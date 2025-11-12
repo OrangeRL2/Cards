@@ -1,8 +1,6 @@
-// commands/Utility/inventory.js
 const {
   SlashCommandBuilder,
   EmbedBuilder,
-  AttachmentBuilder,
   ActionRowBuilder,
   ButtonBuilder,
   ButtonStyle,
@@ -12,11 +10,10 @@ const {
   TextInputBuilder,
   TextInputStyle,
 } = require('discord.js');
-const path = require('node:path');
-const fs = require('fs');
+const path = require('path');
 const User = require('../../models/User');
 
-const CARDS_ROOT     = path.join(__dirname, '../../assets/images');
+const IMAGE_BASE = 'http://152.69.195.48/images';
 const ITEMS_PER_PAGE = 10;
 
 module.exports = {
@@ -25,244 +22,271 @@ module.exports = {
     .setDescription('Show your card inventory')
     .addStringOption(opt =>
       opt.setName('rarity')
-         .setDescription('Filter by rarity')
-         .addChoices(
-           { name: 'UltraRare', value: 'UR' },
-           { name: 'Rare',      value: 'R'  },
-           { name: 'Common',    value: 'C'  }
-         )
+        .setDescription('Filter by rarity')
+        .addChoices(
+          { name: 'C', value: 'C' },
+          { name: 'OC', value: 'OC' },
+          { name: 'U', value: 'U' },
+          { name: 'R', value: 'R' },
+          { name: 'S', value: 'S' },
+          { name: 'P', value: 'P' },
+          { name: 'SY', value: 'SY' },
+          { name: 'RR', value: 'RR' },
+          { name: 'SR', value: 'SR' },
+          { name: 'OSR', value: 'OSR' },
+          { name: 'UR', value: 'UR' },
+          { name: 'OUR', value: 'OUR' },
+          { name: 'SEC', value: 'SEC' },
+          { name: 'HR', value: 'HR' },
+          { name: 'bday', value: 'bday'},
+        ),
     )
     .addStringOption(opt =>
       opt.setName('search')
-         .setDescription('Search by card name')
+        .setDescription('Search by card name'),
     )
     .addStringOption(opt =>
       opt.setName('sort')
-         .setDescription('Sort order')
-         .addChoices(
-           { name: 'Rarity (default)', value: 'rarity' },
-           { name: 'Newest first',     value: 'newest' },
-           { name: 'Oldest first',     value: 'oldest' }
-         )
+        .setDescription('Sort order')
+        .addChoices(
+          { name: 'Rarity (default)', value: 'rarity' },
+          { name: 'Newest first', value: 'newest' },
+          { name: 'Oldest first', value: 'oldest' },
+        ),
     ),
+  requireOshi: true,
 
   async execute(interaction) {
+    await interaction.deferReply();
+
+    // single declarations for filters / sort
     const filterR = interaction.options.getString('rarity');
     const filterQ = interaction.options.getString('search')?.toLowerCase();
-    const sortBy  = interaction.options.getString('sort') || 'rarity';
+    const sortBy = interaction.options.getString('sort') || 'rarity';
 
     const userDoc = await User.findOne({ id: interaction.user.id });
-    if (!userDoc || userDoc.cards.size === 0) {
-      return interaction.reply({ content: "No cards yet. Use `/pull`!", ephemeral: true });
+    if (!userDoc || !userDoc.cards || (userDoc.cards instanceof Map ? userDoc.cards.size === 0 : Object.keys(userDoc.cards || {}).length === 0)) {
+      return interaction.editReply({ content: 'No cards yet. Use `/pull`!', ephemeral: true });
     }
 
-    // Transform map → array
-    let entries = Array.from(userDoc.cards.entries())
-      .map(([name, info]) => ({
-        name,
-        count:      info.count,
-        rarity:     info.rarity,
-        timestamps: info.timestamps
-      }))
-      .filter(c =>
-        (!filterR || c.rarity === filterR) &&
-        (!filterQ || c.name.toLowerCase().includes(filterQ))
-      );
+    // Normalize top-level entries (Map or plain object)
+    const topEntries = userDoc.cards instanceof Map
+      ? Array.from(userDoc.cards.entries())
+      : Object.entries(userDoc.cards || {});
 
-    // Apply sorting
+    // Flatten to one entry per (name, rarity), tolerate multiple shapes
+    const allEntries = [];
+    for (const [topKey, groupRaw] of topEntries) {
+      const nameKey = topKey;
+      const group = groupRaw || {};
+
+      // Case A: new grouped shape with byRarity
+      if (group.byRarity) {
+        // ensure byRarity is iterable (Map or plain object)
+        const inner = group.byRarity instanceof Map
+          ? Array.from(group.byRarity.entries())
+          : Object.entries(group.byRarity || {});
+
+        for (const [rarityKey, infoRaw] of inner) {
+          const info = infoRaw || {};
+          const entryName = group.name || nameKey;
+          const rarity = (info.rarity || rarityKey || '').toString();
+          const count = Number(info.count || 0);
+          const timestamps = Array.isArray(info.timestamps) ? info.timestamps.map(t => new Date(t).getTime()) : [];
+          allEntries.push({ name: entryName, rarity, count, timestamps });
+        }
+        continue;
+      }
+
+      // Case B: previously-flat cardInfo stored directly as value (old schema)
+      if (group.count !== undefined && group.rarity) {
+        const entryName = group.name || nameKey;
+        const rarity = (group.rarity || '').toString();
+        const count = Number(group.count || 0);
+        const timestamps = Array.isArray(group.timestamps) ? group.timestamps.map(t => new Date(t).getTime()) : [];
+        allEntries.push({ name: entryName, rarity, count, timestamps });
+        continue;
+      }
+
+      // Case C: old composite key like "Name::R"
+      if (typeof nameKey === 'string' && nameKey.includes('::')) {
+        const [nm, rar] = nameKey.split('::');
+        const info = group || {};
+        const rarity = (info.rarity || rar || '').toString();
+        const count = Number(info.count || 0);
+        const timestamps = Array.isArray(info.timestamps) ? info.timestamps.map(t => new Date(t).getTime()) : [];
+        allEntries.push({ name: nm, rarity, count, timestamps });
+        continue;
+      }
+
+      // Fallback: unknown shape, try to extract anything useful
+      // If group has keys that look like rarities, treat them as inner map
+      const possibleInner = Object.entries(group || {}).slice(0, 50);
+      for (const [k, v] of possibleInner) {
+        if (v && (v.count !== undefined || v.rarity)) {
+          const entryName = group.name || nameKey;
+          const rarity = (v.rarity || k || '').toString();
+          const count = Number(v.count || 0);
+          const timestamps = Array.isArray(v.timestamps) ? v.timestamps.map(t => new Date(t).getTime()) : [];
+          allEntries.push({ name: entryName, rarity, count, timestamps });
+        }
+      }
+    }
+
+    // Apply filters
+    let entries = allEntries.filter(c =>
+      (!filterR || c.rarity === filterR) &&
+      (!filterQ || c.name.toLowerCase().includes(filterQ))
+    );
+
+    if (!entries.length) {
+      return interaction.editReply({ content: 'No cards match filters.', ephemeral: true });
+    }
+
+    // Sorting
     if (sortBy === 'newest') {
-      entries.sort(
-        (a, b) => Math.max(...b.timestamps) - Math.max(...a.timestamps)
-      );
+      entries.sort((a, b) => (Math.max(...(b.timestamps || [0])) || 0) - (Math.max(...(a.timestamps || [0])) || 0));
     } else if (sortBy === 'oldest') {
-      entries.sort(
-        (a, b) => Math.min(...a.timestamps) - Math.min(...b.timestamps)
-      );
+      entries.sort((a, b) => (Math.min(...(a.timestamps || [Date.now()])) || 0) - (Math.min(...(b.timestamps || [Date.now()])) || 0));
     } else {
-      // default: rarity → name
-      const order = { C:1, R:2, SuperRare:3, UR:4 };
+      const order = {
+        C: 1, OC: 2, U: 3, R: 4, S: 5, P: 6, SY: 7, RR: 8, SR: 9, OSR: 10, UR: 11, OUR: 12, SEC: 13, HR: 14,
+      };
       entries.sort((a, b) => {
-        const d = order[b.rarity] - order[a.rarity];
-        return d !== 0 ? d : a.name.localeCompare(b.name);
+        const d = (order[b.rarity] || 999) - (order[a.rarity] || 999);
+        return d || a.name.localeCompare(b.name);
       });
-    }
-
-    if (entries.length === 0) {
-      return interaction.reply({ content: 'No cards match filters.', ephemeral: true });
     }
 
     // Paginate
-    const totalPages = Math.ceil(entries.length / ITEMS_PER_PAGE);
-    const pages = Array.from(
-      { length: totalPages },
-      (_, i) => entries.slice(i * ITEMS_PER_PAGE, (i + 1) * ITEMS_PER_PAGE)
-    );
-    let listPage = 0;
-    let imageIdx = 0;
+    const totalPages = Math.max(1, Math.ceil(entries.length / ITEMS_PER_PAGE));
+    const pages = Array.from({ length: totalPages }, (_, i) => entries.slice(i * ITEMS_PER_PAGE, (i + 1) * ITEMS_PER_PAGE));
 
-    // Prepare image attachments
-    const imageResults = entries
-      .map(c => {
-        const safe = c.name.replace(/[/\\?%*:|"<>]/g, '');
-        const p = path.join(CARDS_ROOT, c.rarity, `${safe}.png`);
-        return fs.existsSync(p)
-          ? { ...c, attachment: new AttachmentBuilder(p, { name: `${safe}.png` }) }
-          : null;
-      })
-      .filter(Boolean);
+    // Prepare image data (encoded name)
+    const imageResults = entries.map(c => {
+      const encodedName = encodeURIComponent(c.name);
+      const url = `${IMAGE_BASE}/${c.rarity}/${encodedName}.png`;
+      return { c, url };
+    });
 
-    // Builders
-    const buildListEmbed = page => {
-      const chunk = pages[page];
-      return new EmbedBuilder()
+    // Build embeds and components
+    const listEmbeds = pages.map((chunk, i) =>
+      new EmbedBuilder()
         .setTitle(`${interaction.user.username}'s Inventory`)
         .setDescription(chunk.map(c => `**[${c.rarity}]** ${c.name} (x${c.count})`).join('\n'))
         .setColor(Colors.Blue)
-        .setFooter({ text: `Page ${page+1}/${totalPages} • Pulls: ${userDoc.pulls}` });
-    };
-
-    const buildListButtons = page => new ActionRowBuilder().addComponents(
-      new ButtonBuilder()
-        .setCustomId('list_prev')
-        .setLabel('⬅️')
-        .setStyle(ButtonStyle.Primary)
-        .setDisabled(page === 0),
-      new ButtonBuilder()
-        .setCustomId('list_view')
-        .setLabel('🖼️ View Mode')
-        .setStyle(ButtonStyle.Success),
-      new ButtonBuilder()
-        .setCustomId('list_next')
-        .setLabel('➡️')
-        .setStyle(ButtonStyle.Primary)
-        .setDisabled(page === totalPages - 1),
-      new ButtonBuilder()
-        .setCustomId('skip')
-        .setLabel('🔢 Go to Page')
-        .setStyle(ButtonStyle.Secondary)
+        .setFooter({ text: `Page ${i + 1}/${totalPages} • Pulls: ${userDoc.pulls}` })
     );
 
-    const buildImageEmbed = i => {
-      const { name, rarity, count, attachment } = imageResults[i];
-      const cm = { UltraRare:Colors.DarkPurple, SuperRare:Colors.Blue, Rare:Colors.Green, Common:Colors.Grey };
-      return new EmbedBuilder()
-        .setTitle(`[${rarity}] ${name} x${count}`)
-        .setImage(`attachment://${attachment.name}`)
-        .setColor(cm[rarity] ?? Colors.Default)
-        .setFooter({ text: `Card ${i+1} of ${imageResults.length}` });
-    };
-
-    const buildImageButtons = () => new ActionRowBuilder().addComponents(
-      new ButtonBuilder()
-        .setCustomId('prev')
-        .setLabel('⬅️')
-        .setStyle(ButtonStyle.Primary)
-        .setDisabled(imageIdx === 0),
-      new ButtonBuilder()
-        .setCustomId('back')
-        .setLabel('🔙 List Mode')
-        .setStyle(ButtonStyle.Secondary),
-      new ButtonBuilder()
-        .setCustomId('next')
-        .setLabel('➡️')
-        .setStyle(ButtonStyle.Primary)
-        .setDisabled(imageIdx === imageResults.length - 1)
+    const listRows = pages.map((_, i) =>
+      new ActionRowBuilder().addComponents(
+        new ButtonBuilder().setCustomId('list_prev').setLabel('⬅️').setStyle(ButtonStyle.Primary).setDisabled(i === 0),
+        new ButtonBuilder().setCustomId('list_view').setLabel('🖼️ View Mode').setStyle(ButtonStyle.Success),
+        new ButtonBuilder().setCustomId('list_next').setLabel('➡️').setStyle(ButtonStyle.Primary).setDisabled(i === totalPages - 1),
+        new ButtonBuilder().setCustomId('skip').setLabel('🔢 Go to Page').setStyle(ButtonStyle.Secondary),
+      )
     );
 
-    // Send first page
-    const message = await interaction.reply({
-      embeds: [buildListEmbed(0)],
-      components: [buildListButtons(0)],
-      fetchReply: true
-    });
+    const imageEmbeds = imageResults.map(({ c, url }, i) =>
+      new EmbedBuilder()
+        .setTitle(`**[${c.rarity}]** ${c.name} (x${c.count})`)
+        .setImage(url)
+        .setColor({
+          UR: Colors.DarkPurple,
+          R: Colors.Green,
+          C: Colors.Grey,
+          SuperRare: Colors.Blue,
+        }[c.rarity] ?? Colors.Default)
+        .setFooter({ text: `Card ${i + 1} of ${imageResults.length}` })
+    );
 
-    // Collector
-    const valid = ['list_prev','list_next','list_view','prev','next','back'];
+    const imageRows = imageResults.map((_, i) =>
+      new ActionRowBuilder().addComponents(
+        new ButtonBuilder().setCustomId('prev').setLabel('⬅️').setStyle(ButtonStyle.Primary).setDisabled(i === 0),
+        new ButtonBuilder().setCustomId('back').setLabel('🔙 List Mode').setStyle(ButtonStyle.Secondary),
+        new ButtonBuilder().setCustomId('next').setLabel('➡️').setStyle(ButtonStyle.Primary).setDisabled(i === imageResults.length - 1),
+      )
+    );
+
+    // Send initial list page
+    await interaction.editReply({ embeds: [listEmbeds[0]], components: [listRows[0]] });
+    const message = await interaction.fetchReply();
+
+    let listPage = 0;
+    let imageIdx = 0;
+
     const collector = message.createMessageComponentCollector({
       componentType: ComponentType.Button,
       time: 120_000,
-      filter: i => valid.includes(i.customId) && i.user.id === interaction.user.id
+      filter: btn => btn.user.id === interaction.user.id && ['list_prev', 'list_next', 'list_view', 'skip', 'prev', 'next', 'back'].includes(btn.customId),
     });
 
     collector.on('collect', async btn => {
-      if (btn.customId === 'skip') {
-    // build the modal
-    const modal = new ModalBuilder()
-      .setCustomId('skip_modal')
-      .setTitle('Jump to Page');
+      try {
+        switch (btn.customId) {
+          case 'list_prev':
+            listPage = Math.max(0, listPage - 1);
+            await btn.update({ embeds: [listEmbeds[listPage]], components: [listRows[listPage]] });
+            break;
 
-    const input = new TextInputBuilder()
-      .setCustomId('page_input')
-      .setLabel(`Enter a page number (1–${totalPages})`)
-      .setStyle(TextInputStyle.Short)
-      .setPlaceholder('e.g. 3')
-      .setRequired(true);
+          case 'list_next':
+            listPage = Math.min(totalPages - 1, listPage + 1);
+            await btn.update({ embeds: [listEmbeds[listPage]], components: [listRows[listPage]] });
+            break;
 
-    modal.addComponents(new ActionRowBuilder().addComponents(input));
+          case 'skip': {
+            const modal = new ModalBuilder().setCustomId('skip_modal').setTitle('Jump to Page');
+            const input = new TextInputBuilder().setCustomId('page_input').setLabel(`Enter a page (1–${totalPages})`).setStyle(TextInputStyle.Short).setRequired(true);
+            modal.addComponents(new ActionRowBuilder().addComponents(input));
+            await btn.showModal(modal);
 
-    return btn.showModal(modal);
-  }
-      switch (btn.customId) {
-        case 'list_prev':
-          listPage--;
-          return btn.update({ embeds:[buildListEmbed(listPage)], components:[buildListButtons(listPage)] });
-        case 'list_next':
-          listPage++;
-          return btn.update({ embeds:[buildListEmbed(listPage)], components:[buildListButtons(listPage)] });
-        case 'list_view':
-          imageIdx = 0;
-          return btn.update({
-            embeds: [buildImageEmbed(imageIdx)],
-            files:  [imageResults[imageIdx].attachment],
-            components: [buildImageButtons()]
-          });
-        case 'prev':
-        case 'next':
-          imageIdx += btn.customId === 'next' ? 1 : -1;
-          return btn.update({
-            embeds: [buildImageEmbed(imageIdx)],
-            files:  [imageResults[imageIdx].attachment],
-            components: [buildImageButtons()]
-          });
-        case 'back':
-          return btn.update({
-            embeds: [buildListEmbed(listPage)],
-            files:  [],
-            components: [buildListButtons(listPage)]
-          });
+            try {
+              const modalInt = await btn.awaitModalSubmit({ filter: m => m.customId === 'skip_modal' && m.user.id === interaction.user.id, time: 60000 });
+              let target = parseInt(modalInt.fields.getTextInputValue('page_input'), 10);
+              if (isNaN(target)) target = 1;
+              target = Math.max(1, Math.min(target, totalPages));
+              listPage = target - 1;
+              await modalInt.update({ embeds: [listEmbeds[listPage]], components: [listRows[listPage]] });
+            } catch (err) {
+              // ignore modal timeout / cancel
+            }
+            break;
+          }
+
+          case 'list_view':
+            imageIdx = listPage * ITEMS_PER_PAGE;
+            imageIdx = Math.max(0, Math.min(imageIdx, imageEmbeds.length - 1));
+            await btn.update({ embeds: [imageEmbeds[imageIdx]], components: [imageRows[imageIdx]] });
+            break;
+
+          case 'prev':
+          case 'next':
+            imageIdx += btn.customId === 'next' ? 1 : -1;
+            imageIdx = Math.max(0, Math.min(imageIdx, imageEmbeds.length - 1));
+            await btn.update({ embeds: [imageEmbeds[imageIdx]], components: [imageRows[imageIdx]] });
+            break;
+
+          case 'back':
+            listPage = Math.floor(imageIdx / ITEMS_PER_PAGE);
+            await btn.update({ embeds: [listEmbeds[listPage]], components: [listRows[listPage]] });
+            break;
+        }
+      } catch (err) {
+        console.error('inventory collector error:', err);
       }
     });
-    const modalCollector = interaction.channel.createMessageComponentCollector({
-  componentType: ComponentType.ModalSubmit,
-  time: 120_000
-});
-
-modalCollector.on('collect', async modalInt => {
-  if (modalInt.customId !== 'skip_modal' || modalInt.user.id !== interaction.user.id)
-    return;
-
-  // parse and clamp the page
-  const raw = modalInt.fields.getTextInputValue('page_input');
-  let target = parseInt(raw, 10);
-  if (isNaN(target)) target = 1;
-  target = Math.max(1, Math.min(target, totalPages));
-  listPage = target - 1;
-
-  // update the list‐embed
-  await modalInt.update({
-    embeds: [buildListEmbed(listPage)],
-    components: [buildListButtons(listPage)],
-    files: []  // clear any attachments
-  });
-});
 
     collector.on('end', async () => {
-      const disabled = message.components.map(r => {
-        const row = ActionRowBuilder.from(r);
-        row.components.forEach(b => b.setDisabled(true));
-        return row;
-      });
-      await message.edit({ components: disabled });
+      try {
+        const disabled = message.components.map(r => {
+          const row = ActionRowBuilder.from(r);
+          row.components.forEach(b => b.setDisabled(true));
+          return row;
+        });
+        await message.edit({ components: disabled });
+      } catch (err) {
+        console.error('inventory cleanup error:', err);
+      }
     });
-  }
+  },
 };

@@ -1,5 +1,5 @@
 const pools = require('../utils/loadImages');
-const rates = { C: 0.70, R: 0.25, UR: 0.05 };
+const rates = { C: 0.10, OC: 0.10, U:0.10, R: 0.10, RR: 0.10,SR: 0.10, OSR: 0.10, UR: 0.10, OUR: 0.10, SEC: 0.10,   };
 
 function weightedDraw() {
   const roll = Math.random();
