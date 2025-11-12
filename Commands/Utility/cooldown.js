@@ -100,7 +100,7 @@ module.exports = {
     const hasRefillInfo = (res?.nextRefillInMs != null) || (doc?.lastRefill != null) || (doc?.pulls != null);
     const nextRefillText = nextInMs > 0
       ? `<t:${Math.floor((Date.now() + nextInMs) / 1000)}:R>`
-      : (hasRefillInfo ? 'Refill available now' : 'Refill scheduled');
+      : (hasRefillInfo ? '' : 'Refill scheduled');
 
     const remainingTimed = doc && typeof doc.pulls === 'number' ? doc.pulls : 0;
     const remainingEvent = doc && typeof doc.eventPulls === 'number' ? doc.eventPulls : 0;

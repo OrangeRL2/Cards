@@ -18,16 +18,16 @@ module.exports = {
         .setDescription('Card name (you can type a prefix)')
         .setRequired(true)
     )
-    .addIntegerOption(option =>
-      option
-        .setName('count')
-        .setDescription('How many to send')
-        .setRequired(true)
-    )
     .addStringOption(option =>
       option
         .setName('rarity')
         .setDescription('Rarity of the card (required)')
+        .setRequired(true)
+    )
+    .addIntegerOption(option =>
+      option
+        .setName('count')
+        .setDescription('How many to send')
         .setRequired(true)
     ),
   requireOshi: true,
@@ -99,8 +99,8 @@ module.exports = {
     await toDoc.save();
 
     return interaction.reply({
-      content: `You sent ${sendCount} × **${cardName}** (rarity ${interaction.options.getString('rarity')}) to ${toUser.username}.`,
-      ephemeral: true
+      content: `You sent ${sendCount} x **[${interaction.options.getString('rarity')}] ${cardName}** to ${toUser.username}.`,
+      ephemeral: false
     });
   }
 };

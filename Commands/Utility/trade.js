@@ -65,14 +65,14 @@ module.exports = {
          .setDescription('Card name prefix to offer')
          .setRequired(true)
     )
-    .addIntegerOption(opt =>
-      opt.setName('count')
-         .setDescription('How many cards to offer')
-         .setRequired(true)
-    )
     .addStringOption(opt =>
       opt.setName('rarity')
          .setDescription('Rarity of the offered card (required)')
+         .setRequired(true)
+    )
+    .addIntegerOption(opt =>
+      opt.setName('count')
+         .setDescription('How many cards to offer')
          .setRequired(true)
     ),
 
@@ -127,7 +127,7 @@ module.exports = {
       .setDescription(
         `**From:** <@${fromId}>\n` +
         `**To:**   <@${toId}>\n\n` +
-        `**Sender offers:**\n• ${cardName} (rarity ${interaction.options.getString('rarity')}) ×${tradeCount}\n` +
+        `**Sender offers:**\n• ${tradeCount} x **[${interaction.options.getString('rarity')}] ${cardName}**\n\n` +
         `**Recipient offers:**\n• None yet\n\n` +
         `Both parties must press ✅ to confirm.`
       )
@@ -136,8 +136,8 @@ module.exports = {
 
     const row = new ActionRowBuilder().addComponents(
       new ButtonBuilder().setCustomId('trade_add').setLabel('➕ Add Card').setStyle(ButtonStyle.Primary),
-      new ButtonBuilder().setCustomId('trade_accept').setLabel('✅ Accept').setStyle(ButtonStyle.Success),
-      new ButtonBuilder().setCustomId('trade_reject').setLabel('❌ Reject').setStyle(ButtonStyle.Danger)
+      new ButtonBuilder().setCustomId('trade_accept').setLabel('✅').setStyle(ButtonStyle.Success),
+      new ButtonBuilder().setCustomId('trade_reject').setLabel('❌').setStyle(ButtonStyle.Danger)
     );
 
     // Send initial reply safely and try to fetch the message for interactive collector
@@ -185,8 +185,8 @@ module.exports = {
       }
 
       function buildDescription() {
-        const senderOffer = (session.offers[session.fromId] || []).map(c => `• ${c.name} (rarity ${c.rarity}) ×${c.count}`).join('\n') || 'None';
-        const recipientOffer = (session.offers[session.toId] || []).map(c => `• ${c.name} (rarity ${c.rarity}) ×${c.count}`).join('\n') || 'None';
+        const senderOffer = (session.offers[session.fromId] || []).map(c => `• ${tradeCount} x **[${c.rarity}] ${cardName}**`).join('\n') || 'None';
+        const recipientOffer = (session.offers[session.toId] || []).map(c => `• ${tradeCount} x **[${c.rarity}] ${cardName}**`).join('\n') || 'None';
         return (
           `**From:** <@${session.fromId}>\n` +
           `**To:**   <@${session.toId}>\n\n` +
@@ -202,8 +202,8 @@ module.exports = {
         const modal = new ModalBuilder().setCustomId(modalId).setTitle('Add a Card to Trade');
 
         const nameInput = new TextInputBuilder().setCustomId('trade_card').setLabel('Card name or prefix').setStyle(TextInputStyle.Short).setRequired(true);
-        const countInput = new TextInputBuilder().setCustomId('trade_count').setLabel('How many?').setStyle(TextInputStyle.Short).setRequired(true);
         const rarityInput = new TextInputBuilder().setCustomId('trade_rarity').setLabel('Rarity').setStyle(TextInputStyle.Short).setRequired(true);
+        const countInput = new TextInputBuilder().setCustomId('trade_count').setLabel('How many?').setStyle(TextInputStyle.Short).setRequired(true);
 
         modal.addComponents(new ActionRowBuilder().addComponents(nameInput), new ActionRowBuilder().addComponents(countInput), new ActionRowBuilder().addComponents(rarityInput));
 
@@ -270,7 +270,7 @@ module.exports = {
       // ---- Accept ----
       if (btn.customId === 'trade_accept') {
         session.accepted[userId] = true;
-        try { await btn.reply({ content: '✅ You accepted. Waiting for the other party.', ephemeral: true }); } catch {}
+        try { await btn.reply({ content: `✅ <@${userId}> has accepted.`, ephemeral: false }); } catch {}
 
         if (session.accepted[session.fromId] && session.accepted[session.toId]) {
           // finalize: re-fetch docs to reduce race issues
@@ -313,7 +313,7 @@ module.exports = {
           if (toDocFinal) saves.push(toDocFinal.save());
           await Promise.all(saves);
 
-          try { await message.edit({ content: '✅ Trade completed!', embeds: [], components: [] }); } catch (e) { console.warn('failed to finalize message edit', e); }
+          try { await message.edit({ content: `Trade between <@${session.fromId}> and <@${session.toId}> has been completed!`, embeds: [], components: [] }); } catch (e) { console.warn('failed to finalize message edit', e); }
           sessions.delete(message.id);
         }
         return;

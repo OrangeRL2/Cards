@@ -133,7 +133,6 @@ module.exports = {
           { name: 'Timed pulls', value: `${consumeResult.remainingTimed}`, inline: true },
           { name: 'Event pulls', value: `${consumeResult.remainingEvent}`, inline: true },
           { name: 'Next timed pull', value: nextRefillText, inline: true },
-          { name: 'Event pulls allowed', value: `${allowEvent}`, inline: true },
         );
       const elapsed = Date.now() - gifShownAt;
       if (elapsed < GIF_DURATION_MS) await sleep(GIF_DURATION_MS - elapsed);
@@ -192,7 +191,7 @@ module.exports = {
       }
 
       const encodedUrl = encodeURI(`${IMAGE_BASE}/${rarity}/${raw}.png`);
-      const titleLine = `[${rarity}] - ${displayName} - (x${card.count})`;
+      const titleLine = `**[${rarity}]** - ${displayName} - #${card.count}`;
 
       pageItems.push({
         rarity,
@@ -220,7 +219,6 @@ module.exports = {
         .addFields(
           { name: 'Timed pulls remaining', value: `${consumeResult.remainingTimed}`, inline: true },
           { name: 'Event pulls remaining', value: `${consumeResult.remainingEvent}`, inline: true },
-          { name: 'Event pulls allowed', value: `${allowEvent}`, inline: true }
         )
         .setImage(it.imageUrl)
         .setURL(it.imageUrl)
