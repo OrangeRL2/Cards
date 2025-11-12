@@ -101,7 +101,7 @@ module.exports = {
 
       const buildEmbed = (pageIdx) => {
         const page = pages[pageIdx];
-        const description = page.map(c => `**${c.rarity}** — ${c.name}`).join('\n');
+        const description = page.map(c => `**[${c.rarity}]** ${c.name}`).join('\n');
         const first = page[0];
         const color = COLOR_MAP[first?.rarity] ?? Colors.Default;
 
