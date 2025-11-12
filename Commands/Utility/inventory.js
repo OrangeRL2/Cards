@@ -150,14 +150,19 @@ module.exports = {
       entries.sort((a, b) => (Math.min(...(a.timestamps || [Date.now()])) || 0) - (Math.min(...(b.timestamps || [Date.now()])) || 0));
     } else {
       const order = {
-        C: 1, OC: 2, U: 3, R: 4, S: 5, P: 6, SY: 7, RR: 8, SR: 9, OSR: 10, UR: 11, OUR: 12, SEC: 13, HR: 14,
+        C: 1, OC: 2, U: 3, R: 4, S: 5, P: 6, SY: 7, RR: 8, SR: 9, OSR: 10, UR: 11, HR: 12, OUR: 13, SEC: 14,
       };
       entries.sort((a, b) => {
         const d = (order[b.rarity] || 999) - (order[a.rarity] || 999);
         return d || a.name.localeCompare(b.name);
       });
     }
+     // --- Totals: total copies (cards) and pulls (timestamps) ---
+    const totalCards = allEntries.reduce((sum, e) => sum + (Number(e.count) || 0), 0);
+    const totalPulls = allEntries.reduce((sum, e) => sum + (Array.isArray(e.timestamps) ? e.timestamps.length : 0), 0);
 
+    const filteredCards = entries.reduce((sum, e) => sum + (Number(e.count) || 0), 0);
+    const filteredPulls = entries.reduce((sum, e) => sum + (Array.isArray(e.timestamps) ? e.timestamps.length : 0), 0);
     // Paginate
     const totalPages = Math.max(1, Math.ceil(entries.length / ITEMS_PER_PAGE));
     const pages = Array.from({ length: totalPages }, (_, i) => entries.slice(i * ITEMS_PER_PAGE, (i + 1) * ITEMS_PER_PAGE));
@@ -175,15 +180,15 @@ module.exports = {
         .setTitle(`${interaction.user.username}'s Inventory`)
         .setDescription(chunk.map(c => `**[${c.rarity}]** ${c.name} (x${c.count})`).join('\n'))
         .setColor(Colors.Blue)
-        .setFooter({ text: `Page ${i + 1}/${totalPages} • Pulls: ${userDoc.pulls}` })
+        .setFooter({ text: `Page ${i + 1}/${totalPages} • Cards: ${filteredCards}` })
     );
 
     const listRows = pages.map((_, i) =>
       new ActionRowBuilder().addComponents(
         new ButtonBuilder().setCustomId('list_prev').setLabel('⬅️').setStyle(ButtonStyle.Primary).setDisabled(i === 0),
-        new ButtonBuilder().setCustomId('list_view').setLabel('🖼️ View Mode').setStyle(ButtonStyle.Success),
+        new ButtonBuilder().setCustomId('list_view').setLabel('🖼️').setStyle(ButtonStyle.Success),
         new ButtonBuilder().setCustomId('list_next').setLabel('➡️').setStyle(ButtonStyle.Primary).setDisabled(i === totalPages - 1),
-        new ButtonBuilder().setCustomId('skip').setLabel('🔢 Go to Page').setStyle(ButtonStyle.Secondary),
+        new ButtonBuilder().setCustomId('skip').setLabel('Skip to page').setStyle(ButtonStyle.Secondary),
       )
     );
 
@@ -203,7 +208,7 @@ module.exports = {
     const imageRows = imageResults.map((_, i) =>
       new ActionRowBuilder().addComponents(
         new ButtonBuilder().setCustomId('prev').setLabel('⬅️').setStyle(ButtonStyle.Primary).setDisabled(i === 0),
-        new ButtonBuilder().setCustomId('back').setLabel('🔙 List Mode').setStyle(ButtonStyle.Secondary),
+        new ButtonBuilder().setCustomId('back').setLabel('🔙').setStyle(ButtonStyle.Secondary),
         new ButtonBuilder().setCustomId('next').setLabel('➡️').setStyle(ButtonStyle.Primary).setDisabled(i === imageResults.length - 1),
       )
     );
