@@ -13,7 +13,7 @@ const gifAfterglow =  'https://media.discordapp.net/attachments/1046811248647475
 const gifHarohapi =   'https://media.discordapp.net/attachments/1046811248647475302/1437428283217149962/hhw.gif';
 const gifRoselia =    'https://media.discordapp.net/attachments/1046811248647475302/1437428356617338891/Roselia.gif';
 const gifMyGo =       'https://media.discordapp.net/attachments/1046811248647475302/1437428386988556438/MyGO.gif';
-const GIF_DURATION_MS = 900;
+let GIF_DURATION_MS = 1200;
 const gifs = [gifPopipa, gifAfterglow, gifHarohapi, gifRoselia, gifMyGo];
 
 function sleep(ms) {
@@ -166,6 +166,8 @@ module.exports = {
       return;
     }
 
+    
+
     // Ensure user document exists
     let userDoc = await User.findOne({ id: discordUserId }).exec();
     if (!userDoc) userDoc = await User.create({ id: discordUserId });
@@ -208,6 +210,34 @@ module.exports = {
     await userDoc.save();
 
     const descriptionAll = `${allNames.join('\n')}`;
+
+const elapsedSinceGif = Date.now() - gifShownAt;
+if (elapsedSinceGif < GIF_DURATION_MS) {
+  await sleep(GIF_DURATION_MS - elapsedSinceGif);
+}
+
+    // If any SEC was pulled, show a special reveal GIF before the result embed
+const hasSEC = pageItems.some(it => String(it.rarity ?? '').toUpperCase() === 'C');
+if (hasSEC) {
+  GIF_DURATION_MS = 1200;
+  //const specialGifUrl = 'https://media.discordapp.net/attachments/845037984986169384/931909410526216282/rip.gif?ex=69168c05&is=69153a85&hm=fa55eddeca55ecba0093b9d899bedd2b1fb1488f0de7cba72a71797635946397&format=webp&animated=true'; // choose a GIF for SEC
+  const specialGifUrl = 'https://media.discordapp.net/attachments/1046811248647475302/1437428522577821828/Ran_chan_drop_kick.gif?ex=691680e1&is=69152f61&hm=e4f0afaf8c0fdf11d05a0c0eedb8198fd8b16809fe3414a4e4ed9dc4302118be&='; // choose a GIF for SEC
+  try {
+    const secEmbed = new EmbedBuilder()
+      .setTitle('**!?!?!?!?!?!?!?!?!?!?!?!?**')
+      //.setDescription('**special reveal incoming!!!**')
+      .setColor(0xFFD700)
+      .setImage(specialGifUrl);
+
+    // show the special GIF (replace current reply contents)
+    await interaction.editReply({ embeds: [secEmbed], components: [] });
+
+    // ensure the GIF is visible long enough
+    await sleep(GIF_DURATION_MS);
+  } catch (err) {
+    console.warn('failed to show SEC reveal gif:', err);
+  }
+}
 
     // Embed maker
     function makeEmbed(idx) {
