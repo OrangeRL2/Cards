@@ -185,10 +185,10 @@ module.exports = {
 
     const listRows = pages.map((_, i) =>
       new ActionRowBuilder().addComponents(
-        new ButtonBuilder().setCustomId('list_prev').setLabel('⬅️').setStyle(ButtonStyle.Primary).setDisabled(i === 0),
-        new ButtonBuilder().setCustomId('list_view').setLabel('🖼️').setStyle(ButtonStyle.Success),
-        new ButtonBuilder().setCustomId('list_next').setLabel('➡️').setStyle(ButtonStyle.Primary).setDisabled(i === totalPages - 1),
-        new ButtonBuilder().setCustomId('skip').setLabel('Skip to page').setStyle(ButtonStyle.Secondary),
+        new ButtonBuilder().setCustomId('list_prev').setLabel('◀ Prev').setStyle(ButtonStyle.Primary).setDisabled(i === 0),
+        new ButtonBuilder().setCustomId('list_view').setLabel('🃏Image').setStyle(ButtonStyle.Success),
+        new ButtonBuilder().setCustomId('list_next').setLabel('Next ▶').setStyle(ButtonStyle.Primary).setDisabled(i === totalPages - 1),
+        new ButtonBuilder().setCustomId('skip').setLabel('📖 Jump').setStyle(ButtonStyle.Secondary),
       )
     );
 
@@ -207,9 +207,9 @@ module.exports = {
 
     const imageRows = imageResults.map((_, i) =>
       new ActionRowBuilder().addComponents(
-        new ButtonBuilder().setCustomId('prev').setLabel('⬅️').setStyle(ButtonStyle.Primary).setDisabled(i === 0),
-        new ButtonBuilder().setCustomId('back').setLabel('🔙').setStyle(ButtonStyle.Secondary),
-        new ButtonBuilder().setCustomId('next').setLabel('➡️').setStyle(ButtonStyle.Primary).setDisabled(i === imageResults.length - 1),
+        new ButtonBuilder().setCustomId('prev').setLabel('◀ Prev').setStyle(ButtonStyle.Primary).setDisabled(i === 0),
+        new ButtonBuilder().setCustomId('back').setLabel('⤵️ Back').setStyle(ButtonStyle.Secondary),
+        new ButtonBuilder().setCustomId('next').setLabel('Next ▶').setStyle(ButtonStyle.Primary).setDisabled(i === imageResults.length - 1),
       )
     );
 

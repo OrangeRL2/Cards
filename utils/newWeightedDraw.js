@@ -6,14 +6,13 @@ function rand() {
 }
 
 function pickWeighted(options) {
-  // options: [{ key: 'C', weight: 94 }, ...]
+  // options: [{ key: 'C', weight: 95 }, ...]
   const total = options.reduce((s, o) => s + o.weight, 0);
   let r = rand() * total;
   for (const o of options) {
     if (r <= o.weight) return o.key;
     r -= o.weight;
   }
-  // fallback
   return options[options.length - 1].key;
 }
 
@@ -28,58 +27,82 @@ function pickFileFromPool(rarity) {
 function drawPack() {
   const results = [];
 
-  // 4 C slots (all C having same odds)
-  const cOptions = [
-    { key: 'C', weight: 94.0 },
-    { key: 'S', weight: 3.0 },
-    { key: 'OC', weight: 2.75 },
-    { key: 'HR', weight: 0.25 },
+  // Common slots
+  // Slot 1 and Slot 2 (same odds)
+  const commonSlot12Options = [
+    { key: 'C', weight: 95.0 },
+    { key: 'S', weight: 4.0 },
+    { key: 'OC', weight: 1.0 },
   ];
-  for (let i = 0; i < 4; i++) {
-    const rarity = pickWeighted(cOptions);
+  for (let i = 0; i < 2; i++) {
+    const rarity = pickWeighted(commonSlot12Options);
     const file = pickFileFromPool(rarity);
     results.push({ rarity, file });
   }
 
-  // 3 U slots with slot-specific probabilities
-  const uSlotOptions = [
-    // Slot 1
+  // Slot 3 (common with bday instead of OC/HR)
+  const commonSlot3Options = [
+    { key: 'C', weight: 95.0 },
+    { key: 'S', weight: 4.0 },
+    { key: 'bday', weight: 1.0 }, // use key your pools expect, adjust if different
+  ];
+  {
+    const rarity = pickWeighted(commonSlot3Options);
+    const file = pickFileFromPool(rarity);
+    results.push({ rarity, file });
+  }
+
+  // Slot 4 (common with small HR chance)
+  const commonSlot4Options = [
+    { key: 'C', weight: 95.0 },
+    { key: 'S', weight: 4.5 },
+    { key: 'HR', weight: 0.5 },
+  ];
+  {
+    const rarity = pickWeighted(commonSlot4Options);
+    const file = pickFileFromPool(rarity);
+    results.push({ rarity, file });
+  }
+
+  // Uncommon slots (slot-specific)
+  const uncommonSlotOptions = [
+    // Uncommon Slot 1
     [
-      { key: 'U', weight: 81.0 },
-      { key: 'RR', weight: 17.0 },
-      { key: 'SY', weight: 2.0 },
+      { key: 'U', weight: 84.0 },
+      { key: 'RR', weight: 15.0 },
+      { key: 'SY', weight: 1.0 },
     ],
-    // Slot 2
-    [
-      { key: 'U', weight: 90.0 },
-      { key: 'SR', weight: 8.0 },
-      { key: 'SY', weight: 2.0 },
-    ],
-    // Slot 3
+    // Uncommon Slot 2
     [
       { key: 'U', weight: 94.0 },
-      { key: 'OSR', weight: 5.0 },
+      { key: 'SR', weight: 5.0 },
+      { key: 'SY', weight: 1.0 },
+    ],
+    // Uncommon Slot 3
+    [
+      { key: 'U', weight: 95.0 },
+      { key: 'OSR', weight: 4.0 },
       { key: 'UR', weight: 1.0 },
     ],
   ];
 
-  for (let s = 0; s < 3; s++) {
-    const rarity = pickWeighted(uSlotOptions[s]);
+  for (let s = 0; s < uncommonSlotOptions.length; s++) {
+    const rarity = pickWeighted(uncommonSlotOptions[s]);
     const file = pickFileFromPool(rarity);
     results.push({ rarity, file });
   }
 
   // Rare slot
   const rareOptions = [
-    { key: 'R', weight: 99.0 },
-    { key: 'OUR', weight: 0.75 },
-    { key: 'SEC', weight: 0.25 },
+    { key: 'R', weight: 99.35 },
+    { key: 'OUR', weight: 0.50 },
+    { key: 'SEC', weight: 0.15 },
   ];
   const rareRarity = pickWeighted(rareOptions);
   const rareFile = pickFileFromPool(rareRarity);
   results.push({ rarity: rareRarity, file: rareFile });
 
-  // results length should be 8
+  // total results should be 8
   return results;
 }
 

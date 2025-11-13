@@ -115,12 +115,12 @@ module.exports = {
       const row = new ActionRowBuilder().addComponents(
         new ButtonBuilder()
           .setCustomId('miss_prev')
-          .setLabel('⬅️ Prev')
+          .setLabel('◀ Prev')
           .setStyle(ButtonStyle.Primary)
           .setDisabled(true),
         new ButtonBuilder()
           .setCustomId('miss_next')
-          .setLabel('Next ➡️')
+          .setLabel('Next ▶')
           .setStyle(ButtonStyle.Primary)
           .setDisabled(pages.length === 1),
       );

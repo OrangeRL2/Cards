@@ -70,7 +70,7 @@ module.exports = {
       const list = oshis.map(o => {
         const next = nextOccurrenceJst(o.bdayMonth, o.bdayDay, nowJst);
         const nextJst = new Date(next.getTime() + 9 * 60 * 60000); // to display JST fields
-        const display = `${nextJst.getFullYear()}-${String(nextJst.getMonth()+1).padStart(2,'0')}-${String(nextJst.getDate()).padStart(2,'0')}`;
+        const display = `${nextJst.getFullYear()}/${String(nextJst.getMonth()+1).padStart(2,'0')}/${String(nextJst.getDate()).padStart(2,'0')}`;
         const days = daysBetweenCeil(nowJst, next);
         return { id: o.id, label: o.label, gen: o.gen, image: o.image, nextDate: next, display, days };
       });
@@ -89,7 +89,7 @@ module.exports = {
         description: lines.join('\n\n'),
         color: 0xff99cc,
         timestamp: new Date().toISOString(),
-        footer: { text: 'Dates shown in JST' },
+        footer: { text: 'YYYY/MM/DD Format' },
       };
 
       const primary = nextFive[0];

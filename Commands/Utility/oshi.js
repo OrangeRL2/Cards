@@ -51,7 +51,7 @@ module.exports = {
 
       const oshiMeta = OSHI_LIST.find(o => o.id === doc.oshiId);
       const oshiLabel = oshiMeta ? `${oshiMeta.label}` : doc.oshiId;
-      const chosenAtText = doc.chosenAt ? ` — chosen <t:${Math.floor(new Date(doc.chosenAt).getTime() / 1000)}:R>` : '';
+      const chosenAtText = doc.chosenAt ? ` - chosen <t:${Math.floor(new Date(doc.chosenAt).getTime() / 1000)}:R>` : '';
       const imagePart = oshiMeta && oshiMeta.image ? `\n${oshiMeta.image}` : '';
 
       await interaction.reply({

@@ -72,46 +72,68 @@ module.exports = {
       } catch {}
       return id;
     };
-    const resolveDisplayNameFast = (id, client) => {
+const resolveDisplayNameFast = async (id, client, guild) => {
+  // 1) guild member displayName if available (best UX)
+  if (guild) {
+    try {
+      const memberCached = guild.members.cache.get(id);
+      if (memberCached) return memberCached.displayName;
+      // try a fetch as a fallback (may be rate-limited / slower)
+      const fetchedMember = await guild.members.fetch(id).catch(() => null);
+      if (fetchedMember) return fetchedMember.displayName;
+    } catch {}
+  }
+
+  // 2) client cache user tag
   const cached = client.users.cache.get(id);
-  if (cached) return cached.tag; // instant
-  // optional: don't fetch to keep it fast — return id as fallback
+  if (cached) return cached.tag;
+
+  // 3) one-off fetch from API — slower but ensures a readable name after restarts
+  try {
+    const fetched = await client.users.fetch(id).catch(() => null);
+    if (fetched) return fetched.tag;
+  } catch {}
+  
+  // 4) final fallback to raw id
   return id;
-  // If you want a one-off fetch (slower), replace the above with:
-  // try { const user = await client.users.fetch(id); return user.tag; } catch { return id; }
 };
 
-    const makeEmbed = async (pageIndex) => {
-      const start = pageIndex * PAGE_SIZE;
-      const slice = topUsers.slice(start, start + PAGE_SIZE);
+const userIndex = topUsers.findIndex(u => u.id === interaction.user.id);
+  const userRank = userIndex === -1 ? null : userIndex + 1;
+  const makeEmbed = async (pageIndex) => {
+  const start = pageIndex * PAGE_SIZE;
+  const slice = topUsers.slice(start, start + PAGE_SIZE);
 
-      const lines = await Promise.all(
-        slice.map(async (doc, idx) => {
-          const rank = start + idx + 1;
-          const pulls = typeof doc.pulls === 'number' ? doc.pulls : 0;
-          //const displayName = await resolveDisplayName(doc.id);
-          const displayName = resolveDisplayNameFast(doc.id, interaction.client);
-          return `**#${rank}** • ${displayName} — ${pulls} pulls`;
-        })
-      );
+  const lines = await Promise.all(
+    slice.map(async (doc, idx) => {
+      const rank = start + idx + 1;
+      const pulls = typeof doc.pulls === 'number' ? doc.pulls : 0;
+      const displayName = await resolveDisplayNameFast(doc.id, interaction.client, interaction.guild);
+      // highlight the user who invoked the command
+      return `**#${rank}** • ${displayName} - ${pulls} pulls`;
+    })
+  );
 
-      return new EmbedBuilder()
-        .setTitle('🏆 Pull Leaderboard')
-        .setDescription(lines.join('\n'))
-        .setFooter({ text: `Page ${pageIndex + 1} of ${totalPages}` })
-        .setColor('Gold');
-    };
+  const footerRank = userRank ? ` • Your rank: #${userRank}` : ' • Your rank: Unranked';
+  return new EmbedBuilder()
+    .setTitle('🏆 Pull Leaderboard')
+    .setDescription(lines.join('\n'))
+    .setFooter({ text: `Page ${pageIndex + 1} of ${totalPages}${footerRank}` })
+    .setColor('Gold');
+};
+
+
 
     const makeRow = (pageIndex, disabled = false) => {
       const prev = new ButtonBuilder()
         .setCustomId('lb_prev')
-        .setLabel('Previous')
+        .setLabel('◀ Prev')
         .setStyle(ButtonStyle.Primary)
         .setDisabled(disabled || pageIndex <= 0);
 
       const next = new ButtonBuilder()
         .setCustomId('lb_next')
-        .setLabel('Next')
+        .setLabel('Next ▶')
         .setStyle(ButtonStyle.Primary)
         .setDisabled(disabled || pageIndex >= totalPages - 1);
 

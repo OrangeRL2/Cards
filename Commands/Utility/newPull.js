@@ -13,8 +13,9 @@ const gifAfterglow =  'https://media.discordapp.net/attachments/1046811248647475
 const gifHarohapi =   'https://media.discordapp.net/attachments/1046811248647475302/1437428283217149962/hhw.gif';
 const gifRoselia =    'https://media.discordapp.net/attachments/1046811248647475302/1437428356617338891/Roselia.gif';
 const gifMyGo =       'https://media.discordapp.net/attachments/1046811248647475302/1437428386988556438/MyGO.gif';
+const gifMorfonica =       'https://cdn.discordapp.com/attachments/802431770023952406/1438516550628937819/Morf.gif';
 let GIF_DURATION_MS = 1200;
-const gifs = [gifPopipa, gifAfterglow, gifHarohapi, gifRoselia, gifMyGo];
+const gifs = [gifPopipa, gifAfterglow, gifHarohapi, gifRoselia, gifMyGo, gifMorfonica];
 
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
@@ -217,7 +218,7 @@ if (elapsedSinceGif < GIF_DURATION_MS) {
 }
 
     // If any SEC was pulled, show a special reveal GIF before the result embed
-const hasSEC = pageItems.some(it => String(it.rarity ?? '').toUpperCase() === 'C');
+const hasSEC = pageItems.some(it => String(it.rarity ?? '').toUpperCase() === 'SEC');
 if (hasSEC) {
   GIF_DURATION_MS = 1200;
   //const specialGifUrl = 'https://media.discordapp.net/attachments/845037984986169384/931909410526216282/rip.gif?ex=69168c05&is=69153a85&hm=fa55eddeca55ecba0093b9d899bedd2b1fb1488f0de7cba72a71797635946397&format=webp&animated=true'; // choose a GIF for SEC
