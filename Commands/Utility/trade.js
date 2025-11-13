@@ -1,4 +1,3 @@
-// commands/Utility/trade.js
 const {
   SlashCommandBuilder,
   EmbedBuilder,
@@ -50,7 +49,6 @@ async function safeReplyAndFetch(interaction, payload) {
   }
 }
 
-// ---------- Command ----------
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('trade')
@@ -84,7 +82,8 @@ module.exports = {
     const toId = toUser.id;
     const partial = interaction.options.getString('card').toLowerCase();
     const tradeCount = interaction.options.getInteger('count');
-    const rarityReq = String(interaction.options.getString('rarity')).toLowerCase();
+    const rarityReq = String(interaction.options.getString('rarity') ?? '').toLowerCase();
+    const rarityDisplay = String(interaction.options.getString('rarity') ?? '').toUpperCase();
 
     if (toId === fromId) {
       return interaction.followUp?.({ content: "You can’t trade with yourself.", ephemeral: true }) ?? null;
@@ -114,23 +113,17 @@ module.exports = {
 
     const cardEntry = fromDoc.cards[fromIdx];
     const cardName = cardEntry.name;
-    const cardRarity = cardEntry.rarity;
+    // store canonical display rarity uppercase
+    const cardRarity = String(cardEntry.rarity ?? '').toUpperCase();
     const cardAvailable = cardEntry.count || 0;
 
     if (cardAvailable < tradeCount) {
       return interaction.followUp?.({ content: `You only have ${cardAvailable} × ${cardName}.`, ephemeral: true }) ?? null;
     }
 
-    // Build initial embed
-    const embed = new EmbedBuilder()
+    // Build initial embed (description will be filled from session via buildDescription)
+    const embedBase = new EmbedBuilder()
       .setTitle('🔄 Trade Proposal')
-      .setDescription(
-        `**From:** <@${fromId}>\n` +
-        `**To:**   <@${toId}>\n\n` +
-        `**Sender offers:**\n• ${tradeCount} x **[${interaction.options.getString('rarity')}] ${cardName}**\n\n` +
-        `**Recipient offers:**\n• None yet\n\n` +
-        `Both parties must press ✅ to confirm.`
-      )
       .setColor(Colors.Gold)
       .setFooter({ text: 'This trade expires in 5 minutes.' });
 
@@ -143,28 +136,62 @@ module.exports = {
     // Send initial reply safely and try to fetch the message for interactive collector
     const message = await safeReplyAndFetch(interaction, {
       content: `<@${toId}>, you have a trade request:`,
-      embeds: [embed],
+      embeds: [EmbedBuilder.from(embedBase).setDescription('Preparing trade...')],
       components: [row]
     });
 
     if (!message) {
-      // Interaction expired or fetch failed; inform user and abort interactive session
       try { await interaction.followUp({ content: 'Could not start interactive trade (interaction expired). Please try again.', ephemeral: true }); } catch {}
       return;
     }
 
+    // Helper to build description from session
+    function buildDescription(session) {
+      const fromMark = session.accepted?.[session.fromId] ? '✅' : '❌';
+      const toMark = session.accepted?.[session.toId] ? '✅' : '❌';
+
+      const senderOffer = (session.offers[session.fromId] || [])
+        .map(o => `• ${o.count} x **[${String(o.rarity ?? '').toUpperCase()}] ${o.name}**`)
+        .join('\n') || 'None';
+
+      const recipientOffer = (session.offers[session.toId] || [])
+        .map(o => `• ${o.count} x **[${String(o.rarity ?? '').toUpperCase()}] ${o.name}**`)
+        .join('\n') || 'None';
+
+      return (
+        `**From:** <@${session.fromId}> ${fromMark}\n` +
+        `**To:**   <@${session.toId}> ${toMark}\n\n` +
+        `**Sender offers:**\n${senderOffer}\n\n` +
+        `**Recipient offers:**\n${recipientOffer}\n\n` +
+        `Both parties must press ✅ to confirm.`
+      );
+    }
+
     // Initialize session
-    sessions.set(message.id, {
+    const session = {
       messageId: message.id,
       fromId,
       toId,
       offers: {
+        // ensure we store the initial offer with the correct fields and uppercase rarity
         [fromId]: [{ name: cardName, count: tradeCount, rarity: cardRarity }],
         [toId]: []
       },
       accepted: { [fromId]: false, [toId]: false },
-      embedBase: embed
-    });
+      embedBase // store the base embed for future clones
+    };
+
+    // set session in map
+    sessions.set(message.id, session);
+
+    // Immediately set the real description (so the message contains correct content)
+    try {
+      const initial = EmbedBuilder.from(session.embedBase).setDescription(buildDescription(session));
+      session.embedBase = initial;
+      await message.edit({ embeds: [initial] });
+    } catch (e) {
+      console.warn('failed to set initial session embed description', e);
+    }
 
     const collector = message.createMessageComponentCollector({
       componentType: ComponentType.Button,
@@ -184,28 +211,16 @@ module.exports = {
         return;
       }
 
-      function buildDescription() {
-        const senderOffer = (session.offers[session.fromId] || []).map(c => `• ${tradeCount} x **[${c.rarity}] ${cardName}**`).join('\n') || 'None';
-        const recipientOffer = (session.offers[session.toId] || []).map(c => `• ${tradeCount} x **[${c.rarity}] ${cardName}**`).join('\n') || 'None';
-        return (
-          `**From:** <@${session.fromId}>\n` +
-          `**To:**   <@${session.toId}>\n\n` +
-          `**Sender offers:**\n${senderOffer}\n` +
-          `**Recipient offers:**\n${recipientOffer}\n\n` +
-          `Both parties must press ✅ to confirm.`
-        );
-      }
-
       // ---- Add card via modal ----
       if (btn.customId === 'trade_add') {
         const modalId = `trade_add_modal_${message.id}_${userId}`;
         const modal = new ModalBuilder().setCustomId(modalId).setTitle('Add a Card to Trade');
 
         const nameInput = new TextInputBuilder().setCustomId('trade_card').setLabel('Card name or prefix').setStyle(TextInputStyle.Short).setRequired(true);
-        const rarityInput = new TextInputBuilder().setCustomId('trade_rarity').setLabel('Rarity').setStyle(TextInputStyle.Short).setRequired(true);
         const countInput = new TextInputBuilder().setCustomId('trade_count').setLabel('How many?').setStyle(TextInputStyle.Short).setRequired(true);
+        const rarityInput = new TextInputBuilder().setCustomId('trade_rarity').setLabel('Rarity').setStyle(TextInputStyle.Short).setRequired(true);
 
-        modal.addComponents(new ActionRowBuilder().addComponents(nameInput), new ActionRowBuilder().addComponents(countInput), new ActionRowBuilder().addComponents(rarityInput));
+        modal.addComponents(new ActionRowBuilder().addComponents(nameInput), new ActionRowBuilder().addComponents(rarityInput), new ActionRowBuilder().addComponents(countInput));
 
         try {
           await btn.showModal(modal);
@@ -223,7 +238,7 @@ module.exports = {
 
           const nameVal = submitted.fields.getTextInputValue('trade_card');
           const countVal = parseInt(submitted.fields.getTextInputValue('trade_count'), 10);
-          const rarityVal = String(submitted.fields.getTextInputValue('trade_rarity')).toLowerCase();
+          const rarityVal = String(submitted.fields.getTextInputValue('trade_rarity') ?? '').toLowerCase();
 
           if (!nameVal || isNaN(countVal) || countVal < 1) {
             try { await submitted.reply({ content: '❌ Invalid input.', ephemeral: true }); } catch {}
@@ -254,12 +269,16 @@ module.exports = {
 
           // update session offers and reset accepts
           session.offers[userId] = session.offers[userId] || [];
-          session.offers[userId].push({ name: c.name, count: countVal, rarity: c.rarity });
+          // store rarity uppercased for consistent display
+          session.offers[userId].push({ name: c.name, count: countVal, rarity: String(c.rarity ?? '').toUpperCase() });
           session.accepted[session.fromId] = false;
           session.accepted[session.toId] = false;
 
-          const newEmbed = EmbedBuilder.from(session.embedBase).setDescription(buildDescription());
-          try { await message.edit({ embeds: [newEmbed] }); } catch (e) { console.warn('failed to edit message', e); }
+          // build new embed from session.embedBase and update session.embedBase
+          const newEmbed = EmbedBuilder.from(session.embedBase).setDescription(buildDescription(session));
+          session.embedBase = newEmbed;
+          await message.edit({ embeds: [newEmbed] }).catch(e => console.warn('failed to edit message', e));
+
           try { await submitted.reply({ content: '✅ Card added to the trade!', ephemeral: true }); } catch {}
         } catch (e) {
           try { await btn.followUp({ content: 'Modal timed out or failed.', ephemeral: true }); } catch {}
@@ -270,7 +289,16 @@ module.exports = {
       // ---- Accept ----
       if (btn.customId === 'trade_accept') {
         session.accepted[userId] = true;
-        try { await btn.reply({ content: `✅ <@${userId}> has accepted.`, ephemeral: false }); } catch {}
+        //try { await btn.reply({ content: `✅ <@${userId}> has accepted.`, ephemeral: false }); } catch {}
+          try { await btn.deferUpdate(); } catch (e) { /* optional: console.warn('defer failed', e); */ }
+        // update embed to show acceptance marks
+        try {
+          const updated = EmbedBuilder.from(session.embedBase).setDescription(buildDescription(session));
+          session.embedBase = updated;
+          await message.edit({ embeds: [updated] }).catch(e => console.warn('failed to edit message', e));
+        } catch (e) {
+          console.warn('failed to update acceptance display', e);
+        }
 
         if (session.accepted[session.fromId] && session.accepted[session.toId]) {
           // finalize: re-fetch docs to reduce race issues
@@ -298,7 +326,8 @@ module.exports = {
                 targetDoc.cards[tIdx].timestamps = targetDoc.cards[tIdx].timestamps || [];
                 targetDoc.cards[tIdx].timestamps.push(new Date());
               } else {
-                targetDoc.cards.push({ name: offer.name, rarity: offer.rarity, count: offer.count, timestamps: [new Date()] });
+                // ensure stored rarity is uppercase for display consistency
+                targetDoc.cards.push({ name: offer.name, rarity: String(offer.rarity ?? '').toUpperCase(), count: offer.count, timestamps: [new Date()] });
               }
             }
             sourceDoc.markModified('cards');

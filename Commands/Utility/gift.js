@@ -99,7 +99,7 @@ module.exports = {
     await toDoc.save();
 
     return interaction.reply({
-      content: `You sent ${sendCount} x **[${interaction.options.getString('rarity')}] ${cardName}** to ${toUser.username}.`,
+      content: `You sent ${sendCount} x **[${interaction.options.getString('rarity').toUpperCase()}] ${cardName}** to ${toUser}.`,
       ephemeral: false
     });
   }
