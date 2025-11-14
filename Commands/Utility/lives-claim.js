@@ -40,15 +40,15 @@ module.exports = {
         const out = await resolveAttemptAtomic(userId, att.id);
         const stageName = getStageName(att.stage);
         if (!out.success) {
-          results.push({ stage: att.stage, stageName, name: att.name, ok: false, note: out.reason || 'failed' });
-        } else {
-          const ok = Boolean(out.successResult);
-          const note = ok ? (out.pCard ? `succeeded with her live and brought home **[P] ${out.pCard.name}** with her` : 'came home alone') : 'Live Failed.. - Graduated from sadness';
-          // inside the loop, after computing stageName and note/ok
-            results.push({ stage: att.stage, stageName, rarity: att.rarity, name: att.name, ok, note });
-
-          if (ok) successCount++;
-        }
+        results.push({ stage: att.stage, stageName, name: att.name, ok: false, note: out.reason || 'failed', points: out.awardedPoints || 0 });
+            } else {
+              const ok = Boolean(out.successResult);
+              const note = ok
+                ? (out.pCard ? `succeeded with her live and brought home **[P] ${out.pCard.name}** with her` : 'came home alone')
+                : 'Live Failed.. - Graduated from sadness';
+              results.push({ stage: att.stage, stageName, rarity: att.rarity, name: att.name, ok, note, points: out.awardedPoints || 0 });
+              if (ok) successCount++;
+            }
       } catch (err) {
         console.error('resolveAttemptAtomic error:', err);
         const stageName = getStageName(att?.stage ?? 'unknown');
@@ -77,7 +77,7 @@ module.exports = {
     const embed = new EmbedBuilder()
       .setTitle('Lives Claim Results')
       .setDescription(results.length
-        ? results.map(r => `${r.ok ? '✅' : '❌'} [${r.stageName}] | **[${r.rarity}]** ${r.name} ${r.note}`).join('\n')
+        ? results.map(r => `${r.ok ? '✅' : '❌'} [${r.stageName}] | **[${r.rarity}]** ${r.name} ${r.note}${r.points ? ` • + ${r.points} pts` : ''}`).join('\n')
         : 'No ready attempts to claim right now.')
       .setColor(successCount > 0 ? Colors.Green : Colors.Yellow)
       .addFields(

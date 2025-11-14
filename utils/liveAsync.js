@@ -22,18 +22,19 @@ function getStageName(stage) {
   return STAGE_NAMES[stage] || `Stage ${stage}`;
 }
 const SUCCESS_RATES = {
-  C: 0.01, OC: 0.05, U: 0.05,
+  C: 0.01, OC: 0.05, U: 0.02,
   S: 0.29, R: 0.11, RR: 0.30,
   SR: 0.46, OSR: 0.48,
   UR: 0.66, OUR: 0.77, SY: 0.57,
-  SEC: 0.99,
+  SEC: 0.09,
 };
 const DURATION_MS = {
-  1: 15 * 60 * 1000,
-  2: 30 * 60 * 1000,
+  1: 5 * 1000,
+  2: 60 * 60 * 1000,
   3: 5 * 60 * 60 * 1000,
   4: 12 * 60 * 60 * 1000,
-  5: 24 * 60 * 60 * 1000,
+  //5: 24 * 60 * 60 * 1000,
+  5: 5 * 1000,
 };
 
 function getStageForRarity(rarity) {
@@ -61,6 +62,32 @@ async function pickRandomPCard() {
     return null;
   }
 }
+// utils/liveAsync.js (add near other helpers)
+
+const STAGE5_POOL_DIRNAME = 'SP'; // folder under assets/images for stage 5 special pool
+
+async function pickRandomStage5Card() {
+  try {
+    const baseDir = path.join(__dirname, '..', 'assets', 'images', STAGE5_POOL_DIRNAME);
+    if (!fs.existsSync(baseDir) || !fs.statSync(baseDir).isDirectory()) return null;
+    const files = fs.readdirSync(baseDir).filter(f => /\.(png|jpe?g|gif)$/i.test(f));
+    if (!files.length) return null;
+    const chosen = files[Math.floor(Math.random() * files.length)];
+    const displayName = path.basename(chosen, path.extname(chosen)).replace(/[_-]+/g, ' ').trim();
+    const fullPath = path.join(baseDir, chosen);
+    return { file: fullPath, displayName };
+  } catch {
+    return null;
+  }
+}
+
+// Points awarding mapping helper
+// We'll compute base points as Math.round(successChance * 100) so rarities map to intuitive integer points.
+// e.g. successChance 0.66 => base 66 points
+function basePointsFromChance(chance) {
+  return Math.max(0, Math.round(Number(chance) * 100));
+}
+
 
 /**
  * Attempt to start an attempt atomically:
@@ -169,7 +196,8 @@ async function resolveAttemptAtomic(userId, attemptId) {
   const modified = upd && (upd.modifiedCount ?? upd.nModified ?? upd.n ?? 0);
   if (!upd || modified === 0) return { success: false, reason: 'already-resolved' };
 
-  let pCard = null;
+    let pCard = null;
+  let awardedPoints = 0;
 
   if (success) {
     // restore original card (increment or create)
@@ -184,26 +212,79 @@ async function resolveAttemptAtomic(userId, attemptId) {
       await User.updateOne({ id: userId }, { $push: { cards: { name: cardName, rarity: cardRarity, count: 1, timestamps: [new Date()] } } }).exec();
     }
 
-    // award random P
-    const picked = await pickRandomPCard();
-    if (picked) {
-      const displayName = picked.displayName || 'Performance Card';
-      const incP = await User.updateOne(
-        { id: userId, 'cards.name': displayName, 'cards.rarity': 'P' },
-        { $inc: { 'cards.$.count': 1 }, $push: { 'cards.$.timestamps': new Date() } }
-      ).exec();
-      const incPModified = incP && (incP.modifiedCount ?? incP.nModified ?? incP.n ?? 0);
-      if (!incP || incPModified === 0) {
-        await User.updateOne({ id: userId }, { $push: { cards: { name: displayName, rarity: 'P', count: 1, timestamps: [new Date()] } } }).exec();
+    // Special Stage 5 success behavior: 66% full-art card from Stage5 pool, 33% 25 points
+    if (Number(attempt.stage) === 5) {
+      const roll = Math.random();
+      if (roll <= 0.66) {
+        // award Stage5 special full art card from stage5 pool
+        const picked = await pickRandomStage5Card();
+        if (picked) {
+          const displayName = picked.displayName || 'Stage5 Card';
+          const incP = await User.updateOne(
+            { id: userId, 'cards.name': displayName, 'cards.rarity': 'P' },
+            { $inc: { 'cards.$.count': 1 }, $push: { 'cards.$.timestamps': new Date() } }
+          ).exec();
+          const incPModified = incP && (incP.modifiedCount ?? incP.nModified ?? incP.n ?? 0);
+          if (!incP || incPModified === 0) {
+            await User.updateOne({ id: userId }, { $push: { cards: { name: displayName, rarity: 'P', count: 1, timestamps: [new Date()] } } }).exec();
+          }
+          const userAfter = await User.findOne({ id: userId }).lean();
+          pCard = (userAfter.cards || []).find(c => String(c.name).toLowerCase() === String(displayName).toLowerCase() && c.rarity === 'P') || null;
+        }
+      } else {
+        // award 25 points on this branch of success
+        awardedPoints = 25;
+        if (awardedPoints > 0) {
+          await User.updateOne({ id: userId }, { $inc: { points: awardedPoints } }).exec();
+        }
       }
-      const userAfter = await User.findOne({ id: userId }).lean();
-      pCard = (userAfter.cards || []).find(c => String(c.name).toLowerCase() === String(displayName).toLowerCase() && c.rarity === 'P') || null;
+    } else {
+      // Non-stage5 success: award regular random P as before
+      const picked = await pickRandomPCard();
+      if (picked) {
+        const displayName = picked.displayName || 'Performance Card';
+        const incP = await User.updateOne(
+          { id: userId, 'cards.name': displayName, 'cards.rarity': 'P' },
+          { $inc: { 'cards.$.count': 1 }, $push: { 'cards.$.timestamps': new Date() } }
+        ).exec();
+        const incPModified = incP && (incP.modifiedCount ?? incP.nModified ?? incP.n ?? 0);
+        if (!incP || incPModified === 0) {
+          await User.updateOne({ id: userId }, { $push: { cards: { name: displayName, rarity: 'P', count: 1, timestamps: [new Date()] } } }).exec();
+        }
+        const userAfter = await User.findOne({ id: userId }).lean();
+        pCard = (userAfter.cards || []).find(c => String(c.name).toLowerCase() === String(displayName).toLowerCase() && c.rarity === 'P') || null;
+      }
     }
   } else {
-    // On failure: original card remains consumed (dies). No action needed.
+    // Failure: card "graduates". Award consolation points based on stage and rarity
+    // Get successChance for the rarity (0..1)
+    const chance = getSuccessChance(attempt.rarity);
+    // Determine stage multiplier:
+    // stage 1 => 100% of chance (points = chance * 100)
+    // stage 2 => 50%
+    // stage 3 => 50%
+    // stage 4 => 100%
+    // stage 5 => fail => 1000 points
+    const stageNum = Number(attempt.stage);
+    if (stageNum === 5) {
+      awardedPoints = 1000;
+    } else if (stageNum === 1) {
+      awardedPoints = basePointsFromChance(chance);
+    } else if (stageNum === 2 || stageNum === 3) {
+      awardedPoints = Math.round(basePointsFromChance(chance) * 0.5);
+    } else if (stageNum === 4) {
+      awardedPoints = basePointsFromChance(chance);
+    } else {
+      awardedPoints = Math.round(basePointsFromChance(chance) * 0.5);
+    }
+
+    if (awardedPoints > 0) {
+      await User.updateOne({ id: userId }, { $inc: { points: awardedPoints } }).exec();
+    }
   }
 
-  return { success: true, resolved: true, attemptId, successResult: success, pCard };
+  // Return result including pCard and awardedPoints to callers
+  return { success: true, resolved: true, attemptId, successResult: success, pCard, awardedPoints };
 }
 
 module.exports = {
@@ -213,5 +294,6 @@ module.exports = {
   getDurationForStage,
   getSuccessChance,
   pickRandomPCard,
+  pickRandomStage5Card, 
   getStageName,
 };
