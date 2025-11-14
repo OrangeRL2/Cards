@@ -94,9 +94,9 @@ function drawPack() {
 
   // Rare slot
   const rareOptions = [
-    { key: 'SEC', weight: 99.35 },
+    { key: 'R', weight: 99.35 },
     { key: 'OUR', weight: 0.50 },
-    { key: 'R', weight: 0.15 },
+    { key: 'SEC', weight: 0.15 },
   ];
   const rareRarity = pickWeighted(rareOptions);
   const rareFile = pickFileFromPool(rareRarity);
