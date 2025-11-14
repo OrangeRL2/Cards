@@ -1,6 +1,7 @@
-// utils/birthdayGrant.js
 const PullQuota = require('../models/PullQuota');
+const User = require('../models/User');
 const OSHI_LIST = require('../config/oshis');
+const { pickBdayFile, normalizeLabel } = require('./loadBdayImages');
 
 const EVENT_PULLS_AMOUNT = 12;
 
@@ -20,6 +21,41 @@ function alreadyGrantedThisJstYear(pq) {
   const lastYear = getJstInfo(new Date(pq.lastBirthdayGivenAt)).year;
   const thisYear = getJstInfo().year;
   return lastYear === thisYear;
+}
+
+async function addBdayCardToUser(userId, oshiLabel) {
+  try {
+    const file = pickBdayFile(oshiLabel);
+    if (!file) return null;
+
+    // Derive display name from filename (strip extension, replace _ and -)
+    const base = file.split('/').pop();
+    const ext = base.includes('.') ? base.substring(base.lastIndexOf('.')) : '';
+    const raw = ext ? base.slice(0, base.length - ext.length) : base;
+    const displayName = raw.replace(/[_-]+/g, ' ').trim();
+
+    // Ensure user doc exists
+    let userDoc = await User.findOne({ id: userId }).exec();
+    if (!userDoc) userDoc = await User.create({ id: userId, cards: [] });
+
+    // Find existing card entry for this bday (name + rarity)
+    let card = (userDoc.cards || []).find(c => c.name === displayName && c.rarity === 'bday');
+    if (!card) {
+      card = { name: displayName, rarity: 'bday', count: 1, timestamps: [new Date()] };
+      userDoc.cards = userDoc.cards || [];
+      userDoc.cards.push(card);
+    } else {
+      card.count = (card.count || 0) + 1;
+      card.timestamps = card.timestamps || [];
+      card.timestamps.push(new Date());
+    }
+
+    await userDoc.save();
+    return { file, displayName };
+  } catch (err) {
+    console.error('[addBdayCardToUser] error', err);
+    return null;
+  }
 }
 
 async function grantOnSelectIfBirthday(userId, chosenOshiId, { client = null, birthdayChannelId = null } = {}) {
@@ -47,12 +83,15 @@ async function grantOnSelectIfBirthday(userId, chosenOshiId, { client = null, bi
     await pq.save();
   }
 
+  // Try to also grant the birthday card (best-effort)
+  const bdayResult = await addBdayCardToUser(userId, oshi.label);
+
   // Personalized embed announcement when user triggers selection grant (optional)
   if (client && birthdayChannelId) {
     try {
       const ch = await client.channels.fetch(birthdayChannelId).catch(() => null);
       if (ch && ch.isTextBased?.()) {
-        const peopleText = `• <@${userId}> just chose **${oshi.label}** as their oshi and received **${EVENT_PULLS_AMOUNT} event pulls**!`;
+        const peopleText = `• <@${userId}> just chose **${oshi.label}** as their oshi and received **${EVENT_PULLS_AMOUNT} event pulls**${bdayResult ? ` as well as **${oshi.label}\'s** birthday card!` : '!'}`;
         const celebrationLines = [
           'Make a wish and celebrate!',
           'Cake, confetti, and fanart time!',
@@ -63,7 +102,7 @@ async function grantOnSelectIfBirthday(userId, chosenOshiId, { client = null, bi
 
         const embed = {
           title: `🎉 Happy Birthday ${oshi.label}! 🎉`,
-          description: `${peopleText}\n\n${celebration}`,
+          description: peopleText + `\n\n${celebration}`,
           color: 0xffcc00,
           timestamp: new Date().toISOString(),
           footer: { text: 'Birthday event' },
@@ -87,7 +126,7 @@ async function grantOnSelectIfBirthday(userId, chosenOshiId, { client = null, bi
     }
   }
 
-  return { granted: true, method: 'selection' };
+  return { granted: true, method: 'selection', gaveCard: Boolean(bdayResult) };
 }
 
 module.exports = { getJstInfo, alreadyGrantedThisJstYear, grantOnSelectIfBirthday };

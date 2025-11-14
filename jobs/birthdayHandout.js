@@ -1,10 +1,11 @@
-// jobs/birthdayHandout.js
 const cron = require('node-cron');
 const Oshi = require('../models/Oshi');
 const PullQuota = require('../models/PullQuota');
+const User = require('../models/User');
 const oshis = require('../config/oshis'); // array with id,label,bdayMonth,bdayDay
-const { getJstInfo, alreadyGrantedThisJstYear } = require('../utils/birthdayGrant'); // reuse helpers
+const { getJstInfo } = require('../utils/birthdayGrant'); // reuse helper
 const DailyEvent = require('../models/DailyEvent');
+const { pickBdayFile } = require('../utils/loadBdayImages');
 const { jstDateString } = require('../utils/jst');
 
 const EVENT_PULLS_AMOUNT = 12;
@@ -16,7 +17,7 @@ function todaysOshiIds() {
 }
 
 // Announce helper: try to send to configured channel via client
-async function announceBirthday(client, birthdayChannelId, oshiId) {
+async function announceBirthday(client, birthdayChannelId, oshiId, grantsCount) {
   if (!client || !birthdayChannelId) return;
   try {
     const o = oshis.find(x => x.id === oshiId);
@@ -27,18 +28,15 @@ async function announceBirthday(client, birthdayChannelId, oshiId) {
 
     const embed = {
       title: `🎉 Happy Birthday ${o.label}! 🎉`,
-      description: `Everyone who has **${o.label}** as their oshi receives **12 event pulls** today!`,
+      description: `Everyone who has **${o.label}** as their oshi receives **${EVENT_PULLS_AMOUNT} event pulls** as well as **${o.label}\'s** bday card today!`,
       color: 0xffcc00,
       timestamp: new Date().toISOString(),
       footer: { text: 'Birthday event' },
     };
 
-    // include image or thumbnail if present in your oshis config
     if (o.image) {
-      // prefer image in the embed body if available
       embed.image = { url: o.image };
     } else {
-      // fallback animated gif you provided
       embed.image = { url: 'https://media.discordapp.net/attachments/432383725515309056/864530510276198400/kasumifinal.gif' };
     }
 
@@ -48,6 +46,38 @@ async function announceBirthday(client, birthdayChannelId, oshiId) {
   }
 }
 
+async function addBdayCardToUser(userId, oshiLabel) {
+  try {
+    const file = pickBdayFile(oshiLabel);
+    if (!file) return null;
+
+    const base = file.split('/').pop();
+    const ext = base.includes('.') ? base.substring(base.lastIndexOf('.')) : '';
+    const raw = ext ? base.slice(0, base.length - ext.length) : base;
+    const displayName = raw.replace(/[_-]+/g, ' ').trim();
+
+    // Ensure user doc exists
+    let userDoc = await User.findOne({ id: userId }).exec();
+    if (!userDoc) userDoc = await User.create({ id: userId, cards: [] });
+
+    let card = (userDoc.cards || []).find(c => c.name === displayName && c.rarity === 'bday');
+    if (!card) {
+      card = { name: displayName, rarity: 'bday', count: 1, timestamps: [new Date()] };
+      userDoc.cards = userDoc.cards || [];
+      userDoc.cards.push(card);
+    } else {
+      card.count = (card.count || 0) + 1;
+      card.timestamps = card.timestamps || [];
+      card.timestamps.push(new Date());
+    }
+
+    await userDoc.save();
+    return { file, displayName };
+  } catch (err) {
+    console.error('[addBdayCardToUser] error', err);
+    return null;
+  }
+}
 
 async function grantBirthdayPulls({ client = null, birthdayChannelId = null } = {}) {
   try {
@@ -123,8 +153,14 @@ async function grantBirthdayPulls({ client = null, birthdayChannelId = null } = 
             await pq.save();
           }
 
+          // Give birthday card (best-effort). Ignore if missing.
+          const bdayCard = await addBdayCardToUser(userId, oshiDoc.label);
+          if (!bdayCard) {
+            console.warn(`[birthdayHandout] no bday file found for ${oshiDoc.label} when granting to ${userId}`);
+          }
+
           grants++;
-          console.log(`[birthdayHandout] granted ${EVENT_PULLS_AMOUNT} to ${userId} for ${oshiId}`);
+          console.log(`[birthdayHandout] granted ${EVENT_PULLS_AMOUNT} to ${userId} for ${oshiId} (bday card ${bdayCard ? 'added' : 'missing'})`);
         } catch (userErr) {
           console.error('[birthdayHandout] error granting to user', userId, userErr);
         }
@@ -139,7 +175,7 @@ async function grantBirthdayPulls({ client = null, birthdayChannelId = null } = 
 
       if (grants > 0) {
         try {
-          await announceBirthday(client, birthdayChannelId, oshiId);
+          await announceBirthday(client, birthdayChannelId, oshiId, grants);
         } catch (announceErr) {
           console.error('[birthdayHandout] announce error for', oshiId, announceErr);
         }

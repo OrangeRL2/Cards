@@ -76,7 +76,7 @@ module.exports = {
       });
 
       list.sort((a, b) => a.nextDate - b.nextDate);
-      const nextFive = list.slice(0, 5);
+      const nextFive = list.slice(0, 10);
 
       const lines = nextFive.map((x, idx) => {
         const dayWord = x.days === 0 ? 'Today' : `${x.days} day${x.days === 1 ? '' : 's'}`;

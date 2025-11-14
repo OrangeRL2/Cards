@@ -220,67 +220,113 @@ module.exports = {
     let listPage = 0;
     let imageIdx = 0;
 
-    const collector = message.createMessageComponentCollector({
-      componentType: ComponentType.Button,
-      time: 120_000,
-      filter: btn => btn.user.id === interaction.user.id && ['list_prev', 'list_next', 'list_view', 'skip', 'prev', 'next', 'back'].includes(btn.customId),
-    });
+// create the collector without a built-in time limit
+const collector = message.createMessageComponentCollector({
+  componentType: ComponentType.Button,
+  filter: btn => btn.user.id === interaction.user.id && ['list_prev', 'list_next', 'list_view', 'skip', 'prev', 'next', 'back'].includes(btn.customId),
+  // no `time` here — we'll manage idle ourselves
+});
 
-    collector.on('collect', async btn => {
-      try {
-        switch (btn.customId) {
-          case 'list_prev':
-            listPage = Math.max(0, listPage - 1);
-            await btn.update({ embeds: [listEmbeds[listPage]], components: [listRows[listPage]] });
-            break;
+let idleTimeout = null;
+const IDLE_LIMIT = 120_000; // 2 minutes
 
-          case 'list_next':
-            listPage = Math.min(totalPages - 1, listPage + 1);
-            await btn.update({ embeds: [listEmbeds[listPage]], components: [listRows[listPage]] });
-            break;
+function resetIdleTimer() {
+  if (idleTimeout) clearTimeout(idleTimeout);
+  idleTimeout = setTimeout(() => {
+    // stop the collector with a reason so collector.on('end') can handle cleanup
+    collector.stop('idle');
+  }, IDLE_LIMIT);
+}
 
-          case 'skip': {
-            const modal = new ModalBuilder().setCustomId('skip_modal').setTitle('Jump to Page');
-            const input = new TextInputBuilder().setCustomId('page_input').setLabel(`Enter a page (1–${totalPages})`).setStyle(TextInputStyle.Short).setRequired(true);
-            modal.addComponents(new ActionRowBuilder().addComponents(input));
-            await btn.showModal(modal);
+// start the idle timer once when the collector is created
+resetIdleTimer();
 
-            try {
-              const modalInt = await btn.awaitModalSubmit({ filter: m => m.customId === 'skip_modal' && m.user.id === interaction.user.id, time: 60000 });
-              let target = parseInt(modalInt.fields.getTextInputValue('page_input'), 10);
-              if (isNaN(target)) target = 1;
-              target = Math.max(1, Math.min(target, totalPages));
-              listPage = target - 1;
-              await modalInt.update({ embeds: [listEmbeds[listPage]], components: [listRows[listPage]] });
-            } catch (err) {
-              // ignore modal timeout / cancel
-            }
-            break;
-          }
+collector.on('collect', async btn => {
+  try {
+    // reset the idle timer on every interaction
+    resetIdleTimer();
 
-          case 'list_view':
-            imageIdx = listPage * ITEMS_PER_PAGE;
-            imageIdx = Math.max(0, Math.min(imageIdx, imageEmbeds.length - 1));
-            await btn.update({ embeds: [imageEmbeds[imageIdx]], components: [imageRows[imageIdx]] });
-            break;
+    switch (btn.customId) {
+      case 'list_prev':
+        listPage = Math.max(0, listPage - 1);
+        await btn.update({ embeds: [listEmbeds[listPage]], components: [listRows[listPage]] });
+        break;
 
-          case 'prev':
-          case 'next':
-            imageIdx += btn.customId === 'next' ? 1 : -1;
-            imageIdx = Math.max(0, Math.min(imageIdx, imageEmbeds.length - 1));
-            await btn.update({ embeds: [imageEmbeds[imageIdx]], components: [imageRows[imageIdx]] });
-            break;
+      case 'list_next':
+        listPage = Math.min(totalPages - 1, listPage + 1);
+        await btn.update({ embeds: [listEmbeds[listPage]], components: [listRows[listPage]] });
+        break;
 
-          case 'back':
-            listPage = Math.floor(imageIdx / ITEMS_PER_PAGE);
-            await btn.update({ embeds: [listEmbeds[listPage]], components: [listRows[listPage]] });
-            break;
+      case 'skip': {
+        const modal = new ModalBuilder().setCustomId('skip_modal').setTitle('Jump to Page');
+        const input = new TextInputBuilder().setCustomId('page_input').setLabel(`Enter a page (1–${totalPages})`).setStyle(TextInputStyle.Short).setRequired(true);
+        modal.addComponents(new ActionRowBuilder().addComponents(input));
+        await btn.showModal(modal);
+
+        try {
+          const modalInt = await btn.awaitModalSubmit({ filter: m => m.customId === 'skip_modal' && m.user.id === interaction.user.id, time: 60000 });
+          // reset idle timer after modal submit as well
+          resetIdleTimer();
+
+          let target = parseInt(modalInt.fields.getTextInputValue('page_input'), 10);
+          if (isNaN(target)) target = 1;
+          target = Math.max(1, Math.min(target, totalPages));
+          listPage = target - 1;
+          await modalInt.update({ embeds: [listEmbeds[listPage]], components: [listRows[listPage]] });
+        } catch (err) {
+          // ignore modal timeout / cancel
         }
-      } catch (err) {
-        console.error('inventory collector error:', err);
+        break;
       }
-    });
 
+      case 'list_view':
+        imageIdx = listPage * ITEMS_PER_PAGE;
+        imageIdx = Math.max(0, Math.min(imageIdx, imageEmbeds.length - 1));
+        await btn.update({ embeds: [imageEmbeds[imageIdx]], components: [imageRows[imageIdx]] });
+        break;
+
+      case 'prev':
+      case 'next':
+        imageIdx += btn.customId === 'next' ? 1 : -1;
+        imageIdx = Math.max(0, Math.min(imageIdx, imageEmbeds.length - 1));
+        await btn.update({ embeds: [imageEmbeds[imageIdx]], components: [imageRows[imageIdx]] });
+        break;
+
+      case 'back':
+        listPage = Math.floor(imageIdx / ITEMS_PER_PAGE);
+        await btn.update({ embeds: [listEmbeds[listPage]], components: [listRows[listPage]] });
+        break;
+    }
+  } catch (err) {
+    console.error('inventory collector error:', err);
+  }
+});
+
+collector.on('end', async (_collected, reason) => {
+  try {
+    // clear any pending idle timer
+    if (idleTimeout) {
+      clearTimeout(idleTimeout);
+      idleTimeout = null;
+    }
+
+    // if ended because of idle (or any other reason), disable the message buttons
+    const disabled = message.components.map(r => {
+      const row = ActionRowBuilder.from(r);
+      row.components.forEach(b => b.setDisabled(true));
+      return row;
+    });
+    await message.edit({ components: disabled });
+
+    // optional: if you want to notify the user why it ended
+    if (reason === 'idle') {
+      // e.g., edit the embed footer or send a follow-up message
+      // await interaction.followUp({ content: 'Session timed out due to inactivity.', ephemeral: true });
+    }
+  } catch (err) {
+    console.error('inventory cleanup error:', err);
+  }
+});
     collector.on('end', async () => {
       try {
         const disabled = message.components.map(r => {

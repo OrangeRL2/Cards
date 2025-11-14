@@ -71,7 +71,7 @@ module.exports = {
 			}
 
           const birthdayText = grantResult && grantResult.granted
-            ? ' Bonus: +15 event pulls granted for birthday!'
+            ? ' Bonus: +12 event pulls granted for birthday!'
             : '';
 
           // confirmation: remove components so it can't be reused
