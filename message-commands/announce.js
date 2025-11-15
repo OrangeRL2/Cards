@@ -7,7 +7,7 @@ const config = require('../config.json');
 const OWNER_ID = '153551890976735232'; // replace with your Discord ID (string)
 const PREFIX = '!'; // prefix used by your dispatcher
 const MAX_RECIPIENTS_HARD_CAP = 2000;
-const DEFAULT_COUNT_PARAM = 50;
+const DEFAULT_COUNT_PARAM = 500;
 const BATCH_SIZE = 200;
 
 // parse args: !announce "Title" "Message" [--flag=val ...]

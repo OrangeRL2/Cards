@@ -58,15 +58,73 @@ module.exports = {
     let consumeResult;
     try {
       if (allowEvent) {
-        // Use existing logic that prefers timed then event pulls
-        consumeResult = await pullQuota.consumePulls(discordUserId, amount);
-      } else {
-        // Force consume from timed pulls only (no event pulls)
-        // We'll reuse getUpdatedQuota to refresh timed pulls first
+        // Deterministic consumption: use event pulls first, then timed pulls
         const { doc, nextRefillInMs } = await pullQuota.getUpdatedQuota(discordUserId);
 
         if (!doc) {
-          // Shouldn't happen but handle defensively
+          consumeResult = {
+            success: false,
+            consumedFromEvent: 0,
+            consumedFromTimed: 0,
+            doc,
+            remainingEvent: 0,
+            remainingTimed: 0,
+            nextRefillInMs,
+          };
+        } else {
+          const needed = amount; // currently 1
+          let consumedFromEvent = 0;
+          let consumedFromTimed = 0;
+
+          // use event pulls first
+          if (doc.eventPulls >= needed) {
+            consumedFromEvent = needed;
+            doc.eventPulls -= consumedFromEvent;
+          } else if (doc.eventPulls > 0) {
+            consumedFromEvent = doc.eventPulls;
+            doc.eventPulls = 0;
+          }
+
+          const remainingNeeded = needed - consumedFromEvent;
+
+          if (remainingNeeded > 0 && doc.pulls > 0) {
+            // consume from timed pulls for the rest
+            consumedFromTimed = Math.min(doc.pulls, remainingNeeded);
+            const wasFullBefore = doc.pulls >= pullQuota.MAX_STOCK;
+            doc.pulls = Math.max(0, doc.pulls - consumedFromTimed);
+            if (wasFullBefore && consumedFromTimed > 0) {
+              // start refill timer now if we removed from a full pool
+              doc.lastRefill = new Date();
+            }
+          }
+
+          await doc.save();
+
+          // recompute nextRefillInMs after mutation
+          let nextIn = 0;
+          if (doc.pulls < pullQuota.MAX_STOCK) {
+            const now = Date.now();
+            const lastRefillTs = doc.lastRefill ? new Date(doc.lastRefill).getTime() : now;
+            nextIn = Math.max(0, pullQuota.REFILL_INTERVAL_MS - (now - lastRefillTs));
+          }
+
+          const success = (consumedFromEvent + consumedFromTimed) === needed;
+
+          consumeResult = {
+            success,
+            consumedFromEvent,
+            consumedFromTimed,
+            doc,
+            remainingEvent: doc.eventPulls,
+            remainingTimed: doc.pulls,
+            nextRefillInMs: nextIn,
+          };
+        }
+      } else {
+        // existing timed-only branch (unchanged)
+        const { doc, nextRefillInMs } = await pullQuota.getUpdatedQuota(discordUserId);
+
+        if (!doc) {
           consumeResult = {
             success: false,
             consumedFromEvent: 0,
@@ -81,7 +139,6 @@ module.exports = {
           const wasFullBefore = doc.pulls >= pullQuota.MAX_STOCK;
           doc.pulls = Math.max(0, doc.pulls - consumedFromTimed);
           if (wasFullBefore) {
-            // start refill timer now if we removed from a full pool
             doc.lastRefill = new Date();
           }
           await doc.save();
@@ -104,7 +161,6 @@ module.exports = {
             nextRefillInMs: nextIn,
           };
         } else {
-          // No timed pulls available and event usage disallowed -> fail
           consumeResult = {
             success: false,
             consumedFromEvent: 0,
@@ -147,7 +203,7 @@ module.exports = {
     // Draw exactly one pack
     let pack;
     try {
-      pack = drawPack(); // [{ rarity, file }, ...]
+      pack = drawPack(discordUserId); // [{ rarity, file }, ...]
     } catch (err) {
       console.error('drawPack error:', err);
       // rollback

@@ -15,6 +15,7 @@ const User = require('../../models/User');
 
 const IMAGE_BASE = 'http://152.69.195.48/images';
 const ITEMS_PER_PAGE = 10;
+const IDLE_LIMIT = 120_000; // 2 minutes
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -30,10 +31,10 @@ module.exports = {
           { name: 'R', value: 'R' },
           { name: 'S', value: 'S' },
           { name: 'P', value: 'P' },
-          { name: 'SY', value: 'SY' },
           { name: 'RR', value: 'RR' },
           { name: 'SR', value: 'SR' },
           { name: 'OSR', value: 'OSR' },
+          { name: 'SY', value: 'SY' },
           { name: 'UR', value: 'UR' },
           { name: 'OUR', value: 'OUR' },
           { name: 'SEC', value: 'SEC' },
@@ -52,6 +53,7 @@ module.exports = {
           { name: 'Rarity (default)', value: 'rarity' },
           { name: 'Newest first', value: 'newest' },
           { name: 'Oldest first', value: 'oldest' },
+          { name: 'Amount (count)', value: 'amount' },
         ),
     ),
   requireOshi: true,
@@ -80,9 +82,8 @@ module.exports = {
       const nameKey = topKey;
       const group = groupRaw || {};
 
-      // Case A: new grouped shape with byRarity
+      // Case A: grouped shape with byRarity
       if (group.byRarity) {
-        // ensure byRarity is iterable (Map or plain object)
         const inner = group.byRarity instanceof Map
           ? Array.from(group.byRarity.entries())
           : Object.entries(group.byRarity || {});
@@ -98,7 +99,7 @@ module.exports = {
         continue;
       }
 
-      // Case B: previously-flat cardInfo stored directly as value (old schema)
+      // Case B: flat cardInfo stored directly
       if (group.count !== undefined && group.rarity) {
         const entryName = group.name || nameKey;
         const rarity = (group.rarity || '').toString();
@@ -108,7 +109,7 @@ module.exports = {
         continue;
       }
 
-      // Case C: old composite key like "Name::R"
+      // Case C: composite key "Name::R"
       if (typeof nameKey === 'string' && nameKey.includes('::')) {
         const [nm, rar] = nameKey.split('::');
         const info = group || {};
@@ -119,8 +120,7 @@ module.exports = {
         continue;
       }
 
-      // Fallback: unknown shape, try to extract anything useful
-      // If group has keys that look like rarities, treat them as inner map
+      // Fallback: try inner entries
       const possibleInner = Object.entries(group || {}).slice(0, 50);
       for (const [k, v] of possibleInner) {
         if (v && (v.count !== undefined || v.rarity)) {
@@ -143,54 +143,66 @@ module.exports = {
       return interaction.editReply({ content: 'No cards match filters.', ephemeral: true });
     }
 
+    // Totals
+    const totalCards = allEntries.reduce((sum, e) => sum + (Number(e.count) || 0), 0);
+    const totalPulls = allEntries.reduce((sum, e) => sum + (Array.isArray(e.timestamps) ? e.timestamps.length : 0), 0);
+    const filteredCards = entries.reduce((sum, e) => sum + (Number(e.count) || 0), 0);
+    const filteredPulls = entries.reduce((sum, e) => sum + (Array.isArray(e.timestamps) ? e.timestamps.length : 0), 0);
+
     // Sorting
     if (sortBy === 'newest') {
       entries.sort((a, b) => (Math.max(...(b.timestamps || [0])) || 0) - (Math.max(...(a.timestamps || [0])) || 0));
     } else if (sortBy === 'oldest') {
       entries.sort((a, b) => (Math.min(...(a.timestamps || [Date.now()])) || 0) - (Math.min(...(b.timestamps || [Date.now()])) || 0));
+    } else if (sortBy === 'amount') {
+      entries.sort((a, b) => {
+        const ca = Number(a.count || 0);
+        const cb = Number(b.count || 0);
+        if (cb !== ca) return cb - ca;
+        return a.name.localeCompare(b.name);
+      });
     } else {
       const order = {
-        C: 1, OC: 2, U: 3, R: 4, S: 5, P: 6, SY: 7, RR: 8, SR: 9, OSR: 10, UR: 11, HR: 12, OUR: 13, SEC: 14,
+        C: 1, U: 2, R: 3, OC: 4, S: 5, P: 6, SP:7, RR: 8, SR: 9, OSR: 10, SY: 11, UR: 12, HR: 13, OUR: 14, SEC: 15, UP:16
       };
       entries.sort((a, b) => {
         const d = (order[b.rarity] || 999) - (order[a.rarity] || 999);
-        return d || a.name.localeCompare(b.name);
+        if (d !== 0) return d;
+        return a.name.localeCompare(b.name);
       });
     }
-     // --- Totals: total copies (cards) and pulls (timestamps) ---
-    const totalCards = allEntries.reduce((sum, e) => sum + (Number(e.count) || 0), 0);
-    const totalPulls = allEntries.reduce((sum, e) => sum + (Array.isArray(e.timestamps) ? e.timestamps.length : 0), 0);
 
-    const filteredCards = entries.reduce((sum, e) => sum + (Number(e.count) || 0), 0);
-    const filteredPulls = entries.reduce((sum, e) => sum + (Array.isArray(e.timestamps) ? e.timestamps.length : 0), 0);
     // Paginate
     const totalPages = Math.max(1, Math.ceil(entries.length / ITEMS_PER_PAGE));
     const pages = Array.from({ length: totalPages }, (_, i) => entries.slice(i * ITEMS_PER_PAGE, (i + 1) * ITEMS_PER_PAGE));
 
-    // Prepare image data (encoded name)
+    // Prepare image data (encoded name) — keep original encoding: encodeURIComponent(c.name)
     const imageResults = entries.map(c => {
-      const encodedName = encodeURIComponent(c.name);
-      const url = `${IMAGE_BASE}/${c.rarity}/${encodedName}.png`;
+      const encodedName = encodeURIComponent(String(c.name));
+      const url = `${IMAGE_BASE}/${encodeURIComponent(c.rarity)}/${encodedName}.png`;
       return { c, url };
     });
 
-    // Build embeds and components
+    // Helper to build unique customIds per interaction
+    const uid = interaction.id || `${Date.now()}_${Math.floor(Math.random()*1000)}`;
+    const cid = (name) => `${name}_${uid}`;
+
+    // Build embeds and components (prebuilt)
     const listEmbeds = pages.map((chunk, i) =>
       new EmbedBuilder()
         .setTitle(`${interaction.user.username}'s Inventory`)
         .setDescription(chunk.map(c => `**[${c.rarity}]** ${c.name} (x${c.count})`).join('\n'))
         .setColor(Colors.Blue)
-        .setFooter({ text: `Page ${i + 1}/${totalPages} • Cards: ${filteredCards}` })
+        .setFooter({ text: `Page ${i + 1}/${totalPages} • Cards: ${filteredCards} • Pulls: ${filteredPulls} • Total cards: ${totalCards}` })
     );
 
-    const listRows = pages.map((_, i) =>
-      new ActionRowBuilder().addComponents(
-        new ButtonBuilder().setCustomId('list_prev').setLabel('◀ Prev').setStyle(ButtonStyle.Primary).setDisabled(i === 0),
-        new ButtonBuilder().setCustomId('list_view').setLabel('🃏Image').setStyle(ButtonStyle.Success),
-        new ButtonBuilder().setCustomId('list_next').setLabel('Next ▶').setStyle(ButtonStyle.Primary).setDisabled(i === totalPages - 1),
-        new ButtonBuilder().setCustomId('skip').setLabel('📖 Jump').setStyle(ButtonStyle.Secondary),
-      )
-    );
+    const listRows = pages.map((_, i) => {
+      const prev = new ButtonBuilder().setCustomId(cid(`list_prev_${i}`)).setLabel('◀ Prev').setStyle(ButtonStyle.Primary).setDisabled(i === 0);
+      const view = new ButtonBuilder().setCustomId(cid(`list_view_${i}`)).setLabel('🃏 Image').setStyle(ButtonStyle.Success);
+      const next = new ButtonBuilder().setCustomId(cid(`list_next_${i}`)).setLabel('Next ▶').setStyle(ButtonStyle.Primary).setDisabled(i === totalPages - 1);
+      const skip = new ButtonBuilder().setCustomId(cid(`skip_${i}`)).setLabel('📖 Jump').setStyle(ButtonStyle.Secondary);
+      return new ActionRowBuilder().addComponents(prev, view, next, skip);
+    });
 
     const imageEmbeds = imageResults.map(({ c, url }, i) =>
       new EmbedBuilder()
@@ -205,13 +217,12 @@ module.exports = {
         .setFooter({ text: `Card ${i + 1} of ${imageResults.length}` })
     );
 
-    const imageRows = imageResults.map((_, i) =>
-      new ActionRowBuilder().addComponents(
-        new ButtonBuilder().setCustomId('prev').setLabel('◀ Prev').setStyle(ButtonStyle.Primary).setDisabled(i === 0),
-        new ButtonBuilder().setCustomId('back').setLabel('⤵️ Back').setStyle(ButtonStyle.Secondary),
-        new ButtonBuilder().setCustomId('next').setLabel('Next ▶').setStyle(ButtonStyle.Primary).setDisabled(i === imageResults.length - 1),
-      )
-    );
+    const imageRows = imageResults.map((_, i) => {
+      const prev = new ButtonBuilder().setCustomId(cid(`img_prev_${i}`)).setLabel('◀ Prev').setStyle(ButtonStyle.Primary).setDisabled(i === 0);
+      const back = new ButtonBuilder().setCustomId(cid(`img_back_${i}`)).setLabel('⤵️ Back').setStyle(ButtonStyle.Secondary);
+      const next = new ButtonBuilder().setCustomId(cid(`img_next_${i}`)).setLabel('Next ▶').setStyle(ButtonStyle.Primary).setDisabled(i === imageResults.length - 1);
+      return new ActionRowBuilder().addComponents(prev, back, next);
+    });
 
     // Send initial list page
     await interaction.editReply({ embeds: [listEmbeds[0]], components: [listRows[0]] });
@@ -220,121 +231,97 @@ module.exports = {
     let listPage = 0;
     let imageIdx = 0;
 
-// create the collector without a built-in time limit
-const collector = message.createMessageComponentCollector({
-  componentType: ComponentType.Button,
-  filter: btn => btn.user.id === interaction.user.id && ['list_prev', 'list_next', 'list_view', 'skip', 'prev', 'next', 'back'].includes(btn.customId),
-  // no `time` here — we'll manage idle ourselves
-});
+    // create the collector and filter by the uid embedded in customId
+    const collector = message.createMessageComponentCollector({
+      componentType: ComponentType.Button,
+      filter: btn => btn.user.id === interaction.user.id && String(btn.customId).endsWith(`_${uid}`),
+    });
 
-let idleTimeout = null;
-const IDLE_LIMIT = 120_000; // 2 minutes
-
-function resetIdleTimer() {
-  if (idleTimeout) clearTimeout(idleTimeout);
-  idleTimeout = setTimeout(() => {
-    // stop the collector with a reason so collector.on('end') can handle cleanup
-    collector.stop('idle');
-  }, IDLE_LIMIT);
-}
-
-// start the idle timer once when the collector is created
-resetIdleTimer();
-
-collector.on('collect', async btn => {
-  try {
-    // reset the idle timer on every interaction
+    let idleTimeout = null;
+    function resetIdleTimer() {
+      if (idleTimeout) clearTimeout(idleTimeout);
+      idleTimeout = setTimeout(() => collector.stop('idle'), IDLE_LIMIT);
+    }
     resetIdleTimer();
 
-    switch (btn.customId) {
-      case 'list_prev':
-        listPage = Math.max(0, listPage - 1);
-        await btn.update({ embeds: [listEmbeds[listPage]], components: [listRows[listPage]] });
-        break;
-
-      case 'list_next':
-        listPage = Math.min(totalPages - 1, listPage + 1);
-        await btn.update({ embeds: [listEmbeds[listPage]], components: [listRows[listPage]] });
-        break;
-
-      case 'skip': {
-        const modal = new ModalBuilder().setCustomId('skip_modal').setTitle('Jump to Page');
-        const input = new TextInputBuilder().setCustomId('page_input').setLabel(`Enter a page (1–${totalPages})`).setStyle(TextInputStyle.Short).setRequired(true);
-        modal.addComponents(new ActionRowBuilder().addComponents(input));
-        await btn.showModal(modal);
-
-        try {
-          const modalInt = await btn.awaitModalSubmit({ filter: m => m.customId === 'skip_modal' && m.user.id === interaction.user.id, time: 60000 });
-          // reset idle timer after modal submit as well
-          resetIdleTimer();
-
-          let target = parseInt(modalInt.fields.getTextInputValue('page_input'), 10);
-          if (isNaN(target)) target = 1;
-          target = Math.max(1, Math.min(target, totalPages));
-          listPage = target - 1;
-          await modalInt.update({ embeds: [listEmbeds[listPage]], components: [listRows[listPage]] });
-        } catch (err) {
-          // ignore modal timeout / cancel
-        }
-        break;
-      }
-
-      case 'list_view':
-        imageIdx = listPage * ITEMS_PER_PAGE;
-        imageIdx = Math.max(0, Math.min(imageIdx, imageEmbeds.length - 1));
-        await btn.update({ embeds: [imageEmbeds[imageIdx]], components: [imageRows[imageIdx]] });
-        break;
-
-      case 'prev':
-      case 'next':
-        imageIdx += btn.customId === 'next' ? 1 : -1;
-        imageIdx = Math.max(0, Math.min(imageIdx, imageEmbeds.length - 1));
-        await btn.update({ embeds: [imageEmbeds[imageIdx]], components: [imageRows[imageIdx]] });
-        break;
-
-      case 'back':
-        listPage = Math.floor(imageIdx / ITEMS_PER_PAGE);
-        await btn.update({ embeds: [listEmbeds[listPage]], components: [listRows[listPage]] });
-        break;
-    }
-  } catch (err) {
-    console.error('inventory collector error:', err);
-  }
-});
-
-collector.on('end', async (_collected, reason) => {
-  try {
-    // clear any pending idle timer
-    if (idleTimeout) {
-      clearTimeout(idleTimeout);
-      idleTimeout = null;
-    }
-
-    // if ended because of idle (or any other reason), disable the message buttons
-    const disabled = message.components.map(r => {
-      const row = ActionRowBuilder.from(r);
-      row.components.forEach(b => b.setDisabled(true));
-      return row;
-    });
-    await message.edit({ components: disabled });
-
-    // optional: if you want to notify the user why it ended
-    if (reason === 'idle') {
-      // e.g., edit the embed footer or send a follow-up message
-      // await interaction.followUp({ content: 'Session timed out due to inactivity.', ephemeral: true });
-    }
-  } catch (err) {
-    console.error('inventory cleanup error:', err);
-  }
-});
-    collector.on('end', async () => {
+    collector.on('collect', async btn => {
+      resetIdleTimer();
       try {
+        const parts = btn.customId.split(`_${uid}`)[0]; // e.g., list_prev_0 or img_next_3
+        // normalize action and index
+        if (parts.startsWith('list_prev_')) {
+          listPage = Math.max(0, listPage - 1);
+          await btn.update({ embeds: [listEmbeds[listPage]], components: [listRows[listPage]] });
+          return;
+        }
+        if (parts.startsWith('list_next_')) {
+          listPage = Math.min(totalPages - 1, listPage + 1);
+          await btn.update({ embeds: [listEmbeds[listPage]], components: [listRows[listPage]] });
+          return;
+        }
+        if (parts.startsWith('list_view_')) {
+          imageIdx = listPage * ITEMS_PER_PAGE;
+          imageIdx = Math.max(0, Math.min(imageIdx, imageEmbeds.length - 1));
+          await btn.update({ embeds: [imageEmbeds[imageIdx]], components: [imageRows[imageIdx]] });
+          return;
+        }
+        if (parts.startsWith('skip_')) {
+          const modalId = `skip_modal_${uid}`;
+          const modal = new ModalBuilder().setCustomId(modalId).setTitle('Jump to Page');
+          const input = new TextInputBuilder().setCustomId('page_input').setLabel(`Enter a page (1–${totalPages})`).setStyle(TextInputStyle.Short).setRequired(true);
+          modal.addComponents(new ActionRowBuilder().addComponents(input));
+          await btn.showModal(modal);
+
+          try {
+            const modalInt = await btn.awaitModalSubmit({ filter: m => m.customId === modalId && m.user.id === interaction.user.id, time: 60000 });
+            resetIdleTimer();
+            let target = parseInt(modalInt.fields.getTextInputValue('page_input'), 10);
+            if (isNaN(target)) target = 1;
+            target = Math.max(1, Math.min(target, totalPages));
+            listPage = target - 1;
+            await modalInt.update({ embeds: [listEmbeds[listPage]], components: [listRows[listPage]] });
+          } catch (err) {
+            try { await interaction.followUp({ content: 'Jump cancelled or timed out.', ephemeral: true }); } catch {}
+          }
+          return;
+        }
+
+        if (parts.startsWith('img_prev_')) {
+          imageIdx = Math.max(0, imageIdx - 1);
+          await btn.update({ embeds: [imageEmbeds[imageIdx]], components: [imageRows[imageIdx]] });
+          return;
+        }
+        if (parts.startsWith('img_next_')) {
+          imageIdx = Math.min(imageEmbeds.length - 1, imageIdx + 1);
+          await btn.update({ embeds: [imageEmbeds[imageIdx]], components: [imageRows[imageIdx]] });
+          return;
+        }
+        if (parts.startsWith('img_back_')) {
+          listPage = Math.floor(imageIdx / ITEMS_PER_PAGE);
+          await btn.update({ embeds: [listEmbeds[listPage]], components: [listRows[listPage]] });
+          return;
+        }
+      } catch (err) {
+        console.error('inventory collector error:', err);
+      }
+    });
+
+    collector.on('end', async (_collected, reason) => {
+      try {
+        if (idleTimeout) {
+          clearTimeout(idleTimeout);
+          idleTimeout = null;
+        }
+
+        // disable the message buttons by mapping current components into disabled clones
         const disabled = message.components.map(r => {
           const row = ActionRowBuilder.from(r);
           row.components.forEach(b => b.setDisabled(true));
           return row;
         });
         await message.edit({ components: disabled });
+
+        // removed timed-out follow-up message per request
       } catch (err) {
         console.error('inventory cleanup error:', err);
       }

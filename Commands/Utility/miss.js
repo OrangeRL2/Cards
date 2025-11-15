@@ -16,7 +16,7 @@ const IMAGE_BASE = process.env.IMAGE_BASE || 'http://152.69.195.48/images';
 const PAGE_SIZE = 10;
 
 const RARITY_ORDER = [
-  'C', 'OC', 'U', 'R', 'S', 'P', 'SY', 'RR', 'SR', 'OSR', 'UR', 'OUR', 'SEC', 'HR', 'bday',
+  'C', 'OC', 'U', 'R', 'S', 'P','SP','UP', 'SY', 'RR', 'SR', 'OSR', 'UR', 'OUR', 'SEC', 'HR', 'bday',
 ];
 
 const COLOR_MAP = {
