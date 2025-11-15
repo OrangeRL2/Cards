@@ -1,7 +1,7 @@
 // Commands/Utility/lives-claim.js
 const { SlashCommandBuilder, EmbedBuilder, Colors } = require('discord.js');
 const User = require('../../models/User');
-const { resolveAttemptAtomic, getDurationForStage, getStageName } = require('../../utils/liveAsync');
+const { resolveAttemptAtomic, getDurationForStage, getStageName, normalizeCardName } = require('../../utils/liveAsync');
 
 function msToHuman(ms) {
   if (ms <= 0) return '0s';
@@ -22,7 +22,6 @@ module.exports = {
     .setDescription('Claim all ready live attempts and view stage statuses.'),
   requireOshi: true,
   async execute(interaction) {
-    // Make this ephemeral for the user
     await interaction.deferReply({ ephemeral: false });
     const userId = interaction.user.id;
 
@@ -31,24 +30,23 @@ module.exports = {
 
     const now = Date.now();
 
-    // Claim ready attempts
-    const readyAttempts = (user.pendingAttempts || []).filter(a => !a.resolved && new Date(a.readyAt).getTime() <= now);
+    // Build deterministic map: for each stage pick the unresolved attempt with earliest readyAt
+    const stageMap = {};
+    (user.pendingAttempts || []).forEach(a => {
+      if (a.resolved) return;
+      const s = Number(a.stage);
+      const readyAt = new Date(a.readyAt).getTime();
+      if (!stageMap[s] || readyAt < new Date(stageMap[s].readyAt).getTime()) {
+        stageMap[s] = a;
+      }
+    });
+
+    // Claim ready attempts: collect all attempts that are ready (by scanning stageMap)
+    const readyAttempts = Object.values(stageMap).filter(a => new Date(a.readyAt).getTime() <= now);
 
     if (!readyAttempts.length) {
-      // Still show per-stage status even when nothing to claim
-      const userAfterEmpty = await User.findOne({ id: userId }).lean();
-      const stagesEmpty = [1, 2, 3, 4, 5].map(stageNum => {
-        const slot = (userAfterEmpty.pendingAttempts || []).find(a => !a.resolved && Number(a.stage) === stageNum);
-        const durationMs = getDurationForStage(stageNum) || 0;
-        if (!slot) return { stage: stageNum, empty: true, durationMs };
-        const readyAt = new Date(slot.readyAt).getTime();
-        const readyNow = readyAt <= now;
-        const msUntil = Math.max(0, readyAt - now);
-        return { stage: stageNum, empty: false, readyNow, msUntil, readyAt, durationMs, name: slot.name, rarity: slot.rarity };
-      });
-
-      const nextReadyTsEmpty = (userAfterEmpty.pendingAttempts || [])
-        .filter(a => !a.resolved)
+      // show per-stage status using stageMap and deterministic selection
+      const nextReadyTsEmpty = Object.values(stageMap)
         .map(a => new Date(a.readyAt).getTime())
         .filter(t => t > now);
       const nextReadyTextEmpty = nextReadyTsEmpty.length ? `<t:${Math.floor(Math.min(...nextReadyTsEmpty) / 1000)}:R>` : 'No pending attempts';
@@ -62,23 +60,26 @@ module.exports = {
           { name: 'Next ready', value: nextReadyTextEmpty, inline: true }
         );
 
-      stagesEmpty.forEach(s => {
-        const stageLabel = `${s.stage} - (${getStageName(s.stage)})`;
-        if (s.empty) {
-          embedEmpty.addFields({ name: `${stageLabel}`, value: `Empty • Duration ${msToHuman(s.durationMs)}`, inline: false });
+      [1,2,3,4,5].forEach(stageNum => {
+        const slot = stageMap[stageNum];
+        const durationMs = getDurationForStage(stageNum) || 0;
+        const stageLabel = `${stageNum} - (${getStageName(stageNum)})`;
+        if (!slot) {
+          embedEmpty.addFields({ name: `${stageLabel}`, value: `Empty • Duration ${msToHuman(durationMs)}`, inline: false });
         } else {
-          const readyTs = Math.floor(s.readyAt / 1000);
+          const readyTs = Math.floor(new Date(slot.readyAt).getTime() / 1000);
           const readyRelative = `<t:${readyTs}:R>`;
-          if (s.readyNow) {
+          const readyNow = new Date(slot.readyAt).getTime() <= now;
+          if (readyNow) {
             embedEmpty.addFields({
               name: `${stageLabel}`,
-              value: `Occupied (ready) • **[${s.rarity}]** ${s.name} • Ready ${readyRelative}`,
+              value: `Occupied (ready) • **[${slot.rarity}]** ${slot.name} • Ready ${readyRelative}`,
               inline: false
             });
           } else {
             embedEmpty.addFields({
               name: `${stageLabel}`,
-              value: `Occupied • **[${s.rarity}]** ${s.name} • Ready ${readyRelative}`,
+              value: `Occupied • **[${slot.rarity}]** ${slot.name} • Ready ${readyRelative}`,
               inline: false
             });
           }
@@ -88,126 +89,124 @@ module.exports = {
       return interaction.editReply({ embeds: [embedEmpty] });
     }
 
-    // Safety cap to avoid long-running operations
     const MAX_PROCESS = 25;
     const toProcess = readyAttempts.slice(0, MAX_PROCESS);
 
     const results = [];
     let successCount = 0;
 
-  for (const att of toProcess) {
-  try {
-    const out = await resolveAttemptAtomic(userId, att.id);
-    const stageName = getStageName(att.stage);
-    if (!out || out.success === false) {
-      // include rarity for consistency
-      results.push({
-        stage: att.stage,
-        stageName,
-        rarity: att.rarity || 'unknown',
-        name: att.name,
-        ok: false,
-        note: out?.reason || 'failed',
-        points: out?.awardedPoints || 0
-      });
-    } else {
-      const ok = Boolean(out.successResult);
-      let note;
-      if (ok) {
-        if (out.pCard) {
-          // Reverse the phrasing: "[card gained] showed up at [card sent]'s live!"
-          const gainedRarity = out.pCard.rarity || 'P';
-          const gainedName = out.pCard.name || 'Unknown';
-          const sentName = att.name || 'Unknown';
-          note = `**[${gainedRarity}] ${gainedName}** showed up at **${sentName}**'s live!`;
+    for (const att of toProcess) {
+      try {
+        const out = await resolveAttemptAtomic(userId, att.id);
+        const stageName = getStageName(att.stage);
+        if (!out || out.success === false) {
+          results.push({
+            stage: att.stage,
+            stageName,
+            rarity: att.rarity || 'unknown',
+            name: att.name,
+            ok: false,
+            note: out?.reason || 'failed',
+            points: out?.awardedPoints || 0
+          });
         } else {
-          note = `**${sentName}** came home from the live`;
+          const ok = Boolean(out.successResult);
+          let note;
+          const sentName = normalizeCardName(att.name) || '';
+
+          if (ok) {
+            if (out.pCard) {
+              const gainedRarity = out.pCard.rarity || 'P';
+              const gainedName = out.pCard.name || '';
+              note = `**[${gainedRarity}] ${gainedName}** showed up at **${sentName}**'s live!`;
+            } else {
+              note = `**${sentName}** came home from the live`;
+            }
+          } else {
+            note = `**${sentName}** Live Failed.. - Graduated from sadness`;
+          }
+
+          results.push({
+            stage: att.stage,
+            stageName,
+            rarity: att.rarity || 'unknown',
+            name: att.name,
+            ok,
+            note,
+            points: out.awardedPoints || 0
+          });
+          if (ok) successCount++;
         }
-      } else {
-        note = 'Live Failed.. - Graduated from sadness';
+      } catch (err) {
+        console.error('resolveAttemptAtomic error:', err);
+        const stageName = getStageName(att?.stage ?? 'unknown');
+        results.push({ stage: att?.stage, stageName, rarity: att?.rarity || 'unknown', name: att?.name ?? 'unknown', ok: false, note: 'internal error', points: 0 });
       }
-
-      results.push({
-        stage: att.stage,
-        stageName,
-        rarity: att.rarity || 'unknown',
-        name: att.name,
-        ok,
-        note,
-        points: out.awardedPoints || 0
-      });
-      if (ok) successCount++;
     }
-  } catch (err) {
-    console.error('resolveAttemptAtomic error:', err);
-    const stageName = getStageName(att?.stage ?? 'unknown');
-    results.push({ stage: att?.stage, stageName, rarity: att?.rarity || 'unknown', name: att?.name ?? 'unknown', ok: false, note: 'internal error', points: 0 });
-  }
-}
 
-    // If we capped processing, include a notice
     const moreNotice = readyAttempts.length > MAX_PROCESS ? `\n\n(Processed ${MAX_PROCESS} of ${readyAttempts.length} ready attempts — run again to claim the rest.)` : '';
 
-    // Re-fetch user to show current pending attempts & per-stage statuses
+    // Re-fetch user to show current pending attempts after processing and rebuild deterministic stageMap
     const userAfter = await User.findOne({ id: userId }).lean();
-    const stages = [1, 2, 3, 4, 5].map(stageNum => {
-      const slot = (userAfter.pendingAttempts || []).find(a => !a.resolved && Number(a.stage) === stageNum);
-      const durationMs = getDurationForStage(stageNum) || 0;
-      if (!slot) return { stage: stageNum, empty: true, durationMs };
-      const readyAt = new Date(slot.readyAt).getTime();
-      const readyNow = readyAt <= now;
-      const msUntil = Math.max(0, readyAt - now);
-      return { stage: stageNum, empty: false, readyNow, msUntil, readyAt, durationMs, name: slot.name, rarity: slot.rarity };
+    const stageMapAfter = {};
+    (userAfter?.pendingAttempts || []).forEach(a => {
+      if (a.resolved) return;
+      const s = Number(a.stage);
+      const readyAt = new Date(a.readyAt).getTime();
+      if (!stageMapAfter[s] || readyAt < new Date(stageMapAfter[s].readyAt).getTime()) {
+        stageMapAfter[s] = a;
+      }
     });
 
-    const nextReadyTs = (userAfter.pendingAttempts || [])
-      .filter(a => !a.resolved)
+    const nextReadyTs = Object.values(stageMapAfter)
       .map(a => new Date(a.readyAt).getTime())
       .filter(t => t > now);
     const nextReadyText = nextReadyTs.length ? `<t:${Math.floor(Math.min(...nextReadyTs) / 1000)}:R>` : 'No pending attempts';
 
-const embed = new EmbedBuilder()
-  .setTitle('Lives Claim Results')
-  .setDescription(
-    results.length
-      ? results.map(r => {
-          let pointsText = '';
-          if (r.points) {
-            const unit = Number(r.points) === 1 ? 'fan' : 'fans';
-            if (Number(r.stage) === 5) {
-              pointsText = ` and gained ${r.points} ${unit}!`;
-            } else {
-              pointsText = `, and ${r.points} ${unit} stayed behind after graduation ended`;
-            }
-          }
-          return `${r.ok ? '✅' : '❌'} [${r.stageName} live] |  ${r.note}${pointsText}`;
-        }).join('\n') + moreNotice
-      : 'No ready attempts to claim right now.'
-  )
-  .setColor(successCount > 0 ? Colors.Green : Colors.Yellow)
-  .addFields(
-    { name: 'Successes', value: `${successCount}`, inline: true },
-    { name: 'Next ready', value: nextReadyText, inline: true }
-  );
+    const embed = new EmbedBuilder()
+      .setTitle('Lives Claim Results')
+      .setDescription(
+        results.length
+          ? results.map(r => {
+              let pointsText = '';
+              if (r.points) {
+                const unit = Number(r.points) === 1 ? 'fan' : 'fans';
+                if (Number(r.stage) === 5) {
+                  pointsText = ` and gained ${r.points} ${unit}!`;
+                } else {
+                  pointsText = `, and ${r.points} ${unit} stayed behind after graduation ended`;
+                }
+              }
+              return `${r.ok ? '✅' : '❌'} [${r.stageName} live] |  ${r.note}${pointsText}`;
+            }).join('\n') + moreNotice
+          : 'No ready attempts to claim right now.'
+      )
+      .setColor(successCount > 0 ? Colors.Green : Colors.Yellow)
+      .addFields(
+        { name: 'Successes', value: `${successCount}`, inline: true },
+        { name: 'Next ready', value: nextReadyText, inline: true }
+      );
 
-    // Add per-stage details — use Discord relative timestamps (<t:...:R>) for ready times
-    stages.forEach(s => {
-      const stageLabel = `${s.stage} - (${getStageName(s.stage)})`;
-      if (s.empty) {
-        embed.addFields({ name: `${stageLabel}`, value: `Empty • Duration ${msToHuman(s.durationMs)}`, inline: false });
+    [1,2,3,4,5].forEach(stageNum => {
+      const slot = stageMapAfter[stageNum];
+      const durationMs = getDurationForStage(stageNum) || 0;
+      const stageLabel = `${stageNum} - (${getStageName(stageNum)})`;
+      if (!slot) {
+        embed.addFields({ name: `${stageLabel}`, value: `Empty • Duration ${msToHuman(durationMs)}`, inline: false });
       } else {
-        const readyTs = Math.floor(s.readyAt / 1000);
+        const readyTs = Math.floor(new Date(slot.readyAt).getTime() / 1000);
         const readyRelative = `<t:${readyTs}:R>`;
-        if (s.readyNow) {
+        const readyNow = new Date(slot.readyAt).getTime() <= now;
+        if (readyNow) {
           embed.addFields({
             name: `${stageLabel}`,
-            value: `Occupied (ready) • **[${s.rarity}]** ${s.name} • Ready ${readyRelative}`,
+            value: `Occupied (ready) • **[${slot.rarity}]** ${slot.name} • Ready ${readyRelative}`,
             inline: false
           });
         } else {
           embed.addFields({
             name: `${stageLabel}`,
-            value: `Occupied • **[${s.rarity}]** ${s.name} • Ready ${readyRelative}`,
+            value: `Occupied • **[${slot.rarity}]** ${slot.name} • Ready ${readyRelative}`,
             inline: false
           });
         }

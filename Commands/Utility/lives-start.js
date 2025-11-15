@@ -43,7 +43,8 @@ function levenshtein(a, b) {
   }
   return v0[bLen];
 }
-function findBestCardMatch(cards, query, rarity) {
+// now accepts optional minCount (default 1)
+function findBestCardMatch(cards, query, rarity, minCount = 1) {
   if (!Array.isArray(cards) || cards.length === 0) return null;
   const q = (query || '').toLowerCase().trim();
   let best = null;
@@ -51,7 +52,7 @@ function findBestCardMatch(cards, query, rarity) {
     if (String(c.rarity).toLowerCase() !== String(rarity).toLowerCase()) continue;
     const name = String(c.name || '').toLowerCase();
     if (!name) continue;
-    if (!c.count || c.count <= 0) continue;
+    if (!c.count || c.count < minCount) continue;
     let score = 0;
     if (name === q) score = 100;
     else if (q.length > 0 && name.startsWith(q)) score = 80;
@@ -66,7 +67,14 @@ function findBestCardMatch(cards, query, rarity) {
   return best ? best.card : null;
 }
 
-// stage -> allowed rarities
+// Pick a random owned card matching rarity and minCount
+function pickRandomOwnedCard(cards, rarity, minCount = 1) {
+  if (!Array.isArray(cards) || cards.length === 0) return null;
+  const pool = cards.filter(c => String(c.rarity).toLowerCase() === String(rarity).toLowerCase() && c.count >= minCount);
+  if (!pool.length) return null;
+  return pool[Math.floor(Math.random() * pool.length)];
+}
+
 const STAGE_ALLOWED_RARITIES = {
   1: ['C', 'OC', 'U'],
   2: ['S', 'R', 'RR'],
@@ -91,11 +99,21 @@ module.exports = {
           { name: `3 - ${getStageName(3)}`, value: 3 },
           { name: `4 - ${getStageName(4)}`, value: 4 },
           { name: `5 - ${getStageName(5)}`, value: 5 }
-        )),
-        requireOshi: true,
+        ))
+    .addBooleanOption(b =>
+      b.setName('multi')
+        .setDescription('Only match cards you own multiple copies of (count > 1)')
+        .setRequired(false))
+    .addBooleanOption(b =>
+      b.setName('any')
+        .setDescription('Pick a random matching card you own (no name input required)')
+        .setRequired(false)),
+  requireOshi: true,
   async execute(interaction) {
     const userId = interaction.user.id;
     const stage = interaction.options.getInteger('stage');
+    const multiOnly = interaction.options.getBoolean('multi') || false;
+    const anyRandom = interaction.options.getBoolean('any') || false;
     const hint = interaction.options.getString('hint') || '';
     const stageName = getStageName(stage);
 
@@ -139,7 +157,134 @@ module.exports = {
 
       const chosenRarity = sel.values[0];
 
-      // open modal to get card name
+      // If anyRandom is true, we skip modal and pick a random matching owned card
+      if (anyRandom) {
+        // immediate deferred reply to show confirmation
+        try { await sel.deferReply({ flags: EPHEMERAL_FLAG }); } catch (e) { try { await sel.reply({ content: 'Processing...', flags: EPHEMERAL_FLAG }); } catch {} }
+
+        // reload user just before picking
+        const user = await User.findOne({ id: userId }).lean();
+        if (!user || !Array.isArray(user.cards) || user.cards.length === 0) {
+          try { await sel.editReply({ content: "You have no cards to send.", embeds: [], components: [] }); } catch {}
+          return;
+        }
+
+        const candidate = pickRandomOwnedCard(user.cards, chosenRarity, multiOnly ? 2 : 1);
+        if (!candidate) {
+          const msg = multiOnly
+            ? `No matching owned card with rarity ${chosenRarity} and count > 1 available to pick randomly.`
+            : `No matching owned card with rarity ${chosenRarity} available to pick randomly.`;
+          try { await sel.editReply({ content: msg, embeds: [], components: [] }); } catch {}
+          return;
+        }
+
+        // confirmation embed + buttons for chosen random card
+        const durationMs = getDurationForStage(stage);
+        const confirmEmbed = new EmbedBuilder()
+          .setTitle('Confirm Live Send (Random Pick)')
+          .setDescription(`A random matching card was selected: **[${candidate.rarity}] ${candidate.name}**. Send it to **${stageName}**?`)
+          .setColor(Colors.Blue)
+          .addFields(
+            { name: 'Card count', value: `${candidate.count}`, inline: true },
+            { name: 'Ready', value: `<t:${Math.floor((Date.now() + durationMs) / 1000)}:f>`, inline: true },
+            { name: 'Duration', value: msToHuman(durationMs), inline: true }
+          );
+
+        const confirmRow = new ActionRowBuilder().addComponents(
+          new ButtonBuilder().setCustomId(`live_confirm_${interaction.id}_${Date.now()}`).setLabel('Confirm').setStyle(ButtonStyle.Success),
+          new ButtonBuilder().setCustomId(`live_cancel_${interaction.id}_${Date.now()}`).setLabel('Cancel').setStyle(ButtonStyle.Secondary)
+        );
+
+        try {
+          await sel.editReply({ embeds: [confirmEmbed], components: [confirmRow], content: null });
+        } catch {
+          try { await sel.followUp({ embeds: [confirmEmbed], components: [confirmRow], flags: EPHEMERAL_FLAG }); } catch {}
+        }
+
+        let confirmMsg;
+        try { confirmMsg = await sel.fetchReply(); } catch (err) { console.error('fetchReply failed', err); try { await sel.followUp({ content: 'Internal error preparing confirmation.', flags: EPHEMERAL_FLAG }); } catch {} return; }
+
+        const btnCollector = confirmMsg.createMessageComponentCollector({ time: 30_000 });
+
+        btnCollector.on('collect', async btn => {
+          if (btn.user.id !== interaction.user.id) {
+            await btn.reply({ content: "This confirmation isn't for you.", flags: EPHEMERAL_FLAG });
+            return;
+          }
+
+          if (btn.customId.startsWith('live_cancel')) {
+            try { await btn.update({ content: 'Cancelled.', embeds: [], components: [] }); } catch {
+              try { await btn.followUp({ content: 'Cancelled.', flags: EPHEMERAL_FLAG }); } catch {}
+            }
+            btnCollector.stop('cancelled');
+            return;
+          }
+
+          if (btn.customId.startsWith('live_confirm')) {
+            let startRes;
+            try {
+              startRes = await startAttemptAtomic(userId, candidate.name, candidate.rarity);
+              console.debug('[live.start] startAttemptAtomic result', { userId, stage, startRes });
+            } catch (err) {
+              console.error('startAttemptAtomic error', err);
+              try { await btn.update({ content: 'Failed to start attempt. Try again later.', embeds: [], components: [] }); } catch {
+                try { await btn.followUp({ content: 'Failed to start attempt. Try again later.', flags: EPHEMERAL_FLAG }); } catch {}
+              }
+              btnCollector.stop('error');
+              return;
+            }
+
+            if (!startRes.success) {
+              if (startRes.reason === 'stage-busy') {
+                const next = startRes.nextReadyAt ? `<t:${Math.floor(new Date(startRes.nextReadyAt).getTime() / 1000)}:R>` : 'soon';
+                const busyMsg = `${stageName} is occupied. Next slot frees: ${next}`;
+                try { await btn.update({ content: busyMsg, embeds: [], components: [] }); } catch {
+                  try { await btn.followUp({ content: busyMsg, flags: EPHEMERAL_FLAG }); } catch {}
+                }
+                btnCollector.stop('stage-busy');
+                return;
+              }
+              if (startRes.reason === 'no-card') {
+                const noCardMsg = `You don't have any **[${candidate.rarity}] ${candidate.name}** left to send.`;
+                try { await btn.update({ content: noCardMsg, embeds: [], components: [] }); } catch {
+                  try { await btn.followUp({ content: noCardMsg, flags: EPHEMERAL_FLAG }); } catch {}
+                }
+                btnCollector.stop('no-card');
+                return;
+              }
+              try { await btn.update({ content: 'Failed to start attempt. Try again later.', embeds: [], components: [] }); } catch {
+                try { await btn.followUp({ content: 'Failed to start attempt. Try again later.', flags: EPHEMERAL_FLAG }); } catch {}
+              }
+              btnCollector.stop('error');
+              return;
+            }
+
+            // success
+            const readyAt = startRes.readyAt instanceof Date ? startRes.readyAt : new Date(startRes.readyAt);
+            const outEmbed = new EmbedBuilder()
+              .setTitle('Live Attempt Started')
+              .setDescription(`**[${candidate.rarity}] ${candidate.name}** has started a live at **${stageName}**.`)
+              .addFields(
+                { name: 'Ready', value: `<t:${Math.floor(readyAt.getTime() / 1000)}:f>`, inline: true },
+                { name: 'Duration', value: msToHuman(getDurationForStage(stage)), inline: true }
+              )
+              .setColor(Colors.Green);
+
+            try {
+              await btn.update({ content: null, embeds: [outEmbed], components: [] });
+            } catch {
+              try { await btn.followUp({ embeds: [outEmbed], flags: EPHEMERAL_FLAG }); } catch {}
+            }
+
+            btnCollector.stop('started');
+          }
+        });
+
+        btnCollector.on('end', async () => {});
+        return;
+      }
+
+      // Normal flow: show modal to ask for name and proceed (same as before)
       const modalId = `live_name_modal_${interaction.id}_${Date.now()}`;
       const modal = new ModalBuilder().setCustomId(modalId).setTitle(`Send ${chosenRarity} to ${stageName}`);
       const nameInput = new TextInputBuilder()
@@ -186,8 +331,11 @@ module.exports = {
       if (!user || !Array.isArray(user.cards) || user.cards.length === 0) {
         return submitted.editReply({ content: "You have no cards to send.", embeds: [], components: [] });
       }
-      const candidate = findBestCardMatch(user.cards, rawName, chosenRarity);
+      const candidate = findBestCardMatch(user.cards, rawName, chosenRarity, multiOnly ? 2 : 1);
       if (!candidate) {
+        if (multiOnly) {
+          return submitted.editReply({ content: `No matching owned card with rarity ${chosenRarity} and count > 1 found for "${rawName}".`, embeds: [], components: [] });
+        }
         return submitted.editReply({ content: `No matching owned card with rarity ${chosenRarity} found for "${rawName}".`, embeds: [], components: [] });
       }
 
@@ -243,6 +391,7 @@ module.exports = {
           let startRes;
           try {
             startRes = await startAttemptAtomic(userId, candidate.name, candidate.rarity);
+            console.debug('[live.start] startAttemptAtomic result', { userId, stage, startRes });
           } catch (err) {
             console.error('startAttemptAtomic error', err);
             try { await btn.update({ content: 'Failed to start attempt. Try again later.', embeds: [], components: [] }); } catch {
@@ -304,10 +453,8 @@ module.exports = {
     });
 
     collector.on('end', async (_, reason) => {
-      // if user never selected, optionally inform them
       try {
         const fetched = await interaction.fetchReply();
-        // if still has components, edit to say timed out
         if (fetched && Array.isArray(fetched.components) && fetched.components.length > 0) {
           await interaction.editReply({ content: 'closed', embeds: [], components: [], flags: EPHEMERAL_FLAG });
         }
