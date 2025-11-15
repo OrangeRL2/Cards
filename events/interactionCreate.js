@@ -5,15 +5,14 @@ const OshiUser = require('../models/Oshi');
 const OSHI_LIST = require('../config/oshis');
 const { buildGenSelect, buildOshiSelect, GEN_CUSTOM_ID, OSHI_CUSTOM_ID } = require('../requireOshiUI');
 const { grantOnSelectIfBirthday } = require('../utils/birthdayGrant');
-const config = require('../config.json'); // where birthdayChannelId lives
+const { addOshiOsrToUser } = require('../utils/oshiRewards');
+const config = require('../config.json');
 
 module.exports = {
   name: Events.InteractionCreate,
   async execute(interaction) {
     try {
-      // Handle component (select menu) interactions first
       if (interaction.isStringSelectMenu()) {
-        // GEN selection: customId = `oshi_gen:${userId}`
         if (interaction.customId.startsWith(`${GEN_CUSTOM_ID}:`)) {
           const [, allowedUserId] = interaction.customId.split(':');
           if (interaction.user.id !== allowedUserId) {
@@ -23,7 +22,6 @@ module.exports = {
           const encodedGen = interaction.values?.[0];
           if (!encodedGen) return interaction.reply({ content: 'No generation selected.', ephemeral: true });
 
-          // build new oshi select for chosen gen and update the message
           const oshiRow = buildOshiSelect(allowedUserId, encodedGen);
           return interaction.update({
             content: `Choose an oshi from ${decodeURIComponent(encodedGen)}`,
@@ -31,15 +29,12 @@ module.exports = {
           });
         }
 
-        // OSHI selection: customId = `oshi_choose:${userId}:${encodedGen}`
         if (interaction.customId.startsWith(`${OSHI_CUSTOM_ID}:`)) {
-          // parse customId safely
           const parts = interaction.customId.split(':');
-          // expected: ['oshi_choose', userId, encodedGen...]
           if (parts.length < 3) return interaction.reply({ content: 'Invalid interaction.', ephemeral: true });
 
           const allowedUserId = parts[1];
-          const encodedGen = parts.slice(2).join(':'); // rejoin in case gen contained ':'
+          const encodedGen = parts.slice(2).join(':');
           if (interaction.user.id !== allowedUserId) {
             return interaction.reply({ content: 'This menu is not for you.', ephemeral: true });
           }
@@ -50,7 +45,28 @@ module.exports = {
           const oshi = OSHI_LIST.find(o => o.id === selectedId);
           if (!oshi) return interaction.reply({ content: 'Invalid selection.', ephemeral: true });
 
-          // save to DB (upsert)
+          // NEW: check if user already has an oshi and refuse changes
+          try {
+            const existing = await OshiUser.findOne({ userId: allowedUserId }).lean().exec();
+            if (existing && existing.oshiId) {
+              // remove components visually and send ephemeral reply
+              try {
+                await interaction.update({
+                  content: `You already have an oshi and cannot change it here.`,
+                  components: [],
+                });
+              } catch (updateErr) {
+                // fallback to ephemeral reply if update fails
+                await interaction.reply({ content: 'You already have an oshi and cannot change it here.', ephemeral: true });
+              }
+              return;
+            }
+          } catch (dbCheckErr) {
+            console.error('[INT] failed to check existing oshi', dbCheckErr);
+            return interaction.reply({ content: 'Unable to verify your oshi status. Try again later.', ephemeral: true });
+          }
+
+          // save to DB (upsert) — safe because we've confirmed none exists
           try {
             await OshiUser.findOneAndUpdate(
               { userId: allowedUserId },
@@ -62,30 +78,38 @@ module.exports = {
             return interaction.reply({ content: 'Failed to save your selection. Try again later.', ephemeral: true });
           }
 
-		  let grantResult = null;
-			try {
-			  // pass client and channel so helper can announce
-			  grantResult = await grantOnSelectIfBirthday(allowedUserId, oshi.id, { client: interaction.client, birthdayChannelId: config.birthdayChannelId });
-			} catch (err) {
-			  console.error('[INT] birthday grant error', err);
-			}
+          // best-effort: give an OSR card for this oshi (no date restriction)
+          let osrResult = null;
+          try {
+            osrResult = await addOshiOsrToUser(allowedUserId, oshi.label);
+          } catch (err) {
+            console.error('[INT] osr grant error', err);
+          }
 
-          const birthdayText = grantResult && grantResult.granted
-            ? ' Bonus: +12 event pulls granted for birthday!'
-            : '';
+          // birthday grant (best-effort)
+          let grantResult = null;
+          try {
+            grantResult = await grantOnSelectIfBirthday(allowedUserId, oshi.id, { client: interaction.client, birthdayChannelId: config.birthdayChannelId });
+          } catch (err) {
+            console.error('[INT] birthday grant error', err);
+          }
+
+          const birthdayText = grantResult && grantResult.granted ? ' Bonus: +12 event pulls granted for birthday!' : '';
+          const osrText = osrResult && osrResult.gave ? ` You also received an OSR card for ${oshi.label}!` : '';
 
           // confirmation: remove components so it can't be reused
+          let genDisplay;
+          try { genDisplay = decodeURIComponent(encodedGen); } catch { genDisplay = encodedGen; }
+
           return interaction.update({
-            content: `You chose **${oshi.label}** (${decodeURIComponent(encodedGen)}) as your oshi!${birthdayText}`,
+            content: `You chose **${oshi.label}** (${genDisplay}) as your oshi!${birthdayText}${osrText}`,
             components: [],
           });
         }
 
-        // Not our menu, ignore
         return;
       }
 
-      // --- HANDLE CHAT INPUT COMMANDS ---
       if (!interaction.isChatInputCommand()) return;
 
       console.log('[INT] command invoke', interaction.commandName, 'user', interaction.user.id);
@@ -96,12 +120,10 @@ module.exports = {
         return;
       }
 
-      // initialize cooldown store
       if (!interaction.client.cooldowns) interaction.client.cooldowns = new Collection();
       const cooldowns = interaction.client.cooldowns;
       if (!cooldowns.has(command.data.name)) cooldowns.set(command.data.name, new Collection());
 
-      // cooldown handling
       const now = Date.now();
       const timestamps = cooldowns.get(command.data.name);
       const cooldownSeconds = Number(command.cooldown) || 0;
@@ -121,7 +143,6 @@ module.exports = {
         setTimeout(() => timestamps.delete(interaction.user.id), cooldownMs);
       }
 
-      // enforce oshi if command asks for it
       console.log('[INT] requireOshi?', !!command.requireOshi);
       if (command.requireOshi) {
         let oshiDoc;
@@ -136,16 +157,11 @@ module.exports = {
         }
 
         console.log('[INT] requireOshi result', !!oshiDoc);
-        if (!oshiDoc) {
-          // requireOshi sent the ephemeral prompt and we must stop further execution
-          return;
-        }
+        if (!oshiDoc) return;
 
-        // attach for handlers that want it
         interaction.oshi = oshiDoc;
       }
 
-      // finally run the command
       try {
         await command.execute(interaction);
       } catch (err) {
@@ -158,7 +174,6 @@ module.exports = {
       }
     } catch (topErr) {
       console.error('[INT] unexpected error in interaction handler', topErr);
-      // Best-effort reply if possible
       try {
         if (interaction && !interaction.replied && !interaction.deferred) {
           await interaction.reply({ content: 'An unexpected error occurred. Try again later.', ephemeral: true });

@@ -9,7 +9,7 @@ async function getOrCreate(userId) {
 	if (!doc) {
 		doc = await PullQuota.create({
 			userId,
-			pulls: MAX_STOCK,
+			pulls: 6,
 			lastRefill: new Date(),
 			eventPulls: 0,
 		});

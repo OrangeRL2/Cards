@@ -58,7 +58,7 @@ function daysBetweenCeil(fromDate, toDate) {
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('nextbirthdays')
-    .setDescription('Show the next 5 upcoming oshi birthdays (JST).'),
+    .setDescription('Show the next 10 upcoming oshi birthdays (JST).'),
   cooldown: 5,
 
   async execute(interaction) {

@@ -1,19 +1,5 @@
 // config/oshis.js
 module.exports = [
-		{
-		'id': 'testa',
-		'label': 'Testa',
-		'gen': 'Gen2',
-		'bdayMonth': 11,
-		'bdayDay': 14,
-	},
-			{
-		'id': 'testament',
-		'label': 'Testament',
-		'gen': 'Gen2',
-		'bdayMonth': 11,
-		'bdayDay': 14,
-	},
 	{
 		'id': 'miko',
 		'label': 'Miko',
@@ -411,7 +397,7 @@ module.exports = [
 		'label': 'Kobo',
 		'gen': 'ID Gen3',
 		'bdayMonth': 12,
-		'bdayDay': 13,
+		'bdayDay': 12,
 	},
 	{
 		'id': 'amelia',
