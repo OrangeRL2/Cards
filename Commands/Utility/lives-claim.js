@@ -117,7 +117,7 @@ module.exports = {
           if (ok) {
             if (out.pCard) {
               const gainedRarity = out.pCard.rarity || 'P';
-              const gainedName = out.pCard.name || '';
+              const gainedName = out.pCard.name || out.pCard.displayName || 'special guest';
               note = `**[${gainedRarity}] ${gainedName}** showed up at **${sentName}**'s live!`;
             } else {
               note = `**${sentName}** came home from the live`;

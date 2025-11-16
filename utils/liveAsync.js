@@ -17,7 +17,7 @@ const DURATION_MS = {
 }; // keep same shape; adjust 5 for prod
 const STAGE5_CARD_RARITY = 'SP';
 const STAGE5_POOL_DIRNAME = 'SP';
-const STAGE5_PICK_FALLBACK_POINTS = 25;
+const STAGE5_PICK_FALLBACK_POINTS = 15;
 
 function getStageForRarity(r){ return STAGE_FOR_RARITY[String(r)] || null; }
 function getStageName(s){ return STAGE_NAMES[s] || `Stage ${s}`; }
@@ -172,7 +172,7 @@ async function tryAwardPCard({ userId, picked, session, trace }) {
   const pickedName = normalizeCardName(picked.displayName);
   const pRes = await incOrUpsertCard(userId, pickedName, 'P', session ? { session } : {});
   console.debug('[live] incOrUpsertCard result for pickedName:', { pickedName, pRes });
-
+  
   if (!pRes) {
     trace.notes.push('P-insert-miss');
     if (session) {
@@ -197,6 +197,7 @@ async function tryAwardPCard({ userId, picked, session, trace }) {
 
   const pElem = pRes.card ? pRes.card : pRes;
   trace.awardedPCard = { name: pElem.name, rarity: pElem.rarity };
+  console.debug('[live] awarded-p raw result:', pElem);
   return pElem;
 }
 
@@ -249,6 +250,16 @@ async function resolveAttemptAtomic(userId, attemptId){
   const session = await mongoose.startSession().catch(()=>null);
   const trace = { restoredCard:null, awardedPoints:0, awardedPCard:null, notes:[] };
 
+  const normalizeAward = (pElem, defaultRarity='P') => {
+    if(!pElem) return null;
+    const card = (pElem && typeof pElem === 'object' && pElem.card) ? pElem.card : pElem;
+    return {
+      name: card?.name || card?.displayName || '',
+      displayName: card?.displayName || card?.name || '',
+      rarity: card?.rarity || defaultRarity
+    };
+  };
+
   // helper to perform the core logic inside a session when available
   if(session){
     try{
@@ -277,7 +288,7 @@ async function resolveAttemptAtomic(userId, attemptId){
 
         // restore card
         const restored = await incOrUpsertCard(userId, normalizedAttemptName, attempt.rarity, { session });
-        if(restored) trace.restoredCard = { name: restored.name, rarity: restored.rarity };
+        if(restored) trace.restoredCard = { name: (restored.card? restored.card.name : restored.name) || '', rarity: (restored.card? restored.card.rarity : restored.rarity) || attempt.rarity };
         else trace.notes.push('restore-missing');
 
         let awardedPoints = 0;
@@ -295,7 +306,8 @@ async function resolveAttemptAtomic(userId, attemptId){
               }else{
                 const pickedName = normalizeCardName(picked.displayName);
                 const pElem = await incOrUpsertCard(userId, pickedName, STAGE5_CARD_RARITY, { session });
-                if(pElem) awardedP = pElem;
+                const norm = normalizeAward(pElem, STAGE5_CARD_RARITY);
+                if(norm) awardedP = norm;
                 else { trace.notes.push('stage5-insert-miss'); awardedPoints += STAGE5_PICK_FALLBACK_POINTS; await User.updateOne({ id: userId }, { $inc:{ points: STAGE5_PICK_FALLBACK_POINTS } }, { session }).exec(); }
               }
             }else{
@@ -308,7 +320,9 @@ async function resolveAttemptAtomic(userId, attemptId){
             else{
               const pickedName = normalizeCardName(picked.displayName);
               const pElem = await incOrUpsertCard(userId, pickedName, 'P', { session });
-              if(pElem) awardedP = pElem; else { trace.notes.push('P-insert-miss'); awardedPoints += 5; await User.updateOne({ id: userId }, { $inc:{ points:5 } }, { session }).exec(); }
+              const norm = normalizeAward(pElem, 'P');
+              if(norm) awardedP = norm;
+              else { trace.notes.push('P-insert-miss'); awardedPoints += 5; await User.updateOne({ id: userId }, { $inc:{ points:5 } }, { session }).exec(); }
             }
           }
         }else{
@@ -323,7 +337,7 @@ async function resolveAttemptAtomic(userId, attemptId){
         }
 
         trace.awardedPoints = awardedPoints;
-        if(awardedP) trace.awardedPCard = { name: awardedP.name, rarity: awardedP.rarity };
+        if(awardedP) trace.awardedPCard = { name: awardedP.name, displayName: awardedP.displayName, rarity: awardedP.rarity };
 
         await User.updateOne(
           { id: userId, 'pendingAttempts.id': attemptId },
@@ -331,7 +345,7 @@ async function resolveAttemptAtomic(userId, attemptId){
           { arrayFilters: [{ 'p.id': attemptId }], session }
         ).exec();
 
-        out = { success:true, resolved:true, attemptId, successResult, pCard:trace.awardedPCard, awardedPoints: trace.awardedPoints || 0 };
+        out = { success:true, resolved:true, attemptId, successResult, pCard: trace.awardedPCard, awardedPoints: trace.awardedPoints || 0 };
       });
       return out;
     }catch(err){
@@ -367,7 +381,7 @@ async function resolveAttemptAtomic(userId, attemptId){
       if(modifiedCountOf(mark) === 0) return { success:false, reason:'already-resolved' };
 
       const restored = await incOrUpsertCard(userId, normalizedAttemptName, attempt.rarity);
-      if(restored) trace.restoredCard = { name: restored.name, rarity: restored.rarity };
+      if(restored) trace.restoredCard = { name: (restored.card? restored.card.name : restored.name) || '', rarity: (restored.card? restored.card.rarity : restored.rarity) || attempt.rarity };
       else trace.notes.push('restore-missing');
 
       let awardedPoints = 0;
@@ -385,7 +399,8 @@ async function resolveAttemptAtomic(userId, attemptId){
             }else{
               const pickedName = normalizeCardName(picked.displayName);
               const pElem = await incOrUpsertCard(userId, pickedName, STAGE5_CARD_RARITY);
-              if(pElem) awardedP = pElem;
+              const norm = normalizeAward(pElem, STAGE5_CARD_RARITY);
+              if(norm) awardedP = norm;
               else { trace.notes.push('stage5-insert-miss'); awardedPoints += STAGE5_PICK_FALLBACK_POINTS; await User.updateOne({ id: userId }, { $inc:{ points: STAGE5_PICK_FALLBACK_POINTS } }).exec(); }
             }
           }else{ awardedPoints += 25; await User.updateOne({ id: userId }, { $inc:{ points:25 } }).exec(); }
@@ -395,7 +410,9 @@ async function resolveAttemptAtomic(userId, attemptId){
           else{
             const pickedName = normalizeCardName(picked.displayName);
             const pElem = await incOrUpsertCard(userId, pickedName, 'P');
-            if(pElem) awardedP = pElem; else { trace.notes.push('P-insert-miss'); awardedPoints += 5; await User.updateOne({ id: userId }, { $inc:{ points:5 } }).exec(); }
+            const norm = normalizeAward(pElem, 'P');
+            if(norm) awardedP = norm;
+            else { trace.notes.push('P-insert-miss'); awardedPoints += 5; await User.updateOne({ id: userId }, { $inc:{ points:5 } }).exec(); }
           }
         }
       }else{
@@ -410,20 +427,21 @@ async function resolveAttemptAtomic(userId, attemptId){
       }
 
       trace.awardedPoints = awardedPoints;
-      if(awardedP) trace.awardedPCard = { name: awardedP.name, rarity: awardedP.rarity };
+      if(awardedP) trace.awardedPCard = { name: awardedP.name, displayName: awardedP.displayName, rarity: awardedP.rarity };
 
       await User.updateOne(
         { id: userId, 'pendingAttempts.id': attemptId },
         { $set: { 'pendingAttempts.$.effectsApplied': true, 'pendingAttempts.$.effectsTrace': trace } }
       ).exec();
 
-      return { success:true, resolved:true, attemptId, successResult, pCard:trace.awardedPCard, awardedPoints: trace.awardedPoints || 0 };
+      return { success:true, resolved:true, attemptId, successResult, pCard: trace.awardedPCard, awardedPoints: trace.awardedPoints || 0 };
     }catch(err){
       console.error('[live] resolveAttemptAtomic error (no-session)', err);
       return { success:false, reason:'internal-error' };
     }
   }
 }
+
 
 module.exports = {
   startAttemptAtomic,

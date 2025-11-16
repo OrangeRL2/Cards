@@ -21,6 +21,10 @@ module.exports = {
   data: new SlashCommandBuilder()
     .setName('inventory')
     .setDescription('Show your card inventory')
+    .addUserOption(opt =>
+      opt.setName('user')
+        .setDescription('View another user\'s inventory (optional)')
+    )
     .addStringOption(opt =>
       opt.setName('rarity')
         .setDescription('Filter by rarity')
@@ -31,6 +35,8 @@ module.exports = {
           { name: 'R', value: 'R' },
           { name: 'S', value: 'S' },
           { name: 'P', value: 'P' },
+          { name: 'SP', value: 'SP' },
+          { name: 'UP', value: 'UP' },
           { name: 'RR', value: 'RR' },
           { name: 'SR', value: 'SR' },
           { name: 'OSR', value: 'OSR' },
@@ -59,6 +65,17 @@ module.exports = {
   requireOshi: true,
 
   async execute(interaction) {
+    // resolve target user (owner of inventory) and viewer (interaction.user)
+    const explicitTarget = interaction.options.getUser('user');
+    const targetUser = explicitTarget ? explicitTarget : interaction.user;
+
+    // disallow viewing bot inventories
+    if (targetUser.bot) {
+      await interaction.reply({ content: 'You cannot view a bot inventory.', ephemeral: true });
+      return;
+    }
+
+    const ephemeralReply = targetUser.id !== interaction.user.id;
     await interaction.deferReply();
 
     // single declarations for filters / sort
@@ -66,9 +83,9 @@ module.exports = {
     const filterQ = interaction.options.getString('search')?.toLowerCase();
     const sortBy = interaction.options.getString('sort') || 'rarity';
 
-    const userDoc = await User.findOne({ id: interaction.user.id });
+    const userDoc = await User.findOne({ id: targetUser.id });
     if (!userDoc || !userDoc.cards || (userDoc.cards instanceof Map ? userDoc.cards.size === 0 : Object.keys(userDoc.cards || {}).length === 0)) {
-      return interaction.editReply({ content: 'No cards yet. Use `/pull`!', ephemeral: true });
+      return interaction.editReply({ content: `${targetUser.id === interaction.user.id ? 'No cards yet. Use `/pull`!' : `${targetUser.username} has no cards yet.`}`, ephemeral: ephemeralReply });
     }
 
     // Normalize top-level entries (Map or plain object)
@@ -140,7 +157,7 @@ module.exports = {
     );
 
     if (!entries.length) {
-      return interaction.editReply({ content: 'No cards match filters.', ephemeral: true });
+      return interaction.editReply({ content: 'No cards match filters.', ephemeral: ephemeralReply });
     }
 
     // Totals
@@ -149,11 +166,21 @@ module.exports = {
     const filteredCards = entries.reduce((sum, e) => sum + (Number(e.count) || 0), 0);
     const filteredPulls = entries.reduce((sum, e) => sum + (Array.isArray(e.timestamps) ? e.timestamps.length : 0), 0);
 
+    // safe timestamp helpers (avoid spreading large arrays or empty spreads)
+    function maxTimestamp(arr = []) {
+      if (!arr || arr.length === 0) return 0;
+      return arr.reduce((m, t) => Math.max(m, Number(t) || 0), 0);
+    }
+    function minTimestamp(arr = []) {
+      if (!arr || arr.length === 0) return 0;
+      return arr.reduce((m, t) => Math.min(m, Number(t) || 0), Number(arr[0]) || 0);
+    }
+
     // Sorting
     if (sortBy === 'newest') {
-      entries.sort((a, b) => (Math.max(...(b.timestamps || [0])) || 0) - (Math.max(...(a.timestamps || [0])) || 0));
+      entries.sort((a, b) => maxTimestamp(b.timestamps) - maxTimestamp(a.timestamps));
     } else if (sortBy === 'oldest') {
-      entries.sort((a, b) => (Math.min(...(a.timestamps || [Date.now()])) || 0) - (Math.min(...(b.timestamps || [Date.now()])) || 0));
+      entries.sort((a, b) => minTimestamp(a.timestamps) - minTimestamp(b.timestamps));
     } else if (sortBy === 'amount') {
       entries.sort((a, b) => {
         const ca = Number(a.count || 0);
@@ -163,23 +190,40 @@ module.exports = {
       });
     } else {
       const order = {
-        C: 1, U: 2, R: 3, OC: 4, S: 5, P: 6, SP:7, RR: 8, SR: 9, OSR: 10, SY: 11, UR: 12, HR: 13, OUR: 14, SEC: 15, UP:16
-      };
+  C: 1,
+  U: 2,
+  R: 3,
+  OC: 4,
+  S: 5,
+  P: 6,
+  SP: 7,
+  RR: 8,
+  SR: 9,
+  OSR: 10,
+  SY: 11,
+  HR: 12,
+  bday: 13,
+  UR: 14,
+  OUR: 15,
+  SEC: 16,
+  UP: 17
+};
       entries.sort((a, b) => {
         const d = (order[b.rarity] || 999) - (order[a.rarity] || 999);
         if (d !== 0) return d;
         return a.name.localeCompare(b.name);
       });
     }
-function escapeMarkdown(str = '') {
-  return String(str).replace(/([\\_*[\]()~`>#\-=|{}.!])/g, '\\$1');
-}
+
+    function escapeMarkdown(str = '') {
+      return String(str).replace(/([\\_*[\]()~`>#\-=|{}.!])/g, '\\$1');
+    }
 
     // Paginate
     const totalPages = Math.max(1, Math.ceil(entries.length / ITEMS_PER_PAGE));
     const pages = Array.from({ length: totalPages }, (_, i) => entries.slice(i * ITEMS_PER_PAGE, (i + 1) * ITEMS_PER_PAGE));
 
-    // Prepare image data (encoded name) — keep original encoding: encodeURIComponent(c.name)
+    // Prepare image data (encoded name)
     const imageResults = entries.map(c => {
       const encodedName = encodeURIComponent(String(c.name));
       const url = `${IMAGE_BASE}/${encodeURIComponent(c.rarity)}/${encodedName}.png`;
@@ -191,21 +235,21 @@ function escapeMarkdown(str = '') {
     const cid = (name) => `${name}_${uid}`;
 
     // Build embeds and components (prebuilt)
-const listEmbeds = pages.map((chunk, i) =>
-  new EmbedBuilder()
-    .setTitle(`${interaction.user.username}'s Inventory`)
-    .setDescription(
-      chunk
-        .map(c => {
-          const encodedName = encodeURIComponent(String(c.name));
-          const url = `${IMAGE_BASE}/${encodeURIComponent(c.rarity)}/${encodedName}.png`;
-          return `**[${c.rarity}]** [${escapeMarkdown(c.name)}](${url}) (x${c.count})`;
-        })
-        .join('\n')
-    )
-    .setColor(Colors.Blue)
-    .setFooter({ text: `Page ${i + 1}/${totalPages} • Cards: ${filteredCards}` })
-);
+    const listEmbeds = pages.map((chunk, i) =>
+      new EmbedBuilder()
+        .setTitle(`${targetUser.username}'s Inventory`)
+        .setDescription(
+          chunk
+            .map(c => {
+              const encodedName = encodeURIComponent(String(c.name));
+              const url = `${IMAGE_BASE}/${encodeURIComponent(c.rarity)}/${encodedName}.png`;
+              return `**[${c.rarity}]** [${escapeMarkdown(c.name)}](${url}) (x${c.count})`;
+            })
+            .join('\n')
+        )
+        .setColor(Colors.Blue)
+        .setFooter({ text: `Page ${i + 1}/${totalPages} • Cards: ${filteredCards}` })
+    );
 
     const listRows = pages.map((_, i) => {
       const prev = new ButtonBuilder().setCustomId(cid(`list_prev_${i}`)).setLabel('◀ Prev').setStyle(ButtonStyle.Primary).setDisabled(i === 0);
@@ -217,7 +261,7 @@ const listEmbeds = pages.map((chunk, i) =>
 
     const imageEmbeds = imageResults.map(({ c, url }, i) =>
       new EmbedBuilder()
-        .setTitle(`**[${c.rarity}]** ${c.name} (x${c.count})`)
+        .setTitle(`**[${c.rarity}]** ${escapeMarkdown(c.name)} (x${c.count})`)
         .setImage(url)
         .setColor({
           UR: Colors.DarkPurple,
@@ -258,7 +302,8 @@ const listEmbeds = pages.map((chunk, i) =>
     collector.on('collect', async btn => {
       resetIdleTimer();
       try {
-        const parts = btn.customId.split(`_${uid}`)[0]; // e.g., list_prev_0 or img_next_3
+        const idx = btn.customId.lastIndexOf(`_${uid}`);
+        const parts = idx === -1 ? btn.customId : btn.customId.slice(0, idx); // e.g., list_prev_0 or img_next_3
         // normalize action and index
         if (parts.startsWith('list_prev_')) {
           listPage = Math.max(0, listPage - 1);
@@ -292,7 +337,7 @@ const listEmbeds = pages.map((chunk, i) =>
             listPage = target - 1;
             await modalInt.update({ embeds: [listEmbeds[listPage]], components: [listRows[listPage]] });
           } catch (err) {
-            try { await interaction.followUp({ content: 'Jump cancelled or timed out.', ephemeral: true }); } catch {}
+            try { await btn.reply({ content: 'Jump cancelled or timed out.', ephemeral: true }); } catch {}
           }
           return;
         }
