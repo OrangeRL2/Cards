@@ -229,44 +229,71 @@ module.exports = {
     let userDoc = await User.findOne({ id: discordUserId }).exec();
     if (!userDoc) userDoc = await User.create({ id: discordUserId });
 
-    // Prepare items
-    const pageItems = [];
-    const allNames = [];
-    for (const item of pack) {
-      const { rarity, file } = item;
-      const base = path.basename(file);
-      const ext = path.extname(base);
-      const raw = base.slice(0, base.length - ext.length);
-      const displayName = raw.replace(/[_-]+/g, ' ').trim();
+// helper: escape ] and ) which break Markdown link syntax
+function escapeLinkText(text) {
+  return text.replace(/([\\_*[\]()~`>#\-=|{}.!])/g, '\\$1');
+}
+function prettyRarityPlain(r) { return `[${r}]`; }
+const pageItems = [];
+const allNames = [];
 
-      let card = userDoc.cards.find(c => c.name === displayName && c.rarity === rarity);
-      if (!card) {
-        card = { name: displayName, rarity, count: 1, timestamps: [new Date()] };
-        userDoc.cards.push(card);
-      } else {
-        card.count = (card.count || 0) + 1;
-        card.timestamps = card.timestamps || [];
-        card.timestamps.push(new Date());
-      }
+for (const item of pack) {
+  const { rarity, file } = item;
+  const base = path.basename(file);
+  const ext = path.extname(base);
+  const raw = base.slice(0, base.length - ext.length);
+  const displayName = raw.replace(/[_-]+/g, ' ').trim();
 
-      const encodedUrl = encodeURI(`${IMAGE_BASE}/${rarity}/${raw}.png`);
-      const titleLine = `**[${rarity}]** - ${displayName} - #${card.count}`;
+  // ensure cards array exists defensively
+  userDoc.cards = userDoc.cards || [];
+  let card = userDoc.cards.find(c => c.name === displayName && c.rarity === rarity);
+  if (!card) {
+    card = { name: displayName, rarity, count: 1, timestamps: [new Date()] };
+    userDoc.cards.push(card);
+  } else {
+    card.count = (card.count || 0) + 1;
+    card.timestamps = card.timestamps || [];
+    card.timestamps.push(new Date());
+  }
 
-      pageItems.push({
-        rarity,
-        rawName: raw,
-        displayName,
-        titleLine,
-        imageUrl: encodedUrl,
-      });
+  // encode only the filename segment; normalize IMAGE_BASE trailing slash
+  const encodedUrl = `${IMAGE_BASE.replace(/\/$/,'')}/${rarity}/${encodeURIComponent(raw)}.png`;
 
-      allNames.push(`${titleLine}`);
-    }
+  // Use normal ASCII brackets as plain text; make only "Name - #N" the clickable link
+  const visiblePrefix = `${prettyRarityPlain(rarity)} - `;
+  const titleBody = `${displayName}`; // link text (escaped)
+  const titleCount = ` - #${card.count}`; // link text (escaped)
+  const titleLine = `${visiblePrefix}${titleBody}`; // for other uses (pageItems, logs)
 
-    userDoc.pulls = (userDoc.pulls || 0) + 1;
-    await userDoc.save();
+  pageItems.push({
+    rarity,
+    rawName: raw,
+    displayName,
+    titleLine,
+    imageUrl: encodedUrl,
+  });
 
-    const descriptionAll = `${allNames.join('\n')}`;
+  // single push to allNames: prefix (plain) + clickable link (escaped)
+  allNames.push(`${visiblePrefix}[${escapeLinkText(titleBody)}](${encodedUrl})${titleCount}`);
+}
+
+// increment and persist user pulls
+userDoc.pulls = (userDoc.pulls || 0) + 1;
+await userDoc.save();
+
+// join and safely truncate description
+let descriptionAll = allNames.join('\n');
+const MAX_DESC = 4096;
+if (descriptionAll.length > MAX_DESC) {
+  // keep full lines, then indicate how many were omitted
+  const truncated = descriptionAll.slice(0, MAX_DESC - 80); // leave room for suffix
+  const lastNl = truncated.lastIndexOf('\n');
+  const visible = lastNl > 0 ? truncated.slice(0, lastNl) : truncated;
+  const visibleCount = visible.split('\n').filter(Boolean).length;
+  const totalCount = allNames.length;
+  const omitted = totalCount - visibleCount;
+  descriptionAll = `${visible}\n...and ${omitted} more`;
+}
 
 const elapsedSinceGif = Date.now() - gifShownAt;
 if (elapsedSinceGif < GIF_DURATION_MS) {

@@ -171,6 +171,9 @@ module.exports = {
         return a.name.localeCompare(b.name);
       });
     }
+function escapeMarkdown(str = '') {
+  return String(str).replace(/([\\_*[\]()~`>#\-=|{}.!])/g, '\\$1');
+}
 
     // Paginate
     const totalPages = Math.max(1, Math.ceil(entries.length / ITEMS_PER_PAGE));
@@ -188,13 +191,21 @@ module.exports = {
     const cid = (name) => `${name}_${uid}`;
 
     // Build embeds and components (prebuilt)
-    const listEmbeds = pages.map((chunk, i) =>
-      new EmbedBuilder()
-        .setTitle(`${interaction.user.username}'s Inventory`)
-        .setDescription(chunk.map(c => `**[${c.rarity}]** ${c.name} (x${c.count})`).join('\n'))
-        .setColor(Colors.Blue)
-        .setFooter({ text: `Page ${i + 1}/${totalPages} • Cards: ${filteredCards} • Pulls: ${filteredPulls} • Total cards: ${totalCards}` })
-    );
+const listEmbeds = pages.map((chunk, i) =>
+  new EmbedBuilder()
+    .setTitle(`${interaction.user.username}'s Inventory`)
+    .setDescription(
+      chunk
+        .map(c => {
+          const encodedName = encodeURIComponent(String(c.name));
+          const url = `${IMAGE_BASE}/${encodeURIComponent(c.rarity)}/${encodedName}.png`;
+          return `**[${c.rarity}]** [${escapeMarkdown(c.name)}](${url}) (x${c.count})`;
+        })
+        .join('\n')
+    )
+    .setColor(Colors.Blue)
+    .setFooter({ text: `Page ${i + 1}/${totalPages} • Cards: ${filteredCards}` })
+);
 
     const listRows = pages.map((_, i) => {
       const prev = new ButtonBuilder().setCustomId(cid(`list_prev_${i}`)).setLabel('◀ Prev').setStyle(ButtonStyle.Primary).setDisabled(i === 0);

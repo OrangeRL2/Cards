@@ -440,7 +440,7 @@ module.exports = {
           try {
             await btn.update({ content: null, embeds: [outEmbed], components: [] });
           } catch {
-            try { await btn.followUp({ embeds: [outEmbed], flags: EPHEMERAL_FLAG }); } catch {}
+            try { await btn.followUp({ embeds: [outEmbed], ephemeral: false }); } catch {}
           }
 
           btnCollector.stop('started');

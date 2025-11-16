@@ -96,8 +96,8 @@ function drawPack(userId) {
   // Slot 3 (common with bday instead of OC/HR)
   const commonSlot3Base = [
     { key: 'C', weight: 95.0 },
-    { key: 'S', weight: 4.0 },
-    { key: 'bday', weight: 1.0 },
+    { key: 'S', weight: 4.5 },
+    { key: 'bday', weight: 0.5 },
   ];
   const commonSlot3Options = applyOverride(userId, commonSlot3Base, specialOverrides.commonSlot3Options);
   {
