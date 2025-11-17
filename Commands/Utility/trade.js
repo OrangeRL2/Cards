@@ -23,10 +23,6 @@ async function safeDefer(interaction) {
   }
 }
 
-/**
- * Safely reply/edit/followUp and attempt to fetch the sent message.
- * Returns the Message or null if it couldn't be fetched (expired/unknown webhook).
- */
 async function safeReplyAndFetch(interaction, payload) {
   try {
     if (!interaction.deferred && !interaction.replied) {
@@ -113,7 +109,6 @@ module.exports = {
 
     const cardEntry = fromDoc.cards[fromIdx];
     const cardName = cardEntry.name;
-    // store canonical display rarity uppercase
     const cardRarity = String(cardEntry.rarity ?? '').toUpperCase();
     const cardAvailable = cardEntry.count || 0;
 
@@ -121,7 +116,6 @@ module.exports = {
       return interaction.followUp?.({ content: `You only have ${cardAvailable} × ${cardName}.`, ephemeral: true }) ?? null;
     }
 
-    // Build initial embed (description will be filled from session via buildDescription)
     const embedBase = new EmbedBuilder()
       .setTitle('🔄 Trade Proposal')
       .setColor(Colors.Gold)
@@ -133,7 +127,6 @@ module.exports = {
       new ButtonBuilder().setCustomId('trade_reject').setLabel('❌').setStyle(ButtonStyle.Danger)
     );
 
-    // Send initial reply safely and try to fetch the message for interactive collector
     const message = await safeReplyAndFetch(interaction, {
       content: `<@${toId}>, you have a trade request:`,
       embeds: [EmbedBuilder.from(embedBase).setDescription('Preparing trade...')],
@@ -145,7 +138,6 @@ module.exports = {
       return;
     }
 
-    // Helper to build description from session
     function buildDescription(session) {
       const fromMark = session.accepted?.[session.fromId] ? '✅' : '❌';
       const toMark = session.accepted?.[session.toId] ? '✅' : '❌';
@@ -173,18 +165,17 @@ module.exports = {
       fromId,
       toId,
       offers: {
-        // ensure we store the initial offer with the correct fields and uppercase rarity
         [fromId]: [{ name: cardName, count: tradeCount, rarity: cardRarity }],
         [toId]: []
       },
       accepted: { [fromId]: false, [toId]: false },
-      embedBase // store the base embed for future clones
+      embedBase,
+      finalizing: false
     };
 
-    // set session in map
     sessions.set(message.id, session);
 
-    // Immediately set the real description (so the message contains correct content)
+    // Immediately set the real description
     try {
       const initial = EmbedBuilder.from(session.embedBase).setDescription(buildDescription(session));
       session.embedBase = initial;
@@ -213,6 +204,7 @@ module.exports = {
 
       // ---- Add card via modal ----
       if (btn.customId === 'trade_add') {
+        // Important: do NOT defer or reply on the button before showing the modal
         const modalId = `trade_add_modal_${message.id}_${userId}`;
         const modal = new ModalBuilder().setCustomId(modalId).setTitle('Add a Card to Trade');
 
@@ -233,7 +225,7 @@ module.exports = {
         try {
           const submitted = await btn.awaitModalSubmit({
             filter: i => i.customId === modalId && i.user.id === userId,
-            time: 30_000
+            time: 60_000
           });
 
           const nameVal = submitted.fields.getTextInputValue('trade_card');
@@ -245,6 +237,7 @@ module.exports = {
             return;
           }
 
+          // Fetch fresh user doc for validation
           const doc = await User.findOne({ id: userId }).exec();
           if (!doc || !Array.isArray(doc.cards) || doc.cards.length === 0) {
             try { await submitted.reply({ content: '❌ You have no cards.', ephemeral: true }); } catch {}
@@ -261,26 +254,43 @@ module.exports = {
             return;
           }
 
+          // Fixed: prevent duplicate/over-offer by checking already-offered total and merging offers
           const c = doc.cards[idx];
-          if ((c.count || 0) < countVal) {
-            try { await submitted.reply({ content: `❌ You only have ${c.count || 0} × ${c.name}.`, ephemeral: true }); } catch {}
+          const existingOffered = (session.offers[userId] || [])
+            .filter(o => String(o.name).toLowerCase() === String(c.name).toLowerCase()
+                      && String(o.rarity || '').toLowerCase() === String(c.rarity || '').toLowerCase())
+            .reduce((sum, o) => sum + (o.count || 0), 0);
+
+          if ((c.count || 0) < existingOffered + countVal) {
+            try { await submitted.reply({ content: `❌ You only have ${c.count || 0} × ${c.name}. You already offered ${existingOffered}.`, ephemeral: true }); } catch {}
             return;
           }
 
-          // update session offers and reset accepts
           session.offers[userId] = session.offers[userId] || [];
-          // store rarity uppercased for consistent display
-          session.offers[userId].push({ name: c.name, count: countVal, rarity: String(c.rarity ?? '').toUpperCase() });
+
+          const sameIdx = session.offers[userId].findIndex(o =>
+            String(o.name).toLowerCase() === String(c.name).toLowerCase() &&
+            String(o.rarity || '').toLowerCase() === String(c.rarity || '').toLowerCase()
+          );
+
+          if (sameIdx !== -1) {
+            session.offers[userId][sameIdx].count = (session.offers[userId][sameIdx].count || 0) + countVal;
+          } else {
+            session.offers[userId].push({ name: c.name, count: countVal, rarity: String(c.rarity ?? '').toUpperCase() });
+          }
+
+          // reset both accepts
           session.accepted[session.fromId] = false;
           session.accepted[session.toId] = false;
 
-          // build new embed from session.embedBase and update session.embedBase
+          // update embed
           const newEmbed = EmbedBuilder.from(session.embedBase).setDescription(buildDescription(session));
           session.embedBase = newEmbed;
           await message.edit({ embeds: [newEmbed] }).catch(e => console.warn('failed to edit message', e));
 
           try { await submitted.reply({ content: '✅ Card added to the trade!', ephemeral: true }); } catch {}
         } catch (e) {
+          console.error('awaitModalSubmit failed or timed out', e);
           try { await btn.followUp({ content: 'Modal timed out or failed.', ephemeral: true }); } catch {}
         }
         return;
@@ -288,9 +298,10 @@ module.exports = {
 
       // ---- Accept ----
       if (btn.customId === 'trade_accept') {
+        // mark acceptance and attempt finalization if both accepted
         session.accepted[userId] = true;
-        //try { await btn.reply({ content: `✅ <@${userId}> has accepted.`, ephemeral: false }); } catch {}
-          try { await btn.deferUpdate(); } catch (e) { /* optional: console.warn('defer failed', e); */ }
+        try { await btn.deferUpdate(); } catch (e) { /* ignore */ }
+
         // update embed to show acceptance marks
         try {
           const updated = EmbedBuilder.from(session.embedBase).setDescription(buildDescription(session));
@@ -300,15 +311,53 @@ module.exports = {
           console.warn('failed to update acceptance display', e);
         }
 
+        // Finalize when both have accepted
         if (session.accepted[session.fromId] && session.accepted[session.toId]) {
-          // finalize: re-fetch docs to reduce race issues
-          const fromDocFinal = await User.findOne({ id: session.fromId }).exec();
-          const toDocFinal = await User.findOne({ id: session.toId }).exec() || new User({ id: session.toId, cards: [] });
+          // guard against concurrent finalizations
+          if (session.finalizing) return;
+          session.finalizing = true;
 
+          // disable components immediately to avoid more clicks
+          try { await message.edit({ components: [] }); } catch (e) {}
+
+          // Re-fetch docs and validate availability one last time
+          let fromDocFinal = await User.findOne({ id: session.fromId }).exec();
+          let toDocFinal = await User.findOne({ id: session.toId }).exec();
+
+          fromDocFinal = fromDocFinal || new User({ id: session.fromId, cards: [] });
+          toDocFinal = toDocFinal || new User({ id: session.toId, cards: [] });
+
+          const insufficient = [];
+          const checkOffers = (sourceDoc, offerArray) => {
+            for (const offer of offerArray || []) {
+              const s = (sourceDoc.cards || []).find(x =>
+                x.name === offer.name &&
+                String(x.rarity || '').toLowerCase() === String(offer.rarity || '').toLowerCase()
+              );
+              if (!s || (s.count || 0) < offer.count) {
+                insufficient.push({ userId: sourceDoc.id, name: offer.name, have: s ? s.count || 0 : 0, need: offer.count });
+              }
+            }
+          };
+
+          checkOffers(fromDocFinal, session.offers[session.fromId]);
+          checkOffers(toDocFinal, session.offers[session.toId]);
+
+          if (insufficient.length) {
+            const msg = `Trade aborted: insufficient cards for the following entries: ${insufficient.map(i => `<@${i.userId}>: ${i.have}/${i.need} ${i.name}`).join(', ')}`;
+            try { await message.edit({ content: msg, embeds: [], components: [] }); } catch (e) {}
+            sessions.delete(message.id);
+            return;
+          }
+
+          // perform transfer
           const transfer = (sourceDoc, targetDoc, offerArray) => {
             for (const offer of offerArray || []) {
               // remove from source
-              const sIdx = (sourceDoc.cards || []).findIndex(x => x.name === offer.name && String(x.rarity || '').toLowerCase() === String(offer.rarity || '').toLowerCase());
+              const sIdx = (sourceDoc.cards || []).findIndex(x =>
+                x.name === offer.name &&
+                String(x.rarity || '').toLowerCase() === String(offer.rarity || '').toLowerCase()
+              );
               if (sIdx !== -1) {
                 sourceDoc.cards[sIdx].count = (sourceDoc.cards[sIdx].count || 0) - offer.count;
                 if (sourceDoc.cards[sIdx].count <= 0) sourceDoc.cards.splice(sIdx, 1);
@@ -320,13 +369,15 @@ module.exports = {
 
               // add to target
               targetDoc.cards = targetDoc.cards || [];
-              const tIdx = targetDoc.cards.findIndex(x => x.name === offer.name && String(x.rarity || '').toLowerCase() === String(offer.rarity || '').toLowerCase());
+              const tIdx = targetDoc.cards.findIndex(x =>
+                x.name === offer.name &&
+                String(x.rarity || '').toLowerCase() === String(offer.rarity || '').toLowerCase()
+              );
               if (tIdx !== -1) {
                 targetDoc.cards[tIdx].count = (targetDoc.cards[tIdx].count || 0) + offer.count;
                 targetDoc.cards[tIdx].timestamps = targetDoc.cards[tIdx].timestamps || [];
                 targetDoc.cards[tIdx].timestamps.push(new Date());
               } else {
-                // ensure stored rarity is uppercase for display consistency
                 targetDoc.cards.push({ name: offer.name, rarity: String(offer.rarity ?? '').toUpperCase(), count: offer.count, timestamps: [new Date()] });
               }
             }
@@ -334,16 +385,20 @@ module.exports = {
             targetDoc.markModified('cards');
           };
 
-          transfer(fromDocFinal || new User({ id: session.fromId, cards: [] }), toDocFinal || new User({ id: session.toId, cards: [] }), session.offers[session.fromId]);
-          transfer(toDocFinal || new User({ id: session.toId, cards: [] }), fromDocFinal || new User({ id: session.fromId, cards: [] }), session.offers[session.toId]);
+          try {
+            transfer(fromDocFinal, toDocFinal, session.offers[session.fromId]);
+            transfer(toDocFinal, fromDocFinal, session.offers[session.toId]);
 
-          const saves = [];
-          if (fromDocFinal) saves.push(fromDocFinal.save());
-          if (toDocFinal) saves.push(toDocFinal.save());
-          await Promise.all(saves);
+            // Save both docs (ensure created docs are saved)
+            await Promise.all([fromDocFinal.save(), toDocFinal.save()]);
 
-          try { await message.edit({ content: `Trade between <@${session.fromId}> and <@${session.toId}> has been completed!`, embeds: [], components: [] }); } catch (e) { console.warn('failed to finalize message edit', e); }
-          sessions.delete(message.id);
+            try { await message.edit({ content: `Trade between <@${session.fromId}> and <@${session.toId}> has been completed!`, embeds: [], components: [] }); } catch (e) { console.warn('failed to finalize message edit', e); }
+          } catch (err) {
+            console.error('trade finalize error', err);
+            try { await message.edit({ content: 'Trade failed due to server error. No changes were saved.', embeds: [], components: [] }); } catch (e) {}
+          } finally {
+            sessions.delete(message.id);
+          }
         }
         return;
       }
