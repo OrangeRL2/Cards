@@ -7,7 +7,7 @@ const config = require('../config.json');
 const OWNER_ID = '153551890976735232'; // replace with your Discord ID (string)
 const PREFIX = '!'; // prefix used by your dispatcher
 const MAX_RECIPIENTS_HARD_CAP = 2000;
-const DEFAULT_COUNT_PARAM = 500;
+const DEFAULT_COUNT_PARAM = 50;
 const BATCH_SIZE = 200;
 
 // parse args: !announce "Title" "Message" [--flag=val ...]
@@ -57,7 +57,7 @@ module.exports = {
       if (!parsed) {
         return message.reply({
           content:
-            'Usage: !announce "Title" "Message" --pulls=2 --target=@everyone --count=50 --embed="https://..." --plain --channel=123'
+            'Usage: !announce "Title" "Message" --pulls=2 --target=@everyone --count=50 --embed="https://..." --plain --channel=123 --ping=<id|@name|@everyone>'
         }).catch(() => {});
       }
 
@@ -93,15 +93,94 @@ module.exports = {
         return message.reply({ content: `Unable to fetch channel ${channelId}. Check bot permissions and that channel exists.` }).catch(() => {});
       }
 
-      // Post to birthday channel (embed or plain)
+      // Helper: resolve --ping token to a mention string usable in top-level content
+      async function resolvePingToken(guild, pingToken) {
+        if (!pingToken) return null;
+        const t = String(pingToken).trim();
+
+        // direct everyone/here
+        if (/^@everyone$/i.test(t)) return '@everyone';
+        if (/^@here$/i.test(t)) return '@here';
+
+        // already <@123...> or plain id
+        const idMatch = t.match(/<@!?(\d+)>|^(\d+)$/);
+        if (idMatch) {
+          const id = idMatch[1] || idMatch[2];
+          if (guild) {
+            const member = guild.members.cache.get(id) || await guild.members.fetch(id).catch(() => null);
+            if (member) return `<@${id}>`;
+            return `<@${id}>`; // best-effort even if not cached/fetchable
+          }
+          return `<@${id}>`;
+        }
+
+        // role mention by @Role or <@&id>
+        const roleMatch = t.match(/<@&(\d+)>|^@(.+)$/);
+        if (roleMatch && guild) {
+          if (roleMatch[1]) {
+            const role = guild.roles.cache.get(roleMatch[1]);
+            if (role) return `<@&${role.id}>`;
+          } else if (roleMatch[2]) {
+            const roleName = roleMatch[2].trim();
+            const role = guild.roles.cache.find(r => r.name.toLowerCase() === roleName.toLowerCase());
+            if (role) return `<@&${role.id}>`;
+          }
+        }
+
+        // try username#discrim
+        if (guild) {
+          const tagMatch = t.match(/^(.+)#(\d{4})$/);
+          if (tagMatch) {
+            const [ , name, discrim ] = tagMatch;
+            const memberByTag = guild.members.cache.find(m => `${m.user.username}#${m.user.discriminator}`.toLowerCase() === `${name}#${discrim}`.toLowerCase());
+            if (memberByTag) return `<@${memberByTag.id}>`;
+          }
+
+          // try exact username (case-insensitive) or display name
+          const nameNoAt = t.replace(/^@/, '');
+          const memberByName = guild.members.cache.find(m =>
+            m.user.username.toLowerCase() === nameNoAt.toLowerCase() ||
+            (m.nickname && m.nickname.toLowerCase() === nameNoAt.toLowerCase())
+          );
+          if (memberByName) return `<@${memberByName.id}>`;
+        }
+
+        // fallback: not resolvable
+        return null;
+      }
+
+      // Build top-level mention from flags.ping (if provided)
+      const guild = message.guild;
+      let topMention = null;
+      if (flags.ping) {
+        topMention = await resolvePingToken(guild, flags.ping);
+      }
+
+      // Build allowedMentions based on topMention so Discord.js will actually deliver the ping
+      const allowedMentions = { parse: [] };
+      if (topMention === '@everyone' || topMention === '@here') {
+        allowedMentions.parse.push('everyone');
+      } else if (topMention && topMention.startsWith('<@&')) {
+        // role mention: include roles parsing
+        allowedMentions.parse.push('roles');
+      } else if (topMention && topMention.startsWith('<@')) {
+        const uid = topMention.match(/<@!?(\d+)>/)?.[1];
+        if (uid) allowedMentions.users = [uid];
+      }
+
+      // Post to birthday channel (embed or plain) — place mention above embed/plain so it actually notifies
       let posted;
       try {
         if (sendAsEmbed && embed) {
-          posted = await targetChannel.send({ embeds: [embed] });
+          posted = await targetChannel.send({
+            content: topMention || undefined,
+            embeds: [embed],
+            allowedMentions
+          });
         } else {
-          // plain text: include title (raw, so emojis remain) and body
-          const text = `**${title}**\n\n${body}`;
-          posted = await targetChannel.send({ content: text });
+          // plain text: include the ping above title/body
+          const text = `${topMention ? topMention + '\n' : ''}**${title}**\n\n${body}`;
+          posted = await targetChannel.send({ content: text, allowedMentions });
         }
       } catch (err) {
         console.error('[announce] send embed/text failed', err);
@@ -114,7 +193,6 @@ module.exports = {
       }
 
       // Resolve recipients (same logic as before)
-      const guild = message.guild;
       if (!guild) return message.reply({ content: 'This command must be used in a guild channel.' }).catch(() => {});
 
       let recipients = [];

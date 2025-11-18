@@ -7,13 +7,13 @@ const User = require('../models/User');
 
 const STAGE_FOR_RARITY = { C:1, OC:1, U:1, S:2, R:2, RR:2, SR:3, OSR:3, UR:4, OUR:4, SY:4, SEC:5 };
 const STAGE_NAMES = {1:'Galaxy',2:'SPACE',3:'CiRCLE',4:'RiNG',5:'Budokan'};
-const SUCCESS_RATES = { C:0.01, OC:0.05, U:0.02, S:0.29, R:0.11, RR:0.30, SR:0.46, OSR:0.48, UR:0.66, OUR:0.77, SY:0.57, SEC:0.99 };
+const SUCCESS_RATES = { C:0.01, OC:0.09, U:0.05, S:0.29, R:0.19, RR:0.39, SR:0.49, OSR:0.59, UR:0.79, OUR:0.89, SY:0.69, SEC:0.99 };
 const DURATION_MS = {
   1:30 * 60 * 1000,
   2:3.6e6,
-  3:5*3.6e6,
-  4:12*3.6e6,
-  5:24*3.6e6
+  3:3*3.6e6,
+  4:8*3.6e6,
+  5:22*3.6e6
 }; // keep same shape; adjust 5 for prod
 const STAGE5_CARD_RARITY = 'SP';
 const STAGE5_POOL_DIRNAME = 'SP';
