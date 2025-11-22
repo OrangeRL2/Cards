@@ -1,4 +1,3 @@
-// commands/misc/pull.js
 const { SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 const path = require('path');
 
@@ -13,7 +12,7 @@ const gifAfterglow =  'https://media.discordapp.net/attachments/1046811248647475
 const gifHarohapi =   'https://media.discordapp.net/attachments/1046811248647475302/1437428283217149962/hhw.gif';
 const gifRoselia =    'https://media.discordapp.net/attachments/1046811248647475302/1437428356617338891/Roselia.gif';
 const gifMyGo =       'https://media.discordapp.net/attachments/1046811248647475302/1437428386988556438/MyGO.gif';
-const gifMorfonica =       'https://cdn.discordapp.com/attachments/802431770023952406/1438516550628937819/Morf.gif';
+const gifMorfonica =  'https://cdn.discordapp.com/attachments/802431770023952406/1438516550628937819/Morf.gif';
 let GIF_DURATION_MS = 1200;
 const gifs = [gifPopipa, gifAfterglow, gifHarohapi, gifRoselia, gifMyGo, gifMorfonica];
 
@@ -56,10 +55,16 @@ module.exports = {
 
     // consume exactly 1 pull
     let consumeResult;
+    // We'll capture whether the user was on their last timed pull BEFORE we mutate quota
+    let wasLastTimedPullBefore = false;
+
     try {
       if (allowEvent) {
         // Deterministic consumption: use event pulls first, then timed pulls
         const { doc, nextRefillInMs } = await pullQuota.getUpdatedQuota(discordUserId);
+
+        // capture pre-mutation timed-pull state
+        wasLastTimedPullBefore = !!(doc && typeof doc.pulls === 'number' && doc.pulls === 1);
 
         if (!doc) {
           consumeResult = {
@@ -121,8 +126,11 @@ module.exports = {
           };
         }
       } else {
-        // existing timed-only branch (unchanged)
+        // existing timed-only branch (unchanged except we capture pre-mutation state)
         const { doc, nextRefillInMs } = await pullQuota.getUpdatedQuota(discordUserId);
+
+        // capture pre-mutation timed-pull state
+        wasLastTimedPullBefore = !!(doc && typeof doc.pulls === 'number' && doc.pulls === 1);
 
         if (!doc) {
           consumeResult = {
@@ -203,7 +211,8 @@ module.exports = {
     // Draw exactly one pack
     let pack;
     try {
-      pack = drawPack(discordUserId); // [{ rarity, file }, ...]
+      // pass in the pre-consumption boolean so drawPack knows if this was the last timed pull BEFORE we mutated the quota
+      pack = await drawPack(discordUserId, null); // [{ rarity, file }, ...]
     } catch (err) {
       console.error('drawPack error:', err);
       // rollback
@@ -223,105 +232,200 @@ module.exports = {
       return;
     }
 
-    
+    // --- NEW: atomic user updates to avoid VersionError and document contention ---
+    // We'll upsert the user, increment pulls, and then for each card either increment the existing array element or push a new one.
+    // After updates, we re-fetch a fresh user doc (lean) to build pageItems and counts.
 
-    // Ensure user document exists
-    let userDoc = await User.findOne({ id: discordUserId }).exec();
-    if (!userDoc) userDoc = await User.create({ id: discordUserId });
+    // Ensure user document exists and increment pulls atomically
+    try {
+      // Upsert user with incremented pulls
+      await User.updateOne(
+        { id: discordUserId },
+        { $inc: { pulls: 1 }, $setOnInsert: { id: discordUserId } },
+        { upsert: true }
+      ).exec();
+    } catch (err) {
+      console.error('user upsert/pull increment failed:', err);
+      // Attempt to rollback quota consumption if possible
+      try {
+        if (consumedEvent > 0) await pullQuota.addEventPulls(discordUserId, consumedEvent);
+        if (consumedTimed > 0) {
+          const { doc } = await pullQuota.getUpdatedQuota(discordUserId);
+          doc.pulls = Math.min(pullQuota.MAX_STOCK, doc.pulls + consumedTimed);
+          await doc.save();
+        }
+      } catch (rbErr) {
+        console.warn('rollback failed after user upsert failure:', rbErr);
+      }
+      const elapsed = Date.now() - gifShownAt;
+      if (elapsed < GIF_DURATION_MS) await sleep(GIF_DURATION_MS - elapsed);
+      await interaction.editReply({ content: 'Failed to persist your pull. Your pull may have been refunded (if possible).', components: [] });
+      return;
+    }
 
-// helper: escape ] and ) which break Markdown link syntax
-function escapeLinkText(text) {
-  return text.replace(/([\\_*[\]()~`>#\-=|{}.!])/g, '\\$1');
-}
-function prettyRarityPlain(r) { return `[${r}]`; }
-const pageItems = [];
-const allNames = [];
+    // For each card in pack, atomically increment or add
+    try {
+      for (const item of pack) {
+        const { rarity, file } = item;
+        const base = path.basename(file);
+        const ext = path.extname(base);
+        const raw = base.slice(0, base.length - ext.length);
+        const displayName = raw.replace(/[_-]+/g, ' ').trim();
 
-for (const item of pack) {
-  const { rarity, file } = item;
-  const base = path.basename(file);
-  const ext = path.extname(base);
-  const raw = base.slice(0, base.length - ext.length);
-  const displayName = raw.replace(/[_-]+/g, ' ').trim();
+        // Try to increment existing card entry
+        const incResult = await User.updateOne(
+          { id: discordUserId, 'cards.name': displayName, 'cards.rarity': rarity },
+          {
+            $inc: { 'cards.$.count': 1 },
+            $push: { 'cards.$.timestamps': new Date() }
+          }
+        ).exec();
 
-  // ensure cards array exists defensively
-  userDoc.cards = userDoc.cards || [];
-  let card = userDoc.cards.find(c => c.name === displayName && c.rarity === rarity);
-  if (!card) {
-    card = { name: displayName, rarity, count: 1, timestamps: [new Date()] };
-    userDoc.cards.push(card);
-  } else {
-    card.count = (card.count || 0) + 1;
-    card.timestamps = card.timestamps || [];
-    card.timestamps.push(new Date());
-  }
+        // If no matching card element existed, push a new one
+        if (!incResult.matchedCount || incResult.matchedCount === 0) {
+          try {
+            await User.updateOne(
+              { id: discordUserId },
+              {
+                $push: {
+                  cards: {
+                    name: displayName,
+                    rarity,
+                    count: 1,
+                    timestamps: [new Date()]
+                  }
+                }
+              }
+            ).exec();
+          } catch (pushErr) {
+            // Rare race: another concurrent process may have created the card element between the two updates.
+            // Try to increment again as a fallback.
+            try {
+              await User.updateOne(
+                { id: discordUserId, 'cards.name': displayName, 'cards.rarity': rarity },
+                {
+                  $inc: { 'cards.$.count': 1 },
+                  $push: { 'cards.$.timestamps': new Date() }
+                }
+              ).exec();
+            } catch (finalErr) {
+              console.warn('Failed to add or increment card for user', discordUserId, displayName, finalErr);
+            }
+          }
+        }
+      }
+    } catch (err) {
+      console.error('card atomic updates failed:', err);
+      // best-effort rollback of quota (don't attempt to revert partial card writes)
+      try {
+        if (consumedEvent > 0) await pullQuota.addEventPulls(discordUserId, consumedEvent);
+        if (consumedTimed > 0) {
+          const { doc } = await pullQuota.getUpdatedQuota(discordUserId);
+          doc.pulls = Math.min(pullQuota.MAX_STOCK, doc.pulls + consumedTimed);
+          await doc.save();
+        }
+      } catch (rbErr) {
+        console.warn('rollback failed after card update error:', rbErr);
+      }
+      const elapsed = Date.now() - gifShownAt;
+      if (elapsed < GIF_DURATION_MS) await sleep(GIF_DURATION_MS - elapsed);
+      await interaction.editReply({ content: 'Failed to persist your card results. Your pull may have been refunded (if possible).', components: [] });
+      return;
+    }
 
-  // encode only the filename segment; normalize IMAGE_BASE trailing slash
-  const encodedUrl = `${IMAGE_BASE.replace(/\/$/,'')}/${rarity}/${encodeURIComponent(raw)}.png`;
+    // Re-fetch fresh user doc for display (lean to avoid mongoose document versioning in memory)
+    let userDocFresh;
+    try {
+      userDocFresh = await User.findOne({ id: discordUserId }).lean().exec();
+      if (!userDocFresh) {
+        // Unexpected: create minimal view to continue
+        userDocFresh = { id: discordUserId, cards: [], pulls: 0 };
+      }
+    } catch (err) {
+      console.error('failed to load fresh user doc for display:', err);
+      userDocFresh = { id: discordUserId, cards: [], pulls: 0 };
+    }
 
-  // Use normal ASCII brackets as plain text; make only "Name - #N" the clickable link
-  const visiblePrefix = `${prettyRarityPlain(rarity)} - `;
-  const titleBody = `${displayName}`; // link text (escaped)
-  const titleCount = ` - #${card.count}`; // link text (escaped)
-  const titleLine = `${visiblePrefix}${titleBody}`; // for other uses (pageItems, logs)
+    // --- post-draw processing (adjusted to use fresh doc) ---
+    // helper: escape ] and ) which break Markdown link syntax
+    function escapeLinkText(text) {
+      return text.replace(/([\\_*[\]()~`>#\-=|{}.!])/g, '\\$1');
+    }
+    function prettyRarityPlain(r) { return `[${r}]`; }
+    const pageItems = [];
+    const allNames = [];
 
-  pageItems.push({
-    rarity,
-    rawName: raw,
-    displayName,
-    titleLine,
-    imageUrl: encodedUrl,
-  });
+    for (const item of pack) {
+      const { rarity, file } = item;
+      const base = path.basename(file);
+      const ext = path.extname(base);
+      const raw = base.slice(0, base.length - ext.length);
+      const displayName = raw.replace(/[_-]+/g, ' ').trim();
 
-  // single push to allNames: prefix (plain) + clickable link (escaped)
-  allNames.push(`${visiblePrefix}[${escapeLinkText(titleBody)}](${encodedUrl})${titleCount}`);
-}
+      // find the updated card entry in userDocFresh to get current count
+      const cardEntry = (userDocFresh.cards || []).find(c => c.name === displayName && c.rarity === rarity);
+      const cardCount = (cardEntry && typeof cardEntry.count === 'number') ? cardEntry.count : 1;
 
-// increment and persist user pulls
-userDoc.pulls = (userDoc.pulls || 0) + 1;
-await userDoc.save();
+      // encode only the filename segment; normalize IMAGE_BASE trailing slash
+      const encodedUrl = `${IMAGE_BASE.replace(/\/$/,'')}/${rarity}/${encodeURIComponent(raw)}.png`;
 
-// join and safely truncate description
-let descriptionAll = allNames.join('\n');
-const MAX_DESC = 4096;
-if (descriptionAll.length > MAX_DESC) {
-  // keep full lines, then indicate how many were omitted
-  const truncated = descriptionAll.slice(0, MAX_DESC - 80); // leave room for suffix
-  const lastNl = truncated.lastIndexOf('\n');
-  const visible = lastNl > 0 ? truncated.slice(0, lastNl) : truncated;
-  const visibleCount = visible.split('\n').filter(Boolean).length;
-  const totalCount = allNames.length;
-  const omitted = totalCount - visibleCount;
-  descriptionAll = `${visible}\n...and ${omitted} more`;
-}
+      // Use normal ASCII brackets as plain text; make only "Name - #N" the clickable link
+      const visiblePrefix = `${prettyRarityPlain(rarity)} - `;
+      const titleBody = `${displayName}`; // link text (escaped)
+      const titleCount = ` - #${cardCount}`; // link text (escaped)
+      const titleLine = `${visiblePrefix}${titleBody}`; // for other uses (pageItems, logs)
 
-const elapsedSinceGif = Date.now() - gifShownAt;
-if (elapsedSinceGif < GIF_DURATION_MS) {
-  await sleep(GIF_DURATION_MS - elapsedSinceGif);
-}
+      pageItems.push({
+        rarity,
+        rawName: raw,
+        displayName,
+        titleLine,
+        imageUrl: encodedUrl,
+      });
+
+      // single push to allNames: prefix (plain) + clickable link (escaped)
+      allNames.push(`${visiblePrefix}[${escapeLinkText(titleBody)}](${encodedUrl})${titleCount}`);
+    }
+
+    // join and safely truncate description
+    let descriptionAll = allNames.join('\n');
+    const MAX_DESC = 4096;
+    if (descriptionAll.length > MAX_DESC) {
+      // keep full lines, then indicate how many were omitted
+      const truncated = descriptionAll.slice(0, MAX_DESC - 80); // leave room for suffix
+      const lastNl = truncated.lastIndexOf('\n');
+      const visible = lastNl > 0 ? truncated.slice(0, lastNl) : truncated;
+      const visibleCount = visible.split('\n').filter(Boolean).length;
+      const totalCount = allNames.length;
+      const omitted = totalCount - visibleCount;
+      descriptionAll = `${visible}\n...and ${omitted} more`;
+    }
+
+    const elapsedSinceGif = Date.now() - gifShownAt;
+    if (elapsedSinceGif < GIF_DURATION_MS) {
+      await sleep(GIF_DURATION_MS - elapsedSinceGif);
+    }
 
     // If any SEC was pulled, show a special reveal GIF before the result embed
-const hasSEC = pageItems.some(it => String(it.rarity ?? '').toUpperCase() === 'SEC');
-if (hasSEC) {
-  GIF_DURATION_MS = 1200;
-  //const specialGifUrl = 'https://media.discordapp.net/attachments/845037984986169384/931909410526216282/rip.gif?ex=69168c05&is=69153a85&hm=fa55eddeca55ecba0093b9d899bedd2b1fb1488f0de7cba72a71797635946397&format=webp&animated=true'; // choose a GIF for SEC
-  const specialGifUrl = 'https://media.discordapp.net/attachments/1046811248647475302/1437428522577821828/Ran_chan_drop_kick.gif?ex=691680e1&is=69152f61&hm=e4f0afaf8c0fdf11d05a0c0eedb8198fd8b16809fe3414a4e4ed9dc4302118be&='; // choose a GIF for SEC
-  try {
-    const secEmbed = new EmbedBuilder()
-      .setTitle('**!?!?!?!?!?!?!?!?!?!?!?!?**')
-      //.setDescription('**special reveal incoming!!!**')
-      .setColor(0xFFD700)
-      .setImage(specialGifUrl);
+    const hasSEC = pageItems.some(it => String(it.rarity ?? '').toUpperCase() === 'SEC');
+    if (hasSEC) {
+      GIF_DURATION_MS = 1200;
+      const specialGifUrl = 'https://media.discordapp.net/attachments/1046811248647475302/1437428522577821828/Ran_chan_drop_kick.gif?ex=691680e1&is=69152f61&hm=e4f0afaf8c0fdf11d05a0c0eedb8198fd8b16809fe3414a4e4ed9dc4302118be&=';
+      try {
+        const secEmbed = new EmbedBuilder()
+          .setTitle('**!?!?!?!?!?!?!?!?!?!?!?!?**')
+          .setColor(0xFFD700)
+          .setImage(specialGifUrl);
 
-    // show the special GIF (replace current reply contents)
-    await interaction.editReply({ embeds: [secEmbed], components: [] });
+        // show the special GIF (replace current reply contents)
+        await interaction.editReply({ embeds: [secEmbed], components: [] });
 
-    // ensure the GIF is visible long enough
-    await sleep(GIF_DURATION_MS);
-  } catch (err) {
-    console.warn('failed to show SEC reveal gif:', err);
-  }
-}
+        // ensure the GIF is visible long enough
+        await sleep(GIF_DURATION_MS);
+      } catch (err) {
+        console.warn('failed to show SEC reveal gif:', err);
+      }
+    }
 
     // Embed maker
     function makeEmbed(idx) {
