@@ -5,9 +5,11 @@ const PullQuota = require('../models/PullQuota');
 const config = require('../config.json');
 
 const OWNER_ID = '153551890976735232'; // replace with your Discord ID (string)
+const OWNER_ID2 = '409717160995192832';
+const OWNER_ID3 = '272129129841688577';
 const PREFIX = '!'; // prefix used by your dispatcher
 const MAX_RECIPIENTS_HARD_CAP = 2000;
-const DEFAULT_COUNT_PARAM = 50;
+const DEFAULT_COUNT_PARAM = 2000;
 const BATCH_SIZE = 200;
 
 // parse args: !announce "Title" "Message" [--flag=val ...]
@@ -48,7 +50,7 @@ module.exports = {
       console.log('[announce] invoked by', message.author.id);
 
       // Owner guard
-      if (message.author.id !== OWNER_ID) {
+      if (message.author.id !== OWNER_ID  && message.author.id !== OWNER_ID2) {
         console.log('[announce] denied owner check', message.author.id);
         return message.reply({ content: 'You are not allowed to use this command.' }).catch(() => {});
       }
@@ -65,7 +67,7 @@ module.exports = {
       const color = flags.color || '#2b2d31';
       const pullsPer = Math.max(0, Number(flags.pulls || 0));
       const countParam = Math.max(1, Math.min(Number(flags.count || DEFAULT_COUNT_PARAM), MAX_RECIPIENTS_HARD_CAP));
-      const targetRaw = flags.target || null;
+      const targetRaw = flags.target || null; 
 
       const embedUrl = flags.embed || null;
       const sendAsEmbed = !(flags.plain || flags['no-embed']); // default: embed unless --plain or --no-embed set

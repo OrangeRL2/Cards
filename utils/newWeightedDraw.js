@@ -26,11 +26,11 @@ function pickFileFromPool(rarity) {
 // --- User groups ---
 const specialUserIds = new Set([
   '409717160995192832',
-  '153551890976735232',
+  '',
 ]);
 
 const otherUserIds = new Set([
-  '1171127294413246567',
+  '',
   '222222222222222222',
 ]);
 

@@ -4,7 +4,8 @@ const User = require('../models/User');
 const PullQuota = require('../models/PullQuota');
 const config = require('../config.json');
 
-const OWNER_ID = '153551890976735232';
+const OWNER_ID2 = '153551890976735232';
+const OWNER_ID = '409717160995192832';
 const PREFIX = '!';
 const COMMAND_NAME = 'testannounce';
 const MAX_RECIPIENTS_HARD_CAP = 2000;
@@ -52,7 +53,7 @@ module.exports = {
 
       console.log(`[${COMMAND_NAME}] invoked by`, message.author.id);
 
-      if (message.author.id !== OWNER_ID) {
+      if (message.author.id !== OWNER_ID && message.author.id !== OWNER_ID2) {
         console.log(`[${COMMAND_NAME}] denied owner check`, message.author.id);
         return message.reply({ content: 'You are not allowed to use this command.' }).catch(() => {});
       }
