@@ -287,7 +287,8 @@ module.exports = {
           const newEmbed = EmbedBuilder.from(session.embedBase).setDescription(buildDescription(session));
           session.embedBase = newEmbed;
           await message.edit({ embeds: [newEmbed] }).catch(e => console.warn('failed to edit message', e));
-
+          // reset the collector timer so the trade expires 5 minutes after the last add
+          try { collector.resetTimer(); } catch (e) { console.warn('failed to reset collector timer', e); }
           try { await submitted.reply({ content: '✅ Card added to the trade!', ephemeral: true }); } catch {}
         } catch (e) {
           console.error('awaitModalSubmit failed or timed out', e);

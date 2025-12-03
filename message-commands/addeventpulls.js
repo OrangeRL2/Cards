@@ -5,6 +5,7 @@ const PREFIX = '!';
 const COMMAND_NAME = 'addeventpulls';
 const OWNER_ID = '409717160995192832'; // replace or add more checks as needed
 const OWNER_ID2 = '153551890976735232';
+const OWNER_ID3 = '272129129841688577';
 const MAX_RECIPIENTS_HARD_CAP = 2000;
 const DEFAULT_COUNT_PARAM = 1000;
 const BATCH_SIZE = 200;
@@ -34,7 +35,7 @@ module.exports = {
       if (!message.content?.startsWith(PREFIX)) return;
       if (message.author.bot) return;
 
-      if (message.author.id !== OWNER_ID && message.author.id !== OWNER_ID2) {
+      if (message.author.id !== OWNER_ID && message.author.id !== OWNER_ID2&& message.author.id !== OWNER_ID3) {
         return message.reply({ content: 'You are not allowed to use this command.' }).catch(() => {});
       }
 

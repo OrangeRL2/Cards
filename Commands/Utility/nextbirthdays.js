@@ -43,7 +43,9 @@ function nextOccurrenceJst(month, day, fromJstDate = null) {
   const candKey = `${candJst.getFullYear()}${String(candJst.getMonth()+1).padStart(2,'0')}${String(candJst.getDate()).padStart(2,'0')}`;
   const fromKey = `${fromJst.getFullYear()}${String(fromJst.getMonth()+1).padStart(2,'0')}${String(fromJst.getDate()).padStart(2,'0')}`;
 
-  if (Number(candKey) <= Number(fromKey)) {
+  // Only roll to next year if the candidate is strictly before today (JST).
+  // Keep candidate if it's the same JST date (so today's birthday is shown).
+  if (Number(candKey) < Number(fromKey)) {
     candidate = jstMidnightUtcDate(year + 1, month, day);
   }
 

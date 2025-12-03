@@ -1,4 +1,4 @@
-// commands/misc/pull.js
+// Commands/Utility/pull.js
 const { SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 const path = require('path');
 
@@ -203,7 +203,7 @@ module.exports = {
     // Draw exactly one pack
     let pack;
     try {
-      pack = drawPack(discordUserId); // [{ rarity, file }, ...]
+      pack = await drawPack(discordUserId); // [{ rarity, file }, ...]
     } catch (err) {
       console.error('drawPack error:', err);
       // rollback
@@ -222,8 +222,6 @@ module.exports = {
       await interaction.editReply({ content: 'An error occurred while drawing the pack. Your pull has been refunded (if possible).', components: [] });
       return;
     }
-
-    
 
     // Ensure user document exists
     let userDoc = await User.findOne({ id: discordUserId }).exec();
