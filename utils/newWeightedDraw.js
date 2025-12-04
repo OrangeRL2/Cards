@@ -67,9 +67,9 @@ commonSlot1Options: [
     ],
   ],
   rareOptions: [
-    { key: 'R', weight: 99.20 },
+    { key: 'R', weight: 99.40 },
     { key: 'OUR', weight: 0.55 },
-    { key: 'SEC', weight: 0.25 },
+    { key: 'SEC', weight: 0.05 },
   ],
 };
 
@@ -266,7 +266,7 @@ async function drawPack(userId, useSpecialRatesOverride = null) {
     //{ key: 'SEC', weight: 0.00 },
     { key: 'R', weight: 99.60 },
     { key: 'OUR', weight: 0.39 },
-    { key: 'SEC', weight: 0.01 },
+    { key: 'SEC', weight: 0.03 },
   ];
   const rareOptions = applyOverride(userId, rareBase, 'rareOptions', overrideSet);
   {

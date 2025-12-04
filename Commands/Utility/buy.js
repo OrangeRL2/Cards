@@ -257,47 +257,47 @@ module.exports = {
             });
             return;
           }
-// capture current total so label is correct
-const totalItems = filteredItems.length || 1;
-const modalId = `shop_buy_modal_${listPage}_${uid}`;
-const modal = new ModalBuilder().setCustomId(modalId).setTitle('Buy from Shop');
-const itemInput = new TextInputBuilder()
-  .setCustomId('item_global_index')
-  .setLabel(`Enter the item number shown (1–${totalItems})`)
-  .setStyle(TextInputStyle.Short)
-  .setRequired(true);
-modal.addComponents(new ActionRowBuilder().addComponents(itemInput));
-await comp.showModal(modal);
+          // capture current total so label is correct
+          const totalItems = filteredItems.length || 1;
+          const modalId = `shop_buy_modal_${listPage}_${uid}`;
+          const modal = new ModalBuilder().setCustomId(modalId).setTitle('Buy from Shop');
+          const itemInput = new TextInputBuilder()
+            .setCustomId('item_global_index')
+            .setLabel(`Enter the item number shown (1–${totalItems})`)
+            .setStyle(TextInputStyle.Short)
+            .setRequired(true);
+          modal.addComponents(new ActionRowBuilder().addComponents(itemInput));
+          await comp.showModal(modal);
 
-try {
-  const modalInt = await comp.awaitModalSubmit({
-    filter: m => m.customId === modalId && m.user.id === interaction.user.id,
-    time: 60_000,
-  });
-
-  resetIdle();
-
-  // acknowledge modal so it disappears
-  try {
-    if (!modalInt.deferred && !modalInt.replied) await modalInt.deferReply({ ephemeral: true });
-    await modalInt.deleteReply().catch(() => {});
-  } catch (ackErr) {
-    try { await modalInt.reply({ content: 'Processing purchase...', ephemeral: true }); await modalInt.deleteReply().catch(() => {}); } catch {}
-  }
-
-  // parse global index directly
-  let entered = parseInt(modalInt.fields.getTextInputValue('item_global_index'), 10);
-  if (isNaN(entered) || entered < 1) entered = 1;
-  const globalIndex = entered - 1;
-  if (globalIndex < 0 || globalIndex >= filteredItems.length) {
-    try { await modalInt.followUp({ content: 'Invalid item selection.', ephemeral: true }); } catch {}
-    return;
-  }
-  const item = filteredItems[globalIndex];
-  await handlePurchase(interaction, modalInt, item);
-} catch (err) {
-  try { await comp.reply({ content: 'Purchase cancelled or timed out.', ephemeral: true }); } catch {}
-}
+          try {
+            const modalInt = await comp.awaitModalSubmit({
+              filter: m => m.customId === modalId && m.user.id === interaction.user.id,
+              time: 60_000,
+            });
+          
+            resetIdle();
+          
+            // acknowledge modal so it disappears
+            try {
+              if (!modalInt.deferred && !modalInt.replied) await modalInt.deferReply({ ephemeral: true });
+              await modalInt.deleteReply().catch(() => {});
+            } catch (ackErr) {
+              try { await modalInt.reply({ content: 'Processing purchase...', ephemeral: true }); await modalInt.deleteReply().catch(() => {}); } catch {}
+            }
+          
+            // parse global index directly
+            let entered = parseInt(modalInt.fields.getTextInputValue('item_global_index'), 10);
+            if (isNaN(entered) || entered < 1) entered = 1;
+            const globalIndex = entered - 1;
+            if (globalIndex < 0 || globalIndex >= filteredItems.length) {
+              try { await modalInt.followUp({ content: 'Invalid item selection.', ephemeral: true }); } catch {}
+              return;
+            }
+            const item = filteredItems[globalIndex];
+            await handlePurchase(interaction, modalInt, item);
+          } catch (err) {
+            try { await comp.reply({ content: 'Purchase cancelled or timed out.', ephemeral: true }); } catch {}
+          }
 
 
           // IMAGE NAV
