@@ -23,10 +23,13 @@ function sleep(ms) {
 
 const COST_TIERS = [
   { id: 'all', label: 'All Cards', min: -Infinity, max: Infinity },
-  { id: 'tier1', label: 'Cheapies', min: 0, max: 1000 },
-  { id: 'tier2', label: 'Expensives', min: 1001, max: 5000 },
-  { id: 'tier3', label: 'Expensiver', min: 5001, max: 10000 },
-  { id: 'tier4', label: 'Super Expensive', min: 10001, max: Infinity },
+  { id: 'tier1', label: 'Tier 1', min: 0, max: 1000 },
+  { id: 'tier2', label: 'Tier 2', min: 1001, max: 2500 },
+  { id: 'tier3', label: 'Tier 3', min: 2501, max: 5000 },
+  { id: 'tier4', label: 'Tier 4', min: 5001, max: 10000 },
+  { id: 'tier5', label: 'Tier 5', min: 10001, max: 20000 },
+  { id: 'tier6', label: 'Tier 6', min: 20001, max: 30000 },
+  { id: 'tier7', label: 'Tier 7', min: 30001, max: Infinity },
 ];
 
 const IMAGE_BASE = process.env.IMAGE_BASE || 'http://152.69.195.48/images';
@@ -254,58 +257,48 @@ module.exports = {
             });
             return;
           }
-          if (cid.startsWith(`shop_list_buy_`)) {
-            // modal: ask for item number on page (no qty)
-            const pageItems = pages[listPage] || [];
-            const modalId = `shop_buy_modal_${listPage}_${uid}`;
-            const modal = new ModalBuilder().setCustomId(modalId).setTitle('Buy from Shop');
-            const itemInput = new TextInputBuilder()
-              .setCustomId('item_on_page')
-              .setLabel(`Item number on page (1–${pageItems.length || 1})`)
-              .setStyle(TextInputStyle.Short)
-              .setRequired(true);
-            modal.addComponents(new ActionRowBuilder().addComponents(itemInput));
-            await comp.showModal(modal);
+// capture current total so label is correct
+const totalItems = filteredItems.length || 1;
+const modalId = `shop_buy_modal_${listPage}_${uid}`;
+const modal = new ModalBuilder().setCustomId(modalId).setTitle('Buy from Shop');
+const itemInput = new TextInputBuilder()
+  .setCustomId('item_global_index')
+  .setLabel(`Enter the item number shown (1–${totalItems})`)
+  .setStyle(TextInputStyle.Short)
+  .setRequired(true);
+modal.addComponents(new ActionRowBuilder().addComponents(itemInput));
+await comp.showModal(modal);
 
-            try {
-              const modalInt = await comp.awaitModalSubmit({
-                filter: m => m.customId === modalId && m.user.id === interaction.user.id,
-                time: 60_000,
-              });
+try {
+  const modalInt = await comp.awaitModalSubmit({
+    filter: m => m.customId === modalId && m.user.id === interaction.user.id,
+    time: 60_000,
+  });
 
-              resetIdle();
+  resetIdle();
 
-              // ACKNOWLEDGE the modal immediately so it disappears from the user's client.
-              // Defer an ephemeral reply so the modal closes, then delete that ephemeral reply immediately
-              // so the user does not see a lingering "thinking" ephemeral message.
-              try {
-                await modalInt.deferReply({ ephemeral: true });
-                // delete the ephemeral deferred reply right away so there's no visible ephemeral "thinking" message
-                try { await modalInt.deleteReply().catch(() => {}); } catch {}
-              } catch (ackErr) {
-                // fallback: try a quick ephemeral reply then delete it
-                try { await modalInt.reply({ content: 'Processing purchase...', ephemeral: true }); await modalInt.deleteReply().catch(() => {}); } catch {}
-              }
+  // acknowledge modal so it disappears
+  try {
+    if (!modalInt.deferred && !modalInt.replied) await modalInt.deferReply({ ephemeral: true });
+    await modalInt.deleteReply().catch(() => {});
+  } catch (ackErr) {
+    try { await modalInt.reply({ content: 'Processing purchase...', ephemeral: true }); await modalInt.deleteReply().catch(() => {}); } catch {}
+  }
 
-              // Now the modal is acknowledged and gone. Parse input and proceed.
-              let itemNum = parseInt(modalInt.fields.getTextInputValue('item_on_page'), 10);
-              if (isNaN(itemNum) || itemNum < 1) itemNum = 1;
-              const globalIndex = listPage * ITEMS_PER_PAGE + (itemNum - 1);
-              if (globalIndex < 0 || globalIndex >= filteredItems.length) {
-                // Inform user via ephemeral (optional) or skip; keep ephemeral here for invalid input
-                try { await modalInt.followUp({ content: 'Invalid item selection.', ephemeral: true }); } catch {}
-                return;
-              }
-              const item = filteredItems[globalIndex];
+  // parse global index directly
+  let entered = parseInt(modalInt.fields.getTextInputValue('item_global_index'), 10);
+  if (isNaN(entered) || entered < 1) entered = 1;
+  const globalIndex = entered - 1;
+  if (globalIndex < 0 || globalIndex >= filteredItems.length) {
+    try { await modalInt.followUp({ content: 'Invalid item selection.', ephemeral: true }); } catch {}
+    return;
+  }
+  const item = filteredItems[globalIndex];
+  await handlePurchase(interaction, modalInt, item);
+} catch (err) {
+  try { await comp.reply({ content: 'Purchase cancelled or timed out.', ephemeral: true }); } catch {}
+}
 
-              // Pass both the original interaction (for editing the main shop message) and the acknowledged modal interaction
-              await handlePurchase(interaction, modalInt, item);
-            } catch (err) {
-              try { await comp.reply({ content: 'Purchase cancelled or timed out.', ephemeral: true }); } catch {}
-            }
-
-            return;
-          }
 
           // IMAGE NAV
           if (cid.startsWith(`shop_img_prev_`)) {
