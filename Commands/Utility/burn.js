@@ -19,10 +19,10 @@ const Oshi = require('../../models/Oshi');
 const PullQuota = require('../../models/PullQuota');
 const BurnLog = require('../../models/BurnLog');
 const LevelMilestone = require('../../models/LevelMilestone');
-const { xpForCard, xpToNextForLevel } = require('../../utils/leveling');
+const { xpForCard, xpToNextForLevel, isValidRarity, RARITY_XP } = require('../../utils/leveling');
 const { getAllEnabledMilestones, milestonesForLevel } = require('../../utils/milestones');
 
-const IMAGE_POOL_ROOT = path.join(__dirname, '..', '..', 'assets','images'); // adjust if needed
+const IMAGE_POOL_ROOT = path.join(__dirname, '..', '..', 'images'); // adjust if needed
 
 // In-memory sessions map for interactive burn flows
 const sessions = new Map();
@@ -177,9 +177,20 @@ module.exports = {
           });
 
           const nameVal = submitted.fields.getTextInputValue('burn_card').trim();
-          const rarityVal = String(submitted.fields.getTextInputValue('burn_rarity') ?? '').toUpperCase().trim();
+          const rarityRaw = submitted.fields.getTextInputValue('burn_rarity') ?? '';
+          const rarityVal = String(rarityRaw).toUpperCase().trim();
           const countVal = parseInt(submitted.fields.getTextInputValue('burn_count'), 10);
 
+          // Validate rarity
+          if (!isValidRarity(rarityVal)) {
+            try {
+              await submitted.reply({
+                content: 'Invalid rarity. Valid rarities: ' + Object.keys(RARITY_XP).join(', '),
+                ephemeral: true
+              });
+            } catch {}
+            return;
+          }
 
           if (!nameVal || !rarityVal || isNaN(countVal) || countVal < 1) {
             try { await submitted.reply({ content: 'Invalid input.', ephemeral: true }); } catch {}
@@ -206,16 +217,22 @@ module.exports = {
           const available = Number(card.count || 0);
           const existingOffered = s.offers.filter(o => o.name.toLowerCase() === card.name.toLowerCase() && o.rarity === rarityVal).reduce((a, b) => a + (b.count || 0), 0);
           if (available < existingOffered + countVal) {
-            try { await submitted.reply({ content: `You only have ${available}× ${card.name}. You already added ${existingOffered}.`, ephemeral: true }); } catch {}
+            try { await submitted.reply({ content: `You only have ${available} × ${card.name}. You already added ${existingOffered}.`, ephemeral: true }); } catch {}
             return;
           }
 
-          const entryXp = xpForCard(card.rarity, countVal);
+          // Compute entry XP and attach to offer
+          const entryXp = xpForCard(rarityVal, countVal);
+          if (entryXp === null) {
+            try { await submitted.reply({ content: 'Invalid rarity', ephemeral: true }); } catch {}
+            return;
+          }
+
           s.offers.push({ name: card.name, rarity: rarityVal, count: countVal, xp: entryXp });
           s.totalXp = s.offers.reduce((sum, o) => sum + (o.xp || 0), 0);
           s.finalizing = false;
 
-          await submitted.reply({ content: `Added ${countVal}× ${card.name} (${rarityVal}) — ${entryXp} XP`, ephemeral: true });
+          await submitted.reply({ content: `Added ${countVal} × ${card.name} (${rarityVal}) — ${entryXp} XP`, ephemeral: true });
           await refreshPreview();
         } catch (err) {
           console.warn('awaitModalSubmit failed or timed out', err);
@@ -269,7 +286,7 @@ module.exports = {
           const userDoc = await User.findOne({ id: userId }).session(sessionDb).exec();
           if (!userDoc) throw new Error('User doc missing');
 
-          // Re-validate offers
+          // Re-validate offers and compute totalXp using stored offer.xp
           let totalXp = 0;
           for (const offer of s.offers) {
             const idx = (userDoc.cards || []).findIndex(c =>
@@ -281,7 +298,11 @@ module.exports = {
             const available = Number(card.count || 0);
             const totalRequested = s.offers.filter(o => o.name === offer.name && o.rarity === offer.rarity).reduce((a, b) => a + (b.count || 0), 0);
             if (available < totalRequested) throw new Error(`Insufficient ${offer.name}: have ${available}, need ${totalRequested}`);
-            totalXp += xpForCard(card.rarity, offer.count);
+
+            // Use stored offer.xp (fallback to recompute if missing)
+            const offerXp = (typeof offer.xp === 'number') ? offer.xp : xpForCard(offer.rarity, offer.count);
+            if (offerXp === null) throw new Error('Invalid rarity in offer');
+            totalXp += offerXp;
           }
 
           // Load oshi
@@ -327,8 +348,11 @@ module.exports = {
             for (const m of toGrant) {
               awardedMilestones.push(m);
 
-              // record history for every award occurrence
+              // ensure history and counts exist
               oshi.awardsHistory = oshi.awardsHistory || [];
+              oshi.awardCounts = oshi.awardCounts || {};
+
+              // record every award occurrence
               oshi.awardsHistory.push({
                 milestoneId: String(m._id),
                 level: oshi.level,
@@ -337,9 +361,15 @@ module.exports = {
                 awardValue: m.awardValue
               });
 
+              // increment a counter for this milestone
+              oshi.awardCounts[String(m._id)] = (oshi.awardCounts[String(m._id)] || 0) + 1;
+
+              // keep oneTime behavior for oshi.awards
               if (m.oneTime) {
                 oshi.awards = oshi.awards || [];
-                oshi.awards.push(String(m._id));
+                if (!oshi.awards.includes(String(m._id))) {
+                  oshi.awards.push(String(m._id));
+                }
               }
             }
           }

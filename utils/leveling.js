@@ -16,6 +16,7 @@ const RARITY_XP = {
   UR: 90,
   OUR: 100,
   SEC: 250,
+  UP: 1000,
 };
 
 function isValidRarity(rarity) {
