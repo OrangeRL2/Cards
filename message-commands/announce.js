@@ -49,8 +49,12 @@ module.exports = {
 
       console.log('[announce] invoked by', message.author.id);
 
-      // Owner guard
-      if (message.author.id !== OWNER_ID  && message.author.id !== OWNER_ID2) {
+      // Owner guard (include OWNER_ID3)
+      if (
+        message.author.id !== OWNER_ID &&
+        message.author.id !== OWNER_ID2 &&
+        message.author.id !== OWNER_ID3
+      ) {
         console.log('[announce] denied owner check', message.author.id);
         return message.reply({ content: 'You are not allowed to use this command.' }).catch(() => {});
       }
@@ -59,7 +63,7 @@ module.exports = {
       if (!parsed) {
         return message.reply({
           content:
-            'Usage: !announce "Title" "Message" --pulls=2 --target=@everyone --count=50 --embed="https://..." --plain --channel=123 --ping=<id|@name|@everyone>'
+            'Usage: !announce "Title" "Message" --pulls=2 --target=@everyone --count=50 --embed="https://..." --plain --channel=123 --ping=<id|@name|@everyone> --pullquota'
         }).catch(() => {});
       }
 
@@ -67,12 +71,12 @@ module.exports = {
       const color = flags.color || '#2b2d31';
       const pullsPer = Math.max(0, Number(flags.pulls || 0));
       const countParam = Math.max(1, Math.min(Number(flags.count || DEFAULT_COUNT_PARAM), MAX_RECIPIENTS_HARD_CAP));
-      const targetRaw = flags.target || null; 
+      const targetRaw = flags.target || null;
 
       const embedUrl = flags.embed || null;
       const sendAsEmbed = !(flags.plain || flags['no-embed']); // default: embed unless --plain or --no-embed set
 
-      console.log('[announce] parsed', { title, pullsPer, targetRaw, countParam, embedUrl, sendAsEmbed });
+      console.log('[announce] parsed', { title, pullsPer, targetRaw, countParam, embedUrl, sendAsEmbed, pullquota: !!flags.pullquota });
 
       // Build embed (if used)
       let embed;
@@ -190,49 +194,64 @@ module.exports = {
       }
 
       // If no pull grant requested, finish
-      if (pullsPer <= 0 || !targetRaw) {
+      if (pullsPer <= 0 || (!targetRaw && !flags.pullquota)) {
         return message.reply({ content: `Announcement posted to <#${channelId}> (id: ${posted.id}). No pulls granted.` }).catch(() => {});
       }
 
-      // Resolve recipients (same logic as before)
-      if (!guild) return message.reply({ content: 'This command must be used in a guild channel.' }).catch(() => {});
-
+      // Resolve recipients
+      // If --pullquota flag is present, target every userId registered in PullQuota
       let recipients = [];
 
       try {
-        if (targetRaw === '@everyone' || targetRaw === '@here') {
-          const allMembers = await guild.members.fetch().catch(() => null);
-          if (!allMembers) {
-            return message.reply({ content: 'Unable to fetch guild members. Ensure Guild Members intent is enabled and bot has member access.' }).catch(() => {});
+        if (flags.pullquota) {
+          // Fetch all PullQuota userIds
+          const pqDocs = await PullQuota.find({}, 'userId').lean().catch((e) => {
+            console.error('[announce] PullQuota.find error', e);
+            return null;
+          });
+          if (!pqDocs) {
+            return message.reply({ content: 'Failed to fetch PullQuota records from database.' }).catch(() => {});
           }
-          recipients = Array.from(allMembers.values()).map(m => m.user);
+          // Map to objects with id property so downstream code can use user.id
+          recipients = pqDocs.map(d => ({ id: String(d.userId) }));
         } else {
-          const mentionId = (targetRaw.match(/<@!?(\d+)>/) || targetRaw.match(/<@&(\d+)>/) || targetRaw.match(/^(\d+)$/))?.[1];
-          if (mentionId) {
-            const member = guild.members.cache.get(mentionId) || await guild.members.fetch(mentionId).catch(() => null);
-            if (member) {
-              recipients = [member.user];
-            } else {
-              const role = guild.roles.cache.get(mentionId);
-              if (role) {
-                recipients = Array.from(role.members.values()).map(m => m.user);
-                if (recipients.length === 0) {
-                  const allMembers = await guild.members.fetch().catch(() => null);
-                  if (allMembers) recipients = Array.from(allMembers.values()).filter(m => m.roles.cache.has(role.id)).map(m => m.user);
+          // existing behavior requires guild context
+          if (!guild) return message.reply({ content: 'This command must be used in a guild channel.' }).catch(() => {});
+
+          if (targetRaw === '@everyone' || targetRaw === '@here') {
+            const allMembers = await guild.members.fetch().catch(() => null);
+            if (!allMembers) {
+              return message.reply({ content: 'Unable to fetch guild members. Ensure Guild Members intent is enabled and bot has member access.' }).catch(() => {});
+            }
+            recipients = Array.from(allMembers.values()).map(m => m.user);
+          } else {
+            const mentionId = (targetRaw.match(/<@!?(\d+)>/) || targetRaw.match(/<@&(\d+)>/) || targetRaw.match(/^(\d+)$/))?.[1];
+            if (mentionId) {
+              const member = guild.members.cache.get(mentionId) || await guild.members.fetch(mentionId).catch(() => null);
+              if (member) {
+                recipients = [member.user];
+              } else {
+                const role = guild.roles.cache.get(mentionId);
+                if (role) {
+                  recipients = Array.from(role.members.values()).map(m => m.user);
+                  if (recipients.length === 0) {
+                    const allMembers = await guild.members.fetch().catch(() => null);
+                    if (allMembers) recipients = Array.from(allMembers.values()).filter(m => m.roles.cache.has(role.id)).map(m => m.user);
+                  }
                 }
               }
-            }
-          } else {
-            const roleByName = guild.roles.cache.find(r => r.name.toLowerCase() === targetRaw.toLowerCase());
-            if (roleByName) {
-              recipients = Array.from(roleByName.members.values()).map(m => m.user);
-              if (recipients.length === 0) {
-                const allMembers = await guild.members.fetch().catch(() => null);
-                if (allMembers) recipients = Array.from(allMembers.values()).filter(m => m.roles.cache.has(roleByName.id)).map(m => m.user);
-              }
             } else {
-              const memberByTag = guild.members.cache.find(m => `${m.user.username}#${m.user.discriminator}`.toLowerCase() === targetRaw.toLowerCase());
-              if (memberByTag) recipients = [memberByTag.user];
+              const roleByName = guild.roles.cache.find(r => r.name.toLowerCase() === targetRaw.toLowerCase());
+              if (roleByName) {
+                recipients = Array.from(roleByName.members.values()).map(m => m.user);
+                if (recipients.length === 0) {
+                  const allMembers = await guild.members.fetch().catch(() => null);
+                  if (allMembers) recipients = Array.from(allMembers.values()).filter(m => m.roles.cache.has(roleByName.id)).map(m => m.user);
+                }
+              } else {
+                const memberByTag = guild.members.cache.find(m => `${m.user.username}#${m.user.discriminator}`.toLowerCase() === targetRaw.toLowerCase());
+                if (memberByTag) recipients = [memberByTag.user];
+              }
             }
           }
         }
