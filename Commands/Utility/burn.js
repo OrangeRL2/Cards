@@ -22,7 +22,7 @@ const LevelMilestone = require('../../models/LevelMilestone');
 const { xpForCard, xpToNextForLevel, isValidRarity, RARITY_XP } = require('../../utils/leveling');
 const { getAllEnabledMilestones, milestonesForLevel } = require('../../utils/milestones');
 
-const IMAGE_POOL_ROOT = path.join(__dirname, '..', '..', 'images'); // adjust if needed
+const IMAGE_POOL_ROOT = path.join(__dirname, '..', '..','assets', 'images','oshi'); // adjust if needed
 
 // In-memory sessions map for interactive burn flows
 const sessions = new Map();
@@ -73,6 +73,32 @@ async function buildPreviewEmbed(session) {
   }
 
   return embed;
+}
+// Helper: pick a random file from a random rarity subfolder inside poolPath
+function pickRandomFileFromOshiPool(poolPath) {
+  let subdirs = [];
+  try {
+    subdirs = fs.readdirSync(poolPath, { withFileTypes: true })
+      .filter(d => d.isDirectory())
+      .map(d => d.name);
+  } catch (e) {
+    return null;
+  }
+  if (!subdirs || subdirs.length === 0) return null;
+
+  const rarityFolder = subdirs[Math.floor(Math.random() * subdirs.length)];
+  const rarityPath = path.join(poolPath, rarityFolder);
+
+  let files = [];
+  try {
+    files = fs.readdirSync(rarityPath).filter(f => /\.(png|jpe?g|webp|gif)$/i.test(f));
+  } catch (e) {
+    return null;
+  }
+  if (!files || files.length === 0) return null;
+
+  const pick = files[Math.floor(Math.random() * files.length)];
+  return { pick, rarityFolder };
 }
 
 module.exports = {
@@ -215,6 +241,10 @@ module.exports = {
           }
 
           const card = userDoc.cards[idx];
+          if (card.locked) {
+            try { await submitted.reply({ content: `❌ **[${card.rarity}] ${card.name}** is locked! Use \`/lock\` to unlock it first.`, ephemeral: true }); } catch {}
+            return;
+          }
           const available = Number(card.count || 0);
           const existingOffered = s.offers.filter(o => o.name.toLowerCase() === card.name.toLowerCase() && o.rarity === rarityVal).reduce((a, b) => a + (b.count || 0), 0);
           if (available < existingOffered + countVal) {
@@ -381,44 +411,51 @@ module.exports = {
               const n = Number(m.awardValue || 0);
               if (n > 0) totalEventPulls += n;
             } else if (m.awardType === 'card') {
-              const poolFolder = (m.awardValue && m.awardValue.poolFolder) || oshi.oshiId;
-              const poolPath = path.join(IMAGE_POOL_ROOT, poolFolder);
-              let files = [];
-              try {
-                files = fs.readdirSync(poolPath).filter(f => /\.(png|jpe?g|webp)$/i.test(f));
-              } catch (e) {
-                console.warn('Pool read failed', poolPath, e);
-                files = [];
-              }
-              if (files.length === 0) {
-                console.warn('No files in pool for', poolFolder);
-                continue;
-              }
-              const pick = files[Math.floor(Math.random() * files.length)];
-              const raw = path.basename(pick, path.extname(pick));
-              const displayName = raw.replace(/[_-]+/g, ' ').trim();
-              const awardCount = Number((m.awardValue && m.awardValue.count) || 1);
-              const awardRarity = (m.awardValue && m.awardValue.rarityFilter) ? String(m.awardValue.rarityFilter).toUpperCase() : 'C';
+              // previous variables: poolFolder, poolPath already defined above
+// determine pool folder and path for this milestone
+const poolFolder = (m.awardValue && m.awardValue.poolFolder) || oshi.oshiId;
+const poolPath = path.join(IMAGE_POOL_ROOT, poolFolder);
 
-              // Add or increment in userDoc
-              userDoc.cards = userDoc.cards || [];
-              const existing = userDoc.cards.find(x => String(x.name) === displayName && String(x.rarity || '').toUpperCase() === awardRarity);
-              if (existing) {
-                existing.count = (existing.count || 0) + awardCount;
-                existing.timestamps = existing.timestamps || [];
-                existing.timestamps.push(new Date());
-              } else {
-                userDoc.cards.push({
-                  name: displayName,
-                  rarity: awardRarity,
-                  count: awardCount,
-                  sourceFile: pick,
-                  timestamps: [new Date()]
-                });
-              }
-              userDoc.markModified('cards');
-              awardedCards.push({ name: displayName, rarity: awardRarity, count: awardCount, file: pick });
-              console.log('Awarded card', { userId, poolFolder, pick, displayName, awardRarity, awardCount });
+// pick a random file from a random rarity subfolder
+const pickResult = pickRandomFileFromOshiPool(poolPath);
+if (!pickResult) {
+  console.warn('No files found in any rarity subfolder for', poolFolder);
+  continue;
+}
+const pick = pickResult.pick;
+const chosenRarityFolder = pickResult.rarityFolder;
+
+const raw = path.basename(pick, path.extname(pick));
+const displayName = raw.replace(/[_-]+/g, ' ').trim();
+const awardCount = Number((m.awardValue && m.awardValue.count) || 1);
+
+// If milestone specified a rarityFilter, prefer it; otherwise use chosen rarity folder
+const awardRarity = (m.awardValue && m.awardValue.rarityFilter)
+  ? String(m.awardValue.rarityFilter).toUpperCase()
+  : String(chosenRarityFolder).toUpperCase();
+
+// store a relative sourceFile path: poolFolder/rarityFolder/filename
+const storedPath = path.join(poolFolder, chosenRarityFolder, pick);
+
+// Add or increment in userDoc
+userDoc.cards = userDoc.cards || [];
+const existing = userDoc.cards.find(x => String(x.name) === displayName && String(x.rarity || '').toUpperCase() === awardRarity);
+if (existing) {
+  existing.count = (existing.count || 0) + awardCount;
+  existing.timestamps = existing.timestamps || [];
+  existing.timestamps.push(new Date());
+} else {
+  userDoc.cards.push({
+    name: displayName,
+    rarity: awardRarity,
+    count: awardCount,
+    sourceFile: storedPath,
+    timestamps: [new Date()]
+  });
+}
+userDoc.markModified('cards');
+awardedCards.push({ name: displayName, rarity: awardRarity, count: awardCount, file: storedPath });
+console.log('Awarded card', { userId, poolFolder, pick, displayName, awardRarity, awardCount });
             }
           }
 
@@ -448,6 +485,31 @@ module.exports = {
 
           await sessionDb.commitTransaction();
           sessionDb.endSession();
+          // Announce level-up awards to the user and optionally in-channel
+try {
+  const awardLines = [];
+
+  if (totalEventPulls > 0) {
+    awardLines.push(`Event pulls awarded: **${totalEventPulls}**`);
+  }
+
+  if (awardedCards && awardedCards.length > 0) {
+    awardLines.push('Cards awarded:');
+    awardLines.push(...awardedCards.map(a => `• ${a.name} (${a.rarity}) x${a.count}`));
+  }
+
+  if (awardLines.length > 0) {
+    const awardText = awardLines.join('\n');
+
+    // Ephemeral feedback to the user who confirmed the burn
+    try { await btn.followUp({ content: `Level-up awards:\n${awardText}`, ephemeral: true }); } catch (e) { /* ignore */ }
+
+    // Optional: public announcement in the channel (uncomment if you want it visible)
+    try { await interaction.channel.send({ content: `<@${userId}> leveled up and received:\n${awardText}` }); } catch (e) { /* ignore */ }
+  }
+} catch (e) {
+  console.warn('Failed to send award announcement', e);
+}
 
           // Finalize UI
           sessions.delete(sent.id);
@@ -462,7 +524,7 @@ module.exports = {
             );
 
           if (totalEventPulls > 0) resultEmbed.addFields({ name: 'Event pulls awarded', value: `${totalEventPulls}`, inline: true });
-          if (awardedCards.length) resultEmbed.addFields({ name: 'Cards awarded', value: awardedCards.map(a => `${a.name} (${a.rarity}) x${a.count}`).join('\n'), inline: false });
+          if (awardedCards.length) resultEmbed.addFields({ name: 'Cards awarded', value: awardedCards.map(a => `**[${a.rarity}]** ${a.name} x${a.count}`).join('\n'), inline: false });
           if (awardedMilestones.length) resultEmbed.addFields({ name: 'Milestones', value: awardedMilestones.map(m => `${m.awardType} @ level ${m.level}`).join('\n'), inline: false });
 
           try { await sent.edit({ content: '✅ Burn completed', embeds: [resultEmbed], components: [] }); } catch (e) {}
