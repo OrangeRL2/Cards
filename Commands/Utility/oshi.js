@@ -1,5 +1,5 @@
 // commands/oshi.js
-const { SlashCommandBuilder } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const OshiUser = require('../../models/Oshi');
 const OSHI_LIST = require('../../config/oshis');
 
@@ -51,11 +51,62 @@ module.exports = {
 
       const oshiMeta = OSHI_LIST.find(o => o.id === doc.oshiId);
       const oshiLabel = oshiMeta ? `${oshiMeta.label}` : doc.oshiId;
-      const chosenAtText = doc.chosenAt ? ` - chosen <t:${Math.floor(new Date(doc.chosenAt).getTime() / 1000)}:R>` : '';
-      const imagePart = oshiMeta && oshiMeta.image ? `\n${oshiMeta.image}` : '';
+      
+      // Get level and XP info
+      const level = doc.level || 1;
+      const xp = doc.xp || 0;
+      const xpToNext = doc.xpToNext || 100; // Default if not set
+      
+      // Calculate XP progress percentage
+      const progressPercent = Math.min(100, Math.max(0, (xp / xpToNext) * 100));
+      
+      // Create progress bar (10 segments)
+      const progressBarSegments = 10;
+      const filledSegments = Math.floor(progressPercent / (100 / progressBarSegments));
+      const emptySegments = progressBarSegments - filledSegments;
+      const progressBar = '█'.repeat(filledSegments) + '░'.repeat(emptySegments);
+
+      // Build the image URL
+      const baseName = typeof oshiLabel === 'string' ? oshiLabel.trim() : String(oshiLabel);
+      const cardName = `${baseName} 001`;
+      const rarity = 'OSR';
+      const encodedCardName = encodeURIComponent(cardName);
+      const imageUrl = `http://152.69.195.48/images/${rarity}/${encodedCardName}.png`;
+
+      // Create embed
+      const embed = new EmbedBuilder()
+        .setTitle(`${displayName}'s Oshi: ${oshiLabel}`)
+        .setColor(0xFF69B4) // Pink color for oshi theme
+        .setThumbnail(targetUser.displayAvatarURL({ dynamic: true, size: 64 }))
+        .setImage(imageUrl)
+        .addFields(
+          { 
+            name: 'Level Progress', 
+            value: `**Level ${level}**\n${xp}/${xpToNext} XP\n\`${progressBar}\` ${progressPercent.toFixed(1)}%`,
+            inline: true 
+          }
+        );
+
+      // Add chosen time if available
+      if (doc.chosenAt) {
+        embed.addFields({
+          name: 'Chosen',
+          value: `<t:${Math.floor(new Date(doc.chosenAt).getTime() / 1000)}:R>`,
+          inline: true
+        });
+      }
+
+      // Add last leveled time if available
+      if (doc.lastLeveledAt) {
+        embed.addFields({
+          name: 'Last Level Up',
+          value: `<t:${Math.floor(new Date(doc.lastLeveledAt).getTime() / 1000)}:R>`,
+          inline: true
+        });
+      }
 
       await interaction.reply({
-        content: `${displayName}'s oshi is **${oshiLabel}**${chosenAtText}.${imagePart}`,
+        embeds: [embed],
         ephemeral: false,
       });
     } catch (err) {

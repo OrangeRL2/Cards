@@ -14,8 +14,11 @@ const gifHarohapi =   'https://media.discordapp.net/attachments/1046811248647475
 const gifRoselia =    'https://media.discordapp.net/attachments/1046811248647475302/1437428356617338891/Roselia.gif';
 const gifMyGo =       'https://media.discordapp.net/attachments/1046811248647475302/1437428386988556438/MyGO.gif';
 const gifMorfonica =       'https://cdn.discordapp.com/attachments/802431770023952406/1438516550628937819/Morf.gif';
+const gifMujica =       'https://cdn.discordapp.com/attachments/986110973574283265/1446127876339400724/ave_mujica.gif';
+const gifPasupare =   'https://cdn.discordapp.com/attachments/986110973574283265/1441054422401683626/Pasupare.gif';
+const gifRAS =       'https://cdn.discordapp.com/attachments/802431770023952406/1443593296189456486/ras.gif';
 let GIF_DURATION_MS = 1200;
-const gifs = [gifPopipa, gifAfterglow, gifHarohapi, gifRoselia, gifMyGo, gifMorfonica];
+const gifs = [gifPopipa, gifAfterglow, gifHarohapi, gifRoselia, gifMyGo, gifMorfonica, gifMujica, gifPasupare, gifRAS];
 
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
@@ -174,6 +177,19 @@ module.exports = {
       }
     } catch (err) {
       console.error('consumePulls error:', err);
+      // ADD ROLLBACK HERE if pulls were partially consumed
+  if (consumeResult && !consumeResult.success && (consumeResult.consumedFromEvent > 0 || consumeResult.consumedFromTimed > 0)) {
+    try {
+      if (consumeResult.consumedFromEvent > 0) await pullQuota.addEventPulls(discordUserId, consumeResult.consumedFromEvent);
+      if (consumeResult.consumedFromTimed > 0) {
+        const { doc } = await pullQuota.getUpdatedQuota(discordUserId);
+        doc.pulls = Math.min(pullQuota.MAX_STOCK, doc.pulls + consumeResult.consumedFromTimed);
+        await doc.save();
+      }
+    } catch (rollbackErr) {
+      console.warn('Initial consumption rollback failed:', rollbackErr);
+    }
+  }
       const elapsed = Date.now() - gifShownAt;
       if (elapsed < GIF_DURATION_MS) await sleep(GIF_DURATION_MS - elapsed);
       await interaction.editReply({ content: 'Failed to check pull quota. Please try again later.' });

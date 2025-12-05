@@ -111,7 +111,7 @@ module.exports = {
           const rarity = (info.rarity || rarityKey || '').toString();
           const count = Number(info.count || 0);
           const timestamps = Array.isArray(info.timestamps) ? info.timestamps.map(t => new Date(t).getTime()) : [];
-          allEntries.push({ name: entryName, rarity, count, timestamps });
+          allEntries.push({ name: entryName, rarity, count, timestamps, locked: info.locked || false });
         }
         continue;
       }
@@ -122,7 +122,7 @@ module.exports = {
         const rarity = (group.rarity || '').toString();
         const count = Number(group.count || 0);
         const timestamps = Array.isArray(group.timestamps) ? group.timestamps.map(t => new Date(t).getTime()) : [];
-        allEntries.push({ name: entryName, rarity, count, timestamps });
+        allEntries.push({ name: entryName, rarity, count, timestamps, locked: group.locked || false });
         continue;
       }
 
@@ -133,7 +133,7 @@ module.exports = {
         const rarity = (info.rarity || rar || '').toString();
         const count = Number(info.count || 0);
         const timestamps = Array.isArray(info.timestamps) ? info.timestamps.map(t => new Date(t).getTime()) : [];
-        allEntries.push({ name: nm, rarity, count, timestamps });
+        allEntries.push({ name: nm, rarity, count, timestamps, locked: info.locked || false });
         continue;
       }
 
@@ -145,7 +145,7 @@ module.exports = {
           const rarity = (v.rarity || k || '').toString();
           const count = Number(v.count || 0);
           const timestamps = Array.isArray(v.timestamps) ? v.timestamps.map(t => new Date(t).getTime()) : [];
-          allEntries.push({ name: entryName, rarity, count, timestamps });
+          allEntries.push({ name: entryName, rarity, count, timestamps, locked: v.locked || false });
         }
       }
     }
@@ -243,7 +243,8 @@ module.exports = {
             .map(c => {
               const encodedName = encodeURIComponent(String(c.name));
               const url = `${IMAGE_BASE}/${encodeURIComponent(c.rarity)}/${encodedName}.png`;
-              return `**[${c.rarity}]** [${escapeMarkdown(c.name)}](${url}) (x${c.count})`;
+              const lockEmoji = c.locked ? ' 🔒' : '';
+              return `**[${c.rarity}]** [${escapeMarkdown(c.name)}](${url}) (x${c.count}) ${lockEmoji}`;
             })
             .join('\n')
         )
@@ -260,8 +261,8 @@ module.exports = {
     });
 
     const imageEmbeds = imageResults.map(({ c, url }, i) =>
-      new EmbedBuilder()
-        .setTitle(`**[${c.rarity}]** ${escapeMarkdown(c.name)} (x${c.count})`)
+    new EmbedBuilder()
+        .setTitle(`**[${c.rarity}]** ${escapeMarkdown(c.name)} (x${c.count})${c.locked ? ' 🔒' : ''} `)
         .setImage(url)
         .setColor({
           UR: Colors.DarkPurple,

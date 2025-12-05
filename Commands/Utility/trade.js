@@ -97,7 +97,8 @@ module.exports = {
     // Find matching card (prefix + rarity)
     const fromIdx = fromDoc.cards.findIndex(c =>
       String(c.name).toLowerCase().startsWith(partial) &&
-      String(c.rarity || '').toLowerCase() === rarityReq
+      String(c.rarity || '').toLowerCase() === rarityReq &&
+      !c.locked
     );
 
     if (fromIdx === -1) {
@@ -108,6 +109,13 @@ module.exports = {
     }
 
     const cardEntry = fromDoc.cards[fromIdx];
+    // ADD THIS CHECK
+    if (cardEntry.locked) {
+      return interaction.followUp?.({ 
+        content: `**[${cardEntry.rarity}] ${cardEntry.name}** is locked! Use \`/lock\` to unlock it first.`, 
+        ephemeral: true 
+      }) ?? null;
+    }
     const cardName = cardEntry.name;
     const cardRarity = String(cardEntry.rarity ?? '').toUpperCase();
     const cardAvailable = cardEntry.count || 0;
@@ -246,7 +254,8 @@ module.exports = {
 
           const idx = doc.cards.findIndex(c =>
             String(c.name).toLowerCase().startsWith(nameVal.toLowerCase()) &&
-            String(c.rarity || '').toLowerCase() === rarityVal
+            String(c.rarity || '').toLowerCase() === rarityVal &&
+            !c.locked
           );
 
           if (idx === -1) {
@@ -256,6 +265,10 @@ module.exports = {
 
           // Fixed: prevent duplicate/over-offer by checking already-offered total and merging offers
           const c = doc.cards[idx];
+          if (c.locked) {
+            try { await submitted.reply({ content: `❌ **[${c.rarity}] ${c.name}** is locked! Use \`/lock\` to unlock it first.`, ephemeral: true }); } catch {}
+            return;
+          }
           const existingOffered = (session.offers[userId] || [])
             .filter(o => String(o.name).toLowerCase() === String(c.name).toLowerCase()
                       && String(o.rarity || '').toLowerCase() === String(c.rarity || '').toLowerCase())

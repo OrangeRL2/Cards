@@ -6,7 +6,7 @@ const { Client, Collection, GatewayIntentBits } = require('discord.js');
 const { token, mongoUri } = require('./config.json');
 const { startScheduler, grantBirthdayPulls } = require('./jobs/birthdayHandout');
 const config = require('./config.json');
-
+const TradeListing = require('./models/TradeListing');
 // create client with required intents
 const client = new Client({
   intents: [
@@ -147,6 +147,29 @@ client.on('messageCreate', async (message) => {
     try { await message.reply({ content: 'Command error' }); } catch {}
   }
 });
+// Add this somewhere in your bot's startup (like index.js)
+async function cleanupExpiredListings() {
+  try {
+    const result = await TradeListing.updateMany(
+      { 
+        status: 'active',
+        expiresAt: { $lt: new Date() }
+      },
+      { status: 'expired' }
+    );
+    
+    if (result.modifiedCount > 0) {
+      console.log(`Cleaned up ${result.modifiedCount} expired listings`);
+    }
+  } catch (error) {
+    console.error('Error cleaning up expired listings:', error);
+  }
+}
+
+// Run cleanup every hour
+setInterval(cleanupExpiredListings, 60 * 60 * 1000);
+// Run once on startup
+cleanupExpiredListings();
 
 // ----------------- graceful shutdown -----------------
 async function shutdown() {

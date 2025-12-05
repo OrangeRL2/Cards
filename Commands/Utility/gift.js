@@ -49,7 +49,8 @@ module.exports = {
     // find by prefix AND rarity
     const idx = fromDoc.cards.findIndex(c =>
       String(c.name).toLowerCase().startsWith(partialName) &&
-      String(c.rarity || '').toLowerCase() === rarityReq
+      String(c.rarity || '').toLowerCase() === rarityReq &&
+      !c.locked
     );
 
     if (idx === -1) {

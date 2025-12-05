@@ -1,5 +1,4 @@
 // Commands/Utility/burn.js
-/*
 const {
   SlashCommandBuilder,
   ModalBuilder,
@@ -206,7 +205,8 @@ module.exports = {
 
           const idx = (userDoc.cards || []).findIndex(c =>
             String(c.name).toLowerCase().startsWith(nameVal.toLowerCase()) &&
-            String(c.rarity || '').toUpperCase() === rarityVal
+            String(c.rarity || '').toUpperCase() === rarityVal &&
+            !c.locked
           );
 
           if (idx === -1) {
@@ -492,5 +492,3 @@ module.exports = {
     });
   }
 };
-
-*/

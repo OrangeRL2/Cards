@@ -50,6 +50,7 @@ function findBestCardMatch(cards, query, rarity, minCount = 1) {
   let best = null;
   for (const c of cards) {
     if (String(c.rarity).toLowerCase() !== String(rarity).toLowerCase()) continue;
+    if (c.locked) continue;
     const name = String(c.name || '').toLowerCase();
     if (!name) continue;
     if (!c.count || c.count < minCount) continue;
@@ -70,7 +71,7 @@ function findBestCardMatch(cards, query, rarity, minCount = 1) {
 // Pick a random owned card matching rarity and minCount
 function pickRandomOwnedCard(cards, rarity, minCount = 1) {
   if (!Array.isArray(cards) || cards.length === 0) return null;
-  const pool = cards.filter(c => String(c.rarity).toLowerCase() === String(rarity).toLowerCase() && c.count >= minCount);
+  const pool = cards.filter(c => String(c.rarity).toLowerCase() === String(rarity).toLowerCase() && c.count >= minCount && !c.locked);
   if (!pool.length) return null;
   return pool[Math.floor(Math.random() * pool.length)];
 }

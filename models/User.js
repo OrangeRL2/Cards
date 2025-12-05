@@ -5,6 +5,7 @@ const cardInfoSchema = new Schema({
   rarity: { type: String, required: true },
   count: { type: Number, default: 0 },
   timestamps: { type: [Date], default: [] },
+  locked: { type: Boolean, default: false },
 });
 
 const pendingAttemptSchema = new Schema({
