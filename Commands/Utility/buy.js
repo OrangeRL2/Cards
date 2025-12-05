@@ -235,39 +235,78 @@ module.exports = {
             return;
           }
 
-          const cid = comp.customId;
+const cid = comp.customId;
 
-          // LIST NAV
-          if (cid.startsWith(`shop_list_prev_`)) {
-            listPage = (listPage - 1 + Math.max(1, pages.length)) % Math.max(1, pages.length);
-            await comp.update({ embeds: [listEmbeds[listPage]], components: [selectRow, listRows[listPage]] });
-            return;
-          }
-          if (cid.startsWith(`shop_list_next_`)) {
-            listPage = (listPage + 1) % Math.max(1, pages.length);
-            await comp.update({ embeds: [listEmbeds[listPage]], components: [selectRow, listRows[listPage]] });
-            return;
-          }
-          if (cid.startsWith(`shop_list_view_`)) {
-            imageIdx = listPage * ITEMS_PER_PAGE;
-            imageIdx = Math.max(0, Math.min(imageIdx, imageEmbeds.length - 1));
-            await comp.update({
-              embeds: [imageEmbeds[imageIdx] || new EmbedBuilder().setTitle('No items').setDescription('No items in this tier.')],
-              components: [selectRow, imageRows[imageIdx] || listRows[listPage]],
-            });
-            return;
-          }
-          // capture current total so label is correct
-          const totalItems = filteredItems.length || 1;
-          const modalId = `shop_buy_modal_${listPage}_${uid}`;
-          const modal = new ModalBuilder().setCustomId(modalId).setTitle('Buy from Shop');
-          const itemInput = new TextInputBuilder()
-            .setCustomId('item_global_index')
-            .setLabel(`Enter the item number shown (1–${totalItems})`)
-            .setStyle(TextInputStyle.Short)
-            .setRequired(true);
-          modal.addComponents(new ActionRowBuilder().addComponents(itemInput));
-          await comp.showModal(modal);
+// LIST NAV
+if (cid.startsWith(`shop_list_prev_`)) {
+  listPage = (listPage - 1 + Math.max(1, pages.length)) % Math.max(1, pages.length);
+  await comp.update({ embeds: [listEmbeds[listPage]], components: [selectRow, listRows[listPage]] });
+  return;
+}
+if (cid.startsWith(`shop_list_next_`)) {
+  listPage = (listPage + 1) % Math.max(1, pages.length);
+  await comp.update({ embeds: [listEmbeds[listPage]], components: [selectRow, listRows[listPage]] });
+  return;
+}
+if (cid.startsWith(`shop_list_view_`)) {
+  imageIdx = listPage * ITEMS_PER_PAGE;
+  imageIdx = Math.max(0, Math.min(imageIdx, imageEmbeds.length - 1));
+  await comp.update({
+    embeds: [imageEmbeds[imageIdx] || new EmbedBuilder().setTitle('No items').setDescription('No items in this tier.')],
+    components: [selectRow, imageRows[imageIdx] || listRows[listPage]],
+  });
+  return;
+}
+
+// IMAGE NAV
+if (cid.startsWith(`shop_img_prev_`)) {
+  if (imageEmbeds.length === 0) {
+    await comp.update({ embeds: [new EmbedBuilder().setTitle('No items').setDescription('No items in this tier.')], components: [selectRow, listRows[listPage]] });
+    return;
+  }
+  imageIdx = (imageIdx - 1 + imageEmbeds.length) % imageEmbeds.length;
+  await comp.update({ embeds: [imageEmbeds[imageIdx]], components: [selectRow, imageRows[imageIdx]] });
+  return;
+}
+if (cid.startsWith(`shop_img_next_`)) {
+  if (imageEmbeds.length === 0) {
+    await comp.update({ embeds: [new EmbedBuilder().setTitle('No items').setDescription('No items in this tier.')], components: [selectRow, listRows[listPage]] });
+    return;
+  }
+  imageIdx = (imageIdx + 1) % imageEmbeds.length;
+  await comp.update({ embeds: [imageEmbeds[imageIdx]], components: [selectRow, imageRows[imageIdx]] });
+  return;
+}
+if (cid.startsWith(`shop_img_back_`)) {
+  listPage = Math.floor(imageIdx / ITEMS_PER_PAGE);
+  await comp.update({ embeds: [listEmbeds[listPage]], components: [selectRow, listRows[listPage]] });
+  return;
+}
+if (cid.startsWith(`shop_img_buy_`)) {
+  const parts = cid.split('_'); // shop_img_buy_{i}_{uid}
+  const idx = Number(parts[3]);
+  const item = filteredItems[idx];
+  if (!item) {
+    try { await comp.reply({ content: 'Item not found.', ephemeral: true }); } catch {}
+    return;
+  }
+  try { await comp.deferUpdate(); } catch (e) { /* ignore */ }
+  await handlePurchase(interaction, comp, item);
+  return;
+}
+
+// If we reach here, it's not a nav/image action — show the buy modal
+const totalItems = filteredItems.length || 1;
+const modalId = `shop_buy_modal_${listPage}_${uid}`;
+const modal = new ModalBuilder().setCustomId(modalId).setTitle('Buy from Shop');
+const itemInput = new TextInputBuilder()
+  .setCustomId('item_global_index')
+  .setLabel(`Enter the item number shown (1–${totalItems})`)
+  .setStyle(TextInputStyle.Short)
+  .setRequired(true);
+modal.addComponents(new ActionRowBuilder().addComponents(itemInput));
+await comp.showModal(modal);
+
 
           try {
             const modalInt = await comp.awaitModalSubmit({

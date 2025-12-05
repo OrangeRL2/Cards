@@ -1,4 +1,5 @@
 // Commands/Utility/burn.js
+/*
 const {
   SlashCommandBuilder,
   ModalBuilder,
@@ -491,3 +492,5 @@ module.exports = {
     });
   }
 };
+
+*/
