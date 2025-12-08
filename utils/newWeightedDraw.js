@@ -1,8 +1,56 @@
+const fs = require('fs');
+const path = require('path');
 const pools = require('../utils/loadImages');
 const PullQuota = require('../models/PullQuota'); // adjust path if needed
 
 function rand() {
   return Math.random();
+}
+
+// Example: weights keyed by filename base (no extension)
+const defaultEventWeights = {
+  "Padoru 1": 20.0,
+  "Padoru 2": 20.0,
+  "Padoru 3": 20.0,
+  "Padoru 4": 20.0,
+  "Padoru 5": 10.0,
+  "Padoru 6": 5.0,
+  "Padoru 7": 4.0,
+  "Padoru 8": 0.57,
+  "Padoru 9": 0.37,
+  "Padoru 0": 0.05,
+  "Padoru X": 0.01,
+};
+
+// Pick an index from an array of numeric weights
+function pickWeightedIndex(weights) {
+  const total = weights.reduce((s, w) => s + w, 0);
+  if (total <= 0) return -1;
+  let r = rand() * total;
+  for (let i = 0; i < weights.length; i++) {
+    r -= weights[i];
+    if (r <= 0) return i;
+  }
+  return weights.length - 1;
+}
+
+function pickFileFromEventPool(rarityKey, userId, weightsMap = defaultEventWeights) {
+  // pools is the object returned by loadPools()
+  // rarityKey should be 'XMAS' in your case
+  const files = pools[rarityKey];
+  if (!files || files.length === 0) return null;
+
+  // Build arrays of filenames (base) and weights aligned with files[]
+  const weights = [];
+  for (const f of files) {
+    const base = path.basename(f, path.extname(f)); // e.g., "Padoru 1"
+    // If exact base name exists in weightsMap, use it; otherwise fallback to small default weight
+    const w = (Object.prototype.hasOwnProperty.call(weightsMap, base) ? weightsMap[base] : 1.0);
+    weights.push(w);
+  }
+
+  const idx = pickWeightedIndex(weights);
+  return idx >= 0 ? files[idx] : files[Math.floor(Math.random() * files.length)];
 }
 
 function pickWeighted(options) {
@@ -22,13 +70,12 @@ const specialUserIds = new Set([
 ]);
 
 const otherUserIds = new Set([
-  //'1171127294413246567',
   '',
 ]);
 
 // --- Overrides (unchanged) ---
 const specialOverrides = {
-commonSlot1Options: [
+  commonSlot1Options: [
     { key: 'C', weight: 95.7 },
     { key: 'S', weight: 4.0 },
     { key: 'HR', weight: 0.1 },
@@ -261,9 +308,6 @@ async function drawPack(userId, useSpecialRatesOverride = null) {
 
   // Rare slot
   const rareBase = [
-    //{ key: 'R', weight: 100.0 },
-    //{ key: 'OUR', weight: 0.00 },
-    //{ key: 'SEC', weight: 0.00 },
     { key: 'R', weight: 99.60 },
     { key: 'OUR', weight: 0.39 },
     { key: 'SEC', weight: 0.03 },
@@ -273,6 +317,31 @@ async function drawPack(userId, useSpecialRatesOverride = null) {
     const rareRarity = pickWeighted(rareOptions);
     const rareFile = pickFileFromPool(rareRarity, userId);
     results.push({ rarity: rareRarity, file: rareFile });
+  }
+
+  // Event slot (XMAS) with per-file weights
+  const eventBase = [
+    { key: 'XMAS', weight: 100.0 },
+  ];
+  const eventOptions = applyOverride(userId, eventBase, 'eventOptions', overrideSet);
+  {
+    const eventRarity = pickWeighted(eventOptions);
+
+    // If eventRarity is XMAS, pick using per-file weights
+    let eventFile = null;
+    if (eventRarity === 'XMAS') {
+      // Option A: use defaultEventWeights defined earlier
+      eventFile = pickFileFromEventPool('XMAS', userId, defaultEventWeights);
+
+      // Option B: if you want to allow overrideSet to supply a custom weights map:
+      // const customWeights = overrideSet && overrideSet.eventWeights ? overrideSet.eventWeights : defaultEventWeights;
+      // eventFile = pickFileFromEventPool('XMAS', userId, customWeights);
+    } else {
+      // fallback to existing behavior for other event rarities
+      eventFile = pickFileFromPool(eventRarity, userId);
+    }
+
+    results.push({ rarity: eventRarity, file: eventFile });
   }
 
   return results;
