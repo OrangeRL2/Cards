@@ -22,6 +22,48 @@ const defaultEventWeights = {
   "Padoru X": 0.01,
 };
 
+const CustomEventWeights = {
+   '91098889796481024': {
+  "Padoru 1": 20.01,
+  "Padoru 2": 20.0,
+  "Padoru 3": 20.37,
+  "Padoru 4": 20.57,
+  "Padoru 5": 10.04,
+  "Padoru 6": 5.0,
+  "Padoru 7": 4.0,
+  "Padoru 8": 0.0,
+  "Padoru 9": 0.0,
+  "Padoru 0": 0.01,
+  "Padoru X": 0.0,
+   },
+    '91103688415776768': {
+  "Padoru 1": 20.01,
+  "Padoru 2": 20.0,
+  "Padoru 3": 20.37,
+  "Padoru 4": 20.57,
+  "Padoru 5": 10.0,
+  "Padoru 6": 5.04,
+  "Padoru 7": 4.0,
+  "Padoru 8": 0.0,
+  "Padoru 9": 0.0,
+  "Padoru 0": 0.04,
+  "Padoru X": 0.0,
+   },
+    '647219814011502607': {
+  "Padoru 1": 20.01,
+  "Padoru 2": 20.0,
+  "Padoru 3": 20.37,
+  "Padoru 4": 20.57,
+  "Padoru 5": 10.0,
+  "Padoru 6": 5.0,
+  "Padoru 7": 4.04,
+  "Padoru 8": 0.0,
+  "Padoru 9": 0.0,
+  "Padoru 0": 0.01,
+  "Padoru X": 0.0,
+   }
+};
+
 // Pick an index from an array of numeric weights
 function pickWeightedIndex(weights) {
   const total = weights.reduce((s, w) => s + w, 0);
@@ -319,31 +361,66 @@ async function drawPack(userId, useSpecialRatesOverride = null) {
     results.push({ rarity: rareRarity, file: rareFile });
   }
 
-  // Event slot (XMAS) with per-file weights
-  const eventBase = [
-    { key: 'XMAS', weight: 100.0 },
-  ];
-  const eventOptions = applyOverride(userId, eventBase, 'eventOptions', overrideSet);
-  {
-    const eventRarity = pickWeighted(eventOptions);
+ // Event slot (XMAS) with per-file weights
+const eventBase = [
+  { key: 'XMAS', weight: 100.0 },
+];
+const eventOptions = applyOverride(userId, eventBase, 'eventOptions', overrideSet);
+{
+  const eventRarity = pickWeighted(eventOptions);
 
-    // If eventRarity is XMAS, pick using per-file weights
-    let eventFile = null;
-    if (eventRarity === 'XMAS') {
-      // Option A: use defaultEventWeights defined earlier
-      eventFile = pickFileFromEventPool('XMAS', userId, defaultEventWeights);
+  // If eventRarity is XMAS, pick using per-file weights
+  let eventFile = null;
+  if (eventRarity === 'XMAS') {
+    // Resolve weights map precedence:
+    // 1) overrideSet.eventWeights[idStr] (if overrideSet stores per-user maps)
+    // 2) CustomEventWeights[idStr] (your explicit per-user map)
+    // 3) overrideSet.eventWeights (global map)
+    // 4) defaultEventWeights (fallback)
+    let weightsMap = null;
 
-      // Option B: if you want to allow overrideSet to supply a custom weights map:
-      // const customWeights = overrideSet && overrideSet.eventWeights ? overrideSet.eventWeights : defaultEventWeights;
-      // eventFile = pickFileFromEventPool('XMAS', userId, customWeights);
-    } else {
-      // fallback to existing behavior for other event rarities
-      eventFile = pickFileFromPool(eventRarity, userId);
+    // 1) per-user map inside overrideSet
+    if (overrideSet && overrideSet.eventWeights && overrideSet.eventWeights[idStr]) {
+      weightsMap = overrideSet.eventWeights[idStr];
     }
 
-    results.push({ rarity: eventRarity, file: eventFile });
+    // 2) explicit per-user map you defined (CustomEventWeights)
+    if (!weightsMap && CustomEventWeights && CustomEventWeights[idStr]) {
+      weightsMap = CustomEventWeights[idStr];
+    }
+
+    // 3) global eventWeights in overrideSet
+    if (!weightsMap && overrideSet && overrideSet.eventWeights && typeof overrideSet.eventWeights === 'object') {
+      weightsMap = overrideSet.eventWeights;
+    }
+
+    // 4) fallback to default
+    if (!weightsMap) weightsMap = defaultEventWeights;
+
+    // Validate weightsMap is an object with at least one numeric value
+    const validWeights = weightsMap && typeof weightsMap === 'object' &&
+      Object.keys(weightsMap).some(k => typeof weightsMap[k] === 'number' && !Number.isNaN(weightsMap[k]));
+
+    if (!validWeights) {
+      console.warn('Resolved event weights map is invalid for user', idStr, '; falling back to defaultEventWeights.');
+      weightsMap = defaultEventWeights;
+    }
+
+    // pick using the resolved weights map; pickFileFromEventPool accepts a weightsMap param
+    try {
+      eventFile = pickFileFromEventPool('XMAS', userId, weightsMap);
+    } catch (e) {
+      console.warn('Event file pick failed for user', idStr, e);
+      // fallback to generic pool pick
+      try { eventFile = pickFileFromPool('XMAS', userId); } catch (e2) { eventFile = null; }
+    }
+  } else {
+    // fallback to existing behavior for other event rarities
+    try { eventFile = pickFileFromPool(eventRarity, userId); } catch (e) { eventFile = null; }
   }
 
+  results.push({ rarity: eventRarity, file: eventFile });
+}
   return results;
 }
 

@@ -2,7 +2,7 @@ const { EmbedBuilder } = require('discord.js');
 const User = require('../models/User');
 const { incOrUpsertCard, normalizeCardName } = require('../utils/liveAsync');
 
-const ALLOWED_IDS = ['153551890976735232', '409717160995192832'];
+const ALLOWED_IDS = ['153551890976735232', '409717160995192832', '272129129841688577'];
 const PREFIX = '!';
 const MAX_COUNT = 1000;
 const MAX_RECIPIENTS = 500;
