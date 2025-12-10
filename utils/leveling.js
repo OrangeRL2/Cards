@@ -1,5 +1,5 @@
 // utils/leveling.js
-const BASE_XP = 10;
+const BASE_XP = 100;
 
 const RARITY_XP = {
   C: 1,

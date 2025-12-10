@@ -34,6 +34,13 @@ const userSchema = new Schema({
     stage_4: { type: Date, default: null },
     stage_5: { type: Date, default: null },
   },
+  lastLiveOptions: {
+  stage_1: { type: new Schema({ multi: Boolean, any: Boolean }, { _id: false }), default: null },
+  stage_2: { type: new Schema({ multi: Boolean, any: Boolean }, { _id: false }), default: null },
+  stage_3: { type: new Schema({ multi: Boolean, any: Boolean }, { _id: false }), default: null },
+  stage_4: { type: new Schema({ multi: Boolean, any: Boolean }, { _id: false }), default: null },
+  stage_5: { type: new Schema({ multi: Boolean, any: Boolean }, { _id: false }), default: null },
+},
   pendingAttempts: { type: [pendingAttemptSchema], default: [] },
 }, { timestamps: true });
 

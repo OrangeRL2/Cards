@@ -12,6 +12,58 @@ module.exports = {
   name: Events.InteractionCreate,
   async execute(interaction) {
     try {
+      // --- Autocomplete handler for command options (e.g., rarity) ---
+      // in events/interactionCreate.js — put this near the top of execute(interaction)
+// Autocomplete handler — replace any existing autocomplete branch with this
+// Autocomplete handler (replace existing branch)
+if (typeof interaction.isAutocomplete === 'function' && interaction.isAutocomplete()) {
+  try {
+    const focused = interaction.options.getFocused(true); // { name, value }
+    console.log('[AUTOCOMPLETE] focused', focused.value, 'stage', interaction.options.getInteger('stage'));
+
+    if (focused.name !== 'rarity') {
+      await interaction.respond([]);
+      return;
+    }
+
+    const STAGE_ALLOWED_RARITIES = {
+      1: ['C', 'OC', 'U'],
+      2: ['S', 'R', 'RR'],
+      3: ['SR', 'OSR'],
+      4: ['UR', 'OUR', 'SY'],
+      5: ['SEC'],
+    };
+
+    const stage = interaction.options.getInteger('stage');
+
+    // If you want to force the user to pick stage first, set fallbackAllowed = []
+    // If you want to show all rarities when stage is missing, set fallbackAllowed = Object.values(STAGE_ALLOWED_RARITIES).flat()
+    const fallbackAllowed = Object.values(STAGE_ALLOWED_RARITIES).flat();
+
+    const allowed = stage && STAGE_ALLOWED_RARITIES[stage] ? STAGE_ALLOWED_RARITIES[stage] : fallbackAllowed;
+
+    const input = String(focused.value || '').toLowerCase();
+
+    // Primary filter: contains the typed input
+    let suggestions = allowed
+      .filter(r => r.toLowerCase().includes(input))
+      .slice(0, 25)
+      .map(r => ({ name: r, value: r }));
+
+    // If nothing matched the typed input, fall back to showing the allowed list (so the user sees options)
+    if (suggestions.length === 0) {
+      suggestions = allowed.slice(0, 25).map(r => ({ name: r, value: r }));
+    }
+
+    await interaction.respond(suggestions);
+  } catch (err) {
+    console.error('[INT] autocomplete handler error', err);
+    try { await interaction.respond([]); } catch {}
+  }
+  return;
+}
+
+
       if (interaction.isStringSelectMenu()) {
         if (interaction.customId.startsWith(`${GEN_CUSTOM_ID}:`)) {
           const [, allowedUserId] = interaction.customId.split(':');

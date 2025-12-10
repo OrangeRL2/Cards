@@ -20,7 +20,7 @@ async function seed() {
       oshiId: null,
       awardType: 'eventPulls',
       awardValue: 1,
-      repeatEvery: 10,
+      repeatEvery: 0,
       oneTime: false,
       enabled: true,
       priority: 10

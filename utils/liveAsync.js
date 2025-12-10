@@ -477,4 +477,3 @@ module.exports = {
   normalizeCardName,
   incOrUpsertCard,
 };
-
