@@ -6,11 +6,12 @@ const {
   ButtonBuilder,
   ButtonStyle,
   ComponentType,
+  StringSelectMenuBuilder,
 } = require('discord.js');
 const TradeListing = require('../../models/TradeListing');
 const User = require('../../models/User');
 const mongoose = require('mongoose');
-const PAGE_SIZE = 5; // listings per page
+const PAGE_SIZE = 4; // listings per page
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -250,7 +251,26 @@ module.exports = {
             }
 
             // Attempt forced trade (supports 'specific' wanted items)
-            const result = await performForcedTrade(fresh.userId, detailInt.user.id, fresh);
+            // Load initiator doc to compute eligible cards
+            const initiatorDoc = await User.findOne({ id: detailInt.user.id }).exec();
+            if (!initiatorDoc) {
+              return detailInt.followUp({ content: 'Could not load your inventory.', ephemeral: true });
+            }
+
+            // Prompt the initiator to choose exact cards for each wanted item
+            // promptInitiatorChoices should be the same helper you used in trade-listing.js
+            const chosenWanted = await promptInitiatorChoices(detailInt, fresh, initiatorDoc);
+            if (!chosenWanted) {
+              // promptInitiatorChoices already sent an ephemeral timeout/cancel message
+              return;
+            }
+
+            // Optional: show summary before committing
+            const summary = chosenWanted.map((c, idx) => `Wanted #${idx + 1}: ${c.name} [${c.rarity}]`).join('\n');
+            await detailInt.followUp({ content: `You selected:\n${summary}\nAttempting trade...`, ephemeral: true });
+
+            // Call the updated performForcedTrade that accepts chosenWanted
+            const result = await performForcedTrade(fresh.userId, detailInt.user.id, fresh, chosenWanted);
             if (!result.success) {
               return detailInt.followUp({ content: `Trade failed: ${result.reason}`, ephemeral: true });
             }
@@ -290,14 +310,148 @@ module.exports = {
   }
 };
 
-// Helper: performForcedTrade (same behavior as your other forced-trade logic)
-// Supports only 'specific' wanted items. Returns { success: boolean, reason?: string }
-async function performForcedTrade(ownerId, initiatorId, listing) {
+// Helper: safe await for components
+async function awaitComponentSafe(channel, filter, options = {}) {
+  try {
+    return await channel.awaitMessageComponent({ filter, ...options });
+  } catch (e) {
+    return null;
+  }
+}
+
+// Prompt the initiator to choose exact cards for each wanted item
+async function promptInitiatorChoices(interaction, listing, initiatorDoc) {
+  const components = [];
+  const mapping = [];
+
+  for (let i = 0; i < listing.wanted.length; i++) {
+    const want = listing.wanted[i];
+
+    let eligible = [];
+    if (want.type === 'specific') {
+      eligible = (initiatorDoc.cards || []).filter(c =>
+        String(c.name) === String(want.name) &&
+        String(c.rarity || '').toUpperCase() === String(want.rarity).toUpperCase() &&
+        !c.locked && c.count > 0
+      );
+    } else if (want.type === 'any_rarity') {
+      eligible = (initiatorDoc.cards || []).filter(c =>
+        String(c.name) === String(want.name) && !c.locked && c.count > 0
+      );
+    } else if (want.type === 'any_name') {
+      eligible = (initiatorDoc.cards || []).filter(c =>
+        String(c.rarity || '').toUpperCase() === String(want.rarity).toUpperCase() && !c.locked && c.count > 0
+      );
+    } else {
+      await interaction.followUp({ content: `Unsupported wanted type: ${want.type}`, ephemeral: true });
+      return null;
+    }
+
+    if (eligible.length === 0) {
+      await interaction.followUp({ content: `You have no eligible cards for wanted item #${i + 1}.`, ephemeral: true });
+      return null;
+    }
+
+    const customId = `choose_want_${listing._id}_${i}_${Date.now()}`;
+    const select = new StringSelectMenuBuilder()
+      .setCustomId(customId)
+      .setPlaceholder(`Choose card for wanted #${i + 1}`)
+      .setMaxValues(1);
+
+    eligible.slice(0, 25).forEach(c => {
+      const value = `${c.name}::${c.rarity}`;
+      select.addOptions({
+        label: c.name.length > 25 ? c.name.slice(0, 22) + '...' : c.name,
+        description: `${c.rarity} • You have ${c.count}`,
+        value
+      });
+    });
+
+    components.push(new ActionRowBuilder().addComponents(select));
+    mapping.push({ index: i, want, customId });
+  }
+
+  await interaction.followUp({
+    content: 'Select which card you will give for each wanted item. You have 60 seconds.',
+    components,
+    ephemeral: true
+  });
+
+  const chosenWanted = new Array(listing.wanted.length).fill(null);
+
+  for (const map of mapping) {
+    const filter = (i) => i.user.id === interaction.user.id && i.customId === map.customId;
+    const selectInteraction = await awaitComponentSafe(interaction.channel, filter, { time: 60000 });
+    if (!selectInteraction) {
+      await interaction.followUp({ content: 'Selection timed out. Trade cancelled.', ephemeral: true });
+      return null;
+    }
+    const [name, rarity] = selectInteraction.values[0].split('::');
+    await selectInteraction.deferUpdate();
+    chosenWanted[map.index] = { name, rarity };
+  }
+
+  return chosenWanted;
+}
+
+// Updated handleInitiateTrade to prompt initiator and pass chosenWanted to the transaction
+async function handleInitiateTrade(interaction, listing, sentMessage) {
+  const initiatorId = interaction.user.id;
+  const ownerId = listing.userId;
+
+  if (initiatorId === ownerId) {
+    return interaction.followUp({ content: 'You cannot initiate a trade on your own listing.', ephemeral: true });
+  }
+
+  const freshListing = await TradeListing.findById(listing._id).exec();
+  if (!freshListing || freshListing.status !== 'active') {
+    return interaction.followUp({ content: 'This listing is no longer active.', ephemeral: true });
+  }
+
+  const initiatorDoc = await User.findOne({ id: initiatorId }).exec();
+  if (!initiatorDoc) {
+    return interaction.followUp({ content: 'Could not load your inventory.', ephemeral: true });
+  }
+
+  const chosenWanted = await promptInitiatorChoices(interaction, freshListing, initiatorDoc);
+  if (!chosenWanted) return;
+
+  const summary = chosenWanted.map((c, idx) => `Wanted #${idx + 1}: ${c.name} [${c.rarity}]`).join('\n');
+  await interaction.followUp({ content: `You selected:\n${summary}\nAttempting trade...`, ephemeral: true });
+
+  const result = await performForcedTrade(ownerId, initiatorId, freshListing, chosenWanted);
+
+  if (!result.success) {
+    return interaction.followUp({ content: `Trade failed: ${result.reason}`, ephemeral: true });
+  }
+
+  freshListing.status = 'completed';
+  await freshListing.save();
+
+  try {
+    const disabledRow = new ActionRowBuilder().addComponents(
+      new ButtonBuilder()
+        .setCustomId(`initiate_trade_${listing._id}`)
+        .setLabel('Initiate Trade')
+        .setStyle(ButtonStyle.Primary)
+        .setDisabled(true)
+    );
+    await sentMessage.edit({ components: [disabledRow] });
+  } catch (e) { /* ignore edit errors */ }
+
+  await interaction.followUp({ content: `✅ Trade completed between <@${ownerId}> and <@${initiatorId}>.`, ephemeral: true });
+
+  try {
+    await interaction.channel.send({ content: `✅ Trade completed between <@${ownerId}> and <@${initiatorId}> (Listing ID: ${listing._id}).` });
+  } catch (e) { /* ignore */ }
+}
+
+// Updated performForcedTrade that accepts chosenWanted and validates them inside the transaction
+async function performForcedTrade(ownerId, initiatorId, listing, chosenWanted) {
   const session = await mongoose.startSession();
   session.startTransaction();
-  
+
   try {
-    // Load both users within transaction
     const owner = await User.findOne({ id: ownerId }).session(session).exec();
     const initiator = await User.findOne({ id: initiatorId }).session(session).exec();
 
@@ -306,11 +460,10 @@ async function performForcedTrade(ownerId, initiatorId, listing) {
       return { success: false, reason: 'One of the users could not be found.' };
     }
 
-    // Improved card finding function that handles your data structure
     const findCard = (user, name, rarity) => {
       if (!user.cards || !Array.isArray(user.cards)) return null;
-      return user.cards.find(c => 
-        String(c.name) === String(name) && 
+      return user.cards.find(c =>
+        String(c.name) === String(name) &&
         String(c.rarity || '').toUpperCase() === String(rarity).toUpperCase()
       );
     };
@@ -324,60 +477,86 @@ async function performForcedTrade(ownerId, initiatorId, listing) {
       }
     }
 
-    // Validate initiator has wanted cards (only specific types)
-    for (const want of listing.wanted) {
+    // Validate chosenWanted presence and alignment
+    if (!Array.isArray(chosenWanted) || chosenWanted.length !== listing.wanted.length) {
+      await session.abortTransaction();
+      return { success: false, reason: 'Invalid chosen cards provided.' };
+    }
+
+    for (let i = 0; i < listing.wanted.length; i++) {
+      const want = listing.wanted[i];
+      const chosen = chosenWanted[i];
+      if (!chosen || !chosen.name || !chosen.rarity) {
+        await session.abortTransaction();
+        return { success: false, reason: `Missing chosen card for wanted item #${i + 1}.` };
+      }
+
       if (want.type === 'specific') {
-        const card = findCard(initiator, want.name, want.rarity);
-        if (!card || card.count < 1 || card.locked) {
+        if (String(chosen.name) !== String(want.name) || String(chosen.rarity).toUpperCase() !== String(want.rarity).toUpperCase()) {
           await session.abortTransaction();
-          return { success: false, reason: `You do not have the required wanted card: [${want.rarity}] ${want.name}.` };
+          return { success: false, reason: `Chosen card does not match required specific item for wanted #${i + 1}.` };
+        }
+      } else if (want.type === 'any_rarity') {
+        if (String(chosen.name) !== String(want.name)) {
+          await session.abortTransaction();
+          return { success: false, reason: `Chosen card does not match required name for wanted #${i + 1}.` };
+        }
+      } else if (want.type === 'any_name') {
+        if (String(chosen.rarity).toUpperCase() !== String(want.rarity).toUpperCase()) {
+          await session.abortTransaction();
+          return { success: false, reason: `Chosen card does not match required rarity for wanted #${i + 1}.` };
         }
       } else {
         await session.abortTransaction();
-        return { success: false, reason: `Wanted type "${want.type}" is not supported for forced trades yet.` };
+        return { success: false, reason: `Wanted type "${want.type}" is not supported for forced trades.` };
+      }
+
+      const initiatorCard = findCard(initiator, chosen.name, chosen.rarity);
+      if (!initiatorCard || initiatorCard.count < 1 || initiatorCard.locked) {
+        await session.abortTransaction();
+        return { success: false, reason: `You do not have the chosen card: [${chosen.rarity}] ${chosen.name}.` };
       }
     }
 
-    // SIMPLIFIED APPROACH: Perform transfers without complex locking
-    // Since we're in a transaction, we can safely modify
-    
-    // 1. Remove cards from owners
+    // Perform transfers owner -> initiator for offering
     for (const offer of listing.offering) {
-      const cardIndex = owner.cards.findIndex(c => 
-        String(c.name) === String(offer.name) && 
+      const cardIndex = owner.cards.findIndex(c =>
+        String(c.name) === String(offer.name) &&
         String(c.rarity || '').toUpperCase() === String(offer.rarity).toUpperCase()
       );
-      
+
       if (cardIndex !== -1) {
         owner.cards[cardIndex].count -= offer.count;
-        if (owner.cards[cardIndex].count <= 0) {
-          owner.cards.splice(cardIndex, 1);
-        }
+        if (owner.cards[cardIndex].count <= 0) owner.cards.splice(cardIndex, 1);
+      } else {
+        await session.abortTransaction();
+        return { success: false, reason: `Owner missing offered card ${offer.name} [${offer.rarity}] during transfer.` };
       }
     }
 
-    // 2. Remove wanted cards from initiator
-    for (const want of listing.wanted.filter(w => w.type === 'specific')) {
-      const cardIndex = initiator.cards.findIndex(c => 
-        String(c.name) === String(want.name) && 
-        String(c.rarity || '').toUpperCase() === String(want.rarity).toUpperCase()
+    // Remove chosen wanted cards from initiator
+    for (const chosen of chosenWanted) {
+      const cardIndex = initiator.cards.findIndex(c =>
+        String(c.name) === String(chosen.name) &&
+        String(c.rarity || '').toUpperCase() === String(chosen.rarity).toUpperCase()
       );
-      
+
       if (cardIndex !== -1) {
         initiator.cards[cardIndex].count -= 1;
-        if (initiator.cards[cardIndex].count <= 0) {
-          initiator.cards.splice(cardIndex, 1);
-        }
+        if (initiator.cards[cardIndex].count <= 0) initiator.cards.splice(cardIndex, 1);
+      } else {
+        await session.abortTransaction();
+        return { success: false, reason: `Initiator missing chosen card ${chosen.name} [${chosen.rarity}] during transfer.` };
       }
     }
 
-    // 3. Add received cards to each user
+    // Add offered cards to initiator
     for (const offer of listing.offering) {
-      const cardIndex = initiator.cards.findIndex(c => 
-        String(c.name) === String(offer.name) && 
+      const cardIndex = initiator.cards.findIndex(c =>
+        String(c.name) === String(offer.name) &&
         String(c.rarity || '').toUpperCase() === String(offer.rarity).toUpperCase()
       );
-      
+
       if (cardIndex !== -1) {
         initiator.cards[cardIndex].count += offer.count;
       } else {
@@ -390,37 +569,34 @@ async function performForcedTrade(ownerId, initiatorId, listing) {
       }
     }
 
-    for (const want of listing.wanted.filter(w => w.type === 'specific')) {
-      const cardIndex = owner.cards.findIndex(c => 
-        String(c.name) === String(want.name) && 
-        String(c.rarity || '').toUpperCase() === String(want.rarity).toUpperCase()
+    // Add chosen wanted cards to owner
+    for (const chosen of chosenWanted) {
+      const cardIndex = owner.cards.findIndex(c =>
+        String(c.name) === String(chosen.name) &&
+        String(c.rarity || '').toUpperCase() === String(chosen.rarity).toUpperCase()
       );
-      
+
       if (cardIndex !== -1) {
         owner.cards[cardIndex].count += 1;
       } else {
         owner.cards.push({
-          name: want.name,
-          rarity: want.rarity,
+          name: chosen.name,
+          rarity: chosen.rarity,
           count: 1,
           timestamps: [new Date()]
         });
       }
     }
 
-    // Mark documents as modified
     owner.markModified('cards');
     initiator.markModified('cards');
 
-    // Save both users
     await owner.save({ session });
     await initiator.save({ session });
 
-    // Commit transaction
     await session.commitTransaction();
-    
     return { success: true };
-    
+
   } catch (error) {
     await session.abortTransaction();
     console.error('Trade transaction error:', error);
@@ -429,7 +605,6 @@ async function performForcedTrade(ownerId, initiatorId, listing) {
     session.endSession();
   }
 }
-
 
 async function unlockCards(ownerId, initiatorId, listing) {
   try {

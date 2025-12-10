@@ -3,7 +3,7 @@ const PREFIX = '!';
 
 // Configure allowed user IDs here
 const ALLOWED_TARGETERS = new Set([
-  '153551890976735232', // replace with real user IDs
+  '153551890976735232', 
   '234567890123456789'
 ]);
 

@@ -53,7 +53,7 @@ module.exports = {
       const oshiLabel = oshiMeta ? `${oshiMeta.label}` : doc.oshiId;
       
       // Get level and XP info
-      const level = doc.level || 1;
+      const level = doc.level || 0;
       const xp = doc.xp || 0;
       const xpToNext = doc.xpToNext || 100; // Default if not set
       

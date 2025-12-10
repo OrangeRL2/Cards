@@ -18,6 +18,7 @@ const path = require('node:path');
 const pools = require('../../utils/loadImages'); // same as miss
 const activeSessions = new Map();
 const mongoose = require('mongoose');
+
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('wanted')
@@ -57,7 +58,8 @@ async function startListingCreation(interaction) {
     offering: [],
     wanted: [],
     step: 'offering',
-    message: null
+    message: null,
+    // pendingWantedType and pendingWantedRarity will be set when user chooses wanted type first
   };
 
   const embed = createListingEmbed(session);
@@ -92,7 +94,6 @@ function createListingEmbed(session) {
       value: session.wanted.map((item, index) => {
         switch (item.type) {
           case 'specific': return `**${index + 1}.** [${item.rarity}] ${item.name}`;
-          case 'any_rarity': return `**${index + 1}.** Any rarity: ${item.name}`;
           case 'any_name': return `**${index + 1}.** Any ${item.rarity} card`;
         }
       }).join('\n') || 'None'
@@ -144,10 +145,6 @@ function createListingComponents(session) {
       .setLabel(session.step === 'offering' ? 'Switch to Wanted' : 'Switch to Offering')
       .setStyle(ButtonStyle.Success),
     new ButtonBuilder()
-      .setCustomId('preview_listing')
-      .setLabel('Preview Listing')
-      .setStyle(ButtonStyle.Secondary),
-    new ButtonBuilder()
       .setCustomId('publish_listing')
       .setLabel('Publish Listing')
       .setStyle(ButtonStyle.Success)
@@ -175,45 +172,39 @@ function setupCollector(message, session) {
     }
 
     try {
-      // Defer update immediately to avoid "already replied" errors
-      //await interaction.deferUpdate();
-
       switch (interaction.customId) {
         case 'add_offering':
-            // showModal must be called directly in response to the interaction
-            await showCardSearchModal(interaction, session, 'offering');
-            break;
+          // showModal must be called directly in response to the interaction
+          await showCardSearchModal(interaction, session, 'offering');
+          break;
         case 'add_wanted':
+          // Show the wanted type selection first (this function will then open the modal)
           await showWantedTypeSelection(interaction, session);
           break;
         case 'remove_last_offering':
-            session.offering.pop();
-
-            // Acknowledge quickly so the client doesn't show failure
-            await interaction.deferUpdate();
-
-            // Then update the stored message (or use interaction.update if you want to update the same message)
-            await updateSessionMessage(session);
-            break;
+          session.offering.pop();
+          await interaction.deferUpdate();
+          await updateSessionMessage(session);
           break;
         case 'remove_last_wanted':
           session.wanted.pop();
+          await interaction.deferUpdate();
           await updateSessionMessage(session);
           break;
         case 'switch_step':
-            // toggle step
-            session.step = session.step === 'offering' ? 'wanted' : 'offering';
+          // toggle step
+          session.step = session.step === 'offering' ? 'wanted' : 'offering';
 
-            // Build updated embed/components
-            const embed = createListingEmbed(session);
-            const components = createListingComponents(session);
+          // Build updated embed/components
+          const embed = createListingEmbed(session);
+          const components = createListingComponents(session);
 
-            // Acknowledge and update the message in one call
-            await interaction.update({ embeds: [embed], components });
+          // Acknowledge and update the message in one call
+          await interaction.update({ embeds: [embed], components });
 
-            // refresh cached message reference (optional)
-            session.message = await interaction.channel.messages.fetch(interaction.message.id).catch(() => session.message);
-            break;
+          // refresh cached message reference (optional)
+          session.message = await interaction.channel.messages.fetch(interaction.message.id).catch(() => session.message);
+          break;
         case 'preview_listing':
           await showPreview(interaction, session);
           break;
@@ -228,7 +219,7 @@ function setupCollector(message, session) {
       }
     } catch (error) {
       console.error('Listing collector error:', error);
-      await interaction.followUp({ content: 'An error occurred.'});
+      try { await interaction.followUp({ content: 'An error occurred.'}); } catch (_) {}
     }
   });
 
@@ -236,6 +227,89 @@ function setupCollector(message, session) {
     activeSessions.delete(session.userId);
   });
 }
+
+// Replace your existing showWantedTypeSelection with this corrected version
+async function showWantedTypeSelection(interaction, session) {
+  const menu = new StringSelectMenuBuilder()
+    .setCustomId('wanted_type_first')
+    .setPlaceholder('Choose wanted match type')
+    .setMaxValues(1)
+    .addOptions([
+      { label: 'Specific card (exact rarity)', value: 'specific', description: 'Require exact rarity and name' },
+      { label: 'Any card of a rarity', value: 'any_name', description: 'Match any card of a chosen rarity' }
+    ]);
+
+  const row = new ActionRowBuilder().addComponents(menu);
+
+  // reply with the select menu (ephemeral)
+  await interaction.reply({ content: 'How should this wanted item be matched?', components: [row], ephemeral: false });
+
+  const choice = await interaction.channel.awaitMessageComponent({
+    filter: (i) => i.customId === 'wanted_type_first' && i.user.id === session.userId,
+    time: 60000
+  }).catch(() => null);
+
+  if (!choice) {
+    try { await interaction.followUp({ content: 'Timed out selecting wanted type.', ephemeral: true }); } catch (_) {}
+    return;
+  }
+
+  // Do NOT defer or reply to `choice` if we plan to show a modal using it.
+  const selected = choice.values[0];
+  session.pendingWantedType = selected;
+
+  if (selected === 'any_name') {
+  // Ask for rarity selection (ephemeral)
+  const rarities = Object.keys(pools).slice(0, 25);
+  const rarityMenu = new StringSelectMenuBuilder()
+    .setCustomId('any_name_rarity_first')
+    .setPlaceholder('Select rarity for "Any <rarity> card"')
+    .setMaxValues(1);
+
+  rarities.forEach(r => rarityMenu.addOptions({ label: r, value: r }));
+  const rarityRow = new ActionRowBuilder().addComponents(rarityMenu);
+
+  // interaction was already replied to above, so followUp is correct
+  await choice.update({
+    content: 'Select the rarity for the "Any <rarity> card" option:',
+    components: [rarityRow]
+  });
+
+  const rarityChoice = await interaction.channel.awaitMessageComponent({
+    filter: (i) => i.customId === 'any_name_rarity_first' && i.user.id === session.userId,
+    time: 60000
+  }).catch(() => null);
+
+  if (!rarityChoice) {
+    try { await interaction.followUp({ content: 'Timed out selecting rarity.', ephemeral: true }); } catch (_) {}
+    delete session.pendingWantedType;
+    return;
+  }
+
+  // Add the wanted item immediately (no search needed)
+  const chosenRarity = rarityChoice.values[0];
+  session.wanted.push({ type: 'any_name', rarity: chosenRarity });
+
+  // Clear pending fields (defensive)
+  delete session.pendingWantedType;
+  delete session.pendingWantedRarity;
+
+  // Update the main session message and confirm to the user
+  await updateSessionMessage(session);
+  
+  await rarityChoice.deferUpdate();
+  await choice.deleteReply(); // remove the select menu message
+  
+  //await rarityChoice.update({ content: `✅ Wanted: any ${chosenRarity} card added.`, ephemeral: true });
+
+  return;
+}
+
+
+  // For specific or any_rarity: show the modal using the original choice interaction
+  return await showCardSearchModal(choice, session, 'wanted');
+}
+
 
 async function showCardSearchModal(interaction, session, type) {
   const modal = new ModalBuilder()
@@ -250,6 +324,7 @@ async function showCardSearchModal(interaction, session, type) {
 
   modal.addComponents(new ActionRowBuilder().addComponents(searchInput));
 
+  // showModal must be called on the interaction that triggered this flow (we pass that in)
   await interaction.showModal(modal);
 
   const modalSubmit = await interaction.awaitModalSubmit({
@@ -257,12 +332,13 @@ async function showCardSearchModal(interaction, session, type) {
     time: 60000
   });
 
-  const searchTerm = modalSubmit.fields.getTextInputValue('search').toLowerCase();
+  const searchTermRaw = modalSubmit.fields.getTextInputValue('search');
+  const searchTerm = String(searchTermRaw).toLowerCase().trim();
 
   if (type === 'wanted') {
-    // Build universe from pools (same logic as miss)
+    // Build universe from pools
     const universe = [];
-    const RARITY_ORDER = Object.keys(pools); // or keep your RARITY_ORDER constant if available
+    const RARITY_ORDER = Object.keys(pools);
     for (const rarity of RARITY_ORDER) {
       const files = Array.isArray(pools[rarity]) ? pools[rarity] : [];
       for (const f of files) {
@@ -275,17 +351,39 @@ async function showCardSearchModal(interaction, session, type) {
     const availableCards = universe.filter(c => c.name.toLowerCase().includes(searchTerm));
 
     if (availableCards.length === 0) {
-      return modalSubmit.reply({ content: `No cards found matching "${searchTerm}".`, ephemeral: true });
+      return modalSubmit.reply({ content: `No cards found matching "${searchTermRaw}".`, ephemeral: true });
     }
 
+    // Ensure a wanted type was chosen earlier (this function expects session.pendingWantedType to be set)
+    const pendingType = session.pendingWantedType;
+    if (!pendingType) {
+      return modalSubmit.reply({ content: 'Wanted type not selected. Please choose the wanted type first and try again.', ephemeral: true });
+    }
+
+    // Single result: add according to pending type (specific or any_name)
     if (availableCards.length === 1) {
-      // For wanted we don't need quantity; ask for rarity confirmation (if needed)
-      return await askForWantedConfirm(modalSubmit, session, availableCards[0]);
+      const card = availableCards[0];
+
+      if (pendingType === 'specific') {
+        session.wanted.push({ type: 'specific', name: card.name, rarity: card.rarity });
+      } else if (pendingType === 'any_name') {
+        // any_name uses the previously selected rarity
+        session.wanted.push({ type: 'any_name', rarity: session.pendingWantedRarity });
+      }
+
+      // Clear pending fields and update UI
+      delete session.pendingWantedType;
+      delete session.pendingWantedRarity;
+      await updateSessionMessage(session);
+      
+      //return modalSubmit.reply({ content: '✅ Wanted card added!', ephemeral: true });
     }
 
+    // Multiple results -> show select menu (will use pending type when user selects)
+    // For specific: user will pick exact card; for any_name we only need rarity (already chosen)
     return await showCardSelectMenu(modalSubmit, session, type, availableCards);
   } else {
-    // offering: search user's own cards as before
+    // offering: search user's own cards
     const userDoc = await User.findOne({ id: session.userId });
     const availableCards = (userDoc?.cards || []).filter(card =>
       !card.locked &&
@@ -294,7 +392,7 @@ async function showCardSearchModal(interaction, session, type) {
 
     if (availableCards.length === 0) {
       return modalSubmit.reply({
-        content: `No available cards found matching "${searchTerm}".`,
+        content: `No available cards found matching "${searchTermRaw}".`,
         ephemeral: true
       });
     }
@@ -307,7 +405,6 @@ async function showCardSearchModal(interaction, session, type) {
     await showCardSelectMenu(modalSubmit, session, type, availableCards);
   }
 }
-
 
 async function showCardSelectMenu(interaction, session, type, availableCards) {
   const selectMenu = new StringSelectMenuBuilder()
@@ -334,7 +431,7 @@ async function showCardSelectMenu(interaction, session, type, availableCards) {
   await interaction.reply({
     content: `Found ${availableCards.length} cards. Select one:`,
     components: [row],
-    ephemeral: true
+    ephemeral: false
   });
 
   const selectInteraction = await interaction.channel.awaitMessageComponent({
@@ -347,13 +444,113 @@ async function showCardSelectMenu(interaction, session, type, availableCards) {
   if (scope === 'univ') {
     // Universe/wanted card selected
     const cardObj = { name: cardName, rarity };
-    await askForWantedConfirm(selectInteraction, session, cardObj);
+    const pendingType = session.pendingWantedType;
+
+    if (!pendingType) {
+      await selectInteraction.reply({ content: 'Wanted type not set. Please start again and choose a wanted type first.', ephemeral: true });
+      return;
+    }
+
+    if (pendingType === 'specific') {
+      session.wanted.push({ type: 'specific', name: cardObj.name, rarity: cardObj.rarity });
+    } else if (pendingType === 'any_name') {
+      session.wanted.push({ type: 'any_name', rarity: session.pendingWantedRarity });
+    }
+
+    // Clear pending fields and update UI
+    delete session.pendingWantedType;
+    delete session.pendingWantedRarity;
+
+    await updateSessionMessage(session);
+    await selectInteraction.deferUpdate();
+    await interaction.deleteReply(); // remove the select menu message
+    //await selectInteraction.followUp({ content: '✅ Wanted card added!', ephemeral: true });
   } else {
-    // User card selected
+    // User card selected (offering flow)
     const userDoc = await User.findOne({ id: session.userId });
     const selectedCard = (userDoc?.cards || []).find(c => c.name === cardName && c.rarity === rarity);
     await askForQuantity(selectInteraction, session, type, selectedCard);
   }
+}
+
+// Helper: safe await for components
+async function awaitComponentSafe(channel, filter, options = {}) {
+  try {
+    return await channel.awaitMessageComponent({ filter, ...options });
+  } catch (e) {
+    return null;
+  }
+}
+
+// Prompt the initiator to choose exact cards for each wanted item
+async function promptInitiatorChoices(interaction, listing, initiatorDoc) {
+  const components = [];
+  const mapping = [];
+
+  for (let i = 0; i < listing.wanted.length; i++) {
+    const want = listing.wanted[i];
+
+    let eligible = [];
+    if (want.type === 'specific') {
+      eligible = (initiatorDoc.cards || []).filter(c =>
+        String(c.name) === String(want.name) &&
+        String(c.rarity || '').toUpperCase() === String(want.rarity).toUpperCase() &&
+        !c.locked && c.count > 0
+      );
+    } else if (want.type === 'any_name') {
+      eligible = (initiatorDoc.cards || []).filter(c =>
+        String(c.rarity || '').toUpperCase() === String(want.rarity).toUpperCase() && !c.locked && c.count > 0
+      );
+    } else {
+      await interaction.followUp({ content: `Unsupported wanted type: ${want.type}`, ephemeral: true });
+      return null;
+    }
+
+    if (eligible.length === 0) {
+      await interaction.followUp({ content: `You have no eligible cards for wanted item #${i + 1}.`, ephemeral: true });
+      return null;
+    }
+
+    const customId = `choose_want_${listing._id}_${i}_${Date.now()}`;
+    const select = new StringSelectMenuBuilder()
+      .setCustomId(customId)
+      .setPlaceholder(`Choose card for wanted #${i + 1}`)
+      .setMaxValues(1);
+
+    eligible.slice(0, 25).forEach(c => {
+      const value = `${c.name}::${c.rarity}`;
+      select.addOptions({
+        label: c.name.length > 25 ? c.name.slice(0, 22) + '...' : c.name,
+        description: `${c.rarity} • You have ${c.count}`,
+        value
+      });
+    });
+
+    components.push(new ActionRowBuilder().addComponents(select));
+    mapping.push({ index: i, want, customId });
+  }
+
+  await interaction.followUp({
+    content: 'Select which card you will give for each wanted item.',
+    components,
+    ephemeral: true
+  });
+
+  const chosenWanted = new Array(listing.wanted.length).fill(null);
+
+  for (const map of mapping) {
+    const filter = (i) => i.user.id === interaction.user.id && i.customId === map.customId;
+    const selectInteraction = await awaitComponentSafe(interaction.channel, filter, { time: 60000*2 });
+    if (!selectInteraction) {
+      await interaction.followUp({ content: 'Selection timed out. Trade cancelled.', ephemeral: true });
+      return null;
+    }
+    const [name, rarity] = selectInteraction.values[0].split('::');
+    await selectInteraction.deferUpdate();
+    chosenWanted[map.index] = { name, rarity };
+  }
+
+  return chosenWanted;
 }
 
 /**
@@ -366,12 +563,12 @@ async function showCardSelectMenu(interaction, session, type, availableCards) {
  * NOTE: This is a best-effort single-process approach. For production with concurrent writes,
  * use MongoDB transactions (replica set) or stronger locking.
  */
-async function performForcedTrade(ownerId, initiatorId, listing) {
+// Updated performForcedTrade that accepts chosenWanted and validates them inside the transaction
+async function performForcedTrade(ownerId, initiatorId, listing, chosenWanted) {
   const session = await mongoose.startSession();
   session.startTransaction();
-  
+
   try {
-    // Load both users within transaction
     const owner = await User.findOne({ id: ownerId }).session(session).exec();
     const initiator = await User.findOne({ id: initiatorId }).session(session).exec();
 
@@ -380,11 +577,10 @@ async function performForcedTrade(ownerId, initiatorId, listing) {
       return { success: false, reason: 'One of the users could not be found.' };
     }
 
-    // Improved card finding function that handles your data structure
     const findCard = (user, name, rarity) => {
       if (!user.cards || !Array.isArray(user.cards)) return null;
-      return user.cards.find(c => 
-        String(c.name) === String(name) && 
+      return user.cards.find(c =>
+        String(c.name) === String(name) &&
         String(c.rarity || '').toUpperCase() === String(rarity).toUpperCase()
       );
     };
@@ -398,60 +594,81 @@ async function performForcedTrade(ownerId, initiatorId, listing) {
       }
     }
 
-    // Validate initiator has wanted cards (only specific types)
-    for (const want of listing.wanted) {
+    // Validate chosenWanted presence and alignment
+    if (!Array.isArray(chosenWanted) || chosenWanted.length !== listing.wanted.length) {
+      await session.abortTransaction();
+      return { success: false, reason: 'Invalid chosen cards provided.' };
+    }
+
+    for (let i = 0; i < listing.wanted.length; i++) {
+      const want = listing.wanted[i];
+      const chosen = chosenWanted[i];
+      if (!chosen || !chosen.name || !chosen.rarity) {
+        await session.abortTransaction();
+        return { success: false, reason: `Missing chosen card for wanted item #${i + 1}.` };
+      }
+
       if (want.type === 'specific') {
-        const card = findCard(initiator, want.name, want.rarity);
-        if (!card || card.count < 1 || card.locked) {
+        if (String(chosen.name) !== String(want.name) || String(chosen.rarity).toUpperCase() !== String(want.rarity).toUpperCase()) {
           await session.abortTransaction();
-          return { success: false, reason: `You do not have the required wanted card: [${want.rarity}] ${want.name}.` };
+          return { success: false, reason: `Chosen card does not match required specific item for wanted #${i + 1}.` };
+        }
+      } else if (want.type === 'any_name') {
+        if (String(chosen.rarity).toUpperCase() !== String(want.rarity).toUpperCase()) {
+          await session.abortTransaction();
+          return { success: false, reason: `Chosen card does not match required rarity for wanted #${i + 1}.` };
         }
       } else {
         await session.abortTransaction();
-        return { success: false, reason: `Wanted type "${want.type}" is not supported for forced trades yet.` };
+        return { success: false, reason: `Wanted type "${want.type}" is not supported for forced trades.` };
+      }
+
+      const initiatorCard = findCard(initiator, chosen.name, chosen.rarity);
+      if (!initiatorCard || initiatorCard.count < 1 || initiatorCard.locked) {
+        await session.abortTransaction();
+        return { success: false, reason: `You do not have the chosen card: [${chosen.rarity}] ${chosen.name}.` };
       }
     }
 
-    // SIMPLIFIED APPROACH: Perform transfers without complex locking
-    // Since we're in a transaction, we can safely modify
-    
-    // 1. Remove cards from owners
+    // Perform transfers owner -> initiator for offering
     for (const offer of listing.offering) {
-      const cardIndex = owner.cards.findIndex(c => 
-        String(c.name) === String(offer.name) && 
+      const cardIndex = owner.cards.findIndex(c =>
+        String(c.name) === String(offer.name) &&
         String(c.rarity || '').toUpperCase() === String(offer.rarity).toUpperCase()
       );
-      
+
       if (cardIndex !== -1) {
         owner.cards[cardIndex].count -= offer.count;
-        if (owner.cards[cardIndex].count <= 0) {
-          owner.cards.splice(cardIndex, 1);
-        }
+        if (owner.cards[cardIndex].count <= 0) owner.cards.splice(cardIndex, 1);
+      } else {
+        await session.abortTransaction();
+        return { success: false, reason: `Owner missing offered card ${offer.name} [${offer.rarity}] during transfer.` };
       }
     }
 
-    // 2. Remove wanted cards from initiator
-    for (const want of listing.wanted.filter(w => w.type === 'specific')) {
-      const cardIndex = initiator.cards.findIndex(c => 
-        String(c.name) === String(want.name) && 
-        String(c.rarity || '').toUpperCase() === String(want.rarity).toUpperCase()
+    // Remove chosen wanted cards from initiator
+    for (const chosen of chosenWanted) {
+      const cardIndex = initiator.cards.findIndex(c =>
+        String(c.name) === String(chosen.name) &&
+        String(c.rarity || '').toUpperCase() === String(chosen.rarity).toUpperCase()
       );
-      
+
       if (cardIndex !== -1) {
         initiator.cards[cardIndex].count -= 1;
-        if (initiator.cards[cardIndex].count <= 0) {
-          initiator.cards.splice(cardIndex, 1);
-        }
+        if (initiator.cards[cardIndex].count <= 0) initiator.cards.splice(cardIndex, 1);
+      } else {
+        await session.abortTransaction();
+        return { success: false, reason: `Initiator missing chosen card ${chosen.name} [${chosen.rarity}] during transfer.` };
       }
     }
 
-    // 3. Add received cards to each user
+    // Add offered cards to initiator
     for (const offer of listing.offering) {
-      const cardIndex = initiator.cards.findIndex(c => 
-        String(c.name) === String(offer.name) && 
+      const cardIndex = initiator.cards.findIndex(c =>
+        String(c.name) === String(offer.name) &&
         String(c.rarity || '').toUpperCase() === String(offer.rarity).toUpperCase()
       );
-      
+
       if (cardIndex !== -1) {
         initiator.cards[cardIndex].count += offer.count;
       } else {
@@ -464,37 +681,34 @@ async function performForcedTrade(ownerId, initiatorId, listing) {
       }
     }
 
-    for (const want of listing.wanted.filter(w => w.type === 'specific')) {
-      const cardIndex = owner.cards.findIndex(c => 
-        String(c.name) === String(want.name) && 
-        String(c.rarity || '').toUpperCase() === String(want.rarity).toUpperCase()
+    // Add chosen wanted cards to owner
+    for (const chosen of chosenWanted) {
+      const cardIndex = owner.cards.findIndex(c =>
+        String(c.name) === String(chosen.name) &&
+        String(c.rarity || '').toUpperCase() === String(chosen.rarity).toUpperCase()
       );
-      
+
       if (cardIndex !== -1) {
         owner.cards[cardIndex].count += 1;
       } else {
         owner.cards.push({
-          name: want.name,
-          rarity: want.rarity,
+          name: chosen.name,
+          rarity: chosen.rarity,
           count: 1,
           timestamps: [new Date()]
         });
       }
     }
 
-    // Mark documents as modified
     owner.markModified('cards');
     initiator.markModified('cards');
 
-    // Save both users
     await owner.save({ session });
     await initiator.save({ session });
 
-    // Commit transaction
     await session.commitTransaction();
-    
     return { success: true };
-    
+
   } catch (error) {
     await session.abortTransaction();
     console.error('Trade transaction error:', error);
@@ -504,23 +718,6 @@ async function performForcedTrade(ownerId, initiatorId, listing) {
   }
 }
 
-// Helper to unlock cards if something fails
-async function unlockCards(ownerId, initiatorId, listing) {
-  try {
-    for (const offer of listing.offering) {
-      await User.updateOne(
-        { id: ownerId, 'cards.name': offer.name, 'cards.rarity': offer.rarity },
-        { $set: { 'cards.$.locked': false } }
-      ).exec();
-    }
-    for (const want of listing.wanted.filter(w => w.type === 'specific')) {
-      await User.updateOne(
-        { id: initiatorId, 'cards.name': want.name, 'cards.rarity': want.rarity },
-        { $set: { 'cards.$.locked': false } }
-      ).exec();
-    }
-  } catch (e) { /* ignore unlock errors */ }
-}
 
 async function askForQuantity(interaction, session, type, card) {
   const modal = new ModalBuilder()
@@ -567,13 +764,11 @@ async function askForQuantity(interaction, session, type, card) {
   }
 
   await updateSessionMessage(session);
-  await modalSubmit.reply({ content: '✅ Card added!', flags: 64 });
+  await modalSubmit.deferUpdate();
+  await interaction.deleteReply(); // remove the modal message
+  //await modalSubmit.reply({ content: '✅ Card added!', flags: 64 });
 }
 
-async function showWantedTypeSelection(interaction, session) {
-  // Simple implementation - just use the same card search for wanted items
-  await showCardSearchModal(interaction, session, 'wanted');
-}
 async function askForWantedConfirm(interaction, session, card) {
   // Acknowledge the interaction and add wanted item
   // interaction may be a modal submit or select interaction; use deferUpdate if needed
@@ -621,8 +816,7 @@ async function updateSessionMessage(session) {
   }
 }
 
-// Ensure User model is required at top: const User = require('../../models/User');
-
+// Updated handleInitiateTrade to prompt initiator and pass chosenWanted to the transaction
 async function handleInitiateTrade(interaction, listing, sentMessage) {
   const initiatorId = interaction.user.id;
   const ownerId = listing.userId;
@@ -631,24 +825,31 @@ async function handleInitiateTrade(interaction, listing, sentMessage) {
     return interaction.followUp({ content: 'You cannot initiate a trade on your own listing.', ephemeral: true });
   }
 
-  // Re-fetch fresh listing from DB to ensure status
   const freshListing = await TradeListing.findById(listing._id).exec();
   if (!freshListing || freshListing.status !== 'active') {
     return interaction.followUp({ content: 'This listing is no longer active.', ephemeral: true });
   }
 
-  // Attempt the forced trade
-  const result = await performForcedTrade(ownerId, initiatorId, freshListing);
+  const initiatorDoc = await User.findOne({ id: initiatorId }).exec();
+  if (!initiatorDoc) {
+    return interaction.followUp({ content: 'Could not load your inventory.', ephemeral: true });
+  }
+
+  const chosenWanted = await promptInitiatorChoices(interaction, freshListing, initiatorDoc);
+  if (!chosenWanted) return;
+
+  const summary = chosenWanted.map((c, idx) => `Wanted #${idx + 1}: ${c.name} [${c.rarity}]`).join('\n');
+  await interaction.followUp({ content: `You selected:\n${summary}\nAttempting trade...`, ephemeral: true });
+
+  const result = await performForcedTrade(ownerId, initiatorId, freshListing, chosenWanted);
 
   if (!result.success) {
     return interaction.followUp({ content: `Trade failed: ${result.reason}`, ephemeral: true });
   }
 
-  // Mark listing completed and update DB
   freshListing.status = 'completed';
   await freshListing.save();
 
-  // Disable the button on the posted message
   try {
     const disabledRow = new ActionRowBuilder().addComponents(
       new ButtonBuilder()
@@ -660,14 +861,13 @@ async function handleInitiateTrade(interaction, listing, sentMessage) {
     await sentMessage.edit({ components: [disabledRow] });
   } catch (e) { /* ignore edit errors */ }
 
-  // Notify both parties publicly (or privately if you prefer)
   await interaction.followUp({ content: `✅ Trade completed between <@${ownerId}> and <@${initiatorId}>.`, ephemeral: true });
 
   try {
-    // Optionally DM or mention the owner in channel
     await interaction.channel.send({ content: `✅ Trade completed between <@${ownerId}> and <@${initiatorId}> (Listing ID: ${listing._id}).` });
   } catch (e) { /* ignore */ }
 }
+
 
 async function showPreview(interaction, session) {
   const embed = new EmbedBuilder()
@@ -684,7 +884,6 @@ async function showPreview(interaction, session) {
         value: session.wanted.map(w => {
           switch (w.type) {
             case 'specific': return `• [${w.rarity}] ${w.name}`;
-            case 'any_rarity': return `• Any rarity: ${w.name}`;
             case 'any_name': return `• Any ${w.rarity} card`;
           }
         }).join('\n') || 'None'
@@ -752,7 +951,6 @@ async function postToChannel(interaction, listing) {
       .setStyle(ButtonStyle.Primary)
   );
 
-  // FIX: Remove the duplicate channel.send() call
   const sent = await channel.send({ embeds: [embed], components: [row] });
 
   // Collector to handle the "Initiate Trade" button clicks
@@ -792,7 +990,6 @@ async function postToChannel(interaction, listing) {
 function formatWantedItem(item) {
   switch (item.type) {
     case 'specific': return `• [${item.rarity}] ${item.name}`;
-    case 'any_rarity': return `• Any rarity: ${item.name}`;
     case 'any_name': return `• Any ${item.rarity} card`;
   }
 }
@@ -826,7 +1023,6 @@ async function listActiveListings(interaction) {
     const wantedText = listing.wanted.map(w => {
       switch (w.type) {
         case 'specific': return `• [${w.rarity}] ${w.name}`;
-        case 'any_rarity': return `• Any rarity: ${w.name}`;
         case 'any_name': return `• Any ${w.rarity} card`;
       }
     }).join('\n');
@@ -925,7 +1121,6 @@ async function listActiveListings(interaction) {
         const wantedText = listing.wanted.map(w => {
           switch (w.type) {
             case 'specific': return `• [${w.rarity}] ${w.name}`;
-            case 'any_rarity': return `• Any rarity: ${w.name}`;
             case 'any_name': return `• Any ${w.rarity} card`;
           }
         }).join('\n');
@@ -986,4 +1181,3 @@ async function listActiveListings(interaction) {
     } catch (e) {}
   });
 }
-

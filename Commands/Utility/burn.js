@@ -22,7 +22,7 @@ const LevelMilestone = require('../../models/LevelMilestone');
 const { xpForCard, xpToNextForLevel, isValidRarity, RARITY_XP } = require('../../utils/leveling');
 const { getAllEnabledMilestones, milestonesForLevel } = require('../../utils/milestones');
 
-const IMAGE_POOL_ROOT = path.join(__dirname, '..', '..','assets', 'images','oshi'); // adjust if needed
+const IMAGE_POOL_ROOT = path.join(__dirname, '..', '..', 'assets', 'images', 'oshi'); // adjust if needed
 
 // In-memory sessions map for interactive burn flows
 const sessions = new Map();
@@ -39,9 +39,9 @@ async function buildPreviewEmbed(session) {
   const { userId, oshiId, offers } = session;
   const totalXp = offers.reduce((s, o) => s + (o.xp || 0), 0);
   const oshiDoc = await Oshi.findOne({ userId }).lean().exec();
-  const level = oshiDoc?.level || 1;
-  const xp = oshiDoc?.xp || 0;
-  const xpToNext = oshiDoc?.xpToNext || xpToNextForLevel(level);
+  const level = oshiDoc?.level ?? 0;               // or ?? 1 if you want 1 only when undefined
+  const xp = oshiDoc?.xp ?? 0;
+  const xpToNext = oshiDoc?.xpToNext ?? xpToNextForLevel(level);
 
   const allMilestones = await getAllEnabledMilestones();
   const nextLevel = level + 1;
@@ -58,47 +58,171 @@ async function buildPreviewEmbed(session) {
     );
 
   if (nextMilestones.length) {
-    embed.addFields({ name: `Next level rewards (level ${nextLevel})`, value: nextMilestones.map(m => {
-      if (m.awardType === 'eventPulls') return `Event pulls: ${m.awardValue}`;
-      if (m.awardType === 'card') {
-        const pool = (m.awardValue && m.awardValue.poolFolder) || oshiId;
-        const cnt = (m.awardValue && m.awardValue.count) || 1;
-        const rar = (m.awardValue && m.awardValue.rarityFilter) ? ` rarity ${m.awardValue.rarityFilter}` : '';
-        return `Card x${cnt} from pool ${pool}${rar}`;
+ // Update the embed field to show something meaningful even when rarities can't be detected
+// Update the embed field display
+embed.addFields({ name: `Next level rewards (level ${nextLevel})`, value: nextMilestones.map(m => {
+  if (m.awardType === 'eventPulls') return `Event pulls: ${m.awardValue}`;
+  if (m.awardType === 'card') {
+    const cnt = (m.awardValue && m.awardValue.count) || 1;
+    const pool = (m.awardValue && m.awardValue.poolFolder) || oshiId;
+    
+    // Auto-detect available rarities from directory structure
+    const availableRarities = getAvailableRaritiesForPool(pool);
+    
+    if (availableRarities.length > 0) {
+      if (availableRarities.length === 1) {
+        return `Card (${availableRarities[0]})`;
+      } else {
+        return `Cards from: ${availableRarities.join(', ')}`;
       }
-      return `${m.awardType}: ${JSON.stringify(m.awardValue)}`;
-    }).join('\n'), inline: false });
+    } else {
+      // Fallback: show the pool name
+      const poolName = pool ? path.basename(pool) : oshiId;
+      return `Card x${cnt} (${poolName})`;
+    }
+  }
+  return `${m.awardType}: ${JSON.stringify(m.awardValue)}`;
+}).join('\n'), inline: false });
   } else {
     embed.addFields({ name: `Next level rewards (level ${nextLevel})`, value: 'None', inline: false });
   }
 
   return embed;
 }
-// Helper: pick a random file from a random rarity subfolder inside poolPath
-function pickRandomFileFromOshiPool(poolPath) {
-  let subdirs = [];
+
+// Helper: Get available rarities for a pool (works with your directory structure)
+function getAvailableRaritiesForPool(poolFolder) {
+  const poolPath = resolvePoolPath(poolFolder);
+  console.log(`Checking rarities in: ${poolPath}`);
+  
   try {
-    subdirs = fs.readdirSync(poolPath, { withFileTypes: true })
-      .filter(d => d.isDirectory())
-      .map(d => d.name);
+    if (!fs.existsSync(poolPath)) {
+      console.error(`Pool path does not exist: ${poolPath}`);
+      return [];
+    }
+
+    const items = fs.readdirSync(poolPath, { withFileTypes: true });
+    const subdirs = items.filter(d => d.isDirectory());
+    
+    // If the pool path contains subdirectories, those are the rarities
+    if (subdirs.length > 0) {
+      const rarities = subdirs.map(d => d.name.toUpperCase());
+      console.log(`Found subdirectory rarities: ${rarities.join(', ')}`);
+      return rarities;
+    }
+    
+    // If no subdirectories, check if this is a specific rarity folder
+    // Look for image files directly in the folder
+    const imageFiles = items.filter(f => f.isFile() && /\.(png|jpe?g|webp|gif)$/i.test(f.name));
+    if (imageFiles.length > 0) {
+      // This is a flat directory with images - use the folder name as the rarity
+      const folderName = path.basename(poolPath).toUpperCase();
+      console.log(`Flat directory with images, using folder name as rarity: ${folderName}`);
+      return [folderName];
+    }
+    
+    console.log(`No subdirectories or image files found in ${poolPath}`);
+    return [];
   } catch (e) {
+    console.error(`Error reading pool path ${poolPath}:`, e);
+    return [];
+  }
+}
+
+// Helper: Resolve pool path correctly, handling relative paths
+function resolvePoolPath(poolFolder) {
+  if (!poolFolder) {
+    return IMAGE_POOL_ROOT;
+  }
+  
+  // If poolFolder is a relative path (starts with ../ or ./), resolve from project root
+  if (poolFolder.startsWith('../') || poolFolder.startsWith('./')) {
+    const projectRoot = path.join(__dirname, '..', '..'); // Go up to project root
+    return path.resolve(projectRoot, poolFolder);
+  }
+  
+  // Otherwise, assume it's a folder name under the oshi directory
+  return path.join(IMAGE_POOL_ROOT, poolFolder);
+}
+
+// Updated Helper: Randomly pick a card from all available rarity folders in the pool
+// Corrected Helper: Randomly pick a card from a pool
+function pickRandomCardFromOshiPool(poolFolder) {
+  const poolPath = resolvePoolPath(poolFolder);
+  console.log(`Looking for cards in: ${poolPath}`);
+  
+  let allFiles = [];
+
+  try {
+    // Check if the pool path exists
+    if (!fs.existsSync(poolPath)) {
+      console.error(`Pool path does not exist: ${poolPath}`);
+      return null;
+    }
+
+    const items = fs.readdirSync(poolPath, { withFileTypes: true });
+    
+    // Check if there are any subdirectories
+    const subdirs = items.filter(d => d.isDirectory());
+    const filesInRoot = items.filter(f => f.isFile() && /\.(png|jpe?g|webp|gif)$/i.test(f.name));
+
+    console.log(`Found ${subdirs.length} subdirectories, ${filesInRoot.length} files in root`);
+
+    // If there are files directly in the root, use those
+    if (filesInRoot.length > 0) {
+      console.log(`Using files from root directory`);
+      
+      const rootFiles = filesInRoot.map(f => ({
+        file: f.name,
+        rarity: path.basename(poolPath).toUpperCase(), // Use the pool folder name as rarity
+        fullPath: path.join(poolPath, f.name)
+      }));
+      
+      allFiles.push(...rootFiles);
+    }
+
+    // If there are subdirectories, also scan them
+    if (subdirs.length > 0) {
+      console.log(`Also scanning ${subdirs.length} subdirectories`);
+      
+      for (const subdir of subdirs) {
+        try {
+          const subdirPath = path.join(poolPath, subdir.name);
+          const files = fs.readdirSync(subdirPath)
+            .filter(f => /\.(png|jpe?g|webp|gif)$/i.test(f))
+            .map(f => ({
+              file: f,
+              rarity: subdir.name.toUpperCase(), // Use subdirectory name as rarity
+              fullPath: path.join(subdirPath, f)
+            }));
+          
+          allFiles.push(...files);
+          console.log(`Found ${files.length} files in ${subdir.name}`);
+        } catch (e) {
+          console.error(`Error reading subdirectory ${subdir.name}:`, e);
+        }
+      }
+    }
+
+  } catch (e) {
+    console.error(`Error reading pool path ${poolPath}:`, e);
     return null;
   }
-  if (!subdirs || subdirs.length === 0) return null;
-
-  const rarityFolder = subdirs[Math.floor(Math.random() * subdirs.length)];
-  const rarityPath = path.join(poolPath, rarityFolder);
-
-  let files = [];
-  try {
-    files = fs.readdirSync(rarityPath).filter(f => /\.(png|jpe?g|webp|gif)$/i.test(f));
-  } catch (e) {
+  
+  if (allFiles.length === 0) {
+    console.log(`No image files found in ${poolPath}`);
     return null;
   }
-  if (!files || files.length === 0) return null;
 
-  const pick = files[Math.floor(Math.random() * files.length)];
-  return { pick, rarityFolder };
+  // Pick a random file from all available files
+  const randomFile = allFiles[Math.floor(Math.random() * allFiles.length)];
+  console.log(`Selected card: ${randomFile.file} with rarity: ${randomFile.rarity}`);
+  
+  return {
+    pick: randomFile.file,
+    rarityFolder: randomFile.rarity,
+    fullPath: randomFile.fullPath
+  };
 }
 
 module.exports = {
@@ -359,7 +483,7 @@ module.exports = {
 
           // Add XP and level up
           oshi.xp = (oshi.xp || 0) + totalXp;
-          oshi.xpToNext = oshi.xpToNext || xpToNextForLevel(oshi.level || 1);
+          oshi.xpToNext = oshi.xpToNext ?? xpToNextForLevel(oshi.level || 1);
 
           const allMilestones = await getAllEnabledMilestones();
           const awardedMilestones = [];
@@ -367,10 +491,10 @@ module.exports = {
           let totalEventPulls = 0;
           let levelsGained = 0;
 
-          while (oshi.xp >= (oshi.xpToNext || xpToNextForLevel(oshi.level))) {
+          while (oshi.xp >= (oshi.xpToNext ?? xpToNextForLevel(oshi.level))) {
             const need = oshi.xpToNext || xpToNextForLevel(oshi.level);
             oshi.xp -= need;
-            oshi.level = (oshi.level || 1) + 1;
+            oshi.level = (oshi.level ?? 0) + 1; // if you want 0 -> 1 on first increment
             oshi.xpToNext = xpToNextForLevel(oshi.level);
             oshi.lastLeveledAt = new Date();
             levelsGained += 1;
@@ -411,51 +535,47 @@ module.exports = {
               const n = Number(m.awardValue || 0);
               if (n > 0) totalEventPulls += n;
             } else if (m.awardType === 'card') {
-              // previous variables: poolFolder, poolPath already defined above
-// determine pool folder and path for this milestone
-const poolFolder = (m.awardValue && m.awardValue.poolFolder) || oshi.oshiId;
-const poolPath = path.join(IMAGE_POOL_ROOT, poolFolder);
+              // determine pool folder and path for this milestone
+              const poolFolder = (m.awardValue && m.awardValue.poolFolder) || oshi.oshiId;
+              
+              // pick a random file from all available rarity folders in the pool
+              const pickResult = pickRandomCardFromOshiPool(poolFolder);
+              if (!pickResult) {
+                console.warn('No files found in pool', poolFolder);
+                continue;
+              }
+              const pick = pickResult.pick;
+              const chosenRarityFolder = pickResult.rarityFolder;
 
-// pick a random file from a random rarity subfolder
-const pickResult = pickRandomFileFromOshiPool(poolPath);
-if (!pickResult) {
-  console.warn('No files found in any rarity subfolder for', poolFolder);
-  continue;
-}
-const pick = pickResult.pick;
-const chosenRarityFolder = pickResult.rarityFolder;
+              const raw = path.basename(pick, path.extname(pick));
+              const displayName = raw.replace(/[_-]+/g, ' ').trim();
+              const awardCount = Number((m.awardValue && m.awardValue.count) || 1);
 
-const raw = path.basename(pick, path.extname(pick));
-const displayName = raw.replace(/[_-]+/g, ' ').trim();
-const awardCount = Number((m.awardValue && m.awardValue.count) || 1);
+              // Use the discovered rarity folder
+              const awardRarity = String(chosenRarityFolder).toUpperCase();
 
-// If milestone specified a rarityFilter, prefer it; otherwise use chosen rarity folder
-const awardRarity = (m.awardValue && m.awardValue.rarityFilter)
-  ? String(m.awardValue.rarityFilter).toUpperCase()
-  : String(chosenRarityFolder).toUpperCase();
+              // store a relative sourceFile path: poolFolder/rarityFolder/filename
+              const storedPath = path.join(poolFolder, chosenRarityFolder, pick);
 
-// store a relative sourceFile path: poolFolder/rarityFolder/filename
-const storedPath = path.join(poolFolder, chosenRarityFolder, pick);
-
-// Add or increment in userDoc
-userDoc.cards = userDoc.cards || [];
-const existing = userDoc.cards.find(x => String(x.name) === displayName && String(x.rarity || '').toUpperCase() === awardRarity);
-if (existing) {
-  existing.count = (existing.count || 0) + awardCount;
-  existing.timestamps = existing.timestamps || [];
-  existing.timestamps.push(new Date());
-} else {
-  userDoc.cards.push({
-    name: displayName,
-    rarity: awardRarity,
-    count: awardCount,
-    sourceFile: storedPath,
-    timestamps: [new Date()]
-  });
-}
-userDoc.markModified('cards');
-awardedCards.push({ name: displayName, rarity: awardRarity, count: awardCount, file: storedPath });
-console.log('Awarded card', { userId, poolFolder, pick, displayName, awardRarity, awardCount });
+              // Add or increment in userDoc
+              userDoc.cards = userDoc.cards || [];
+              const existing = userDoc.cards.find(x => String(x.name) === displayName && String(x.rarity || '').toUpperCase() === awardRarity);
+              if (existing) {
+                existing.count = (existing.count || 0) + awardCount;
+                existing.timestamps = existing.timestamps || [];
+                existing.timestamps.push(new Date());
+              } else {
+                userDoc.cards.push({
+                  name: displayName,
+                  rarity: awardRarity,
+                  count: awardCount,
+                  sourceFile: storedPath,
+                  timestamps: [new Date()]
+                });
+              }
+              userDoc.markModified('cards');
+              awardedCards.push({ name: displayName, rarity: awardRarity, count: awardCount, file: storedPath });
+              console.log('Awarded card', { userId, poolFolder, chosenRarityFolder, pick, displayName, awardRarity, awardCount });
             }
           }
 
@@ -485,31 +605,32 @@ console.log('Awarded card', { userId, poolFolder, pick, displayName, awardRarity
 
           await sessionDb.commitTransaction();
           sessionDb.endSession();
+
           // Announce level-up awards to the user and optionally in-channel
-try {
-  const awardLines = [];
+          try {
+            const awardLines = [];
 
-  if (totalEventPulls > 0) {
-    awardLines.push(`Event pulls awarded: **${totalEventPulls}**`);
-  }
+            if (totalEventPulls > 0) {
+              awardLines.push(`Event pulls awarded: **${totalEventPulls}**`);
+            }
 
-  if (awardedCards && awardedCards.length > 0) {
-    awardLines.push('Cards awarded:');
-    awardLines.push(...awardedCards.map(a => `• ${a.name} (${a.rarity}) x${a.count}`));
-  }
+            if (awardedCards && awardedCards.length > 0) {
+              awardLines.push('Cards awarded:');
+              awardLines.push(...awardedCards.map(a => `• **[${a.rarity}]** ${a.name} x${a.count}`));
+            }
 
-  if (awardLines.length > 0) {
-    const awardText = awardLines.join('\n');
+            if (awardLines.length > 0) {
+              const awardText = awardLines.join('\n');
 
-    // Ephemeral feedback to the user who confirmed the burn
-    try { await btn.followUp({ content: `Level-up awards:\n${awardText}`, ephemeral: true }); } catch (e) { /* ignore */ }
+              // Ephemeral feedback to the user who confirmed the burn
+              try { await btn.followUp({ content: `Level-up awards:\n${awardText}`, ephemeral: true }); } catch (e) { /* ignore */ }
 
-    // Optional: public announcement in the channel (uncomment if you want it visible)
-    try { await interaction.channel.send({ content: `<@${userId}> leveled up and received:\n${awardText}` }); } catch (e) { /* ignore */ }
-  }
-} catch (e) {
-  console.warn('Failed to send award announcement', e);
-}
+              // Optional: public announcement in the channel (uncomment if you want it visible)
+              try { await interaction.channel.send({ content: `<@${userId}> leveled up and received:\n${awardText}` }); } catch (e) { /* ignore */ }
+            }
+          } catch (e) {
+            console.warn('Failed to send award announcement', e);
+          }
 
           // Finalize UI
           sessions.delete(sent.id);
