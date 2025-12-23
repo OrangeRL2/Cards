@@ -1,14 +1,26 @@
 // commands/oshi.js
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
+const mongoose = require('mongoose');
 const OshiUser = require('../../models/Oshi');
 const OSHI_LIST = require('../../config/oshis');
+
+// Lightweight override model used by /change-img (if present).
+// Defining it here avoids requiring another file and is safe if the collection doesn't exist yet.
+const { Schema } = mongoose;
+const OshiImageOverrideSchema = new Schema({
+  userId: { type: String, required: true, unique: true },
+  rarity: { type: String, trim: true, required: true },
+  cardName: { type: String, trim: true, required: true },
+  updatedAt: { type: Date, default: () => new Date() }
+});
+const OshiImageOverride = mongoose.models.OshiImageOverride || mongoose.model('OshiImageOverride', OshiImageOverrideSchema);
 
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('oshi')
-    .setDescription('Show the oshi a user picked. If no user is provided, shows your oshi.')
-    .addUserOption(option =>
-      option
+    .setDescription('Show a user\'s oshi (or your own).')
+    .addUserOption(opt =>
+      opt
         .setName('user')
         .setDescription('The user whose oshi you want to see')
         .setRequired(false)
@@ -19,7 +31,7 @@ module.exports = {
       const targetUser = interaction.options.getUser('user') ?? interaction.user;
       const targetId = targetUser.id;
 
-      // Try to resolve a GuildMember to get displayName; fallback to tag if not available
+      // Resolve display name (prefer guild displayName)
       let displayName = targetUser.tag;
       if (interaction.guild) {
         try {
@@ -29,65 +41,62 @@ module.exports = {
           // ignore and keep fallback
         }
       } else {
-        // If no guild (DM), fall back to username/tag
         displayName = targetUser.username;
       }
 
+      // Load the user's oshi document
       const doc = await OshiUser.findOne({ userId: targetId }).lean().exec();
 
       if (!doc) {
         if (targetId === interaction.user.id) {
-          return await interaction.reply({
-            content: "You haven't picked an oshi yet. Use the command that triggers the oshi chooser.",
-            ephemeral: true,
-          });
+          return await interaction.reply({ content: "You haven't picked an oshi yet. Use the oshi chooser command first.", ephemeral: true });
         } else {
-          return await interaction.reply({
-            content: `${displayName} hasn't picked an oshi yet.`,
-            ephemeral: true,
-          });
+          return await interaction.reply({ content: `${displayName} hasn't picked an oshi yet.`, ephemeral: true });
         }
       }
 
       const oshiMeta = OSHI_LIST.find(o => o.id === doc.oshiId);
-      const oshiLabel = oshiMeta ? `${oshiMeta.label}` : doc.oshiId;
-      
-      // Get level and XP info
-      const level = doc.level || 1;
+      const oshiLabel = oshiMeta ? oshiMeta.label : doc.oshiId;
+
+      // Level / XP info
+      const level = doc.level || 0;
       const xp = doc.xp || 0;
-      const xpToNext = doc.xpToNext || 100; // Default if not set
-      
-      // Calculate XP progress percentage
+      const xpToNext = doc.xpToNext || 100;
       const progressPercent = Math.min(100, Math.max(0, (xp / xpToNext) * 100));
-      
-      // Create progress bar (10 segments)
       const progressBarSegments = 10;
       const filledSegments = Math.floor(progressPercent / (100 / progressBarSegments));
       const emptySegments = progressBarSegments - filledSegments;
       const progressBar = '█'.repeat(filledSegments) + '░'.repeat(emptySegments);
 
-      // Build the image URL
-      const baseName = typeof oshiLabel === 'string' ? oshiLabel.trim() : String(oshiLabel);
-      const cardName = `${baseName} 001`;
-      const rarity = 'OSR';
-      const encodedCardName = encodeURIComponent(cardName);
-      const imageUrl = `http://152.69.195.48/images/${rarity}/${encodedCardName}.png`;
+      // Prefer override from OshiImageOverride collection if present
+      const override = await OshiImageOverride.findOne({ userId: targetId }).lean().exec();
 
-      // Create embed
+      let imageUrl;
+      if (override && override.rarity && override.cardName) {
+        const encodedCardName = encodeURIComponent(String(override.cardName).trim());
+        const rarityPart = encodeURIComponent(String(override.rarity).trim());
+        imageUrl = `http://152.69.195.48/images/${rarityPart}/${encodedCardName}.png`;
+      } else {
+        const baseName = typeof oshiLabel === 'string' ? oshiLabel.trim() : String(oshiLabel);
+        const cardName = `${baseName} 001`;
+        const rarity = 'OSR';
+        const encodedCardName = encodeURIComponent(cardName);
+        imageUrl = `http://152.69.195.48/images/${rarity}/${encodedCardName}.png`;
+      }
+
       const embed = new EmbedBuilder()
         .setTitle(`${displayName}'s Oshi: ${oshiLabel}`)
-        .setColor(0xFF69B4) // Pink color for oshi theme
+        .setColor(0xFF69B4)
         .setThumbnail(targetUser.displayAvatarURL({ dynamic: true, size: 64 }))
         .setImage(imageUrl)
         .addFields(
-          { 
-            name: 'Level Progress', 
+          {
+            name: 'Level Progress',
             value: `**Level ${level}**\n${xp}/${xpToNext} XP\n\`${progressBar}\` ${progressPercent.toFixed(1)}%`,
-            inline: true 
+            inline: true
           }
         );
 
-      // Add chosen time if available
       if (doc.chosenAt) {
         embed.addFields({
           name: 'Chosen',
@@ -96,7 +105,6 @@ module.exports = {
         });
       }
 
-      // Add last leveled time if available
       if (doc.lastLeveledAt) {
         embed.addFields({
           name: 'Last Level Up',
@@ -105,10 +113,7 @@ module.exports = {
         });
       }
 
-      await interaction.reply({
-        embeds: [embed],
-        ephemeral: false,
-      });
+      await interaction.reply({ embeds: [embed], ephemeral: false });
     } catch (err) {
       console.error('[CMD] /oshi error', err);
       if (!interaction.replied && !interaction.deferred) {
@@ -117,5 +122,5 @@ module.exports = {
         await interaction.followUp({ content: 'An error occurred while fetching oshi info.', ephemeral: true });
       }
     }
-  },
+  }
 };

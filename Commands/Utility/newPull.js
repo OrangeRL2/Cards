@@ -218,7 +218,7 @@ module.exports = {
     // Draw the pack FIRST (before consuming pulls)
     let pack;
     try {
-      pack = await drawPack(discordUserId); // [{ rarity, file }, ...]
+      pack = await drawPack(discordUserId, null); // [{ rarity, file }, ...]
     } catch (err) {
       console.error('drawPack error:', err);
       const elapsed = Date.now() - gifShownAt;

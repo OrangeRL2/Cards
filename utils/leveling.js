@@ -2,21 +2,22 @@
 const BASE_XP = 100;
 
 const RARITY_XP = {
-  C: 1,
-  U: 3,
-  R: 6,
-  OC: 4,
-  S: 12,
-  RR: 40,
-  SR: 50,
-  OSR: 60,
-  SY: 70,
-  HR: 80,
-  BDAY: 80,
-  UR: 90,
-  OUR: 100,
-  SEC: 250,
-  UP: 1000,
+C: 1,
+U: 2,
+R: 3,
+S: 5,
+P: 5,
+OC: 7,
+SP: 10,
+RR: 10,
+SR: 15,
+OSR: 20,
+SY: 50,
+UR: 60,
+OUR: 100,
+HR: 150,
+BDAY: 150,
+SEC: 300,
 };
 
 function isValidRarity(rarity) {
@@ -32,8 +33,21 @@ function xpForCard(rarity, count = 1) {
   return Math.floor(per * Math.max(0, Number(count) || 0));
 }
 
+// XP required for the next single level given the current level.
+// Behavior:
+//  - start level is 0 (new users can be level 0)
+//  - level 0 => require BASE_XP (i.e., treat multiplier as 1)
+//  - level 1 => require BASE_XP * 1
+//  - level 2 => require BASE_XP * 2
+//  - etc.
 function xpToNextForLevel(level) {
-  return Math.floor(BASE_XP * Math.pow(1.1, Math.max(0, level - 1)));
+  // Normalize numeric level safely, allowing level 0
+  const raw = Number(level);
+  const lvl = Number.isFinite(raw) ? Math.max(0, Math.floor(raw)) : 0;
+
+  // Use level+1 so level 0 => BASE_XP*1, level 1 => BASE_XP*2, ...
+  return BASE_XP * (lvl + 1);
 }
+
 
 module.exports = { BASE_XP, RARITY_XP, isValidRarity, xpForCard, xpToNextForLevel };

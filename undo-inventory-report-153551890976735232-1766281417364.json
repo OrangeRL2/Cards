@@ -1,0 +1,1376 @@
+{
+  "totalLogs": 91,
+  "processed": [
+    {
+      "logId": "69312101f8d160be9a80b827",
+      "result": {
+        "ok": true,
+        "undone": true,
+        "removals": [
+          {
+            "name": "IRyS 502",
+            "rarity": "S",
+            "removeCount": 1,
+            "existingCount": 2
+          }
+        ]
+      }
+    },
+    {
+      "logId": "693122500a8b0034ae3428cc",
+      "result": {
+        "ok": true,
+        "undone": true,
+        "removals": [
+          {
+            "name": "Suisei 002",
+            "rarity": "UP",
+            "removeCount": 1,
+            "existingCount": 2766
+          }
+        ]
+      }
+    },
+    {
+      "logId": "693126c2e8861b9dd973aa1c",
+      "result": {
+        "ok": true,
+        "undone": true,
+        "removals": [
+          {
+            "name": "Suisei 002",
+            "rarity": "UP",
+            "removeCount": 2,
+            "existingCount": 2765
+          }
+        ]
+      }
+    },
+    {
+      "logId": "6931278887cf55d7e7d1a226",
+      "result": {
+        "ok": true,
+        "undone": true,
+        "removals": [
+          {
+            "name": "Suisei 002",
+            "rarity": "UP",
+            "removeCount": 1,
+            "existingCount": 2763
+          }
+        ]
+      }
+    },
+    {
+      "logId": "693127c587cf55d7e7d1a2c6",
+      "result": {
+        "ok": true,
+        "undone": true,
+        "removals": [
+          {
+            "name": "Calli, IRyS, Nerissa , Ollie, Nene 501",
+            "rarity": "UP",
+            "removeCount": 2,
+            "existingCount": 3
+          }
+        ]
+      }
+    },
+    {
+      "logId": "6931281887cf55d7e7d1a31b",
+      "result": {
+        "ok": true,
+        "undone": true,
+        "removals": [
+          {
+            "name": "Calli, IRyS, Nerissa , Ollie, Nene 501",
+            "rarity": "UP",
+            "removeCount": 1,
+            "existingCount": 1
+          }
+        ]
+      }
+    },
+    {
+      "logId": "6931286787cf55d7e7d1a3b8",
+      "result": {
+        "ok": true,
+        "undone": true,
+        "removals": [
+          {
+            "name": "Suisei 002",
+            "rarity": "UP",
+            "removeCount": 10,
+            "existingCount": 2762
+          }
+        ]
+      }
+    },
+    {
+      "logId": "6931287b87cf55d7e7d1a40d",
+      "result": {
+        "ok": true,
+        "undone": true,
+        "removals": [
+          {
+            "name": "Suisei 002",
+            "rarity": "UP",
+            "removeCount": 5,
+            "existingCount": 2752
+          }
+        ]
+      }
+    },
+    {
+      "logId": "6931289187cf55d7e7d1a463",
+      "result": {
+        "ok": true,
+        "undone": true,
+        "removals": [
+          {
+            "name": "Suisei 002",
+            "rarity": "UP",
+            "removeCount": 5,
+            "existingCount": 2747
+          }
+        ]
+      }
+    },
+    {
+      "logId": "693129302cf44cc873a59365",
+      "result": {
+        "ok": true,
+        "undone": true,
+        "removals": [
+          {
+            "name": "Suisei 002",
+            "rarity": "UP",
+            "removeCount": 1,
+            "existingCount": 2742
+          }
+        ]
+      }
+    },
+    {
+      "logId": "693129582cf44cc873a593bc",
+      "result": {
+        "ok": true,
+        "undone": true,
+        "removals": [
+          {
+            "name": "Suisei 002",
+            "rarity": "UP",
+            "removeCount": 15,
+            "existingCount": 2741
+          }
+        ]
+      }
+    },
+    {
+      "logId": "69312ae8abc688eed24050dc",
+      "result": {
+        "ok": true,
+        "undone": true,
+        "removals": [
+          {
+            "name": "Suisei 002",
+            "rarity": "UP",
+            "removeCount": 20,
+            "existingCount": 2726
+          }
+        ]
+      }
+    },
+    {
+      "logId": "69312b03abc688eed2405131",
+      "result": {
+        "ok": true,
+        "undone": true,
+        "removals": [
+          {
+            "name": "Suisei 002",
+            "rarity": "UP",
+            "removeCount": 1000,
+            "existingCount": 2706
+          }
+        ]
+      }
+    },
+    {
+      "logId": "69312b61abc688eed2405219",
+      "result": {
+        "ok": true,
+        "undone": true,
+        "removals": [
+          {
+            "name": "Suisei 002",
+            "rarity": "UP",
+            "removeCount": 2,
+            "existingCount": 1706
+          }
+        ]
+      }
+    },
+    {
+      "logId": "69312b7eabc688eed240526e",
+      "result": {
+        "ok": true,
+        "undone": true,
+        "removals": [
+          {
+            "name": "Suisei 002",
+            "rarity": "UP",
+            "removeCount": 1,
+            "existingCount": 1704
+          }
+        ]
+      }
+    },
+    {
+      "logId": "69312bb58441e065d99a47e8",
+      "result": {
+        "ok": true,
+        "undone": true,
+        "removals": [
+          {
+            "name": "Suisei 002",
+            "rarity": "UP",
+            "removeCount": 50,
+            "existingCount": 1703
+          }
+        ]
+      }
+    },
+    {
+      "logId": "69312bd58441e065d99a483d",
+      "result": {
+        "ok": true,
+        "undone": true,
+        "removals": [
+          {
+            "name": "Suisei 002",
+            "rarity": "UP",
+            "removeCount": 50,
+            "existingCount": 1653
+          }
+        ]
+      }
+    },
+    {
+      "logId": "69312bec8441e065d99a4893",
+      "result": {
+        "ok": true,
+        "undone": true,
+        "removals": [
+          {
+            "name": "Suisei 002",
+            "rarity": "UP",
+            "removeCount": 100,
+            "existingCount": 1603
+          }
+        ]
+      }
+    },
+    {
+      "logId": "69312c1a8441e065d99a4932",
+      "result": {
+        "ok": true,
+        "undone": true,
+        "removals": [
+          {
+            "name": "Suisei 002",
+            "rarity": "UP",
+            "removeCount": 1,
+            "existingCount": 1503
+          }
+        ]
+      }
+    },
+    {
+      "logId": "69312c5a8441e065d99a4988",
+      "result": {
+        "ok": true,
+        "undone": true,
+        "removals": [
+          {
+            "name": "Suisei 002",
+            "rarity": "UP",
+            "removeCount": 500,
+            "existingCount": 1502
+          }
+        ]
+      }
+    },
+    {
+      "logId": "69312c788441e065d99a49df",
+      "result": {
+        "ok": true,
+        "undone": true,
+        "removals": [
+          {
+            "name": "Suisei 002",
+            "rarity": "UP",
+            "removeCount": 1000,
+            "existingCount": 1002
+          }
+        ]
+      }
+    },
+    {
+      "logId": "69312d0a8441e065d99a4a3b",
+      "result": {
+        "ok": true,
+        "undone": true,
+        "removals": [
+          {
+            "name": "Reine 501",
+            "rarity": "UP",
+            "removeCount": 100000,
+            "existingCount": 100129
+          }
+        ]
+      }
+    },
+    {
+      "logId": "69312edb51cea41ccebcad1b",
+      "result": {
+        "ok": true,
+        "undone": true,
+        "removals": [
+          {
+            "name": "Polka 002",
+            "rarity": "C",
+            "removeCount": 10,
+            "existingCount": 4440609
+          }
+        ]
+      }
+    },
+    {
+      "logId": "69312f7451cea41ccebcadc0",
+      "result": {
+        "ok": true,
+        "undone": true,
+        "removals": [
+          {
+            "name": "Reine 501",
+            "rarity": "UP",
+            "removeCount": 10,
+            "existingCount": 129
+          }
+        ]
+      }
+    },
+    {
+      "logId": "6931442f3400e1b50d7298b7",
+      "result": {
+        "ok": true,
+        "undone": true,
+        "removals": [
+          {
+            "name": "Reine 501",
+            "rarity": "UP",
+            "removeCount": 1,
+            "existingCount": 119
+          }
+        ]
+      }
+    },
+    {
+      "logId": "69328ded5ecf4e8c82747c5c",
+      "result": {
+        "ok": true,
+        "undone": true,
+        "removals": [
+          {
+            "name": "Reine 501",
+            "rarity": "UP",
+            "removeCount": 1,
+            "existingCount": 118
+          }
+        ]
+      }
+    },
+    {
+      "logId": "69328e6b4043231c287ba2d7",
+      "result": {
+        "ok": true,
+        "undone": true,
+        "removals": [
+          {
+            "name": "Reine 501",
+            "rarity": "UP",
+            "removeCount": 2,
+            "existingCount": 117
+          }
+        ]
+      }
+    },
+    {
+      "logId": "69328fc424646f60762cd8b7",
+      "result": {
+        "ok": true,
+        "undone": true,
+        "removals": [
+          {
+            "name": "Reine 501",
+            "rarity": "UP",
+            "removeCount": 5,
+            "existingCount": 115
+          }
+        ]
+      }
+    },
+    {
+      "logId": "69328fd824646f60762cd93c",
+      "result": {
+        "ok": true,
+        "undone": true,
+        "removals": [
+          {
+            "name": "Reine 501",
+            "rarity": "UP",
+            "removeCount": 2,
+            "existingCount": 110
+          }
+        ]
+      }
+    },
+    {
+      "logId": "69329111b622ef1ef5780d8d",
+      "result": {
+        "ok": true,
+        "undone": true,
+        "removals": [
+          {
+            "name": "Reine 501",
+            "rarity": "UP",
+            "removeCount": 10,
+            "existingCount": 108
+          }
+        ]
+      }
+    },
+    {
+      "logId": "693292bf7df24717dcbd1570",
+      "result": {
+        "ok": true,
+        "undone": true,
+        "removals": [
+          {
+            "name": "Suisei 002",
+            "rarity": "UP",
+            "removeCount": 1,
+            "existingCount": 2
+          }
+        ]
+      }
+    },
+    {
+      "logId": "693294c998d1d57f7459d67e",
+      "result": {
+        "ok": true,
+        "undone": true,
+        "removals": [
+          {
+            "name": "Reine 501",
+            "rarity": "UP",
+            "removeCount": 2,
+            "existingCount": 98
+          }
+        ]
+      }
+    },
+    {
+      "logId": "693294fb30ab75b915f9639e",
+      "result": {
+        "ok": true,
+        "undone": true,
+        "removals": [
+          {
+            "name": "Reine 501",
+            "rarity": "UP",
+            "removeCount": 5,
+            "existingCount": 96
+          }
+        ]
+      }
+    },
+    {
+      "logId": "6932959547acfd929b2b15d7",
+      "result": {
+        "ok": true,
+        "undone": true,
+        "removals": [
+          {
+            "name": "Reine 501",
+            "rarity": "UP",
+            "removeCount": 10,
+            "existingCount": 91
+          }
+        ]
+      }
+    },
+    {
+      "logId": "6932961ab087f3a587e4bdb2",
+      "result": {
+        "ok": true,
+        "undone": true,
+        "removals": [
+          {
+            "name": "Reine 501",
+            "rarity": "UP",
+            "removeCount": 20,
+            "existingCount": 81
+          }
+        ]
+      }
+    },
+    {
+      "logId": "6933d554b6eb2de805437e50",
+      "result": {
+        "ok": true,
+        "undone": true,
+        "removals": [
+          {
+            "name": "Reine 501",
+            "rarity": "UP",
+            "removeCount": 1,
+            "existingCount": 61
+          },
+          {
+            "name": "Cecilia 001",
+            "rarity": "R",
+            "removeCount": 1,
+            "existingCount": 22
+          }
+        ]
+      }
+    },
+    {
+      "logId": "6933d68eb6eb2de80543811c",
+      "result": {
+        "ok": true,
+        "undone": true,
+        "removals": [
+          {
+            "name": "Reine 501",
+            "rarity": "UP",
+            "removeCount": 10,
+            "existingCount": 60
+          }
+        ]
+      }
+    },
+    {
+      "logId": "6933d6b1b6eb2de8054381b3",
+      "result": {
+        "ok": true,
+        "undone": true,
+        "removals": [
+          {
+            "name": "Reine 501",
+            "rarity": "UP",
+            "removeCount": 50,
+            "existingCount": 50
+          }
+        ]
+      }
+    },
+    {
+      "logId": "6933ec6c71cc5575d5abde3a",
+      "result": {
+        "ok": true,
+        "undone": true,
+        "removals": [
+          {
+            "name": "Polka 002",
+            "rarity": "C",
+            "removeCount": 10,
+            "existingCount": 4440599
+          }
+        ]
+      }
+    },
+    {
+      "logId": "6933ed5439df988cc6e40d5c",
+      "result": {
+        "ok": true,
+        "undone": true,
+        "removals": [
+          {
+            "name": "Polka 002",
+            "rarity": "C",
+            "removeCount": 110,
+            "existingCount": 4440589
+          }
+        ]
+      }
+    },
+    {
+      "logId": "6933ee99e3439b6b3951879e",
+      "result": {
+        "ok": true,
+        "undone": true,
+        "removals": [
+          {
+            "name": "Polka 002",
+            "rarity": "C",
+            "removeCount": 100,
+            "existingCount": 4440479
+          }
+        ]
+      }
+    },
+    {
+      "logId": "6933eeade3439b6b3951888b",
+      "result": {
+        "ok": true,
+        "undone": true,
+        "removals": [
+          {
+            "name": "Polka 002",
+            "rarity": "C",
+            "removeCount": 200,
+            "existingCount": 4440379
+          }
+        ]
+      }
+    },
+    {
+      "logId": "6933eec2e3439b6b39518978",
+      "result": {
+        "ok": true,
+        "undone": true,
+        "removals": [
+          {
+            "name": "Polka 002",
+            "rarity": "C",
+            "removeCount": 300,
+            "existingCount": 4440179
+          }
+        ]
+      }
+    },
+    {
+      "logId": "6937afbe8b1fa68792a37818",
+      "result": {
+        "ok": true,
+        "undone": true,
+        "removals": [
+          {
+            "name": "Polka 002",
+            "rarity": "C",
+            "removeCount": 100,
+            "existingCount": 4439879
+          }
+        ]
+      }
+    },
+    {
+      "logId": "6937b024658eb5a9c748eafd",
+      "result": {
+        "ok": true,
+        "undone": true,
+        "removals": [
+          {
+            "name": "Polka 002",
+            "rarity": "C",
+            "removeCount": 100,
+            "existingCount": 4439779
+          }
+        ]
+      }
+    },
+    {
+      "logId": "6937b0eec5d2ad23cfcdee3b",
+      "result": {
+        "ok": true,
+        "undone": true,
+        "removals": [
+          {
+            "name": "Polka 002",
+            "rarity": "C",
+            "removeCount": 10,
+            "existingCount": 4439679
+          }
+        ]
+      }
+    },
+    {
+      "logId": "6937b19fa555cd2eaf9c2f6a",
+      "result": {
+        "ok": true,
+        "undone": true,
+        "removals": [
+          {
+            "name": "Polka 002",
+            "rarity": "C",
+            "removeCount": 11,
+            "existingCount": 4439669
+          }
+        ]
+      }
+    },
+    {
+      "logId": "6937b2b8be38c044c5f6ec34",
+      "result": {
+        "ok": true,
+        "undone": true,
+        "removals": [
+          {
+            "name": "Polka 002",
+            "rarity": "C",
+            "removeCount": 12,
+            "existingCount": 4439658
+          }
+        ]
+      }
+    },
+    {
+      "logId": "6937b334be38c044c5f6eef9",
+      "result": {
+        "ok": true,
+        "undone": true,
+        "removals": [
+          {
+            "name": "Polka 002",
+            "rarity": "C",
+            "removeCount": 10,
+            "existingCount": 4439646
+          }
+        ]
+      }
+    },
+    {
+      "logId": "6937b3c447a492db703bc755",
+      "result": {
+        "ok": true,
+        "undone": true,
+        "removals": [
+          {
+            "name": "Polka 002",
+            "rarity": "C",
+            "removeCount": 12,
+            "existingCount": 4439636
+          }
+        ]
+      }
+    },
+    {
+      "logId": "6937b3ff47a492db703bcb85",
+      "result": {
+        "ok": true,
+        "undone": true,
+        "removals": [
+          {
+            "name": "Polka 002",
+            "rarity": "C",
+            "removeCount": 11,
+            "existingCount": 4439624
+          }
+        ]
+      }
+    },
+    {
+      "logId": "6937b649eb21efbad55d6064",
+      "result": {
+        "ok": true,
+        "undone": true,
+        "removals": [
+          {
+            "name": "Polka 002",
+            "rarity": "C",
+            "removeCount": 13,
+            "existingCount": 4439613
+          }
+        ]
+      }
+    },
+    {
+      "logId": "6937b71b3d289a645132b1fe",
+      "result": {
+        "ok": true,
+        "undone": true,
+        "removals": [
+          {
+            "name": "Polka 002",
+            "rarity": "C",
+            "removeCount": 14,
+            "existingCount": 4439600
+          }
+        ]
+      }
+    },
+    {
+      "logId": "6937b7c6dd477a7f9a86adf2",
+      "result": {
+        "ok": true,
+        "undone": true,
+        "removals": [
+          {
+            "name": "Polka 002",
+            "rarity": "C",
+            "removeCount": 10,
+            "existingCount": 4439586
+          }
+        ]
+      }
+    },
+    {
+      "logId": "6937b8631b5a6fced3862a1c",
+      "result": {
+        "ok": true,
+        "undone": true,
+        "removals": [
+          {
+            "name": "Polka 002",
+            "rarity": "C",
+            "removeCount": 11,
+            "existingCount": 4439576
+          }
+        ]
+      }
+    },
+    {
+      "logId": "6937ba1f709611a5ac74583d",
+      "result": {
+        "ok": true,
+        "undone": true,
+        "removals": [
+          {
+            "name": "Polka 002",
+            "rarity": "C",
+            "removeCount": 12,
+            "existingCount": 4439565
+          }
+        ]
+      }
+    },
+    {
+      "logId": "6937ba57709611a5ac7459ab",
+      "result": {
+        "ok": true,
+        "undone": true,
+        "removals": [
+          {
+            "name": "Polka 002",
+            "rarity": "C",
+            "removeCount": 13,
+            "existingCount": 4439553
+          }
+        ]
+      }
+    },
+    {
+      "logId": "6937bae2736bd6e3f0b20f42",
+      "result": {
+        "ok": true,
+        "undone": true,
+        "removals": [
+          {
+            "name": "Polka 002",
+            "rarity": "C",
+            "removeCount": 15,
+            "existingCount": 4439540
+          }
+        ]
+      }
+    },
+    {
+      "logId": "6937bb2cda5ad9355f356b0a",
+      "result": {
+        "ok": true,
+        "undone": true,
+        "removals": [
+          {
+            "name": "Polka 002",
+            "rarity": "C",
+            "removeCount": 10,
+            "existingCount": 4439525
+          }
+        ]
+      }
+    },
+    {
+      "logId": "6937bc85b5a88f47ca75d235",
+      "result": {
+        "ok": true,
+        "undone": true,
+        "removals": [
+          {
+            "name": "Polka 002",
+            "rarity": "C",
+            "removeCount": 11,
+            "existingCount": 4439515
+          }
+        ]
+      }
+    },
+    {
+      "logId": "6937bd5a31ea0fc9be87051f",
+      "result": {
+        "ok": true,
+        "undone": true,
+        "removals": [
+          {
+            "name": "Polka 002",
+            "rarity": "C",
+            "removeCount": 10,
+            "existingCount": 4439504
+          }
+        ]
+      }
+    },
+    {
+      "logId": "6937bda2e24fef3172889e06",
+      "result": {
+        "ok": true,
+        "undone": true,
+        "removals": [
+          {
+            "name": "Polka 002",
+            "rarity": "C",
+            "removeCount": 11,
+            "existingCount": 4439494
+          }
+        ]
+      }
+    },
+    {
+      "logId": "6937bdf93a14f782ec8567d0",
+      "result": {
+        "ok": true,
+        "undone": true,
+        "removals": [
+          {
+            "name": "Polka 002",
+            "rarity": "C",
+            "removeCount": 12,
+            "existingCount": 4439483
+          }
+        ]
+      }
+    },
+    {
+      "logId": "6937c3bb634acd0d863e8ee9",
+      "result": {
+        "ok": true,
+        "undone": true,
+        "removals": [
+          {
+            "name": "Polka 002",
+            "rarity": "C",
+            "removeCount": 14,
+            "existingCount": 4439471
+          }
+        ]
+      }
+    },
+    {
+      "logId": "6937c64b1c9340b58dedf871",
+      "result": {
+        "ok": true,
+        "undone": true,
+        "removals": [
+          {
+            "name": "Polka 002",
+            "rarity": "C",
+            "removeCount": 14,
+            "existingCount": 4439457
+          }
+        ]
+      }
+    },
+    {
+      "logId": "6937c6bf02669a7295d724c3",
+      "result": {
+        "ok": true,
+        "undone": true,
+        "removals": [
+          {
+            "name": "Polka 002",
+            "rarity": "C",
+            "removeCount": 16,
+            "existingCount": 4439443
+          }
+        ]
+      }
+    },
+    {
+      "logId": "6937c70423b80bd1c1eb6434",
+      "result": {
+        "ok": true,
+        "undone": true,
+        "removals": [
+          {
+            "name": "Polka 002",
+            "rarity": "C",
+            "removeCount": 11,
+            "existingCount": 4439427
+          }
+        ]
+      }
+    },
+    {
+      "logId": "6937c72b23b80bd1c1eb670c",
+      "result": {
+        "ok": true,
+        "undone": true,
+        "removals": [
+          {
+            "name": "Polka 002",
+            "rarity": "C",
+            "removeCount": 10,
+            "existingCount": 4439416
+          }
+        ]
+      }
+    },
+    {
+      "logId": "6938eeca8830d14b1314e0bb",
+      "result": {
+        "ok": true,
+        "undone": true,
+        "removals": [
+          {
+            "name": "Polka 002",
+            "rarity": "C",
+            "removeCount": 11,
+            "existingCount": 4439406
+          }
+        ]
+      }
+    },
+    {
+      "logId": "6938eee78830d14b1314e7fb",
+      "result": {
+        "ok": true,
+        "undone": true,
+        "removals": [
+          {
+            "name": "Polka 002",
+            "rarity": "C",
+            "removeCount": 12,
+            "existingCount": 4439395
+          }
+        ]
+      }
+    },
+    {
+      "logId": "693904cd3048dbfbf4ab31cc",
+      "result": {
+        "ok": true,
+        "undone": true,
+        "removals": [
+          {
+            "name": "Polka 002",
+            "rarity": "C",
+            "removeCount": 100,
+            "existingCount": 4439383
+          }
+        ]
+      }
+    },
+    {
+      "logId": "6939050af067581b8eadfe57",
+      "result": {
+        "ok": true,
+        "undone": true,
+        "removals": [
+          {
+            "name": "Polka 002",
+            "rarity": "C",
+            "removeCount": 10,
+            "existingCount": 4439283
+          }
+        ]
+      }
+    },
+    {
+      "logId": "6939059a04a7954dc5aed6db",
+      "result": {
+        "ok": true,
+        "undone": true,
+        "removals": [
+          {
+            "name": "Polka 002",
+            "rarity": "C",
+            "removeCount": 100,
+            "existingCount": 4439273
+          }
+        ]
+      }
+    },
+    {
+      "logId": "693905b904a7954dc5aed8b6",
+      "result": {
+        "ok": true,
+        "undone": true,
+        "removals": [
+          {
+            "name": "Polka 002",
+            "rarity": "C",
+            "removeCount": 100,
+            "existingCount": 4439173
+          }
+        ]
+      }
+    },
+    {
+      "logId": "69390604adc68e884aea02dd",
+      "result": {
+        "ok": true,
+        "undone": true,
+        "removals": [
+          {
+            "name": "Polka 002",
+            "rarity": "C",
+            "removeCount": 100,
+            "existingCount": 4439073
+          }
+        ]
+      }
+    },
+    {
+      "logId": "693906797062dcc31a4ed293",
+      "result": {
+        "ok": true,
+        "undone": true,
+        "removals": [
+          {
+            "name": "Polka 002",
+            "rarity": "C",
+            "removeCount": 100,
+            "existingCount": 4438973
+          }
+        ]
+      }
+    },
+    {
+      "logId": "693906917062dcc31a4ed46f",
+      "result": {
+        "ok": true,
+        "undone": true,
+        "removals": [
+          {
+            "name": "Polka 002",
+            "rarity": "C",
+            "removeCount": 200,
+            "existingCount": 4438873
+          }
+        ]
+      }
+    },
+    {
+      "logId": "693908bc674f7aed5125ec6c",
+      "result": {
+        "ok": true,
+        "undone": true,
+        "removals": [
+          {
+            "name": "Polka 002",
+            "rarity": "C",
+            "removeCount": 100,
+            "existingCount": 4438673
+          }
+        ]
+      }
+    },
+    {
+      "logId": "69390943674f7aed5125f019",
+      "result": {
+        "ok": true,
+        "undone": true,
+        "removals": [
+          {
+            "name": "Polka 002",
+            "rarity": "C",
+            "removeCount": 100,
+            "existingCount": 4438573
+          }
+        ]
+      }
+    },
+    {
+      "logId": "693909baa6b892aac59add0e",
+      "result": {
+        "ok": true,
+        "undone": true,
+        "removals": [
+          {
+            "name": "Polka 002",
+            "rarity": "C",
+            "removeCount": 100,
+            "existingCount": 4438473
+          }
+        ]
+      }
+    },
+    {
+      "logId": "69397cef28803363fc4ed108",
+      "result": {
+        "ok": true,
+        "undone": true,
+        "removals": [
+          {
+            "name": "Polka 002",
+            "rarity": "C",
+            "removeCount": 5000,
+            "existingCount": 4438373
+          }
+        ]
+      }
+    },
+    {
+      "logId": "69397fd828803363fc4ef3db",
+      "result": {
+        "ok": true,
+        "undone": true,
+        "removals": [
+          {
+            "name": "Polka 002",
+            "rarity": "C",
+            "removeCount": 666666,
+            "existingCount": 4433373
+          }
+        ]
+      }
+    },
+    {
+      "logId": "6939807093115c9b9542ede1",
+      "result": {
+        "ok": true,
+        "undone": true,
+        "removals": [
+          {
+            "name": "Polka 002",
+            "rarity": "C",
+            "removeCount": 66666,
+            "existingCount": 3766707
+          }
+        ]
+      }
+    },
+    {
+      "logId": "6939808a93115c9b9542f00b",
+      "result": {
+        "ok": true,
+        "undone": true,
+        "removals": [
+          {
+            "name": "Polka 002",
+            "rarity": "C",
+            "removeCount": 66666,
+            "existingCount": 3700041
+          }
+        ]
+      }
+    },
+    {
+      "logId": "693980a293115c9b9542f23d",
+      "result": {
+        "ok": true,
+        "undone": true,
+        "removals": [
+          {
+            "name": "Polka 002",
+            "rarity": "C",
+            "removeCount": 99999,
+            "existingCount": 3633375
+          }
+        ]
+      }
+    },
+    {
+      "logId": "693980b793115c9b9542f47f",
+      "result": {
+        "ok": true,
+        "undone": true,
+        "removals": [
+          {
+            "name": "Polka 002",
+            "rarity": "C",
+            "removeCount": 666666,
+            "existingCount": 3533376
+          }
+        ]
+      }
+    },
+    {
+      "logId": "6939813193115c9b9542f812",
+      "result": {
+        "ok": true,
+        "undone": true,
+        "removals": [
+          {
+            "name": "Polka 002",
+            "rarity": "C",
+            "removeCount": 666666,
+            "existingCount": 2866710
+          }
+        ]
+      }
+    },
+    {
+      "logId": "693982bbcfd28ea07cdac47f",
+      "result": {
+        "ok": true,
+        "undone": true,
+        "removals": [
+          {
+            "name": "Polka 002",
+            "rarity": "C",
+            "removeCount": 550000,
+            "existingCount": 2200044
+          }
+        ]
+      }
+    },
+    {
+      "logId": "693983f2bead2c8dd39113e2",
+      "result": {
+        "ok": true,
+        "undone": true,
+        "removals": [
+          {
+            "name": "Polka 002",
+            "rarity": "C",
+            "removeCount": 550000,
+            "existingCount": 1650044
+          }
+        ]
+      }
+    },
+    {
+      "logId": "69398467702e145fe14c4e5e",
+      "result": {
+        "ok": true,
+        "undone": true,
+        "removals": [
+          {
+            "name": "Polka 002",
+            "rarity": "C",
+            "removeCount": 550000,
+            "existingCount": 1100044
+          }
+        ]
+      }
+    },
+    {
+      "logId": "6939886dd93e58cf4f13a7ce",
+      "result": {
+        "ok": true,
+        "undone": true,
+        "removals": [
+          {
+            "name": "Polka 002",
+            "rarity": "C",
+            "removeCount": 550000,
+            "existingCount": 550044
+          }
+        ]
+      }
+    }
+  ]
+}

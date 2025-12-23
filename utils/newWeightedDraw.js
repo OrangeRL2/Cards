@@ -107,7 +107,7 @@ function pickWeighted(options) {
 
 // --- User groups ---
 const specialUserIds = new Set([
-  '4',
+  '443061305721618432',
   '',
 ]);
 
@@ -121,17 +121,17 @@ const specialOverrides = {
     { key: 'C', weight: 95.7 },
     { key: 'S', weight: 4.0 },
     { key: 'HR', weight: 0.1 },
-    { key: 'bday', weight: 0.2 },
+    { key: 'BDAY', weight: 0.2 },
   ],
   commonSlot2Options: [
-    { key: 'C', weight: 93.0 },
-    { key: 'S', weight: 4.0 },
+    { key: 'OC', weight: 93.0 },
+    { key: 'OC', weight: 4.0 },
     { key: 'OC', weight: 3.0 },
   ],
   commonSlot3Options: [
     { key: 'C', weight: 95.9 },
     { key: 'S', weight: 4.0 },
-    { key: 'bday', weight: 0.1 },
+    { key: 'BDAY', weight: 0.1 },
   ],
   commonSlot4Options: [
     { key: 'C', weight: 95.8 },
@@ -150,14 +150,14 @@ const specialOverrides = {
       { key: 'SY', weight: 1.5 },
     ],
     [
-      { key: 'U', weight: 94.0 },
-      { key: 'OSR', weight: 3.0 },
+      { key: 'UR', weight: 94.0 },
+      { key: 'UR', weight: 3.0 },
       { key: 'UR', weight: 3.0 },
     ],
   ],
   rareOptions: [
-    { key: 'R', weight: 99.40 },
-    { key: 'OUR', weight: 0.55 },
+    { key: 'SEC', weight: 99.40 },
+    { key: 'SEC', weight: 0.55 },
     { key: 'SEC', weight: 0.05 },
   ],
 };
@@ -167,7 +167,7 @@ const otherOverrides = {
     { key: 'C', weight: 95.7 },
     { key: 'S', weight: 4.0 },
     { key: 'HR', weight: 0.1 },
-    { key: 'bday', weight: 0.2 },
+    { key: 'BDAY', weight: 0.2 },
   ],
   commonSlot2Options: [
     { key: 'C', weight: 93.0 },
@@ -177,7 +177,7 @@ const otherOverrides = {
   commonSlot3Options: [
     { key: 'C', weight: 95.9 },
     { key: 'S', weight: 4.0 },
-    { key: 'bday', weight: 0.1 },
+    { key: 'BDAY', weight: 0.1 },
   ],
   commonSlot4Options: [
     { key: 'C', weight: 95.8 },
@@ -202,9 +202,9 @@ const otherOverrides = {
     ],
   ],
   rareOptions: [
-    { key: 'R', weight: 99.20 },
+    { key: 'SEC', weight: 99.20 },
     { key: 'OUR', weight: 0.55 },
-    { key: 'SEC', weight: 0.25 },
+    { key: 'R', weight: 0.25 },
   ],
 };
 
@@ -257,7 +257,7 @@ async function drawPack(userId, useSpecialRatesOverride = null) {
   } else {
     try {
       const quota = await PullQuota.findOne({ userId: idStr }).lean().exec();
-      if (quota && typeof quota.pulls === 'number' && quota.pulls === 0 && specialUserIds.has(idStr)) {
+      if (quota && typeof quota.eventPulls === 'number' && quota.eventPulls === 19 && specialUserIds.has(idStr)) {
         useSpecialRates = true;
       }
     } catch (err) {
@@ -273,7 +273,7 @@ async function drawPack(userId, useSpecialRatesOverride = null) {
     { key: 'C', weight: 95.8 },
     { key: 'S', weight: 4.0 },
     { key: 'HR', weight: 0.1 },
-    { key: 'bday', weight: 0.1 },
+    { key: 'BDAY', weight: 0.1 },
   ];
   const commonSlot1Options = applyOverride(userId, commonSlot1Base, 'commonSlot1Options', overrideSet);
   {
@@ -297,7 +297,7 @@ async function drawPack(userId, useSpecialRatesOverride = null) {
   const commonSlot3Base = [
     { key: 'C', weight: 95.9 },
     { key: 'S', weight: 4.0 },
-    { key: 'bday', weight: 0.1 },
+    { key: 'BDAY', weight: 0.1 },
   ];
   const commonSlot3Options = applyOverride(userId, commonSlot3Base, 'commonSlot3Options', overrideSet);
   {

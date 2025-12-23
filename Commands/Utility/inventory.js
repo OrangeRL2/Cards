@@ -1,3 +1,4 @@
+//Commands/Utility/inventory.js
 const {
   SlashCommandBuilder,
   EmbedBuilder,
@@ -29,23 +30,24 @@ module.exports = {
       opt.setName('rarity')
         .setDescription('Filter by rarity')
         .addChoices(
+          { name: 'XMAS', value: 'XMAS' },
           { name: 'C', value: 'C' },
-          { name: 'OC', value: 'OC' },
           { name: 'U', value: 'U' },
           { name: 'R', value: 'R' },
           { name: 'S', value: 'S' },
+          { name: 'RR', value: 'RR' },
+          { name: 'OC', value: 'OC' },
+          { name: 'SR', value: 'SR' },
+          { name: 'OSR', value: 'OSR' },
           { name: 'P', value: 'P' },
           { name: 'SP', value: 'SP' },
           { name: 'UP', value: 'UP' },
-          { name: 'RR', value: 'RR' },
-          { name: 'SR', value: 'SR' },
-          { name: 'OSR', value: 'OSR' },
           { name: 'SY', value: 'SY' },
           { name: 'UR', value: 'UR' },
           { name: 'OUR', value: 'OUR' },
-          { name: 'SEC', value: 'SEC' },
           { name: 'HR', value: 'HR' },
-          { name: 'bday', value: 'bday'},
+          { name: 'BDAY', value: 'BDAY'},
+          { name: 'SEC', value: 'SEC' },
         ),
     )
     .addStringOption(opt =>
@@ -61,6 +63,10 @@ module.exports = {
           { name: 'Oldest first', value: 'oldest' },
           { name: 'Amount (count)', value: 'amount' },
         ),
+    )
+    .addBooleanOption(opt =>
+      opt.setName('multi')
+    .setDescription('Show only cards you have 2 or more of')
     ),
   requireOshi: true,
 
@@ -82,6 +88,7 @@ module.exports = {
     const filterR = interaction.options.getString('rarity');
     const filterQ = interaction.options.getString('search')?.toLowerCase();
     const sortBy = interaction.options.getString('sort') || 'rarity';
+    const multiFilter = interaction.options.getBoolean('multi') || false;
 
     const userDoc = await User.findOne({ id: targetUser.id });
     if (!userDoc || !userDoc.cards || (userDoc.cards instanceof Map ? userDoc.cards.size === 0 : Object.keys(userDoc.cards || {}).length === 0)) {
@@ -153,12 +160,17 @@ module.exports = {
     // Apply filters
     let entries = allEntries.filter(c =>
       (!filterR || c.rarity === filterR) &&
-      (!filterQ || c.name.toLowerCase().includes(filterQ))
+      (!filterQ || c.name.toLowerCase().includes(filterQ)) &&
+      (!multiFilter || c.count >= 2)  // Multi filter: only show if count >= 2
     );
 
     if (!entries.length) {
-      return interaction.editReply({ content: 'No cards match filters.', ephemeral: ephemeralReply });
-    }
+  const filterMessage = multiFilter ? 
+    'No cards match filters (or no cards with 2 or more copies).' : 
+    'No cards match filters.';
+  return interaction.editReply({ content: filterMessage, ephemeral: ephemeralReply });
+}
+
 
     // Totals
     const totalCards = allEntries.reduce((sum, e) => sum + (Number(e.count) || 0), 0);
@@ -189,25 +201,27 @@ module.exports = {
         return a.name.localeCompare(b.name);
       });
     } else {
-      const order = {
-  C: 1,
-  U: 2,
-  R: 3,
-  OC: 4,
+const order = {
+  XMAS: 1,
+  C: 2,
+  U: 3,
+  R: 4,
   S: 5,
-  P: 6,
-  SP: 7,
-  RR: 8,
-  SR: 9,
-  OSR: 10,
-  SY: 11,
-  HR: 12,
-  bday: 13,
+  RR: 6,
+  OC: 7,
+  SR: 8,
+  OSR: 9,
+  P: 10,
+  SP: 11,
+  UP: 12,
+  SY: 13,
   UR: 14,
   OUR: 15,
-  SEC: 16,
-  UP: 17
+  HR: 16,
+  BDAY: 17,
+  SEC: 18
 };
+
       entries.sort((a, b) => {
         const d = (order[b.rarity] || 999) - (order[a.rarity] || 999);
         if (d !== 0) return d;
@@ -237,7 +251,7 @@ module.exports = {
     // Build embeds and components (prebuilt)
     const listEmbeds = pages.map((chunk, i) =>
       new EmbedBuilder()
-        .setTitle(`${targetUser.username}'s Inventory`)
+        .setTitle(`${targetUser.username}'s Inventory${multiFilter ? ' (Multiples Only)' : ''}`)
         .setDescription(
           chunk
             .map(c => {
@@ -249,16 +263,16 @@ module.exports = {
             .join('\n')
         )
         .setColor(Colors.Blue)
-        .setFooter({ text: `Page ${i + 1}/${totalPages} • Cards: ${filteredCards}` })
+        .setFooter({ text: `Page ${i + 1}/${totalPages} • Cards: ${filteredCards}${multiFilter ? ' (2+ copies)' : ''}` })
     );
 
-    const listRows = pages.map((_, i) => {
-      const prev = new ButtonBuilder().setCustomId(cid(`list_prev_${i}`)).setLabel('◀ Prev').setStyle(ButtonStyle.Primary).setDisabled(i === 0);
-      const view = new ButtonBuilder().setCustomId(cid(`list_view_${i}`)).setLabel('🃏 Image').setStyle(ButtonStyle.Success);
-      const next = new ButtonBuilder().setCustomId(cid(`list_next_${i}`)).setLabel('Next ▶').setStyle(ButtonStyle.Primary).setDisabled(i === totalPages - 1);
-      const skip = new ButtonBuilder().setCustomId(cid(`skip_${i}`)).setLabel('📖 Jump').setStyle(ButtonStyle.Secondary);
-      return new ActionRowBuilder().addComponents(prev, view, next, skip);
-    });
+const listRows = pages.map((_, i) => {
+  const prev = new ButtonBuilder().setCustomId(cid(`list_prev_${i}`)).setLabel('◀ Prev').setStyle(ButtonStyle.Primary).setDisabled(false);
+  const view = new ButtonBuilder().setCustomId(cid(`list_view_${i}`)).setLabel('🃏 Image').setStyle(ButtonStyle.Success);
+  const next = new ButtonBuilder().setCustomId(cid(`list_next_${i}`)).setLabel('Next ▶').setStyle(ButtonStyle.Primary).setDisabled(false);
+  const skip = new ButtonBuilder().setCustomId(cid(`skip_${i}`)).setLabel('📖 Jump').setStyle(ButtonStyle.Secondary);
+  return new ActionRowBuilder().addComponents(prev, view, next, skip);
+});
 
     const imageEmbeds = imageResults.map(({ c, url }, i) =>
     new EmbedBuilder()
@@ -273,13 +287,12 @@ module.exports = {
         .setFooter({ text: `Card ${i + 1} of ${imageResults.length}` })
     );
 
-    const imageRows = imageResults.map((_, i) => {
-      const prev = new ButtonBuilder().setCustomId(cid(`img_prev_${i}`)).setLabel('◀ Prev').setStyle(ButtonStyle.Primary).setDisabled(i === 0);
-      const back = new ButtonBuilder().setCustomId(cid(`img_back_${i}`)).setLabel('⤵️ Back').setStyle(ButtonStyle.Secondary);
-      const next = new ButtonBuilder().setCustomId(cid(`img_next_${i}`)).setLabel('Next ▶').setStyle(ButtonStyle.Primary).setDisabled(i === imageResults.length - 1);
-      return new ActionRowBuilder().addComponents(prev, back, next);
-    });
-
+const imageRows = imageResults.map((_, i) => {
+  const prev = new ButtonBuilder().setCustomId(cid(`img_prev_${i}`)).setLabel('◀ Prev').setStyle(ButtonStyle.Primary).setDisabled(false);
+  const back = new ButtonBuilder().setCustomId(cid(`img_back_${i}`)).setLabel('⤵️ Back').setStyle(ButtonStyle.Secondary);
+  const next = new ButtonBuilder().setCustomId(cid(`img_next_${i}`)).setLabel('Next ▶').setStyle(ButtonStyle.Primary).setDisabled(false);
+  return new ActionRowBuilder().addComponents(prev, back, next);
+});
     // Send initial list page
     await interaction.editReply({ embeds: [listEmbeds[0]], components: [listRows[0]] });
     const message = await interaction.fetchReply();
@@ -307,12 +320,14 @@ module.exports = {
         const parts = idx === -1 ? btn.customId : btn.customId.slice(0, idx); // e.g., list_prev_0 or img_next_3
         // normalize action and index
         if (parts.startsWith('list_prev_')) {
-          listPage = Math.max(0, listPage - 1);
+          // wrap to last page when at 0
+          listPage = (listPage - 1 + totalPages) % totalPages;
           await btn.update({ embeds: [listEmbeds[listPage]], components: [listRows[listPage]] });
           return;
         }
         if (parts.startsWith('list_next_')) {
-          listPage = Math.min(totalPages - 1, listPage + 1);
+          // wrap to 0 when at last
+          listPage = (listPage + 1) % totalPages;
           await btn.update({ embeds: [listEmbeds[listPage]], components: [listRows[listPage]] });
           return;
         }
@@ -344,12 +359,12 @@ module.exports = {
         }
 
         if (parts.startsWith('img_prev_')) {
-          imageIdx = Math.max(0, imageIdx - 1);
+          imageIdx = (imageIdx - 1 + imageEmbeds.length) % imageEmbeds.length;
           await btn.update({ embeds: [imageEmbeds[imageIdx]], components: [imageRows[imageIdx]] });
           return;
         }
         if (parts.startsWith('img_next_')) {
-          imageIdx = Math.min(imageEmbeds.length - 1, imageIdx + 1);
+          imageIdx = (imageIdx + 1) % imageEmbeds.length;
           await btn.update({ embeds: [imageEmbeds[imageIdx]], components: [imageRows[imageIdx]] });
           return;
         }

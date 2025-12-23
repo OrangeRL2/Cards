@@ -9,7 +9,7 @@ const {
 const User = require('../../models/User');
 
 const PAGE_SIZE = 10;
-const COLLECTOR_TIMEOUT = 1 * 60 * 1000; // 2 minutes
+const COLLECTOR_TIMEOUT = 5 * 60 * 1000; // 2 minutes
 const DISCORD_UNKNOWN_INTERACTION = 10062;
 
 module.exports = {
