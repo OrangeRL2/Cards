@@ -6,7 +6,7 @@ const User = require('../../models/User');
 const { drawPack } = require('../../utils/newWeightedDraw');
 const pullQuota = require('../../utils/pullQuota');
 
-const IMAGE_BASE = 'https://152.69.195.48/images';
+const IMAGE_BASE = 'http://152.69.195.48/images';
 const PAGE_TIMEOUT_MS = 2 * 60 * 1000; // 2 minutes
 const gifs = [
   'https://media.discordapp.net/attachments/1046811248647475302/1437428233086963774/ppp.gif',
