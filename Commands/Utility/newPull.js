@@ -418,7 +418,7 @@ module.exports = {
           components: [row],
         });
       } catch (err) {
-        console.error('collector interaction error:', err);
+        console.error('collector interaction errorr:', err);
       }
     });
 
