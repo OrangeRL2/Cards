@@ -28,7 +28,6 @@ async function addBdayCardToUser(userId, oshiLabel) {
     const file = pickBdayFile(oshiLabel);
     if (!file) return null;
 
-    // Derive display name from filename (strip extension, replace _ and -)
     const base = file.split('/').pop();
     const ext = base.includes('.') ? base.substring(base.lastIndexOf('.')) : '';
     const raw = ext ? base.slice(0, base.length - ext.length) : base;
@@ -38,16 +37,24 @@ async function addBdayCardToUser(userId, oshiLabel) {
     let userDoc = await User.findOne({ id: userId }).exec();
     if (!userDoc) userDoc = await User.create({ id: userId, cards: [] });
 
-    // Find existing card entry for this bday (name + rarity)
-    let card = (userDoc.cards || []).find(c => c.name === displayName && c.rarity === 'bday');
+    let card = (userDoc.cards || []).find(c => c.name === displayName && c.rarity === 'BDAY');
+    const now = new Date();
+
     if (!card) {
-      card = { name: displayName, rarity: 'bday', count: 1, timestamps: [new Date()] };
+      card = { 
+        name: displayName, 
+        rarity: 'BDAY', 
+        count: 1, 
+        firstAcquiredAt: now,
+        lastAcquiredAt: now,
+        locked: false
+      };
       userDoc.cards = userDoc.cards || [];
       userDoc.cards.push(card);
     } else {
       card.count = (card.count || 0) + 1;
-      card.timestamps = card.timestamps || [];
-      card.timestamps.push(new Date());
+      if (!card.firstAcquiredAt) card.firstAcquiredAt = now;
+      card.lastAcquiredAt = now;
     }
 
     await userDoc.save();

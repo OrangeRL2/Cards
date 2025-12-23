@@ -73,30 +73,47 @@ module.exports = {
       return id;
     };
 const resolveDisplayNameFast = async (id, client, guild) => {
-  // 1) guild member displayName if available (best UX)
+  let name = null;
+
+  // 1) Try guild member displayName first
   if (guild) {
     try {
       const memberCached = guild.members.cache.get(id);
-      if (memberCached) return memberCached.displayName;
-      // try a fetch as a fallback (may be rate-limited / slower)
-      const fetchedMember = await guild.members.fetch(id).catch(() => null);
-      if (fetchedMember) return fetchedMember.displayName;
+      const member = memberCached || await guild.members.fetch(id).catch(() => null);
+      if (member && member.displayName) {
+        name = member.displayName;
+      }
     } catch {}
   }
 
-  // 2) client cache user tag
-  const cached = client.users.cache.get(id);
-  if (cached) return cached.tag;
+  // 2) Try client cache user tag
+  if (!name) {
+    const cached = client.users.cache.get(id);
+    if (cached && cached.tag) name = cached.tag;
+  }
 
-  // 3) one-off fetch from API — slower but ensures a readable name after restarts
-  try {
-    const fetched = await client.users.fetch(id).catch(() => null);
-    if (fetched) return fetched.tag;
-  } catch {}
-  
-  // 4) final fallback to raw id
-  return id;
+  // 3) One-off fetch
+  if (!name) {
+    try {
+      const fetched = await client.users.fetch(id).catch(() => null);
+      if (fetched && fetched.tag) name = fetched.tag;
+    } catch {}
+  }
+
+  // 4) Fallback to raw ID
+  if (!name) name = id;
+
+  // Sanitize name to prevent spoilers, markdown, mentions, and invisible characters
+  return name
+    .replace(/([*_~`>])/g, '\\$1')  // escape markdown
+    .replace(/\|\|/g, '')           // remove spoiler pipes
+    .replace(/<@!?(\d+)>/g, '[user]')  // mentions -> [user]
+    .replace(/<@&(\d+)>/g, '[role]')   // role mentions
+    .replace(/<#(\d+)>/g, '[channel]') // channel mentions
+    .replace(/[\u200B-\u200D\uFEFF]/g, '') // remove zero-width chars
+    .trim() || 'Unknown';
 };
+
 
 const userIndex = topUsers.findIndex(u => u.id === interaction.user.id);
   const userRank = userIndex === -1 ? null : userIndex + 1;

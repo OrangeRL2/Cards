@@ -375,10 +375,6 @@ module.exports = {
               if (sIdx !== -1) {
                 sourceDoc.cards[sIdx].count = (sourceDoc.cards[sIdx].count || 0) - offer.count;
                 if (sourceDoc.cards[sIdx].count <= 0) sourceDoc.cards.splice(sIdx, 1);
-                else {
-                  sourceDoc.cards[sIdx].timestamps = sourceDoc.cards[sIdx].timestamps || [];
-                  sourceDoc.cards[sIdx].timestamps.push(new Date());
-                }
               }
 
               // add to target
@@ -388,11 +384,18 @@ module.exports = {
                 String(x.rarity || '').toLowerCase() === String(offer.rarity || '').toLowerCase()
               );
               if (tIdx !== -1) {
-                targetDoc.cards[tIdx].count = (targetDoc.cards[tIdx].count || 0) + offer.count;
-                targetDoc.cards[tIdx].timestamps = targetDoc.cards[tIdx].timestamps || [];
-                targetDoc.cards[tIdx].timestamps.push(new Date());
+                const card = targetDoc.cards[tIdx];
+                card.count = (card.count || 0) + offer.count;
+                card.firstAcquiredAt ??= now;
+                card.lastAcquiredAt = now;
               } else {
-                targetDoc.cards.push({ name: offer.name, rarity: String(offer.rarity ?? '').toUpperCase(), count: offer.count, timestamps: [new Date()] });
+      targetDoc.cards.push({
+        name: offer.name,
+        rarity: String(offer.rarity ?? '').toUpperCase(),
+        count: offer.count,
+        firstAcquiredAt: now,
+        lastAcquiredAt: now,
+      });
               }
             }
             sourceDoc.markModified('cards');

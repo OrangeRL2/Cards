@@ -215,74 +215,115 @@ module.exports = {
       return;
     }
 
-    // Draw the pack FIRST (before consuming pulls)
-    let pack;
-    try {
-      pack = await drawPack(discordUserId, null); // [{ rarity, file }, ...]
-    } catch (err) {
-      console.error('drawPack error:', err);
-      const elapsed = Date.now() - gifShownAt;
-      if (elapsed < GIF_DURATION_MS) await sleep(GIF_DURATION_MS - elapsed);
-      await interaction.editReply({ content: 'An error occurred while drawing the pack. Please try again.', components: [] });
-      return;
-    }
+// Draw the pack FIRST (before consuming pulls)
+let pack;
+try {
+  pack = await drawPack(discordUserId, null); // [{ rarity, file }, ...]
+} catch (err) {
+  console.error('drawPack error:', err);
+  const elapsed = Date.now() - gifShownAt;
+  if (elapsed < GIF_DURATION_MS) await sleep(GIF_DURATION_MS - elapsed);
+  await interaction.editReply({ content: 'An error occurred while drawing the pack. Please try again.', components: [] });
+  return;
+}
 
-  
-    // Ensure user document exists and add cards
-    let userDoc = await User.findOne({ id: discordUserId }).exec();
-    if (!userDoc) userDoc = await User.create({ id: discordUserId });
+// Ensure user document exists (upsert a minimal doc so subsequent updates succeed)
+try {
+  await User.updateOne(
+    { id: discordUserId },
+    { $setOnInsert: { id: discordUserId } },
+    { upsert: true }
+  );
+} catch (err) {
+  console.error('ensure user error:', err);
+  const elapsed = Date.now() - gifShownAt;
+  if (elapsed < GIF_DURATION_MS) await sleep(GIF_DURATION_MS - elapsed);
+  await interaction.editReply({ content: 'Failed to prepare user record. Please try again later.', components: [] });
+  return;
+}
 
-    // helper: escape ] and ) which break Markdown link syntax
-    function escapeLinkText(text) {
-      return text.replace(/([\\_*[\]()~`>#\-=|{}.!])/g, '\\$1');
-    }
-    function prettyRarityPlain(r) { return `[${r}]`; }
-    const pageItems = [];
-    const allNames = [];
+// helper: escape ] and ) which break Markdown link syntax
+function escapeLinkText(text) {
+  return text.replace(/([\\_*[\]()~`>#\-=|{}.!])/g, '\\$1');
+}
+function prettyRarityPlain(r) { return `[${r}]`; }
 
-    for (const item of pack) {
-      const { rarity, file } = item;
-      const base = path.basename(file);
-      const ext = path.extname(base);
-      const raw = base.slice(0, base.length - ext.length);
-      const displayName = raw.replace(/[_-]+/g, ' ').trim();
+const pageItems = [];
+const allNames = [];
+const now = new Date();
 
-      // ensure cards array exists defensively
-      userDoc.cards = userDoc.cards || [];
-      let card = userDoc.cards.find(c => c.name === displayName && c.rarity === rarity);
-      if (!card) {
-        card = { name: displayName, rarity, count: 1, timestamps: [new Date()] };
-        userDoc.cards.push(card);
-      } else {
-        card.count = (card.count || 0) + 1;
-        card.timestamps = card.timestamps || [];
-        card.timestamps.push(new Date());
+try {
+  for (const item of pack) {
+    const { rarity, file } = item;
+    const base = path.basename(file);
+    const ext = path.extname(base);
+    const raw = base.slice(0, base.length - ext.length);
+    const displayName = raw.replace(/[_-]+/g, ' ').trim();
+
+    // Try to increment an existing card (atomic)
+    const incResult = await User.updateOne(
+      { id: discordUserId, "cards.name": displayName, "cards.rarity": rarity },
+      {
+        $inc: { "cards.$.count": 1 },
+        $set: { "cards.$.lastAcquiredAt": now }
       }
+    );
 
-      // encode only the filename segment; normalize IMAGE_BASE trailing slash
-      const encodedUrl = `${IMAGE_BASE.replace(/\/$/,'')}/${rarity}/${encodeURIComponent(raw)}.png`;
-
-      // Use normal ASCII brackets as plain text; make only "Name - #N" the clickable link
-      const visiblePrefix = `${prettyRarityPlain(rarity)} - `;
-      const titleBody = `${displayName}`; // link text (escaped)
-      const titleCount = ` - #${card.count}`; // link text (escaped)
-      const titleLine = `${visiblePrefix}${titleBody}`; // for other uses (pageItems, logs)
-
-      pageItems.push({
-        rarity,
-        rawName: raw,
-        displayName,
-        titleLine,
-        imageUrl: encodedUrl,
-      });
-
-      // single push to allNames: prefix (plain) + clickable link (escaped)
-      allNames.push(`${visiblePrefix}[${escapeLinkText(titleBody)}](${encodedUrl})${titleCount}`);
+    // If no existing card was matched, push a new card atomically
+    if (incResult.matchedCount === 0 || incResult.modifiedCount === 0) {
+      await User.updateOne(
+        { id: discordUserId },
+        {
+          $push: {
+            cards: { name: displayName, rarity, count: 1, firstAcquiredAt: now, lastAcquiredAt: now }
+          }
+        }
+      );
     }
 
-    // increment and persist user pulls
-    userDoc.pulls = (userDoc.pulls || 0) + 1;
-    await userDoc.save();
+    // Read back the single card element to get the current count for display
+    const userCardDoc = await User.findOne(
+      { id: discordUserId, "cards.name": displayName, "cards.rarity": rarity },
+      { "cards.$": 1 }
+    ).lean();
+
+    let currentCount = 1;
+    if (userCardDoc && Array.isArray(userCardDoc.cards) && userCardDoc.cards[0]) {
+      currentCount = userCardDoc.cards[0].count || 1;
+    }
+
+    const encodedUrl = `${IMAGE_BASE.replace(/\/$/,'')}/${rarity}/${encodeURIComponent(raw)}.png`;
+
+    const visiblePrefix = `${prettyRarityPlain(rarity)} - `;
+    const titleBody = `${displayName}`;
+    const titleCount = ` - #${currentCount}`;
+    const titleLine = `${visiblePrefix}${titleBody}`;
+
+    pageItems.push({
+      rarity,
+      rawName: raw,
+      displayName,
+      titleLine,
+      imageUrl: encodedUrl,
+    });
+
+    allNames.push(`${visiblePrefix}[${escapeLinkText(titleBody)}](${encodedUrl})${titleCount}`);
+  }
+
+  // increment and persist user pulls atomically (single increment for the whole pack)
+  await User.updateOne(
+    { id: discordUserId },
+    { $inc: { pulls: 1 } }
+  );
+
+} catch (err) {
+  console.error('atomic update error:', err);
+  const elapsed = Date.now() - gifShownAt;
+  if (elapsed < GIF_DURATION_MS) await sleep(GIF_DURATION_MS - elapsed);
+  await interaction.editReply({ content: 'An error occurred while saving your pull. Please try again.', components: [] });
+  return;
+}
+
 
     // join and safely truncate description
     let descriptionAll = allNames.join('\n');

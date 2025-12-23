@@ -11,34 +11,50 @@ const User = require('../models/User');
 async function addOshiOsrToUser(userId, oshiLabel) {
   try {
     const now = new Date();
-    const baseName = typeof oshiLabel === 'string' ? oshiLabel.trim() : String(oshiLabel);
+    const baseName = typeof oshiLabel === 'string'
+      ? oshiLabel.trim()
+      : String(oshiLabel);
+
     const cardName = `${baseName} 001`;
     const rarity = 'OSR';
 
-    // 1) Try to increment an existing OSR card atomically
-    const inc = await User.findOneAndUpdate(
+    // 1) Try to increment existing OSR card
+    const updated = await User.findOneAndUpdate(
       { id: userId, 'cards.name': cardName, 'cards.rarity': rarity },
-      { $inc: { 'cards.$.count': 1 }, $push: { 'cards.$.timestamps': now } },
-      { new: true, useFindAndModify: false }
+      {
+        $inc: { 'cards.$.count': 1 },
+        $set: { 'cards.$.lastAcquiredAt': now }
+      },
+      { new: true }
     ).exec();
 
-    if (inc) {
+    if (updated) {
       return { gave: true, created: false, name: cardName, rarity };
     }
 
-    // 2) Otherwise push a new OSR card (create user if missing)
-    const pushed = await User.findOneAndUpdate(
+    // 2) Otherwise insert new card (upsert user)
+    const inserted = await User.findOneAndUpdate(
       { id: userId },
       {
         $setOnInsert: { id: userId },
         $push: {
-          cards: { name: cardName, rarity, count: 1, timestamps: [now] }
+          cards: {
+            name: cardName,
+            rarity,
+            count: 1,
+            firstAcquiredAt: now,
+            lastAcquiredAt: now,
+            locked: false,
+          }
         }
       },
-      { upsert: true, new: true, useFindAndModify: false }
+      { upsert: true, new: true }
     ).exec();
 
-    if (pushed) return { gave: true, created: true, name: cardName, rarity };
+    if (inserted) {
+      return { gave: true, created: true, name: cardName, rarity };
+    }
+
     return { gave: false };
   } catch (err) {
     console.error('[addOshiOsrToUser] error', err);
