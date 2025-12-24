@@ -154,10 +154,6 @@ module.exports = {
         cardEntry.count = (Number(cardEntry.count) || 0) - t.amount;
         if (cardEntry.count <= 0) {
           fromDoc.cards.splice(curIdx, 1);
-        } else {
-          cardEntry.timestamps = cardEntry.timestamps || [];
-          cardEntry.timestamps.push(new Date());
-          fromDoc.cards[curIdx] = cardEntry;
         }
       }
 
@@ -167,23 +163,24 @@ module.exports = {
       // Credit recipient: add each transferred card (aggregate by name+rarity)
       let toDoc = await User.findOne({ id: toUser.id }).exec();
       if (!toDoc) toDoc = new User({ id: toUser.id, cards: [] });
-
+      const now = new Date();
       for (const t of transfers) {
         const toIdx = toDoc.cards.findIndex(c => String(c.name) === String(t.name) && String(c.rarity || '') === String(t.rarity || ''));
         if (toIdx !== -1) {
-          toDoc.cards[toIdx].count = (toDoc.cards[toIdx].count || 0) + t.amount;
-          toDoc.cards[toIdx].timestamps = toDoc.cards[toIdx].timestamps || [];
-          toDoc.cards[toIdx].timestamps.push(new Date());
-          // Preserve locked state: if either existing or incoming is locked, keep locked = true
-          toDoc.cards[toIdx].locked = Boolean(toDoc.cards[toIdx].locked) || Boolean(t.locked);
+          const card = toDoc.cards[toIdx];
+          card.count = (card.count || 0) + t.amount;
+          card.firstAcquiredAt ??= now;
+          card.lastAcquiredAt = now;
+          card.locked = Boolean(card.locked) || Boolean(t.locked);
         } else {
-          toDoc.cards.push({
-            name: t.name,
-            rarity: t.rarity,
-            count: t.amount,
-            timestamps: [new Date()],
-            locked: Boolean(t.locked)
-          });
+    toDoc.cards.push({
+      name: t.name,
+      rarity: t.rarity,
+      count: t.amount,
+      firstAcquiredAt: now,
+      lastAcquiredAt: now,
+      locked: Boolean(t.locked),
+    });
         }
       }
 

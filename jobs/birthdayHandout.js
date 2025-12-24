@@ -60,9 +60,9 @@ async function addBdayCardToUser(userId, oshiLabel) {
     let userDoc = await User.findOne({ id: userId }).exec();
     if (!userDoc) userDoc = await User.create({ id: userId, cards: [] });
 
-    let card = (userDoc.cards || []).find(c => c.name === displayName && c.rarity === 'bday');
+    let card = (userDoc.cards || []).find(c => c.name === displayName && c.rarity === 'BDAY');
     if (!card) {
-      card = { name: displayName, rarity: 'bday', count: 1, timestamps: [new Date()] };
+      card = { name: displayName, rarity: 'BDAY', count: 1, timestamps: [new Date()] };
       userDoc.cards = userDoc.cards || [];
       userDoc.cards.push(card);
     } else {

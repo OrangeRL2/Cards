@@ -66,95 +66,126 @@ async function pickRandomStage5Card(){ return pickRandomFromDir(STAGE5_POOL_DIRN
 // Inc-or-upsert card. Returns { card, path, raw } or null
 async function incOrUpsertCard(userId, name, rarity, opts = {}) {
   const session = opts.session || null;
-  const origin = opts.origin ? String(opts.origin) : null;
   const ts = new Date();
   const normalized = normalizeCardName(name);
 
   const findInArray = (cards) => {
     if (!Array.isArray(cards)) return null;
-    return cards.find(c => normalizeCardName(c.name) === normalized && String(c.rarity) === String(rarity));
+    return cards.find(
+      c => normalizeCardName(c.name) === normalized &&
+           String(c.rarity) === String(rarity)
+    );
   };
 
-  // 1) Fast insert-if-missing via findOneAndUpdate (returns updated doc)
+  // 1) Fast insert-if-missing
   try {
-    const pushTimestamps = origin ? [{ ts, origin }] : [ts];
-    const pushDoc = { name: normalized, rarity, count: 1, timestamps: pushTimestamps };
+    const pushDoc = {
+      name: normalized,
+      rarity,
+      count: 1,
+      firstAcquiredAt: ts,
+      lastAcquiredAt: ts,
+    };
 
-    const pushFilter = { id: userId, $nor: [{ cards: { $elemMatch: { name: normalized, rarity } } }] };
+    const pushFilter = {
+      id: userId,
+      $nor: [{ cards: { $elemMatch: { name: normalized, rarity } } }]
+    };
+
     const pushUpdate = { $push: { cards: pushDoc } };
-    const pushOpts = session ? { session, returnDocument: 'after' } : { returnDocument: 'after' };
+    const pushOpts = session
+      ? { session, returnDocument: 'after' }
+      : { returnDocument: 'after' };
 
-    console.debug('[live] incOrUpsertCard push (findOneAndUpdate)', { userId, normalized, rarity, hasSession: !!session });
-    const pushedDoc = await User.findOneAndUpdate(pushFilter, pushUpdate, pushOpts).lean().exec();
+    const pushedDoc = await User
+      .findOneAndUpdate(pushFilter, pushUpdate, pushOpts)
+      .lean()
+      .exec();
 
     if (pushedDoc) {
       const cardElem = findInArray(pushedDoc.cards);
-      if (cardElem) return { card: cardElem, path: 'push', raw: { acknowledged: true, matchedCount: 1, modifiedCount: 1 } };
-      console.warn('[live] push returned doc but card not found in returned array; falling through', { userId, normalized, rarity });
+      if (cardElem) {
+        return { card: cardElem, path: 'push', raw: { ok: 1 } };
+      }
     }
   } catch (err) {
-    console.error('[live] incOrUpsertCard push error', err);
+    console.error('[incOrUpsertCard] push error', err);
   }
 
-  // 2) Deterministic: fetch user's cards, find best match with normalizeCardName, then increment by _id
+  // 2) Increment by _id (safe)
   try {
-    const userDoc = await User.findOne({ id: userId }, { cards: 1 }, session ? { session } : {}).lean();
-    if (userDoc && Array.isArray(userDoc.cards) && userDoc.cards.length) {
+    const userDoc = await User
+      .findOne({ id: userId }, { cards: 1 }, session ? { session } : {})
+      .lean();
+
+    if (userDoc?.cards?.length) {
       const found = findInArray(userDoc.cards);
       if (found) {
         const arrayFilters = [{ 'elem._id': found._id }];
         const incUpdate = {
           $inc: { 'cards.$[elem].count': 1 },
-          $push: { 'cards.$[elem].timestamps': origin ? { ts, origin } : ts }
+          $set: { 'cards.$[elem].lastAcquiredAt': ts },
         };
-        const optsFNU = session ? { session, arrayFilters, returnDocument: 'after' } : { arrayFilters, returnDocument: 'after' };
 
-        console.debug('[live] incOrUpsertCard increment-by-id (findOneAndUpdate)', { userId, normalized, rarity, cardId: found._id });
-        const updated = await User.findOneAndUpdate({ id: userId }, incUpdate, optsFNU).lean().exec();
+        const optsFNU = session
+          ? { session, arrayFilters, returnDocument: 'after' }
+          : { arrayFilters, returnDocument: 'after' };
 
-        if (updated && Array.isArray(updated.cards)) {
-          const updatedElem = (updated.cards || []).find(c => String(c._id) === String(found._id));
-          if (updatedElem) return { card: updatedElem, path: 'inc-by-id', raw: { acknowledged: true, matchedCount: 1, modifiedCount: 1 } };
+        const updated = await User
+          .findOneAndUpdate({ id: userId }, incUpdate, optsFNU)
+          .lean()
+          .exec();
+
+        if (updated?.cards) {
+          const updatedElem = updated.cards.find(
+            c => String(c._id) === String(found._id)
+          );
+          if (updatedElem) {
+            return { card: updatedElem, path: 'inc-by-id', raw: { ok: 1 } };
+          }
         }
-
-        console.warn('[live] increment-by-id succeeded but returned doc missing element', { userId, normalized, rarity, cardId: found._id });
-      } else {
-        console.debug('[live] no matching card found in user cards for normalized name; will try name-based inc', { userId, normalized, rarity });
       }
     }
   } catch (err) {
-    console.error('[live] incOrUpsertCard increment-by-id error', err);
+    console.error('[incOrUpsertCard] inc-by-id error', err);
   }
 
-  // 3) Name-based arrayFilters fallback (try to increment by name/rarity)
+  // 3) Name-based fallback
   try {
     const arrayFilters = [{ 'elem.name': normalized, 'elem.rarity': rarity }];
     const incUpdate = {
       $inc: { 'cards.$[elem].count': 1 },
-      $push: { 'cards.$[elem].timestamps': origin ? { ts, origin } : ts }
+      $set: { 'cards.$[elem].lastAcquiredAt': ts },
     };
 
-    console.debug('[live] incOrUpsertCard arrayFilters fallback update', { userId, normalized, rarity });
-    const incRes = await User.updateOne({ id: userId }, incUpdate, session ? { session, arrayFilters } : { arrayFilters }).exec();
+    const incRes = await User.updateOne(
+      { id: userId },
+      incUpdate,
+      session ? { session, arrayFilters } : { arrayFilters }
+    ).exec();
 
     if (modifiedCountOf(incRes) > 0) {
-      const doc = await User.findOne({ id: userId }, { cards: 1 }, session ? { session } : {}).lean();
+      const doc = await User
+        .findOne({ id: userId }, { cards: 1 }, session ? { session } : {})
+        .lean();
+
       const card = findInArray(doc?.cards);
       if (card) return { card, path: 'inc', raw: incRes };
-      console.error('[live] incOrUpsertCard fallback reported modified but fetched element mismatch', { userId, normalized, rarity, raw: incRes });
-      return { card: null, path: 'inc-mismatch', raw: incRes };
     }
   } catch (err) {
-    console.error('[live] incOrUpsertCard arrayFilters fallback error', err);
+    console.error('[incOrUpsertCard] fallback error', err);
   }
 
-  // 4) Final: maybe concurrently inserted by other process — fetch and return if present
+  // 4) Final fetch
   try {
-    const doc2 = await User.findOne({ id: userId }, { cards: 1 }, session ? { session } : {}).lean();
+    const doc2 = await User
+      .findOne({ id: userId }, { cards: 1 }, session ? { session } : {})
+      .lean();
+
     const card2 = findInArray(doc2?.cards);
     return card2 ? { card: card2, path: 'fetch' } : null;
   } catch (err) {
-    console.error('[live] incOrUpsertCard final-fetch error', err);
+    console.error('[incOrUpsertCard] final-fetch error', err);
     return null;
   }
 }
@@ -202,48 +233,78 @@ async function tryAwardPCard({ userId, picked, session, trace }) {
 }
 
 // Start attempt: normalize input, decrement card, push pendingAttempt
-async function startAttemptAtomic(userId, name, rarity){
+async function startAttemptAtomic(userId, name, rarity) {
   const normalized = normalizeCardName(name);
   const stage = getStageForRarity(rarity);
-  if(!stage) return { success:false, reason:'invalid-rarity' };
-  const now = Date.now();
-  const readyAt = new Date(now + getDurationForStage(stage));
+  if (!stage) return { success: false, reason: 'invalid-rarity' };
+
+  const now = new Date();
+  const readyAt = new Date(Date.now() + getDurationForStage(stage));
   const attemptId = nanoid();
 
   const query = {
     id: userId,
     $or: [
       { pendingAttempts: { $exists: false } },
-      { pendingAttempts: { $not: { $elemMatch: { stage: stage, resolved: false } } } }
+      { pendingAttempts: { $not: { $elemMatch: { stage, resolved: false } } } }
     ]
   };
+
   const update = {
     $inc: { 'cards.$[elem].count': -1 },
+    $set: { 'cards.$[elem].lastAcquiredAt': now },
     $push: {
-      'cards.$[elem].timestamps': new Date(),
       pendingAttempts: {
-        id: attemptId, name: normalized, rarity, stage, startedAt: new Date(), readyAt, resolved:false, success:null, effectsApplied:false, effectsTrace:{}
+        id: attemptId,
+        name: normalized,
+        rarity,
+        stage,
+        startedAt: now,
+        readyAt,
+        resolved: false,
+        success: null,
+        effectsApplied: false,
+        effectsTrace: {}
       }
     }
   };
-  const arrayFilters = [{ 'elem.name': normalized, 'elem.rarity': rarity, 'elem.count': { $gt: 0 } }];
-  const res = await User.findOneAndUpdate(query, update, { arrayFilters, returnDocument: 'after' }).exec();
-  if(!res){
-    const u = await User.findOne({ id: userId }).lean();
-    if(u){
-      const existing = (u.pendingAttempts||[]).find(a=>!a.resolved && Number(a.stage)===Number(stage));
-      if(existing) return { success:false, reason:'stage-busy', nextReadyAt: existing.readyAt };
-      return { success:false, reason:'no-card' };
-    }
-    return { success:false, reason:'no-user' };
-  }
-  const added = (res.pendingAttempts||[]).find(a=>a.id===attemptId);
-  if(!added) return { success:false, reason:'no-card' };
 
-  // cleanup zero-count cards best-effort
-  User.updateOne({ id: userId }, { $pull: { cards: { count: { $lte: 0 } } } }).exec().catch(()=>{});
-  return { success:true, attemptId, readyAt, stage };
+  const arrayFilters = [
+    { 'elem.name': normalized, 'elem.rarity': rarity, 'elem.count': { $gt: 0 } }
+  ];
+
+  const res = await User.findOneAndUpdate(
+    query,
+    update,
+    { arrayFilters, returnDocument: 'after' }
+  ).exec();
+
+  if (!res) {
+    const u = await User.findOne({ id: userId }).lean();
+    if (u) {
+      const existing = (u.pendingAttempts || []).find(
+        a => !a.resolved && Number(a.stage) === Number(stage)
+      );
+      if (existing) {
+        return { success: false, reason: 'stage-busy', nextReadyAt: existing.readyAt };
+      }
+      return { success: false, reason: 'no-card' };
+    }
+    return { success: false, reason: 'no-user' };
+  }
+
+  const added = (res.pendingAttempts || []).find(a => a.id === attemptId);
+  if (!added) return { success: false, reason: 'no-card' };
+
+  // cleanup zero-count cards (best effort)
+  User.updateOne(
+    { id: userId },
+    { $pull: { cards: { count: { $lte: 0 } } } }
+  ).exec().catch(() => {});
+
+  return { success: true, attemptId, readyAt, stage };
 }
+
 
 // Resolve attempt: read inside transaction to avoid race windows. Use arrayFilters for safe updates.
 async function resolveAttemptAtomic(userId, attemptId){

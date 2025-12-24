@@ -1,4 +1,3 @@
-// Commands/Utility/mass-burn.js
 const {
   SlashCommandBuilder,
   EmbedBuilder,
@@ -20,7 +19,6 @@ const { getAllEnabledMilestones, milestonesForLevel } = require('../../utils/mil
 
 const IMAGE_POOL_ROOT = path.join(__dirname, '..', '..', 'assets', 'images', 'oshi');
 
-// Resolve pool path (handles relative and named pools)
 function resolvePoolPath(poolFolder) {
   if (!poolFolder) return IMAGE_POOL_ROOT;
   if (poolFolder.startsWith('../') || poolFolder.startsWith('./')) {
@@ -30,7 +28,6 @@ function resolvePoolPath(poolFolder) {
   return path.join(IMAGE_POOL_ROOT, poolFolder);
 }
 
-// Pick a random card file from a pool (scans subfolders as rarities)
 function pickRandomCardFromOshiPool(poolFolder) {
   const poolPath = resolvePoolPath(poolFolder);
   let allFiles = [];
@@ -41,12 +38,11 @@ function pickRandomCardFromOshiPool(poolFolder) {
     const filesInRoot = items.filter(f => f.isFile() && /\.(png|jpe?g|webp|gif)$/i.test(f.name));
 
     if (filesInRoot.length > 0) {
-      const rootFiles = filesInRoot.map(f => ({
+      allFiles.push(...filesInRoot.map(f => ({
         file: f.name,
         rarity: path.basename(poolPath).toUpperCase(),
         fullPath: path.join(poolPath, f.name)
-      }));
-      allFiles.push(...rootFiles);
+      })));
     }
 
     if (subdirs.length > 0) {
@@ -61,21 +57,16 @@ function pickRandomCardFromOshiPool(poolFolder) {
               fullPath: path.join(subdirPath, f)
             }));
           allFiles.push(...files);
-        } catch (e) {
-          // ignore subdir read errors
-        }
+        } catch {}
       }
     }
-  } catch (e) {
-    return null;
-  }
+  } catch { return null; }
 
   if (allFiles.length === 0) return null;
   const randomFile = allFiles[Math.floor(Math.random() * allFiles.length)];
   return { pick: randomFile.file, rarityFolder: randomFile.rarity, fullPath: randomFile.fullPath };
 }
 
-// Parse multi filter strings like ">3", ">=2", "3"
 function parseMultiFilter(str) {
   if (!str || typeof str !== 'string') return null;
   const s = str.trim();
@@ -86,14 +77,10 @@ function parseMultiFilter(str) {
   return { op, n };
 }
 
-// Parse rarity string into array of valid rarities
 function parseRarities(rarityString) {
   if (!rarityString) return [];
-  
   const rarities = rarityString.split(/[,;\s]+/).map(r => r.trim().toUpperCase()).filter(r => r);
-  const validRarities = rarities.filter(r => isValidRarity(r));
-  
-  return validRarities;
+  return rarities.filter(r => isValidRarity(r));
 }
 
 module.exports = {
@@ -125,42 +112,26 @@ module.exports = {
     }
     
     function computeBurnCount(stackCount, multiFilter) {
-      if (!multiFilter) return stackCount; // no filter -> burn whole stack
-
+      if (!multiFilter) return stackCount;
       const { op, n } = multiFilter;
-      if (op === '>' || op === '>=') {
-        // keep n, burn the rest (only apply if stackCount > n)
-        if (stackCount > n) return Math.max(0, stackCount - n);
-        return 0;
-      }
-      if (op === '<' || op === '<=') {
-        // stackCount matches the condition -> burn whole stack
-        if (op === '<' && stackCount < n) return stackCount;
-        if (op === '<=' && stackCount <= n) return stackCount;
-        return 0;
-      }
-      // '=' exact: burn exactly n if available
-      if (op === '=' || op === undefined) {
-        if (stackCount >= n) return n;
-        return 0;
-      }
+      if (op === '>' || op === '>=') return stackCount > n ? stackCount - n : 0;
+      if (op === '<' || op === '<=') return (op === '<' ? stackCount < n : stackCount <= n) ? stackCount : 0;
+      if (op === '=' || op === undefined) return stackCount >= n ? n : 0;
       return 0;
     }
-    
+
     const cards = userDoc.cards || [];
     const offers = [];
     for (const c of cards) {
       if (c.locked) continue;
       const cR = String(c.rarity || '').toUpperCase();
-      if (!rarities.includes(cR)) continue; // Check if card rarity is in allowed list
+      if (!rarities.includes(cR)) continue;
       const cnt = Number(c.count || 0);
       if (cnt <= 0) continue;
 
-      // Determine how many to burn from this stack
       const burnCount = computeBurnCount(cnt, multiFilter);
-      if (!burnCount) continue; // nothing to burn for this stack
+      if (!burnCount) continue;
 
-      // push only if burnCount > 0
       const xp = xpForCard(cR, burnCount);
       offers.push({ name: c.name, rarity: cR, originalCount: cnt, count: burnCount, xp });
     }
@@ -177,12 +148,8 @@ module.exports = {
       )
       .setColor(0xFFAA00);
 
-    // If no cards match the criteria, show message and return
     if (offers.length === 0) {
-      await interaction.editReply({ 
-        embeds: [preview],
-        content: 'No cards match the specified criteria.' 
-      });
+      await interaction.editReply({ embeds: [preview], content: 'No cards match the specified criteria.' });
       return;
     }
 
@@ -210,7 +177,7 @@ module.exports = {
         return;
       }
 
-      try { await btn.deferReply({ ephemeral: true }); } catch (e) {}
+      try { await btn.deferReply({ ephemeral: true }); } catch {}
 
       const sessionDb = await mongoose.startSession();
       sessionDb.startTransaction();
@@ -234,12 +201,10 @@ module.exports = {
         for (const offer of offersTx) {
           const idx = (userDocTx.cards || []).findIndex(c => String(c.name) === String(offer.name) && String(c.rarity || '').toUpperCase() === String(offer.rarity).toUpperCase());
           if (idx === -1) continue;
-          userDocTx.cards[idx].count = (userDocTx.cards[idx].count || 0) - offer.count;
-          if (userDocTx.cards[idx].count <= 0) {
+          const card = userDocTx.cards[idx];
+          card.count = (card.count || 0) - offer.count;
+          if (card.count <= 0) {
             userDocTx.cards.splice(idx, 1);
-          } else {
-            userDocTx.cards[idx].timestamps = userDocTx.cards[idx].timestamps || [];
-            userDocTx.cards[idx].timestamps.push(new Date());
           }
         }
         userDocTx.markModified('cards');
@@ -303,17 +268,18 @@ module.exports = {
 
             userDocTx.cards = userDocTx.cards || [];
             const existing = userDocTx.cards.find(x => String(x.name) === displayName && String(x.rarity || '').toUpperCase() === awardRarity);
+            const now = new Date();
             if (existing) {
               existing.count = (existing.count || 0) + awardCount;
-              existing.timestamps = existing.timestamps || [];
-              existing.timestamps.push(new Date());
+              existing.lastAcquiredAt = now;
             } else {
               userDocTx.cards.push({
                 name: displayName,
                 rarity: awardRarity,
                 count: awardCount,
                 sourceFile: storedPath,
-                timestamps: [new Date()]
+                firstAcquiredAt: now,
+                lastAcquiredAt: now
               });
             }
             userDocTx.markModified('cards');
@@ -354,7 +320,7 @@ module.exports = {
           .setDescription(`Burned **${offersTx.length}** card entries (${totalCards} total cards) for **${totalXpTx} XP**.`)
           .addFields(
             { name: 'Oshi', value: `${oshi.oshiId}`, inline: true },
-            { name: 'New level', value: `${oshi.level} ${levelsGained ? `(+${levelsGained})` : ''}`, inline: true },
+            { name: 'Level', value: `${oshi.level} ${levelsGained ? `(+${levelsGained})` : ''}`, inline: true },
             { name: 'XP (remaining)', value: `${oshi.xp}/${oshi.xpToNext}`, inline: true },
             { name: 'Rarities burned', value: rarities.join(', '), inline: true }
           );
@@ -369,8 +335,8 @@ module.exports = {
           resultEmbed.addFields({ name: 'Milestones', value: milestonesText.length > 1024 ? milestonesText.substring(0, 1020) + '...' : milestonesText, inline: false });
         }
 
-        try { await sent.edit({ embeds: [resultEmbed], components: [] }); } catch (e) {}
-        try { await btn.editReply({ content: 'Mass burn completed.', ephemeral: true }); } catch (e) {}
+        try { await sent.edit({ embeds: [resultEmbed], components: [] }); } catch {}
+        try { await btn.editReply({ content: 'Mass burn completed.', ephemeral: true }); } catch {}
         collector.stop('completed');
       } catch (err) {
         console.error('mass-burn finalize failed', err);
@@ -383,7 +349,7 @@ module.exports = {
     });
 
     collector.on('end', async () => {
-      try { await sent.edit({ components: [] }); } catch (e) {}
+      try { await sent.edit({ components: [] }); } catch {}
     });
   }
 };

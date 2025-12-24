@@ -4,7 +4,8 @@ const cardInfoSchema = new Schema({
   name: { type: String, required: true },
   rarity: { type: String, required: true },
   count: { type: Number, default: 0 },
-  timestamps: { type: [Date], default: [] },
+  firstAcquiredAt: { type: Date },       // optional: first time user got the card
+  lastAcquiredAt: { type: Date },        // replaces timestamps array
   locked: { type: Boolean, default: false },
 });
 

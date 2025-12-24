@@ -488,14 +488,15 @@ await comp.showModal(modal);
                 // Add single card
                 userDoc.cards = userDoc.cards || [];
                 const displayName = item.image.replace(/[_-]+/g, ' ').trim();
+                const now = new Date();
                 let card = userDoc.cards.find(c => c.name === displayName && c.rarity === item.rarity);
                 if (!card) {
-                  card = { name: displayName, rarity: item.rarity, count: 1, timestamps: [new Date()] };
+                  card = { name: displayName, rarity: item.rarity, count: 1, firstAcquiredAt: now,lastAcquiredAt: now };
                   userDoc.cards.push(card);
                 } else {
                   card.count = (card.count || 0) + 1;
-                  card.timestamps = card.timestamps || [];
-                  card.timestamps.push(new Date());
+                  if (!card.firstAcquiredAt) card.firstAcquiredAt = now;  // safety: in case old docs have missing date
+                  card.lastAcquiredAt = now;  // always update
                 }
 
                 await userDoc.save({ session });
@@ -555,14 +556,25 @@ await comp.showModal(modal);
               // Add card (best-effort)
               updatedUser.cards = updatedUser.cards || [];
               const displayName = item.name.replace(/[_-]+/g, ' ').trim();
+              const now = new Date();
+                          
               let card = updatedUser.cards.find(c => c.name === displayName && c.rarity === item.rarity);
               if (!card) {
-                card = { name: displayName, rarity: item.rarity, count: 1, timestamps: [new Date()] };
+                // New card
+                card = {
+                  name: displayName,
+                  rarity: item.rarity,
+                  count: 1,
+                  firstAcquiredAt: now,
+                  lastAcquiredAt: now,
+                  locked: false,
+                };
                 updatedUser.cards.push(card);
               } else {
+                // Increment existing
                 card.count = (card.count || 0) + 1;
-                card.timestamps = card.timestamps || [];
-                card.timestamps.push(new Date());
+                if (!card.firstAcquiredAt) card.firstAcquiredAt = now; // safety for old docs
+                card.lastAcquiredAt = now; // always update
               }
               await updatedUser.save();
 
