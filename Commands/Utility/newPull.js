@@ -178,7 +178,7 @@ module.exports = {
       console.error('drawPack error:', err);
       const elapsed = Date.now() - gifShownAt;
       if (elapsed < gifDurationMs) await sleep(gifDurationMs - elapsed);
-      await interaction.editReply({ content: 'An error occurred while drawing the pack. Please try again.', components: [] });
+      await interaction.editReply({ content: 'An error occurred while drawing the pack. Please try againnnn.', components: [] });
       return;
     }
 
