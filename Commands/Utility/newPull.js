@@ -233,7 +233,15 @@ module.exports = {
         // Try to increment existing array element using a tolerant match on a normalized key
         // We don't have a stored key field, so match against normalized name via regex on cards.name
         const incResult = await User.updateOne(
-          { id: discordUserId, "cards.name": { $regex: nameRegex }, "cards.rarity": rarity },
+          { 
+            id: discordUserId, 
+            cards: { 
+              $elemMatch: { 
+                name: { $regex: nameRegex }, 
+                rarity: rarity 
+              } 
+            } 
+          },
           {
             $inc: { "cards.$.count": 1 },
             $set: { "cards.$.lastAcquiredAt": now }
@@ -244,9 +252,17 @@ module.exports = {
         let currentCount = 1;
         if (incResult && incResult.matchedCount > 0) {
           const readDoc = await User.findOne(
-            { id: discordUserId, "cards.name": { $regex: nameRegex }, "cards.rarity": rarity },
-            { "cards.$": 1 }
-          ).lean();
+          { 
+            id: discordUserId, 
+            cards: { 
+              $elemMatch: { 
+                name: { $regex: nameRegex }, 
+                rarity: rarity 
+              } 
+            } 
+          },
+          { "cards.$": 1 }
+        ).lean();
 
           if (readDoc && Array.isArray(readDoc.cards) && readDoc.cards[0]) {
             currentCount = readDoc.cards[0].count || 1;
@@ -263,20 +279,35 @@ module.exports = {
         } else {
           // No matched element existed; attempt a guarded push (only push if no matching element exists now)
           await User.updateOne(
-            {
-              id: discordUserId,
-              $nor: [{ cards: { $elemMatch: { name: { $regex: nameRegex }, rarity } } }]
-            },
-            {
-              $push: {
-                cards: { name: displayName, rarity, count: 1, firstAcquiredAt: now, lastAcquiredAt: now }
-              }
+          {
+            id: discordUserId,
+            $nor: [{ 
+              cards: { 
+                $elemMatch: { 
+                  name: { $regex: nameRegex }, 
+                  rarity: rarity 
+                } 
+              } 
+            }]
+          },
+          {
+            $push: {
+              cards: { name: displayName, rarity, count: 1, firstAcquiredAt: now, lastAcquiredAt: now }
             }
-          );
+          }
+        );
 
           // Read back authoritative element (handles race where another request pushed first)
           const readDoc = await User.findOne(
-            { id: discordUserId, "cards.name": { $regex: nameRegex }, "cards.rarity": rarity },
+            { 
+              id: discordUserId, 
+              cards: { 
+                $elemMatch: { 
+                  name: { $regex: nameRegex }, 
+                  rarity: rarity 
+                } 
+              } 
+            },
             { "cards.$": 1 }
           ).lean();
 
