@@ -331,6 +331,9 @@ module.exports = {
           if (session.finalizing) return;
           session.finalizing = true;
 
+          // ADD THIS LINE:
+          const now = new Date();
+
           // disable components immediately to avoid more clicks
           try { await message.edit({ components: [] }); } catch (e) {}
 
@@ -377,26 +380,26 @@ module.exports = {
                 if (sourceDoc.cards[sIdx].count <= 0) sourceDoc.cards.splice(sIdx, 1);
               }
 
-              // add to target
-              targetDoc.cards = targetDoc.cards || [];
-              const tIdx = targetDoc.cards.findIndex(x =>
-                x.name === offer.name &&
-                String(x.rarity || '').toLowerCase() === String(offer.rarity || '').toLowerCase()
-              );
-              if (tIdx !== -1) {
-                const card = targetDoc.cards[tIdx];
-                card.count = (card.count || 0) + offer.count;
-                card.firstAcquiredAt ??= now;
-                card.lastAcquiredAt = now;
-              } else {
-      targetDoc.cards.push({
-        name: offer.name,
-        rarity: String(offer.rarity ?? '').toUpperCase(),
-        count: offer.count,
-        firstAcquiredAt: now,
-        lastAcquiredAt: now,
-      });
-              }
+            // add to target
+            targetDoc.cards = targetDoc.cards || [];
+            const tIdx = targetDoc.cards.findIndex(x =>
+              x.name === offer.name &&
+              String(x.rarity || '').toLowerCase() === String(offer.rarity || '').toLowerCase()
+            );
+            if (tIdx !== -1) {
+              const card = targetDoc.cards[tIdx];
+              card.count = (card.count || 0) + offer.count;
+              card.firstAcquiredAt ??= now;        // ERROR: 'now' is not defined
+              card.lastAcquiredAt = now;           // ERROR: 'now' is not defined
+            } else {
+              targetDoc.cards.push({
+                name: offer.name,
+                rarity: String(offer.rarity ?? '').toUpperCase(),
+                count: offer.count,
+                firstAcquiredAt: now,              // ERROR: 'now' is not defined
+                lastAcquiredAt: now,               // ERROR: 'now' is not defined
+              });
+            }
             }
             sourceDoc.markModified('cards');
             targetDoc.markModified('cards');
