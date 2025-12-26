@@ -419,7 +419,7 @@ const eventOptions = applyOverride(userId, eventBase, 'eventOptions', overrideSe
     try { eventFile = pickFileFromPool(eventRarity, userId); } catch (e) { eventFile = null; }
   }
 
-  results.push({ rarity: eventRarity, file: eventFile });
+  //results.push({ rarity: eventRarity, file: eventFile });
 }
   return results;
 }
