@@ -91,15 +91,15 @@ module.exports = {
         .setImage(imageUrl)
         .addFields(
           {
-            name: 'Level Progress',
-            value: `**Level ${level}**\n${xp}/${xpToNext} XP\n\`${progressBar}\` ${progressPercent.toFixed(1)}%`,
+            name: 'Anniversary Progress',
+            value: `**${level} Years**\n${xp}/${xpToNext} days until next anniversary\n\`${progressBar}\` ${progressPercent.toFixed(1)}%`,
             inline: true
           }
         );
 
       if (doc.chosenAt) {
         embed.addFields({
-          name: 'Chosen',
+          name: 'Debut',
           value: `<t:${Math.floor(new Date(doc.chosenAt).getTime() / 1000)}:R>`,
           inline: true
         });
@@ -107,7 +107,7 @@ module.exports = {
 
       if (doc.lastLeveledAt) {
         embed.addFields({
-          name: 'Last Level Up',
+          name: 'Last Anniversary',
           value: `<t:${Math.floor(new Date(doc.lastLeveledAt).getTime() / 1000)}:R>`,
           inline: true
         });

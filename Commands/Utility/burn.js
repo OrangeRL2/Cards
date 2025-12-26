@@ -315,13 +315,13 @@ module.exports = {
         sessionDb.endSession();
 
         const resultEmbed = new EmbedBuilder()
-          .setTitle('Mass Burn Completed')
+          .setTitle('Mass Burn Completed (Anniversary Progress)')
           .setColor(0x00BB88)
           .setDescription(`Burned **${offersTx.length}** card entries (${totalCards} total cards) for **${totalXpTx} XP**.`)
           .addFields(
             { name: 'Oshi', value: `${oshi.oshiId}`, inline: true },
-            { name: 'Level', value: `${oshi.level} ${levelsGained ? `(+${levelsGained})` : ''}`, inline: true },
-            { name: 'XP (remaining)', value: `${oshi.xp}/${oshi.xpToNext}`, inline: true },
+            { name: 'Anniversary Year', value: `${oshi.level} ${levelsGained ? `(+${levelsGained})` : ''}`, inline: true },
+            { name: 'Days until next anniversary', value: `${oshi.xp}/${oshi.xpToNext}`, inline: true },
             { name: 'Rarities burned', value: rarities.join(', '), inline: true }
           );
 
@@ -336,7 +336,7 @@ module.exports = {
         }
 
         try { await sent.edit({ embeds: [resultEmbed], components: [] }); } catch {}
-        try { await btn.editReply({ content: 'Mass burn completed.', ephemeral: true }); } catch {}
+        try { await btn.editReply({ content: 'Mass Burn Completed (Anniversary Progress)', ephemeral: true }); } catch {}
         collector.stop('completed');
       } catch (err) {
         console.error('mass-burn finalize failed', err);
