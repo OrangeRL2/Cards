@@ -1,98 +1,8 @@
-const fs = require('fs');
-const path = require('path');
 const pools = require('../utils/loadImages');
 const PullQuota = require('../models/PullQuota'); // adjust path if needed
 
 function rand() {
   return Math.random();
-}
-
-// Example: weights keyed by filename base (no extension)
-const defaultEventWeights = {
-  "Padoru 1": 20.0,
-  "Padoru 2": 20.0,
-  "Padoru 3": 20.0,
-  "Padoru 4": 20.0,
-  "Padoru 5": 10.0,
-  "Padoru 6": 5.0,
-  "Padoru 7": 4.0,
-  "Padoru 8": 0.865,
-  "Padoru 9": 0.12,
-  "Padoru 0": 0.01,
-  "Padoru X": 0.005,
-};
-
-const CustomEventWeights = {
-   '91098889796481024': {
-    "Padoru 1": 20.0,
-  "Padoru 2": 20.0,
-  "Padoru 3": 20.0,
-  "Padoru 4": 20.0,
-  "Padoru 5": 10.0,
-  "Padoru 6": 5.0,
-  "Padoru 7": 4.0,
-  "Padoru 8": 0.865,
-  "Padoru 9": 0.1,
-  "Padoru 0": 0.03,
-  "Padoru X": 0.005,
-   },
-    '91103688415776768': {
-    "Padoru 1": 20.0,
-  "Padoru 2": 20.0,
-  "Padoru 3": 20.0,
-  "Padoru 4": 20.0,
-  "Padoru 5": 10.0,
-  "Padoru 6": 5.0,
-  "Padoru 7": 4.0,
-  "Padoru 8": 0.865,
-  "Padoru 9": 0.1,
-  "Padoru 0": 0.03,
-  "Padoru X": 0.005,
-   },
-    '6': {
-  "Padoru 1": 20.0,
-  "Padoru 2": 20.0,
-  "Padoru 3": 20.0,
-  "Padoru 4": 20.0,
-  "Padoru 5": 10.0,
-  "Padoru 6": 5.0,
-  "Padoru 7": 4.0,
-  "Padoru 8": 0.865,
-  "Padoru 9": 0.1,
-  "Padoru 0": 0.03,
-  "Padoru X": 0.005,
-   }
-};
-
-// Pick an index from an array of numeric weights
-function pickWeightedIndex(weights) {
-  const total = weights.reduce((s, w) => s + w, 0);
-  if (total <= 0) return -1;
-  let r = rand() * total;
-  for (let i = 0; i < weights.length; i++) {
-    r -= weights[i];
-    if (r <= 0) return i;
-  }
-  return weights.length - 1;
-}
-
-function pickFileFromEventPool(rarityKey, userId, weightsMap = defaultEventWeights) {
-  // pools is the object returned by loadPools()
-  // rarityKey should be 'XMAS' in your case
-  const files = pools[rarityKey];
-  if (!files || files.length === 0) return null;
-
-  // Build arrays of filenames (base) and weights aligned with files[]
-  const weights = [];
-  for (const f of files) {
-    const base = path.basename(f, path.extname(f)); // e.g., "Padoru 1"
-    // If exact base name exists in weightsMap, use it; otherwise fallback to small default weight
-    const w = (Object.prototype.hasOwnProperty.call(weightsMap, base) ? weightsMap[base] : 1.0);
-    weights.push(w);
-  }
-
-  const idx = pickWeightedIndex(weights);
-  return idx >= 0 ? files[idx] : files[Math.floor(Math.random() * files.length)];
 }
 
 function pickWeighted(options) {
@@ -107,104 +17,107 @@ function pickWeighted(options) {
 
 // --- User groups ---
 const specialUserIds = new Set([
-  '443061305721618432',
-  '',
+  //'409717160995192832',
+  //'153551890976735232',
 ]);
 
 const otherUserIds = new Set([
-  '',
+  '1171127294413246567',
+  '1334914199968677941',
+  '91098889796481024',
+  '776481620949205042'
 ]);
 
 // --- Overrides (unchanged) ---
 const specialOverrides = {
   commonSlot1Options: [
-    { key: 'C', weight: 95.7 },
-    { key: 'S', weight: 4.0 },
-    { key: 'HR', weight: 0.1 },
-    { key: 'BDAY', weight: 0.2 },
+    { key: 'C', weight: 87.40 },
+    { key: 'S', weight: 12.00 },
+    { key: 'HR', weight: 0.30 },
+    { key: 'bday', weight: 0.30 },
   ],
   commonSlot2Options: [
-    { key: 'OC', weight: 93.0 },
-    { key: 'OC', weight: 4.0 },
-    { key: 'OC', weight: 3.0 },
+    { key: 'C', weight: 82.00 },
+    { key: 'S', weight: 12.00 },
+    { key: 'OC', weight: 6.00 },
   ],
   commonSlot3Options: [
-    { key: 'C', weight: 95.9 },
-    { key: 'S', weight: 4.0 },
-    { key: 'BDAY', weight: 0.1 },
+    { key: 'C', weight: 87.70 },
+    { key: 'S', weight: 12.00 },
+    { key: 'bday', weight: 0.30 },
   ],
   commonSlot4Options: [
-    { key: 'C', weight: 95.8 },
-    { key: 'S', weight: 4.0 },
-    { key: 'HR', weight: 0.2 },
+    { key: 'C', weight: 87.70 },
+    { key: 'S', weight: 12.00 },
+    { key: 'HR', weight: 0.30 },
   ],
   uncommonSlotOptions: [
     [
-      { key: 'U', weight: 86.9 },
-      { key: 'RR', weight: 12.5 },
-      { key: 'SY', weight: 0.6 },
+      { key: 'U', weight: 69.25 },
+      { key: 'RR', weight: 30.00 },
+      { key: 'SY', weight: 0.75 },
     ],
     [
-      { key: 'U', weight: 94.5 },
-      { key: 'SR', weight: 4.0 },
-      { key: 'SY', weight: 1.5 },
+      { key: 'U', weight: 90.25 },
+      { key: 'SR', weight: 9.00 },
+      { key: 'SY', weight: 0.75 },
     ],
     [
-      { key: 'UR', weight: 94.0 },
-      { key: 'UR', weight: 3.0 },
-      { key: 'UR', weight: 3.0 },
+      { key: 'U', weight: 92.50 },
+      { key: 'OSR', weight: 6.00 },
+      { key: 'UR', weight: 1.50 },
     ],
   ],
   rareOptions: [
-    { key: 'SEC', weight: 99.40 },
-    { key: 'SEC', weight: 0.55 },
-    { key: 'SEC', weight: 0.05 },
+    { key: 'R', weight: 98.74 },
+    { key: 'OUR', weight: 1.17 },
+    { key: 'SEC', weight: 0.09 },
   ],
 };
 
 const otherOverrides = {
   commonSlot1Options: [
-    { key: 'C', weight: 95.7 },
-    { key: 'S', weight: 4.0 },
-    { key: 'HR', weight: 0.1 },
-    { key: 'BDAY', weight: 0.2 },
+    { key: 'C', weight: 97.90 },
+    { key: 'S', weight: 2.00 },
+    { key: 'HR', weight: 0.05 },
+    { key: 'bday', weight: 0.05 },
   ],
   commonSlot2Options: [
-    { key: 'C', weight: 93.0 },
-    { key: 'S', weight: 4.0 },
-    { key: 'OC', weight: 3.0 },
+    { key: 'C', weight: 97.00 },
+    { key: 'S', weight: 2.00 },
+    { key: 'OC', weight: 1.00 },
   ],
   commonSlot3Options: [
-    { key: 'C', weight: 95.9 },
-    { key: 'S', weight: 4.0 },
-    { key: 'BDAY', weight: 0.1 },
+    { key: 'C', weight: 97.95 },
+    { key: 'S', weight: 2.00 },
+    { key: 'bday', weight: 0.05 },
   ],
   commonSlot4Options: [
-    { key: 'C', weight: 95.8 },
-    { key: 'S', weight: 4.0 },
-    { key: 'HR', weight: 0.2 },
+    { key: 'C', weight: 97.95 },
+    { key: 'S', weight: 2.00 },
+    { key: 'HR', weight: 0.05 },
   ],
   uncommonSlotOptions: [
     [
-      { key: 'U', weight: 86.9 },
-      { key: 'RR', weight: 12.5 },
-      { key: 'SY', weight: 0.6 },
+      { key: 'U', weight: 94.875 },
+      { key: 'RR', weight: 5.00 },
+      { key: 'SY', weight: 0.125 },
     ],
     [
-      { key: 'U', weight: 94.5 },
-      { key: 'SR', weight: 4.0 },
-      { key: 'SY', weight: 1.5 },
+      { key: 'U', weight: 98.375 },
+      { key: 'SR', weight: 1.50 },
+      { key: 'SY', weight: 0.125 },
     ],
     [
-      { key: 'U', weight: 94.0 },
-      { key: 'OSR', weight: 3.0 },
-      { key: 'UR', weight: 3.0 },
+      { key: 'U', weight: 98.75 },
+      { key: 'OSR', weight: 1.00 },
+      { key: 'UR', weight: 0.25 },
     ],
   ],
   rareOptions: [
-    { key: 'SEC', weight: 99.20 },
-    { key: 'OUR', weight: 0.55 },
-    { key: 'R', weight: 0.25 },
+    { key: 'R', weight: 99.79 },   // adjusted -0.02 to make total exactly 100.00
+    { key: 'OUR', weight: 0.195 },
+    { key: 'SEC', weight: 0.015 },
   ],
 };
 
@@ -257,7 +170,7 @@ async function drawPack(userId, useSpecialRatesOverride = null) {
   } else {
     try {
       const quota = await PullQuota.findOne({ userId: idStr }).lean().exec();
-      if (quota && typeof quota.eventPulls === 'number' && quota.eventPulls === 19 && specialUserIds.has(idStr)) {
+      if (quota && typeof quota.pulls === 'number' && quota.pulls >= 0 && specialUserIds.has(idStr)) {
         useSpecialRates = true;
       }
     } catch (err) {
@@ -273,7 +186,7 @@ async function drawPack(userId, useSpecialRatesOverride = null) {
     { key: 'C', weight: 95.8 },
     { key: 'S', weight: 4.0 },
     { key: 'HR', weight: 0.1 },
-    { key: 'BDAY', weight: 0.1 },
+    { key: 'bday', weight: 0.1 },
   ];
   const commonSlot1Options = applyOverride(userId, commonSlot1Base, 'commonSlot1Options', overrideSet);
   {
@@ -297,7 +210,7 @@ async function drawPack(userId, useSpecialRatesOverride = null) {
   const commonSlot3Base = [
     { key: 'C', weight: 95.9 },
     { key: 'S', weight: 4.0 },
-    { key: 'BDAY', weight: 0.1 },
+    { key: 'bday', weight: 0.1 },
   ];
   const commonSlot3Options = applyOverride(userId, commonSlot3Base, 'commonSlot3Options', overrideSet);
   {
@@ -350,7 +263,7 @@ async function drawPack(userId, useSpecialRatesOverride = null) {
 
   // Rare slot
   const rareBase = [
-    { key: 'R', weight: 99.60 },
+    { key: 'R', weight: 99.58 },
     { key: 'OUR', weight: 0.39 },
     { key: 'SEC', weight: 0.03 },
   ];
@@ -361,66 +274,6 @@ async function drawPack(userId, useSpecialRatesOverride = null) {
     results.push({ rarity: rareRarity, file: rareFile });
   }
 
- // Event slot (XMAS) with per-file weights
-const eventBase = [
-  { key: 'XMAS', weight: 100.0 },
-];
-const eventOptions = applyOverride(userId, eventBase, 'eventOptions', overrideSet);
-{
-  const eventRarity = pickWeighted(eventOptions);
-
-  // If eventRarity is XMAS, pick using per-file weights
-  let eventFile = null;
-  if (eventRarity === 'XMAS') {
-    // Resolve weights map precedence:
-    // 1) overrideSet.eventWeights[idStr] (if overrideSet stores per-user maps)
-    // 2) CustomEventWeights[idStr] (your explicit per-user map)
-    // 3) overrideSet.eventWeights (global map)
-    // 4) defaultEventWeights (fallback)
-    let weightsMap = null;
-
-    // 1) per-user map inside overrideSet
-    if (overrideSet && overrideSet.eventWeights && overrideSet.eventWeights[idStr]) {
-      weightsMap = overrideSet.eventWeights[idStr];
-    }
-
-    // 2) explicit per-user map you defined (CustomEventWeights)
-    if (!weightsMap && CustomEventWeights && CustomEventWeights[idStr]) {
-      weightsMap = CustomEventWeights[idStr];
-    }
-
-    // 3) global eventWeights in overrideSet
-    if (!weightsMap && overrideSet && overrideSet.eventWeights && typeof overrideSet.eventWeights === 'object') {
-      weightsMap = overrideSet.eventWeights;
-    }
-
-    // 4) fallback to default
-    if (!weightsMap) weightsMap = defaultEventWeights;
-
-    // Validate weightsMap is an object with at least one numeric value
-    const validWeights = weightsMap && typeof weightsMap === 'object' &&
-      Object.keys(weightsMap).some(k => typeof weightsMap[k] === 'number' && !Number.isNaN(weightsMap[k]));
-
-    if (!validWeights) {
-      console.warn('Resolved event weights map is invalid for user', idStr, '; falling back to defaultEventWeights.');
-      weightsMap = defaultEventWeights;
-    }
-
-    // pick using the resolved weights map; pickFileFromEventPool accepts a weightsMap param
-    try {
-      eventFile = pickFileFromEventPool('XMAS', userId, weightsMap);
-    } catch (e) {
-      console.warn('Event file pick failed for user', idStr, e);
-      // fallback to generic pool pick
-      try { eventFile = pickFileFromPool('XMAS', userId); } catch (e2) { eventFile = null; }
-    }
-  } else {
-    // fallback to existing behavior for other event rarities
-    try { eventFile = pickFileFromPool(eventRarity, userId); } catch (e) { eventFile = null; }
-  }
-
-  //results.push({ rarity: eventRarity, file: eventFile });
-}
   return results;
 }
 

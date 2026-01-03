@@ -114,46 +114,47 @@ module.exports = {
         .setRequired(false)
     ),
   requireOshi: true,
-  async execute(interaction) {
-    await interaction.deferReply();
+async execute(interaction) {
+  await interaction.deferReply();
 
-    const DEFAULT_GIF_DURATION_MS = 1200;
-    let gifDurationMs = DEFAULT_GIF_DURATION_MS;
+  const DEFAULT_GIF_DURATION_MS = 1200;
+  let gifDurationMs = DEFAULT_GIF_DURATION_MS;
 
-    // Show loading GIF
-    const gifUrl2 = gifs[Math.floor(Math.random() * gifs.length)];
-    let gifShownAt = Date.now();
-    try {
-      const loadingEmbed = new EmbedBuilder()
-        .setTitle('*PULLING...*')
-        .setColor(0x00BBFF)
-        .setImage(gifUrl2);
-      await interaction.editReply({ embeds: [loadingEmbed] });
-      gifShownAt = Date.now();
-    } catch (err) {
-      console.warn('Failed to show loading gif:', err);
-      gifShownAt = Date.now();
-    }
+  // Show loading GIF
+  const gifUrl2 = gifs[Math.floor(Math.random() * gifs.length)];
+  let gifShownAt = Date.now();
+  try {
+    const loadingEmbed = new EmbedBuilder()
+      .setTitle('*PULLING...*')
+      .setColor(0x00BBFF)
+      .setImage(gifUrl2);
+    await interaction.editReply({ embeds: [loadingEmbed] });
+    gifShownAt = Date.now();
+  } catch (err) {
+    console.warn('Failed to show loading gif:', err);
+    gifShownAt = Date.now();
+  }
 
     const discordUserId = interaction.user.id;
     const amount = 1; // single pull
     const allowEvent = Boolean(interaction.options.getBoolean('event'));
 
     // Informational quota check
-    let quotaDoc;
-    try {
-      const { doc } = await pullQuota.getUpdatedQuota(discordUserId);
-      quotaDoc = doc;
-    } catch (err) {
-      console.error('quota check error:', err);
-      const elapsed = Date.now() - gifShownAt;
-      if (elapsed < gifDurationMs) await sleep(gifDurationMs - elapsed);
-      await interaction.editReply({ content: 'Failed to check pull quota. Please try again later.' });
-      return;
-    }
+     // Check quota but DON'T consume yet
+  let quotaDoc;
+  try {
+    const { doc } = await pullQuota.getUpdatedQuota(discordUserId);
+    quotaDoc = doc;
+  } catch (err) {
+    console.error('quota check error:', err);
+    const elapsed = Date.now() - gifShownAt;
+    if (elapsed < gifDurationMs) await sleep(gifDurationMs - elapsed);
+    await interaction.editReply({ content: 'Failed to check pull quota. Please try again later.' });
+    return;
+  }
 
-    const hasEnoughPulls = !!quotaDoc && (allowEvent ? (quotaDoc.eventPulls + quotaDoc.pulls) >= amount : quotaDoc.pulls >= amount);
-    if (!hasEnoughPulls) {
+  const hasEnoughPulls = !!quotaDoc && (allowEvent ? (quotaDoc.eventPulls + quotaDoc.pulls) >= amount : quotaDoc.pulls >= amount);
+  if (!hasEnoughPulls) {
       const nextInMs = quotaDoc ? (quotaDoc.pulls < pullQuota.MAX_STOCK ? Math.max(0, pullQuota.REFILL_INTERVAL_MS - (Date.now() - new Date(quotaDoc.lastRefill || Date.now()).getTime())) : 0) : 0;
       const nextRefillText = nextInMs > 0 ? `<t:${Math.floor((Date.now() + nextInMs) / 1000)}:R>` : 'Refill scheduled';
       const embed = new EmbedBuilder()
@@ -179,34 +180,6 @@ module.exports = {
       const elapsed = Date.now() - gifShownAt;
       if (elapsed < gifDurationMs) await sleep(gifDurationMs - elapsed);
       await interaction.editReply({ content: 'An error occurred while drawing the pack. Please try againnnn.', components: [] });
-      return;
-    }
-
-    // Consume pulls (authoritative)
-    let consumeResult;
-    try {
-      consumeResult = await consumePulls(discordUserId, amount, allowEvent);
-    } catch (err) {
-      console.error('consumePulls error:', err);
-      const elapsed = Date.now() - gifShownAt;
-      if (elapsed < gifDurationMs) await sleep(gifDurationMs - elapsed);
-      await interaction.editReply({ content: 'Failed to consume pulls. Please try again later.', components: [] });
-      return;
-    }
-
-    if (!consumeResult.success) {
-      const nextRefillText = consumeResult.nextRefillInMs > 0 ? `<t:${Math.floor((Date.now() + consumeResult.nextRefillInMs) / 1000)}:R>` : 'Refill scheduled';
-      const embed = new EmbedBuilder()
-        .setTitle('Not enough pulls available')
-        .setColor(0xFF5555)
-        .addFields(
-          { name: 'Timed pulls', value: `${consumeResult.remainingTimed}`, inline: true },
-          { name: 'Event pulls', value: `${consumeResult.remainingEvent}`, inline: true },
-          { name: 'Next timed pull', value: nextRefillText, inline: true },
-        );
-      const elapsed = Date.now() - gifShownAt;
-      if (elapsed < gifDurationMs) await sleep(gifDurationMs - elapsed);
-      await interaction.editReply({ embeds: [embed], components: [] });
       return;
     }
 
@@ -334,9 +307,6 @@ module.exports = {
         pageItems.push({ rarity, rawName: raw, displayName, titleLine, imageUrl: encodedUrl });
         allNames.push(`${visiblePrefix}[${escapeLinkText(titleBody)}](${encodedUrl})${titleCount}`);
       }
-
-      // increment user's pulls once (informational)
-      await User.updateOne({ id: discordUserId }, { $inc: { pulls: 1 } });
     } catch (err) {
       console.error('atomic update error:', err);
       const elapsed = Date.now() - gifShownAt;
@@ -377,7 +347,36 @@ module.exports = {
         console.warn('failed to show SEC reveal gif:', err);
       }
     }
+            // Consume pulls (authoritative)
+    let consumeResult;
+    try {
+      consumeResult = await consumePulls(discordUserId, amount, allowEvent);
+    } catch (err) {
+      console.error('consumePulls error:', err);
+      const elapsed = Date.now() - gifShownAt;
+      if (elapsed < gifDurationMs) await sleep(gifDurationMs - elapsed);
+      await interaction.editReply({ content: 'Failed to consume pulls. Please try again later.', components: [] });
+      return;
+    }
 
+    if (!consumeResult.success) {
+      const nextRefillText = consumeResult.nextRefillInMs > 0 ? `<t:${Math.floor((Date.now() + consumeResult.nextRefillInMs) / 1000)}:R>` : 'Refill scheduled';
+      const embed = new EmbedBuilder()
+        .setTitle('Not enough pulls available')
+        .setColor(0xFF5555)
+        .addFields(
+          { name: 'Timed pulls', value: `${consumeResult.remainingTimed}`, inline: true },
+          { name: 'Event pulls', value: `${consumeResult.remainingEvent}`, inline: true },
+          { name: 'Next timed pull', value: nextRefillText, inline: true },
+        );
+      const elapsed = Date.now() - gifShownAt;
+      if (elapsed < gifDurationMs) await sleep(gifDurationMs - elapsed);
+      await interaction.editReply({ embeds: [embed], components: [] });
+      return;
+    }
+    
+      // increment user's pulls once (informational)
+      await User.updateOne({ id: discordUserId }, { $inc: { pulls: 1 } });
     // Build embed maker
     function makeEmbed(idx) {
       const it = pageItems[idx];

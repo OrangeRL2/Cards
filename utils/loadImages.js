@@ -27,11 +27,11 @@ function loadPools() {
   const defaultPools = readRarityFolders(assetsBase);
 
   // Optional group-specific pools: assets/images/special/<Rarity>/* and assets/images/other/<Rarity>/*
-  const specialBase = path.join(__dirname, '..', 'assets', 'special');
+  const specialBase = path.join(__dirname, '..', 'assets', 'images');
   const otherBase = path.join(assetsBase, 'other');
 
   const specialPools = readRarityFolders(specialBase);
-  const otherPools = readRarityFolders(otherBase);
+  const otherPools = readRarityFolders(specialBase);
 
   // Merge into single export object while keeping group namespaces
   const pools = Object.assign({}, defaultPools);
