@@ -34,7 +34,7 @@ const specialOverrides = {
     { key: 'C', weight: 87.40 },
     { key: 'S', weight: 12.00 },
     { key: 'HR', weight: 0.30 },
-    { key: 'bday', weight: 0.30 },
+    { key: 'BDAY', weight: 0.30 },
   ],
   commonSlot2Options: [
     { key: 'C', weight: 82.00 },
@@ -44,7 +44,7 @@ const specialOverrides = {
   commonSlot3Options: [
     { key: 'C', weight: 87.70 },
     { key: 'S', weight: 12.00 },
-    { key: 'bday', weight: 0.30 },
+    { key: 'BDAY', weight: 0.30 },
   ],
   commonSlot4Options: [
     { key: 'C', weight: 87.70 },
@@ -80,7 +80,7 @@ const otherOverrides = {
     { key: 'C', weight: 97.90 },
     { key: 'S', weight: 2.00 },
     { key: 'HR', weight: 0.05 },
-    { key: 'bday', weight: 0.05 },
+    { key: 'BDAY', weight: 0.05 },
   ],
   commonSlot2Options: [
     { key: 'C', weight: 97.00 },
@@ -90,7 +90,7 @@ const otherOverrides = {
   commonSlot3Options: [
     { key: 'C', weight: 97.95 },
     { key: 'S', weight: 2.00 },
-    { key: 'bday', weight: 0.05 },
+    { key: 'BDAY', weight: 0.05 },
   ],
   commonSlot4Options: [
     { key: 'C', weight: 97.95 },
@@ -186,7 +186,7 @@ async function drawPack(userId, useSpecialRatesOverride = null) {
     { key: 'C', weight: 95.8 },
     { key: 'S', weight: 4.0 },
     { key: 'HR', weight: 0.1 },
-    { key: 'bday', weight: 0.1 },
+    { key: 'BDAY', weight: 0.1 },
   ];
   const commonSlot1Options = applyOverride(userId, commonSlot1Base, 'commonSlot1Options', overrideSet);
   {
@@ -210,7 +210,7 @@ async function drawPack(userId, useSpecialRatesOverride = null) {
   const commonSlot3Base = [
     { key: 'C', weight: 95.9 },
     { key: 'S', weight: 4.0 },
-    { key: 'bday', weight: 0.1 },
+    { key: 'BDAY', weight: 0.1 },
   ];
   const commonSlot3Options = applyOverride(userId, commonSlot3Base, 'commonSlot3Options', overrideSet);
   {

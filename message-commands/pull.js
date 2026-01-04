@@ -55,36 +55,37 @@ module.exports = {
       let replyMessage = null;
 
       // fake interaction that matches the methods your slash handler expects
-      const fakeInteraction = {
-        // use the target user if provided and allowed, otherwise the message author
-        user: targetUser || message.author,
-        // expose the original caller so the slash handler can audit who initiated the action
-        _initiator: message.author,
-        options: {
-          getBoolean: (name) => (name === 'event' ? allowEvent : null)
-        },
-        async deferReply() {
-          try {
-            replyMessage = await message.channel.send({ content: '' });
-          } catch (e) {
-            replyMessage = null;
-          }
-        },
-        async editReply(payload) {
-          try {
-            if (!replyMessage) {
-              replyMessage = await message.channel.send(payload);
-              return replyMessage;
-            }
-            return await replyMessage.edit(typeof payload === 'string' ? { content: payload } : payload);
-          } catch (err) {
-            try { replyMessage = await message.channel.send(payload); return replyMessage; } catch { return null; }
-          }
-        },
-        async reply(payload) {
-          try { replyMessage = await message.channel.send(payload); return replyMessage; } catch { return null; }
-        }
-      };
+      // inside message-commands/pull.js, where fakeInteraction is defined
+const fakeInteraction = {
+  id: `msg-${message.id}`, // ensure a unique id per message invocation
+  user: targetUser || message.author,
+  _initiator: message.author,
+  options: {
+    getBoolean: (name) => (name === 'event' ? allowEvent : null)
+  },
+  async deferReply() {
+    try {
+      replyMessage = await message.channel.send({ content: '' });
+    } catch (e) {
+      replyMessage = null;
+    }
+  },
+  async editReply(payload) {
+    try {
+      if (!replyMessage) {
+        replyMessage = await message.channel.send(payload);
+        return replyMessage;
+      }
+      return await replyMessage.edit(typeof payload === 'string' ? { content: payload } : payload);
+    } catch (err) {
+      try { replyMessage = await message.channel.send(payload); return replyMessage; } catch { return null; }
+    }
+  },
+  async reply(payload) {
+    try { replyMessage = await message.channel.send(payload); return replyMessage; } catch { return null; }
+  }
+};
+
 
       // call the slash command execute exactly as if an interaction invoked it
       await slashCmd.execute(fakeInteraction);
