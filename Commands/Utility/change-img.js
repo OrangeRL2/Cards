@@ -5,6 +5,12 @@ const OshiUser = require('../../models/Oshi');
 const User = require('../../models/User');
 const OSHI_LIST = require('../../config/oshis');
 
+const EXCEPTIONS = {
+  // values are arrays of exception names or prefixes that should be allowed
+  // Example:
+  'chloe': ['Ruka'],
+};
+
 const { Schema } = mongoose;
 const OshiImageOverrideSchema = new Schema({
   userId: { type: String, required: true, unique: true },
@@ -61,12 +67,23 @@ module.exports = {
         return interaction.editReply({ content: 'User has an invalid oshi id; cannot validate card name.' });
       }
       const normOshi = normalizeForCompare(oshiId);
-      const normCard = normalizeForCompare(cardName);
-      if (!normCard.startsWith(normOshi)) {
-        return interaction.editReply({
-          content: `Card name must start with the user's oshi id "${oshiId}". Example: "${oshiId} 001".`
-        });
-      }
+const normCard = normalizeForCompare(cardName);
+
+// Build normalized exceptions list for this oshi (if any)
+const rawExceptions = EXCEPTIONS[oshiId] || [];
+const normExceptions = rawExceptions.map(e => normalizeForCompare(e));
+
+// Allowed if card starts with oshi id OR starts with any exception prefix
+const allowedByOshi = normCard.startsWith(normOshi);
+const allowedByException = normExceptions.some(exc => exc && normCard.startsWith(exc));
+
+if (!allowedByOshi && !allowedByException) {
+  const example = rawExceptions.length ? rawExceptions[0] : `${oshiId} 001`;
+  return interaction.editReply({
+    content: `Card name must start with the user's oshi id "${oshiId}" or match an allowed exception. Example: "${example}".`
+  });
+}
+
 
       // Verify the target user actually owns that card in their inventory
       const userDoc = await User.findOne({ id: targetId }).lean().exec();

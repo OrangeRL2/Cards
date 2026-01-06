@@ -190,12 +190,12 @@ async function grantBirthdayPulls({ client = null, birthdayChannelId = null } = 
 }
 
 function startScheduler({ client = null, birthdayChannelId = null } = {}) {
-  cron.schedule('0 15 * * *', () => {
+  cron.schedule('1 0 * * *', () => {
     console.log('[birthdayHandout] scheduled run (15:00 UTC -> 00:00 JST)');
     grantBirthdayPulls({ client, birthdayChannelId });
   }, {
     scheduled: true,
-    timezone: 'UTC',
+    timezone: 'Asia/Tokyo',
   });
 
   console.log('[birthdayHandout] scheduler started (will run daily at 00:00 JST).');

@@ -15,7 +15,7 @@
     "discord.js": "^14.25.1",
     "ioredis": "^5.8.2",
     "mongodb": "^6.18.0",
-    "mongoose": "^8.20.2",
+    "mongoose": "^8.21.0",
     "nanoid": "^5.1.6",
     "node-cron": "^4.2.1",
     "pm2": "^6.0.13",

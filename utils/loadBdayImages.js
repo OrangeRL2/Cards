@@ -8,7 +8,7 @@ function normalizeLabel(label) {
 }
 
 function loadAllBdayFiles() {
-  const base = path.join(__dirname, '..', 'assets', 'images', 'bday');
+  const base = path.join(__dirname, '..', 'assets', 'images', 'BDAY');
   const allFiles = []; // absolute paths
 
   try {
