@@ -6,8 +6,8 @@ const FUSION_ITEMS = {
     image: 'Suisei 002',
     stock: -1,
     requires: [
-      { rarity: 'UP', image: 'Suisei 003', count: 1 }, // Finalist Suisei
-      { rarity: 'UP', image: 'Suisei 004', count: 1 }, // Top 4 Suisei
+      { rarity: 'C', image: 'Noel 002', count: 1 }, // Finalist Suisei
+      { rarity: 'OC', image: 'Iroha 001', count: 1 }, // Top 4 Suisei
     ],
   },
 

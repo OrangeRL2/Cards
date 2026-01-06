@@ -47,8 +47,8 @@ function paginate(items) {
 
 module.exports = {
   data: new SlashCommandBuilder()
-    .setName('fusion')
-    .setDescription('Fuse cards together to create new ones!'),
+    .setName('collab')
+    .setDescription('Make cards collab together to create new ones!'),
 
   async execute(interaction) {
     await interaction.deferReply();
@@ -57,7 +57,7 @@ module.exports = {
     try {
       const entranceGif = ENTRANCE_GIFS[Math.floor(Math.random() * ENTRANCE_GIFS.length)];
       const loadingEmbed = new EmbedBuilder()
-        .setTitle('*ENTERING FUSION LAB...*')
+        .setTitle('*ENTERING COLLAB PAGE*')
         .setColor(0x00BBFF)
         .setImage(entranceGif);
       await interaction.editReply({ embeds: [loadingEmbed] });
@@ -71,7 +71,7 @@ module.exports = {
       let allItems = Object.entries(FUSION_ITEMS).map(([id, it]) => ({ id, ...it }));
 
       if (allItems.length === 0) {
-        return interaction.editReply({ content: 'No fusion recipes available.', ephemeral: true });
+        return interaction.editReply({ content: 'No collab recipes available.', ephemeral: true });
       }
 
       // Unique uid for this interaction
@@ -90,8 +90,8 @@ module.exports = {
           }).join('\n\n');
 
           return new EmbedBuilder()
-            .setTitle('Fusion Shop')
-            .setDescription(description || 'No fusion recipes.')
+            .setTitle('Collab Shedules')
+            .setDescription(description || 'No collab recipes.')
             .setColor(Colors.Blurple)
             .setFooter({ text: `Page ${pageIdx + 1}/${totalPages}` });
         });
@@ -100,7 +100,7 @@ module.exports = {
           const prev = new ButtonBuilder().setCustomId(`fusion_list_prev_${pageIdx}_${uid}`).setLabel('◀ Prev').setStyle(ButtonStyle.Primary);
           const view = new ButtonBuilder().setCustomId(`fusion_list_view_${pageIdx}_${uid}`).setLabel('🔍 Preview').setStyle(ButtonStyle.Success);
           const next = new ButtonBuilder().setCustomId(`fusion_list_next_${pageIdx}_${uid}`).setLabel('Next ▶').setStyle(ButtonStyle.Primary);
-          const fuse = new ButtonBuilder().setCustomId(`fusion_list_fuse_${pageIdx}_${uid}`).setLabel('Fuse Selected').setStyle(ButtonStyle.Danger);
+          const fuse = new ButtonBuilder().setCustomId(`fusion_list_fuse_${pageIdx}_${uid}`).setLabel('Collab Selected').setStyle(ButtonStyle.Danger);
           return new ActionRowBuilder().addComponents(prev, view, next, fuse);
         });
 
@@ -115,7 +115,7 @@ module.exports = {
 
         const imageRows = items.map((it, i) => {
           const prev = new ButtonBuilder().setCustomId(`fusion_img_prev_${i}_${uid}`).setLabel('◀ Prev').setStyle(ButtonStyle.Primary);
-          const fuse = new ButtonBuilder().setCustomId(`fusion_img_fuse_${i}_${uid}`).setLabel('Fuse').setStyle(ButtonStyle.Danger);
+          const fuse = new ButtonBuilder().setCustomId(`fusion_img_fuse_${i}_${uid}`).setLabel('Collab').setStyle(ButtonStyle.Danger);
           const next = new ButtonBuilder().setCustomId(`fusion_img_next_${i}_${uid}`).setLabel('Next ▶').setStyle(ButtonStyle.Primary);
           const back = new ButtonBuilder().setCustomId(`fusion_img_back_${i}_${uid}`).setLabel('⤵️ Back').setStyle(ButtonStyle.Secondary);
           return new ActionRowBuilder().addComponents(prev, back, next, fuse);
@@ -178,7 +178,7 @@ module.exports = {
           if (cid.startsWith(`fusion_list_fuse_`)) {
             const totalItems = allItems.length || 1;
             const modalId = `fusion_buy_modal_${listPage}_${uid}`;
-            const modal = new ModalBuilder().setCustomId(modalId).setTitle('Fuse from Fusion Shop');
+            const modal = new ModalBuilder().setCustomId(modalId).setTitle('Collab from Collab Schedule');
             const itemInput = new TextInputBuilder()
               .setCustomId('item_global_index')
               .setLabel(`Enter the item number shown (1–${totalItems})`)
@@ -206,7 +206,7 @@ module.exports = {
                 if (!modalInt.deferred && !modalInt.replied) await modalInt.deferReply({ ephemeral: true });
                 await modalInt.deleteReply().catch(() => {});
               } catch (ackErr) {
-                try { await modalInt.reply({ content: 'Processing fusion...', ephemeral: true }); await modalInt.deleteReply().catch(() => {}); } catch {}
+                try { await modalInt.reply({ content: 'Processing collab...', ephemeral: true }); await modalInt.deleteReply().catch(() => {}); } catch {}
               }
 
               // parse global index directly
@@ -220,7 +220,7 @@ module.exports = {
               const item = allItems[globalIndex];
               await handleFusion(interaction, modalInt, item);
             } catch (err) {
-              try { await comp.reply({ content: 'Fusion cancelled or timed out.', ephemeral: true }); } catch {}
+              try { await comp.reply({ content: 'Collab cancelled or timed out.', ephemeral: true }); } catch {}
             }
 
             return;
@@ -229,7 +229,7 @@ module.exports = {
           // IMAGE NAV
           if (cid.startsWith(`fusion_img_prev_`)) {
             if (imageEmbeds.length === 0) {
-              await comp.update({ embeds: [new EmbedBuilder().setTitle('No items').setDescription('No fusion recipes.')], components: [listRows[listPage]] });
+              await comp.update({ embeds: [new EmbedBuilder().setTitle('No items').setDescription('No collab schedules.')], components: [listRows[listPage]] });
               return;
             }
             imageIdx = (imageIdx - 1 + imageEmbeds.length) % imageEmbeds.length;
@@ -238,7 +238,7 @@ module.exports = {
           }
           if (cid.startsWith(`fusion_img_next_`)) {
             if (imageEmbeds.length === 0) {
-              await comp.update({ embeds: [new EmbedBuilder().setTitle('No items').setDescription('No fusion recipes.')], components: [listRows[listPage]] });
+              await comp.update({ embeds: [new EmbedBuilder().setTitle('No items').setDescription('No collab schedules.')], components: [listRows[listPage]] });
               return;
             }
             imageIdx = (imageIdx + 1) % imageEmbeds.length;
@@ -264,7 +264,7 @@ module.exports = {
             return;
           }
         } catch (err) {
-          console.error('fusion collector error:', err);
+          console.error('collab collector error:', err);
           try { if (!comp.replied && !comp.deferred) await comp.reply({ content: 'Internal error.', ephemeral: true }); } catch {}
         }
       });
@@ -279,7 +279,7 @@ module.exports = {
           });
           await message.edit({ components: disabled });
         } catch (err) {
-          console.error('fusion cleanup error:', err);
+          console.error('collab cleanup error:', err);
         }
       });
 
@@ -289,7 +289,7 @@ module.exports = {
         try {
           const fuseGif = FUSE_GIFS[Math.floor(Math.random() * FUSE_GIFS.length)];
           const fuseEmbed = new EmbedBuilder()
-            .setTitle('**FUSION IN PROGRESS**')
+            .setTitle('**COLLAB IN PROGRESS**')
             .setColor(0xFFD700)
             .setImage(fuseGif);
 
@@ -297,13 +297,13 @@ module.exports = {
           try {
             await parentInteraction.editReply({ embeds: [fuseEmbed], components: [] });
           } catch (e) {
-            console.warn('Failed to edit main fusion message for fuse reveal:', e);
+            console.warn('Failed to edit main collab message for collab reveal:', e);
           }
 
           // ensure the GIF is visible long enough
           await sleep(FUSE_GIF_DURATION);
         } catch (err) {
-          console.warn('failed to show fuse gif:', err);
+          console.warn('failed to show collab gif:', err);
         }
 
         try {
@@ -343,8 +343,8 @@ module.exports = {
             }).join('\n');
 
             const failEmbed = new EmbedBuilder()
-              .setTitle('Fusion failed')
-              .setDescription('You do not meet the requirements for this fusion.')
+              .setTitle('Collab failed')
+              .setDescription('Some members were not available for the collab.')
               .addFields(
                 { name: 'Missing cards', value: missingText || 'None', inline: false },
                 { name: 'Recipe', value: `[${recipe.rarity}] ${recipe.image}`, inline: false }
@@ -358,7 +358,7 @@ module.exports = {
                 await parentInteraction.followUp({ embeds: [failEmbed], ephemeral: true });
               }
             } catch (err) {
-              try { await parentInteraction.followUp({ content: 'Fusion failed: missing required cards.', ephemeral: false }); } catch {}
+              try { await parentInteraction.followUp({ content: 'Collab failed: Some members were not available for the collab.', ephemeral: false }); } catch {}
             }
             return;
           }
@@ -401,8 +401,8 @@ module.exports = {
           const reqText = recipe.requires.map(req => `${req.count}x [${req.rarity}] ${req.image}`).join('\n');
 
           const embed = new EmbedBuilder()
-            .setTitle('Fusion Complete!')
-            .setDescription(`You fused cards into **${recipe.name}**!`)
+            .setTitle('Collab Stream Complete!')
+            .setDescription(`You collabed cards turned into **${recipe.name}**!`)
             .addFields(
               { name: 'Required Cards', value: reqText || 'None', inline: false },
               { name: 'Result', value: `[${recipe.rarity}] ${recipe.image}`, inline: false }
@@ -418,17 +418,17 @@ module.exports = {
             try { if (responder && typeof responder.reply === 'function') await responder.reply({ embeds: [embed], ephemeral: true }); } catch {}
           }
         } catch (err) {
-          console.error('fusion handler error:', err);
+          console.error('collab handler error:', err);
           try { if (responder && typeof responder.reply === 'function') await responder.reply({ content: 'An error occurred while processing the fusion. Please try again later.', ephemeral: true }); } catch {}
         }
       }
     } catch (err) {
-      console.error('fusion command error:', err);
+      console.error('collab command error:', err);
       try {
         if (!interaction.replied && !interaction.deferred) {
-          await interaction.reply({ content: 'Internal error opening fusion shop.', ephemeral: true });
+          await interaction.reply({ content: 'Internal error opening collab shop.', ephemeral: true });
         } else {
-          await interaction.editReply({ content: 'Internal error opening fusion shop.' });
+          await interaction.editReply({ content: 'Internal error opening collab shop.' });
         }
       } catch (e) { /* ignore */ }
     }
