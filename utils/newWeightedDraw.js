@@ -17,15 +17,14 @@ function pickWeighted(options) {
 
 // --- User groups ---
 const specialUserIds = new Set([
-  //'409717160995192832',
+  '495185224628699137',//eld
   //'153551890976735232',
 ]);
 
 const otherUserIds = new Set([
-  '1171127294413246567',
-  '1334914199968677941',
-  '91098889796481024',
-  '776481620949205042'
+  '1171127294413246567',//blacky
+  '1334914199968677941',//blacky
+  '91098889796481024', //moo
 ]);
 
 // --- Overrides (unchanged) ---
@@ -34,7 +33,7 @@ const specialOverrides = {
     { key: 'C', weight: 87.40 },
     { key: 'S', weight: 12.00 },
     { key: 'HR', weight: 0.30 },
-    { key: 'BDAY', weight: 0.30 },
+    { key: 'HR', weight: 0.30 }, //bday
   ],
   commonSlot2Options: [
     { key: 'C', weight: 82.00 },
@@ -44,7 +43,7 @@ const specialOverrides = {
   commonSlot3Options: [
     { key: 'C', weight: 87.70 },
     { key: 'S', weight: 12.00 },
-    { key: 'BDAY', weight: 0.30 },
+    { key: 'S', weight: 0.30 }, //bday
   ],
   commonSlot4Options: [
     { key: 'C', weight: 87.70 },
@@ -71,7 +70,7 @@ const specialOverrides = {
   rareOptions: [
     { key: 'R', weight: 98.74 },
     { key: 'OUR', weight: 1.17 },
-    { key: 'SEC', weight: 0.09 },
+    { key: 'OUR', weight: 0.09 },
   ],
 };
 
@@ -80,7 +79,7 @@ const otherOverrides = {
     { key: 'C', weight: 97.90 },
     { key: 'S', weight: 2.00 },
     { key: 'HR', weight: 0.05 },
-    { key: 'BDAY', weight: 0.05 },
+    { key: 'C', weight: 0.05 },
   ],
   commonSlot2Options: [
     { key: 'C', weight: 97.00 },
@@ -90,7 +89,7 @@ const otherOverrides = {
   commonSlot3Options: [
     { key: 'C', weight: 97.95 },
     { key: 'S', weight: 2.00 },
-    { key: 'BDAY', weight: 0.05 },
+    { key: 'C', weight: 0.05 },
   ],
   commonSlot4Options: [
     { key: 'C', weight: 97.95 },
@@ -117,7 +116,7 @@ const otherOverrides = {
   rareOptions: [
     { key: 'R', weight: 99.79 },   // adjusted -0.02 to make total exactly 100.00
     { key: 'OUR', weight: 0.195 },
-    { key: 'SEC', weight: 0.015 },
+    { key: 'R', weight: 0.015 },
   ],
 };
 

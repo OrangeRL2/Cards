@@ -21,12 +21,12 @@ const IDLE_LIMIT = 120_000; // 2 minutes
 
 // GIF settings
 const ENTRANCE_GIFS = [
-  'https://media.discordapp.net/attachments/1438508130165067818/1445661642158374972/tazuna-hayakawa-tazunahayakawa.gif?ex=693128d2&is=692fd752&hm=3dbd79e0a19920088c556e30521108255ac86bb12fe00a9ec9529c0ae51c614d&=',
+  'https://media.discordapp.net/attachments/1438508130165067818/1459785373025697846/puzzle-puzzles.gif?ex=69648a92&is=69633912&hm=6118a2de54e3215f1fc61f4a02c6f2f393160002cb78b99d15f862c3087d7809&=',
 ];
 const FUSE_GIFS = [
-  'https://media.discordapp.net/attachments/1445601709480083527/1445673016552853544/genshin-capturing-radiance.gif?ex=6931336a&is=692fe1ea&hm=7bb78cb57b0a036bd5f0d67362b65c79ff7dec19b6b942963a047ee7e71968ba&=&width=212&height=226',
+  'https://media.discordapp.net/attachments/1438722891431678036/1440675996742320258/Surprise_Hug.gif?ex=69643c54&is=6962ead4&hm=0d43adc4a2bb2b41a598f02bc47f027ce0ed40d27a19d021a948a39c1ec93836&=',
 ];
-const ENTRANCE_GIF_DURATION = 2200; // ms
+const ENTRANCE_GIF_DURATION = 1600; // ms
 const FUSE_GIF_DURATION = 4200; // ms
 
 function sleep(ms) {
@@ -108,7 +108,7 @@ module.exports = {
           new EmbedBuilder()
             .setTitle(`**[${it.rarity}]** ${escapeMarkdown(it.name)}`)
             .setDescription((it.requires || []).map(r => `${r.count}x [${r.rarity}] ${r.image}`).join('\n') || 'No requirements')
-            .setImage(buildImageUrl(it.rarity, `${it.image}.png`))
+            //.setImage(buildImageUrl(it.rarity, `${it.image}.png`))
             .setColor(Colors.Green)
             .setFooter({ text: `Recipe ${i + 1} of ${items.length}` })
         );

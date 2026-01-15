@@ -15,7 +15,7 @@ const IDLE_LIMIT = 120_000;
 
 // RARITY order consistent with inventory / miss (later items considered rarer)
 const RARITY_ORDER = [
-  'C', 'OC', 'U', 'R', 'S', 'P', 'SY', 'RR', 'SR', 'OSR', 'UR', 'OUR', 'SEC', 'HR', 'bday',
+  'XMAS', 'C', 'U', 'R', 'S', 'RR', 'OC', 'SR', 'COL', 'OSR', 'P', 'SP', 'SY', 'UR', 'OUR', 'HR', 'BDAY', 'UP', 'SEC'
 ];
 
 module.exports = {
@@ -79,7 +79,7 @@ module.exports = {
       const themCards = normalizeCards(themDoc?.cards);
 
       // Build maps keyed by lower-case name::rarity -> count
-      const keyOf = c => `${String(c.name).toLowerCase()}::${String(c.rarity)}`;
+      const keyOf = c => `${String(c.name)}::${String(c.rarity)}`;
       const youMap = new Map(youCards.map(c => [keyOf(c), c.count || 0]));
       const themMap = new Map(themCards.map(c => [keyOf(c), c.count || 0]));
 

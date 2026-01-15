@@ -20,7 +20,7 @@ const PAGE_SIZE = 10;
 const IDLE_LIMIT = 120_000; // 2 minutes
 
 const RARITY_ORDER = [
-  'XMAS', 'C', 'U', 'R', 'S', 'RR', 'OC', 'SR', 'OSR', 'P', 'SP', 'SY', 'UR', 'OUR', 'HR', 'BDAY', 'UP', 'SEC'
+  'XMAS', 'C', 'U', 'R', 'S', 'RR', 'OC', 'SR', 'COL', 'OSR', 'P', 'SP', 'SY', 'UR', 'OUR', 'HR', 'BDAY', 'UP', 'SEC'
 ];
 
 const COLOR_MAP = {
@@ -107,8 +107,9 @@ module.exports = {
 
       // prepare imageResults (flat list of missing cards for image view)
       const imageResults = missing.map(c => {
-        const encodedName = encodeURIComponent(String(c.name));
-        const url = `${IMAGE_BASE}/${encodeURIComponent(c.rarity)}/${encodedName}.png`;
+        // If rarity is COL, show secret.png instead of the card image
+        const imageFile = c.rarity === 'COL' ? 'secret.png' : `${encodeURIComponent(String(c.name))}.png`;
+        const url = `${IMAGE_BASE}/${encodeURIComponent(c.rarity)}/${imageFile}`;
         return { c, url };
       });
 
@@ -123,8 +124,9 @@ module.exports = {
           .setDescription(
             chunk
               .map(c => {
-                const encodedName = encodeURIComponent(String(c.name));
-                const url = `${IMAGE_BASE}/${encodeURIComponent(c.rarity)}/${encodedName}.png`;
+                // If rarity is COL, link to secret.png instead of the card image
+                const imageFile = c.rarity === 'COL' ? 'secret.png' : `${encodeURIComponent(String(c.name))}.png`;
+                const url = `${IMAGE_BASE}/${encodeURIComponent(c.rarity)}/${imageFile}`;
                 return `**[${c.rarity}]** [${escapeMarkdown(c.name)}](${url})`;
               })
               .join('\n')
@@ -133,13 +135,14 @@ module.exports = {
           .setFooter({ text: `Page ${i + 1}/${pages.length}` })
       );
 
-const listRows = pages.map((_, i) => {
-  const prev = new ButtonBuilder().setCustomId(cid(`list_prev_${i}`)).setLabel('◀ Prev').setStyle(ButtonStyle.Primary).setDisabled(false);
-  const view = new ButtonBuilder().setCustomId(cid(`list_view_${i}`)).setLabel('🃏 Image').setStyle(ButtonStyle.Success);
-  const next = new ButtonBuilder().setCustomId(cid(`list_next_${i}`)).setLabel('Next ▶').setStyle(ButtonStyle.Primary).setDisabled(false);
-  const skip = new ButtonBuilder().setCustomId(cid(`skip_${i}`)).setLabel('📖 Jump').setStyle(ButtonStyle.Secondary);
-  return new ActionRowBuilder().addComponents(prev, view, next, skip);
-});
+      const listRows = pages.map((_, i) => {
+        const prev = new ButtonBuilder().setCustomId(cid(`list_prev_${i}`)).setLabel('◀ Prev').setStyle(ButtonStyle.Primary).setDisabled(false);
+        const view = new ButtonBuilder().setCustomId(cid(`list_view_${i}`)).setLabel('🃏 Image').setStyle(ButtonStyle.Success);
+        const next = new ButtonBuilder().setCustomId(cid(`list_next_${i}`)).setLabel('Next ▶').setStyle(ButtonStyle.Primary).setDisabled(false);
+        const skip = new ButtonBuilder().setCustomId(cid(`skip_${i}`)).setLabel('📖 Jump').setStyle(ButtonStyle.Secondary);
+        return new ActionRowBuilder().addComponents(prev, view, next, skip);
+      });
+
       // image embeds and rows
       const imageEmbeds = imageResults.map(({ c, url }, i) =>
         new EmbedBuilder()
@@ -149,12 +152,12 @@ const listRows = pages.map((_, i) => {
           .setFooter({ text: `Card ${i + 1} of ${imageResults.length}` })
       );
 
-const imageRows = imageResults.map((_, i) => {
-  const prev = new ButtonBuilder().setCustomId(cid(`img_prev_${i}`)).setLabel('◀ Prev').setStyle(ButtonStyle.Primary).setDisabled(false);
-  const back = new ButtonBuilder().setCustomId(cid(`img_back_${i}`)).setLabel('⤵️ Back').setStyle(ButtonStyle.Secondary);
-  const next = new ButtonBuilder().setCustomId(cid(`img_next_${i}`)).setLabel('Next ▶').setStyle(ButtonStyle.Primary).setDisabled(false);
-  return new ActionRowBuilder().addComponents(prev, back, next);
-});
+      const imageRows = imageResults.map((_, i) => {
+        const prev = new ButtonBuilder().setCustomId(cid(`img_prev_${i}`)).setLabel('◀ Prev').setStyle(ButtonStyle.Primary).setDisabled(false);
+        const back = new ButtonBuilder().setCustomId(cid(`img_back_${i}`)).setLabel('⤵️ Back').setStyle(ButtonStyle.Secondary);
+        const next = new ButtonBuilder().setCustomId(cid(`img_next_${i}`)).setLabel('Next ▶').setStyle(ButtonStyle.Primary).setDisabled(false);
+        return new ActionRowBuilder().addComponents(prev, back, next);
+      });
 
       // send initial list page
       await interaction.editReply({ embeds: [listEmbeds[0]], components: [listRows[0]] });
@@ -187,15 +190,15 @@ const imageRows = imageResults.map((_, i) => {
 
           // list navigation
           if (parts.startsWith('list_prev_')) {
-  listPage = (listPage - 1 + pages.length) % pages.length;
-  await btn.update({ embeds: [listEmbeds[listPage]], components: [listRows[listPage]] });
-  return;
-}
-if (parts.startsWith('list_next_')) {
-  listPage = (listPage + 1) % pages.length;
-  await btn.update({ embeds: [listEmbeds[listPage]], components: [listRows[listPage]] });
-  return;
-}
+            listPage = (listPage - 1 + pages.length) % pages.length;
+            await btn.update({ embeds: [listEmbeds[listPage]], components: [listRows[listPage]] });
+            return;
+          }
+          if (parts.startsWith('list_next_')) {
+            listPage = (listPage + 1) % pages.length;
+            await btn.update({ embeds: [listEmbeds[listPage]], components: [listRows[listPage]] });
+            return;
+          }
           if (parts.startsWith('list_view_')) {
             // open image view at first card of current page
             imageIdx = listPage * PAGE_SIZE;
@@ -232,15 +235,15 @@ if (parts.startsWith('list_next_')) {
 
           // image navigation
           if (parts.startsWith('img_prev_')) {
-  imageIdx = (imageIdx - 1 + imageEmbeds.length) % imageEmbeds.length;
-  await btn.update({ embeds: [imageEmbeds[imageIdx]], components: [imageRows[imageIdx]] });
-  return;
-}
-if (parts.startsWith('img_next_')) {
-  imageIdx = (imageIdx + 1) % imageEmbeds.length;
-  await btn.update({ embeds: [imageEmbeds[imageIdx]], components: [imageRows[imageIdx]] });
-  return;
-}
+            imageIdx = (imageIdx - 1 + imageEmbeds.length) % imageEmbeds.length;
+            await btn.update({ embeds: [imageEmbeds[imageIdx]], components: [imageRows[imageIdx]] });
+            return;
+          }
+          if (parts.startsWith('img_next_')) {
+            imageIdx = (imageIdx + 1) % imageEmbeds.length;
+            await btn.update({ embeds: [imageEmbeds[imageIdx]], components: [imageRows[imageIdx]] });
+            return;
+          }
           if (parts.startsWith('img_back_')) {
             listPage = Math.floor(imageIdx / PAGE_SIZE);
             await btn.update({ embeds: [listEmbeds[listPage]], components: [listRows[listPage]] });

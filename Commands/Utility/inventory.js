@@ -37,6 +37,7 @@ module.exports = {
           { name: 'RR', value: 'RR' },
           { name: 'OC', value: 'OC' },
           { name: 'SR', value: 'SR' },
+          { name: 'COL', value: 'COL' },
           { name: 'OSR', value: 'OSR' },
           { name: 'P', value: 'P' },
           { name: 'SP', value: 'SP' },
