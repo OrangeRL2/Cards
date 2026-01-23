@@ -211,7 +211,7 @@ module.exports = {
       bossChannelBias = await getBossChannelDrawToken(interaction);
       if (bossChannelBias && bossChannelBias.biased && bossChannelBias.drawToken && loadingEmbed) {
         try {
-          loadingEmbed.setFooter({ text: `Boss active: ${bossChannelBias.drawToken} — draw biased` });
+          loadingEmbed.setFooter({ text: `The algorithm has found: ${bossChannelBias.drawToken}!` });
           loadingEmbed.setColor(0xFFD700);
           await interaction.editReply({ embeds: [loadingEmbed] }).catch(() => null);
         } catch (e) { /* ignore */ }

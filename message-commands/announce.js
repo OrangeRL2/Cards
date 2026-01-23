@@ -1,5 +1,5 @@
 // message-commands/announce.js
-const { EmbedBuilder } = require('discord.js');
+const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 const User = require('../models/User');
 const PullQuota = require('../models/PullQuota');
 const config = require('../config.json');
@@ -78,228 +78,301 @@ module.exports = {
 
       console.log('[announce] parsed', { title, pullsPer, targetRaw, countParam, embedUrl, sendAsEmbed, pullquota: !!flags.pullquota });
 
-      // Build embed (if used)
-      let embed;
+      // Build embed (if used) for preview
+      let previewEmbed = null;
+      let previewText = null;
       if (sendAsEmbed) {
-        embed = new EmbedBuilder().setTitle(title).setDescription(body).setColor(color).setTimestamp();
+        previewEmbed = new EmbedBuilder().setTitle(title).setDescription(body).setColor(color).setTimestamp();
         if (embedUrl) {
-          // add as image; Discord will autoplay GIFs in embeds when supported
-          embed.setImage(embedUrl);
+          previewEmbed.setImage(embedUrl);
         }
+      } else {
+        previewText = `**${title}**\n\n${body}`;
       }
 
-      // Determine birthday channel id from config, allow override --channel=<id>
-      const channelId = (flags.channel && String(flags.channel)) || config.birthdayChannelId;
-      if (!channelId) {
-        return message.reply({ content: 'No birthdayChannelId found in config and no --channel provided.' }).catch(() => {});
-      }
+      // Build preview buttons
+      const publishId = `announce_publish_${message.id}_${message.author.id}`;
+      const cancelId = `announce_cancel_${message.id}_${message.author.id}`;
+      const row = new ActionRowBuilder().addComponents(
+        new ButtonBuilder().setCustomId(publishId).setLabel('Publish').setStyle(ButtonStyle.Success),
+        new ButtonBuilder().setCustomId(cancelId).setLabel('Cancel').setStyle(ButtonStyle.Danger)
+      );
 
-      const targetChannel = await message.client.channels.fetch(channelId).catch((e) => null);
-      if (!targetChannel || typeof targetChannel.send !== 'function') {
-        return message.reply({ content: `Unable to fetch channel ${channelId}. Check bot permissions and that channel exists.` }).catch(() => {});
-      }
+      // Send preview to the channel where the command was used
+      const previewMsg = await message.channel.send({
+        content: `Preview (invoked by <@${message.author.id}>). Click **Publish** to post or **Cancel** to abort.`,
+        embeds: previewEmbed ? [previewEmbed] : undefined,
+        components: [row],
+        allowedMentions: { parse: [] }
+      });
 
-      // Helper: resolve --ping token to a mention string usable in top-level content
-      async function resolvePingToken(guild, pingToken) {
-        if (!pingToken) return null;
-        const t = String(pingToken).trim();
-
-        // direct everyone/here
-        if (/^@everyone$/i.test(t)) return '@everyone';
-        if (/^@here$/i.test(t)) return '@here';
-
-        // already <@123...> or plain id
-        const idMatch = t.match(/<@!?(\d+)>|^(\d+)$/);
-        if (idMatch) {
-          const id = idMatch[1] || idMatch[2];
-          if (guild) {
-            const member = guild.members.cache.get(id) || await guild.members.fetch(id).catch(() => null);
-            if (member) return `<@${id}>`;
-            return `<@${id}>`; // best-effort even if not cached/fetchable
-          }
-          return `<@${id}>`;
+      // Collector: only allow the command invoker to interact
+      const filter = (interaction) => {
+        if (!interaction.isButton()) return false;
+        if (interaction.user.id !== message.author.id) {
+          interaction.reply({ content: 'Only the command invoker can use these buttons.', ephemeral: true }).catch(() => {});
+          return false;
         }
+        return [publishId, cancelId].includes(interaction.customId);
+      };
 
-        // role mention by @Role or <@&id>
-        const roleMatch = t.match(/<@&(\d+)>|^@(.+)$/);
-        if (roleMatch && guild) {
-          if (roleMatch[1]) {
-            const role = guild.roles.cache.get(roleMatch[1]);
-            if (role) return `<@&${role.id}>`;
-          } else if (roleMatch[2]) {
-            const roleName = roleMatch[2].trim();
-            const role = guild.roles.cache.find(r => r.name.toLowerCase() === roleName.toLowerCase());
-            if (role) return `<@&${role.id}>`;
-          }
-        }
+      const collector = previewMsg.createMessageComponentCollector({ filter, time: 120000, max: 1 });
 
-        // try username#discrim
-        if (guild) {
-          const tagMatch = t.match(/^(.+)#(\d{4})$/);
-          if (tagMatch) {
-            const [ , name, discrim ] = tagMatch;
-            const memberByTag = guild.members.cache.find(m => `${m.user.username}#${m.user.discriminator}`.toLowerCase() === `${name}#${discrim}`.toLowerCase());
-            if (memberByTag) return `<@${memberByTag.id}>`;
+      let actionTaken = null; // 'publish' | 'cancel' | null
+
+      collector.on('collect', async (interaction) => {
+        try {
+          if (interaction.customId === cancelId) {
+            actionTaken = 'cancel';
+            await interaction.update({
+              content: `Announcement preview cancelled by <@${message.author.id}>.`,
+              embeds: [],
+              components: []
+            });
+            collector.stop('cancelled');
+            return;
           }
 
-          // try exact username (case-insensitive) or display name
-          const nameNoAt = t.replace(/^@/, '');
-          const memberByName = guild.members.cache.find(m =>
-            m.user.username.toLowerCase() === nameNoAt.toLowerCase() ||
-            (m.nickname && m.nickname.toLowerCase() === nameNoAt.toLowerCase())
-          );
-          if (memberByName) return `<@${memberByName.id}>`;
-        }
-
-        // fallback: not resolvable
-        return null;
-      }
-
-      // Build top-level mention from flags.ping (if provided)
-      const guild = message.guild;
-      let topMention = null;
-      if (flags.ping) {
-        topMention = await resolvePingToken(guild, flags.ping);
-      }
-
-      // Build allowedMentions based on topMention so Discord.js will actually deliver the ping
-      const allowedMentions = { parse: [] };
-      if (topMention === '@everyone' || topMention === '@here') {
-        allowedMentions.parse.push('everyone');
-      } else if (topMention && topMention.startsWith('<@&')) {
-        // role mention: include roles parsing
-        allowedMentions.parse.push('roles');
-      } else if (topMention && topMention.startsWith('<@')) {
-        const uid = topMention.match(/<@!?(\d+)>/)?.[1];
-        if (uid) allowedMentions.users = [uid];
-      }
-
-      // Post to birthday channel (embed or plain) — place mention above embed/plain so it actually notifies
-      let posted;
-      try {
-        if (sendAsEmbed && embed) {
-          posted = await targetChannel.send({
-            content: topMention || undefined,
-            embeds: [embed],
-            allowedMentions
-          });
-        } else {
-          // plain text: include the ping above title/body
-          const text = `${topMention ? topMention + '\n' : ''}**${title}**\n\n${body}`;
-          posted = await targetChannel.send({ content: text, allowedMentions });
-        }
-      } catch (err) {
-        console.error('[announce] send embed/text failed', err);
-        return message.reply({ content: 'Failed to post announcement to birthday channel (check bot perms).' }).catch(() => {});
-      }
-
-      // If no pull grant requested, finish
-      if (pullsPer <= 0 || (!targetRaw && !flags.pullquota)) {
-        return message.reply({ content: `Announcement posted to <#${channelId}> (id: ${posted.id}). No pulls granted.` }).catch(() => {});
-      }
-
-      // Resolve recipients
-      // If --pullquota flag is present, target every userId registered in PullQuota
-      let recipients = [];
-
-      try {
-        if (flags.pullquota) {
-          // Fetch all PullQuota userIds
-          const pqDocs = await PullQuota.find({}, 'userId').lean().catch((e) => {
-            console.error('[announce] PullQuota.find error', e);
-            return null;
-          });
-          if (!pqDocs) {
-            return message.reply({ content: 'Failed to fetch PullQuota records from database.' }).catch(() => {});
+          if (interaction.customId === publishId) {
+            actionTaken = 'publish';
+            await interaction.update({
+              content: `Publishing announcement...`,
+              embeds: [],
+              components: []
+            });
+            collector.stop('publish');
+            return;
           }
-          // Map to objects with id property so downstream code can use user.id
-          recipients = pqDocs.map(d => ({ id: String(d.userId) }));
-        } else {
-          // existing behavior requires guild context
-          if (!guild) return message.reply({ content: 'This command must be used in a guild channel.' }).catch(() => {});
+        } catch (err) {
+          console.error('[announce] preview interaction error', err);
+          try { await interaction.reply({ content: 'Error handling button interaction.', ephemeral: true }); } catch {}
+          collector.stop('error');
+        }
+      });
 
-          if (targetRaw === '@everyone' || targetRaw === '@here') {
-            const allMembers = await guild.members.fetch().catch(() => null);
-            if (!allMembers) {
-              return message.reply({ content: 'Unable to fetch guild members. Ensure Guild Members intent is enabled and bot has member access.' }).catch(() => {});
+      collector.on('end', async (collected, reason) => {
+        try {
+          if (reason === 'time' && actionTaken === null) {
+            await previewMsg.edit({
+              content: `Announcement preview timed out and was cancelled (invoked by <@${message.author.id}>).`,
+              embeds: [],
+              components: []
+            }).catch(() => {});
+            return;
+          }
+
+          if (actionTaken === 'cancel') {
+            return;
+          }
+
+          if (actionTaken === 'publish') {
+            // Reconstruct topMention and allowedMentions as in original flow
+            async function resolvePingToken(guild, pingToken) {
+              if (!pingToken) return null;
+              const t = String(pingToken).trim();
+
+              if (/^@everyone$/i.test(t)) return '@everyone';
+              if (/^@here$/i.test(t)) return '@here';
+
+              const idMatch = t.match(/<@!?(\d+)>|^(\d+)$/);
+              if (idMatch) {
+                const id = idMatch[1] || idMatch[2];
+                if (guild) {
+                  const member = guild.members.cache.get(id) || await guild.members.fetch(id).catch(() => null);
+                  if (member) return `<@${id}>`;
+                  return `<@${id}>`;
+                }
+                return `<@${id}>`;
+              }
+
+              const roleMatch = t.match(/<@&(\d+)>|^@(.+)$/);
+              if (roleMatch && guild) {
+                if (roleMatch[1]) {
+                  const role = guild.roles.cache.get(roleMatch[1]);
+                  if (role) return `<@&${role.id}>`;
+                } else if (roleMatch[2]) {
+                  const roleName = roleMatch[2].trim();
+                  const role = guild.roles.cache.find(r => r.name.toLowerCase() === roleName.toLowerCase());
+                  if (role) return `<@&${role.id}>`;
+                }
+              }
+
+              if (guild) {
+                const tagMatch = t.match(/^(.+)#(\d{4})$/);
+                if (tagMatch) {
+                  const [ , name, discrim ] = tagMatch;
+                  const memberByTag = guild.members.cache.find(m => `${m.user.username}#${m.user.discriminator}`.toLowerCase() === `${name}#${discrim}`.toLowerCase());
+                  if (memberByTag) return `<@${memberByTag.id}>`;
+                }
+
+                const nameNoAt = t.replace(/^@/, '');
+                const memberByName = guild.members.cache.find(m =>
+                  m.user.username.toLowerCase() === nameNoAt.toLowerCase() ||
+                  (m.nickname && m.nickname.toLowerCase() === nameNoAt.toLowerCase())
+                );
+                if (memberByName) return `<@${memberByName.id}>`;
+              }
+
+              return null;
             }
-            recipients = Array.from(allMembers.values()).map(m => m.user);
-          } else {
-            const mentionId = (targetRaw.match(/<@!?(\d+)>/) || targetRaw.match(/<@&(\d+)>/) || targetRaw.match(/^(\d+)$/))?.[1];
-            if (mentionId) {
-              const member = guild.members.cache.get(mentionId) || await guild.members.fetch(mentionId).catch(() => null);
-              if (member) {
-                recipients = [member.user];
+
+            const guild = message.guild;
+            let topMention = null;
+            if (flags.ping) {
+              topMention = await resolvePingToken(guild, flags.ping);
+            }
+
+            const allowedMentions = { parse: [] };
+            if (topMention === '@everyone' || topMention === '@here') {
+              allowedMentions.parse.push('everyone');
+            } else if (topMention && topMention.startsWith('<@&')) {
+              allowedMentions.parse.push('roles');
+            } else if (topMention && topMention.startsWith('<@')) {
+              const uid = topMention.match(/<@!?(\d+)>/)?.[1];
+              if (uid) allowedMentions.users = [uid];
+            }
+
+            // Now post to birthday channel (same code as original)
+            const channelId = (flags.channel && String(flags.channel)) || config.birthdayChannelId;
+            if (!channelId) {
+              return message.channel.send({ content: 'No birthdayChannelId found in config and no --channel provided.' }).catch(() => {});
+            }
+
+            const targetChannel = await message.client.channels.fetch(channelId).catch((e) => null);
+            if (!targetChannel || typeof targetChannel.send !== 'function') {
+              return message.channel.send({ content: `Unable to fetch channel ${channelId}. Check bot permissions and that channel exists.` }).catch(() => {});
+            }
+
+            let posted;
+            try {
+              if (sendAsEmbed && previewEmbed) {
+                posted = await targetChannel.send({
+                  content: topMention || undefined,
+                  embeds: [previewEmbed],
+                  allowedMentions
+                });
               } else {
-                const role = guild.roles.cache.get(mentionId);
-                if (role) {
-                  recipients = Array.from(role.members.values()).map(m => m.user);
-                  if (recipients.length === 0) {
-                    const allMembers = await guild.members.fetch().catch(() => null);
-                    if (allMembers) recipients = Array.from(allMembers.values()).filter(m => m.roles.cache.has(role.id)).map(m => m.user);
+                const text = `${topMention ? topMention + '\n' : ''}**${title}**\n\n${body}`;
+                posted = await targetChannel.send({ content: text, allowedMentions });
+              }
+            } catch (err) {
+              console.error('[announce] send embed/text failed', err);
+              return message.channel.send({ content: 'Failed to post announcement to birthday channel (check bot perms).' }).catch(() => {});
+            }
+
+            // If no pull grant requested, finish
+            if (pullsPer <= 0 || (!targetRaw && !flags.pullquota)) {
+              return message.channel.send({ content: `Announcement posted to <#${channelId}> (id: ${posted.id}). No pulls granted.` }).catch(() => {});
+            }
+
+            // Resolve recipients
+            // If --pullquota flag is present, target every userId registered in PullQuota
+            let recipients = [];
+
+            try {
+              if (flags.pullquota) {
+                // Fetch all PullQuota userIds
+                const pqDocs = await PullQuota.find({}, 'userId').lean().catch((e) => {
+                  console.error('[announce] PullQuota.find error', e);
+                  return null;
+                });
+                if (!pqDocs) {
+                  return message.channel.send({ content: 'Failed to fetch PullQuota records from database.' }).catch(() => {});
+                }
+                // Map to objects with id property so downstream code can use user.id
+                recipients = pqDocs.map(d => ({ id: String(d.userId) }));
+              } else {
+                // existing behavior requires guild context
+                if (!guild) return message.channel.send({ content: 'This command must be used in a guild channel.' }).catch(() => {});
+
+                if (targetRaw === '@everyone' || targetRaw === '@here') {
+                  const allMembers = await guild.members.fetch().catch(() => null);
+                  if (!allMembers) {
+                    return message.channel.send({ content: 'Unable to fetch guild members. Ensure Guild Members intent is enabled and bot has member access.' }).catch(() => {});
+                  }
+                  recipients = Array.from(allMembers.values()).map(m => m.user);
+                } else {
+                  const mentionId = (targetRaw.match(/<@!?(\d+)>/) || targetRaw.match(/<@&(\d+)>/) || targetRaw.match(/^(\d+)$/))?.[1];
+                  if (mentionId) {
+                    const member = guild.members.cache.get(mentionId) || await guild.members.fetch(mentionId).catch(() => null);
+                    if (member) {
+                      recipients = [member.user];
+                    } else {
+                      const role = guild.roles.cache.get(mentionId);
+                      if (role) {
+                        recipients = Array.from(role.members.values()).map(m => m.user);
+                        if (recipients.length === 0) {
+                          const allMembers = await guild.members.fetch().catch(() => null);
+                          if (allMembers) recipients = Array.from(allMembers.values()).filter(m => m.roles.cache.has(role.id)).map(m => m.user);
+                        }
+                      }
+                    }
+                  } else {
+                    const roleByName = guild.roles.cache.find(r => r.name.toLowerCase() === targetRaw.toLowerCase());
+                    if (roleByName) {
+                      recipients = Array.from(roleByName.members.values()).map(m => m.user);
+                      if (recipients.length === 0) {
+                        const allMembers = await guild.members.fetch().catch(() => null);
+                        if (allMembers) recipients = Array.from(allMembers.values()).filter(m => m.roles.cache.has(roleByName.id)).map(m => m.user);
+                      }
+                    } else {
+                      const memberByTag = guild.members.cache.find(m => `${m.user.username}#${m.user.discriminator}`.toLowerCase() === targetRaw.toLowerCase());
+                      if (memberByTag) recipients = [memberByTag.user];
+                    }
                   }
                 }
               }
-            } else {
-              const roleByName = guild.roles.cache.find(r => r.name.toLowerCase() === targetRaw.toLowerCase());
-              if (roleByName) {
-                recipients = Array.from(roleByName.members.values()).map(m => m.user);
-                if (recipients.length === 0) {
-                  const allMembers = await guild.members.fetch().catch(() => null);
-                  if (allMembers) recipients = Array.from(allMembers.values()).filter(m => m.roles.cache.has(roleByName.id)).map(m => m.user);
+            } catch (err) {
+              console.error('[announce] resolve recipients error', err);
+              return message.channel.send({ content: 'Error resolving recipients.' }).catch(() => {});
+            }
+
+            // Dedupe and apply cap
+            const unique = Array.from(new Map(recipients.map(u => [u.id, u])).values());
+            const toProcess = unique.slice(0, Math.min(countParam, MAX_RECIPIENTS_HARD_CAP));
+
+            if (toProcess.length === 0) {
+              return message.channel.send({ content: 'No recipients found to grant pulls to.' }).catch(() => {});
+            }
+
+            console.log('[announce] granting pulls to', toProcess.length, 'users');
+
+            // Bulk update in batches
+            for (let i = 0; i < toProcess.length; i += BATCH_SIZE) {
+              const batch = toProcess.slice(i, i + BATCH_SIZE);
+
+              const pullOps = batch.map(user => ({
+                updateOne: {
+                  filter: { userId: user.id },
+                  update: { $inc: { eventPulls: pullsPer }, $setOnInsert: { lastRefill: new Date() } },
+                  upsert: true
                 }
-              } else {
-                const memberByTag = guild.members.cache.find(m => `${m.user.username}#${m.user.discriminator}`.toLowerCase() === targetRaw.toLowerCase());
-                if (memberByTag) recipients = [memberByTag.user];
+              }));
+
+              const userOps = batch.map(user => ({
+                updateOne: {
+                  filter: { id: user.id },
+                  update: { $setOnInsert: { pulls: 0, cards: [] } },
+                  upsert: true
+                }
+              }));
+
+              try {
+                await PullQuota.bulkWrite(pullOps);
+                await User.bulkWrite(userOps);
+              } catch (err) {
+                console.error('[announce] bulkWrite error', err);
+                return message.channel.send({ content: 'Database error while granting pulls.' }).catch(() => {});
               }
             }
+
+            return message.channel.send({ content: `Announcement posted to <#${channelId}> (id: ${posted.id}). Granted ${pullsPer} pull(s) to ${toProcess.length} recipient(s).` }).catch(() => {});
           }
-        }
-      } catch (err) {
-        console.error('[announce] resolve recipients error', err);
-        return message.reply({ content: 'Error resolving recipients.' }).catch(() => {});
-      }
-
-      // Dedupe and apply cap
-      const unique = Array.from(new Map(recipients.map(u => [u.id, u])).values());
-      const toProcess = unique.slice(0, Math.min(countParam, MAX_RECIPIENTS_HARD_CAP));
-
-      if (toProcess.length === 0) {
-        return message.reply({ content: 'No recipients found to grant pulls to.' }).catch(() => {});
-      }
-
-      console.log('[announce] granting pulls to', toProcess.length, 'users');
-
-      // Bulk update in batches
-      for (let i = 0; i < toProcess.length; i += BATCH_SIZE) {
-        const batch = toProcess.slice(i, i + BATCH_SIZE);
-
-        const pullOps = batch.map(user => ({
-          updateOne: {
-            filter: { userId: user.id },
-            update: { $inc: { eventPulls: pullsPer }, $setOnInsert: { lastRefill: new Date() } },
-            upsert: true
-          }
-        }));
-
-        const userOps = batch.map(user => ({
-          updateOne: {
-            filter: { id: user.id },
-            update: { $setOnInsert: { pulls: 0, cards: [] } },
-            upsert: true
-          }
-        }));
-
-        try {
-          await PullQuota.bulkWrite(pullOps);
-          await User.bulkWrite(userOps);
         } catch (err) {
-          console.error('[announce] bulkWrite error', err);
-          return message.reply({ content: 'Database error while granting pulls.' }).catch(() => {});
+          console.error('[announce] collector end handler error', err);
         }
-      }
+      });
 
-      return message.reply({ content: `Announcement posted to <#${channelId}> (id: ${posted.id}). Granted ${pullsPer} pull(s) to ${toProcess.length} recipient(s).` }).catch(() => {});
     } catch (err) {
       console.error('[announce] unexpected error', err);
       try { await message.reply({ content: 'Unexpected error running announce.' }); } catch {}

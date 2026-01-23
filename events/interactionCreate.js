@@ -146,7 +146,7 @@ module.exports = {
               try {
                 const ev = await BossEvent.findOne({ eventId }).lean();
                 if (!ev || ev.status !== 'active') {
-                  return await safeEditOrFollow(interaction, { content: 'This boss event is no longer active.' });
+                  return await safeEditOrFollow(interaction, { content: 'This 24 hour stream is no longer active.' });
                 }
 
                 const userId = interaction.user.id;
@@ -336,7 +336,7 @@ module.exports = {
             try {
               const ev = await BossEvent.findOne({ eventId }).lean();
               if (!ev || ev.status !== 'active') {
-                return safeEditOrFollow(interaction, { content: 'This boss event is no longer active.' });
+                return safeEditOrFollow(interaction, { content: 'This 24 hour stream is no longer active.' });
               }
 
               const res = await bossManager.handleSubWithCard({
@@ -454,7 +454,7 @@ module.exports = {
             try {
               const ev = await BossEvent.findOne({ eventId }).lean();
               if (!ev || ev.status !== 'active') {
-                return safeEditOrFollow(interaction, { content: 'This boss event is no longer active.' });
+                return safeEditOrFollow(interaction, { content: 'This 24 hour stream is no longer active.' });
               }
 
               const userId = interaction.user.id;

@@ -21,7 +21,7 @@ const ASSETS_BASE = path.join(__dirname, '..', 'assets', 'images'); // adjust if
 
 // Tunables
 const SUPERCHAT_BASE = Number(process.env.BOSS_SUPERCHAT_BASE || 100);
-const SUPERCHAT_ESCALATION = Number(process.env.BOSS_SUPERCHAT_ESCALATION || 1.0);
+const SUPERCHAT_ESCALATION = Number(process.env.BOSS_SUPERCHAT_ESCALATION || 0);
 const LIKE_RATE_LIMIT_MS = Number(process.env.BOSS_LIKE_RATE_LIMIT_MS || 5000);
 const IMAGE_BASE = process.env.BOSS_IMAGE_BASE || 'http://152.69.195.48/images';
 const CONFIRM_TIMEOUT_MS = 2 * 60 * 1000; // 2 minutes
@@ -81,24 +81,6 @@ const PARTICIPATION_WEIGHTS = {
   BDAY: 0,
   SEC: 0.0
 };
-const PARTICIPATION_WEIGHTS1 = {
-
-  C:   0,
-  U:   0,
-  R:   1,
-  S:   1,
-  RR:  0,
-  OC:  0,
-  SR:  0,
-  OSR: 0,
-  SY:  0,
-  UR:  0,
-  OUR: 0,
-  HR:  0,
-  BDAY:0,
-  SEC: 0
-
-};
 
 const THIRDPLACE_WEIGHTS = {
   C: 0,
@@ -130,7 +112,7 @@ const SECONDPLACE_WEIGHTS = {
   UR:  15,
   OUR: 11,
   HR:  11,
-  BDAY:800,
+  BDAY:8,
   SEC: 5
 };
 
@@ -625,8 +607,8 @@ async function handleSubWithCard({ userId, oshiId, cardName, cardRarity = null, 
       throw new Error('Selected card not found in your inventory or already used.');
     }
 
-    const points = 5;
-    const happinessDelta = 5;
+    const points = 4;
+    const happinessDelta = 4;
 
     await _upsertUserPointsAndHappiness(ev.eventId, userId, points, happinessDelta, session);
     await BossPointLog.create([{ eventId: ev.eventId, userId, oshiId, action: 'sub', points, meta: { consumedCard: { name: cardName, rarity: cardRarity } } }], { session });
@@ -692,7 +674,7 @@ async function createSuperchatConfirm(interaction, eventId) {
 
     const embed = new EmbedBuilder()
       .setTitle(`Confirm Superchat for ${oshiLabel}`)
-      .setDescription(`This superchat will cause **${currentCost}** fans to empty their wallets.\nIf you confirm, the next superchat will be **${nextCost}** fans wallets.`)
+      .setDescription(`This superchat will cause **${currentCost}** fans to empty their wallets.\nIn exchange 6 happiness points will be awarded`)
       .setColor(0xFF4500)
       .setTimestamp(new Date());
 
@@ -759,11 +741,11 @@ async function handleSuperchatInteraction(interaction) {
       const nextCost = superchatCost(nextN + 1);
 
       try {
-        // call handleSuperchat but force spendFans to currentCost
+        // call handleSuperchat but force spendFans to currentCost \nNext cost: **${result.nextSuperchatMin}**.
         const result = await handleSuperchat({ userId, oshiId: ev.oshiId, spendFans: currentCost, client: interaction.client });
 
         // success message
-        const successText = `Superchat sent: **${result.spendFans}** fans had their wallets emptied.\nHappiness awarded: **${result.happinessDelta}**.\nNext cost: **${result.nextSuperchatMin}**.`;
+        const successText = `Superchat sent: **${result.spendFans}** fans had their wallets emptied.\nHappiness awarded: **${result.happinessDelta}**.`;
         await interaction.update({ content: successText, embeds: [], components: [] }).catch(() => null);
       } catch (err) {
         console.warn('[handleSuperchatInteraction] confirm failed', err);
@@ -814,7 +796,7 @@ async function handleSuperchat({ userId, oshiId, spendFans, client = null }) {
 
   // Compute awards
   const points = spendFans;
-  const happinessDelta = Math.floor(spendFans / 100);
+  const happinessDelta = Math.floor(6);
 
   // Transaction: debit user, update event/user totals (including superchatCount), log
   const session = await mongoose.startSession();

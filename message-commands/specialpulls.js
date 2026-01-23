@@ -36,7 +36,6 @@ module.exports = {
         return message.reply({ content: 'Invalid target or pulls value.' }).catch(() => {});
       }
 
-      // Use the rawTarget as both label and displayLabel to match settlement matching
       const label = String(rawTarget).trim();
       const displayLabel = String(rawTarget).trim();
       const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000);
@@ -55,7 +54,7 @@ module.exports = {
       console.log('[specialpulls] created grant', { id: grant._id, label, pulls, expiresAt: expiresAt.toISOString() });
       await message.reply({ content: `Created special grant "${displayLabel}" — ${pulls} pulls per user until <t:${Math.floor(expiresAt.getTime()/1000)}:R>.` }).catch(() => {});
 
-      // Optional: bulk initialize existing PullQuota docs (careful with large DBs)
+      // Optional: bulk initialize or reset existing PullQuota docs
       if (init) {
         await message.channel.send('Initializing existing PullQuota docs in batches. This may take a while...');
         const cursor = PullQuota.find().cursor();
@@ -64,7 +63,7 @@ module.exports = {
         for await (const doc of cursor) {
           ops.push({
             updateOne: {
-              filter: { userId: doc.userId, [`specialPulls.${label}`]: { $exists: false } },
+              filter: { userId: doc.userId },
               update: { $set: { [`specialPulls.${label}`]: pulls } }
             }
           });
@@ -78,7 +77,7 @@ module.exports = {
           await PullQuota.bulkWrite(ops, { ordered: false }).catch(e => console.error('[specialpulls] bulkWrite err', e));
           total += ops.length;
         }
-        await message.channel.send(`Initialization attempted for ${total} documents (skipped existing keys).`);
+        await message.channel.send(`Initialization attempted for ${total} documents (values overwritten to ${pulls}).`);
       }
     } catch (err) {
       console.error('[specialpulls] unexpected error', err);
