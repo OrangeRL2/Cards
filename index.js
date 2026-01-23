@@ -3,10 +3,11 @@ const fs = require('node:fs');
 const path = require('node:path');
 const mongoose = require('mongoose');
 const { Client, Collection, GatewayIntentBits } = require('discord.js');
-const { token, mongoUri } = require('./config.json');
-const { startScheduler, grantBirthdayPulls } = require('./jobs/birthdayHandout');
 const config = require('./config.json');
+const { token, mongoUri } = config;
+const { startScheduler, grantBirthdayPulls } = require('./jobs/birthdayHandout');
 const TradeListing = require('./models/TradeListing');
+
 // create client with required intents
 const client = new Client({
   intents: [
@@ -45,8 +46,11 @@ if (fs.existsSync(messageCommandsPath)) {
 }
 console.log('[MSG-CMD] loaded keys', Array.from(client.messageCommands.keys()));
 
-// ----------------- slash command loader (existing) -----------------
+// ----------------- slash command loader (conditional pull) -----------------
 const foldersPath = path.join(__dirname, 'Commands');
+const PULL_MODE = config.pullMode || 'normal';
+const PULL_FILENAME = PULL_MODE === 'special' ? 'specialPull.js' : 'pull.js';
+
 if (fs.existsSync(foldersPath)) {
   const commandFolders = fs.readdirSync(foldersPath);
   for (const folder of commandFolders) {
@@ -54,12 +58,17 @@ if (fs.existsSync(foldersPath)) {
     if (!fs.existsSync(commandsPath)) continue;
     const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
     for (const file of commandFiles) {
+      // If both pull.js and specialPull.js exist, only require the selected one
+      if ((file === 'pull.js' || file === 'specialPull.js') && file !== PULL_FILENAME) {
+        continue;
+      }
+
       const filePath = path.join(commandsPath, file);
       try {
         const command = require(filePath);
         if ('data' in command && 'execute' in command) {
           client.commands.set(command.data.name, command);
-          console.log('[SLASH] loaded', command.data.name);
+          console.log('[SLASH] loaded', command.data.name, `(${file})`);
         } else {
           console.log(`[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`);
         }
@@ -147,6 +156,7 @@ client.on('messageCreate', async (message) => {
     try { await message.reply({ content: 'Command error' }); } catch {}
   }
 });
+
 // Add this somewhere in your bot's startup (like index.js)
 async function cleanupExpiredListings() {
   try {
