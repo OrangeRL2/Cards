@@ -1,15 +1,16 @@
 // message-commands/forceboss.js
-const { PermissionsBitField } = require('discord.js');
 const oshis = require('../config/oshis');
 const bossManager = require('../jobs/bossManager');
+const { allowedBossSpawners } = require('../config/permissions');
 
 module.exports = {
   name: 'forceboss',
   description: 'Force spawn a boss now. Usage: !forceboss [oshiId] [seconds]',
   async execute(message, args) {
     try {
-      // Permission check (Administrator)
-      if (!message.member || !message.member.permissions.has?.(PermissionsBitField.Flags.Administrator)) {
+      // Allowlist check (by Discord user ID)
+      const authorId = message?.author?.id;
+      if (!authorId || !allowedBossSpawners.includes(authorId)) {
         return message.reply('You do not have permission to use this command.');
       }
 
