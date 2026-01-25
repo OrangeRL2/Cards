@@ -540,8 +540,8 @@ module.exports = [
 		'bdayDay': 11,
 	},
     	{
-		'id': 'a-chan',
-		'label': 'A-chan',
+		'id': 'achan',
+		'label': 'Achan',
 		'gen': 'Staff',
 		'bdayMonth': 2,
 		'bdayDay': 28,
