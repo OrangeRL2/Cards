@@ -51,7 +51,8 @@ const RARITY_EXCLUDE = new Set(['P', 'SP', 'UP']);
 // You can also set these via environment variables for deployment flexibility.
 const ASSETS_BASE_BY_RARITY = {
   // Example: use a dedicated folder for birthday cards
-  BDAY: process.env.BDAY_ASSETS_BASE || path.join(__dirname, '..', 'assets', 'montlybdays')
+  BDAY: process.env.BDAY_ASSETS_BASE || path.join(__dirname, '..', 'assets', 'montlybdays'),
+  OSR: process.env.OSR_ASSETS_BASE || path.join(__dirname, '..', 'assets', 'montlybdays')
 };
 
 // Helper to resolve the asset base for a given rarity
@@ -795,7 +796,7 @@ async function handleSuperchat({ userId, oshiId, spendFans, client = null }) {
   if ((userDoc.points || 0) < spendFans) throw new Error('Insufficient fans');
 
   // Compute awards
-  const points = spendFans;
+  const points = 6;
   const happinessDelta = Math.floor(6);
 
   // Transaction: debit user, update event/user totals (including superchatCount), log
