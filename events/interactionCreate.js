@@ -1,5 +1,15 @@
 // events/interactionCreate.js
-const { Events, Collection, ModalBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder, StringSelectMenuBuilder } = require('discord.js');
+const {
+  Events,
+  Collection,
+  ModalBuilder,
+  TextInputBuilder,
+  TextInputStyle,
+  ActionRowBuilder,
+  StringSelectMenuBuilder,
+  ButtonBuilder,
+  ButtonStyle
+} = require('discord.js');
 const { requireOshi } = require('../requireOshi');
 const OshiUser = require('../models/Oshi');
 const User = require('../models/User');
@@ -14,6 +24,41 @@ const config = require('../config.json');
 module.exports = {
   name: Events.InteractionCreate,
   async execute(interaction) {
+    // Utility: chunk an array into pages
+    function chunkArray(arr, size) {
+      const out = [];
+      for (let i = 0; i < arr.length; i += size) out.push(arr.slice(i, i + size));
+      return out;
+    }
+
+    // Build eligible options for sub flow: hides locked cards and sorts multis first
+    function buildEligibleOptionsFromUserDoc(userDoc) {
+      const eligible = (userDoc.cards || []).map((c, idx) => ({ ...c, _idx: idx }))
+        .filter(c => ['OSR', 'SR'].includes(c.rarity) && (c.count || 0) > 0 && !c.locked);
+
+      // Sort: multis (count > 1) first, then by count desc, then by name (case-insensitive)
+      eligible.sort((a, b) => {
+        const aMulti = (a.count || 0) > 1 ? 1 : 0;
+        const bMulti = (b.count || 0) > 1 ? 1 : 0;
+        if (bMulti !== aMulti) return bMulti - aMulti; // multis first
+        if ((b.count || 0) !== (a.count || 0)) return (b.count || 0) - (a.count || 0); // larger stacks first
+        return String(a.name || '').localeCompare(String(b.name || ''), undefined, { sensitivity: 'base' });
+      });
+
+      // Map to select option objects
+      const allOptions = eligible.map(c => {
+        const payload = encodeURIComponent(JSON.stringify({ idx: c._idx, name: c.name, rarity: c.rarity }));
+        const countSuffix = (c.count && c.count > 1) ? ` x${c.count}` : '';
+        return {
+          label: `${c.name} (${c.rarity})${countSuffix}`,
+          value: payload,
+          description: `${c.rarity} card${countSuffix}`
+        };
+      });
+
+      return { eligible, allOptions };
+    }
+
     // Helper: safe reply/update wrappers to avoid throwing on expired/unknown interactions (Discord 10062)
     async function safeReply(interaction, opts) {
       try {
@@ -174,55 +219,106 @@ module.exports = {
             return;
           }
 
-        if (action === 'sub') {
-          // present select menu of eligible OSR/SR cards
-          const userId = interaction.user.id;
-          const userDoc = await User.findOne({ id: userId }).lean();
-          if (!userDoc) return safeReply(interaction, { content: 'User not found.', flags: 64 });
-        
-          // Build eligible list: only OSR/SR, positive count, and not locked
-          const eligible = (userDoc.cards || []).map((c, idx) => ({ ...c, _idx: idx }))
-            .filter(c => ['OSR', 'SR'].includes(c.rarity) && (c.count || 0) > 0 && !c.locked);
-        
-          if (!eligible.length) {
-            return safeReply(interaction, { content: 'You have no unlocked OSR or SR cards to subscribe with.', flags: 64 });
+          // --- Page-select "back" button handler (kept for compatibility but not required) ---
+          if (id && id.startsWith('boss_sub_page_back|')) {
+            // customId: boss_sub_page_back|<eventId>|<allowedUserId>
+            const [, backEventId, allowedUserId] = id.split('|');
+
+            if (interaction.user.id !== allowedUserId) {
+              return safeReply(interaction, { content: 'This control is not for you.', flags: 64 });
+            }
+
+            try {
+              const userDoc = await User.findOne({ id: allowedUserId }).lean();
+              if (!userDoc) return safeUpdate(interaction, { content: 'User not found.', components: [] });
+
+              const { allOptions } = buildEligibleOptionsFromUserDoc(userDoc);
+              if (!allOptions.length) {
+                return safeUpdate(interaction, { content: 'You have no unlocked OSR or SR cards to subscribe with.', components: [] });
+              }
+
+              const pages = chunkArray(allOptions, 25);
+              const totalPages = pages.length;
+
+              const pageOptions = pages.map((pageArr, i) => {
+                // compute visible card count (if page is full and you'll add a Back option later,
+                // the user will see 24 real cards + Back)
+                const realCount = pageArr.length >= 25 ? 24 : pageArr.length;
+                const start = i * 25 + 1;
+                const end = i * 25 + pageArr.length;
+                const labelCountText = pageArr.length >= 25 ? `${realCount} cards` : `${realCount} cards`;
+                return {
+                  label: `Page ${i + 1} (${start}-${end})`,
+                  value: String(i),
+                  description: `${labelCountText}`
+                };
+              }).slice(0, 25);
+
+              const pageSelect = new StringSelectMenuBuilder()
+                .setCustomId(`boss_sub_page_select|${backEventId}|${allowedUserId}`)
+                .setPlaceholder('Choose which page of cards to view')
+                .addOptions(pageOptions)
+                .setMinValues(1)
+                .setMaxValues(1);
+
+              const pageRow = new ActionRowBuilder().addComponents(pageSelect);
+
+              return safeUpdate(interaction, {
+                content: `Choose a page to view: (${totalPages} page(s) available)`,
+                components: [pageRow]
+              });
+            } catch (err) {
+              console.error('[INT] boss_sub_page_back handler error', err);
+              return safeUpdate(interaction, { content: 'Failed to return to pages.', components: [] });
+            }
           }
-        
-          // Sort so multis (count > 1) appear first, then by count desc, then by name
-          eligible.sort((a, b) => {
-            const aMulti = (a.count || 0) > 1 ? 1 : 0;
-            const bMulti = (b.count || 0) > 1 ? 1 : 0;
-            if (bMulti !== aMulti) return bMulti - aMulti; // multis first
-            if ((b.count || 0) !== (a.count || 0)) return (b.count || 0) - (a.count || 0); // larger stacks first
-            return String(a.name || '').localeCompare(String(b.name || ''), undefined, { sensitivity: 'base' });
-          });
-        
-          // Build select options (limit to 25)
-          const options = eligible.slice(0, 25).map(c => {
-            const payload = encodeURIComponent(JSON.stringify({ idx: c._idx, name: c.name, rarity: c.rarity }));
-            const countSuffix = (c.count && c.count > 1) ? ` x${c.count}` : '';
-            return {
-              label: `${c.name} (${c.rarity})${countSuffix}`,
-              value: payload,
-              description: `${c.rarity} card${countSuffix}`
-            };
-          });
-        
-          const select = new StringSelectMenuBuilder()
-            .setCustomId(`boss_sub_select|${eventId}|${userId}`)
-            .setPlaceholder('Select a card to consume for Sub (OSR/SR)')
-            .addOptions(options)
-            .setMinValues(1)
-            .setMaxValues(1);
-        
-          const row = new ActionRowBuilder().addComponents(select);
-        
-          return safeReply(interaction, {
-            content: 'Choose which card to consume for Sub (this will be used immediately).',
-            components: [row],
-            flags: 64
-          });
-        }
+
+          if (action === 'sub') {
+            // present a page-select menu first (ephemeral) so we can support >25 cards
+            const userId = interaction.user.id;
+            const userDoc = await User.findOne({ id: userId }).lean();
+            if (!userDoc) return safeReply(interaction, { content: 'User not found.', flags: 64 });
+
+            const { eligible, allOptions } = buildEligibleOptionsFromUserDoc(userDoc);
+            if (!eligible.length) {
+              return safeReply(interaction, { content: 'You have no unlocked OSR or SR cards to subscribe with.', flags: 64 });
+            }
+
+            // Split into pages of 25
+            const pages = chunkArray(allOptions, 25);
+            const totalPages = pages.length;
+
+            // Build page-select options (Discord select max 25 options). If you have >25 pages,
+            // this will only show the first 25 pages.
+            const pageOptions = pages.map((pageArr, i) => {
+              // compute visible card count (if page is full and you'll add a Back option later,
+              // the user will see 24 real cards + Back)
+              const realCount = pageArr.length >= 25 ? 24 : pageArr.length;
+              const start = i * 25 + 1;
+              const end = i * 25 + pageArr.length;
+              const labelCountText = pageArr.length >= 25 ? `${realCount} cards` : `${realCount} cards`;
+              return {
+                label: `Page ${i + 1} (${start}-${end})`,
+                value: String(i),
+                description: `${labelCountText}`
+              };
+            }).slice(0, 25);
+
+            const pageSelect = new StringSelectMenuBuilder()
+              .setCustomId(`boss_sub_page_select|${eventId}|${userId}`)
+              .setPlaceholder('Choose which page of cards to view')
+              .addOptions(pageOptions)
+              .setMinValues(1)
+              .setMaxValues(1);
+
+            const pageRow = new ActionRowBuilder().addComponents(pageSelect);
+
+            return safeReply(interaction, {
+              content: `You have ${allOptions.length} eligible cards across ${totalPages} page(s). Choose a page to view:`,
+              components: [pageRow],
+              flags: 64
+            });
+          }
 
           if (action === 'superchat') {
             try {
@@ -239,57 +335,55 @@ module.exports = {
               // For confirm path, we may perform heavy DB work; defer first
               const actionType = parts[3];
               // inside handleSuperchatInteraction(interaction) when action === 'confirm'
-    if (action === 'confirm') {
-    // Ensure only the intended user can confirm (you already check this earlier)
-    try {
-      // Acknowledge the component quickly so Discord doesn't show "thinking..."
-      await interaction.deferUpdate().catch(() => null);
-    
-      // Try to remove/disable the buttons on the original ephemeral confirm message immediately.
-      // interaction.message should be the ephemeral message that contained the Confirm/Cancel buttons.
-      try {
-        if (interaction.message && interaction.message.edit) {
-          // Remove components and optionally update content to show processing
-          await interaction.message.edit({ content: 'Processing superchat...', components: [] }).catch(() => null);
-        }
-      } catch (editErr) {
-        // non-fatal: log and continue
-        console.warn('[handleSuperchatInteraction] failed to edit confirm message to remove buttons', editErr);
-      }
-    
-      // Run the heavy work asynchronously so we don't block the event loop
-      setImmediate(async () => {
-        try {
-          const userId = interaction.user.id;
-          const ev = await BossEvent.findOne({ eventId }).lean();
-          if (!ev) {
-            // original message already had buttons removed; inform user via followUp
-            await interaction.followUp({ ephemeral: true, content: 'Event no longer available.' }).catch(() => null);
-            return;
-          }
-        
-          // Recompute currentCount and cost inside handleSuperchat or rely on handleSuperchat to validate
-          const result = await handleSuperchat({ userId, oshiId: ev.oshiId, spendFans: undefined, client: interaction.client });
-        
-          // Send ephemeral follow-up with success details
-          const successText = `Superchat sent: **${result.spendFans}** fans had their wallets emptied.\nHappiness awarded: **${result.happinessDelta}**.\nNext cost: **${result.nextSuperchatMin}**.`;
-          await interaction.followUp({ ephemeral: true, content: successText }).catch(() => null);
-        } catch (err) {
-          console.error('[handleSuperchatInteraction] confirm processing failed', err);
-          // Inform the user; the original confirm message already had its buttons removed
-          await interaction.followUp({ ephemeral: true, content: `Superchat failed: ${err?.message || 'internal error'}` }).catch(() => null);
-        }
-      });
-    
-      return true;
-    } catch (err) {
-      console.error('[handleSuperchatInteraction] confirm branch unexpected error', err);
-      try { await interaction.followUp({ ephemeral: true, content: 'Failed to process superchat confirmation.' }).catch(() => null); } catch {}
-      return true;
-    }
-} 
+              if (action === 'confirm') {
+                // Ensure only the intended user can confirm (you already check this earlier)
+                try {
+                  // Acknowledge the component quickly so Discord doesn't show "thinking..."
+                  await interaction.deferUpdate().catch(() => null);
 
+                  // Try to remove/disable the buttons on the original ephemeral confirm message immediately.
+                  // interaction.message should be the ephemeral message that contained the Confirm/Cancel buttons.
+                  try {
+                    if (interaction.message && interaction.message.edit) {
+                      // Remove components and optionally update content to show processing
+                      await interaction.message.edit({ content: 'Processing superchat...', components: [] }).catch(() => null);
+                    }
+                  } catch (editErr) {
+                    // non-fatal: log and continue
+                    console.warn('[handleSuperchatInteraction] failed to edit confirm message to remove buttons', editErr);
+                  }
 
+                  // Run the heavy work asynchronously so we don't block the event loop
+                  setImmediate(async () => {
+                    try {
+                      const userId = interaction.user.id;
+                      const ev = await BossEvent.findOne({ eventId }).lean();
+                      if (!ev) {
+                        // original message already had buttons removed; inform user via followUp
+                        await interaction.followUp({ ephemeral: true, content: 'Event no longer available.' }).catch(() => null);
+                        return;
+                      }
+
+                      // Recompute currentCount and cost inside handleSuperchat or rely on handleSuperchat to validate
+                      const result = await handleSuperchat({ userId, oshiId: ev.oshiId, spendFans: undefined, client: interaction.client });
+
+                      // Send ephemeral follow-up with success details
+                      const successText = `Superchat sent: **${result.spendFans}** fans had their wallets emptied.\nHappiness awarded: **${result.happinessDelta}**.\nNext cost: **${result.nextSuperchatMin}**.`;
+                      await interaction.followUp({ ephemeral: true, content: successText }).catch(() => null);
+                    } catch (err) {
+                      console.error('[handleSuperchatInteraction] confirm processing failed', err);
+                      // Inform the user; the original confirm message already had its buttons removed
+                      await interaction.followUp({ ephemeral: true, content: `Superchat failed: ${err?.message || 'internal error'}` }).catch(() => null);
+                    }
+                  });
+
+                  return true;
+                } catch (err) {
+                  console.error('[handleSuperchatInteraction] confirm branch unexpected error', err);
+                  try { await interaction.followUp({ ephemeral: true, content: 'Failed to process superchat confirmation.' }).catch(() => null); } catch {}
+                  return true;
+                }
+              }
 
               // For cancel or other actions, delegate directly (they are quick)
               await bossManager.handleSuperchatInteraction(interaction);
@@ -318,8 +412,79 @@ module.exports = {
         return;
       }
 
-      // --- String select menu handling (including sub card selection) ---
+      // --- String select menu handling (including page-select and sub card selection) ---
       if (interaction.isStringSelectMenu && interaction.isStringSelectMenu()) {
+        // Handle page-select first: user chose which page to view
+        if (interaction.customId && interaction.customId.startsWith('boss_sub_page_select|')) {
+          const parts = interaction.customId.split('|');
+          if (parts.length < 3) return safeReply(interaction, { content: 'Invalid interaction.', flags: 64 });
+          const [, pageEventId, allowedUserId] = parts;
+
+          if (interaction.user.id !== allowedUserId) {
+            return safeReply(interaction, { content: 'This selection is not for you.', flags: 64 });
+          }
+
+          const selectedPageStr = interaction.values?.[0];
+          if (typeof selectedPageStr === 'undefined') return safeReply(interaction, { content: 'No page selected.', flags: 64 });
+          const pageIndex = Math.max(0, Math.floor(Number(selectedPageStr) || 0));
+
+          try {
+            // Recompute eligible server-side
+            const userDoc = await User.findOne({ id: allowedUserId }).lean();
+            if (!userDoc) return safeUpdate(interaction, { content: 'User not found.', components: [] });
+
+            const { eligible, allOptions } = buildEligibleOptionsFromUserDoc(userDoc);
+            if (!eligible.length) {
+              return safeUpdate(interaction, { content: 'You have no unlocked OSR or SR cards to subscribe with.', components: [] });
+            }
+
+            // Build all options and page them
+            const pages = chunkArray(allOptions, 25);
+            const totalPages = pages.length;
+            const safePageIndex = Math.max(0, Math.min(totalPages - 1, pageIndex));
+            let pageOptions = pages[safePageIndex].slice(); // copy
+
+            // Add "Back to pages" as the last option on the card-select so user can return
+            // Ensure we don't exceed 25 options: if pageOptions already has 25, replace the last one with Back
+            const BACK_VALUE = '__BACK_TO_PAGES__';
+            const backOption = {
+              label: 'Back to pages',
+              value: BACK_VALUE,
+              description: 'Return to the page list'
+            };
+
+            if (pageOptions.length >= 25) {
+              // replace last option
+              pageOptions[pageOptions.length - 1] = backOption;
+            } else {
+              pageOptions.push(backOption);
+            }
+
+            // Defensive: ensure we never pass >25 options to Discord
+            if (pageOptions.length > 25) pageOptions = pageOptions.slice(0, 25);
+
+            // Build the card-select for the chosen page
+            const cardSelect = new StringSelectMenuBuilder()
+              .setCustomId(`boss_sub_select|${pageEventId}|${allowedUserId}`)
+              .setPlaceholder('Select a card to consume for Sub (OSR/SR)')
+              .addOptions(pageOptions)
+              .setMinValues(1)
+              .setMaxValues(1);
+
+            const cardRow = new ActionRowBuilder().addComponents(cardSelect);
+
+            // Update the ephemeral message in-place to show the cards for the selected page
+            return safeUpdate(interaction, {
+              content: `Showing page ${safePageIndex + 1}/${totalPages}. Select a card to consume (or choose Back to pages):`,
+              components: [cardRow]
+            });
+          } catch (err) {
+            console.error('[INT] boss_sub_page_select handler error', err);
+            return safeUpdate(interaction, { content: 'Failed to load that page.', components: [] });
+          }
+        }
+
+        // Handle the actual card selection (consumption) or Back-to-pages via the same select
         if (interaction.customId && interaction.customId.startsWith('boss_sub_select|')) {
           const parts = interaction.customId.split('|');
           if (parts.length < 3) {
@@ -333,6 +498,54 @@ module.exports = {
           const selected = interaction.values?.[0];
           if (!selected) return safeReply(interaction, { content: 'No card selected.', flags: 64 });
 
+          // Handle Back-to-pages sentinel
+          const BACK_VALUE = '__BACK_TO_PAGES__';
+          if (selected === BACK_VALUE) {
+            // Rebuild page-select and show it
+            try {
+              const userDoc = await User.findOne({ id: allowedUserId }).lean();
+              if (!userDoc) return safeUpdate(interaction, { content: 'User not found.', components: [] });
+
+              const { allOptions } = buildEligibleOptionsFromUserDoc(userDoc);
+              if (!allOptions.length) {
+                return safeUpdate(interaction, { content: 'You have no unlocked OSR or SR cards to subscribe with.', components: [] });
+              }
+
+              const pages = chunkArray(allOptions, 25);
+              const totalPages = pages.length;
+
+              const pageOptions = pages.map((pageArr, i) => {
+                const realCount = pageArr.length >= 25 ? 24 : pageArr.length;
+                const start = i * 25 + 1;
+                const end = i * 25 + pageArr.length;
+                const labelCountText = pageArr.length >= 25 ? `${realCount} cards` : `${realCount} cards`;
+                return {
+                  label: `Page ${i + 1} (${start}-${end})`,
+                  value: String(i),
+                  description: `${labelCountText}`
+                };
+              }).slice(0, 25);
+
+              const pageSelect = new StringSelectMenuBuilder()
+                .setCustomId(`boss_sub_page_select|${eventId}|${allowedUserId}`)
+                .setPlaceholder('Choose which page of cards to view')
+                .addOptions(pageOptions)
+                .setMinValues(1)
+                .setMaxValues(1);
+
+              const pageRow = new ActionRowBuilder().addComponents(pageSelect);
+
+              return safeUpdate(interaction, {
+                content: `You have ${allOptions.length} eligible cards across ${totalPages} page(s). Choose a page to view:`,
+                components: [pageRow]
+              });
+            } catch (err) {
+              console.error('[INT] boss_sub_select back-to-pages error', err);
+              return safeUpdate(interaction, { content: 'Failed to return to pages.', components: [] });
+            }
+          }
+
+          // Otherwise it's a real card payload
           let payload;
           try {
             payload = JSON.parse(decodeURIComponent(selected));
