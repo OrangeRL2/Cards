@@ -174,43 +174,55 @@ module.exports = {
             return;
           }
 
-          if (action === 'sub') {
-            // present select menu of eligible OSR/SR cards
-            const userId = interaction.user.id;
-            const userDoc = await User.findOne({ id: userId }).lean();
-            if (!userDoc) return safeReply(interaction, { content: 'User not found.', flags: 64 });
-
-            const eligible = (userDoc.cards || []).map((c, idx) => ({ ...c, _idx: idx }))
-              .filter(c => ['OSR', 'SR'].includes(c.rarity) && (c.count || 0) > 0);
-
-            if (!eligible.length) {
-              return safeReply(interaction, { content: 'You have no OSR or SR cards to subscribe with.', flags: 64 });
-            }
-
-            const options = eligible.slice(0, 25).map(c => {
-              const payload = encodeURIComponent(JSON.stringify({ idx: c._idx, name: c.name, rarity: c.rarity }));
-              return {
-                label: `${c.name} (${c.rarity})${c.count && c.count > 1 ? ` x${c.count}` : ''}`,
-                value: payload,
-                description: `${c.rarity} card`
-              };
-            });
-
-            const select = new StringSelectMenuBuilder()
-              .setCustomId(`boss_sub_select|${eventId}|${userId}`)
-              .setPlaceholder('Select a card to consume for Sub (OSR/SR)')
-              .addOptions(options)
-              .setMinValues(1)
-              .setMaxValues(1);
-
-            const row = new ActionRowBuilder().addComponents(select);
-
-            return safeReply(interaction, {
-              content: 'Choose which card to consume for Sub (this will be used immediately).',
-              components: [row],
-              flags: 64
-            });
+        if (action === 'sub') {
+          // present select menu of eligible OSR/SR cards
+          const userId = interaction.user.id;
+          const userDoc = await User.findOne({ id: userId }).lean();
+          if (!userDoc) return safeReply(interaction, { content: 'User not found.', flags: 64 });
+        
+          // Build eligible list: only OSR/SR, positive count, and not locked
+          const eligible = (userDoc.cards || []).map((c, idx) => ({ ...c, _idx: idx }))
+            .filter(c => ['OSR', 'SR'].includes(c.rarity) && (c.count || 0) > 0 && !c.locked);
+        
+          if (!eligible.length) {
+            return safeReply(interaction, { content: 'You have no unlocked OSR or SR cards to subscribe with.', flags: 64 });
           }
+        
+          // Sort so multis (count > 1) appear first, then by count desc, then by name
+          eligible.sort((a, b) => {
+            const aMulti = (a.count || 0) > 1 ? 1 : 0;
+            const bMulti = (b.count || 0) > 1 ? 1 : 0;
+            if (bMulti !== aMulti) return bMulti - aMulti; // multis first
+            if ((b.count || 0) !== (a.count || 0)) return (b.count || 0) - (a.count || 0); // larger stacks first
+            return String(a.name || '').localeCompare(String(b.name || ''), undefined, { sensitivity: 'base' });
+          });
+        
+          // Build select options (limit to 25)
+          const options = eligible.slice(0, 25).map(c => {
+            const payload = encodeURIComponent(JSON.stringify({ idx: c._idx, name: c.name, rarity: c.rarity }));
+            const countSuffix = (c.count && c.count > 1) ? ` x${c.count}` : '';
+            return {
+              label: `${c.name} (${c.rarity})${countSuffix}`,
+              value: payload,
+              description: `${c.rarity} card${countSuffix}`
+            };
+          });
+        
+          const select = new StringSelectMenuBuilder()
+            .setCustomId(`boss_sub_select|${eventId}|${userId}`)
+            .setPlaceholder('Select a card to consume for Sub (OSR/SR)')
+            .addOptions(options)
+            .setMinValues(1)
+            .setMaxValues(1);
+        
+          const row = new ActionRowBuilder().addComponents(select);
+        
+          return safeReply(interaction, {
+            content: 'Choose which card to consume for Sub (this will be used immediately).',
+            components: [row],
+            flags: 64
+          });
+        }
 
           if (action === 'superchat') {
             try {
