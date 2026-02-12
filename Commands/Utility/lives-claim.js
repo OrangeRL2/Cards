@@ -323,7 +323,7 @@ module.exports = {
 
       // create collector for the button
       const fetched = await interaction.fetchReply();
-      const btnCollector = fetched.createMessageComponentCollector({ time: 30_000 });
+      const btnCollector = fetched.createMessageComponentCollector({ time: 120_000 });
 
       btnCollector.on('collect', async btn => {
   if (btn.user.id !== interaction.user.id) {

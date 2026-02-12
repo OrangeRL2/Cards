@@ -92,10 +92,10 @@ async function drawPackSpecial(userId, specialLabel) {
 
   // --- Common slots (4) ---
   const commonSlot1Options = [
-    { key: 'C', weight: 95.8 },
+    { key: 'C', weight: 93.8 },
     { key: 'S', weight: 4.0 },
-    { key: 'HR', weight: 0.1 },
-    { key: 'BDAY', weight: 0.1 },
+    { key: 'HR', weight: 1.1 },
+    { key: 'BDAY', weight: 1.1 },
   ];
   {
     const rarity = pickWeighted(commonSlot1Options);
@@ -115,9 +115,9 @@ async function drawPackSpecial(userId, specialLabel) {
   }
 
   const commonSlot3Options = [
-    { key: 'C', weight: 95.9 },
+    { key: 'C', weight: 94.9 },
     { key: 'S', weight: 4.0 },
-    { key: 'BDAY', weight: 0.1 },
+    { key: 'BDAY', weight: 1.1 },
   ];
   {
     const rarity = pickWeighted(commonSlot3Options);
@@ -126,9 +126,9 @@ async function drawPackSpecial(userId, specialLabel) {
   }
 
   const commonSlot4Options = [
-    { key: 'C', weight: 95.9 },
+    { key: 'C', weight: 94.9 },
     { key: 'S', weight: 4.0 },
-    { key: 'HR', weight: 0.1 },
+    { key: 'HR', weight: 1.1 },
   ];
   {
     const rarity = pickWeighted(commonSlot4Options);
@@ -139,19 +139,19 @@ async function drawPackSpecial(userId, specialLabel) {
   // --- Uncommon slots (3 picks) ---
   const uncommonSlotBases = [
     [
-      { key: 'U', weight: 89.75 },
+      { key: 'U', weight: 88.75 },
       { key: 'RR', weight: 10.0 },
-      { key: 'SY', weight: 0.25 },
+      { key: 'SY', weight: 1.25 },
     ],
     [
-      { key: 'U', weight: 96.75 },
+      { key: 'U', weight: 95.75 },
       { key: 'SR', weight: 3.0 },
-      { key: 'SY', weight: 0.25 },
+      { key: 'SY', weight: 1.25 },
     ],
     [
-      { key: 'U', weight: 97.5 },
-      { key: 'OSR', weight: 2.0 },
-      { key: 'UR', weight: 0.5 },
+      { key: 'U', weight: 95.5 },
+      { key: 'OSR', weight: 3.0 },
+      { key: 'UR', weight: 1.5 },
     ],
   ];
 
@@ -164,9 +164,9 @@ async function drawPackSpecial(userId, specialLabel) {
 
   // --- Rare slot (1) ---
   const rareOptions = [
-    { key: 'R', weight: 99.58 },
-    { key: 'OUR', weight: 0.39 },
-    { key: 'SEC', weight: 0.03 },
+    { key: 'R', weight: 99.1 },
+    { key: 'OUR', weight: 0.9 },
+    { key: 'SEC', weight: 0.1 },
   ];
   {
     const rareRarity = pickWeighted(rareOptions);

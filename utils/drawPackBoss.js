@@ -28,7 +28,7 @@ function fallbackPickFromPools(rarity, userId) {
 }
 
 async function pickForSlot(rarity, bossLabel, userId) {
-  const tryBoss = !!bossLabel && Math.random() < 0.25;
+  const tryBoss = !!bossLabel && Math.random() < 0.1;
 
   if (tryBoss) {
     try {

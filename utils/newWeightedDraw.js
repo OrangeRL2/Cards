@@ -17,7 +17,6 @@ function pickWeighted(options) {
 
 // --- User groups ---
 const specialUserIds = new Set([
-  //'153551890976735232',
 ]);
 
 const otherUserIds = new Set([
@@ -27,12 +26,19 @@ const otherUserIds = new Set([
 const otherUserIds25 = new Set([
  '1171127294413246567',//blacky
   '1334914199968677941',//blacky
+  '953552994232852490',
+  '1188023588926795827',
+  '1300468334474690583',
+  '1416081468794339479'
 ]); 
 const otherUserIds50 = new Set([
   '91098889796481024', //moo
   '91103688415776768',//moo2
   '647219814011502607',//illegal
   '875533483051712543',//weirdmj
+  '495185224628699137',
+  '578146378501324812',
+  '975246037914624030'
 ]); 
 const otherUserIdsTier75 = new Set([
 ]); 
