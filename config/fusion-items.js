@@ -193,6 +193,91 @@ pekora_marine_flare_3: {
       { rarity: 'SR', image: 'Marine 101', count: 1 },
     ],
   },
+
+  //VAL COLS
+    AquaAya: {
+    name: 'Aqua & Aya Trained(Aqua & Aya + Aqua & Aya)',
+    rarity: 'COL',
+    image: 'Aqua & Aya 101',
+    stock: -1,
+    requires: [
+      { rarity: 'VAL', image: 'Aqua & Aya 101', count: 1 },
+      { rarity: 'VAL', image: 'Aqua & Aya 101', count: 1 },
+    ],
+  },
+    BotanTomori: {
+    name: 'Botan & Tomori Trained(Botan & Tomori + Botan & Tomori)',
+    rarity: 'COL',
+    image: 'Botan & Tomori 101',
+    stock: -1,
+    requires: [
+      { rarity: 'VAL', image: 'Botan & Tomori 101', count: 1 },
+      { rarity: 'VAL', image: 'Botan & Tomori 101', count: 1 },
+    ],
+  },
+      ChloeYukina: {
+    name: 'Chloe & Yukina Trained(Chloe & Yukina + Chloe & Yukina)',
+    rarity: 'COL',
+    image: 'Chloe & Yukina 101',
+    stock: -1,
+    requires: [
+      { rarity: 'VAL', image: 'Chloe & Yukina 101', count: 1 },
+      { rarity: 'VAL', image: 'Chloe & Yukina 101', count: 1 },
+    ],
+  },
+    FubukiKokoro: {
+    name: 'Fubuki & Kokoro Trained(Fubuki & Kokoro + Fubuki & Kokoro)',
+    rarity: 'COL',
+    image: 'Fubuki & Kokoro 101',
+    stock: -1,
+    requires: [
+      { rarity: 'VAL', image: 'Fubuki & Kokoro 101', count: 1 },
+      { rarity: 'VAL', image: 'Fubuki & Kokoro 101', count: 1 },
+    ],
+  },
+
+    LamyMashiro: {
+    name: 'Lamy & Mashiro Trained(Lamy & Mashiro + Lamy & Mashiro)',
+    rarity: 'COL',
+    image: 'Lamy & Mashiro 101',
+    stock: -1,
+    requires: [
+      { rarity: 'VAL', image: 'Lamy & Mashiro 101', count: 1 },
+      { rarity: 'VAL', image: 'Lamy & Mashiro 101', count: 1 },
+    ],
+  },
+      MarineRan: {
+    name: 'Marine & Ran Trained(Marine & Ran + Marine & Ran)',
+    rarity: 'COL',
+    image: 'Marine & Ran 101',
+    stock: -1,
+    requires: [
+      { rarity: 'VAL', image: 'Marine & Ran 101', count: 1 },
+      { rarity: 'VAL', image: 'Marine & Ran 101', count: 1 },
+    ],
+  },
+
+        SoraKasumi: {
+    name: 'Sora & Kasumi Trained(Sora & Kasumi + Sora & Kasumi)',
+    rarity: 'COL',
+    image: 'Sora & Kasumi 101',
+    stock: -1,
+    requires: [
+      { rarity: 'VAL', image: 'Sora & Kasumi 101', count: 1 },
+      { rarity: 'VAL', image: 'Sora & Kasumi 101', count: 1 },
+    ],
+  },
+
+    SuiseiLayer: {
+    name: 'Suisei & Layer Trained(Suisei & Layer + Suisei & Layer)',
+    rarity: 'COL',
+    image: 'Suisei & Layer 101',
+    stock: -1,
+    requires: [
+      { rarity: 'VAL', image: 'Suisei & Layer 101', count: 1 },
+      { rarity: 'VAL', image: 'Suisei & Layer 101', count: 1 },
+    ],
+  },
 };
 
 module.exports = FUSION_ITEMS;

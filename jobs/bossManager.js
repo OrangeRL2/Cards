@@ -1395,7 +1395,7 @@ let refresherInterval = null;
 
 async function startBossManager(client, { weeklySeed } = {}) {
   try {
-    await scheduleWeeklyBosses({ seed: weeklySeed || String(Date.now()) });
+    //await scheduleWeeklyBosses({ seed: weeklySeed || String(Date.now()) });
   } catch (err) {
     console.error('scheduleWeeklyBosses error', err);
   }
