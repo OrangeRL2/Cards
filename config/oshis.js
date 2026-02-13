@@ -512,8 +512,8 @@ module.exports = [
 		'bdayDay': 21,
 	},
 	{
-		'id': 'liz',
-		'label': 'Liz',
+		'id': 'elizabeth',
+		'label': 'Elizabeth',
 		'gen': 'Justice',
 		'bdayMonth': 4,
 		'bdayDay': 25,

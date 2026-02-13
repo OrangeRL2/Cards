@@ -269,13 +269,13 @@ pekora_marine_flare_3: {
   },
 
     SuiseiLayer: {
-    name: 'Suisei & Layer Trained(Suisei & Layer + Suisei & Layer)',
+    name: 'Suisei & LAYER Trained(Suisei & Layer + Suisei & Layer)',
     rarity: 'COL',
-    image: 'Suisei & Layer 101',
+    image: 'Suisei & LAYER 101',
     stock: -1,
     requires: [
-      { rarity: 'VAL', image: 'Suisei & Layer 101', count: 1 },
-      { rarity: 'VAL', image: 'Suisei & Layer 101', count: 1 },
+      { rarity: 'VAL', image: 'Suisei & LAYER 101', count: 1 },
+      { rarity: 'VAL', image: 'Suisei & LAYER 101', count: 1 },
     ],
   },
 };
