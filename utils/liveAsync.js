@@ -9,11 +9,11 @@ const STAGE_FOR_RARITY = { C:1, OC:1, U:1, S:2, R:2, RR:2, SR:3, OSR:3, UR:4, OU
 const STAGE_NAMES = {1:'Galaxy',2:'SPACE',3:'CiRCLE',4:'RiNG',5:'Budokan'};
 const SUCCESS_RATES = { C:0.01, OC:0.09, U:0.05, S:0.29, R:0.19, RR:0.39, SR:0.49, OSR:0.59, UR:0.79, OUR:0.89, SY:0.69, SEC:0.99 };
 const DURATION_MS = {
-  1:30 * 60 * 1000,
-  2:3.6e6,
-  3:3*3.6e6,
-  4:8*3.6e6,
-  5:22*3.6e6
+  1:1,
+  2:1 * 60 * 1000,
+  3:2 * 60 * 1000,
+  4:3 * 60 * 1000,
+  5:4 * 60 * 1000
 }; // keep same shape; adjust 5 for prod
 const STAGE5_CARD_RARITY = 'SP';
 const STAGE5_POOL_DIRNAME = 'SP';
