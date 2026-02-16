@@ -5,6 +5,15 @@
 //   !results-lives --resend
 //   !results-lives --resend Rin
 //   !results-lives --resend --name="Rin"
+//   !results-lives --resend --multi
+//   !results-lives --resend --multi: true --name="Yoi"
+//
+// Semantics:
+//   --resend            : Perform resend only if at least one live was claimed this run,
+//                        and if the "button would have existed" (eligible stages).
+//   --name=<text>       : Name hint for any:false stages (free text after flags also works).
+//   --multi[=: true]    : Require saved options for a stage to have multi=true;
+//                         otherwise that stage is skipped (no card is sent).
 //
 // Authorization:
 //   - Only users in ALLOWED_USER_IDS or members with ALLOWED_ROLE_IDS may use this command.
@@ -151,16 +160,19 @@ function pickRandomOwnedCard(cards, rarity, minCount = 1) {
   return pool[Math.floor(Math.random() * pool.length)];
 }
 
-// small flag parser: --key=value, --flag, non-flag args returned in rest
+// small flag parser: supports --key=value, --key: value, --flag
 function parseFlags(args) {
   const flags = {};
   const rest = [];
   for (const a of args) {
     if (a.startsWith('--')) {
-      const [k, v] = a.slice(2).split('=');
-      if (v === undefined) flags[k] = true;
-      else {
-        const vt = v.toLowerCase();
+      const pair = a.slice(2).split(/[:=]/); // accept ":" or "="
+      const k = pair[0];
+      const v = pair.length > 1 ? pair.slice(1).join(':') : undefined; // preserve any ":" in value
+      if (v === undefined) {
+        flags[k] = true;
+      } else {
+        const vt = v.toLowerCase().trim();
         if (['true', '1', 'yes', 'y'].includes(vt)) flags[k] = true;
         else if (['false', '0', 'no', 'n'].includes(vt)) flags[k] = false;
         else flags[k] = v;
@@ -175,7 +187,7 @@ function parseFlags(args) {
 /** ------------------------------------------------------------------------- */
 
 module.exports = {
-  name: 'results-lives', // invoked as !results-lives [--resend] [--name="Rin"] or free text name after flags
+  name: 'results-lives', // invoked as !results-lives [--resend] [--name="Rin"] [--multi] or free text name after flags
   description: 'Claims ready live attempts and shows stage statuses. Use --resend to auto-resend; add a name for any:false.',
   async execute(message, rawArgs = []) {
     try {
@@ -198,6 +210,9 @@ module.exports = {
       const args = rawArgs.length ? rawArgs : providedArgs;
       const { flags, rest } = parseFlags(args);
       const autoResend = Boolean(flags.resend);
+
+      // Optional override: require multi=true in saved options to resend
+      const forceMulti = Boolean(flags.multi);
 
       // Accept a global name hint either via --name=... or as free text (remaining tokens)
       const globalNameHintRaw =
@@ -436,9 +451,11 @@ module.exports = {
         const pending = userAfter?.pendingAttempts || [];
 
         // Eligible stages: processed this run AND have stored options (multi/any) AND not currently occupied
+        // If --multi is set, additionally require opt.multi === true.
         const eligibleStages = processedStages.filter(s => {
           const opt = lastOpts?.[`stage_${s}`];
           if (!opt || (typeof opt.any !== 'boolean' && typeof opt.multi !== 'boolean')) return false;
+          if (forceMulti && opt.multi !== true) return false; // <-- new rule
           // skip if stage currently occupied (unresolved attempt exists)
           const slot = pending.find(a => !a.resolved && Number(a.stage) === Number(s));
           return !slot;
@@ -455,7 +472,6 @@ module.exports = {
         for (const s of eligibleStages) {
           const opts = lastOpts?.[`stage_${s}`];
           if (!opts) {
-            // Shouldn't happen due to filter, but safe-guard
             continue;
           }
 
@@ -499,7 +515,7 @@ module.exports = {
 
           // any:false —> need a name hint (no modal available on prefix)
           if (!globalNameHint) {
-            summary.push(`Stage ${s}: skipped (saved options require a name; provide one like \`!results-lives --resend Yoi\`)`);
+            summary.push(`Stage ${s}: skipped (saved options require a name; provide one like \`!results-lives --resend --name="Yoi"\`)`);
             continue;
           }
 
