@@ -21,7 +21,7 @@ module.exports = {
 
       // --- 1) DELETE OSHI ENTRY ---
       await Oshi.deleteOne({ userId: TARGET_ID });
-
+      await PullQuota.deleteOne({ userId: TARGET_ID });
       // --- 2) SET PULLS TO 1000 ---
       await PullQuota.updateOne(
         { userId: TARGET_ID },

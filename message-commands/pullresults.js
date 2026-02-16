@@ -16,7 +16,7 @@ const PREFIX = '!';
 const COMMAND_NAME = 'recents';
 
 // Rarities considered SR and above
-const SR_AND_ABOVE = new Set(['SR', 'OSR', 'SY', 'UR', 'OUR', 'HR', 'BDAY', 'SEC', 'ORI']);
+const SR_AND_ABOVE = new Set(['SR', 'OSR', 'VAL', 'SY', 'UR', 'OUR', 'HR', 'BDAY', 'SEC', 'ORI']);
 
 // Define teams here. Keys are team names (case-insensitive when matching by explicit name).
 // Values are arrays of user ID strings.

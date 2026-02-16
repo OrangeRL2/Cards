@@ -336,14 +336,14 @@ async function drawPack(userId, useSpecialRatesOverride = null) {
   }
 
   // Extra slot with appearance chance
-  const extraChance = 0.01; // 10% chance to include the extra slot
+  const extraChance = 0.02; // 10% chance to include the extra slot
   if (Math.random() < extraChance) {
     // Define the base rarity table for the extra slot here so you can edit it
     const extraBase = [
       // <-- edit these entries to the rarities you want for the extra slot
-      { key: 'ORI', weight: 99.58 },
-      { key: 'OUR', weight: 0.39 },
-      { key: 'SEC', weight: 0.03 },
+      { key: 'VAL', weight: 99.58 },
+      { key: 'VAL', weight: 0.39 },
+      { key: 'VAL', weight: 0.03 },
     ];
 
     // Allow overrides under 'extraOptions' in override sets; falls back to extraBase

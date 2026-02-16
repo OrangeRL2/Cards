@@ -211,8 +211,8 @@ pekora_marine_flare_3: {
     image: 'Botan & Tomori 101',
     stock: -1,
     requires: [
-      { rarity: 'VAL', image: 'Botan & Tomori 101', count: 1 },
-      { rarity: 'VAL', image: 'Botan & Tomori 101', count: 1 },
+      { rarity: 'VAL', image: 'Botan & Tomori 001', count: 1 },
+      { rarity: 'VAL', image: 'Botan & Tomori 001', count: 1 },
     ],
   },
       ChloeYukina: {

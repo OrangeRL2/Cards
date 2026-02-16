@@ -48,6 +48,7 @@ module.exports = {
           { name: 'HR', value: 'HR' },
           { name: 'BDAY', value: 'BDAY'},
           { name: 'SEC', value: 'SEC' },
+          { name: 'VAL', value: 'VAL' },
         ),
     )
     .addStringOption(opt =>
@@ -135,7 +136,7 @@ module.exports = {
     } else {
       const order = {
         XMAS: 1, C: 2, U: 3, R: 4, S: 5, RR: 6, OC: 7, SR: 8, OSR: 9,
-        P: 10, SP: 11, UP: 12, SY: 13, UR: 14, OUR: 15, HR: 16, BDAY: 17, SEC: 18
+        P: 10, SP: 11, UP: 12, SY: 13, UR: 14, OUR: 15, HR: 16, BDAY: 17, SEC: 18, VAL: 19
       };
       entries.sort((a, b) => {
         const d = (order[b.rarity] || 999) - (order[a.rarity] || 999);
