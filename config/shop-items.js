@@ -10,6 +10,7 @@ let t7 = 50000;
 const SHOP_ITEMS = {
   //tier1
     bloomSui:  { name: 'Bloom Cup Suisei Top 8',  rarity: 'UP',         cost: t1,   image: 'Suisei 001', stock: -1 },
+    bloomIro:  { name: 'Bloom Cup Iroha',  rarity: 'UP',         cost: t1,   image: 'Iroha 001', stock: -1 },
     bloomFub: { name: 'Bloom Cup Fubuki Top 8', rarity: 'UP',           cost: t1,  image: 'Fubuki 001',  stock: -1 },
     bloomPol: { name: 'Bloom Cup Polka Top 48', rarity: 'UP',           cost: t1,  image: 'Polka 001',  stock: -1 },
     sparkleGen0: { name: 'Shiny Sparkles Symphony Gen 0', rarity: 'UP',  cost: t1,  image: 'Gen 0 001',  stock: -1 },
@@ -19,6 +20,7 @@ const SHOP_ITEMS = {
     worldTour1: { name: 'WorldTour25 -Synchronize!- Calli, IRyS, Nerissa, Ollie, Nene', rarity: 'UP', cost: t2, image: 'Calli, IRyS, Nerissa , Ollie, Nene 501', stock: -1 },
   //tier3
     bloomLam: { name: 'Bloom Cup Champion Lamy', rarity: 'UP',       cost: t3,  image: 'Lamy 001',  stock: -1 },
+    bloomSub: { name: 'Bloom Cup Subaru', rarity: 'UP',       cost: t3,  image: 'Subaru 001',  stock: -1 },
     bloomMik: { name: 'Bloom Cup Champion Miko', rarity: 'UP',       cost: t3,  image: 'Miko 001',  stock: -1 },
     exstreamerTop8Sui: { name: 'Exstreamer Cup Top 8 Suisei', rarity: 'UP', cost: t3, image: 'Suisei 005', stock: -1 },
     bloom6: { name: 'Bloom Cup Reine Top8', rarity: 'UP',                 cost: t3,  image: 'Reine 501',  stock: -1 },

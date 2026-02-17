@@ -181,18 +181,32 @@ module.exports = {
           const ok = Boolean(out.successResult);
           let note;
           const sentName = normalizeCardName(att.name) || '';
-
-          if (ok) {
-            if (out.pCard) {
-              const gainedRarity = out.pCard.rarity || 'P';
-              const gainedName = out.pCard.name || out.pCard.displayName || 'special guest';
-              note = `**[${gainedRarity}] ${gainedName}** showed up at **${sentName}**'s live!`;
+                    
+            if (ok) {
+              // Prefer multi-reward list; fallback to single reward for backward compatibility
+              const gainedCards =
+                Array.isArray(out.pCards) ? out.pCards :
+                (out.pCard ? [out.pCard] : []);
+            
+              const formatCard = (c) => {
+                const gainedRarity = c?.rarity || 'P';
+                const gainedName = c?.displayName || c?.name || 'special guest';
+                return `**[${gainedRarity}] ${gainedName}**`;
+              };
+            
+              if (gainedCards.length >= 2) {
+                // Your requested format when 2 appeared:
+                // **[R] Name** & **[R] Name** showed up at **Sent**'s live!
+                const shown = gainedCards.slice(0, 2).map(formatCard).join(' & ');
+                note = `${shown} showed up at **${sentName}**'s live!`;
+              } else if (gainedCards.length === 1) {
+                note = `${formatCard(gainedCards[0])} showed up at **${sentName}**'s live!`;
+              } else {
+                note = `**${sentName}** came home from the live`;
+              }
             } else {
-              note = `**${sentName}** came home from the live`;
+              note = `**${sentName}** Live Failed.. - Graduated from sadness`;
             }
-          } else {
-            note = `**${sentName}** Live Failed.. - Graduated from sadness`;
-          }
 
           results.push({
             stage: att.stage,

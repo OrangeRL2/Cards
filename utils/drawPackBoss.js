@@ -4,6 +4,20 @@ const pools = require('./loadImages');
 const { pickCardFromRarityFolder } = require('./cardPicker');
 
 function rand() { return Math.random(); }
+
+// --- NEW: Boss alias exceptions map -----------------------------------------
+// When the boss bias is 'Mel', we will pick uniformly from this list.
+// You can add more keys as needed. Keys are case-sensitive to whatever your
+// folder/label system uses.
+const bossAliasMap = {
+  Fuwawa: ['Fuwawa','Mococo', 'Fuwamoco'],
+};
+
+// Helper to pick uniformly from an array (no weights)
+function uniformPick(arr) {
+  return arr[Math.floor(Math.random() * arr.length)];
+}
+
 function pickWeighted(options) {
   const total = options.reduce((s, o) => s + (o.weight || 0), 0);
   let r = rand() * total;
@@ -27,16 +41,44 @@ function fallbackPickFromPools(rarity, userId) {
   return `${rarity}-unknown-001.png`;
 }
 
+// --- UPDATED: pickForSlot to support alias exceptions -----------------------
+// Behavior:
+//  - If boss bias triggers (10%): build a candidate set.
+//      * If bossLabel has aliases, pick uniformly among the aliases.
+//        (equal chance for every alias in the array)
+//      * If there are no aliases for bossLabel, use [bossLabel] as the only candidate.
+//  - Try the first selected candidate; if it fails, try the remaining candidates
+//    (order randomized by the first pick) before global fallback.
+//  - All attempts keep `avoidImmediateRepeat: true`.
 async function pickForSlot(rarity, bossLabel, userId) {
-  const tryBoss = !!bossLabel && Math.random() < 0.1;
-
+  const tryBoss = !!bossLabel && Math.random() < 0.1; // 10% boss bias as in your original file
   if (tryBoss) {
     try {
-      const picked = await pickCardFromRarityFolder(rarity, bossLabel, { avoidImmediateRepeat: true });
-      if (picked) return picked;
-    } catch (err) { /* fallthrough */ }
+      // If aliases exist for the provided bossLabel, use them; otherwise, fall back to the label itself.
+      const aliases = bossAliasMap[bossLabel];
+      const candidates = Array.from(
+        new Set((Array.isArray(aliases) && aliases.length > 0) ? aliases : [bossLabel])
+      );
+
+      // Ensure equal chance among *alias* options by picking the first attempt uniformly.
+      const first = uniformPick(candidates);
+      const ordered = [first, ...candidates.filter(c => c !== first)];
+
+      for (const candidateLabel of ordered) {
+        try {
+          const picked = await pickCardFromRarityFolder(rarity, candidateLabel, { avoidImmediateRepeat: true });
+          if (picked) return picked;
+        } catch (err) {
+          // continue to next candidate
+        }
+      }
+      // If all alias candidates fail, we fall through to the global fallback below.
+    } catch (err) {
+      // fall through to global fallback
+    }
   }
 
+  // Global fallback path (unchanged)
   try {
     const fallback = await pickCardFromRarityFolder(rarity, null, { avoidImmediateRepeat: true });
     if (fallback) return fallback;
@@ -116,7 +158,6 @@ async function drawPackBoss(userId, bossLabel) {
       { key: 'UR', weight: 0.5 },
     ],
   ];
-
   for (let i = 0; i < uncommonSlotBases.length; i++) {
     const options = uncommonSlotBases[i];
     const rarity = pickWeighted(options);
@@ -138,7 +179,6 @@ async function drawPackBoss(userId, bossLabel) {
   if (!Array.isArray(results) || results.length !== 8) {
     console.warn('[drawPackBoss] unexpected results length', { length: results.length });
   }
-
   return results;
 }
 

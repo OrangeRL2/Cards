@@ -79,7 +79,6 @@ module.exports = {
         throw err;
       }
     }
-
     async function safeEditReply(interaction, opts) {
       try {
         if (!interaction) return null;
@@ -92,7 +91,6 @@ module.exports = {
         throw err;
       }
     }
-
     async function safeUpdate(interaction, opts) {
       try {
         if (!interaction) return null;
@@ -105,7 +103,6 @@ module.exports = {
         throw err;
       }
     }
-
     // New helper: try to edit the deferred reply, fallback to followUp if interaction token expired
     async function safeEditOrFollow(interaction, opts) {
       try {
@@ -141,7 +138,6 @@ module.exports = {
             await interaction.respond([]).catch(() => null);
             return;
           }
-
           const STAGE_ALLOWED_RARITIES = {
             1: ['C', 'OC', 'U'],
             2: ['S', 'R', 'RR'],
@@ -152,8 +148,8 @@ module.exports = {
           const stage = interaction.options.getInteger('stage');
           const fallbackAllowed = Object.values(STAGE_ALLOWED_RARITIES).flat();
           const allowed = stage && STAGE_ALLOWED_RARITIES[stage] ? STAGE_ALLOWED_RARITIES[stage] : fallbackAllowed;
-          const input = String(focused.value || '').toLowerCase();
 
+          const input = String(focused.value || '').toLowerCase();
           let suggestions = allowed
             .filter(r => r.toLowerCase().includes(input))
             .slice(0, 25)
@@ -162,7 +158,6 @@ module.exports = {
           if (suggestions.length === 0) {
             suggestions = allowed.slice(0, 25).map(r => ({ name: r, value: r }));
           }
-
           await interaction.respond(suggestions).catch(() => null);
         } catch (err) {
           console.error('[INT] autocomplete handler error', err);
@@ -175,9 +170,8 @@ module.exports = {
       if (interaction.isButton && interaction.isButton()) {
         try {
           const id = interaction.customId;
-          if (!id || !id.startsWith('boss|')) return;
-
-          const [, eventId, action] = id.split('|');
+          if (!id || !id.startsWith('boss\n')) return;
+          const [, eventId, action] = id.split('\n');
 
           // Defer early for actions that will perform DB work (like, superchat confirm/cancel path)
           // For simple UI flows that only present a select, we will not defer here.
@@ -185,7 +179,6 @@ module.exports = {
           if (action === 'like') {
             // Acknowledge immediately so token doesn't expire
             try { await interaction.deferReply({ ephemeral: true }).catch(() => null); } catch (e) { /* ignore */ }
-
             // Run heavy work asynchronously
             setImmediate(async () => {
               try {
@@ -193,18 +186,11 @@ module.exports = {
                 if (!ev || ev.status !== 'active') {
                   return await safeEditOrFollow(interaction, { content: 'This 24 hour stream is no longer active.' });
                 }
-
-                const userId = interaction.user.id;
-                const userDoc = await User.findOne({ id: userId }).lean();
-                const oshiLevel = userDoc?.levels?.[ev.oshiId] || 1;
-
                 try {
-                  const res = await bossManager.handleLike({ userId, oshiId: ev.oshiId, oshiLevel, client: interaction.client });
-
-                  // Member boost: handled inside bossManager; res may include memberMsg
+                  // No User doc fetch here—bossManager.handleLike will fetch Oshi doc and compute bonuses
+                  const res = await bossManager.handleLike({ userId: interaction.user.id, oshiId: ev.oshiId, client: interaction.client });
                   const parts = [`You gave ${res.points} likes (+${res.happinessDelta} happiness).`];
                   if (res.memberMsg) parts.push(res.memberMsg);
-
                   await safeEditOrFollow(interaction, { content: parts.join(' ') });
                 } catch (err) {
                   console.error('[INT] handleLike error', err);
@@ -215,23 +201,40 @@ module.exports = {
                 try { await safeEditOrFollow(interaction, { content: 'Failed to process like.' }); } catch {}
               }
             });
-
             return;
           }
 
           // --- Page-select "back" button handler (kept for compatibility but not required) ---
-          if (id && id.startsWith('boss_sub_page_back|')) {
-            // customId: boss_sub_page_back|<eventId>|<allowedUserId>
-            const [, backEventId, allowedUserId] = id.split('|');
-
+          if (id && id.startsWith('boss_sub_page_back\n')) {
+            // customId: boss_sub_page_back\n<eventId>\n<allowedUserId>
+            const [, backEventId, allowedUserId] = id.split('\n');
             if (interaction.user.id !== allowedUserId) {
               return safeReply(interaction, { content: 'This control is not for you.', flags: 64 });
             }
-
             try {
-              const userDoc = await User.findOne({ id: allowedUserId }).lean();
-              if (!userDoc) return safeUpdate(interaction, { content: 'User not found.', components: [] });
-
+              // Fetch only eligible cards via aggregation (OSR/SR, count>0, not locked)
+              const agg = await User.aggregate([
+                { $match: { id: allowedUserId } },
+                {
+                  $project: {
+                    _id: 0,
+                    cards: {
+                      $filter: {
+                        input: '$cards',
+                        as: 'c',
+                        cond: {
+                          $and: [
+                            { $in: ['$$c.rarity', ['OSR', 'SR']] },
+                            { $gt: ['$$c.count', 0] },
+                            { $ne: ['$$c.locked', true] }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                }
+              ]).exec();
+              const userDoc = agg[0] || { cards: [] };
               const { allOptions } = buildEligibleOptionsFromUserDoc(userDoc);
               if (!allOptions.length) {
                 return safeUpdate(interaction, { content: 'You have no unlocked OSR or SR cards to subscribe with.', components: [] });
@@ -241,8 +244,6 @@ module.exports = {
               const totalPages = pages.length;
 
               const pageOptions = pages.map((pageArr, i) => {
-                // compute visible card count (if page is full and you'll add a Back option later,
-                // the user will see 24 real cards + Back)
                 const realCount = pageArr.length >= 25 ? 24 : pageArr.length;
                 const start = i * 25 + 1;
                 const end = i * 25 + pageArr.length;
@@ -255,7 +256,7 @@ module.exports = {
               }).slice(0, 25);
 
               const pageSelect = new StringSelectMenuBuilder()
-                .setCustomId(`boss_sub_page_select|${backEventId}|${allowedUserId}`)
+                .setCustomId(`boss_sub_page_select\n${backEventId}\n${allowedUserId}`)
                 .setPlaceholder('Choose which page of cards to view')
                 .addOptions(pageOptions)
                 .setMinValues(1)
@@ -276,9 +277,31 @@ module.exports = {
           if (action === 'sub') {
             // present a page-select menu first (ephemeral) so we can support >25 cards
             const userId = interaction.user.id;
-            const userDoc = await User.findOne({ id: userId }).lean();
-            if (!userDoc) return safeReply(interaction, { content: 'User not found.', flags: 64 });
 
+            // Return only eligible cards (OSR/SR, count>0, not locked)
+            const agg = await User.aggregate([
+              { $match: { id: userId } },
+              {
+                $project: {
+                  _id: 0,
+                  cards: {
+                    $filter: {
+                      input: '$cards',
+                      as: 'c',
+                      cond: {
+                        $and: [
+                          { $in: ['$$c.rarity', ['OSR', 'SR']] },
+                          { $gt: ['$$c.count', 0] },
+                          { $ne: ['$$c.locked', true] }
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            ]).exec();
+
+            const userDoc = agg[0] || { cards: [] };
             const { eligible, allOptions } = buildEligibleOptionsFromUserDoc(userDoc);
             if (!eligible.length) {
               return safeReply(interaction, { content: 'You have no unlocked OSR or SR cards to subscribe with.', flags: 64 });
@@ -288,11 +311,8 @@ module.exports = {
             const pages = chunkArray(allOptions, 25);
             const totalPages = pages.length;
 
-            // Build page-select options (Discord select max 25 options). If you have >25 pages,
-            // this will only show the first 25 pages.
+            // Build page-select options (Discord select max 25 options)
             const pageOptions = pages.map((pageArr, i) => {
-              // compute visible card count (if page is full and you'll add a Back option later,
-              // the user will see 24 real cards + Back)
               const realCount = pageArr.length >= 25 ? 24 : pageArr.length;
               const start = i * 25 + 1;
               const end = i * 25 + pageArr.length;
@@ -305,7 +325,7 @@ module.exports = {
             }).slice(0, 25);
 
             const pageSelect = new StringSelectMenuBuilder()
-              .setCustomId(`boss_sub_page_select|${eventId}|${userId}`)
+              .setCustomId(`boss_sub_page_select\n${eventId}\n${userId}`)
               .setPlaceholder('Choose which page of cards to view')
               .addOptions(pageOptions)
               .setMinValues(1)
@@ -323,7 +343,8 @@ module.exports = {
           if (action === 'superchat') {
             try {
               // Parse full customId parts to detect announcement vs confirm/cancel
-              const parts = id.split('|'); // e.g., ['boss','<eventId>','superchat'] or ['boss','<eventId>','superchat','confirm','<userId>']
+              const parts = id.split('\n'); // e.g., ['boss','<eventId>','superchat'] or ['boss','<eventId>','superchat','confirm','<userId>']
+
               // If this is the simple announcement button (no extra suffix), open ephemeral confirm
               if (parts.length === 3) {
                 // call bossManager helper to create ephemeral confirm prompt
@@ -334,6 +355,7 @@ module.exports = {
               // Otherwise it's a confirm/cancel button press; delegate to the handler
               // For confirm path, we may perform heavy DB work; defer first
               const actionType = parts[3];
+
               // inside handleSuperchatInteraction(interaction) when action === 'confirm'
               if (action === 'confirm') {
                 // Ensure only the intended user can confirm (you already check this earlier)
@@ -376,7 +398,6 @@ module.exports = {
                       await interaction.followUp({ ephemeral: true, content: `Superchat failed: ${err?.message || 'internal error'}` }).catch(() => null);
                     }
                   });
-
                   return true;
                 } catch (err) {
                   console.error('[handleSuperchatInteraction] confirm branch unexpected error', err);
@@ -415,24 +436,42 @@ module.exports = {
       // --- String select menu handling (including page-select and sub card selection) ---
       if (interaction.isStringSelectMenu && interaction.isStringSelectMenu()) {
         // Handle page-select first: user chose which page to view
-        if (interaction.customId && interaction.customId.startsWith('boss_sub_page_select|')) {
-          const parts = interaction.customId.split('|');
+        if (interaction.customId && interaction.customId.startsWith('boss_sub_page_select\n')) {
+          const parts = interaction.customId.split('\n');
           if (parts.length < 3) return safeReply(interaction, { content: 'Invalid interaction.', flags: 64 });
           const [, pageEventId, allowedUserId] = parts;
-
           if (interaction.user.id !== allowedUserId) {
             return safeReply(interaction, { content: 'This selection is not for you.', flags: 64 });
           }
-
           const selectedPageStr = interaction.values?.[0];
           if (typeof selectedPageStr === 'undefined') return safeReply(interaction, { content: 'No page selected.', flags: 64 });
-          const pageIndex = Math.max(0, Math.floor(Number(selectedPageStr) || 0));
 
+          const pageIndex = Math.max(0, Math.floor(Number(selectedPageStr || 0)));
           try {
-            // Recompute eligible server-side
-            const userDoc = await User.findOne({ id: allowedUserId }).lean();
-            if (!userDoc) return safeUpdate(interaction, { content: 'User not found.', components: [] });
+            // Recompute eligible server-side (aggregation to return only OSR/SR, count>0, not locked)
+            const agg = await User.aggregate([
+              { $match: { id: allowedUserId } },
+              {
+                $project: {
+                  _id: 0,
+                  cards: {
+                    $filter: {
+                      input: '$cards',
+                      as: 'c',
+                      cond: {
+                        $and: [
+                          { $in: ['$$c.rarity', ['OSR', 'SR']] },
+                          { $gt: ['$$c.count', 0] },
+                          { $ne: ['$$c.locked', true] }
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            ]).exec();
 
+            const userDoc = agg[0] || { cards: [] };
             const { eligible, allOptions } = buildEligibleOptionsFromUserDoc(userDoc);
             if (!eligible.length) {
               return safeUpdate(interaction, { content: 'You have no unlocked OSR or SR cards to subscribe with.', components: [] });
@@ -442,6 +481,7 @@ module.exports = {
             const pages = chunkArray(allOptions, 25);
             const totalPages = pages.length;
             const safePageIndex = Math.max(0, Math.min(totalPages - 1, pageIndex));
+
             let pageOptions = pages[safePageIndex].slice(); // copy
 
             // Add "Back to pages" as the last option on the card-select so user can return
@@ -452,20 +492,18 @@ module.exports = {
               value: BACK_VALUE,
               description: 'Return to the page list'
             };
-
             if (pageOptions.length >= 25) {
               // replace last option
               pageOptions[pageOptions.length - 1] = backOption;
             } else {
               pageOptions.push(backOption);
             }
-
             // Defensive: ensure we never pass >25 options to Discord
             if (pageOptions.length > 25) pageOptions = pageOptions.slice(0, 25);
 
             // Build the card-select for the chosen page
             const cardSelect = new StringSelectMenuBuilder()
-              .setCustomId(`boss_sub_select|${pageEventId}|${allowedUserId}`)
+              .setCustomId(`boss_sub_select\n${pageEventId}\n${allowedUserId}`)
               .setPlaceholder('Select a card to consume for Sub (OSR/SR)')
               .addOptions(pageOptions)
               .setMinValues(1)
@@ -485,8 +523,8 @@ module.exports = {
         }
 
         // Handle the actual card selection (consumption) or Back-to-pages via the same select
-        if (interaction.customId && interaction.customId.startsWith('boss_sub_select|')) {
-          const parts = interaction.customId.split('|');
+        if (interaction.customId && interaction.customId.startsWith('boss_sub_select\n')) {
+          const parts = interaction.customId.split('\n');
           if (parts.length < 3) {
             return safeReply(interaction, { content: 'Invalid selection interaction.', flags: 64 });
           }
@@ -494,7 +532,6 @@ module.exports = {
           if (interaction.user.id !== allowedUserId) {
             return safeReply(interaction, { content: 'This selection is not for you.', flags: 64 });
           }
-
           const selected = interaction.values?.[0];
           if (!selected) return safeReply(interaction, { content: 'No card selected.', flags: 64 });
 
@@ -503,9 +540,29 @@ module.exports = {
           if (selected === BACK_VALUE) {
             // Rebuild page-select and show it
             try {
-              const userDoc = await User.findOne({ id: allowedUserId }).lean();
-              if (!userDoc) return safeUpdate(interaction, { content: 'User not found.', components: [] });
+              const agg = await User.aggregate([
+                { $match: { id: allowedUserId } },
+                {
+                  $project: {
+                    _id: 0,
+                    cards: {
+                      $filter: {
+                        input: '$cards',
+                        as: 'c',
+                        cond: {
+                          $and: [
+                            { $in: ['$$c.rarity', ['OSR', 'SR']] },
+                            { $gt: ['$$c.count', 0] },
+                            { $ne: ['$$c.locked', true] }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                }
+              ]).exec();
 
+              const userDoc = agg[0] || { cards: [] };
               const { allOptions } = buildEligibleOptionsFromUserDoc(userDoc);
               if (!allOptions.length) {
                 return safeUpdate(interaction, { content: 'You have no unlocked OSR or SR cards to subscribe with.', components: [] });
@@ -527,7 +584,7 @@ module.exports = {
               }).slice(0, 25);
 
               const pageSelect = new StringSelectMenuBuilder()
-                .setCustomId(`boss_sub_page_select|${eventId}|${allowedUserId}`)
+                .setCustomId(`boss_sub_page_select\n${eventId}\n${allowedUserId}`)
                 .setPlaceholder('Choose which page of cards to view')
                 .addOptions(pageOptions)
                 .setMinValues(1)
@@ -556,14 +613,12 @@ module.exports = {
 
           // Defer because we will perform DB operations
           try { await interaction.deferReply({ ephemeral: true }).catch(() => null); } catch (e) { /* ignore */ }
-
           setImmediate(async () => {
             try {
               const ev = await BossEvent.findOne({ eventId }).lean();
               if (!ev || ev.status !== 'active') {
                 return safeEditOrFollow(interaction, { content: 'This 24 hour stream is no longer active.' });
               }
-
               const res = await bossManager.handleSubWithCard({
                 userId: interaction.user.id,
                 oshiId: ev.oshiId,
@@ -571,14 +626,12 @@ module.exports = {
                 cardRarity: payload.rarity,
                 client: interaction.client
               });
-
               return safeEditOrFollow(interaction, { content: `You subscribed but [${payload.rarity}] ${payload.name} got jealous and left you (+${res.happinessDelta} happiness).` });
             } catch (err) {
               console.error('[INT] sub-with-card error', err);
               return safeEditOrFollow(interaction, { content: err.message || 'Failed to subscribe with selected card.' });
             }
           });
-
           return;
         }
 
@@ -588,10 +641,8 @@ module.exports = {
           if (interaction.user.id !== allowedUserId) {
             return safeReply(interaction, { content: 'This menu is not for you.', flags: 64 });
           }
-
           const encodedGen = interaction.values?.[0];
           if (!encodedGen) return safeReply(interaction, { content: 'No generation selected.', flags: 64 });
-
           const oshiRow = buildOshiSelect(allowedUserId, encodedGen);
           return safeUpdate(interaction, {
             content: `Choose an oshi from ${decodeURIComponent(encodedGen)}`,
@@ -602,16 +653,13 @@ module.exports = {
         if (interaction.customId.startsWith(`${OSHI_CUSTOM_ID}:`)) {
           const parts = interaction.customId.split(':');
           if (parts.length < 3) return safeReply(interaction, { content: 'Invalid interaction.', flags: 64 });
-
           const allowedUserId = parts[1];
           const encodedGen = parts.slice(2).join(':');
           if (interaction.user.id !== allowedUserId) {
             return safeReply(interaction, { content: 'This menu is not for you.', flags: 64 });
           }
-
           const selectedId = interaction.values?.[0];
           if (!selectedId) return safeReply(interaction, { content: 'No oshi selected.', flags: 64 });
-
           const oshi = OSHI_LIST.find(o => o.id === selectedId);
           if (!oshi) return safeReply(interaction, { content: 'Invalid selection.', flags: 64 });
 
@@ -648,10 +696,8 @@ module.exports = {
           try { osrResult = await addOshiOsrToUser(allowedUserId, oshi.label); } catch (err) { console.error('[INT] osr grant error', err); }
           let grantResult = null;
           try { grantResult = await grantOnSelectIfBirthday(allowedUserId, oshi.id, { client: interaction.client, birthdayChannelId: config.birthdayChannelId }); } catch (err) { console.error('[INT] birthday grant error', err); }
-
           const birthdayText = grantResult && grantResult.granted ? ' Bonus: +12 event pulls granted for birthday!' : '';
           const osrText = osrResult && osrResult.gave ? ` You also received an OSR card for ${oshi.label}!` : '';
-
           let genDisplay;
           try { genDisplay = decodeURIComponent(encodedGen); } catch { genDisplay = encodedGen; }
 
@@ -668,27 +714,24 @@ module.exports = {
       if (interaction.isModalSubmit && interaction.isModalSubmit()) {
         try {
           const id = interaction.customId;
-          if (!id || !id.startsWith('boss_modal|')) return;
-          const [, eventId, modalAction] = id.split('|');
+          if (!id || !id.startsWith('boss_modal\n')) return;
+          const [, eventId, modalAction] = id.split('\n');
           if (modalAction !== 'superchat') return;
 
           // Defer immediately
           try { await interaction.deferReply({ ephemeral: true }).catch(() => null); } catch (e) { /* ignore */ }
-
           setImmediate(async () => {
             try {
               const ev = await BossEvent.findOne({ eventId }).lean();
               if (!ev || ev.status !== 'active') {
                 return safeEditOrFollow(interaction, { content: 'This 24 hour stream is no longer active.' });
               }
-
               const userId = interaction.user.id;
               const raw = interaction.fields.getTextInputValue('spendFans');
               const spendFans = Math.floor(Number(raw || 0));
               if (!Number.isFinite(spendFans) || spendFans <= 0) {
                 return safeEditOrFollow(interaction, { content: 'Please enter a valid positive integer for fans.' });
               }
-
               try {
                 const res = await bossManager.handleSuperchat({ userId, oshiId: ev.oshiId, spendFans, client: interaction.client });
                 return safeEditOrFollow(interaction, {
@@ -704,7 +747,6 @@ module.exports = {
               } catch {}
             }
           });
-
           return;
         } catch (err) {
           console.error('[INT] modal handler error', err);
@@ -744,7 +786,6 @@ module.exports = {
           return safeReply(interaction, { content: `You are on cooldown for \`${command.data.name}\`. Try <t:${expTs}:R>.`, flags: 64 });
         }
       }
-
       if (cooldownMs > 0) {
         timestamps.set(interaction.user.id, now);
         setTimeout(() => timestamps.delete(interaction.user.id), cooldownMs);

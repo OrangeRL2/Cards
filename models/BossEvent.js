@@ -24,4 +24,7 @@ const BossEventSchema = new Schema({
   createdAt: { type: Date, default: () => new Date() }
 });
 
+// Speeds up updates of pointsByUser for a specific user
+BossEventSchema.index({ eventId: 1, 'pointsByUser.userId': 1 });
+
 module.exports = model('BossEvent', BossEventSchema);

@@ -7,7 +7,6 @@ const crypto = require('crypto');
 const mongoose = require('mongoose');
 const fs = require('fs').promises;
 const path = require('path');
-
 const BossEvent = require('../models/BossEvent');
 const BossPointLog = require('../models/BossPointLog');
 const User = require('../models/User');
@@ -17,6 +16,7 @@ const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('
 const { addOshiOsrToUser } = require('../utils/oshiRewards');
 const Oshi = require('../models/Oshi');
 const { postBossResults } = require('../utils/postBossResults');
+
 const ASSETS_BASE = path.join(__dirname, '..', 'assets', 'images'); // adjust if needed
 
 // Tunables
@@ -25,11 +25,11 @@ const SUPERCHAT_ESCALATION = Number(process.env.BOSS_SUPERCHAT_ESCALATION || 0);
 const LIKE_RATE_LIMIT_MS = Number(process.env.BOSS_LIKE_RATE_LIMIT_MS || 5000);
 const IMAGE_BASE = process.env.BOSS_IMAGE_BASE || 'http://152.69.195.48/images';
 const CONFIRM_TIMEOUT_MS = 2 * 60 * 1000; // 2 minutes
+
 // Debug duration support
 const DEBUG_DURATION_MS = process.env.BOSS_DEBUG_DURATION_MS
   ? Number(process.env.BOSS_DEBUG_DURATION_MS)
   : (process.env.BOSS_DEBUG ? 60 * 1000 : null);
-
 function eventDurationMs() {
   return DEBUG_DURATION_MS || 24 * 60 * 60 * 1000;
 }
@@ -42,7 +42,6 @@ const lastLikeAt = new Map();
 const RARITY_ORDER = [
   'C', 'U', 'R', 'S', 'RR', 'OC', 'SR', 'OSR', 'P', 'SP', 'SY', 'UR', 'OUR', 'HR', 'BDAY', 'UP', 'SEC'
 ];
-
 // Exclude these rarities from settlement selection
 const RARITY_EXCLUDE = new Set(['P', 'SP', 'UP']);
 
@@ -63,7 +62,6 @@ function getAssetsBaseForRarity(rarity) {
   // default fallback
   return ASSETS_BASE;
 }
-
 
 // Default participation weights
 const PARTICIPATION_WEIGHTS = {
@@ -90,12 +88,12 @@ const THIRDPLACE_WEIGHTS = {
   S: 0,
   RR: 0,
   OC: 0,
-  SR:  35,
+  SR: 35,
   OSR: 25,
-  SY:  15,
-  UR:  10,
+  SY: 15,
+  UR: 10,
   OUR: 5,
-  HR:  5,
+  HR: 5,
   BDAY:4,
   SEC: 1
 };
@@ -107,12 +105,12 @@ const SECONDPLACE_WEIGHTS = {
   S: 0,
   RR: 0,
   OC: 0,
-  SR:  20,
+  SR: 20,
   OSR: 15,
-  SY:  15,
-  UR:  15,
+  SY: 15,
+  UR: 15,
   OUR: 11,
-  HR:  11,
+  HR: 11,
   BDAY:8,
   SEC: 5
 };
@@ -123,11 +121,11 @@ const SECONDPLACE_WEIGHTS = {
  * - values are arrays of alternative names or prefixes to allow when searching
  *
  * Example:
- *   // when searching for "chloe" also allow files that contain "Ruka"
- *   'chloe': ['Ruka'],
+ * // when searching for "chloe" also allow files that contain "Ruka"
+ * 'chloe': ['Ruka'],
  *
  * Prefix entries: add a trailing '*' to indicate prefix matching (case-insensitive)
- *   'chloe': ['Ruka*']  // matches "Ruka 001", "Rukami", etc.
+ * 'chloe': ['Ruka*'] // matches "Ruka 001", "Rukami", etc.
  *
  * When a rarity folder contains no files that match the primary oshi token,
  * the picker will try these exception tokens (chosen uniformly at random).
@@ -179,10 +177,8 @@ async function addCardToUser(userId, cardName, rarity, count = 1) {
   const session = await mongoose.startSession();
   try {
     session.startTransaction();
-
     // Load user doc with the cards array inside the transaction
     let user = await User.findOne({ id: userId }).session(session).exec();
-
     if (!user) {
       // create user with the card
       const newCard = {
@@ -196,10 +192,8 @@ async function addCardToUser(userId, cardName, rarity, count = 1) {
       await session.commitTransaction();
       return;
     }
-
     // Try to find an existing card entry
     const idx = (user.cards || []).findIndex(c => c.name === cardName && c.rarity === rarity);
-
     if (idx !== -1) {
       // increment existing entry
       const update = {};
@@ -217,7 +211,6 @@ async function addCardToUser(userId, cardName, rarity, count = 1) {
       };
       await User.updateOne({ id: userId }, { $push: { cards: newCard } }, { upsert: true, session });
     }
-
     await session.commitTransaction();
   } catch (err) {
     try { await session.abortTransaction(); } catch (e) { /* ignore */ }
@@ -239,7 +232,6 @@ function nextDateForWeekday(weekday, hour) {
 }
 function pickRandomFrom(arr, rng) { return arr[Math.floor(rng() * arr.length)]; }
 function superchatCost(n) { return Math.ceil(SUPERCHAT_BASE * (1 + SUPERCHAT_ESCALATION * (n - 1))); }
-
 function buildOshiOsrImageUrl(oshiLabel, rarity = 'OSR') {
   const baseName = typeof oshiLabel === 'string' ? oshiLabel.trim() : String(oshiLabel);
   const cardName = `${baseName} 001`;
@@ -247,7 +239,6 @@ function buildOshiOsrImageUrl(oshiLabel, rarity = 'OSR') {
   const rarityPart = encodeURIComponent(String(rarity).trim());
   return `${IMAGE_BASE.replace(/\/$/, '')}/${rarityPart}/${encodedCardName}.png`;
 }
-
 function renderHappinessBar(value) {
   const max = 100;
   const filled = Math.round((Math.max(0, Math.min(value, max)) / max) * 10);
@@ -262,7 +253,6 @@ const OSHI_DESCRIPTIONS = {
   Lamy: 'I love Yoi',
   __default: 'Support **{oshi}** with all you got for special rewards!'
 };
-
 // helper to format a template with simple placeholders
 function formatTemplate(tpl, vars = {}) {
   return String(tpl || '').replace(/\{(\w+)\}/g, (_, k) => (vars[k] !== undefined ? vars[k] : `{${k}}`));
@@ -272,7 +262,6 @@ function formatTemplate(tpl, vars = {}) {
 function buildBossEmbedAndButtons(ev, oshiLabel) {
   // choose template by label (fall back to default)
   const tpl = OSHI_DESCRIPTIONS[oshiLabel] ?? OSHI_DESCRIPTIONS.__default;
-
   // compute dynamic values you want available in templates
   const durationSeconds = Math.round((ev.endsAt.getTime() - ev.spawnAt.getTime()) / 1000);
   const vars = {
@@ -280,9 +269,7 @@ function buildBossEmbedAndButtons(ev, oshiLabel) {
     duration: `${durationSeconds}s`,
     endsAtRelative: `<t:${Math.floor(ev.endsAt.getTime() / 1000)}:R>`
   };
-
   const description = formatTemplate(tpl, vars);
-
   const embed = new EmbedBuilder()
     .setTitle(`${oshiLabel} has started a 24 hour stream!`)
     .setDescription(description)
@@ -292,16 +279,13 @@ function buildBossEmbedAndButtons(ev, oshiLabel) {
       { name: 'Ends', value: vars.endsAtRelative, inline: true },
       { name: 'Happiness', value: renderHappinessBar(typeof ev.happiness === 'number' ? ev.happiness : 0), inline: true },
     );
-
   const row = new ActionRowBuilder().addComponents(
-    new ButtonBuilder().setCustomId(`boss|${ev.eventId}|like`).setLabel('Like').setStyle(ButtonStyle.Primary),
-    new ButtonBuilder().setCustomId(`boss|${ev.eventId}|sub`).setLabel('Sub').setStyle(ButtonStyle.Success),
-    new ButtonBuilder().setCustomId(`boss|${ev.eventId}|superchat`).setLabel('Superchat').setStyle(ButtonStyle.Danger)
+    new ButtonBuilder().setCustomId(`boss\n${ev.eventId}\nlike`).setLabel('Like').setStyle(ButtonStyle.Primary),
+    new ButtonBuilder().setCustomId(`boss\n${ev.eventId}\nsub`).setLabel('Sub').setStyle(ButtonStyle.Success),
+    new ButtonBuilder().setCustomId(`boss\n${ev.eventId}\nsuperchat`).setLabel('Superchat').setStyle(ButtonStyle.Danger)
   );
-
   return { embed, components: [row] };
 }
-
 
 // -------------------- Activator --------------------
 async function activateAndEndEvents() {
@@ -321,19 +305,15 @@ async function announceActivatedEvents(client) {
   const now = new Date();
   const toActivate = await BossEvent.find({ status: 'scheduled', spawnAt: { $lte: now }, endsAt: { $gt: now } });
   if (!toActivate.length) return;
-
   for (const ev of toActivate) {
     const oshiCfg = oshis.find(o => o.id === ev.oshiId);
     const oshiLabel = oshiCfg ? oshiCfg.label : ev.oshiId;
     const imageUrl = buildOshiOsrImageUrl(oshiLabel, 'ORI');
-
     ev.status = 'active';
     ev.imageUrl = imageUrl;
     ev.happiness = ev.happiness || 0;
     await ev.save();
-
     const { embed, components } = buildBossEmbedAndButtons(ev, oshiLabel);
-
     try {
       const channelId = config.bossChannelId;
       if (!channelId) {
@@ -367,11 +347,9 @@ async function refreshEventMessage(client, eventId, evOverride = null) {
       console.warn(`[refresh] event ${eventId} has no announceMessageId`);
       return false;
     }
-
     const oshiCfg = oshis.find(o => o.id === ev.oshiId);
     const oshiLabel = oshiCfg ? oshiCfg.label : ev.oshiId;
     const { embed, components } = buildBossEmbedAndButtons(ev, oshiLabel);
-
     const ch = await client.channels.fetch(config.bossChannelId).catch(err => {
       console.error(`[refresh] failed to fetch channel ${config.bossChannelId}`, err);
       return null;
@@ -380,7 +358,6 @@ async function refreshEventMessage(client, eventId, evOverride = null) {
       console.warn(`[refresh] invalid channel ${config.bossChannelId}`);
       return false;
     }
-
     const msg = await ch.messages.fetch(ev.announceMessageId).catch(err => {
       console.error(`[refresh] failed to fetch message ${ev.announceMessageId}`, err);
       return null;
@@ -389,7 +366,6 @@ async function refreshEventMessage(client, eventId, evOverride = null) {
       console.warn(`[refresh] announcement message ${ev.announceMessageId} not found`);
       return false;
     }
-
     try {
       await msg.edit({ embeds: [embed], components: components || [] });
       console.log(`[refresh] updated announcement ${ev.announceMessageId} for event ${eventId} (happiness=${ev.happiness})`);
@@ -459,16 +435,13 @@ async function consumeCard(userId, allowedRarities = ['OSR','SR'], session = nul
 async function consumeCardByName(userId, cardName, cardRarity = null, session = null) {
   const user = await User.findOne({ id: userId }).session(session);
   if (!user || !Array.isArray(user.cards)) return false;
-
   const idx = user.cards.findIndex(c => {
     if (cardRarity) {
       return c.name === cardName && c.rarity === cardRarity && (c.count || 0) > 0;
     }
     return c.name === cardName && (c.count || 0) > 0;
   });
-
   if (idx === -1) return false;
-
   const card = user.cards[idx];
   if ((card.count || 0) > 1) {
     const update = {};
@@ -499,9 +472,7 @@ async function handleLike({ userId, oshiId, client = null }) {
   if (now - last < LIKE_RATE_LIMIT_MS) throw new Error('Rate limited');
   lastLikeAt.set(userId, now);
 
-  // Prevent duplicate like per user per event
-  const existingLike = await BossPointLog.findOne({ eventId: ev.eventId, userId, action: 'like' }).lean();
-  if (existingLike) throw new Error('You have already liked this 24h stream (one like per person).');
+  // Duplicate likes are now enforced by a unique index on BossPointLog; no pre-read needed
 
   // Pull oshi data from Oshi collection
   // Always fetch the user's chosen oshi record
@@ -530,18 +501,24 @@ async function handleLike({ userId, oshiId, client = null }) {
   // Update event points and per-user points/happiness
   const updatedEv = await _upsertUserPointsAndHappiness(ev.eventId, userId, totalPoints, totalHappiness);
 
-  // Log the like action including whether member bonus applied
-  await BossPointLog.create({
-    eventId: ev.eventId,
-    userId,
-    oshiId,
-    action: 'like',
-    points: totalPoints,
-    meta: {
-      oshiLevel: cappedLevel,
-      memberBonus: isMemberOfOshi ? { points: memberBonusPoints, happiness: memberBonusHappiness } : undefined
-    }
-  });
+  // Log the like action including whether member bonus applied (write-first; rely on unique index)
+  try {
+    await BossPointLog.create({
+      eventId: ev.eventId,
+      userId,
+      oshiId,
+      action: 'like',
+      points: totalPoints,
+      meta: {
+        oshiLevel: cappedLevel,
+        memberBonus: isMemberOfOshi ? { points: memberBonusPoints, happiness: memberBonusHappiness } : undefined
+      }
+    });
+  } catch (e) {
+    // E11000 duplicate key => already liked
+    if (e && e.code === 11000) throw new Error('You have already liked this 24h stream (one like per person).');
+    throw e;
+  }
 
   // Refresh announcement embed
   if (client) {
@@ -553,7 +530,6 @@ async function handleLike({ userId, oshiId, client = null }) {
   const memberMsg = isMemberOfOshi ? `You are a member of **${oshiId}** +${MEMBER_BONUS_POINTS}` : null;
   return { points: totalPoints, happinessDelta: totalHappiness, memberMsg };
 }
-
 
 // SUB: consumes OSR/SR card, adds points=5, happiness=5
 async function handleSub({ userId, oshiId, client = null }) {
@@ -584,7 +560,6 @@ async function handleSub({ userId, oshiId, client = null }) {
       const ok = await refreshEventMessage(client, ev.eventId, updatedEv);
       if (!ok) console.warn(`[handleSub] refreshEventMessage returned false for ${ev.eventId}`);
     }
-
     return { points, happinessDelta };
   } catch (err) {
     try { if (!committed) await session.abortTransaction(); } catch (abortErr) { /* ignore */ }
@@ -622,7 +597,6 @@ async function handleSubWithCard({ userId, oshiId, cardName, cardRarity = null, 
       const ok = await refreshEventMessage(client, ev.eventId, updatedEv);
       if (!ok) console.warn(`[handleSubWithCard] refreshEventMessage returned false for ${ev.eventId}`);
     }
-
     return { points, happinessDelta };
   } catch (err) {
     try { if (!committed) await session.abortTransaction(); } catch (abortErr) { /* ignore */ }
@@ -645,14 +619,17 @@ async function handleMember({ userId, oshiId, client = null }) {
   const happinessDelta = 50;
 
   const updatedEv = await _upsertUserPointsAndHappiness(ev.eventId, userId, points, happinessDelta);
+
   await BossPointLog.create({ eventId: ev.eventId, userId, oshiId, action: 'member', points, meta: {} });
 
   if (client) {
     const ok = await refreshEventMessage(client, ev.eventId, updatedEv);
     if (!ok) console.warn(`[handleMember] refreshEventMessage returned false for ${ev.eventId}`);
   }
+
   return { points, happinessDelta };
 }
+
 async function createSuperchatConfirm(interaction, eventId) {
   try {
     const ev = await BossEvent.findOne({ eventId }).lean();
@@ -660,7 +637,6 @@ async function createSuperchatConfirm(interaction, eventId) {
       await interaction.reply({ content: 'This 24h stream is no longer active.', ephemeral: true });
       return;
     }
-
     const userId = interaction.user.id;
     const userState = (ev.pointsByUser || []).find(p => p.userId === userId);
     const currentCount = userState ? (userState.superchatCount || 0) : 0;
@@ -679,8 +655,8 @@ async function createSuperchatConfirm(interaction, eventId) {
       .setColor(0xFF4500)
       .setTimestamp(new Date());
 
-    const confirmId = `boss|${eventId}|superchat|confirm|${userId}`;
-    const cancelId = `boss|${eventId}|superchat|cancel|${userId}`;
+    const confirmId = `boss\n${eventId}\nsuperchat\nconfirm\n${userId}`;
+    const cancelId  = `boss\n${eventId}\nsuperchat\ncancel\n${userId}`;
 
     const row = new ActionRowBuilder().addComponents(
       new ButtonBuilder().setCustomId(confirmId).setLabel(`Confirm (${currentCost})`).setStyle(ButtonStyle.Danger),
@@ -706,16 +682,16 @@ async function createSuperchatConfirm(interaction, eventId) {
     try { await interaction.reply({ content: 'Failed to open superchat confirm prompt.', ephemeral: true }); } catch (e) { /* ignore */ }
   }
 }
+
 async function handleSuperchatInteraction(interaction) {
   try {
     if (!interaction.isButton?.()) return false;
-    const parts = interaction.customId.split('|'); // boss|<eventId>|superchat|confirm|<userId>
+    const parts = interaction.customId.split('\n'); // boss\n<eventId>\nsuperchat\nconfirm\n<userId>
     if (parts[0] !== 'boss' || parts[2] !== 'superchat') return false;
 
     const eventId = parts[1];
     const action = parts[3];
     const intendedUserId = parts[4];
-
     if (interaction.user.id !== intendedUserId) {
       await interaction.reply({ content: 'You are not authorized to confirm this superchat.', ephemeral: true });
       return true;
@@ -742,7 +718,8 @@ async function handleSuperchatInteraction(interaction) {
       const nextCost = superchatCost(nextN + 1);
 
       try {
-        // call handleSuperchat but force spendFans to currentCost \nNext cost: **${result.nextSuperchatMin}**.
+        // call handleSuperchat but force spendFans to currentCost
+        // Next cost: **${nextCost}**.
         const result = await handleSuperchat({ userId, oshiId: ev.oshiId, spendFans: currentCost, client: interaction.client });
 
         // success message
@@ -763,7 +740,6 @@ async function handleSuperchatInteraction(interaction) {
     return true;
   }
 }
-
 
 // SUPERCHAT: uses fans; points = spendFans; happiness = floor(spendFans/2); escalating cost per user per event
 // SUPERCHAT: charges the current minimum (escalating per-user per-event).
@@ -872,13 +848,11 @@ async function handleSuperchat({ userId, oshiId, spendFans, client = null }) {
   }
 }
 
-
 // -------------------- Settlement helpers --------------------
 // Improved filename normalization and matching to ensure awarded cards match the boss oshi
 function escapeRegExp(string) {
   return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
-
 function normalizeFilenameForMatch(filename) {
   // remove extension, underscores/hyphens -> spaces, collapse spaces, remove punctuation,
   // remove trailing numeric codes like 001/501, trim and lowercase
@@ -930,7 +904,6 @@ async function pickCardFromRarityFolder(rarity, oshiLabel, { avoidImmediateRepea
 
     // exact token matches first (word boundary)
     const exactMatches = target ? candidates.filter(f => new RegExp(`\\b${escapeRegExp(target)}\\b`).test(f.norm)) : [];
-
     // partial matches (substring)
     const partialMatches = target ? candidates.filter(f => f.norm.includes(target)) : [];
 
@@ -948,27 +921,22 @@ async function pickCardFromRarityFolder(rarity, oshiLabel, { avoidImmediateRepea
         const normKey = String(oshiLabel || '').toLowerCase().replace(/[^\w\s]/g, '').trim();
         const exListRaw = EXCEPTIONS && (EXCEPTIONS[normKey] || EXCEPTIONS[oshiLabel] || EXCEPTIONS[capitalize(oshiLabel || '')]);
         const exList = Array.isArray(exListRaw) ? exListRaw.map(e => String(e || '').trim()).filter(Boolean) : [];
-
         if (exList.length > 0) {
           // Try all exceptions and collect matches
           const matchedSet = new Set();
-
           for (const exTokenRaw of exList) {
             const isPrefix = typeof exTokenRaw === 'string' && exTokenRaw.endsWith('*');
             const exToken = isPrefix
               ? exTokenRaw.slice(0, -1).toLowerCase().replace(/[^\w\s]/g, '').trim()
               : String(exTokenRaw || '').toLowerCase().replace(/[^\w\s]/g, '').trim();
-
             if (!exToken) {
               console.debug(`[pickCard] rarity=${rarity} oshi=${oshiLabel} skipping empty exception entry`);
               continue;
             }
-
             const exMatches = candidates.filter(c => {
               if (isPrefix) return c.norm.startsWith(exToken);
               return new RegExp(`\\b${escapeRegExp(exToken)}\\b`).test(c.norm) || c.norm.includes(exToken);
             });
-
             if (exMatches.length > 0) {
               for (const m of exMatches) matchedSet.add(m.raw);
               console.debug(`[pickCard] rarity=${rarity} oshi=${oshiLabel} exception="${exTokenRaw}" matches=${exMatches.length}`);
@@ -976,7 +944,6 @@ async function pickCardFromRarityFolder(rarity, oshiLabel, { avoidImmediateRepea
               console.debug(`[pickCard] rarity=${rarity} oshi=${oshiLabel} exception="${exTokenRaw}" found no matches`);
             }
           }
-
           if (matchedSet.size > 0) {
             // Build pool from unique matched filenames
             pool = Array.from(matchedSet).map(f => ({ raw: f, norm: normalizeFilenameForMatch(f) }));
@@ -1007,7 +974,6 @@ async function pickCardFromRarityFolder(rarity, oshiLabel, { avoidImmediateRepea
         console.debug(`[pickCard] rarity=${rarity} oshi=${oshiLabel} had 0 specific matches, falling back to ${fallback}`);
         return pickCardFromRarityFolder(fallback, oshiLabel, { avoidImmediateRepeat, _visited: visited });
       }
-
       // No fallback available: now fall back to all candidates in this folder as last resort
       pool = candidates;
       console.debug(`[pickCard] rarity=${rarity} oshi=${oshiLabel} no specific matches and no fallback; falling back to all candidates (${candidates.length})`);
@@ -1029,7 +995,6 @@ async function pickCardFromRarityFolder(rarity, oshiLabel, { avoidImmediateRepea
 
     // Choose a group index using crypto.randomInt
     let groupIndex = crypto.randomInt(0, groups.length);
-
     // If avoidImmediateRepeat and chosen group contains lastPicked, try a few alternatives
     if (avoidImmediateRepeat && lastPicked && groups.length > 1) {
       const chosenGroup = groups[groupIndex];
@@ -1051,7 +1016,6 @@ async function pickCardFromRarityFolder(rarity, oshiLabel, { avoidImmediateRepea
     lastPickedByRarity.set(lastKey, rawPick);
 
     console.debug(`[pickCard] rarity=${rarity} oshi=${oshiLabel} poolSize=${pool.length} groups=${groups.length} chosen=${rawPick}`);
-
     return { name: path.basename(rawPick, path.extname(rawPick)), rarity };
   } catch (err) {
     console.error('[pickCardFromRarityFolder] error', err);
@@ -1085,7 +1049,6 @@ function getNextLowerWeightRarity(currentRarity, visitedSet = null) {
       }
       return null;
     }
-
     // Walk left from current index to find the first eligible rarity
     for (let i = idx - 1; i >= 0; i--) {
       const candidate = RARITY_ORDER[i];
@@ -1093,7 +1056,6 @@ function getNextLowerWeightRarity(currentRarity, visitedSet = null) {
       if (visitedSet && visitedSet.has(candidate)) continue;
       return candidate;
     }
-
     // nothing found
     return null;
   } catch (e) {
@@ -1101,7 +1063,6 @@ function getNextLowerWeightRarity(currentRarity, visitedSet = null) {
     return null;
   }
 }
-
 
 /**
  * Pick a card by first selecting a rarity by weight (from weightMap),
@@ -1116,7 +1077,6 @@ async function pickCardByWeightedRarity(weightMap, oshiLabel, opts = {}) {
 
   // copy so we can remove tried rarities
   const candidates = options.slice();
-
   while (candidates.length) {
     // pick a rarity by weight
     const chosenKey = pickWeighted(candidates); // returns the key string
@@ -1130,13 +1090,13 @@ async function pickCardByWeightedRarity(weightMap, oshiLabel, opts = {}) {
 
     // otherwise loop and try next weighted candidate
   }
-
   return null;
 }
 
 // -------------------- Settlement --------------------
 async function settleEndedEvents(client = null) {
   const toSettle = await BossEvent.find({ status: 'ended' });
+
   for (const ev of toSettle) {
     try {
       const sorted = (ev.pointsByUser || []).slice().sort((a,b) => {
@@ -1145,7 +1105,6 @@ async function settleEndedEvents(client = null) {
         const tb = b.firstPointAt ? new Date(b.firstPointAt).getTime() : 0;
         return ta - tb;
       });
-
       const winners = sorted.slice(0,3);
 
       // Participation: pick a rarity using PARTICIPATION_WEIGHTS (excludes P, SP, UP)
@@ -1158,7 +1117,6 @@ async function settleEndedEvents(client = null) {
         try {
           // pick by weighted rarity using PARTICIPATION_WEIGHTS
           const picked = await pickCardByWeightedRarity(PARTICIPATION_WEIGHTS, oshiLabel, { avoidImmediateRepeat: true });
-
           if (picked && picked.name) {
             // award the picked card (increment if exists)
             await addCardToUser(p.userId, picked.name, picked.rarity, 1);
@@ -1196,7 +1154,7 @@ async function settleEndedEvents(client = null) {
           const oshiLabel = oshiCfg ? oshiCfg.label : ev.oshiId;
 
           const picked = await pickCardByWeightedRarity(THIRDPLACE_WEIGHTS, oshiLabel, { avoidImmediateRepeat: true })
-                        || await pickCardByWeightedRarity(PARTICIPATION_WEIGHTS, oshiLabel, { avoidImmediateRepeat: true });
+            || await pickCardByWeightedRarity(PARTICIPATION_WEIGHTS, oshiLabel, { avoidImmediateRepeat: true });
 
           if (picked && picked.name) {
             await addCardToUser(winners[2].userId, picked.name, picked.rarity, 1);
@@ -1215,8 +1173,8 @@ async function settleEndedEvents(client = null) {
         try {
           const oshiCfg = oshis.find(o => o.id === ev.oshiId);
           const oshiLabel = oshiCfg ? oshiCfg.label : ev.oshiId;
-          const isHighVariant = Math.random() < 0.25;
 
+          const isHighVariant = Math.random() < 0.25;
           if (isHighVariant) {
             const picked = await pickCardByWeightedRarity(SECONDPLACE_WEIGHTS, oshiLabel, { avoidImmediateRepeat: true });
             if (picked && picked.name) {
@@ -1228,7 +1186,7 @@ async function settleEndedEvents(client = null) {
             }
           } else {
             const picked = await pickCardByWeightedRarity(SECONDPLACE_WEIGHTS, oshiLabel, { avoidImmediateRepeat: true })
-                          || await pickCardByWeightedRarity(PARTICIPATION_WEIGHTS, oshiLabel, { avoidImmediateRepeat: true });
+              || await pickCardByWeightedRarity(PARTICIPATION_WEIGHTS, oshiLabel, { avoidImmediateRepeat: true });
             if (picked && picked.name) {
               await addCardToUser(winners[1].userId, picked.name, picked.rarity, 1);
               await BossPointLog.create({ eventId: ev.eventId, userId: winners[1].userId, oshiId: ev.oshiId, action: 'reward', points: 0, meta: { tier: 2, reward: picked.rarity, card: picked.name } });
@@ -1243,77 +1201,74 @@ async function settleEndedEvents(client = null) {
       }
 
       // 1st place: ORI + also award a 2nd-place reward on top
-if (winners[0]) {
-  try {
-    const oshiCfg = oshis.find(o => o.id === ev.oshiId);
-    const oshiLabel = oshiCfg ? oshiCfg.label : ev.oshiId;
+      if (winners[0]) {
+        try {
+          const oshiCfg = oshis.find(o => o.id === ev.oshiId);
+          const oshiLabel = oshiCfg ? oshiCfg.label : ev.oshiId;
 
-    // --- ORI awarding (existing behavior) ---
-    const pickedOri = await pickCardFromRarityFolder('ORI', oshiLabel);
-    let cardName = null;
-    if (pickedOri && pickedOri.name) {
-      const norm = normalizeFilenameForMatch(pickedOri.name);
-      if (oshiLabel && new RegExp(`\\b${escapeRegExp(oshiLabel.toLowerCase())}\\b`).test(norm)) {
-        cardName = pickedOri.name;
-      } else {
-        console.warn(`[settle] ORI picked "${pickedOri.name}" doesn't match oshi ${oshiLabel}; generating ORI id`);
-        cardName = `${oshiLabel} 001`;
+          // --- ORI awarding (existing behavior) ---
+          const pickedOri = await pickCardFromRarityFolder('ORI', oshiLabel);
+          let cardName = null;
+          if (pickedOri && pickedOri.name) {
+            const norm = normalizeFilenameForMatch(pickedOri.name);
+            if (oshiLabel && new RegExp(`\\b${escapeRegExp(oshiLabel.toLowerCase())}\\b`).test(norm)) {
+              cardName = pickedOri.name;
+            } else {
+              console.warn(`[settle] ORI picked "${pickedOri.name}" doesn't match oshi ${oshiLabel}; generating ORI id`);
+              cardName = `${oshiLabel} 001`;
+            }
+          } else {
+            cardName = `${oshiLabel} 001`;
+          }
+          await addCardToUser(winners[0].userId, cardName, 'ORI', 1);
+          await BossPointLog.create({
+            eventId: ev.eventId,
+            userId: winners[0].userId,
+            oshiId: ev.oshiId,
+            action: 'reward',
+            points: 0,
+            meta: { tier: 1, reward: 'ORI', card: cardName }
+          });
+
+          // --- EXTRA: award 2nd-place reward on top of ORI ---
+          try {
+            // Use the same SECONDPLACE_WEIGHTS flow as for 2nd place
+            const picked2 = await pickCardByWeightedRarity(SECONDPLACE_WEIGHTS, oshiLabel, { avoidImmediateRepeat: true })
+              || await pickCardByWeightedRarity(PARTICIPATION_WEIGHTS, oshiLabel, { avoidImmediateRepeat: true });
+            if (picked2 && picked2.name) {
+              await addCardToUser(winners[0].userId, picked2.name, picked2.rarity, 1);
+              await BossPointLog.create({
+                eventId: ev.eventId,
+                userId: winners[0].userId,
+                oshiId: ev.oshiId,
+                action: 'reward',
+                points: 0,
+                meta: { tier: 2, reward: picked2.rarity, card: picked2.name, note: '1st place also awarded 2nd-place reward' }
+              });
+            } else {
+              // fallback: give an OSR via helper if no file found
+              await addOshiOsrToUser(winners[0].userId, oshiLabel);
+              await BossPointLog.create({
+                eventId: ev.eventId,
+                userId: winners[0].userId,
+                oshiId: ev.oshiId,
+                action: 'reward',
+                points: 0,
+                meta: { tier: 2, reward: 'OSR', note: 'fallback' }
+              });
+            }
+          } catch (err) {
+            console.error('[settle] extra 2nd-place reward error for 1st place', winners[0].userId, err);
+          }
+        } catch (err) {
+          console.error('[settle] 1st place reward error for', winners[0]?.userId, err);
+        }
       }
-    } else {
-      cardName = `${oshiLabel} 001`;
-    }
-
-    await addCardToUser(winners[0].userId, cardName, 'ORI', 1);
-    await BossPointLog.create({
-      eventId: ev.eventId,
-      userId: winners[0].userId,
-      oshiId: ev.oshiId,
-      action: 'reward',
-      points: 0,
-      meta: { tier: 1, reward: 'ORI', card: cardName }
-    });
-
-    // --- EXTRA: award 2nd-place reward on top of ORI ---
-    try {
-      // Use the same SECONDPLACE_WEIGHTS flow as for 2nd place
-      const picked2 = await pickCardByWeightedRarity(SECONDPLACE_WEIGHTS, oshiLabel, { avoidImmediateRepeat: true })
-                      || await pickCardByWeightedRarity(PARTICIPATION_WEIGHTS, oshiLabel, { avoidImmediateRepeat: true });
-
-      if (picked2 && picked2.name) {
-        await addCardToUser(winners[0].userId, picked2.name, picked2.rarity, 1);
-        await BossPointLog.create({
-          eventId: ev.eventId,
-          userId: winners[0].userId,
-          oshiId: ev.oshiId,
-          action: 'reward',
-          points: 0,
-          meta: { tier: 2, reward: picked2.rarity, card: picked2.name, note: '1st place also awarded 2nd-place reward' }
-        });
-      } else {
-        // fallback: give an OSR via helper if no file found
-        await addOshiOsrToUser(winners[0].userId, oshiLabel);
-        await BossPointLog.create({
-          eventId: ev.eventId,
-          userId: winners[0].userId,
-          oshiId: ev.oshiId,
-          action: 'reward',
-          points: 0,
-          meta: { tier: 2, reward: 'OSR', note: 'fallback' }
-        });
-      }
-    } catch (err) {
-      console.error('[settle] extra 2nd-place reward error for 1st place', winners[0].userId, err);
-    }
-
-  } catch (err) {
-    console.error('[settle] 1st place reward error for', winners[0]?.userId, err);
-  }
-}
-
 
       ev.status = 'settled';
       await ev.save();
       await postBossResults(client, ev.eventId);
+
       // optional: post settlement summary to boss channel
       if (client && config.bossChannelId) {
         try {
@@ -1373,7 +1328,6 @@ async function createAndAnnounceEvent(client, oshiId, durationMs = null) {
 
   const channelId = config.bossChannelId;
   if (!channelId) throw new Error('bossChannelId not configured');
-
   const ch = await client.channels.fetch(channelId);
   if (!ch || !ch.isTextBased?.()) throw new Error('Configured boss channel is not text-based or unavailable');
 
@@ -1384,7 +1338,6 @@ async function createAndAnnounceEvent(client, oshiId, durationMs = null) {
   await eventDoc.save();
 
   console.log(`[createAndAnnounceEvent] spawned event ${eventDoc.eventId} for ${oshiLabel}, announced as message ${msg.id}`);
-
   return { event: eventDoc, message: msg };
 }
 
@@ -1477,8 +1430,8 @@ async function startBossManager(client, { weeklySeed } = {}) {
 
             const oshiCfg = oshis.find(o => o.id === ev.oshiId);
             const oshiLabel = oshiCfg ? oshiCfg.label : ev.oshiId;
-            const { embed, components } = buildBossEmbedAndButtons(ev, oshiLabel);
 
+            const { embed, components } = buildBossEmbedAndButtons(ev, oshiLabel);
             const newHash = hashEmbedAndComponents(embed, components);
             const lastHash = lastEmbedHashByEvent.get(ev.eventId);
 
@@ -1508,7 +1461,6 @@ async function startBossManager(client, { weeklySeed } = {}) {
   }, 600_000); // 10 minutes
 }
 
-
 function stopBossManager() {
   if (activatorInterval) clearInterval(activatorInterval);
   if (settleInterval) clearInterval(settleInterval);
@@ -1530,6 +1482,6 @@ module.exports = {
   refreshEventMessage,
   eventDurationMs,
   createAndAnnounceEvent,
-  createSuperchatConfirm, 
+  createSuperchatConfirm,
   handleSuperchatInteraction,
 };
