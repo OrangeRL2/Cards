@@ -1,0 +1,76 @@
+[33mead141f[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;32msafe-main[m[33m, [m[1;32msafe-backup[m[33m, [m[1;32mrecovery[m[33m, [m[1;32mclean-main[m[33m)[m removed a comment
+[33meda79c2[m rates changes
+[33m553f5c2[m buffed lives and fixed streams
+[33m6e94bf6[m merged pulls, live:s3,4 grant 2 P, boss adds subs more smoothly, added more to shop
+[33m163121b[m added multi flag to results-lives
+[33mf4feaaa[m fixed cooldowns of lives
+[33m15889d8[m added login, added results prefix command
+[33md6d8538[m *current*
+[33m29ebf2c[m changes from liz to elizabeth
+[33m2803f93[m VAL
+[33mf6c6ea3[m *current*
+[33m3389214[m page selector
+[33m155ac4b[m shows multi first in sub
+[33ma14c82c[m latest
+[33m497bf28[m changed boss OSR pick method
+[33mead7f63[m something
+[33m5ad7d48[m changed perms for boss
+[33m2af88aa[m added login
+[33m3e3f746[m bosses
+[33me26edec[m stuff
+[33m6a3c80c[m added padoru special script
+[33m9a51854[m changed fusion into collab
+[33m0a456ce[m fusion
+[33m8dfb695[m added promos
+[33m04bc460[m removed padoru and such
+[33me8e3451[m changed flavor text of burn and oshi
+[33m5ea42d5[m removed padorus
+[33m69205e6[m trade fix
+[33m90e9af4[m Merge pull request #1 from OrangeRL2/refactor2
+[33md5d0dd2[m[33m ([m[1;31morigin/refactor2[m[33m)[m test2
+[33m8c45a49[m removed XMAS from suisei oshi folder
+[33m2998452[m push now increments the correct rarity
+[33m0bbae92[m roll back to hello
+[33m375f67e[m[33m ([m[1;31morigin/refactor[m[33m)[m changes to image base
+[33m24660fa[m fixed a very bad pull bug for the refactor
+[33m40647fd[m changed timestamps
+[33m35b0dcb[m *hello*
+[33m67d1337[m currebt
+[33m3d7eab6[m[33m ([m[1;31morigin/testVer[m[33m)[m changes to startlive
+[33m57f560c[m current
+[33m753950b[m removed identifiers
+[33md26ee2c[m removed wanted and burn temporarily
+[33m7d9b1b5[m more burn changes
+[33m801a413[m functional wanted listings
+[33m6166535[m added --pullquota flag to announce
+[33m0cf94fc[m fixed shop back button
+[33m9dffa2d[m invalid rarity filter
+[33mecdb125[m burn command
+[33m6c9e570[m fixed prices
+[33mdc7ee38[m added shop (prices not finalized)
+[33m1e030bf[m not sure
+[33m5e2f9b5[m rolled back pull command
+[33mccdc348[m can pull for others
+[33m541b49e[m small changes to pull
+[33m242c2bf[m live fix
+[33m29d7ef3[m removed zone identifiers
+[33m3eaca2b[m added cards
+[33mfc1b16e[m changes to rates in lives
+[33m5f17da9[m fixed trade
+[33m191c62a[m changed pull rates
+[33m7cb626b[m Now fixed lives so that they return with a member on success and do not race each other
+[33mbe9617c[m FIXED LIVES FOR REAL
+[33mbf0c8fb[m fixed startlive
+[33ma93e611[m current bot
+[33m9ee1a3c[m changes to live
+[33m9610fe0[m Added points
+[33m47e0c61[m Added lives
+[33mb351131[m added prefix commands
+[33mbf7d005[m Added SEC suprise
+[33m34f3175[m Bug fix to trade command
+[33mf7bbc0d[m Visual changes
+[33m24a8af8[m small change
+[33mc3c6f7f[m added card count to inventory
+[33mea17f2b[m Initial commit
+[33m6fdc266[m first commit
+[33m71ac43f[m first commit

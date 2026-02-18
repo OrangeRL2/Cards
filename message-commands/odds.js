@@ -5,16 +5,15 @@
 // - !odds
 // - !odds <id or @mention>
 // - !odds --id=<id> --mode=normal --slot=rare
-// - !odds idException        -> show DEFAULT odds (ignore rates/overrides)
-// - !odds <id> idException   -> show DEFAULT odds for that id
+// - !odds idException -> show DEFAULT odds (ignore rates/overrides)
+// - !odds <id> idException -> show DEFAULT odds for that id
 //
 // ID Exceptions (always default view):
 // - If targetUserId is in DEFAULT_VIEW_USER_IDS, the command shows DEFAULT odds
 //   unless you pass --force.
 //
 // Notes:
-// - We send ONE embed per mode to avoid Discord embed field limit (<= 25). [1](https://ace00101-my.sharepoint.com/personal/nauldee_nawill_ace00101_onmicrosoft_com/Documents/Microsoft%20Copilot%20Chat%20%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB/index.js)
-
+// - We send ONE embed per mode to avoid Discord embed field limit (<= 25).
 const { EmbedBuilder, Colors } = require('discord.js');
 const { getUserProfile, buildSlotOptions, getOverrides } = require('../utils/rates');
 
@@ -73,9 +72,11 @@ function parseFlags(args) {
   const rest = [];
   for (const a of args) {
     if (a.startsWith('--')) {
-      const pair = a.slice(2).split(/[:=]/); // accept ":" or "="
+      // accept ":" or "="
+      const pair = a.slice(2).split(/[:=]/);
       const k = pair[0];
       const v = pair.length > 1 ? pair.slice(1).join(':') : undefined;
+
       if (v === undefined) {
         flags[k] = true;
       } else {
@@ -129,11 +130,14 @@ function normalizeSlot(slot) {
 function parseUserIdFromMentionOrToken(tok) {
   if (!tok) return null;
   const t = String(tok).trim();
+
   // <@123> or <@!123>
   const m = t.match(/^<@!?(\d+)>$/);
   if (m) return m[1];
+
   // raw digits
   if (/^\d{5,25}$/.test(t)) return t;
+
   return null;
 }
 
@@ -156,7 +160,7 @@ function buildSlotReport({ baseOptions, rate, overrides, raw }) {
 }
 
 // ---------- Base slot tables (mirror your pack files) ----------
-// Normal & Boss bases (same as your normal/boss pack code). [2](https://ace00101-my.sharepoint.com/personal/nauldee_nawill_ace00101_onmicrosoft_com/Documents/Microsoft%20Copilot%20Chat%20%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB/drawPackBoss.js)[3](https://ace00101-my.sharepoint.com/personal/nauldee_nawill_ace00101_onmicrosoft_com/Documents/Microsoft%20Copilot%20Chat%20%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB/drawPackSpecial.js)
+// Normal & Boss bases (same as your normal/boss pack code).
 const NORMAL_BOSS_BASES = {
   common1: [
     { key: 'C', weight: 95.8 },
@@ -201,7 +205,7 @@ const NORMAL_BOSS_BASES = {
   ],
 };
 
-// Special bases (same as your special pack code). [1](https://ace00101-my.sharepoint.com/personal/nauldee_nawill_ace00101_onmicrosoft_com/Documents/Microsoft%20Copilot%20Chat%20%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB/index.js)
+// Special bases (same as your special pack code).
 const SPECIAL_BASES = {
   common1: [
     { key: 'C', weight: 93.8 },
@@ -246,7 +250,7 @@ const SPECIAL_BASES = {
   ],
 };
 
-// Base extra chance from your normal draw code. [2](https://ace00101-my.sharepoint.com/personal/nauldee_nawill_ace00101_onmicrosoft_com/Documents/Microsoft%20Copilot%20Chat%20%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB/drawPackBoss.js)
+// Base extra chance from your normal draw code.
 const BASE_EXTRA_CHANCE = 0.02;
 
 function modeConfig(profile, mode) {
@@ -264,15 +268,19 @@ function makeDefaultProfile() {
   };
 }
 
-function makeEmbedHeader(profile, raw, isDefaultView) {
+/**
+ * IMPORTANT: do NOT leak default-view status by default.
+ * showDebugLabel=true will show DEFAULT view header for authorized diagnostics.
+ */
+function makeEmbedHeader(profile, raw, isDefaultView, showDebugLabel = false) {
   const unclamped = BASE_EXTRA_CHANCE * (profile.extraSlotRate ?? 1);
   const clamped = clamp01(unclamped);
 
   return [
-    isDefaultView
+    (showDebugLabel && isDefaultView)
       ? `**VIEW:** DEFAULT (untouched) — ignoring user rates/overrides`
       : `**VIEW:** USER PROFILE`,
-    `**pullRate:** ${fmtNum(profile.pullRate, 3)} | **specialPullRate:** ${fmtNum(profile.specialPullRate, 3)} | **extraSlotRate:** ${fmtNum(profile.extraSlotRate, 3)}`,
+    `**pullRate:** ${fmtNum(profile.pullRate, 3)}  **specialPullRate:** ${fmtNum(profile.specialPullRate, 3)}  **extraSlotRate:** ${fmtNum(profile.extraSlotRate, 3)}`,
     `**extra slot chance:** ${fmtPct(BASE_EXTRA_CHANCE * 100, 2)} × ${fmtNum(profile.extraSlotRate ?? 1, 3)} = ${fmtPct(unclamped * 100, 2)} (clamped → ${fmtPct(clamped * 100, 2)})`,
     raw ? `*(raw: shows weights and % of total)*` : `*(shows % share within each slot)*`,
   ].join('\n');
@@ -303,8 +311,12 @@ module.exports = {
       const raw = Boolean(flags.raw);
       const compact = Boolean(flags.compact);
 
+      // Optional diagnostics (does NOT change the underlying behavior, only labels/footers)
+      const debugView = Boolean(flags.debug) || Boolean(flags.why);
+
       // keyword-based default view
       const restLower = (rest || []).map(s => String(s).toLowerCase());
+
       const keywordDefaultView =
         Boolean(flags.idException) ||
         Boolean(flags.default) ||
@@ -313,12 +325,13 @@ module.exports = {
 
       // allow showing real profile even if ID is in DEFAULT_VIEW_USER_IDS
       const forceProfile =
-        Boolean(flags.force) || restLower.includes('force');
+        Boolean(flags.force) ||
+        restLower.includes('force');
 
       // remove keywords so they don't mess with ID parsing
       const cleanedRest = (rest || []).filter(s => {
         const t = String(s).toLowerCase();
-        return t !== 'idexception' && t !== 'default' && t !== 'force';
+        return t !== 'idexception' && t !== 'default' && t !== 'force' && t !== 'debug' && t !== 'why';
       });
 
       // resolve target user id
@@ -333,17 +346,17 @@ module.exports = {
       const isDefaultView = (keywordDefaultView || idDefaultView) && !forceProfile;
 
       const profile = isDefaultView ? makeDefaultProfile() : getUserProfile(targetUserId);
-
       const modesToShow = mode === 'all' ? ['normal', 'special', 'boss'] : [mode];
 
-      // ONE embed per mode to avoid hitting embed field limit (<= 25). [1](https://ace00101-my.sharepoint.com/personal/nauldee_nawill_ace00101_onmicrosoft_com/Documents/Microsoft%20Copilot%20Chat%20%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB/index.js)
+      // ONE embed per mode to avoid hitting embed field limit (<= 25).
       const embeds = modesToShow.map((m) => {
         const cfg = modeConfig(profile, m);
 
         const embed = new EmbedBuilder()
           .setTitle(`Odds for ${targetUserId} — ${m.toUpperCase()}`)
-          .setColor(isDefaultView ? Colors.Greyple : Colors.Blurple)
-          .setDescription(makeEmbedHeader(profile, raw, isDefaultView));
+          // Same color always so default view is not visually obvious
+          .setColor(Colors.Blurple)
+          .setDescription(makeEmbedHeader(profile, raw, isDefaultView, debugView));
 
         const slotsToShow = slot
           ? [slot]
@@ -358,12 +371,19 @@ module.exports = {
           // ignore overrides if default view
           const overrides = isDefaultView ? null : getOverrides(profile, cfg.overrideMode, slotName);
 
-          const { lines, total } = buildSlotReport({ baseOptions: base, rate: cfg.rate, overrides, raw });
+          const { lines, total } = buildSlotReport({
+            baseOptions: base,
+            rate: cfg.rate,
+            overrides,
+            raw
+          });
 
           const headerBits = [`${slotName}`];
+
           if (!isDefaultView && overrides && Object.keys(overrides).length) {
             headerBits.push(`(override: ${Object.keys(overrides).join(', ')})`);
           }
+
           if (raw) headerBits.push(`(total=${fmtNum(total, 4)})`);
 
           embed.addFields({
@@ -377,10 +397,19 @@ module.exports = {
         if (!slot || slot === 'extra') {
           const unclamped = BASE_EXTRA_CHANCE * (profile.extraSlotRate ?? 1);
           const clamped = clamp01(unclamped);
+
           embed.addFields({
             name: compact ? `extra` : `extra (appearance only)`,
             value: `${fmtPct(BASE_EXTRA_CHANCE * 100, 2)} × ${fmtNum(profile.extraSlotRate ?? 1, 3)} = ${fmtPct(unclamped * 100, 2)} (clamped → ${fmtPct(clamped * 100, 2)})`,
             inline: compact ? true : false,
+          });
+        }
+
+        // If debug is requested and we're defaulting, add a diagnostic footer.
+        // This is still subtle; the main output stays identical otherwise.
+        if (debugView && isDefaultView) {
+          embed.setFooter({
+            text: 'diagnostic: DEFAULT view in effect (id exception or keyword/default without --force)',
           });
         }
 
