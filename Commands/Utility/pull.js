@@ -734,7 +734,7 @@ module.exports = {
             .addFields({ name: 'Special pulls remaining', value: `${consumeResult.remainingSpecial ?? 0}`, inline: true })
             .setImage(it.imageUrl)
             .setURL(it.imageUrl)
-            .setFooter({ text: `Card: ${idx + 1} / ${pageItems.length} \n Pull by: ${interaction.user.username}` });
+            .setFooter({ text: `Card: ${idx + 1} / ${pageItems.length} \nPull by: ${interaction.user.username}` });
         }
         return new EmbedBuilder()
           .setTitle(`Card: ${idx + 1} **[${it.rarity}]** - ${it.displayName}`)
@@ -746,7 +746,7 @@ module.exports = {
           )
           .setImage(it.imageUrl)
           .setURL(it.imageUrl)
-          .setFooter({ text: `Card: ${idx + 1} / ${pageItems.length} \n Pull by: ${interaction.user.username}` });
+          .setFooter({ text: `Card: ${idx + 1} / ${pageItems.length} \nPull by: ${interaction.user.username}` });
       }
 
       const prevBtnEnabled = new ButtonBuilder().setCustomId('prev').setLabel('◀ Prev').setStyle(ButtonStyle.Primary).setDisabled(pageItems.length <= 1);

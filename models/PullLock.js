@@ -4,8 +4,8 @@ const { Schema, model } = require('mongoose');
 const pullLockSchema = new Schema(
   {
     userId: { type: String, required: true, unique: true, index: true },
-    owner:  { type: String, required: true },                // interaction.id
-    until:  { type: Date,   required: true, index: true },   // lock expiry
+    owner:  { type: String, required: true },              // interaction.id
+    until:  { type: Date,   required: true },              // lock expiry (TTL index defined below)
   },
   { timestamps: false }
 );
@@ -14,4 +14,3 @@ const pullLockSchema = new Schema(
 pullLockSchema.index({ until: 1 }, { expireAfterSeconds: 0 });
 
 module.exports = model('PullLock', pullLockSchema, 'pull_locks');
-
