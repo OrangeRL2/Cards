@@ -10,25 +10,26 @@ const { Schema } = require('mongoose');
 
 // ----------------- Configuration (edit these) -----------------
 const DEFAULT_RANGE = { min: 25, max: 100 }; // default daily fans range
+
 // Special ranges for specific Discord user IDs (exact match)
 const SPECIAL_USER_RANGES = {
-  //MOOMOO
+  // MOOMOO
   '875533483051712543': { min: 1, max: 80 },
   '647219814011502607': { min: 1, max: 80 },
   '91103688415776768': { min: 1, max: 80 },
-  //char
+  // char
   '879614865956827197': { min: 1, max: 80 },
-  //aerestria
+  // aerestria
   '953552994232852490': { min: 1, max: 50 },
   '1188023588926795827': { min: 1, max: 50 },
   '1300468334474690583': { min: 1, max: 50 },
-  //blacky
+  // blacky
   '1416081468794339479': { min: 1, max: 50 },
-
-  //MAINS
+  // MAINS
   '1334914199968677941': { min: 25, max: 53 },
   '91098889796481024': { min: 25, max: 53 },
 };
+
 // Special ranges for specific role IDs (if a member has any of these roles, the corresponding range applies)
 // Role priority: first matching role in this object will be used
 const SPECIAL_ROLE_RANGES = {
@@ -43,49 +44,65 @@ function randIntInclusive(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-// JST helpers
-const JST_OFFSET_MIN = 9 * 60;
-const MS_PER_MIN = 60 * 1000;
-const JST_OFFSET_MS = JST_OFFSET_MIN * MS_PER_MIN;
+// =====================
+// JST helpers (robust)
+// =====================
+const TOKYO_TZ = 'Asia/Tokyo';
+
+// Extract Tokyo-local date/time parts safely using Intl (no parsing, no manual offsets)
+function getTokyoParts(date = new Date()) {
+  const dtf = new Intl.DateTimeFormat('en-CA', {
+    timeZone: TOKYO_TZ,
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false,
+  });
+
+  const parts = dtf.formatToParts(date);
+  const map = {};
+  for (const p of parts) map[p.type] = p.value;
+  return map; // { year, month, day, hour, minute, second, ... }
+}
 
 /**
  * Return a YYYY-MM-DD string for the provided Date (or now) in JST.
  * Accepts either a Date or a parsable date string.
  */
 function jstDateStringFor(dateInput = new Date()) {
-  const now = (dateInput instanceof Date) ? dateInput : new Date(dateInput);
-  const utcMs = now.getTime();
-  const jstMs = utcMs + JST_OFFSET_MS;
-  const jst = new Date(jstMs);
-  const y = jst.getFullYear();
-  const m = String(jst.getMonth() + 1).padStart(2, '0');
-  const d = String(jst.getDate()).padStart(2, '0');
-  return `${y}-${m}-${d}`;
+  const date = (dateInput instanceof Date) ? dateInput : new Date(dateInput);
+  const { year, month, day } = getTokyoParts(date);
+  return `${year}-${month}-${day}`;
 }
 
 /**
  * Returns UNIX seconds for the next JST midnight (00:00 JST next day).
- * Computes the UTC instant that corresponds to 00:00 JST of the next day.
+ * Next midnight JST == 15:00 UTC on the current JST date.
  */
 function nextJstMidnightUnix(now = new Date()) {
-  // Interpret "now" in JST fields
-  const jstLocal = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Tokyo' }));
+  const { year, month, day } = getTokyoParts(now);
 
-  const y = jstLocal.getFullYear();
-  const m = jstLocal.getMonth(); // 0-based
-  const d = jstLocal.getDate();
+  const y = Number(year);
+  const m = Number(month) - 1; // JS months are 0-based
+  const d = Number(day);
 
-  // 00:00 JST next day == 15:00 UTC of the current JST day
+  // 00:00 JST next day == 15:00 UTC of the current JST date
   const nextJstMidnightUtcMs = Date.UTC(y, m, d, 15, 0, 0);
   return Math.floor(nextJstMidnightUtcMs / 1000);
 }
 
 // Lightweight LoginRecord model to persist daily logins
 // Stored in its own collection so we don't need to modify your User schema.
-const loginRecordSchema = new Schema({
-  userId: { type: String, required: true, index: true, unique: true },
-  lastLoginJST: { type: String, required: true }, // YYYY-MM-DD in JST
-}, { timestamps: true });
+const loginRecordSchema = new Schema(
+  {
+    userId: { type: String, required: true, index: true, unique: true },
+    lastLoginJST: { type: String, required: true }, // YYYY-MM-DD in JST
+  },
+  { timestamps: true }
+);
 
 let LoginRecord;
 try {
@@ -98,6 +115,7 @@ module.exports = {
   data: new SlashCommandBuilder()
     .setName('login')
     .setDescription('Claim your daily login fans (resets at midnight JST).'),
+
   /**
    * @param {import('discord.js').CommandInteraction} interaction
    */
@@ -106,14 +124,15 @@ module.exports = {
 
     try {
       const userId = interaction.user.id;
+
       // Determine today's JST date string
       const todayJST = jstDateStringFor();
 
       // Fetch login record
-      let rec = await LoginRecord.findOne({ userId }).exec();
+      const rec = await LoginRecord.findOne({ userId }).exec();
 
       if (rec && rec.lastLoginJST === todayJST) {
-        // Already logged in today — show the date they logged and a relative next reset
+        // Already logged in today — show a relative next reset
         const nextResetUnix = nextJstMidnightUnix();
         await interaction.editReply(
           `You already logged in today. Come back after midnight (<t:${nextResetUnix}:R>.)`
@@ -170,12 +189,18 @@ module.exports = {
       ).exec();
 
       // Reply to user
-      await interaction.editReply(`You logged in for the day and earned **${fans}** fans 🎉`);
+      await interaction.editReply(
+        `You logged in for the day and earned **${fans}** fans 🎉`
+      );
     } catch (err) {
       console.error('[cmd:login] error', err);
       try {
-        await interaction.editReply('An error occurred while processing your login. Please try again later.');
-      } catch (e) { /* ignore */ }
+        await interaction.editReply(
+          'An error occurred while processing your login. Please try again later.'
+        );
+      } catch (e) {
+        /* ignore */
+      }
     }
-  }
+  },
 };

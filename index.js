@@ -7,7 +7,7 @@ const config = require('./config.json');
 const { token, mongoUri } = config;
 const { startScheduler, grantBirthdayPulls } = require('./jobs/birthdayHandout');
 const TradeListing = require('./models/TradeListing');
-
+const bossManager = require('./jobs/bossManager');
 // create client with required intents
 const client = new Client({
   intents: [
@@ -115,10 +115,12 @@ if (fs.existsSync(eventsPath)) {
     console.log(`✅ Logged in as ${client.user.tag} (${client.user.id})`);
     // start scheduler
     startScheduler({ client, birthdayChannelId: config.birthdayChannelId });
-
+    
     // run initial birthday grant once at startup
     await grantBirthdayPulls({ client, birthdayChannelId: config.birthdayChannelId });
-
+    // start boss manager loops (activator/announce/settle/refresher)
+    bossManager.startBossManager(client);
+    console.log('[READY] bossManager started');
     // show loaded counts
     console.log('[READY] messageCommands:', client.messageCommands.size, 'slashCommands:', client.commands.size);
 
