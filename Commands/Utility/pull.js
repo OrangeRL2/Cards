@@ -628,7 +628,7 @@ if (!pityExempt) {
             ).lean();
 
             if (readDoc && Array.isArray(readDoc.cards) && readDoc.cards[0]) {
-              currentCount = readDoc.cards[0].count + 1;
+              currentCount = readDoc.cards[0].count || 1;
             } else {
               const agg = await User.aggregate([
                 { $match: { id: discordUserId } },
@@ -667,7 +667,7 @@ if (!pityExempt) {
             ).lean();
 
             if (readDoc && Array.isArray(readDoc.cards) && readDoc.cards[0]) {
-              currentCount = readDoc.cards[0].count + 1;
+              currentCount = readDoc.cards[0].count || 1;
             } else {
               const agg = await User.aggregate([
                 { $match: { id: discordUserId } },
