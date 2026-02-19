@@ -26,6 +26,7 @@ const pendingAttemptSchema = new Schema({
 const userSchema = new Schema({
   id: { type: String, required: true, unique: true },
   pulls: { type: Number, default: 0 },
+  pullsSinceLastSEC: { type: Number, default: 0 },
   points: { type: Number, default: 0 },
   cards: { type: [cardInfoSchema], default: [] },
   liveCooldowns: {

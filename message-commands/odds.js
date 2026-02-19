@@ -163,39 +163,39 @@ function buildSlotReport({ baseOptions, rate, overrides, raw }) {
 // Normal & Boss bases (same as your normal/boss pack code).
 const NORMAL_BOSS_BASES = {
   common1: [
-    { key: 'C', weight: 95.8 },
-    { key: 'S', weight: 4.0 },
+    { key: 'C', weight: 94.8 },
+    { key: 'S', weight: 5.0 },
     { key: 'HR', weight: 0.1 },
     { key: 'BDAY', weight: 0.1 },
   ],
   common2: [
-    { key: 'C', weight: 94.0 },
-    { key: 'S', weight: 4.0 },
+    { key: 'C', weight: 93.0 },
+    { key: 'S', weight: 5.0 },
     { key: 'OC', weight: 2.0 },
   ],
   common3: [
-    { key: 'C', weight: 95.9 },
-    { key: 'S', weight: 4.0 },
+    { key: 'C', weight: 94.8 },
+    { key: 'S', weight: 5.0 },
     { key: 'BDAY', weight: 0.1 },
   ],
   common4: [
-    { key: 'C', weight: 95.9 },
-    { key: 'S', weight: 4.0 },
+    { key: 'C', weight: 94.8 },
+    { key: 'S', weight: 5.0 },
     { key: 'HR', weight: 0.1 },
   ],
   uncommon1: [
-    { key: 'U', weight: 89.75 },
-    { key: 'RR', weight: 10.0 },
+    { key: 'U', weight: 87.75 },
+    { key: 'RR', weight: 12.0 },
     { key: 'SY', weight: 0.25 },
   ],
   uncommon2: [
-    { key: 'U', weight: 96.75 },
-    { key: 'SR', weight: 3.0 },
+    { key: 'U', weight: 94.75 },
+    { key: 'SR', weight: 5.0 },
     { key: 'SY', weight: 0.25 },
   ],
   uncommon3: [
-    { key: 'U', weight: 97.5 },
-    { key: 'OSR', weight: 2.0 },
+    { key: 'U', weight: 95.5 },
+    { key: 'OSR', weight: 4.0 },
     { key: 'UR', weight: 0.5 },
   ],
   rare: [

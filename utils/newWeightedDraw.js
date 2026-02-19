@@ -31,7 +31,7 @@ function pickFileFromPool(rarity, userId) {
 
 // --- Main draw (async because of DB read)
 // Accept an override flag so callers can decide special-rate eligibility before consuming the pull
-async function drawPack(userId, useSpecialRatesOverride = null) {
+async function drawPack(userId, useSpecialRatesOverride = null, opts = {}) {
   const results = [];
   const idStr = String(userId);
 
@@ -54,8 +54,8 @@ async function drawPack(userId, useSpecialRatesOverride = null) {
 
   // Common Slots
   const commonSlot1Base = [
-    { key: 'C', weight: 95.8 },
-    { key: 'S', weight: 4.0 },
+    { key: 'C', weight: 94.8 },
+    { key: 'S', weight: 5.0 },
     { key: 'HR', weight: 0.1 },
     { key: 'BDAY', weight: 0.1 },
   ];
@@ -67,8 +67,8 @@ async function drawPack(userId, useSpecialRatesOverride = null) {
   }
 
   const commonSlot2Base = [
-    { key: 'C', weight: 94.0 },
-    { key: 'S', weight: 4.0 },
+    { key: 'C', weight: 93.0 },
+    { key: 'S', weight: 5.0 },
     { key: 'OC', weight: 2.0 },
   ];
   {
@@ -79,8 +79,8 @@ async function drawPack(userId, useSpecialRatesOverride = null) {
   }
 
   const commonSlot3Base = [
-    { key: 'C', weight: 95.9 },
-    { key: 'S', weight: 4.0 },
+    { key: 'C', weight: 94.8 },
+    { key: 'S', weight: 5.0 },
     { key: 'BDAY', weight: 0.1 },
   ];
   {
@@ -91,8 +91,8 @@ async function drawPack(userId, useSpecialRatesOverride = null) {
   }
 
   const commonSlot4Base = [
-    { key: 'C', weight: 95.9 },
-    { key: 'S', weight: 4.0 },
+    { key: 'C', weight: 94.8 },
+    { key: 'S', weight: 5.0 },
     { key: 'HR', weight: 0.1 },
   ];
   {
@@ -105,18 +105,18 @@ async function drawPack(userId, useSpecialRatesOverride = null) {
   // Uncommon Slots
   const uncommonSlotBases = [
     [
-      { key: 'U', weight: 89.75 },
-      { key: 'RR', weight: 10.0 },
+      { key: 'U', weight: 87.75 },
+      { key: 'RR', weight: 12.0 },
       { key: 'SY', weight: 0.25 },
     ],
     [
-      { key: 'U', weight: 96.75 },
-      { key: 'SR', weight: 3.0 },
+      { key: 'U', weight: 94.75 },
+      { key: 'SR', weight: 5.0 },
       { key: 'SY', weight: 0.25 },
     ],
     [
-      { key: 'U', weight: 97.5 },
-      { key: 'OSR', weight: 2.0 },
+      { key: 'U', weight: 95.5 },
+      { key: 'OSR', weight: 4.0 },
       { key: 'UR', weight: 0.5 },
     ],
   ];
@@ -136,10 +136,18 @@ async function drawPack(userId, useSpecialRatesOverride = null) {
     { key: 'SEC', weight: 0.03 },
   ];
   {
-    const options = buildSlotOptions(rareBase, profile.pullRate, getOverrides(profile, 'normal', 'rare'));
+     // NEW: merge normal overrides with pity override
+    const baseOverrides = getOverrides(profile, 'normal', 'rare');
+    const pityOverrides = (opts && opts.forceSEC) ? { SEC: 100 } : null;
+    const mergedOverrides = pityOverrides
+      ? { ...(baseOverrides || {}), ...pityOverrides }
+      : baseOverrides;
+
+    const options = buildSlotOptions(rareBase, profile.pullRate, mergedOverrides);
     const rareRarity = pickWeighted(options);
     const rareFile = pickFileFromPool(rareRarity, userId, useSpecialRates);
     results.push({ rarity: rareRarity, file: rareFile });
+
   }
 
   // Extra slot with appearance chance (ONLY chance changes; rarity odds unchanged)

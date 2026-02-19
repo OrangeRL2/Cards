@@ -2,160 +2,7 @@
 const path = require('path');
 const pools = require('./loadImages');
 const { pickCardFromRarityFolder } = require('./cardPicker');
-
-function rand() {
-  return Math.random();
-}
-
-function pickWeighted(options) {
-  const total = options.reduce((s, o) => s + (o.weight || 0), 0);
-  let r = rand() * total;
-  for (const o of options) {
-    if (r <= o.weight) return o.key;
-    r -= o.weight;
-  }
-  return options[options.length - 1].key;
-}
-
-function scaleSlotOdds(baseOptions, rate) {
-  if (!Array.isArray(baseOptions) || baseOptions.length === 0) return baseOptions;
-  const baseKey = baseOptions[0].key;
-
-  if (rate <= 0) return [{ key: baseKey, weight: 100 }];
-
-  let nonBaseSum = 0;
-  const scaledNonBase = [];
-
-  for (const opt of baseOptions) {
-    if (!opt || typeof opt.weight !== 'number') continue;
-    if (opt.key === baseKey) continue;
-
-    const w = opt.weight * rate;
-    nonBaseSum += w;
-    scaledNonBase.push({ key: opt.key, weight: w });
-  }
-
-  const baseWeight = Math.max(0, 100 - nonBaseSum);
-  return [{ key: baseKey, weight: baseWeight }, ...scaledNonBase];
-}
-
-function applyAbsoluteOverrides(slotOptions, overrides = {}, { warn = true } = {}) {
-  if (!Array.isArray(slotOptions) || slotOptions.length === 0) return slotOptions;
-  if (!overrides || typeof overrides !== 'object') return slotOptions;
-
-  const baseKey = String(slotOptions[0].key);
-  const byKey = new Map(slotOptions.map((o) => [String(o.key), { key: o.key, weight: o.weight }]));
-
-  for (const [k, v] of Object.entries(overrides)) {
-    const key = String(k);
-    const w = Number(v);
-    if (!Number.isFinite(w) || w < 0) continue;
-
-    if (byKey.has(key)) byKey.get(key).weight = w;
-    else byKey.set(key, { key, weight: w });
-  }
-
-  let nonBaseSum = 0;
-  for (const [k, obj] of byKey.entries()) {
-    if (k === baseKey) continue;
-    nonBaseSum += Number(obj.weight) || 0;
-  }
-
-  const newBase = 100 - nonBaseSum;
-  if (newBase < 0) {
-    if (warn) {
-      console.warn('[applyAbsoluteOverrides] overrides exceed 100%. Clamping base to 0.', {
-        baseKey,
-        nonBaseSum,
-        overrides,
-      });
-    }
-    byKey.get(baseKey).weight = 0;
-  } else {
-    byKey.get(baseKey).weight = newBase;
-  }
-
-  const originalOrder = slotOptions.map((o) => String(o.key));
-  const out = [];
-  const seen = new Set();
-
-  out.push(byKey.get(baseKey));
-  seen.add(baseKey);
-
-  for (const k of originalOrder) {
-    if (seen.has(k)) continue;
-    if (byKey.has(k)) {
-      out.push(byKey.get(k));
-      seen.add(k);
-    }
-  }
-
-  for (const [k, obj] of byKey.entries()) {
-    if (seen.has(k)) continue;
-    out.push(obj);
-  }
-
-  return out;
-}
-
-function buildSlotOptions(baseOptions, rate, overridesForSlot) {
-  const scaled = scaleSlotOdds(baseOptions, rate);
-  return applyAbsoluteOverrides(scaled, overridesForSlot);
-}
-
-// ---- Same user profiles as newWeightedDraw.js ----
-const rateProfiles = (() => {
-  const m = new Map();
-
-  m.set('1334914199968677941', {
-    pullRate: 0.33,
-    extraSlotRate: 0.0,
-    specialPullRate: 0.0,
-    overrides: { normal: {}, special: {}, boss: {} },
-  });
-
-  [
-    '953552994232852490',
-    '1188023588926795827',
-    '1300468334474690583',
-    '1416081468794339479',
-    '91103688415776768',
-    '647219814011502607',
-    '875533483051712543',
-  ].forEach((id) =>
-    m.set(String(id), {
-      pullRate: 0.50,
-      extraSlotRate: 0.0,
-      specialPullRate: 0.0,
-      overrides: { normal: {}, special: {}, boss: {} },
-    })
-  );
-
-  m.set('1171127294413246567', {
-    pullRate: 0.66,
-    extraSlotRate: 1.0,
-    specialPullRate: 0.50,
-    overrides: { normal: {}, special: {}, boss: {} },
-  });
-
-  return m;
-})();
-
-function getUserProfile(userId) {
-  const idStr = String(userId);
-  return (
-    rateProfiles.get(idStr) || {
-      pullRate: 1.0,
-      extraSlotRate: 1.0,
-      specialPullRate: 1.0,
-      overrides: { normal: {}, special: {}, boss: {} },
-    }
-  );
-}
-
-function getOverrides(profile, mode, slotName) {
-  return profile?.overrides?.[mode]?.[slotName] || null;
-}
+const { pickWeighted, buildSlotOptions, getUserProfile, getOverrides } = require('./rates');
 
 function fallbackPickFromPools(rarity) {
   if (pools.special && pools.special[rarity] && pools.special[rarity].length > 0) {
@@ -191,11 +38,9 @@ async function pickForSlot(rarity, specialLabel) {
   return path.basename(raw, path.extname(raw));
 }
 
-async function drawPackSpecial(userId, specialLabel) {
+async function drawPackSpecial(userId, specialLabel, opts = {}) {
   const results = [];
   const profile = getUserProfile(userId);
-
-  // Special pulls use specialPullRate (your rule) [3](https://ace00101-my.sharepoint.com/personal/nauldee_nawill_ace00101_onmicrosoft_com/Documents/Microsoft%20Copilot%20Chat%20%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB/drawPackSpecial.js)
   const rate = profile.specialPullRate;
 
   // --- Common slots (4) ---
@@ -282,7 +127,13 @@ async function drawPackSpecial(userId, specialLabel) {
     { key: 'SEC', weight: 0.1 },
   ];
   {
-    const options = buildSlotOptions(rareBase, rate, getOverrides(profile, 'special', 'rare'));
+      const baseOverrides = getOverrides(profile, 'special', 'rare');
+    const pityOverrides = (opts && opts.forceSEC) ? { SEC: 100, OUR:0, R:0 } : null;
+    const mergedOverrides = pityOverrides
+      ? { ...(baseOverrides || {}), ...pityOverrides }
+      : baseOverrides;
+
+    const options = buildSlotOptions(rareBase, rate, mergedOverrides);
     const rarity = pickWeighted(options);
     const file = await pickForSlot(rarity, specialLabel);
     results.push({ rarity, file });

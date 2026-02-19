@@ -29,6 +29,13 @@ try {
   drawPackSpecial = null;
 }
 
+// Users who are exempt from "pullsSinceLastSEC" pity tracking
+const PITY_EXEMPT_IDS = new Set([
+  '153551890976735232',
+  '234567890123456789',
+  // add more...
+]);
+
 // In-process guard still useful for same-interaction re-entry,
 // but it doesn't stop two different interactions from the same user. [1](https://ace00101-my.sharepoint.com/personal/nauldee_nawill_ace00101_onmicrosoft_com/Documents/Microsoft%20Copilot%20Chat%20%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB/pull.js)
 const inFlightInteractions = new Map();
@@ -336,7 +343,7 @@ module.exports = {
 
     const discordUserId = interaction.user.id;
     const lockOwner = interaction.id;
-
+    const pityExempt = PITY_EXEMPT_IDS.has(discordUserId);
     // Try to get the lock immediately; if not, wait (queue) without showing any "please wait" error.
     let acquiredFast = await acquirePullLock(discordUserId, lockOwner, 8000);
     let queued = false;
@@ -503,16 +510,43 @@ module.exports = {
         await release();
         return;
       }
+      // Ensure user exists before reading pity
+await User.updateOne(
+  { id: discordUserId },
+  { $setOnInsert: { id: discordUserId, cards: [], points: 0, pullsSinceLastSEC: 0 } },
+  { upsert: true }
+);
+
+// --- SEC pity counter (read before draw) ---
+let pullsSinceLastSEC = 0;
+let forceSEC = false;
+
+if (!pityExempt) {
+  try {
+    const u = await User.findOne({ id: discordUserId }, { pullsSinceLastSEC: 1 }).lean();
+    pullsSinceLastSEC = Number(u?.pullsSinceLastSEC ?? 0);
+    forceSEC = pullsSinceLastSEC >= 1999; // next pull is the 2000th -> guarantee SEC
+  } catch (e) {
+    console.error('[pity] failed to read pullsSinceLastSEC:', e);
+    pullsSinceLastSEC = 0;
+    forceSEC = false;
+  }
+} else {
+  // Exempt users: no pity tracking and no force
+  pullsSinceLastSEC = 0;
+  forceSEC = false;
+}
+
 
       // --- Draw pack ---
       let pack;
       try {
         if (!useSpecial && bossChannelBias && bossChannelBias.biased && bossChannelBias.drawToken) {
-          pack = await drawPackBoss(discordUserId, bossChannelBias.drawToken); // boss-channel path
+          pack = await drawPackBoss(discordUserId, bossChannelBias.drawToken, { forceSEC });
         } else if (useSpecial && drawPackSpecial && specialDrawToken) {
-          pack = await drawPackSpecial(discordUserId, specialDrawToken); // special path
+          pack = await drawPackSpecial(discordUserId, specialDrawToken, { forceSEC });
         } else {
-          pack = await drawPack(discordUserId, null); // default
+          pack = await drawPack(discordUserId, null, { forceSEC });
         }
       } catch (err) {
         console.error('drawPack error after consume:', err);
@@ -722,7 +756,29 @@ module.exports = {
       }
 
       // increment user's pulls once (informational)
-      try { await User.updateOne({ id: discordUserId }, { $inc: { pulls: 1 } }); } catch {}
+// --- Update pull stats + pity counter ---
+let nextSinceSEC = 0;
+
+if (!pityExempt) {
+  // Fail-safe: only reset on actual SEC.
+  // If forceSEC was expected but no SEC occurred, keep at 1999 so next pull forces again.
+  nextSinceSEC = hasSEC ? 0 : (forceSEC ? 1999 : pullsSinceLastSEC + 1);
+}
+
+try {
+  const update = {
+    $setOnInsert: { id: discordUserId, cards: [], points: 0 },
+    $inc: { pulls: 1 },
+  };
+
+  if (!pityExempt) {
+    update.$set = { pullsSinceLastSEC: nextSinceSEC };
+  }
+
+  await User.updateOne({ id: discordUserId }, update, { upsert: true });
+} catch (e) {
+  console.error('[pull] Failed to update pulls/pity:', e);
+}
 
       function makeEmbed(idx) {
         const it = pageItems[idx];
