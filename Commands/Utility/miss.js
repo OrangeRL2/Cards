@@ -142,7 +142,11 @@ module.exports = {
             chunk
               .map(c => {
                 // If rarity is COL, link to secret.png instead of the card image
-                const imageFile = c.rarity === 'COL' ? 'secret.png' : `${encodeURIComponent(String(c.name))}.png`;
+                const secretRarities = ['ORI', 'COL'];
+
+                const imageFile = secretRarities.includes(c.rarity)
+                  ? 'secret.png'
+                  : `${encodeURIComponent(String(c.name))}.png`;
                 const url = `${IMAGE_BASE}/${encodeURIComponent(c.rarity)}/${imageFile}`;
                 return `**[${c.rarity}]** [${escapeMarkdown(c.name)}](${url})`;
               })
