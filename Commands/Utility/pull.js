@@ -31,13 +31,12 @@ try {
 
 // Users who are exempt from "pullsSinceLastSEC" pity tracking
 const PITY_EXEMPT_IDS = new Set([
-  '153551890976735232',
   '234567890123456789',
   // add more...
 ]);
 
 // In-process guard still useful for same-interaction re-entry,
-// but it doesn't stop two different interactions from the same user. [1](https://ace00101-my.sharepoint.com/personal/nauldee_nawill_ace00101_onmicrosoft_com/Documents/Microsoft%20Copilot%20Chat%20%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB/pull.js)
+// but it doesn't stop two different interactions from the same user.
 const inFlightInteractions = new Map();
 
 const IMAGE_BASE = process.env.IMAGE_BASE || 'http://152.69.195.48/images';

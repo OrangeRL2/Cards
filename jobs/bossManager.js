@@ -163,6 +163,8 @@ const OSHI_DESCRIPTIONS = {
   Rushia: 'Konrushi!',
   Mumei: '**{oshi}** stream marathon: support Mumei and earn special cards!',
   Lamy: 'I love Yoi',
+  Hajime: 'Vroom, vroom, vroom!',
+  Hajime: 'Niko Niko nii',
   __default: 'Support **{oshi}** with all you got for special rewards!'
 };
 
@@ -1053,7 +1055,27 @@ async function settleEndedEvents(client = null) {
       await ev.save();
 
       await postBossResults(client, ev.eventId);
-
+      //post settlement summary to boss channel
+      if (client && config.bossChannelId) {
+        try {
+          const ch = await client.channels.fetch(config.bossChannelId).catch(() => null);
+          if (ch && ch.isTextBased?.() && ch.send) {
+            const oshiCfg = oshis.find(o => o.id === ev.oshiId);
+            const oshiLabel = oshiCfg ? oshiCfg.label : ev.oshiId;
+            const summary = new EmbedBuilder()
+              .setTitle(`Stream ended: ${oshiLabel}`)
+              .setDescription(`Stream has ended. Here are the top 3 contributors for **${oshiLabel}**'s last stream:`)
+              .addFields(
+                { name: '1st', value: winners[0] ? `<@${winners[0].userId}>` : '-', inline: true },
+                { name: '2nd', value: winners[1] ? `<@${winners[1].userId}>` : '-', inline: true },
+                { name: '3rd', value: winners[2] ? `<@${winners[2].userId}>` : '-', inline: true }
+              );
+            await ch.send({ embeds: [summary] });
+          }
+        } catch (err) {
+          console.error('settleEndedEvents announce error', err);
+        }
+      }
     } catch (err) {
       console.error('settleEndedEvents error for', ev.eventId, err);
     }

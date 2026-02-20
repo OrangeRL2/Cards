@@ -16,7 +16,13 @@ function tierLabelFromMeta(meta) {
   if (typeof t === 'string') return t.charAt(0).toUpperCase() + t.slice(1);
   return 'Participation';
 }
-
+function tierOrder(m) {
+  const t = m?.tier;
+  if (t === 1 || String(t) === '1') return 0; // best
+  if (t === 2 || String(t) === '2') return 1;
+  if (t === 3 || String(t) === '3') return 2;
+  return 10; // participation / unknown
+}
 function formatRewardLine(meta) {
   const tierLabel = tierLabelFromMeta(meta);
   const reward = meta?.reward || '(unknown)';
@@ -79,12 +85,21 @@ async function postBossResults(client, eventId) {
       const rewardLines = metas.map(formatRewardLine);
       fields.push({
         userId,
+        bestOrder, 
         name: `<@${userId}>`, // placeholder; will resolve per-page
         value: rewardLines.join('\n'),
         inline: false
       });
     }
-
+    
+    // NEW: sort users so top placements appear first
+    fields.sort((a, b) => {
+      const d = (a.bestOrder ?? 10) - (b.bestOrder ?? 10);
+      if (d !== 0) return d;
+      // Tie-breaker: keep consistent ordering
+      return String(a.userId).localeCompare(String(b.userId));
+    });
+    
     // Discord embed field limit: 25 fields per embed. Paginate if needed.
     const MAX_FIELDS_PER_EMBED = 25;
     let page = 0;

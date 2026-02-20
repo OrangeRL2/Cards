@@ -44,7 +44,7 @@ module.exports = {
         .setColor(targetUser.id === requesterId ? Colors.Green : Colors.Blurple)
         .addFields(
           { name: 'Fans', value: `${points}`, inline: true },
-          // CHANGED: show pullsSinceLastSEC instead of pulls
+          { name: 'Pulls', value: `${pulls}`, inline: true },
           { name: 'Pulls Since Last SEC', value: `${pullsSinceLastSEC}`, inline: true },
           { name: 'Cards (total count)', value: `${cardCount}`, inline: true },
           { name: 'Pending lives', value: `${pending}`, inline: true }

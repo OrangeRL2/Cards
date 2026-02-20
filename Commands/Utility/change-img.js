@@ -8,7 +8,9 @@ const OSHI_LIST = require('../../config/oshis');
 const EXCEPTIONS = {
   // values are arrays of exception names or prefixes that should be allowed
   // Example:
-  'chloe': ['Ruka'],
+  'chloe': ['Ruka', 'HoloX'], // allow any card starting with "Ruka" for Chloe oshi
+  'mio': ['FubuMio'],
+  'suisei': ['Micomet','Shiranui Construction','Gen 0'],
 };
 
 const { Schema } = mongoose;

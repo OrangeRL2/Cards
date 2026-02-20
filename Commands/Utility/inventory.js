@@ -17,6 +17,22 @@ const IMAGE_BASE = 'http://152.69.195.48/images';
 const ITEMS_PER_PAGE = 10;
 const IDLE_LIMIT = 120_000; // 2 minutes
 
+// Cards to always hide from output (any rarity)
+const EXCEPTION_LIST = [
+  'Test 001',
+  'Test 999',
+  'Test 002',
+];
+
+// Normalized set for fast case-insensitive exact matching
+const EXCEPTION_SET = new Set(
+  EXCEPTION_LIST.map(n => String(n).trim().toLowerCase()).filter(Boolean)
+);
+
+function isExcludedCardName(name) {
+  return EXCEPTION_SET.has(String(name).trim().toLowerCase());
+}
+
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('inventory')
@@ -48,6 +64,7 @@ module.exports = {
           { name: 'HR', value: 'HR' },
           { name: 'BDAY', value: 'BDAY'},
           { name: 'SEC', value: 'SEC' },
+          { name: 'ORI', value: 'ORI' },
           { name: 'VAL', value: 'VAL' },
         ),
     )
@@ -105,10 +122,12 @@ module.exports = {
 
     // Apply filters
     let entries = allEntries.filter(c =>
-      (!filterR || c.rarity === filterR) &&
-      (!filterQ || c.name.toLowerCase().includes(filterQ)) &&
-      (!multiFilter || c.count >= 2)
-    );
+  (!filterR || c.rarity === filterR) &&
+  (!filterQ || c.name.toLowerCase().includes(filterQ)) &&
+  (!multiFilter || c.count >= 2) &&
+  !isExcludedCardName(c.name)
+);
+
 
     if (!entries.length) {
       const filterMessage = multiFilter ?
@@ -135,8 +154,27 @@ module.exports = {
       });
     } else {
       const order = {
-        XMAS: 1, C: 2, U: 3, R: 4, S: 5, RR: 6, OC: 7, SR: 8, OSR: 9,
-        P: 10, SP: 11, UP: 12, SY: 13, UR: 14, OUR: 15, HR: 16, BDAY: 17, SEC: 18, VAL: 19
+        XMAS  : 1,
+        C     : 2, 
+        U     : 3, 
+        R     : 4, 
+        S     : 5, 
+        RR    : 6, 
+        OC    : 7, 
+        SR    : 8, 
+        OSR   : 9,
+        COL   : 10, 
+        P     : 11, 
+        SP    : 12, 
+        UP    : 13, 
+        SY    : 14, 
+        UR    : 15, 
+        OUR   : 16, 
+        HR    : 17, 
+        BDAY  : 18, 
+        SEC   : 19,
+        VAL   : 20,
+        ORI   : 21,
       };
       entries.sort((a, b) => {
         const d = (order[b.rarity] || 999) - (order[a.rarity] || 999);
@@ -191,7 +229,27 @@ module.exports = {
         .setTitle(`**[${c.rarity}]** ${escapeMarkdown(c.name)} (x${c.count})${c.locked ? ' 🔒' : ''}`)
         .setImage(url)
         .setColor({
-          UR: Colors.DarkPurple, R: Colors.Green, C: Colors.Grey, SuperRare: Colors.Blue
+        XMAS:   0x05472A, // XMAS Green
+        C:    Colors.Grey, 
+        U:    Colors.White,
+        R:    0x7bacec, // R Light Blue
+        S:    0x55DDEE, // S Cyan
+        RR:   0x2A69FB, // RR Blue
+        OC:   Colors.Fuchsia, 
+        SR:   0xEE7744, // SR Orange
+        COL:  0xFF3377, // COL Pink
+        OSR:  0xB19CD9, // OSR Purple
+        P:    0xDDFFEE, // P Pastel Green
+        SP:   0x33DDAA, // SP Aqua
+        SY:   Colors.DarkAqua, 
+        UR:   0xFF9922, // UR Orange
+        OUR:  Colors.DarkPurple,
+        HR:    Colors.Gold,
+        BDAY:  0xF9CDCF, //Bday Pink
+        UP:    0xFFEE22, // UP Yellow
+        SEC:  0x6CCDF8, // SEC Light Blue
+        VAL:  Colors.Red,
+        ORI:  Colors.Orange,
         }[c.rarity] ?? Colors.Default)
         .setFooter({ text: `Card ${i + 1} of ${imageResults.length}` })
     );

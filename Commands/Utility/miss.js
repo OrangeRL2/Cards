@@ -20,14 +20,31 @@ const PAGE_SIZE = 10;
 const IDLE_LIMIT = 120_000; // 2 minutes
 
 const RARITY_ORDER = [
-  'XMAS', 'C', 'U', 'R', 'S', 'RR', 'OC', 'SR', 'COL', 'OSR', 'P', 'SP', 'SY', 'UR', 'OUR', 'HR', 'BDAY', 'UP', 'SEC','VAL'
+  'XMAS', 'C', 'U', 'R', 'S', 'RR', 'OC', 'SR', 'COL', 'OSR', 'P', 'SP', 'SY', 'UR', 'OUR', 'HR', 'BDAY', 'UP', 'SEC','VAL','ORI'
 ];
 
 const COLOR_MAP = {
-  UR: Colors.DarkPurple, R: Colors.Green, C: Colors.Grey,
-  U: Colors.LightGrey, RR: Colors.Green, SR: Colors.Gold,
-  OSR: Colors.Purple, OUR: Colors.DarkPurple, SEC: Colors.Orange,
-  S: Colors.Blue, HR: Colors.DarkBlue, SY: Colors.Gold, OC: Colors.Grey, P: Colors.Gold,
+  XMAS:   0x05472A, // XMAS Green
+  C:    Colors.Grey, 
+  U:    Colors.White,
+  R:    0x7bacec, // R Light Blue
+  S:    0x55DDEE, // S Cyan
+  RR:   0x2A69FB, // RR Blue
+  OC:   Colors.Fuchsia, 
+  SR:   0xEE7744, // SR Orange
+  COL:  0xFF3377, // COL Pink
+  OSR:  0xB19CD9, // OSR Purple
+  P:    0xDDFFEE, // P Pastel Green
+  SP:   0x33DDAA, // SP Aqua
+  SY:   Colors.DarkAqua, 
+  UR:   0xFF9922, // UR Orange
+  OUR:  Colors.DarkPurple,
+  HR:    Colors.Gold,
+  BDAY:  0xF9CDCF, //Bday Pink
+  UP:    0xFFEE22, // UP Yellow
+  SEC:  0x6CCDF8, // SEC Light Blue
+  VAL:  Colors.Red,
+  ORI:  Colors.Orange,
 };
 
 module.exports = {

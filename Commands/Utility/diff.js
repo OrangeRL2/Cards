@@ -13,9 +13,25 @@ const { normalizeCards } = require('../../utils/normalizeCards');
 const ITEMS_PER_PAGE = 10;
 const IDLE_LIMIT = 120_000;
 
+// Cards to always hide from output (any rarity)
+const EXCEPTION_LIST = [
+  'Test 001',
+  'Test 999',
+  'Test 002',
+];
+
+const EXCEPTION_SET = new Set(
+  EXCEPTION_LIST.map(n => String(n).trim().toLowerCase()).filter(Boolean)
+);
+
+function isExcludedCardName(name) {
+  return EXCEPTION_SET.has(String(name).trim().toLowerCase());
+}
+
+
 // RARITY order consistent with inventory / miss (later items considered rarer)
 const RARITY_ORDER = [
-  'XMAS', 'C', 'U', 'R', 'S', 'RR', 'OC', 'SR', 'COL', 'OSR', 'P', 'SP', 'SY', 'UR', 'OUR', 'HR', 'BDAY', 'UP', 'SEC'
+  'XMAS', 'C', 'U', 'R', 'S', 'RR', 'OC', 'SR', 'COL', 'OSR', 'P', 'SP', 'SY', 'UR', 'OUR', 'HR', 'BDAY', 'UP', 'SEC', "VAL", "ORI"
 ];
 
 module.exports = {
@@ -75,8 +91,8 @@ module.exports = {
         User.findOne({ id: targetUser.id }),
       ]);
 
-      const youCards = normalizeCards(youDoc?.cards);
-      const themCards = normalizeCards(themDoc?.cards);
+      const youCards = normalizeCards(youDoc?.cards).filter(c => !isExcludedCardName(c.name));
+      const themCards = normalizeCards(themDoc?.cards).filter(c => !isExcludedCardName(c.name));
 
       // Build maps keyed by lower-case name::rarity -> count
       const keyOf = c => `${String(c.name)}::${String(c.rarity)}`;
