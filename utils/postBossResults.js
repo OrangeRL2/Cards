@@ -81,7 +81,7 @@ async function postBossResults(client, eventId) {
         };
         return order(a) - order(b);
       });
-
+      const bestOrder = tierOrder(metas[0]);
       const rewardLines = metas.map(formatRewardLine);
       fields.push({
         userId,
