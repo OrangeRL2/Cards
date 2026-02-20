@@ -274,7 +274,24 @@ async function consumePulls(discordUserId, amount, allowEvent, specialLabel = nu
   // Timed-only path: atomic decrement
   const dec = await PullQuotaModel.updateOne(
     { userId: discordUserId, pulls: { $gte: 1 } },
-    { $inc: { pulls: -1 }, $set: { lastRefill: new Date() } }
+    [
+  {
+    $set: {
+      lastRefill: {
+        $cond: [
+          { $eq: ["$pulls", PullQuota.MAX_STOCK] },
+          new Date(),
+          "$lastRefill"
+        ]
+      }
+    }
+  },
+  {
+    $set: {
+      pulls: { $subtract: ["$pulls", 1] }
+    }
+  }
+]
   ).exec();
 
   if (dec && dec.modifiedCount === 1) {
