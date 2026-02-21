@@ -66,6 +66,29 @@ const ALLOWED_ROLE_IDS = new Set([
   ...ENV_ALLOWED_ROLES,
 ]);
 
+/** ---------------- Targeting (run command for another user) ----------------
+ * Usage:
+ *   !results-lives @User [flags...]
+ *   !results-lives 123456789012345678 [flags...]
+ * Only callers in ALLOWED_TARGETERS may target another user.
+ * Env (optional): RESULTS_LIVES_ALLOWED_TARGETERS_USER_IDS=153551890976735232,409717160995192832
+ */
+const ENV_ALLOWED_TARGETERS = (process.env.RESULTS_LIVES_ALLOWED_TARGETERS_USER_IDS || '')
+  .split(',')
+  .map(s => s.trim())
+  .filter(Boolean);
+
+// Replace or append here as needed
+const ALLOWED_TARGETERS = new Set([
+  '153551890976735232', // e.g., your ID
+  ...ENV_ALLOWED_TARGETERS,
+]);
+
+function stripMentionToId(token) {
+  return String(token || '').replace(/[<@!>]/g, '');
+}
+
+
 function isAuthorized(message) {
   try {
     // If both lists are empty, allow everyone
@@ -208,6 +231,30 @@ module.exports = {
 
       // Use providedArgs if dispatcher didn't pass rawArgs
       const args = rawArgs.length ? rawArgs : providedArgs;
+
+    // --- Optional: allow privileged callers to run this command for another user (like pull.js) ---
+    // If the first token is a mention/ID and the caller is allowed, we treat it as the target user.
+    let effectiveUser = message.author;
+    const callerId = String(message.author.id);
+    const callerCanTarget = ALLOWED_TARGETERS.has(callerId);
+    const maybeTargetToken = args[0];
+
+    if (maybeTargetToken && callerCanTarget) {
+      const idCandidate = stripMentionToId(maybeTargetToken);
+      if (/^\d{17,20}$/.test(idCandidate) && idCandidate !== callerId) {
+        try {
+          const fetched = await message.client.users.fetch(idCandidate);
+          if (fetched) {
+            effectiveUser = fetched;
+            // Remove the target token so flags/name parsing works normally
+            args.shift();
+          }
+        } catch {
+          // ignore invalid target
+        }
+      }
+    }
+
       const { flags, rest } = parseFlags(args);
       const autoResend = Boolean(flags.resend);
 
@@ -223,13 +270,13 @@ module.exports = {
       // Only use name hint when --resend is present
       const globalNameHint = autoResend && globalNameHintRaw ? globalNameHintRaw : '';
 
-      const userId = message.author.id;
+      const userId = effectiveUser.id;
       const now = Date.now();
 
       const user = await User.findOne({ id: userId }).lean();
       if (!user) {
         // behave like slash: just report, no resend attempt when nothing was just claimed
-        return message.reply({ content: 'You have no pending live attempts.' }).catch(() => {});
+        return message.reply({ content: effectiveUser.id === message.author.id ? 'You have no pending live attempts.' : `**${effectiveUser.username}** has no pending live attempts.` }).catch(() => {});
       }
 
       // ---- Build deterministic stageMap (earliest ready per stage) ----
@@ -318,10 +365,24 @@ module.exports = {
             const sentName = normalizeCardName(att.name) || '';
 
             if (ok) {
-              if (out.pCard) {
-                const gainedRarity = out.pCard.rarity || 'P';
-                const gainedName = out.pCard.name || out.pCard.displayName || 'special guest';
-                note = `**[${gainedRarity}] ${gainedName}** showed up at **${sentName}**'s live!`;
+              // Prefer multi-reward list; fallback to single reward for backward compatibility
+              const gainedCards =
+                Array.isArray(out.pCards) ? out.pCards :
+                (out.pCard ? [out.pCard] : []);
+
+              const formatCard = (c) => {
+                const gainedRarity = c?.rarity || 'P';
+                const gainedName = c?.displayName || c?.name || 'special guest';
+                return `**[${gainedRarity}] ${gainedName}**`;
+              };
+
+              if (gainedCards.length >= 2) {
+                // When 2 appeared:
+                // **[R] Name** & **[R] Name** showed up at **Sent**'s live!
+                const shown = gainedCards.slice(0, 2).map(formatCard).join(' & ');
+                note = `${shown} showed up at **${sentName}**'s live!`;
+              } else if (gainedCards.length === 1) {
+                note = `${formatCard(gainedCards[0])} showed up at **${sentName}**'s live!`;
               } else {
                 note = `**${sentName}** came home from the live`;
               }
