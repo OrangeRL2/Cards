@@ -36,7 +36,7 @@ const SHOP_ITEMS = {
   //tier6
     exstreamer: { name: 'Exstreamer Cup Entry PekoMari', rarity: 'UP', cost: t6, image: 'PekoMari 001', stock: -1 },
     exstreamerFinal: { name: 'Exstreamer Cup Finalist Suisei', rarity: 'UP', cost: t6, image: 'Suisei 003', stock: -1 },
-    padoruX: { name: 'Padoru X', rarity: 'XMAS', cost: t6, image: 'Padoru X', stock: -1 },
+    padoruX: { name: 'Padoru X - Does not allow UP over 50K, ORI and COL', rarity: 'XMAS', cost: t6, image: 'Padoru X', stock: -1 },
     
     exstreamerChamp: { name: 'Exstreamer Cup Champion Suisei', rarity: 'UP', cost: t7, image: 'Suisei 002', stock: -1 },
 };
