@@ -151,14 +151,14 @@ async function drawPack(userId, useSpecialRatesOverride = null, opts = {}) {
   }
 
   // Extra slot with appearance chance (ONLY chance changes; rarity odds unchanged)
-  const baseExtraChance = 0.02;
+  const baseExtraChance = 0.00;
   const extraChance = baseExtraChance * (profile.extraSlotRate ?? 1.0);
 
   if (Math.random() < extraChance) {
     const extraBase = [
-      { key: 'VAL', weight: 99.58 },
-      { key: 'VAL', weight: 0.39 },
-      { key: 'VAL', weight: 0.03 },
+      { key: 'VAL', weight: 0.0 },
+      { key: 'VAL', weight: 0.0 },
+      { key: 'VAL', weight: 0.00 },
     ];
     const extraRarity = pickWeighted(extraBase); // do NOT scale extra odds
     const extraFile = pickFileFromPool(extraRarity, userId, useSpecialRates);

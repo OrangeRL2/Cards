@@ -1,7 +1,7 @@
 // message-commands/specialpulls.js
 const SpecialPullGrant = require('../models/SpecialPullGrant');
 const PullQuota = require('../models/PullQuota');
-const OWNER_IDS = new Set(['153551890976735232','409717160995192832','272129129841688577']);
+const OWNER_IDS = new Set(['153551890976735232','409717160995192832','272129129841688577','399012422805094410']);
 const BATCH = 500;
 
 // parse flags: --pulls=12 --target="suisei" [--init]

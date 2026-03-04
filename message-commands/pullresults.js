@@ -1,10 +1,16 @@
 // message-commands/recent-sr.js
 // Prefix command: !recent-sr (invoked as !recents in this file)
-// Lists SR+ cards the invoking user (or their team) pulled in the current JST day (midnight-to-midnight JST).
+// Lists SR+ cards the invoking user (or their team) pulled in a JST window.
+// Default window: current JST day (midnight-to-midnight JST).
+//
 // Usage:
 //   !recents
-//   !recents --team            (use the team that contains your user id)
-//   !recents --team=Nyanko     (explicit team name)
+//   !recents --days=20         (show from today back through last 20 JST days, inclusive)
+//   !recents --days 20
+//   !recents --team
+//   !recents --team=Nyanko
+//   !recents --team --days=7
+//
 // Notes:
 //  - Shows each card (rarity + name) and when it was pulled; does NOT display stack counts.
 //  - Team groups are defined in TEAM_MAP below.
@@ -17,6 +23,24 @@ const COMMAND_NAME = 'recents';
 
 // Rarities considered SR and above
 const SR_AND_ABOVE = new Set(['SR', 'OSR', 'VAL', 'SY', 'UR', 'OUR', 'HR', 'BDAY', 'SEC', 'ORI']);
+
+// ===============================
+// Always-hidden card names (any rarity)
+// Keep this list in sync with inventory/miss exceptions if you want consistency.
+// Case-insensitive exact match; whitespace is trimmed.
+// ===============================
+const EXCEPTION_LIST = [
+  'Test 001',
+  'Test 999',
+];
+
+const EXCEPTION_SET = new Set(
+  EXCEPTION_LIST.map(n => String(n).trim().toLowerCase()).filter(Boolean)
+);
+
+function isExcludedCardName(name) {
+  return EXCEPTION_SET.has(String(name).trim().toLowerCase());
+}
 
 // Define teams here. Keys are team names (case-insensitive when matching by explicit name).
 // Values are arrays of user ID strings.
@@ -42,13 +66,13 @@ const TEAM_MAP = {
     '1312674257104539761'
   ],
   Nyanko: [
-   '399012422805094410', 
+    '399012422805094410',
     '409720567588061184'
   ],
-  Baba:[
-   '409728788117848074',
-   '370081368274894849',
-   '511182422340272128',
+  Baba: [
+    '409728788117848074',
+    '370081368274894849',
+    '511182422340272128',
     '272129129841688577',
     '581483331548348416',
   ],
@@ -80,12 +104,21 @@ function chunkLines(lines, maxLen = 1900) {
 }
 
 /**
- * Compute the JST-day start and end Date objects for "today" in JST.
- * Returns { start: Date, end: Date, jstDateString: 'YYYY-MM-DD' } where start is JST midnight (inclusive)
- * and end is the next JST midnight (exclusive), expressed as JS Date objects (UTC-based).
+ * Compute the JST-day start and end Date objects for a window ending "today" in JST.
+ * days=1 => today only (midnight-to-midnight JST)
+ * days=20 => last 20 JST days including today (start = JST midnight 19 days ago)
+ *
+ * Returns { start: Date, end: Date, label: string }
+ *  - start inclusive, end exclusive
+ *  - label is human-readable date range in JST
  */
-function getJstDayWindowNow() {
+function getJstWindowNow(days = 1) {
   const JST_OFFSET_MS = 9 * 60 * 60 * 1000;
+  const DAY_MS = 24 * 60 * 60 * 1000;
+
+  let d = parseInt(days, 10);
+  if (!Number.isFinite(d) || d < 1) d = 1;
+
   const now = Date.now();
   const nowJstMs = now + JST_OFFSET_MS;
   const nowJst = new Date(nowJstMs);
@@ -94,14 +127,32 @@ function getJstDayWindowNow() {
   const month = nowJst.getUTCMonth(); // 0-based
   const day = nowJst.getUTCDate();
 
-  // JST midnight in UTC ms is Date.UTC(year, month, day, 0,0,0) - JST_OFFSET_MS
+  // JST midnight today in UTC ms:
   const jstMidnightUtcMs = Date.UTC(year, month, day, 0, 0, 0) - JST_OFFSET_MS;
-  const start = new Date(jstMidnightUtcMs);
-  const end = new Date(jstMidnightUtcMs + 24 * 60 * 60 * 1000);
 
-  const jstDateString = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+  // days=1 => start=today midnight
+  // days=20 => start=midnight 19 days ago
+  const startUtcMs = jstMidnightUtcMs - (d - 1) * DAY_MS;
+  const endUtcMs = jstMidnightUtcMs + DAY_MS; // tomorrow midnight JST (exclusive)
 
-  return { start, end, jstDateString };
+  const startJst = new Date(startUtcMs + JST_OFFSET_MS);
+  const todayJstMidnight = new Date(jstMidnightUtcMs + JST_OFFSET_MS); // today midnight JST
+
+  const fmt = (dt) => {
+    const y = dt.getUTCFullYear();
+    const m = String(dt.getUTCMonth() + 1).padStart(2, '0');
+    const dd = String(dt.getUTCDate()).padStart(2, '0');
+    return `${y}-${m}-${dd}`;
+  };
+
+  const startStr = fmt(startJst);
+  const todayStr = fmt(todayJstMidnight);
+
+  const label = (d === 1)
+    ? `${todayStr} (JST)`
+    : `${startStr} → ${todayStr} (last ${d} days, JST)`;
+
+  return { start: new Date(startUtcMs), end: new Date(endUtcMs), label };
 }
 
 /**
@@ -110,13 +161,18 @@ function getJstDayWindowNow() {
  *   --team           (no value)  => use team that contains the invoking user's id
  *   --team=NAME      => explicit team name
  *   --team NAME      => explicit team name (also supported)
+ *
+ *   --days=INTEGER   => show pulls in last N JST days (including today)
+ *   --days INTEGER   => same
  */
 function parseFlags(tokens) {
   const flags = {};
   for (let i = 0; i < tokens.length; i++) {
     const t = tokens[i];
     if (!t.startsWith('--')) continue;
+
     const [flag, rawVal] = t.split('=', 2);
+
     if (flag === '--team') {
       if (typeof rawVal !== 'undefined') {
         flags.team = rawVal;
@@ -131,6 +187,23 @@ function parseFlags(tokens) {
           flags.team = true;
         }
       }
+      continue;
+    }
+
+    if (flag === '--days') {
+      let val = rawVal;
+      if (typeof val === 'undefined') {
+        const next = tokens[i + 1];
+        if (next && !next.startsWith('--')) {
+          val = next;
+          i++;
+        }
+      }
+      const parsed = parseInt(val, 10);
+      if (Number.isFinite(parsed) && parsed >= 1) {
+        flags.days = parsed;
+      }
+      continue;
     }
   }
   return flags;
@@ -138,7 +211,7 @@ function parseFlags(tokens) {
 
 module.exports = {
   name: COMMAND_NAME,
-  description: 'Prefix command: recent-sr - list SR+ cards you (or your team) pulled in the current JST day (midnight-to-midnight JST)',
+  description: 'Prefix command: recent-sr - list SR+ cards you (or your team) pulled in a JST window (default: today)',
   /**
    * @param {import('discord.js').Message} message
    * @param {string[]} args
@@ -149,22 +222,24 @@ module.exports = {
       if (message.author.bot) return;
 
       // Basic command match: allow "!recents" or "!recents ..." (case-insensitive)
-      const tokens = message.content.trim().split(/\s+/).slice(1); // tokens after command
-      const invoked = message.content.trim().split(/\s+/)[0].slice(PREFIX.length).toLowerCase();
+      const rawParts = message.content.trim().split(/\s+/);
+      const invoked = rawParts[0].slice(PREFIX.length).toLowerCase();
       if (invoked !== COMMAND_NAME) return;
+
+      // tokens after command
+      const tokens = rawParts.slice(1);
 
       // --- restrict usage to IDs listed in TEAM_MAP ---
       const ALL_TEAM_IDS = new Set(Object.values(TEAM_MAP).flat().map(String));
       if (!ALL_TEAM_IDS.has(message.author.id)) {
-        return message.reply({
-          content: 'You are not allowed to use this command.'
-        }).catch(() => {});
+        return message.reply({ content: 'You are not allowed to use this command.' }).catch(() => {});
       }
 
       const flags = parseFlags(tokens);
 
-      // JST day window (midnight-to-midnight JST)
-      const { start: jstStart, end: jstEnd, jstDateString } = getJstDayWindowNow();
+      // JST window: today only by default; extended by --days=N
+      const days = flags.days || 1;
+      const { start: jstStart, end: jstEnd, label: jstLabel } = getJstWindowNow(days);
 
       // Helper to build recent SR+ list for a single userDoc
       function buildRecentFromUserDoc(userDoc) {
@@ -176,7 +251,13 @@ module.exports = {
             lastAcquiredAt: c.lastAcquiredAt ? new Date(c.lastAcquiredAt) : null,
             locked: Boolean(c.locked)
           }))
-          .filter(c => SR_AND_ABOVE.has(c.rarity) && c.lastAcquiredAt && c.lastAcquiredAt.getTime() >= jstStart.getTime() && c.lastAcquiredAt.getTime() < jstEnd.getTime())
+          .filter(c =>
+            SR_AND_ABOVE.has(c.rarity) &&
+            !isExcludedCardName(c.name) &&
+            c.lastAcquiredAt &&
+            c.lastAcquiredAt.getTime() >= jstStart.getTime() &&
+            c.lastAcquiredAt.getTime() < jstEnd.getTime()
+          )
           .sort((a, b) => {
             const ta = a.lastAcquiredAt ? a.lastAcquiredAt.getTime() : 0;
             const tb = b.lastAcquiredAt ? b.lastAcquiredAt.getTime() : 0;
@@ -196,7 +277,9 @@ module.exports = {
           // case-insensitive match
           const foundKey = Object.keys(TEAM_MAP).find(k => k.toLowerCase() === String(requested).toLowerCase());
           if (!foundKey) {
-            return message.reply({ content: `Team "${requested}" not found. Available teams: ${Object.keys(TEAM_MAP).join(', ')}` }).catch(() => {});
+            return message.reply({
+              content: `Team "${requested}" not found. Available teams: ${Object.keys(TEAM_MAP).join(', ')}`
+            }).catch(() => {});
           }
           teamName = foundKey;
           teamIds = Array.isArray(TEAM_MAP[foundKey]) ? TEAM_MAP[foundKey].slice() : [];
@@ -205,7 +288,9 @@ module.exports = {
           const myId = message.author.id;
           const found = Object.entries(TEAM_MAP).find(([, ids]) => Array.isArray(ids) && ids.includes(myId));
           if (!found) {
-            return message.reply({ content: 'You are not a member of any configured team. Either join a team or use the command without --team.' }).catch(() => {});
+            return message.reply({
+              content: 'You are not a member of any configured team. Either join a team or use the command without --team.'
+            }).catch(() => {});
           }
           teamName = found[0];
           teamIds = Array.isArray(found[1]) ? found[1].slice() : [];
@@ -260,11 +345,13 @@ module.exports = {
 
           const recent = buildRecentFromUserDoc(uDoc);
           if (!recent.length) {
-            perUserLines.push(`**${displayName}** - no SR+ pulls for day ${jstDateString}`);
+            perUserLines.push(`**${displayName}** - no SR+ pulls for ${jstLabel}`);
             continue;
           }
+
           totalFound += recent.length;
           perUserLines.push(`**${displayName}** - ${recent.length} item${recent.length === 1 ? '' : 's'}:`);
+
           for (const c of recent) {
             const ts = Math.floor(c.lastAcquiredAt.getTime() / 1000);
             const lockedText = c.locked ? '' : '';
@@ -273,12 +360,15 @@ module.exports = {
         }
 
         if (totalFound === 0) {
-          return message.reply({ content: `No SR+ pulls found for any members of team "${teamName}" on JST day ${jstDateString}.` }).catch(() => {});
+          return message.reply({
+            content: `No SR+ pulls found for any members of team "${teamName}" for ${jstLabel}.`
+          }).catch(() => {});
         }
 
         // Chunk and send
         const chunks = chunkLines(perUserLines, 1900);
-        const header = `SR+ pulls for team **${teamName}** on day: ${jstDateString} - total ${totalFound} item${totalFound === 1 ? '' : 's'}:\n\n`;
+        const header = `SR+ pulls for team **${teamName}** for: ${jstLabel} - total ${totalFound} item${totalFound === 1 ? '' : 's'}:\n\n`;
+
         await message.reply({ content: `${header}${chunks[0]}` }).catch(() => {});
         for (let i = 1; i < chunks.length; i++) {
           await message.channel.send(`(continued) ${chunks[i]}`).catch(() => {});
@@ -295,7 +385,7 @@ module.exports = {
 
       const recent = buildRecentFromUserDoc(userDoc);
       if (!recent.length) {
-        return message.reply({ content: `You have no SR+ pulls in the current day (${jstDateString}).` }).catch(() => {});
+        return message.reply({ content: `You have no SR+ pulls for ${jstLabel}.` }).catch(() => {});
       }
 
       // Build readable lines WITHOUT counts; include rarity, name, and relative time.
@@ -308,7 +398,7 @@ module.exports = {
       const chunks = chunkLines(lines, 1900);
 
       // Send first chunk as reply, rest as channel messages (so they are visible in channel)
-      const header = `SR+ pulls for day: ${jstDateString} (JST) - ${recent.length} item${recent.length === 1 ? '' : 's'}:\n\n`;
+      const header = `SR+ pulls for: ${jstLabel} - ${recent.length} item${recent.length === 1 ? '' : 's'}:\n\n`;
       await message.reply({ content: `${header}${chunks[0]}` }).catch(() => {});
       for (let i = 1; i < chunks.length; i++) {
         await message.channel.send(`(continued) ${chunks[i]}`).catch(() => {});

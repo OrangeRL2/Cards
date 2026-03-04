@@ -4,7 +4,7 @@ const PREFIX = '!';
 // Configure allowed user IDs here
 const ALLOWED_TARGETERS = new Set([
   '153551890976735232', // replace with real user IDs
-  '234567890123456789'
+  '409717160995192832'
 ]);
 
 module.exports = {

@@ -139,13 +139,24 @@ const rateProfiles = (() => {
     specialPullRate: 0.0,
     overrides: { normal: {}, special: {}, boss: {} },
   }); // Black alt
-
-  // 50% pull rate + 0% extraSlot + 0% special pulls (alt gang)
+    
+  // 33% pull rate + 0% extraSlot + 0% special pulls (alt gang)
   [
-    '953552994232852490',  // Eld alt
     '1188023588926795827', // Quaso alt
     '1300468334474690583', // Quaso alt
     '1416081468794339479', // Quaso alt
+
+  ].forEach((id) => {
+    m.set(String(id), {
+      pullRate: 0.33,
+      extraSlotRate: 0.0,
+      specialPullRate: 0.0,
+      overrides: { normal: {}, special: {}, boss: {} },
+    });
+  });
+  // 50% pull rate + 0% extraSlot + 0% special pulls (alt gang)
+  [
+    '953552994232852490',  // Eld alt
     '91103688415776768',   // Moomoo alt
     '647219814011502607',  // Moomoo alt
     '875533483051712543',  // Moomoo alt
@@ -165,6 +176,19 @@ const rateProfiles = (() => {
     specialPullRate: 0.50,
     overrides: { normal: {}, special: {}, boss: {} },
   }); // Blacky
+
+    // 66% pull rate + 0% extraSlot + 0% special pulls (alt gang)
+  [
+    '578146378501324812',  // Quaso
+    '975246037914624030' // Loki
+  ].forEach((id) => {
+    m.set(String(id), {
+      pullRate: 0.66,
+      extraSlotRate: 1.0,
+      specialPullRate: 0.50,
+      overrides: { normal: {}, special: {}, boss: {} },
+    });
+  });
 
     // 80% pull rate + 50% rates on special pulls
   m.set('91098889796481024', {
