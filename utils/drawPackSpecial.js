@@ -9,7 +9,7 @@ const { pickWeighted, buildSlotOptions, getUserProfile, getOverrides } = require
  * Keys are compared case-insensitively.
  */
 const gachaMap = {
-  holoexpo: ['Fuwawa', 'Mococo', 'Fuwamoco'],
+  holoexpo: ['Iofi', 'Risu', 'Moona', 'Anya', 'Ollie', 'Reine', 'Kaela', 'Kobo', 'Zeta', 'Achan', 'Nodoka', 'Ina', 'Amelia', 'Calli', 'Gura', 'Kiara', 'Baelz', 'Kronii', 'Mumei', 'IRyS', 'Fauna', 'Sana', 'Bijou', 'Fuwawa', 'Mococo', 'Nerissa', 'Shiori', 'Gigi', 'Elizabeth', 'Cecilia', 'Raora', 'AZKi', 'Sora', 'Suisei', 'Roboco', 'Miko', 'Mel', 'Haato', 'Aki', 'Matsuri', 'Fubuki', 'Korone', 'Okayu', 'Mio', 'Aqua', 'Ayame', 'Shion', 'Choco', 'Subaru', 'Marine', 'Flare', 'Noel', 'Pekora', 'Luna', 'Towa', 'Watame', 'Kanata', 'Coco', 'Lamy', 'Nene', 'Polka', 'Botan', 'Aloe', 'Chloe', 'Iroha', 'Koyori', 'La+', 'Lui', 'Ao', 'Kanade', 'Hajime', 'Raden', 'Ririka', 'Riona', 'Niko', 'Chihaya', 'Vivi', 'Su'],
 };
 
 /** Pick 1 element uniformly from an array */
