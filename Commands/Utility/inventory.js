@@ -22,6 +22,7 @@ const EXCEPTION_LIST = [
   'Test 001',
   'Test 999',
   'Test 002',
+  'Test',
 ];
 
 // Normalized set for fast case-insensitive exact matching
@@ -46,6 +47,7 @@ module.exports = {
         .setDescription('Filter by rarity')
         .addChoices(
           { name: 'XMAS', value: 'XMAS' },
+          { name: 'VAL', value: 'VAL' },
           { name: 'C', value: 'C' },
           { name: 'U', value: 'U' },
           { name: 'R', value: 'R' },
@@ -65,7 +67,6 @@ module.exports = {
           { name: 'BDAY', value: 'BDAY'},
           { name: 'SEC', value: 'SEC' },
           { name: 'ORI', value: 'ORI' },
-          { name: 'VAL', value: 'VAL' },
         ),
     )
     .addStringOption(opt =>
@@ -155,25 +156,25 @@ module.exports = {
     } else {
       const order = {
         XMAS  : 1,
-        C     : 2, 
-        U     : 3, 
-        R     : 4, 
-        S     : 5, 
-        RR    : 6, 
-        OC    : 7, 
-        SR    : 8, 
-        OSR   : 9,
-        COL   : 10, 
-        P     : 11, 
-        SP    : 12, 
-        UP    : 13, 
-        SY    : 14, 
-        UR    : 15, 
-        OUR   : 16, 
-        HR    : 17, 
-        BDAY  : 18, 
-        SEC   : 19,
-        VAL   : 20,
+        VAL   : 2,
+        C     : 3, 
+        U     : 4, 
+        R     : 5, 
+        S     : 6, 
+        RR    : 7, 
+        OC    : 8, 
+        SR    : 9, 
+        OSR   : 10,
+        COL   : 11, 
+        P     : 12, 
+        SP    : 13, 
+        UP    : 14, 
+        SY    : 15, 
+        UR    : 16, 
+        OUR   : 17, 
+        HR    : 18, 
+        BDAY  : 19, 
+        SEC   : 20,
         ORI   : 21,
       };
       entries.sort((a, b) => {

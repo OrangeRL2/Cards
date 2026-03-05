@@ -31,7 +31,7 @@ function isExcludedCardName(name) {
 
 // RARITY order consistent with inventory / miss (later items considered rarer)
 const RARITY_ORDER = [
-  'XMAS', 'C', 'U', 'R', 'S', 'RR', 'OC', 'SR', 'COL', 'OSR', 'P', 'SP', 'SY', 'UR', 'OUR', 'HR', 'BDAY', 'UP', 'SEC', "VAL", "ORI"
+  'XMAS',"VAL", 'C', 'U', 'R', 'S', 'RR', 'OC', 'SR', 'COL', 'OSR', 'P', 'SP', 'SY', 'UR', 'OUR', 'HR', 'BDAY', 'UP', 'SEC',  "ORI"
 ];
 
 module.exports = {

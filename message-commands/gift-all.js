@@ -14,12 +14,36 @@ const ALLOWED_ROLE_IDS = new Set([
 // parse simple key:value tokens like "user:@Someone" or "count:100"
 function parseOptionsFromTokens(tokens) {
   const opts = {};
-  for (const token of tokens) {
-    const idx = token.indexOf(':');
-    if (idx === -1) continue;
-    const key = token.slice(0, idx).toLowerCase();
-    const val = token.slice(idx + 1);
-    opts[key] = val;
+  for (const raw of tokens) {
+    if (!raw) continue;
+    let token = String(raw).trim();
+    if (!token) continue;
+
+    // Support both legacy key:value and flag styles like --missing=true / --missing
+    // In missing-mode this command sends only 1 of each missing card
+    if (token.startsWith('--')) token = token.slice(2);
+
+    let key = '';
+    let val = '';
+
+    const colonIdx = token.indexOf(':');
+    const eqIdx = token.indexOf('=');
+
+    if (colonIdx !== -1) {
+      key = token.slice(0, colonIdx);
+      val = token.slice(colonIdx + 1);
+    } else if (eqIdx !== -1) {
+      key = token.slice(0, eqIdx);
+      val = token.slice(eqIdx + 1);
+    } else {
+      // bare flags (e.g. --missing) are treated as true
+      key = token;
+      val = 'true';
+    }
+
+    key = String(key).trim().toLowerCase();
+    if (!key) continue;
+    opts[key] = String(val).trim();
   }
   return opts;
 }
@@ -83,11 +107,12 @@ module.exports = {
         }
       }
       if (!toUser) {
-        return message.reply({ content: '!gift-all user:409717160995192832 rarity:all count:999 multi:true allowlocked:false' }).catch(() => {});
+        return message.reply({ content: '!gift-all user:409717160995192832 rarity:all count:999 multi:true allowlocked:false --missing=true' }).catch(() => {});
       }
 
       // Parse options
       const rarityOpt = (opts.rarity || 'any').toLowerCase().trim();
+      const missingOnly = String(opts.missing || 'false').toLowerCase() === 'true';
       let sendCount = parseInt(opts.count, 10);
       if (!Number.isInteger(sendCount) || sendCount < 1) {
         return message.reply({ content: 'Invalid or missing count. Use count:<number> (>=1).' }).catch(() => {});
@@ -104,12 +129,30 @@ module.exports = {
 
       const matchAnyRarity = rarityOpt === 'any' || rarityOpt === 'all' || rarityOpt === '';
 
+      // When --missing=true, only gift cards the recipient has 0 of (like diff.js 'For' mode)
+      let toDoc = null;
+      let toCountMap = null;
+      const keyOf = (c) => `${String(c.name)}::${String(c.rarity || '')}`;
+      if (missingOnly) {
+        toDoc = await User.findOne({ id: toUser.id }).exec();
+        if (!toDoc) toDoc = new User({ id: toUser.id, cards: [] });
+        const theirCards = Array.isArray(toDoc.cards) ? toDoc.cards : [];
+        toCountMap = new Map(theirCards.map(c => [keyOf(c), Number(c.count || 0)]));
+      }
+
       // Collect matches (all names; optional rarity; respect allowLocked)
       const matches = fromDoc.cards
         .map(c => ({ entry: c }))
         .filter(({ entry }) => {
           if (entry.locked && !allowLocked) return false;
           if (!matchAnyRarity && String(entry.rarity || '').toLowerCase() !== rarityOpt) return false;
+
+          if (missingOnly) {
+            const k = keyOf(entry);
+            const themCount = (toCountMap && toCountMap.get(k)) || 0;
+            if (themCount !== 0) return false;
+          }
+
           const available = Number(entry.count || 0);
           return multi ? available > 1 : available > 0;
         });
@@ -119,11 +162,14 @@ module.exports = {
       }
 
       // Sum available across matches (respecting multi rule)
-      const totalAvailable = matches.reduce((sum, m) => {
-        const available = Number(m.entry.count || 0);
-        const availableForTake = multi ? Math.max(0, available - 1) : available;
-        return sum + availableForTake;
-      }, 0);
+      // In missing-mode we only ever send 1 of each missing card, so the max sendable is the number of matches.
+      const totalAvailable = missingOnly
+        ? matches.length
+        : matches.reduce((sum, m) => {
+            const available = Number(m.entry.count || 0);
+            const availableForTake = multi ? Math.max(0, available - 1) : available;
+            return sum + availableForTake;
+          }, 0);
 
       if (totalAvailable <= 0) {
         const reason = multi ? 'You have no matching stacks with more than one copy (multi prevents taking the last copy).' : 'You have no available matching cards to send.';
@@ -149,16 +195,21 @@ module.exports = {
 
       for (const { entry } of matches) {
         if (remaining <= 0) break;
+
         const available = Number(entry.count || 0);
         const availableForTake = multi ? Math.max(0, available - 1) : available;
         if (availableForTake <= 0) continue;
-        const take = Math.min(availableForTake, remaining);
+
+        // missingOnly => take exactly 1 per card (up to remaining)
+        const take = missingOnly ? Math.min(1, remaining) : Math.min(availableForTake, remaining);
+
         transfers.push({
           name: entry.name,
           rarity: entry.rarity,
           amount: take,
           locked: Boolean(entry.locked)
         });
+
         remaining -= take;
       }
 
@@ -172,12 +223,17 @@ module.exports = {
           fromDoc.cards.splice(curIdx, 1);
         }
       }
+
       fromDoc.markModified('cards');
       await fromDoc.save();
 
       // Credit recipient
-      let toDoc = await User.findOne({ id: toUser.id }).exec();
-      if (!toDoc) toDoc = new User({ id: toUser.id, cards: [] });
+      // If we already loaded toDoc for missing-mode, reuse it
+      if (!toDoc) {
+        toDoc = await User.findOne({ id: toUser.id }).exec();
+        if (!toDoc) toDoc = new User({ id: toUser.id, cards: [] });
+      }
+
       const now = new Date();
       for (const t of transfers) {
         const toIdx = toDoc.cards.findIndex(c => String(c.name) === String(t.name) && String(c.rarity || '') === String(t.rarity || ''));
@@ -198,6 +254,7 @@ module.exports = {
           });
         }
       }
+
       toDoc.markModified('cards');
       await toDoc.save();
 
@@ -208,13 +265,14 @@ module.exports = {
         : '';
       const header = `${prefix}You sent `;
       const mention = ` to ${toUser.toString()}.`;
-
       const chunks = chunkSummary(header, summaryParts, mention);
+
       // Send first chunk as reply, rest as channel messages
       await message.reply({ content: `${header}${chunks[0] || ''}${mention}` }).catch(() => {});
       for (let i = 1; i < chunks.length; i++) {
         await message.channel.send(chunks[i] + (i === chunks.length - 1 ? mention : '')).catch(() => {});
       }
+
     } catch (err) {
       console.error('[gift-all] unexpected error', err);
       try { await message.reply({ content: 'Unexpected error running gift-all.' }); } catch {}

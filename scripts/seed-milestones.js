@@ -2421,7 +2421,7 @@ await upsertMilestone(
     level: 91,
     oshiId: null,
     awardType: 'card',
-    awardValue: { poolFolder: "./assets/bday", count: 1 }, // BDAY for entire pool
+    awardValue: { poolFolder: "./assets/montlybdays/BDAY", count: 1 }, // BDAY for entire pool
     oneTime: true,
     enabled: true,
     priority: 5

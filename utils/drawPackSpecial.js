@@ -4,6 +4,37 @@ const pools = require('./loadImages');
 const { pickCardFromRarityFolder } = require('./cardPicker');
 const { pickWeighted, buildSlotOptions, getUserProfile, getOverrides } = require('./rates');
 
+/**
+ * Map a "special event label" -> list of folder labels it can become.
+ * Keys are compared case-insensitively.
+ */
+const gachaMap = {
+  holoexpo: ['Fuwawa', 'Mococo', 'Fuwamoco'],
+};
+
+/** Pick 1 element uniformly from an array */
+function pickOne(arr) {
+  return arr[Math.floor(Math.random() * arr.length)];
+}
+
+/**
+ * Resolve the incoming specialLabel into the actual folder label used for pulls.
+ * - If specialLabel matches a gachaMap key, pick one variant ONCE per pack.
+ * - Otherwise, use the label as-is.
+ */
+function resolveSpecialVariantLabel(specialLabel) {
+  if (!specialLabel) return { baseLabel: null, variantLabel: null };
+
+  const base = String(specialLabel).trim();
+  const key = base.toLowerCase();
+
+  const variants = gachaMap[key];
+  if (Array.isArray(variants) && variants.length > 0) {
+    return { baseLabel: base, variantLabel: pickOne(variants) };
+  }
+  return { baseLabel: base, variantLabel: base };
+}
+
 function fallbackPickFromPools(rarity) {
   if (pools.special && pools.special[rarity] && pools.special[rarity].length > 0) {
     return pools.special[rarity][Math.floor(Math.random() * pools.special[rarity].length)];
@@ -26,20 +57,22 @@ async function pickForSlot(rarity, specialLabel) {
       // fall through
     }
   }
-
   try {
     const fallback = await pickCardFromRarityFolder(rarity, null, { avoidImmediateRepeat: true });
     if (fallback) return fallback;
   } catch (err) {
     // fall through
   }
-
   const raw = fallbackPickFromPools(rarity);
   return path.basename(raw, path.extname(raw));
 }
 
 async function drawPackSpecial(userId, specialLabel, opts = {}) {
   const results = [];
+
+  // ✅ Resolve gacha variant ONCE per pack
+  const { baseLabel, variantLabel } = resolveSpecialVariantLabel(specialLabel);
+
   const profile = getUserProfile(userId);
   const rate = profile.specialPullRate;
 
@@ -53,7 +86,7 @@ async function drawPackSpecial(userId, specialLabel, opts = {}) {
   {
     const options = buildSlotOptions(commonSlot1Base, rate, getOverrides(profile, 'special', 'common1'));
     const rarity = pickWeighted(options);
-    const file = await pickForSlot(rarity, specialLabel);
+    const file = await pickForSlot(rarity, variantLabel); // ✅ use variantLabel
     results.push({ rarity, file });
   }
 
@@ -65,7 +98,7 @@ async function drawPackSpecial(userId, specialLabel, opts = {}) {
   {
     const options = buildSlotOptions(commonSlot2Base, rate, getOverrides(profile, 'special', 'common2'));
     const rarity = pickWeighted(options);
-    const file = await pickForSlot(rarity, specialLabel);
+    const file = await pickForSlot(rarity, variantLabel);
     results.push({ rarity, file });
   }
 
@@ -77,7 +110,7 @@ async function drawPackSpecial(userId, specialLabel, opts = {}) {
   {
     const options = buildSlotOptions(commonSlot3Base, rate, getOverrides(profile, 'special', 'common3'));
     const rarity = pickWeighted(options);
-    const file = await pickForSlot(rarity, specialLabel);
+    const file = await pickForSlot(rarity, variantLabel);
     results.push({ rarity, file });
   }
 
@@ -89,7 +122,7 @@ async function drawPackSpecial(userId, specialLabel, opts = {}) {
   {
     const options = buildSlotOptions(commonSlot4Base, rate, getOverrides(profile, 'special', 'common4'));
     const rarity = pickWeighted(options);
-    const file = await pickForSlot(rarity, specialLabel);
+    const file = await pickForSlot(rarity, variantLabel);
     results.push({ rarity, file });
   }
 
@@ -116,7 +149,7 @@ async function drawPackSpecial(userId, specialLabel, opts = {}) {
     const slotName = `uncommon${i + 1}`;
     const options = buildSlotOptions(uncommonSlotBases[i], rate, getOverrides(profile, 'special', slotName));
     const rarity = pickWeighted(options);
-    const file = await pickForSlot(rarity, specialLabel);
+    const file = await pickForSlot(rarity, variantLabel);
     results.push({ rarity, file });
   }
 
@@ -127,22 +160,22 @@ async function drawPackSpecial(userId, specialLabel, opts = {}) {
     { key: 'SEC', weight: 0.1 },
   ];
   {
-      const baseOverrides = getOverrides(profile, 'special', 'rare');
-    const pityOverrides = (opts && opts.forceSEC) ? { SEC: 100, OUR:0, R:0 } : null;
+    const baseOverrides = getOverrides(profile, 'special', 'rare');
+    const pityOverrides = (opts && opts.forceSEC) ? { SEC: 100, OUR: 0, R: 0 } : null;
     const mergedOverrides = pityOverrides
       ? { ...(baseOverrides || {}), ...pityOverrides }
       : baseOverrides;
 
     const options = buildSlotOptions(rareBase, rate, mergedOverrides);
     const rarity = pickWeighted(options);
-    const file = await pickForSlot(rarity, specialLabel);
+    const file = await pickForSlot(rarity, variantLabel);
     results.push({ rarity, file });
   }
 
-  if (!Array.isArray(results) || results.length !== 8) {
-    console.warn('[drawPackSpecial] unexpected results length', { length: results.length });
+  // ✅ Optional meta return without breaking old callers
+  if (opts && opts.withMeta) {
+    return { results, baseLabel, variantLabel };
   }
-
   return results;
 }
 

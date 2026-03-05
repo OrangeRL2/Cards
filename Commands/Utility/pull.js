@@ -560,8 +560,13 @@ if (!pityExempt) {
         if (!useSpecial && bossChannelBias && bossChannelBias.biased && bossChannelBias.drawToken) {
           pack = await drawPackBoss(discordUserId, bossChannelBias.drawToken, { forceSEC });
         } else if (useSpecial && drawPackSpecial && specialDrawToken) {
-          pack = await drawPackSpecial(discordUserId, specialDrawToken, { forceSEC });
-        } else {
+          const specialRes = await drawPackSpecial(discordUserId, specialDrawToken, { forceSEC, withMeta: true });
+          pack = specialRes.results;
+          // You can display this later in the embed if you want:
+          var resolvedSpecialVariant = specialRes.variantLabel;
+          var resolvedSpecialBase = specialRes.baseLabel;
+        }
+        else {
           pack = await drawPack(discordUserId, null, { forceSEC });
         }
       } catch (err) {
@@ -803,7 +808,12 @@ try {
             .setTitle(`Card: ${idx + 1} **[${it.rarity}]** - ${it.displayName}`)
             .setDescription(descriptionAll)
             .setColor(0x87CEFA)
-            .addFields({ name: 'Special pulls remaining', value: `${consumeResult.remainingSpecial ?? 0}`, inline: true })
+            .addFields(
+              { name: 'Special pulls remaining', value: `${consumeResult.remainingSpecial ?? 0}`, inline: true },
+              resolvedSpecialVariant && resolvedSpecialBase && resolvedSpecialVariant !== resolvedSpecialBase
+                ? { name: 'Gacha pulled:', value: `${resolvedSpecialVariant}`, inline: true }
+                : null
+            )
             .setImage(it.imageUrl)
             .setURL(it.imageUrl)
             .setFooter({ text: `Card: ${idx + 1} / ${pageItems.length} \nPull by: ${interaction.user.username}` });
