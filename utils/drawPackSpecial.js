@@ -9,14 +9,18 @@ const { pickWeighted, buildSlotOptions, getUserProfile, getOverrides } = require
  * Keys are compared case-insensitively.
  */
 const gachaMap = {
-  holoexpo: ['Iofi', 'Risu', 'Moona', 'Anya', 'Ollie', 'Reine', 'Kaela', 'Kobo', 'Zeta', 'Achan', 'Nodoka', 'Ina', 'Amelia', 'Calli', 'Gura', 'Kiara', 'Baelz', 'Kronii', 'Mumei', 'IRyS', 'Fauna', 'Sana', 'Bijou', 'Fuwawa', 'Mococo', 'Nerissa', 'Shiori', 'Gigi', 'Elizabeth', 'Cecilia', 'Raora', 'AZKi', 'Sora', 'Suisei', 'Roboco', 'Miko', 'Mel', 'Haato', 'Aki', 'Matsuri', 'Fubuki', 'Korone', 'Okayu', 'Mio', 'Aqua', 'Ayame', 'Shion', 'Choco', 'Subaru', 'Marine', 'Flare', 'Noel', 'Pekora', 'Luna', 'Towa', 'Watame', 'Kanata', 'Coco', 'Lamy', 'Nene', 'Polka', 'Botan', 'Aloe', 'Chloe', 'Iroha', 'Koyori', 'La+', 'Lui', 'Ao', 'Kanade', 'Hajime', 'Raden', 'Ririka', 'Riona', 'Niko', 'Chihaya', 'Vivi', 'Su'],
+  hololive: ['Iofi', 'Risu', 'Moona', 'Anya', 'Ollie', 'Reine', 'Kaela', 'Kobo', 'Zeta', 'Achan', 'Nodoka', 'Ina', 'Amelia', 'Calli', 'Gura', 'Kiara', 'Baelz', 'Kronii', 'Mumei', 'IRyS', 'Fauna', 'Sana', 'Bijou', 'Fuwawa', 'Mococo', 'Nerissa', 'Shiori', 'Gigi', 'Elizabeth', 'Cecilia', 'Raora', 'AZKi', 'Sora', 'Suisei', 'Roboco', 'Miko', 'Mel', 'Haato', 'Aki', 'Matsuri', 'Fubuki', 'Korone', 'Okayu', 'Mio', 'Aqua', 'Ayame', 'Shion', 'Choco', 'Subaru', 'Marine', 'Flare', 'Noel', 'Pekora', 'Luna', 'Towa', 'Watame', 'Kanata', 'Coco', 'Lamy', 'Nene', 'Polka', 'Botan', 'Aloe', 'Chloe', 'Iroha', 'Koyori', 'La+', 'Lui', 'Ao', 'Kanade', 'Hajime', 'Raden', 'Ririka', 'Riona', 'Niko', 'Chihaya', 'Vivi', 'Su'],
+  stage1: ['Fubuki', 'Ayame', 'Choco', 'Okayu', 'Pekora', 'Flare', 'Watame', 'Lamy', 'Polka', 'Lui', 'Koyori', 'Zeta', 'Kobo', 'Ina', 'Fuwawa', 'Mococo'],
+  stage2: ['Sora', 'Miko', 'Subaru', 'Mio', 'Nene', 'Botan', 'La+', 'Iofi', 'Ollie', 'Kiara', 'Elizabeth', 'Gigi', 'Cecilia', 'Raora'],
+  stage3: ['AZKi', 'Matsuri', 'Noel', 'Luna', 'Iroha', 'Risu', 'Reine', 'IRyS', 'Baelz', 'Shiori', 'Riona', 'Niko', 'Su', 'Chihaya', 'Vivi'],
+  stage4: ['Roboco', 'Suisei', 'Aki', 'Marine', 'Towa', 'Moona', 'Anya', 'Kaela', 'Calli', 'Kronii', 'Bijou', 'Nerissa', 'Kanade', 'Ririka', 'Hajime', 'Raden'],
 };
 
 /** Pick 1 element uniformly from an array */
 function pickOne(arr) {
   return arr[Math.floor(Math.random() * arr.length)];
 }
-
+const MONTHLY_BDAYS_BASE = process.env.MONTHLY_BDAYS_BASE || 'assets/montlybdays';
 /**
  * Resolve the incoming specialLabel into the actual folder label used for pulls.
  * - If specialLabel matches a gachaMap key, pick one variant ONCE per pack.
@@ -49,23 +53,50 @@ function fallbackPickFromPools(rarity) {
 }
 
 async function pickForSlot(rarity, specialLabel) {
+  const R = String(rarity || '').toUpperCase();
+
+  // ✅ Special-pull BDAY: try monthly base first (with label, then without)
+  if (R === 'BDAY') {
+    try {
+      const pickedMonthly = await pickCardFromRarityFolder(
+        'BDAY',
+        specialLabel || null,
+        { avoidImmediateRepeat: true, baseDir: MONTHLY_BDAYS_BASE }
+      );
+      if (pickedMonthly) return pickedMonthly;
+    } catch {}
+
+    // If label search found nothing, try neutral monthly pick
+    try {
+      const pickedMonthlyNeutral = await pickCardFromRarityFolder(
+        'BDAY',
+        null,
+        { avoidImmediateRepeat: true, baseDir: MONTHLY_BDAYS_BASE }
+      );
+      if (pickedMonthlyNeutral) return pickedMonthlyNeutral;
+    } catch {}
+    // If monthly folder is missing/empty, fall through to normal BDAY behavior below.
+  }
+
+  // Existing behavior: label-biased pick from default ASSETS_BASE/<RARITY>
   if (specialLabel) {
     try {
       const picked = await pickCardFromRarityFolder(rarity, specialLabel, { avoidImmediateRepeat: true });
       if (picked) return picked;
-    } catch (err) {
-      // fall through
-    }
+    } catch {}
   }
+
+  // Fallback: neutral pick from default
   try {
     const fallback = await pickCardFromRarityFolder(rarity, null, { avoidImmediateRepeat: true });
     if (fallback) return fallback;
-  } catch (err) {
-    // fall through
-  }
+  } catch {}
+
+  // Last fallback: pool fallback
   const raw = fallbackPickFromPools(rarity);
   return path.basename(raw, path.extname(raw));
 }
+
 
 async function drawPackSpecial(userId, specialLabel, opts = {}) {
   const results = [];

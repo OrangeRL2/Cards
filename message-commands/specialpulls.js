@@ -1,7 +1,14 @@
 // message-commands/specialpulls.js
 const SpecialPullGrant = require('../models/SpecialPullGrant');
 const PullQuota = require('../models/PullQuota');
-const OWNER_IDS = new Set(['153551890976735232','409717160995192832','272129129841688577','399012422805094410']);
+
+const OWNER_IDS = new Set([
+  '153551890976735232',
+  '409717160995192832',
+  '272129129841688577',
+  '399012422805094410'
+]);
+
 const BATCH = 500;
 
 // parse flags: --pulls=12 --target="suisei" [--init]
@@ -16,7 +23,7 @@ function parseFlags(content) {
 
 module.exports = {
   name: 'specialpulls',
-  description: 'Owner-only: create 24h special pulls for a target oshi',
+  description: 'Owner-only: create 24h special pulls for a target oshi (hard clears previous specials)',
   async execute(message) {
     try {
       console.log('[specialpulls] invoked by', message.author?.id, 'content:', message.content);
@@ -40,7 +47,25 @@ module.exports = {
       const displayLabel = String(rawTarget).trim();
       const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000);
 
-      // Create grant
+      // ============================================================
+      // HARD CLEAR: delete ALL previous special grants + wipe quotas
+      // ============================================================
+
+      // 1) Delete all existing grants (hard delete)
+      const deleted = await SpecialPullGrant.deleteMany({});
+      console.log('[specialpulls] hard-cleared SpecialPullGrant docs:', { deleted: deleted.deletedCount ?? 0 });
+
+      // 2) Wipe specialPulls in PullQuota for all users (removes old label keys)
+      //    This prevents old specialPulls.<label> values from lingering forever.
+      const wipe = await PullQuota.updateMany({}, { $set: { specialPulls: {} } }).exec();
+      console.log('[specialpulls] wiped PullQuota.specialPulls for all users:', {
+        matched: wipe.matchedCount ?? wipe.n ?? 0,
+        modified: wipe.modifiedCount ?? wipe.nModified ?? 0,
+      });
+
+      // ============================================================
+      // Create the new grant (the only one now)
+      // ============================================================
       const grant = await SpecialPullGrant.create({
         label,
         displayLabel,
@@ -51,15 +76,27 @@ module.exports = {
         active: true
       });
 
-      console.log('[specialpulls] created grant', { id: grant._id, label, pulls, expiresAt: expiresAt.toISOString() });
-      await message.reply({ content: `Created special grant "${displayLabel}" — ${pulls} pulls per user until <t:${Math.floor(expiresAt.getTime()/1000)}:R>.` }).catch(() => {});
+      console.log('[specialpulls] created grant', {
+        id: grant._id,
+        label,
+        pulls,
+        expiresAt: expiresAt.toISOString()
+      });
 
-      // Optional: bulk initialize or reset existing PullQuota docs
+      await message.reply({
+        content: `Created special grant "${displayLabel}" — ${pulls} pulls per user until <t:${Math.floor(expiresAt.getTime() / 1000)}:R>. (Previous specials deleted)`
+      }).catch(() => {});
+
+      // Optional: bulk initialize PullQuota docs with the new label
+      // NOTE: since we wiped specialPulls above, init isn't strictly necessary,
+      // but keeping it is fine if you want to prefill everyone.
       if (init) {
-        await message.channel.send('Initializing existing PullQuota docs in batches. This may take a while...');
+        await message.channel.send('Initializing PullQuota docs in batches. This may take a while...');
+
         const cursor = PullQuota.find().cursor();
         let ops = [];
         let total = 0;
+
         for await (const doc of cursor) {
           ops.push({
             updateOne: {
@@ -67,21 +104,30 @@ module.exports = {
               update: { $set: { [`specialPulls.${label}`]: pulls } }
             }
           });
+
           if (ops.length >= BATCH) {
-            await PullQuota.bulkWrite(ops, { ordered: false }).catch(e => console.error('[specialpulls] bulkWrite err', e));
+            await PullQuota.bulkWrite(ops, { ordered: false }).catch(e =>
+              console.error('[specialpulls] bulkWrite err', e)
+            );
             total += ops.length;
             ops = [];
           }
         }
+
         if (ops.length) {
-          await PullQuota.bulkWrite(ops, { ordered: false }).catch(e => console.error('[specialpulls] bulkWrite err', e));
+          await PullQuota.bulkWrite(ops, { ordered: false }).catch(e =>
+            console.error('[specialpulls] bulkWrite err', e)
+          );
           total += ops.length;
         }
-        await message.channel.send(`Initialization attempted for ${total} documents (values overwritten to ${pulls}).`);
+
+        await message.channel.send(`Initialization attempted for ${total} documents (values set to ${pulls}).`);
       }
     } catch (err) {
       console.error('[specialpulls] unexpected error', err);
-      try { await message.reply({ content: 'Unexpected error running specialpulls. Check logs.' }); } catch {}
+      try {
+        await message.reply({ content: 'Unexpected error running specialpulls. Check logs.' });
+      } catch {}
     }
   }
 };

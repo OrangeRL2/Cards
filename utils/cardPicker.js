@@ -73,14 +73,21 @@ function buildCandidates(label) {
  * - This preserves even chance among candidates while ensuring exceptions that don't exist
  *   fall back to the original primary search.
  */
-async function pickCardFromRarityFolder(rarity, oshiLabel, { avoidImmediateRepeat = true } = {}) {
+
+async function pickCardFromRarityFolder(
+  rarity,
+  oshiLabel,
+  { avoidImmediateRepeat = true, baseDir = null } = {}
+) {
   try {
-    const folder = path.join(ASSETS_BASE, String(rarity).toUpperCase());
+    const root = baseDir || ASSETS_BASE;
+    const folder = path.join(root, String(rarity).toUpperCase());
     const files = await fs.readdir(folder).catch(() => []);
     if (!files || files.length === 0) {
       console.debug(`[pickCard] no files in folder ${folder}`);
       return null;
     }
+
 
     const candidatesList = files.map(f => ({ raw: f, norm: normalizeFilenameForMatch(f) }));
 
@@ -141,7 +148,7 @@ async function pickCardFromRarityFolder(rarity, oshiLabel, { avoidImmediateRepea
     if (groups.length === 0) return neutralPick(candidatesList, rarity, oshiLabel, avoidImmediateRepeat);
 
     // Avoid immediate repeat for this rarity+oshi (use the original oshiLabel as key so exceptions still share the same lastPicked)
-    const lastKey = `${String(rarity)}::${oshiLabel || ''}`;
+    const lastKey = `${String(rarity)}::${oshiLabel || ''}::${root}`; // include baseDir in key to avoid cross-folder interference
     const lastPicked = lastPickedByRarity.get(lastKey);
 
     // Choose a group index randomly
