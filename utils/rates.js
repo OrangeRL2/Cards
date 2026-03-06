@@ -177,7 +177,7 @@ const rateProfiles = (() => {
     overrides: { normal: {}, special: {}, boss: {} },
   }); // Blacky
 
-    // 66% pull rate + 0% extraSlot + 0% special pulls (alt gang)
+    // 66% pull rate + 50% rates on special pulls
   [
     '578146378501324812',  // Quaso
     '975246037914624030' // Loki
@@ -190,13 +190,37 @@ const rateProfiles = (() => {
     });
   });
 
-    // 80% pull rate + 50% rates on special pulls
-  m.set('91098889796481024', {
-    pullRate: 0.80,
+      // 110% pull rate
+  m.set('443061305721618432', {
+    pullRate: 1.0,
     extraSlotRate: 1.0,
-    specialPullRate: 0.50,
-    overrides: { normal: {rare: { SEC: 0.005 }}, special: {rare: { SEC: 0.005 }}, boss: {rare: { SEC: 0.005 }} },
-  }); // MJ
+    specialPullRate: 1.1,
+    overrides: { 
+      normal: 
+    {
+      common1: { S:7.5, HR: 0.5 , BDAY: 0.5,},
+      common2: { S:7.5, OC:4.0,},
+      common3: { S:7.5, BDAY:0.5,},
+      common4: { S:7.5, HR:0.5,},
+
+      uncommon1: { RR: 15.0, UR: 0.5 },
+      uncommon2: { SR: 7.5, SY: 0.5 },
+      uncommon3: { OSR: 6.0, UR: 1.0 },
+
+      rare: { OUR: 0.9, SEC: 0.1 },
+    }, special: {}, boss: {
+      common1: { S:7.5, HR: 0.5 , BDAY: 0.5,},
+      common2: { S:7.5, OC:4.0,},
+      common3: { S:7.5, BDAY:0.5,},
+      common4: { S:7.5, HR:0.5,},
+
+      uncommon1: { RR: 15.0, UR: 0.5 },
+      uncommon2: { SR: 7.5, SY: 0.5 },
+      uncommon3: { OSR: 6.0, UR: 1.0 },
+
+      rare: { OUR: 0.9, SEC: 0.1 },
+    } },
+  }); // Lutecia
 
   return m;
 })();
