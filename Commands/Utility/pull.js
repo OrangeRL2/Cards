@@ -29,10 +29,24 @@ try {
   drawPackSpecial = null;
 }
 
-// Users who are exempt from "pullsSinceLastSEC" pity tracking
+/**
+ * Pity behavior:
+ * - PITY_EXEMPT_IDS: do NOT increment pullsSinceLastSEC and do NOT force SEC.
+ * - PITY_EXEMPT_IDS2: DO increment pullsSinceLastSEC, but NEVER force SEC.
+ */
 const PITY_EXEMPT_IDS = new Set([
-  '234567890123456789',
-  // add more...
+  '1188023588926795827', // Quaso alt
+  '1300468334474690583', // Quaso alt
+  '1416081468794339479', // Quaso alt
+  '953552994232852490',  // Eld alt
+  '91103688415776768',   // Moomoo alt
+  '647219814011502607',  // Moomoo alt
+  '875533483051712543',  // Moomoo alt
+]);
+
+const PITY_EXEMPT_IDS2 = new Set([
+  '1311652316973240380', //Kasumi
+  '399631405228752897', //Saori
 ]);
 
 // In-process guard still useful for same-interaction re-entry,
@@ -40,8 +54,9 @@ const PITY_EXEMPT_IDS = new Set([
 const inFlightInteractions = new Map();
 
 const IMAGE_BASE = process.env.IMAGE_BASE || 'http://152.69.195.48/images';
+
 const PAGE_TIMEOUT_MS = 2 * 60 * 1000; // 2 minutes
-const DEFAULT_GIF_DURATION_MS = 1200;  // base animation delay for first/solo pulls
+const DEFAULT_GIF_DURATION_MS = 1200; // base animation delay for first/solo pulls
 
 const gifs = [
   'https://media.discordapp.net/attachments/1046811248647475302/1437428233086963774/ppp.gif',
@@ -138,6 +153,7 @@ async function consumePulls(discordUserId, amount, allowEvent, specialLabel = nu
     const grant = await SpecialPullGrant
       .findOne({ label: labelKey, active: true, expiresAt: { $gt: new Date() } })
       .lean();
+
     if (!grant) {
       return {
         success: false,
@@ -159,6 +175,7 @@ async function consumePulls(discordUserId, amount, allowEvent, specialLabel = nu
         ).catch(() => null);
       } catch {}
     }
+
     await ensureUserSpecialKey(discordUserId, labelKey, grant.pullsPerUser);
 
     const { doc } = await PullQuota.getUpdatedQuota(discordUserId);
@@ -190,6 +207,7 @@ async function consumePulls(discordUserId, amount, allowEvent, specialLabel = nu
     }
 
     const toConsume = Math.min(amount, remainingSpecial);
+
     try {
       const incObj = {};
       incObj[`specialPulls.${labelKey}`] = -toConsume;
@@ -205,6 +223,7 @@ async function consumePulls(discordUserId, amount, allowEvent, specialLabel = nu
     }
 
     const { doc: afterDoc } = await PullQuota.getUpdatedQuota(discordUserId);
+
     let afterRemainingSpecial = 0;
     if (afterDoc) {
       if (afterDoc.specialPulls && typeof afterDoc.specialPulls.get === 'function') {
@@ -213,6 +232,7 @@ async function consumePulls(discordUserId, amount, allowEvent, specialLabel = nu
         afterRemainingSpecial = Number(afterDoc.specialPulls[labelKey] ?? 0);
       }
     }
+
     return {
       success: true,
       consumedFromEvent: 0, consumedFromTimed: 0, consumedFromSpecial: toConsume,
@@ -247,17 +267,20 @@ async function consumePulls(discordUserId, amount, allowEvent, specialLabel = nu
       consumedFromEvent = doc.eventPulls;
       doc.eventPulls = 0;
     }
+
     const remainingNeeded = needed - consumedFromEvent;
+
     if (remainingNeeded > 0 && doc.pulls > 0) {
       consumedFromTimed = Math.min(doc.pulls, remainingNeeded);
       const wasFullBefore = doc.pulls >= PullQuota.MAX_STOCK;
       doc.pulls = Math.max(0, doc.pulls - consumedFromTimed);
       if (wasFullBefore && consumedFromTimed > 0) doc.lastRefill = new Date();
     }
-    await doc.save();
 
+    await doc.save();
     const nextIn = computeNextRefill(doc);
     const success = (consumedFromEvent + consumedFromTimed) === needed;
+
     return {
       success,
       consumedFromEvent,
@@ -275,23 +298,23 @@ async function consumePulls(discordUserId, amount, allowEvent, specialLabel = nu
   const dec = await PullQuotaModel.updateOne(
     { userId: discordUserId, pulls: { $gte: 1 } },
     [
-  {
-    $set: {
-      lastRefill: {
-        $cond: [
-          { $eq: ["$pulls", PullQuota.MAX_STOCK] },
-          new Date(),
-          "$lastRefill"
-        ]
+      {
+        $set: {
+          lastRefill: {
+            $cond: [
+              { $eq: ["$pulls", PullQuota.MAX_STOCK] },
+              new Date(),
+              "$lastRefill"
+            ]
+          }
+        }
+      },
+      {
+        $set: {
+          pulls: { $subtract: ["$pulls", 1] }
+        }
       }
-    }
-  },
-  {
-    $set: {
-      pulls: { $subtract: ["$pulls", 1] }
-    }
-  }
-]
+    ]
   ).exec();
 
   if (dec && dec.modifiedCount === 1) {
@@ -319,10 +342,10 @@ async function consumePulls(discordUserId, amount, allowEvent, specialLabel = nu
 
 // --- Helpers for escaping/link-safe text ---
 function escapeRegex(s) {
-  return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  return s.replace(/[.*+?^${}()\n[\]\\]/g, '\\$&');
 }
 function escapeLinkText(text) {
-  return text.replace(/([_\*\[\]\(\)\~\`\>\#\-\=\{\}\.\!\\])/g, '\\$1');
+  return text.replace(/(_*\[\~`>#+\-=|{}.!\\])/g, '\\$1');
 }
 
 module.exports = {
@@ -339,7 +362,9 @@ module.exports = {
         .setDescription('Use the currently active special pulls (if any).')
         .setRequired(false)
     ),
+
   requireOshi: true,
+
   async execute(interaction) {
     // Defer immediately so Discord doesn’t time us out while we queue.
     try { await interaction.deferReply(); } catch {}
@@ -347,6 +372,7 @@ module.exports = {
     // Show loading GIF right away (users see something even if they spam).
     const gifUrl = gifs[Math.floor(Math.random() * gifs.length)];
     const loadingEmbed = new EmbedBuilder().setTitle('*PULLING...*').setColor(0x00BBFF).setImage(gifUrl);
+
     let gifShownAt = Date.now();
     try { await interaction.editReply({ embeds: [loadingEmbed] }); gifShownAt = Date.now(); } catch {}
 
@@ -359,7 +385,11 @@ module.exports = {
 
     const discordUserId = interaction.user.id;
     const lockOwner = interaction.id;
-    const pityExempt = PITY_EXEMPT_IDS.has(discordUserId);
+
+    // ✅ NEW: pity mode flags
+    const pityNoTrack = PITY_EXEMPT_IDS.has(discordUserId);
+    const pityNoForce = pityNoTrack || PITY_EXEMPT_IDS2.has(discordUserId);
+
     // Try to get the lock immediately; if not, wait (queue) without showing any "please wait" error.
     let acquiredFast = await acquirePullLock(discordUserId, lockOwner, 8000);
     let queued = false;
@@ -372,12 +402,14 @@ module.exports = {
         const ANIM_MS = queued ? 0 : DEFAULT_GIF_DURATION_MS;
         const elapsed = Date.now() - gifShownAt;
         if (elapsed < ANIM_MS) await sleep(ANIM_MS - elapsed);
+
         try {
           await interaction.editReply({
             content: 'Server is busy handling your previous pulls. Please try again in a moment.',
             components: []
           });
         } catch {}
+
         inFlightInteractions.delete(interaction.id);
         return;
       }
@@ -399,7 +431,7 @@ module.exports = {
 
       // --- Resolve active special grant (if requested) ---
       let consumeLabelKey = null; // quota key (grant.label)
-      let specialDrawToken = null; // draw token (grant.displayLabel || label)
+      let specialDrawToken = null; // draw token (grant.displayLabel ?? label)
       let resolvedGrant = null;
 
       if (useSpecial) {
@@ -409,6 +441,7 @@ module.exports = {
             inFlightInteractions.delete(interaction.id);
             const elapsed = Date.now() - gifShownAt;
             if (elapsed < ANIM_MS) await sleep(ANIM_MS - elapsed);
+
             const embed = new EmbedBuilder()
               .setTitle('No active special pulls')
               .setColor(0xFF5555)
@@ -417,6 +450,7 @@ module.exports = {
             await release();
             return;
           }
+
           consumeLabelKey = String(grant.label);
           specialDrawToken = String(grant.displayLabel ?? grant.label);
           resolvedGrant = grant;
@@ -429,8 +463,10 @@ module.exports = {
         } catch (err) {
           console.error('failed to resolve active special grant:', err);
           inFlightInteractions.delete(interaction.id);
+
           const elapsed = Date.now() - gifShownAt;
           if (elapsed < ANIM_MS) await sleep(ANIM_MS - elapsed);
+
           await interaction.editReply({ content: 'Failed to check special pulls. Please try again later.', components: [] }).catch(() => null);
           await release();
           return;
@@ -445,8 +481,10 @@ module.exports = {
           // If this is a special attempt in a boss channel, block it per requirement
           if (useSpecial) {
             inFlightInteractions.delete(interaction.id);
+
             const elapsed = Date.now() - gifShownAt;
             if (elapsed < ANIM_MS) await sleep(ANIM_MS - elapsed);
+
             const embed = new EmbedBuilder()
               .setTitle('Special pulls are not allowed here')
               .setColor(0xFF5555)
@@ -455,6 +493,7 @@ module.exports = {
             await release();
             return;
           }
+
           // Cosmetic hint on loading embed when boss bias applies
           try {
             loadingEmbed.setFooter({ text: `The algorithm has found: ${bossChannelBias.drawToken}!` });
@@ -475,8 +514,10 @@ module.exports = {
       } catch (err) {
         console.error('consumePulls error (pre-draw):', err);
         inFlightInteractions.delete(interaction.id);
+
         const elapsed = Date.now() - gifShownAt;
         if (elapsed < ANIM_MS) await sleep(ANIM_MS - elapsed);
+
         await interaction.editReply({ content: 'Failed to consume pulls. Please try again later.', components: [] }).catch(() => null);
         await release();
         return;
@@ -498,9 +539,12 @@ module.exports = {
               { name: 'Special pulls remaining', value: `${consumeResult.remainingSpecial ?? 0}`, inline: true },
               { name: 'Next timed pull', value: nextRefillText, inline: true }
             );
+
           inFlightInteractions.delete(interaction.id);
+
           const elapsed = Date.now() - gifShownAt;
           if (elapsed < ANIM_MS) await sleep(ANIM_MS - elapsed);
+
           await interaction.editReply({ embeds: [embed], components: [] }).catch(() => null);
           await release();
           return;
@@ -514,45 +558,51 @@ module.exports = {
             { name: 'Event pulls', value: `${consumeResult.remainingEvent ?? 0}`, inline: true },
             { name: 'Next timed pull', value: nextRefillText, inline: true },
           );
+
         if (consumeResult.reason === 'no_active_special') {
           embed.addFields({ name: 'Special pulls', value: `No active special available`, inline: false });
         } else if (consumeResult.reason === 'no_special_remaining') {
           embed.addFields({ name: 'Special pulls', value: `No special pulls remaining`, inline: false });
         }
+
         inFlightInteractions.delete(interaction.id);
+
         const elapsed = Date.now() - gifShownAt;
         if (elapsed < ANIM_MS) await sleep(ANIM_MS - elapsed);
+
         await interaction.editReply({ embeds: [embed], components: [] }).catch(() => null);
         await release();
         return;
       }
+
       // Ensure user exists before reading pity
-await User.updateOne(
-  { id: discordUserId },
-  { $setOnInsert: { id: discordUserId, cards: [], points: 0, pullsSinceLastSEC: 0 } },
-  { upsert: true }
-);
+      await User.updateOne(
+        { id: discordUserId },
+        { $setOnInsert: { id: discordUserId, cards: [], points: 0, pullsSinceLastSEC: 0 } },
+        { upsert: true }
+      );
 
-// --- SEC pity counter (read before draw) ---
-let pullsSinceLastSEC = 0;
-let forceSEC = false;
+      // --- SEC pity counter (read before draw) ---
+      let pullsSinceLastSEC = 0;
+      let forceSEC = false;
 
-if (!pityExempt) {
-  try {
-    const u = await User.findOne({ id: discordUserId }, { pullsSinceLastSEC: 1 }).lean();
-    pullsSinceLastSEC = Number(u?.pullsSinceLastSEC ?? 0);
-    forceSEC = pullsSinceLastSEC >= 1999; // next pull is the 2000th -> guarantee SEC
-  } catch (e) {
-    console.error('[pity] failed to read pullsSinceLastSEC:', e);
-    pullsSinceLastSEC = 0;
-    forceSEC = false;
-  }
-} else {
-  // Exempt users: no pity tracking and no force
-  pullsSinceLastSEC = 0;
-  forceSEC = false;
-}
+      if (!pityNoTrack) {
+        try {
+          const u = await User.findOne({ id: discordUserId }, { pullsSinceLastSEC: 1 }).lean();
+          pullsSinceLastSEC = Number(u?.pullsSinceLastSEC ?? 0);
 
+          // ✅ Force only if user is NOT in no-force mode
+          forceSEC = (!pityNoForce) && (pullsSinceLastSEC >= 1999); // next pull is the 2000th
+        } catch (e) {
+          console.error('[pity] failed to read pullsSinceLastSEC:', e);
+          pullsSinceLastSEC = 0;
+          forceSEC = false;
+        }
+      } else {
+        // Fully exempt: no tracking and no force
+        pullsSinceLastSEC = 0;
+        forceSEC = false;
+      }
 
       // --- Draw pack ---
       let pack;
@@ -560,17 +610,13 @@ if (!pityExempt) {
         if (!useSpecial && bossChannelBias && bossChannelBias.biased && bossChannelBias.drawToken) {
           pack = await drawPackBoss(discordUserId, bossChannelBias.drawToken, { forceSEC });
         } else if (useSpecial && drawPackSpecial && specialDrawToken) {
-          const specialRes = await drawPackSpecial(discordUserId, specialDrawToken, { forceSEC, withMeta: true });
-          pack = specialRes.results;
-          // You can display this later in the embed if you want:
-          var resolvedSpecialVariant = specialRes.variantLabel;
-          var resolvedSpecialBase = specialRes.baseLabel;
-        }
-        else {
+          pack = await drawPackSpecial(discordUserId, specialDrawToken, { forceSEC });
+        } else {
           pack = await drawPack(discordUserId, null, { forceSEC });
         }
       } catch (err) {
         console.error('drawPack error after consume:', err);
+
         // Refund on failure
         try {
           const { doc } = await PullQuota.getUpdatedQuota(discordUserId);
@@ -598,9 +644,12 @@ if (!pityExempt) {
         } catch (refundErr) {
           console.error('refund error after draw failure:', refundErr);
         }
+
         inFlightInteractions.delete(interaction.id);
+
         const elapsed = Date.now() - gifShownAt;
         if (elapsed < ANIM_MS) await sleep(ANIM_MS - elapsed);
+
         await interaction.editReply({ content: 'An error occurred while drawing the pack. Your pull has been refunded. Please try again.', components: [] }).catch(() => null);
         await release();
         return;
@@ -613,11 +662,14 @@ if (!pityExempt) {
 
       try {
         await User.updateOne({ id: discordUserId }, { $setOnInsert: { id: discordUserId, pulls: 0, cards: [] } }, { upsert: true });
+
         for (const item of pack) {
           const { rarity, file } = item;
+
           const base = path.basename(file);
           const ext = path.extname(base);
           const raw = base.slice(0, base.length - ext.length);
+
           const displayName = raw.replace(/[_-\s]+/g, ' ').trim();
           const key = displayName.replace(/[_\s\-]+/g, ' ').replace(/\s+/g, ' ').trim();
           const nameRegex = new RegExp(`^${escapeRegex(key)}$`, 'i');
@@ -639,6 +691,7 @@ if (!pityExempt) {
           );
 
           let currentCount = 1;
+
           if (incResult && incResult.matchedCount > 0) {
             const readDoc = await User.findOne(
               {
@@ -680,10 +733,7 @@ if (!pityExempt) {
             );
 
             const readDoc = await User.findOne(
-              {
-                id: discordUserId,
-                cards: { $elemMatch: { name: { $regex: nameRegex }, rarity: rarity } }
-              },
+              { id: discordUserId, cards: { $elemMatch: { name: { $regex: nameRegex }, rarity: rarity } } },
               { "cards.$": 1 }
             ).lean();
 
@@ -705,13 +755,14 @@ if (!pityExempt) {
           const titleBody = `${displayName}`;
           const titleCount = ` - #${currentCount}`;
           const titleLine = `${visiblePrefix}${titleBody}`;
+
           pageItems.push({ rarity, rawName: raw, displayName, titleLine, imageUrl: encodedUrl });
 
-          // Keep your description assembly (escaped links) if desired:
           allNames.push(`${visiblePrefix}[${escapeLinkText(titleBody)}](${encodedUrl})${titleCount}`);
         }
       } catch (err) {
         console.error('atomic update error after consume:', err);
+
         // refund because we consumed earlier but failed to persist cards
         try {
           const { doc } = await PullQuota.getUpdatedQuota(discordUserId);
@@ -739,9 +790,12 @@ if (!pityExempt) {
         } catch (refundErr) {
           console.error('refund error after atomic update failure:', refundErr);
         }
+
         inFlightInteractions.delete(interaction.id);
+
         const elapsed = Date.now() - gifShownAt;
         if (elapsed < ANIM_MS) await sleep(ANIM_MS - elapsed);
+
         await interaction.editReply({ content: 'An error occurred while saving your pull. Your pull has been refunded. Please try again.', components: [] }).catch(() => null);
         await release();
         return;
@@ -750,6 +804,7 @@ if (!pityExempt) {
       // --- Build description and show results ---
       let descriptionAll = allNames.join('\n');
       const MAX_DESC = 4096;
+
       if (descriptionAll.length > MAX_DESC) {
         const truncated = descriptionAll.slice(0, MAX_DESC - 80);
         const lastNl = truncated.lastIndexOf('\n');
@@ -765,6 +820,7 @@ if (!pityExempt) {
 
       // SEC reveal (also respects queued fast mode)
       const hasSEC = pageItems.some(it => String(it.rarity ?? '').toUpperCase() === 'SEC');
+
       if (hasSEC) {
         const specialGifUrl = 'https://media.discordapp.net/attachments/1046811248647475302/1437428522577821828/Ran_chan_drop_kick.gif';
         try {
@@ -776,48 +832,44 @@ if (!pityExempt) {
         }
       }
 
-      // increment user's pulls once (informational)
-// --- Update pull stats + pity counter ---
-let nextSinceSEC = 0;
+      // --- Update pull stats + pity counter ---
+      let nextSinceSEC = 0;
 
-if (!pityExempt) {
-  // Fail-safe: only reset on actual SEC.
-  // If forceSEC was expected but no SEC occurred, keep at 1999 so next pull forces again.
-  nextSinceSEC = hasSEC ? 0 : (forceSEC ? 1999 : pullsSinceLastSEC + 1);
-}
+      // ✅ NEW: count unless "no-track". No-force users will keep counting and never force.
+      if (!pityNoTrack) {
+        nextSinceSEC = hasSEC ? 0 : (pullsSinceLastSEC + 1);
+      }
 
-try {
-  const update = {
-    $setOnInsert: { id: discordUserId, cards: [], points: 0 },
-    $inc: { pulls: 1 },
-  };
+      try {
+        const update = {
+          $setOnInsert: { id: discordUserId, cards: [], points: 0 },
+          $inc: { pulls: 1 },
+        };
 
-  if (!pityExempt) {
-    update.$set = { pullsSinceLastSEC: nextSinceSEC };
-  }
+        // ✅ NEW: save pity count for normal users + IDS2; do not save for IDS1
+        if (!pityNoTrack) {
+          update.$set = { pullsSinceLastSEC: nextSinceSEC };
+        }
 
-  await User.updateOne({ id: discordUserId }, update, { upsert: true });
-} catch (e) {
-  console.error('[pull] Failed to update pulls/pity:', e);
-}
+        await User.updateOne({ id: discordUserId }, update, { upsert: true });
+      } catch (e) {
+        console.error('[pull] Failed to update pulls/pity:', e);
+      }
 
       function makeEmbed(idx) {
         const it = pageItems[idx];
+
         if (useSpecial) {
           return new EmbedBuilder()
             .setTitle(`Card: ${idx + 1} **[${it.rarity}]** - ${it.displayName}`)
             .setDescription(descriptionAll)
             .setColor(0x87CEFA)
-            .addFields(
-              { name: 'Special pulls remaining', value: `${consumeResult.remainingSpecial ?? 0}`, inline: true },
-              resolvedSpecialVariant && resolvedSpecialBase && resolvedSpecialVariant !== resolvedSpecialBase
-                ? { name: 'Gacha pulled:', value: `${resolvedSpecialVariant}`, inline: true }
-                : null
-            )
+            .addFields({ name: 'Special pulls remaining', value: `${consumeResult.remainingSpecial ?? 0}`, inline: true })
             .setImage(it.imageUrl)
             .setURL(it.imageUrl)
-            .setFooter({ text: `Card: ${idx + 1} / ${pageItems.length} \nPull by: ${interaction.user.username}` });
+            .setFooter({ text: `Card: ${idx + 1} / ${pageItems.length}\nPull by: ${interaction.user.username}` });
         }
+
         return new EmbedBuilder()
           .setTitle(`Card: ${idx + 1} **[${it.rarity}]** - ${it.displayName}`)
           .setDescription(descriptionAll)
@@ -828,7 +880,7 @@ try {
           )
           .setImage(it.imageUrl)
           .setURL(it.imageUrl)
-          .setFooter({ text: `Card: ${idx + 1} / ${pageItems.length} \nPull by: ${interaction.user.username}` });
+          .setFooter({ text: `Card: ${idx + 1} / ${pageItems.length}\nPull by: ${interaction.user.username}` });
       }
 
       const prevBtnEnabled = new ButtonBuilder().setCustomId('prev').setLabel('◀ Prev').setStyle(ButtonStyle.Primary).setDisabled(pageItems.length <= 1);
@@ -840,6 +892,7 @@ try {
       const disableRow = new ActionRowBuilder().addComponents(prevBtnDisabled, nextBtnDisabled);
 
       const message = await interaction.editReply({ embeds: [makeEmbed(0)], components: [row] }).catch(() => null);
+
       if (!message) {
         inFlightInteractions.delete(interaction.id);
         return;
@@ -854,6 +907,7 @@ try {
       }
 
       const collector = message.createMessageComponentCollector({ filter: (i) => i.user.id === discordUserId, time: PAGE_TIMEOUT_MS });
+
       let pageIndex = 0;
 
       collector.on('collect', async (btnInt) => {
@@ -861,6 +915,7 @@ try {
           if (btnInt.customId === 'prev') pageIndex = (pageIndex - 1 + pageItems.length) % pageItems.length;
           else if (btnInt.customId === 'next') pageIndex = (pageIndex + 1) % pageItems.length;
           else return await btnInt.reply({ content: 'Unknown action', ephemeral: true });
+
           await btnInt.update({ embeds: [makeEmbed(pageIndex)], components: [row] });
         } catch (err) {
           console.error('collector interaction error:', err);
