@@ -22,7 +22,8 @@ const EXCEPTION_LIST = [
   'Test 001',
   'Test 999',
   'Test 002',
-  'Test',
+  'Test ',
+  'Test 998',
 ];
 
 // Normalized set for fast case-insensitive exact matching
