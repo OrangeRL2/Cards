@@ -7,6 +7,63 @@ const PREFIX = '!';
 const TOP_N = 10;
 const ADMIN_CHANNEL_ID = String(config.adminChannelId || '');
 
+// -------------------- HARD-CODED AUTHORIZATION --------------------
+// Owners: always allowed (DMs and guilds)
+const OWNER_IDS = new Set([
+  '153551890976735232',
+  '409717160995192832',
+  '272129129841688577',
+  '399012422805094410',
+]);
+// Users allowed to run !scores (owners are auto-allowed)
+const ALLOWED_USER_IDS = new Set([
+  ...OWNER_IDS,
+  // add other user IDs here:
+  // '91098889796481024',
+]);
+
+// Roles allowed to run !scores (guild-only; role checks do not work in DMs)
+const ALLOWED_ROLE_IDS = new Set([
+  '844054364033384470', // e.g., @Moderators
+  // '234567890123456789', // e.g., @Staff
+]);
+
+/**
+ * Policy:
+ * - OWNER_IDS are always allowed.
+ * - If both ALLOWED_USER_IDS and ALLOWED_ROLE_IDS are empty => DENY by default.
+ * - Otherwise, caller must be in ALLOWED_USER_IDS OR have any role in ALLOWED_ROLE_IDS.
+ * - Role checks require guild/member context (not available in DMs).
+ */
+function isAuthorized(message) {
+  try {
+    const callerId = String(message.author.id);
+
+    // 1) Owner override
+    if (OWNER_IDS.has(callerId)) return true;
+
+    // 2) Default deny if both allowlists are empty
+    if (ALLOWED_USER_IDS.size === 0 && ALLOWED_ROLE_IDS.size === 0) return false;
+
+    // 3) User allowlist
+    if (ALLOWED_USER_IDS.has(callerId)) return true;
+
+    // 4) Role allowlist (guild only)
+    const member = message.member;
+    if (!member || !message.guild || ALLOWED_ROLE_IDS.size === 0) return false;
+
+    const roleCache = member.roles?.cache;
+    if (!roleCache || roleCache.size === 0) return false;
+
+    for (const rid of ALLOWED_ROLE_IDS) {
+      if (roleCache.has(rid)) return true;
+    }
+    return false;
+  } catch {
+    return false;
+  }
+}
+
 // eventId -> current leader userId (in-memory)
 const leaderCache = new Map();
 
@@ -17,7 +74,7 @@ const leaderCache = new Map();
 function getModels() {
   const { Schema } = mongoose;
 
-  // Matches your topscores.js structure and collection name "bosspointlogs" [2](https://ace00101-my.sharepoint.com/personal/nauldee_nawill_ace00101_onmicrosoft_com/Documents/Microsoft%20Copilot%20Chat%20%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB/topscores.js)
+  // Matches your topscores.js structure and collection name "bosspointlogs"
   const BossPointLogSchema = new Schema(
     {
       eventId: { type: String, required: true, index: true },
@@ -43,7 +100,7 @@ function getModels() {
     BossPointLog = mongoose.model('BossPointLog', BossPointLogSchema);
   }
 
-  // Minimal users collection mapping (mirrors topscores.js expectations) [2](https://ace00101-my.sharepoint.com/personal/nauldee_nawill_ace00101_onmicrosoft_com/Documents/Microsoft%20Copilot%20Chat%20%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB/topscores.js)
+  // Minimal users collection mapping (mirrors topscores.js expectations)
   const UserSchema = new Schema(
     {
       id: { type: String, required: true, unique: true },
@@ -133,7 +190,7 @@ async function resolveUserLabels(message, User, rows) {
     }
   }
 
-  // Fallback to DB user data if available (as topscores.js does) [2](https://ace00101-my.sharepoint.com/personal/nauldee_nawill_ace00101_onmicrosoft_com/Documents/Microsoft%20Copilot%20Chat%20%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB/topscores.js)
+  // Fallback to DB user data if available
   const users = await User.find({ id: { $in: ids } }).lean().exec().catch(() => []);
   const dbMap = new Map((users || []).map(u => [String(u.id), u]));
 
@@ -186,9 +243,14 @@ module.exports = {
 
   async execute(message, args = []) {
     try {
-      // Prefix guard (your index.js dispatcher already does this, but safe to keep) [1](https://ace00101-my.sharepoint.com/personal/nauldee_nawill_ace00101_onmicrosoft_com/Documents/Microsoft%20Copilot%20Chat%20%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB/index.js)
+      // Prefix guard (your dispatcher also checks this; safe to keep)
       if (!message.content?.startsWith(PREFIX)) return;
       if (message.author.bot) return;
+
+      // -------------------- AUTHZ CHECK --------------------
+      if (!isAuthorized(message)) {
+        return message.reply({ content: 'You are not permitted to use this command.' }).catch(() => {});
+      }
 
       const { BossPointLog, User } = getModels();
 

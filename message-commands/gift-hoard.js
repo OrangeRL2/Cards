@@ -22,8 +22,15 @@ const ALLOWED_ROLE_IDS = new Set([
  */
 const hoardMap = {
   '409717160995192832': ['Lamy', 'Nepolabo'],
-  '153551890976735232': ['Pekora', 'Marine', 'Noel'],
-  // Add more...
+  '153551890976735232': ['Suisei', 'miComet', 'Shiranui Construction','Gen 0'],
+  '399012422805094410': ['Mumei', 'Promise'],
+  '272129129841688577': ['Zeta', 'holoh3ro'],
+  '1311652316973240380': ['Chloe', 'holoX'],
+  '443061305721618432': ['Ayame', 'Gen 2'],
+  '399631405228752897': ['Towa', 'holoForce'],
+  '409724952091295745': ['Kanata', 'holoForce'],
+  '153551890976735232': ['Mio', 'GAMERS', 'Dorobo','ayafubumi','Koyori','holoX'],
+  '409728788117848074': ['Haato', 'Gen 1'],
 };
 
 /**

@@ -14,35 +14,53 @@
 //
 // Notes:
 // - We send ONE embed per mode to avoid Discord embed field limit (<= 25).
+
 const { EmbedBuilder, Colors } = require('discord.js');
 const { getUserProfile, buildSlotOptions, getOverrides } = require('../utils/rates');
 
-// ---------- Optional authorization ----------
-// If BOTH allowlists are empty, everyone is allowed (by design).
-const ENV_ALLOWED_USERS = (process.env.ODDS_ALLOWED_USER_IDS || '')
-  .split(',')
-  .map(s => s.trim())
-  .filter(Boolean);
+// ---------- Hard-coded authorization (no env vars) ----------
+const OWNER_IDS = new Set([
+  // Owners: always allowed (DMs and guilds)
+  '153551890976735232',
+  '409717160995192832',
+  '272129129841688577',
+  '399012422805094410',
+]);
 
-const ENV_ALLOWED_ROLES = (process.env.ODDS_ALLOWED_ROLE_IDS || '')
-  .split(',')
-  .map(s => s.trim())
-  .filter(Boolean);
+// Users allowed to run !odds (owners are auto-allowed)
+const ALLOWED_USER_IDS = new Set([
+  ...OWNER_IDS,
+  // Add additional user IDs here:
+  // '91098889796481024',
+]);
 
-// If you want hard default access for yourself, add your ID here:
-// const ALLOWED_USER_IDS = new Set(['153551890976735232', ...ENV_ALLOWED_USERS]);
-const ALLOWED_USER_IDS = new Set([...ENV_ALLOWED_USERS]);
-const ALLOWED_ROLE_IDS = new Set([...ENV_ALLOWED_ROLES]);
+// Roles allowed to run !odds (guild-only; role checks do not work in DMs)
+const ALLOWED_ROLE_IDS = new Set([
+  '844054364033384470', // e.g., @Moderators
+  // '234567890123456789', // e.g., @Staff
+]);
 
+/**
+ * HARD-CODED policy:
+ * - OWNER_IDS are always allowed.
+ * - If both ALLOWED_USER_IDS and ALLOWED_ROLE_IDS are empty, default = DENY.
+ * - Otherwise, caller must be in ALLOWED_USER_IDS OR have a role in ALLOWED_ROLE_IDS.
+ * - Role checks require guild/member context (not available in DMs).
+ */
 function isAuthorized(message) {
   try {
-    // If both lists are empty, allow everyone
-    if (ALLOWED_USER_IDS.size === 0 && ALLOWED_ROLE_IDS.size === 0) return true;
-
     const callerId = String(message.author.id);
+
+    // 1) Owner override
+    if (OWNER_IDS.has(callerId)) return true;
+
+    // 2) Default deny if both allowlists are empty
+    if (ALLOWED_USER_IDS.size === 0 && ALLOWED_ROLE_IDS.size === 0) return false;
+
+    // 3) User allowlist
     if (ALLOWED_USER_IDS.has(callerId)) return true;
 
-    // Role checks require guild/member context (not available in DMs)
+    // 4) Role allowlist (guild only)
     const member = message.member;
     if (!member || !message.guild || ALLOWED_ROLE_IDS.size === 0) return false;
 
