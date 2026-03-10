@@ -21,6 +21,7 @@ const SHOP_ITEMS = {
   bloomSubaru: { name: 'XMAS Subaru', rarity: 'XMAS', cost: xmas, image: 'Padoru Subaru', stock: -1, event: 'XMAS' },
   bloomTowa: { name: 'XMAS Towa', rarity: 'XMAS', cost: xmas, image: 'Padoru Towa', stock: -1, event: 'XMAS' },
   bloomZeta: { name: 'XMAS Zeta', rarity: 'XMAS', cost: xmas, image: 'Padoru Zeta', stock: -1, event: 'XMAS' },
+  padoruX: { name: 'Padoru X - Does not allow UP over 50K, ORI and COL', rarity: 'XMAS', cost: t6, image: 'Padoru X', stock: -1, event: 'XMAS' },
   
 
   // VAL
