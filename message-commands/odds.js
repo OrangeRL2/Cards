@@ -79,6 +79,7 @@ function isAuthorized(message) {
 // ---------- ID Exceptions (ALWAYS show default odds in this command) ----------
 const DEFAULT_VIEW_USER_IDS = new Set([
   '91098889796481024', // MJ (example: always show as default in !odds)
+  '409717160995192832' // Yoi
 ]);
 
 // ---------- Helpers ----------

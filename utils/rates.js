@@ -222,6 +222,37 @@ const rateProfiles = (() => {
     } },
   }); // Lutecia
 
+        // 110% pull rate
+  m.set('409717160995192832', {
+    pullRate: 1.0,
+    extraSlotRate: 1.0,
+    specialPullRate: 1.1,
+    overrides: { 
+      normal: 
+    {
+      common1: { S:7.5, HR: 0.5 , BDAY: 0.5,},
+      common2: { S:7.5, OC:4.0,},
+      common3: { S:7.5, BDAY:0.5,},
+      common4: { S:7.5, HR:0.5,},
+
+      uncommon1: { RR: 15.0, UR: 0.5 },
+      uncommon2: { SR: 7.5, SY: 0.5 },
+      uncommon3: { OSR: 6.0, UR: 1.0 },
+
+      rare: { OUR: 0.9, SEC: 0.1 },
+    }, special: {}, boss: {
+      common1: { S:7.5, HR: 0.5 , BDAY: 0.5,},
+      common2: { S:7.5, OC:4.0,},
+      common3: { S:7.5, BDAY:0.5,},
+      common4: { S:7.5, HR:0.5,},
+
+      uncommon1: { RR: 15.0, UR: 0.5 },
+      uncommon2: { SR: 7.5, SY: 0.5 },
+      uncommon3: { OSR: 6.0, UR: 1.0 },
+
+      rare: { OUR: 0.9, SEC: 0.1 },
+    } },
+  }); //Yoi
   return m;
 })();
 
