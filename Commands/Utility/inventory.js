@@ -69,7 +69,7 @@ module.exports = {
           { name: 'SEC', value: 'SEC' },
           { name: 'ORI', value: 'ORI' },
         ),
-    )
+    ) 
     .addStringOption(opt =>
       opt.setName('search')
         .setDescription('Search by card name'),
@@ -129,7 +129,6 @@ module.exports = {
   (!multiFilter || c.count >= 2) &&
   !isExcludedCardName(c.name)
 );
-
 
     if (!entries.length) {
       const filterMessage = multiFilter ?
