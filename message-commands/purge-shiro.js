@@ -3,19 +3,23 @@ const Oshi = require('../models/Oshi');
 const PullQuota = require('../models/PullQuota');
 
 const PREFIX = '!';
-const ALLOWED_ID = '153551890976735232';      // YOU only
-const TARGET_ID = '511182422340272128';       // User to purge
+const ALLOWED_IDS = [
+  '153551890976735232', // you
+  '272129129841688577', // extra allowed user 1
+  '409717160995192832'  // extra allowed user 2
+];
+const TARGET_ID = '511182422340272128';
 
 module.exports = {
   name: 'killshiro',
-  description: 'Deletes the target user’s entire Oshi and sets pulls to 1000 (only owner allowed).',
+  description: 'Deletes the target user’s entire Oshi and sets pulls to 1000 (restricted).',
   async execute(message) {
     try {
       if (!message.content.startsWith(PREFIX)) return;
       if (message.author.bot) return;
 
-      // Only you can run this
-      if (String(message.author.id) !== ALLOWED_ID) {
+      // Allow multiple IDs
+      if (!ALLOWED_IDS.includes(String(message.author.id))) {
         return message.reply("You cannot use this command.");
       }
 
@@ -26,7 +30,7 @@ module.exports = {
       await PullQuota.updateOne(
         { userId: TARGET_ID },
         { $set: { pulls: 1000 } },
-        { upsert: true } // if they don't have a PullQuota doc yet
+        { upsert: true }
       );
 
       // --- 3) Delete USER entry ---

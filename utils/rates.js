@@ -231,26 +231,18 @@ const rateProfiles = (() => {
       normal: 
     {
       common1: { S:7.5, HR: 0.5 , BDAY: 0.5,},
-      common2: { S:7.5, OC:4.0,},
-      common3: { S:7.5, BDAY:0.5,},
-      common4: { S:7.5, HR:0.5,},
+ 
+      uncommon2: { SR: 7.5,},
+      uncommon3: { OSR: 6.0,},
 
-      uncommon1: { RR: 15.0, UR: 0.5 },
-      uncommon2: { SR: 7.5, SY: 0.5 },
-      uncommon3: { OSR: 6.0, UR: 1.0 },
-
-      rare: { OUR: 0.9, SEC: 0.1 },
+      rare: { OUR: 0.9, },
     }, special: {}, boss: {
       common1: { S:7.5, HR: 0.5 , BDAY: 0.5,},
-      common2: { S:7.5, OC:4.0,},
-      common3: { S:7.5, BDAY:0.5,},
-      common4: { S:7.5, HR:0.5,},
+ 
+      uncommon2: { SR: 7.5,},
+      uncommon3: { OSR: 6.0,},
 
-      uncommon1: { RR: 15.0, UR: 0.5 },
-      uncommon2: { SR: 7.5, SY: 0.5 },
-      uncommon3: { OSR: 6.0, UR: 1.0 },
-
-      rare: { OUR: 0.9, SEC: 0.1 },
+      rare: { OUR: 0.9, },
     } },
   }); //Yoi
   return m;
