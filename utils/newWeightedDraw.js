@@ -1,22 +1,51 @@
 // newWeightedDraw.js
+const path = require('path');
 const pools = require('../utils/loadImages');
-const PullQuota = require('../models/PullQuota'); // kept from your original file
+const PullQuota = require('../models/PullQuota');
 const { pickWeighted, buildSlotOptions, getUserProfile, getOverrides } = require('../utils/rates');
 
 // --- Pool selection logic (kept as-is from your file) ---
 const specialUserIds = new Set([]);
+const otherUserIds = new Set([]);
 
-// NOTE: This set only affects *which image pool* is used (pools.other), not odds.
-const otherUserIds = new Set([
-]);
+/**
+ * Extract a stable "card key" from a pool entry.
+ * By default: uses filename WITHOUT extension.
+ * Example: "/cards/EAS/Padoru 1.png" -> "Padoru 1"
+ */
+function cardKeyFromFile(filePath) {
+  const base = path.basename(String(filePath));
+  return base.replace(path.extname(base), '');
+}
 
-function pickFileFromPool(rarity, userId) {
+/**
+ * Pick a file from a pool with optional per-card weights.
+ *
+ * @param {string} rarity
+ * @param {string|number} userId
+ * @param {boolean} useSpecialRates
+ * @param {Object<string, number>|null} fileWeightsMap - map of cardKey -> weight
+ * @param {number} unlistedWeight - weight used when a card isn't listed in the map (default 0)
+ */
+function pickFileFromPool(rarity, userId, useSpecialRates = false, fileWeightsMap = null, unlistedWeight = 0) {
   const idStr = String(userId);
   let pool = null;
 
-  if (specialUserIds.has(idStr) && pools.special && Array.isArray(pools.special[rarity]) && pools.special[rarity].length > 0) {
+  // Respect "useSpecialRates" gate (your original intent)
+  if (
+    useSpecialRates &&
+    specialUserIds.has(idStr) &&
+    pools.special &&
+    Array.isArray(pools.special[rarity]) &&
+    pools.special[rarity].length > 0
+  ) {
     pool = pools.special[rarity];
-  } else if (otherUserIds.has(idStr) && pools.other && Array.isArray(pools.other[rarity]) && pools.other[rarity].length > 0) {
+  } else if (
+    otherUserIds.has(idStr) &&
+    pools.other &&
+    Array.isArray(pools.other[rarity]) &&
+    pools.other[rarity].length > 0
+  ) {
     pool = pools.other[rarity];
   } else if (Array.isArray(pools[rarity]) && pools[rarity].length > 0) {
     pool = pools[rarity];
@@ -26,8 +55,55 @@ function pickFileFromPool(rarity, userId) {
     throw new Error(`Pool for rarity "${rarity}" is empty or missing for user "${userId}"`);
   }
 
-  return pool[Math.floor(Math.random() * pool.length)];
+  // If no weights provided -> uniform random
+  if (!fileWeightsMap || typeof fileWeightsMap !== 'object') {
+    return pool[Math.floor(Math.random() * pool.length)];
+  }
+
+  // Build weighted options based on the pool files
+  const options = pool.map((file) => {
+    const k = cardKeyFromFile(file);
+    const w = (k in fileWeightsMap) ? Number(fileWeightsMap[k]) : Number(unlistedWeight);
+    return { key: file, weight: isFinite(w) ? w : 0 };
+  });
+
+  // If all weights are <= 0, fall back to uniform random (safer than erroring)
+  const total = options.reduce((s, o) => s + (o.weight > 0 ? o.weight : 0), 0);
+  if (total <= 0) {
+    return pool[Math.floor(Math.random() * pool.length)];
+  }
+
+  // pickWeighted returns the "key" value, which we set as the file path
+  return pickWeighted(options);
 }
+
+/**
+ * DEFAULT per-card weight maps for the EXTRA slot.
+ * Add any rarity here (EAS, EGG, VAL, etc.).
+ *
+ * Keys must match `cardKeyFromFile()` output:
+ * - by default = filename WITHOUT extension
+ */
+const defaultExtraCardWeightsByRarity = {
+  // Example: EAS controlled weights
+  EAS: {
+    "White Egg": 13.33,
+    "Green Egg": 13.33,
+    "Red Egg": 13.33,
+    "Blue Egg": 13.33,
+    "Purple Egg": 13.33,
+    "Yellow Egg": 13.33,
+    "Suisei 001": 5.00375,
+    "Lamy 001": 5.00375,
+    "Haato 001": 5.00375,
+    "Zeta 001": 5.00375,
+    "Easter X": 0.005,
+  },
+
+  // You can do the same for other extra-slot rarities if you want:
+  // VAL: { "Valentine A": 50, "Valentine B": 50 },
+  // EGG: { "Egg 1": 80, "Egg 2": 20 },
+};
 
 // --- Main draw (async because of DB read)
 // Accept an override flag so callers can decide special-rate eligibility before consuming the pull
@@ -136,7 +212,6 @@ async function drawPack(userId, useSpecialRatesOverride = null, opts = {}) {
     { key: 'SEC', weight: 0.03 },
   ];
   {
-     // NEW: merge normal overrides with pity override
     const baseOverrides = getOverrides(profile, 'normal', 'rare');
     const pityOverrides = (opts && opts.forceSEC) ? { SEC: 100 } : null;
     const mergedOverrides = pityOverrides
@@ -147,21 +222,34 @@ async function drawPack(userId, useSpecialRatesOverride = null, opts = {}) {
     const rareRarity = pickWeighted(options);
     const rareFile = pickFileFromPool(rareRarity, userId, useSpecialRates);
     results.push({ rarity: rareRarity, file: rareFile });
-
   }
 
   // Extra slot with appearance chance (ONLY chance changes; rarity odds unchanged)
-  const baseExtraChance = 0.00;
+  const baseExtraChance = 12.5/100; // 12.5% base chance for the extra slot to appear
   const extraChance = baseExtraChance * (profile.extraSlotRate ?? 1.0);
 
   if (Math.random() < extraChance) {
     const extraBase = [
-      { key: 'VAL', weight: 0.0 },
-      { key: 'VAL', weight: 0.0 },
-      { key: 'VAL', weight: 0.00 },
+      { key: 'EAS', weight: 99.99 },
+      { key: 'EAS', weight: 0.01 },
     ];
+
     const extraRarity = pickWeighted(extraBase); // do NOT scale extra odds
-    const extraFile = pickFileFromPool(extraRarity, userId, useSpecialRates);
+
+    // Allow dynamic overrides via opts, fallback to defaults:
+    const runtimeWeights = (opts.extraCardWeightsByRarity && opts.extraCardWeightsByRarity[extraRarity]) || null;
+    const defaultWeights = defaultExtraCardWeightsByRarity[extraRarity] || null;
+    const weightsToUse = runtimeWeights || defaultWeights;
+
+    // If weightsToUse is null/undefined -> uniform random fallback inside pickFileFromPool
+    const extraFile = pickFileFromPool(
+      extraRarity,
+      userId,
+      useSpecialRates,
+      weightsToUse,
+      opts.unlistedExtraCardWeight ?? 0
+    );
+
     results.push({ rarity: extraRarity, file: extraFile, slot: 'extra' });
   }
 

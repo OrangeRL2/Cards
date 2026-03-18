@@ -75,7 +75,7 @@ module.exports = {
         { userId },
         {
           $set: { oshiId: oshiIdToStore },
-          $setOnInsert: { userId, chosenAt: now }
+          $setOnInsert: { userId }
         },
         { upsert: true }
       ).exec();
