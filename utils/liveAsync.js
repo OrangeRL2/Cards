@@ -227,7 +227,7 @@ async function tryAwardPCard({ userId, picked, session, trace }) {
   return pElem;
 }
 
-// Start attempt: normalize input, decrement card, push pendingAttempt
+// Start attempt: normalize input, decrement card, prune+append pendingAttempt (single atomic update)
 async function startAttemptAtomic(userId, name, rarity) {
   const normalized = normalizeCardName(name);
   const stage = getStageForRarity(rarity);
@@ -237,59 +237,136 @@ async function startAttemptAtomic(userId, name, rarity) {
   const readyAt = new Date(Date.now() + getDurationForStage(stage));
   const attemptId = nanoid();
 
+  // Prune policy:
+  // - remove attempts that are resolved AND whose readyAt is older than cutoff
+  // - keep unresolved attempts always
+  // - keep very recent resolved attempts for a short time to avoid race-y UX issues
+  const cutoff = new Date(Date.now() - (60*24) * 60 * 1000); // 24 hours
+  const MAX_PENDING_KEEP = 100; // hard cap for safety
+
+  const newAttempt = {
+    id: attemptId,
+    name: normalized,
+    rarity,
+    stage,
+    startedAt: now,
+    readyAt,
+    resolved: false,
+    success: null,
+    effectsApplied: false,
+    effectsTrace: {}
+  };
+
+  // Require:
+  // 1) user exists
+  // 2) user has the card with count > 0
+  // 3) user has no unresolved attempt for this stage
   const query = {
     id: userId,
+    cards: { $elemMatch: { name: normalized, rarity: rarity, count: { $gt: 0 } } },
     $or: [
       { pendingAttempts: { $exists: false } },
       { pendingAttempts: { $not: { $elemMatch: { stage, resolved: false } } } }
     ]
   };
 
-  const update = {
-    $inc: { 'cards.$[elem].count': -1 },
-    $set: { 'cards.$[elem].lastAcquiredAt': now },
-    $push: {
-      pendingAttempts: {
-        id: attemptId,
-        name: normalized,
-        rarity,
-        stage,
-        startedAt: now,
-        readyAt,
-        resolved: false,
-        success: null,
-        effectsApplied: false,
-        effectsTrace: {}
+  // Update pipeline (avoids $push + $pull conflict)
+  const updatePipeline = [
+    {
+      $set: {
+        // --- cards: decrement the matching stack in-place via $map
+        cards: {
+          $map: {
+            input: { $ifNull: ["$cards", []] },
+            as: "c",
+            in: {
+              $cond: [
+                {
+                  $and: [
+                    { $eq: ["$$c.name", normalized] },
+                    { $eq: ["$$c.rarity", rarity] },
+                    { $gt: ["$$c.count", 0] }
+                  ]
+                },
+                {
+                  $mergeObjects: [
+                    "$$c",
+                    {
+                      count: { $subtract: ["$$c.count", 1] },
+                      lastAcquiredAt: now
+                    }
+                  ]
+                },
+                "$$c"
+              ]
+            }
+          }
+        },
+
+        // --- pendingAttempts: prune old resolved + append newAttempt + cap length
+        pendingAttempts: {
+          $let: {
+            vars: {
+              existing: { $ifNull: ["$pendingAttempts", []] }
+            },
+            in: {
+              $slice: [
+                {
+                  $concatArrays: [
+                    {
+                      $filter: {
+                        input: "$$existing",
+                        as: "a",
+                        cond: {
+                          $or: [
+                            { $eq: ["$$a.resolved", false] },
+                            { $gte: ["$$a.readyAt", cutoff] }
+                          ]
+                        }
+                      }
+                    },
+                    [newAttempt]
+                  ]
+                },
+                -MAX_PENDING_KEEP
+              ]
+            }
+          }
+        },
+
+        // Keep timestamps fresh (Mongoose timestamps aren't always applied to pipeline updates)
+        updatedAt: now
       }
     }
-  };
-
-  const arrayFilters = [{ 'elem.name': normalized, 'elem.rarity': rarity, 'elem.count': { $gt: 0 } }];
+  ];
 
   const res = await User.findOneAndUpdate(
     query,
-    update,
-    { arrayFilters, returnDocument: 'after' }
-  ).exec();
+    updatePipeline,
+    { returnDocument: 'after' } // same style you're already using
+  )
+    .lean()
+    .exec();
 
   if (!res) {
-    const u = await User.findOne({ id: userId }).lean();
+    // Determine reason (best effort, same as your old flow)
+    const u = await User.findOne({ id: userId }, { pendingAttempts: 1, cards: 1 }).lean();
     if (u) {
-      const existing = (u.pendingAttempts || []).find(a => !a.resolved && Number(a.stage) === Number(stage));
+      const existing = (u.pendingAttempts || []).find(
+        a => !a.resolved && Number(a.stage) === Number(stage)
+      );
       if (existing) return { success: false, reason: 'stage-busy', nextReadyAt: existing.readyAt };
       return { success: false, reason: 'no-card' };
     }
     return { success: false, reason: 'no-user' };
   }
 
+  // Sanity check that the attempt was appended
   const added = (res.pendingAttempts || []).find(a => a.id === attemptId);
   if (!added) return { success: false, reason: 'no-card' };
 
-  // cleanup zero-count cards (best effort)
-  User.updateOne(
-    { id: userId },
-    { $pull: { cards: { count: { $lte: 0 } } } }
-  ).exec().catch(() => {});
+  // Optional: If you still want to purge zero-count card stacks, do it elsewhere (cron / occasional),
+  // because doing it here increases write churn on a large array.
 
   return { success: true, attemptId, readyAt, stage };
 }

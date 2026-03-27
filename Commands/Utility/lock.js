@@ -8,11 +8,11 @@ module.exports = {
     .setDescription('Lock or unlock cards to prevent them from being traded, gifted, burned, or used in lives')
     .addStringOption(option =>
       option.setName('card')
-        .setDescription('Card name (you can type a prefix)')
+        .setDescription('Card name (prefix) OR "all"/"any"/* to target all cards')
         .setRequired(true))
     .addStringOption(option =>
       option.setName('rarity')
-        .setDescription('Rarity of the card (required). Use "all" to target every rarity')
+        .setDescription('Rarity of the card (required). Use "all"/"any"/* to target every rarity')
         .setRequired(true))
     .addStringOption(option =>
       option.setName('action')
@@ -23,13 +23,18 @@ module.exports = {
           { name: '🔓 Unlock', value: 'unlock' }
         )),
   requireOshi: true,
+
   async execute(interaction) {
     const userId = interaction.user.id;
-    const partialNameRaw = interaction.options.getString('card');
-    const partialName = String(partialNameRaw).toLowerCase();
+
+    const cardReqRaw = interaction.options.getString('card');
+    const cardReq = String(cardReqRaw).trim().toLowerCase();
+
     const rarityReqRaw = interaction.options.getString('rarity');
-    const rarityReq = String(rarityReqRaw).toLowerCase();
+    const rarityReq = String(rarityReqRaw).trim().toLowerCase();
+
     const action = interaction.options.getString('action');
+    const newLockState = action === 'lock';
 
     const userDoc = await User.findOne({ id: userId }).exec();
     if (!userDoc || !Array.isArray(userDoc.cards) || userDoc.cards.length === 0) {
@@ -39,26 +44,34 @@ module.exports = {
     // allow targeting all rarities by using "all", "any", or "*"
     const targetAllRarities = ['all', 'any', '*'].includes(rarityReq);
 
+    // ✅ NEW: allow targeting all cards by using "all", "any", or "*"
+    const targetAllCards = ['all', 'any', '*'].includes(cardReq);
+
     // Find ALL matching cards (not just first)
     const matchingCards = userDoc.cards.filter(c => {
-      const nameMatches = String(c.name).toLowerCase().startsWith(partialName);
+      // Card name match: either "all cards" OR prefix match
+      const nameMatches = targetAllCards
+        ? true
+        : String(c.name).toLowerCase().startsWith(cardReq);
+
       if (!nameMatches) return false;
+
+      // Rarity match: either all rarities OR exact rarity
       if (targetAllRarities) return true;
       return String(c.rarity || '').toLowerCase() === rarityReq;
     });
 
     if (matchingCards.length === 0) {
       const rarityDisplay = targetAllRarities ? 'any rarity' : `"${rarityReqRaw}"`;
+      const cardDisplay = targetAllCards ? 'any card' : `"${cardReqRaw}"`;
       return interaction.reply({
-        content: `No card starts with "${partialNameRaw}" and rarity ${rarityDisplay}.`,
+        content: `No cards match card ${cardDisplay} and rarity ${rarityDisplay}.`,
         flags: 64
       });
     }
 
     // Update lock status for all matching cards
     let updatedCount = 0;
-    const newLockState = action === 'lock';
-
     for (const card of matchingCards) {
       if (card.locked !== newLockState) {
         card.locked = newLockState;
@@ -127,13 +140,15 @@ module.exports = {
         : 'These cards can now be used normally.'
     });
 
+    const cardLabel = targetAllCards ? 'All Cards' : cardReqRaw;
+    const rarityLabel = targetAllRarities ? 'All Rarities' : rarityReqRaw;
+
     const embed = new EmbedBuilder()
       .setTitle(action === 'lock' ? '🔒 Cards Locked' : '🔓 Cards Unlocked')
       .setColor(action === 'lock' ? 0xFF5555 : 0x55FF55)
-      .setDescription(`**${updatedCount}** card(s) matching **[${targetAllRarities ? 'All Rarities' : rarityReqRaw}]** "${partialNameRaw}" have been ${action}ed.`)
+      .setDescription(`**${updatedCount}** card(s) matching **[${rarityLabel}]** "${cardLabel}" have been ${action}ed.`)
       .addFields(fields);
 
-    // Use flags bit for ephemeral responses (64) to avoid the deprecation warning
-    return interaction.reply({ embeds: [embed], flags: 64 });
+    return interaction.reply({ embeds: [embed] });
   }
 };

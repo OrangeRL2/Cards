@@ -13,6 +13,8 @@ const BossPointLogSchema = new Schema({
   },
   points:    { type: Number, default: 0 },
   meta:      { type: Schema.Types.Mixed, default: {} },
+
+  // keep this - TTL will use it
   createdAt: { type: Date, default: () => new Date() }
 });
 
@@ -25,10 +27,10 @@ BossPointLogSchema.index(
   { unique: true, partialFilterExpression: { action: 'like' } }
 );
 
-// Optional: auto-expire old logs if you set BOSS_LOG_TTL_DAYS (e.g., 60)
-if (process.env.BOSS_LOG_TTL_DAYS) {
-  const days = Math.max(1, Number(process.env.BOSS_LOG_TTL_DAYS) || 2);
-  BossPointLogSchema.index({ createdAt: 1 }, { expireAfterSeconds: days * 24 * 3600 });
-}
+// ✅ Always expire after 24 hours
+BossPointLogSchema.index(
+  { createdAt: 1 },
+  { expireAfterSeconds: 60 * 60 * 25 } // 86400
+);
 
 module.exports = model('BossPointLog', BossPointLogSchema);

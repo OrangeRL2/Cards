@@ -49,6 +49,6 @@ const userSchema = new Schema({
 // Optional: create an index to help find unresolved attempts quickly
 // Note: MongoDB doesn't support unique constraints on array subdocuments across documents easily.
 // This index helps queries for unresolved attempts per user.
-userSchema.index({ id: 1, 'pendingAttempts.id': 1 });
+userSchema.index({ id: 1 });
 
 module.exports = model('User', userSchema);
