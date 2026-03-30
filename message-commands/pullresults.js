@@ -32,6 +32,7 @@ const SR_AND_ABOVE = new Set(['SR', 'OSR', 'VAL', 'SY', 'UR', 'OUR', 'HR', 'BDAY
 const EXCEPTION_LIST = [
   'Test 001',
   'Test 999',
+  'Test 998',
 ];
 
 const EXCEPTION_SET = new Set(

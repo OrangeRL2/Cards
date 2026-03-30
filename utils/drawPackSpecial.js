@@ -21,6 +21,7 @@ function pickOne(arr) {
   return arr[Math.floor(Math.random() * arr.length)];
 }
 const MONTHLY_BDAYS_BASE = process.env.MONTHLY_BDAYS_BASE || 'assets/montlybdays';
+const OSR_BASE = process.env.OSR_BASE || 'assets/special/OSR';
 /**
  * Resolve the incoming specialLabel into the actual folder label used for pulls.
  * - If specialLabel matches a gachaMap key, pick one variant ONCE per pack.
@@ -76,6 +77,28 @@ async function pickForSlot(rarity, specialLabel) {
       if (pickedMonthlyNeutral) return pickedMonthlyNeutral;
     } catch {}
     // If monthly folder is missing/empty, fall through to normal BDAY behavior below.
+  }
+
+    else if (R === 'OSR') {
+    try {
+      const pickedOSR = await pickCardFromRarityFolder(
+        'OSR',
+        specialLabel || null,
+        { avoidImmediateRepeat: true, baseDir: OSR_BASE }
+      );
+      if (pickedOSR) return pickedOSR;
+    } catch {}
+
+    // If label search found nothing, try neutral monthly pick
+    try {
+      const pickedOSRNeutral = await pickCardFromRarityFolder(
+        'OSR',
+        null,
+        { avoidImmediateRepeat: true, baseDir: OSR_BASE }
+      );
+      if (pickedOSRNeutral) return pickedOSRNeutral;
+    } catch {}
+    // If osr folder is missing/empty, fall through to normal OSR behavior below.
   }
 
   // Existing behavior: label-biased pick from default ASSETS_BASE/<RARITY>

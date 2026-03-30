@@ -29,7 +29,7 @@ const hoardMap = {
   '443061305721618432': ['Ayame', 'Gen 2'],
   '399631405228752897': ['Towa', 'holoForce'],
   '409724952091295745': ['Kanata', 'holoForce'],
-  '153551890976735232': ['Mio', 'GAMERS', 'Dorobo','ayafubumi','Koyori','holoX'],
+  '409720567588061184': ['Mio', 'GAMERS', 'Dorobo','ayafubumi','Koyori','holoX'],
   '409728788117848074': ['Haato', 'Gen 1'],
 };
 

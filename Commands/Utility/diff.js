@@ -18,6 +18,7 @@ const EXCEPTION_LIST = [
   'Test 001',
   'Test 999',
   'Test 002',
+  'Test 998',
 ];
 
 const EXCEPTION_SET = new Set(

@@ -9,7 +9,7 @@ const PREFIX = '!';
 const COMMAND_NAME = 'restart';
 const OWNER_ID = '409717160995192832';
 const OWNER_ID2 = '153551890976735232';
-const OWNER_ID3 = '399012422805094410';
+const OWNER_ID3 = '272129129841688577';
 
 function parseFlags(content) {
   const parts = content.split(/\s+/).slice(1); // drop command token

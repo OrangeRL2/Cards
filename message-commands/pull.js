@@ -45,11 +45,11 @@ module.exports = {
         return message.reply({ content: 'Slash pull command not loaded.' }).catch(() => {});
       }
 
-      // parse allowEvent similar to slash usage (skip first arg if it was a target and allowed)
+      // parse allowspecial similar to slash usage (skip first arg if it was a target and allowed)
       const argStart = targetUser ? 1 : 0;
       const remainingArgs = args.slice(argStart);
-      const allowEvent = remainingArgs.includes('event') ||
-                         remainingArgs.includes('--event') ||
+      const allowspecial = remainingArgs.includes('special') ||
+                         remainingArgs.includes('--special') ||
                          remainingArgs.includes('true');
 
       let replyMessage = null;
@@ -61,7 +61,7 @@ const fakeInteraction = {
   user: targetUser || message.author,
   _initiator: message.author,
   options: {
-    getBoolean: (name) => (name === 'event' ? allowEvent : null)
+    getBoolean: (name) => (name === 'special' ? allowspecial : null)
   },
   async deferReply() {
     try {

@@ -225,7 +225,7 @@ async function drawPack(userId, useSpecialRatesOverride = null, opts = {}) {
   }
 
   // Extra slot with appearance chance (ONLY chance changes; rarity odds unchanged)
-  const baseExtraChance = 12.5/100; // 12.5% base chance for the extra slot to appear
+  const baseExtraChance = 0; // 12.5% base chance for the extra slot to appear
   const extraChance = baseExtraChance * (profile.extraSlotRate ?? 1.0);
 
   if (Math.random() < extraChance) {
