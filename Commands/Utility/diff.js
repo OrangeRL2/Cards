@@ -30,6 +30,12 @@ function isExcludedCardName(name) {
 }
 
 
+function normCount(v) {
+  const n = Number(v);
+  return Number.isFinite(n) ? n : 0;
+}
+
+
 // RARITY order consistent with inventory / miss (later items considered rarer)
 const RARITY_ORDER = [
   'XMAS', "VAL", 'C', 'U', 'R', 'S', 'RR', 'OC', 'SR', 'COL', 'OSR', 'P', 'SP', 'SY', 'UR', 'OUR', 'HR', 'BDAY', 'UP', 'SEC',  "ORI"
@@ -97,8 +103,8 @@ module.exports = {
 
       // Build maps keyed by lower-case name::rarity -> count
       const keyOf = c => `${String(c.name)}::${String(c.rarity)}`;
-      const youMap = new Map(youCards.map(c => [keyOf(c), c.count || 0]));
-      const themMap = new Map(themCards.map(c => [keyOf(c), c.count || 0]));
+      const youMap = new Map(youCards.map(c => [keyOf(c), normCount(c.count)]));
+      const themMap = new Map(themCards.map(c => [keyOf(c), normCount(c.count)]));
 
       // Build list depending on mode
       let results = [];
@@ -107,8 +113,10 @@ module.exports = {
           if (filterR && c.rarity !== filterR) continue;
           if (filterQ && !String(c.name).toLowerCase().includes(filterQ)) continue;
           const k = keyOf(c);
-          const youCount = youMap.get(k) || 0;
-          const themCount = c.count || 0;
+          
+          const youCount = normCount(youMap.get(k));
+          const themCount = normCount(c.count);
+          
           // show only cards the target has that you have zero of
           if (youCount !== 0) continue;
           if (themCount <= 0) continue;

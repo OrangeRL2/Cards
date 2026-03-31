@@ -278,6 +278,20 @@ pekora_marine_flare_3: {
       { rarity: 'VAL', image: 'Suisei & LAYER 101', count: 1 },
     ],
   },
+
+      ReGLOSS: {
+    name: 'Spring ReGLOSS(Ririka + Hajime + Kanade + Raden + Ao)',
+    rarity: 'COL',
+    image: 'ReGLOSS 101',
+    stock: -1,
+    requires: [
+      { rarity: 'EAS', image: 'Ririka 101', count: 1 },
+      { rarity: 'EAS', image: 'Hajime 101', count: 1 },
+      { rarity: 'EAS', image: 'Kanade 101', count: 1 },
+      { rarity: 'EAS', image: 'Raden 101', count: 1 },
+      { rarity: 'EAS', image: 'Ao 101', count: 1 },
+    ],
+  },
 };
 
 module.exports = FUSION_ITEMS;

@@ -11,54 +11,72 @@ const CARD_POOLS = {
   White: {
     rarity: 'EAS',
     cards: {
-      'Koyori 001': 5.00375,
-      'Easter X': 0.005,
-      'Easter Y': 0.005,
+      'Koyori 001': 33.33233333333333,
+      'Hajime 101': 33.33233333333333,
+      'Mumei 001': 33.33233333333333,
+      'Easter X': 0.001,
+      'Easter Y': 0.001,
+      'Easter Z': 0.001,
     },
   },
 
   Green: {
     rarity: 'EAS',
     cards: {
-      'Pekora 001': 5.00375,
-      'Easter X': 0.005,
-      'Easter Y': 0.005,
+      'Pekora 001': 33.33233333333333,
+      'Mio 001': 33.33233333333333,
+      'Raden 101': 33.33233333333333,
+      'Easter X': 0.001,
+      'Easter Y': 0.001,
+      'Easter Z': 0.001,
     },
   },
 
   Red: {
     rarity: 'EAS',
     cards: {
-      'Miko 001': 5.00375,
-      'Easter X': 0.005,
-      'Easter Y': 0.005,
+      'Miko 001': 33.33233333333333,
+      'Polka 001': 33.33233333333333,
+      'Ririka 101': 33.33233333333333,
+      'Easter X': 0.001,
+      'Easter Y': 0.001,
+      'Easter Z': 0.001,
     },
   },
 
   Blue: {
     rarity: 'EAS',
     cards: {
-      'Ao 001': 5.00375,
-      'Easter X': 0.005,
-      'Easter Y': 0.005,
+      'Ao 101': 33.33233333333333,
+      'Shiori 001': 33.33233333333333,
+      'Okayu 001': 33.33233333333333,
+      'Easter X': 0.001,
+      'Easter Y': 0.001,
+      'Easter Z': 0.001,
     },
   },
 
   Purple: {
     rarity: 'EAS',
     cards: {
-      'Bijou 001': 5.00375,
-      'Easter X': 0.005,
-      'Easter Y': 0.005,
+      'Bijou 001': 33.33233333333333,
+      'Calli 001': 33.33233333333333,
+      'Shion 001': 33.33233333333333,
+      'Easter X': 0.001,
+      'Easter Y': 0.001,
+      'Easter Z': 0.001,
     },
   },
 
   Yellow: {
     rarity: 'EAS',
     cards: {
-      'Kanade 001': 5.00375,
-      'Easter X': 0.005,
-      'Easter Y': 0.005,
+      'Kanade 101': 33.33233333333333,
+      'Watame 001': 33.33233333333333,
+      'Nene 001': 33.33233333333333,
+      'Easter X': 0.001,
+      'Easter Y': 0.001,
+      'Easter Z': 0.001,
     },
   },
 };

@@ -85,28 +85,37 @@ function pickFileFromPool(rarity, userId, useSpecialRates = false, fileWeightsMa
  * - by default = filename WITHOUT extension
  */
 const defaultExtraCardWeightsByRarity = {
-  // Example: EAS controlled weights
   EAS: {
-    "White Egg": 13.33,
-    "Green Egg": 13.33,
-    "Red Egg": 13.33,
-    "Blue Egg": 13.33,
-    "Purple Egg": 13.33,
-    "Yellow Egg": 13.33,
+    "White Egg": 14.166666666666666,
+    "Green Egg": 14.166666666666666,
+    "Red Egg": 14.166666666666666,
+    "Blue Egg": 14.166666666666666,
+    "Purple Egg": 14.166666666666666,
+    "Yellow Egg": 14.166666666666666,
 
-    "Bijou 001": 5.00375, //purple
-    "Koyori 001": 5.00375, //white
-    "Miko 001": 5.00375, //red
-    "Pekora 001": 5.00375, //green
-    "Kande 001": 5.00375, //yellow
-    "Ao 001": 5.00375, //blue
-    "Easter X": 0.005,
-    "Easter Y": 0.005,
+    "Koyori 001": 0.833,
+    "Hajime 101": 0.833,
+    "Mumei 001": 0.833,
+    "Pekora 001": 0.833,
+    "Mio 001": 0.833,
+    "Raden 101": 0.833,
+    "Miko 001": 0.833,
+    "Polka 001": 0.833,
+    "Ririka 101": 0.833,
+    "Ao 101": 0.833,
+    "Shiori 001": 0.833,
+    "Okayu 001": 0.833,
+    "Bijou 001": 0.833,
+    "Calli 001": 0.833,
+    "Shion 001": 0.833,
+    "Kanade 101": 0.833,
+    "Watame 001": 0.833,
+    "Nene 001": 0.833,
+
+    "Easter X": 0.002,
+    "Easter Y": 0.002,
+    "Easter O": 0.002,
   },
-
-  // You can do the same for other extra-slot rarities if you want:
-  // VAL: { "Valentine A": 50, "Valentine B": 50 },
-  // EGG: { "Egg 1": 80, "Egg 2": 20 },
 };
 
 // --- Main draw (async because of DB read)

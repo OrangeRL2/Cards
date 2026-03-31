@@ -92,9 +92,15 @@ module.exports = {
         if (filterQ && !card.name.toLowerCase().includes(filterQ)) return false;
 
         const info = owned.find(c => c.name === card.name && c.rarity === card.rarity);
-        if (!info) return true;
-        if (info.rarity !== card.rarity) return true;
-        return false;
+
+      // Missing if no record OR record exists but count is 0 or less
+      if (!info) return true;
+            
+      const cnt = Number(info.count ?? info.qty ?? 0);
+      if (!Number.isFinite(cnt) || cnt <= 0) return true;
+            
+      return false;
+
       });
 
       if (missing.length === 0) {
