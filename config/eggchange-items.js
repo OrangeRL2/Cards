@@ -1,57 +1,115 @@
 // config/eggchange-items.js
-// Exchange items for /eggschange (card-currency shop)
+
+const DEFAULT_REWARD_WEIGHTS = {
+  card: 59.95,         // most likely
+  fans: 35.00,         // also very likely
+  eventpulls: 5.00,    // decently rare
+  streamtickets: 0.05, // super rare
+};
+
+const CARD_POOLS = {
+  White: {
+    rarity: 'EAS',
+    cards: {
+      'Koyori 001': 5.00375,
+      'Easter X': 0.005,
+      'Easter Y': 0.005,
+    },
+  },
+
+  Green: {
+    rarity: 'EAS',
+    cards: {
+      'Pekora 001': 5.00375,
+      'Easter X': 0.005,
+      'Easter Y': 0.005,
+    },
+  },
+
+  Red: {
+    rarity: 'EAS',
+    cards: {
+      'Miko 001': 5.00375,
+      'Easter X': 0.005,
+      'Easter Y': 0.005,
+    },
+  },
+
+  Blue: {
+    rarity: 'EAS',
+    cards: {
+      'Ao 001': 5.00375,
+      'Easter X': 0.005,
+      'Easter Y': 0.005,
+    },
+  },
+
+  Purple: {
+    rarity: 'EAS',
+    cards: {
+      'Bijou 001': 5.00375,
+      'Easter X': 0.005,
+      'Easter Y': 0.005,
+    },
+  },
+
+  Yellow: {
+    rarity: 'EAS',
+    cards: {
+      'Kanade 001': 5.00375,
+      'Easter X': 0.005,
+      'Easter Y': 0.005,
+    },
+  },
+};
+
+function toWeightedCardPool(colorName) {
+  const def = CARD_POOLS[colorName];
+  if (!def) return [];
+
+  return Object.entries(def.cards).map(([image, weight]) => ({
+    rarity: def.rarity,
+    image,
+    weight,
+  }));
+}
+
+function createColorEggchange(colorName) {
+  return {
+    name: `${colorName} Egg Reward Gacha`,
+    type: 'rewardgacha',
+    costCards: [
+      { rarity: 'EAS', image: `${colorName} Egg`, count: 5 },
+    ],
+
+    rewardPool: [
+      { rewardType: 'card', weight: DEFAULT_REWARD_WEIGHTS.card },
+      { rewardType: 'fans', amount: 25, weight: DEFAULT_REWARD_WEIGHTS.fans },
+      { rewardType: 'eventpulls', amount: 1, weight: DEFAULT_REWARD_WEIGHTS.eventpulls },
+
+      // Stream Ticket is just a card reward
+      {
+        rewardType: 'streamticketcard',
+        rarity: 'EAS',
+        image: 'Stream Ticket',
+        amount: 1,
+        weight: DEFAULT_REWARD_WEIGHTS.streamtickets,
+      },
+    ],
+
+    cardPool: toWeightedCardPool(colorName),
+
+    banner: { rarity: 'EAS', image: `${colorName} Easter Banner` },
+  };
+}
 
 const EGGSCHANGE_ITEMS = {
-  // --- GACHA EXAMPLES ---
-  easterGacha1: {
-    name: 'White Easter Gacha 1x',
-    type: 'gacha', // 'gacha' | 'eventpulls' | 'fans'
-    pulls: 1,
-    costCards: [
-      { rarity: 'EAS', image: 'White Egg', count: 5 },
-    ],
-    pool: [
-      { rarity: 'EAS', image: 'Zeta 001', weight: 50.0 },
-      { rarity: 'EAS', image: 'Lamy 001', weight: 50.0 },
-      // add more...
-    ],
-    banner: { rarity: 'EAS', image: 'White Easter Banner' },
-  },
-
-  easterGacha10: {
-    name: 'White Easter Gacha 10x',
-    type: 'gacha',
-    pulls: 10,
-    costCards: [
-      { rarity: 'EAS', image: 'White Egg', count: 50 },
-    ],
-    pool: [
-      { rarity: 'EAS', image: 'Zeta 001', weight: 50.0 },
-      { rarity: 'EAS', image: 'Lamy 001', weight: 50.0 },
-      // add more...
-    ],
-    banner: { rarity: 'EAS', image: 'White Easter Banner' },
-  },
-
-  // --- EXCHANGE EGGS -> EVENT PULLS (PullQuota.eventPulls) ---
-  easterPulls10: {
-    name: 'Event pulls +10',
-    type: 'eventpulls',
-    amount: 10,
-    costCards: [{ rarity: 'EAS', image: 'White Egg', count: 5 }],
-    costCards: [{ rarity: 'EAS', image: 'Green Egg', count: 5 }],
-    costCards: [{ rarity: 'EAS', image: 'Red Egg', count: 5 }],
-    costCards: [{ rarity: 'EAS', image: 'Blue Egg', count: 5 }],
-    costCards: [{ rarity: 'EAS', image: 'Purple Egg', count: 5 }],
-    costCards: [{ rarity: 'EAS', image: 'Yellow Egg', count: 5 }],
-  },
-  // --- EXCHANGE EGGS -> FANS (User.points) ---
-  easterFans100: {
-    name: 'Fans +100',
-    type: 'fans',
-    amount: 100,
-    costCards: [{ rarity: 'EAS', image: 'White Egg', count: 5 }],
-  },
+  whiteEggchange: createColorEggchange('White'),
+  greenEggchange: createColorEggchange('Green'),
+  redEggchange: createColorEggchange('Red'),
+  blueEggchange: createColorEggchange('Blue'),
+  purpleEggchange: createColorEggchange('Purple'),
+  yellowEggchange: createColorEggchange('Yellow'),
 };
 
 module.exports = EGGSCHANGE_ITEMS;

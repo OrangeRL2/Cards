@@ -93,11 +93,15 @@ const defaultExtraCardWeightsByRarity = {
     "Blue Egg": 13.33,
     "Purple Egg": 13.33,
     "Yellow Egg": 13.33,
-    "Suisei 001": 5.00375,
-    "Lamy 001": 5.00375,
-    "Haato 001": 5.00375,
-    "Zeta 001": 5.00375,
+
+    "Bijou 001": 5.00375, //purple
+    "Koyori 001": 5.00375, //white
+    "Miko 001": 5.00375, //red
+    "Pekora 001": 5.00375, //green
+    "Kande 001": 5.00375, //yellow
+    "Ao 001": 5.00375, //blue
     "Easter X": 0.005,
+    "Easter Y": 0.005,
   },
 
   // You can do the same for other extra-slot rarities if you want:
@@ -225,7 +229,7 @@ async function drawPack(userId, useSpecialRatesOverride = null, opts = {}) {
   }
 
   // Extra slot with appearance chance (ONLY chance changes; rarity odds unchanged)
-  const baseExtraChance = 0; // 12.5% base chance for the extra slot to appear
+  const baseExtraChance = 0.40; // 40% base chance for the extra slot to appear
   const extraChance = baseExtraChance * (profile.extraSlotRate ?? 1.0);
 
   if (Math.random() < extraChance) {
