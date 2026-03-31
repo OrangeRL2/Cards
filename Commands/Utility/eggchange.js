@@ -37,7 +37,7 @@ function buildImageUrl(rarity, imageFilename) {
 
 // Optional reveal gifs
 const REVEAL_GIFS = [
-  'https://media.discordapp.net/attachments/1438508130165067818/1459785373025697846/puzzle-puzzles.gif?ex=69648a92&is=69633912&hm=6118a2de54e3215f1fc61f4a02c6f2f393160002cb78b99d15f862c3087d7809&=',
+  'https://cdn.discordapp.com/attachments/1438508130165067818/1488683188527300859/kurousagi.gif?ex=69cdabc2&is=69cc5a42&hm=c4a55e3c555523974099d1ece90f7c1bc8b92679cfa9ad43954e7bc41ee889f7&',
 ];
 const REVEAL_DURATION = 1600;
 
@@ -147,7 +147,7 @@ module.exports = {
           .join(', ') || 'None';
 
       if (it.type === 'rewardgacha') {
-        return `**${index}.** 🎲 ${escapeMarkdown(it.name)}\nCost: ${costText}\nRewards: random card / 25 fans / 1 event pull / Stream Ticket`;
+        return `**${index}.** 🎲 ${escapeMarkdown(it.name)}\nCost: ${costText}\nRewards: random card / 25 fans / 5 event pull / Stream Ticket`;
       }
 
       if (it.type === 'gacha') {
@@ -214,7 +214,7 @@ module.exports = {
         let desc = `Cost:\n${costText}`;
 
         if (it.type === 'rewardgacha') {
-          desc += `\n\nPossible rewards:\n• 1 random card from this color pool\n• 25 fans\n• 1 event pull\n• 1x [EAS] Stream Ticket`;
+          desc += `\n\nPossible rewards:\n• 1 random card from this color pool\n• 25 fans\n• 5 event pull\n• 1x [EAS] Stream Ticket`;
         }
 
         const embed = new EmbedBuilder()

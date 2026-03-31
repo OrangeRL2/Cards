@@ -68,6 +68,7 @@ module.exports = {
           { name: 'BDAY', value: 'BDAY'},
           { name: 'SEC', value: 'SEC' },
           { name: 'ORI', value: 'ORI' },
+          { name: 'EAS', value: 'EAS' },
         ),
     ) 
     .addStringOption(opt =>
@@ -176,6 +177,7 @@ module.exports = {
         BDAY  : 19, 
         SEC   : 20,
         ORI   : 21,
+        EAS   : 22,
       };
       entries.sort((a, b) => {
         const d = (order[b.rarity] || 999) - (order[a.rarity] || 999);
@@ -251,6 +253,7 @@ module.exports = {
         SEC:  0x6CCDF8, // SEC Light Blue
         VAL:  Colors.Red,
         ORI:  Colors.Orange,
+        EAS:  0xFF2301,
         }[c.rarity] ?? Colors.Default)
         .setFooter({ text: `Card ${i + 1} of ${imageResults.length}` })
     );

@@ -1,10 +1,10 @@
 // config/eggchange-items.js
 
 const DEFAULT_REWARD_WEIGHTS = {
-  card: 59.95,         // most likely
-  fans: 35.00,         // also very likely
-  eventpulls: 5.00,    // decently rare
-  streamtickets: 0.05, // super rare
+  card: 59.90,         // most likely
+  fans: 30.00,         // also very likely
+  eventpulls: 10.00,    // decently rare
+  streamtickets: 0.1, // super rare
 };
 
 const CARD_POOLS = {
@@ -16,7 +16,7 @@ const CARD_POOLS = {
       'Mumei 001': 33.33233333333333,
       'Easter X': 0.001,
       'Easter Y': 0.001,
-      'Easter Z': 0.001,
+      'Easter O': 0.001,
     },
   },
 
@@ -28,7 +28,7 @@ const CARD_POOLS = {
       'Raden 101': 33.33233333333333,
       'Easter X': 0.001,
       'Easter Y': 0.001,
-      'Easter Z': 0.001,
+      'Easter O': 0.001,
     },
   },
 
@@ -40,7 +40,7 @@ const CARD_POOLS = {
       'Ririka 101': 33.33233333333333,
       'Easter X': 0.001,
       'Easter Y': 0.001,
-      'Easter Z': 0.001,
+      'Easter O': 0.001,
     },
   },
 
@@ -52,7 +52,7 @@ const CARD_POOLS = {
       'Okayu 001': 33.33233333333333,
       'Easter X': 0.001,
       'Easter Y': 0.001,
-      'Easter Z': 0.001,
+      'Easter O': 0.001,
     },
   },
 
@@ -64,7 +64,7 @@ const CARD_POOLS = {
       'Shion 001': 33.33233333333333,
       'Easter X': 0.001,
       'Easter Y': 0.001,
-      'Easter Z': 0.001,
+      'Easter O': 0.001,
     },
   },
 
@@ -76,7 +76,7 @@ const CARD_POOLS = {
       'Nene 001': 33.33233333333333,
       'Easter X': 0.001,
       'Easter Y': 0.001,
-      'Easter Z': 0.001,
+      'Easter O': 0.001,
     },
   },
 };
@@ -103,7 +103,7 @@ function createColorEggchange(colorName) {
     rewardPool: [
       { rewardType: 'card', weight: DEFAULT_REWARD_WEIGHTS.card },
       { rewardType: 'fans', amount: 25, weight: DEFAULT_REWARD_WEIGHTS.fans },
-      { rewardType: 'eventpulls', amount: 1, weight: DEFAULT_REWARD_WEIGHTS.eventpulls },
+      { rewardType: 'eventpulls', amount: 5, weight: DEFAULT_REWARD_WEIGHTS.eventpulls },
 
       // Stream Ticket is just a card reward
       {

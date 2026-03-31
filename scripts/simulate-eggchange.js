@@ -13,7 +13,7 @@
 // Config defaults
 // ------------------------
 
-const DEFAULT_EXTRA_CHANCE = 0.20;
+const DEFAULT_EXTRA_CHANCE = 0.40;
 
 const DEFAULT_EAS_WEIGHTS = {
     "White Egg": 14.166666666666666,

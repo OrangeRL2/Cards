@@ -20,7 +20,7 @@ const PAGE_SIZE = 10;
 const IDLE_LIMIT = 120_000; // 2 minutes
 
 const RARITY_ORDER = [
-  'XMAS', 'VAL', 'C', 'U', 'R', 'S', 'RR', 'OC', 'SR', 'COL', 'OSR', 'P', 'SP', 'SY', 'UR', 'OUR', 'HR', 'BDAY', 'UP', 'SEC','ORI'
+  'XMAS', 'VAL', 'C', 'U', 'R', 'S', 'RR', 'OC', 'SR', 'COL', 'OSR', 'P', 'SP', 'SY', 'UR', 'OUR', 'HR', 'BDAY', 'UP', 'SEC','ORI','EAS'
 ];
 
 const COLOR_MAP = {
@@ -45,6 +45,7 @@ const COLOR_MAP = {
   SEC:  0x6CCDF8, // SEC Light Blue
   VAL:  Colors.Red,
   ORI:  Colors.Orange,
+  EAS:  0xFF2301,
 };
 
 module.exports = {
