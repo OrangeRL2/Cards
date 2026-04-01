@@ -15,12 +15,12 @@ const mongoose = require('mongoose');
 const User = require('../../models/User');
 const PullQuota = require('../../models/PullQuota');
 const EGGSCHANGE_ITEMS = require('../../config/eggchange-items');
-const { pickWeighted } = require('../../utils/rates');
+const { pickWeighted, pickWeightedWithRoll } = require('../../utils/rates');
 
 const IMAGE_BASE = process.env.IMAGE_BASE || 'http://152.69.195.48/images';
+
 const ITEMS_PER_PAGE = 5;
-const IDLE_LIMIT = 120_000; // UI idle timeout for shop-like menu
-const PAGE_TIMEOUT_MS = 120_000; // paging timeout for gacha results
+const IDLE_LIMIT = 120_000; // UI idle timeout
 
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -28,7 +28,7 @@ function sleep(ms) {
 
 // Escape Discord markdown safely
 function escapeMarkdown(str = '') {
-  return String(str).replace(/([\\`*_{}[\+\-.!\n>~|])/g, '\\$1');
+  return String(str).replace(/(\[\\`*_{}\[\]+\-.!\n>~\])/g, '\\$1');
 }
 
 function buildImageUrl(rarity, imageFilename) {
@@ -52,19 +52,17 @@ function paginate(items) {
 // ===== Inventory helpers =====
 function getCardCount(userDoc, rarity, name) {
   const c = (userDoc.cards || []).find(
-    (x) => String(x.rarity) === String(rarity) && String(x.name) === String(name)
+    (x) => String(x.rarity) === String(rarity) && String(x.name) === String(name),
   );
-  return c?.count || 0;
+  return Number(c?.count || 0);
 }
 
 function addCard(userDoc, rarity, name, amount = 1) {
   userDoc.cards = userDoc.cards || [];
   const now = new Date();
-
   let c = userDoc.cards.find(
-    (x) => String(x.rarity) === String(rarity) && String(x.name) === String(name)
+    (x) => String(x.rarity) === String(rarity) && String(x.name) === String(name),
   );
-
   if (!c) {
     c = {
       name,
@@ -76,7 +74,7 @@ function addCard(userDoc, rarity, name, amount = 1) {
     };
     userDoc.cards.push(c);
   } else {
-    c.count = (c.count || 0) + amount;
+    c.count = Number(c.count || 0) + Number(amount || 0);
     if (!c.firstAcquiredAt) c.firstAcquiredAt = now;
     c.lastAcquiredAt = now;
   }
@@ -85,18 +83,25 @@ function addCard(userDoc, rarity, name, amount = 1) {
 function deductCards(userDoc, costCards) {
   for (const req of costCards) {
     const idx = (userDoc.cards || []).findIndex(
-      (x) => String(x.rarity) === String(req.rarity) && String(x.name) === String(req.image)
+      (x) => String(x.rarity) === String(req.rarity) && String(x.name) === String(req.image),
     );
-
     if (idx === -1) continue;
-
-    userDoc.cards[idx].count = (userDoc.cards[idx].count || 0) - Number(req.count || 0);
+    userDoc.cards[idx].count = Number(userDoc.cards[idx].count || 0) - Number(req.count || 0);
     if (userDoc.cards[idx].count <= 0) userDoc.cards.splice(idx, 1);
   }
 }
 
+function canAfford(userDoc, costCards) {
+  const reqs = Array.isArray(costCards) ? costCards : [];
+  for (const req of reqs) {
+    const have = getCardCount(userDoc, req.rarity, req.image);
+    if (have < Number(req.count ?? 0)) return false;
+  }
+  return true;
+}
+
 // ===== Weighted roll helpers =====
-function pickWeightedEntry(entries = []) {
+function pickWeightedEntry(entries = [], { label = 'pool' } = {}) {
   const valid = entries
     .map((entry, idx) => ({
       idx,
@@ -112,9 +117,30 @@ function pickWeightedEntry(entries = []) {
     weight: x.weight,
   }));
 
-  const picked = pickWeighted(options);
-  const pickedIdx = Number(picked);
+  // Use debug-capable picker (roll + total)
+  const { key, roll, total } = pickWeightedWithRoll(options, { integer: true });
+  const pickedIdx = Number(key);
   const found = valid.find((x) => x.idx === pickedIdx);
+
+  // "Drawn weight" = weight of the selected entry
+  const pickedWeight = found?.weight ?? null;
+
+  // Helpful identifier (card pulls use image; rewardgacha uses rewardType)
+  const pickedDesc =
+    found?.entry?.image ??
+    found?.entry?.rewardType ??
+    found?.entry?.name ??
+    `idx:${pickedIdx}`;
+
+  console.log('[eggschange][weighted-pick]', {
+    label,
+    roll,
+    total,
+    pickedIdx,
+    pickedWeight,
+    pickedDesc,
+  });
+
   return found?.entry ?? null;
 }
 
@@ -133,7 +159,6 @@ module.exports = {
     await interaction.deferReply();
 
     const items = Object.entries(EGGSCHANGE_ITEMS).map(([id, it]) => ({ id, ...it }));
-
     if (items.length === 0) {
       return interaction.editReply({ content: 'No eggschange items are configured right now.' });
     }
@@ -149,19 +174,15 @@ module.exports = {
       if (it.type === 'rewardgacha') {
         return `**${index}.** 🎲 ${escapeMarkdown(it.name)}\nCost: ${costText}\nRewards: random card / 25 fans / 5 event pull / Stream Ticket`;
       }
-
       if (it.type === 'gacha') {
-        return `**${index}.** 🎲 ${escapeMarkdown(it.name)}\nCost: ${costText}\nRolls: ${it.pulls || 1}`;
+        return `**${index}.** 🎲 ${escapeMarkdown(it.name)}\nCost: ${costText}\nRolls: ${it.pulls ?? 1}`;
       }
-
       if (it.type === 'eventpulls') {
-        return `**${index}.** 🎟️ ${escapeMarkdown(it.name)}\nCost: ${costText}\nGives: +${it.amount || 0} event pulls`;
+        return `**${index}.** 🎟️ ${escapeMarkdown(it.name)}\nCost: ${costText}\nGives: +${it.amount ?? 0} event pulls`;
       }
-
       if (it.type === 'fans') {
-        return `**${index}.** 👥 ${escapeMarkdown(it.name)}\nCost: ${costText}\nGives: +${it.amount || 0} fans`;
+        return `**${index}.** 👥 ${escapeMarkdown(it.name)}\nCost: ${costText}\nGives: +${it.amount ?? 0} fans`;
       }
-
       return `**${index}.** ${escapeMarkdown(it.name)}\nCost: ${costText}`;
     }
 
@@ -185,7 +206,8 @@ module.exports = {
         const prev = new ButtonBuilder()
           .setCustomId(`egg_list_prev_${pageIdx}_${uid}`)
           .setLabel('◀ Prev')
-          .setStyle(ButtonStyle.Primary);
+          .setStyle(ButtonStyle.Primary)
+          .setDisabled(totalPages <= 1);
 
         const view = new ButtonBuilder()
           .setCustomId(`egg_list_view_${pageIdx}_${uid}`)
@@ -195,7 +217,8 @@ module.exports = {
         const next = new ButtonBuilder()
           .setCustomId(`egg_list_next_${pageIdx}_${uid}`)
           .setLabel('Next ▶')
-          .setStyle(ButtonStyle.Primary);
+          .setStyle(ButtonStyle.Primary)
+          .setDisabled(totalPages <= 1);
 
         const ex = new ButtonBuilder()
           .setCustomId(`egg_list_exchange_${pageIdx}_${uid}`)
@@ -212,7 +235,6 @@ module.exports = {
             .join('\n') || 'None';
 
         let desc = `Cost:\n${costText}`;
-
         if (it.type === 'rewardgacha') {
           desc += `\n\nPossible rewards:\n• 1 random card from this color pool\n• 25 fans\n• 5 event pull\n• 1x [EAS] Stream Ticket`;
         }
@@ -226,7 +248,6 @@ module.exports = {
         if (it.banner?.rarity && it.banner?.image) {
           embed.setImage(buildImageUrl(it.banner.rarity, `${it.banner.image}.png`));
         }
-
         return embed;
       });
 
@@ -234,7 +255,8 @@ module.exports = {
         const prev = new ButtonBuilder()
           .setCustomId(`egg_img_prev_${i}_${uid}`)
           .setLabel('◀ Prev')
-          .setStyle(ButtonStyle.Primary);
+          .setStyle(ButtonStyle.Primary)
+          .setDisabled(activeItems.length <= 1);
 
         const back = new ButtonBuilder()
           .setCustomId(`egg_img_back_${i}_${uid}`)
@@ -244,7 +266,8 @@ module.exports = {
         const next = new ButtonBuilder()
           .setCustomId(`egg_img_next_${i}_${uid}`)
           .setLabel('Next ▶')
-          .setStyle(ButtonStyle.Primary);
+          .setStyle(ButtonStyle.Primary)
+          .setDisabled(activeItems.length <= 1);
 
         const ex = new ButtonBuilder()
           .setCustomId(`egg_img_exchange_${i}_${uid}`)
@@ -259,36 +282,101 @@ module.exports = {
 
     let { pages, listEmbeds, listRows, imageEmbeds, imageRows } = buildUi(items);
 
-    await interaction.editReply({
+    const message = await interaction.editReply({
       embeds: [listEmbeds[0]],
       components: [listRows[0]],
-    });
-
-    const message = await interaction.fetchReply();
+    }).then(() => interaction.fetchReply());
 
     let listPage = 0;
     let imageIdx = 0;
 
-    const collector = message.createMessageComponentCollector({
-      componentType: ComponentType.Any,
-      time: IDLE_LIMIT,
-      filter: (comp) =>
-        comp.user.id === interaction.user.id && String(comp.customId).endsWith(`_${uid}`),
-    });
+    // Result state (so we can support Prev/Next + Again + Back)
+    let resultState = null; // { type: 'gacha'|'single', item, pageItems, descriptionAll, costText, pageIndex, canAgain }
 
     let idleTimer = null;
-
-    function resetIdle() {
+    function resetIdle(collector) {
       if (idleTimer) clearTimeout(idleTimer);
       idleTimer = setTimeout(() => collector.stop('idle'), IDLE_LIMIT);
     }
 
-    resetIdle();
-
     let isProcessing = false;
 
+    // IDs for result buttons (use item.id so "again" repeats the same purchase)
+    const resultMenuId = `egg_back_menu_${uid}`;
+    const resultPrevId = `eggroll_prev_${uid}`;
+    const resultNextId = `eggroll_next_${uid}`;
+
+    function makeResultRows() {
+      if (!resultState) return [];
+
+      const menuBtn = new ButtonBuilder()
+        .setCustomId(resultMenuId)
+        .setLabel('↩ Back to Menu')
+        .setStyle(ButtonStyle.Secondary);
+
+      const againId = `egg_again_${resultState.item.id}_${uid}`;
+      const againBtn = new ButtonBuilder()
+        .setCustomId(againId)
+        .setLabel('🔁 Eggschange Again')
+        .setStyle(ButtonStyle.Danger)
+        .setDisabled(!resultState.canAgain);
+
+      if (resultState.type === 'gacha') {
+        const prevBtn = new ButtonBuilder()
+          .setCustomId(resultPrevId)
+          .setLabel('◀ Prev')
+          .setStyle(ButtonStyle.Primary)
+          .setDisabled((resultState.pageItems?.length ?? 0) <= 1);
+
+        const nextBtn = new ButtonBuilder()
+          .setCustomId(resultNextId)
+          .setLabel('Next ▶')
+          .setStyle(ButtonStyle.Primary)
+          .setDisabled((resultState.pageItems?.length ?? 0) <= 1);
+
+        return [new ActionRowBuilder().addComponents(prevBtn, nextBtn, againBtn, menuBtn)];
+      }
+
+      return [new ActionRowBuilder().addComponents(againBtn, menuBtn)];
+    }
+
+    function makeGachaEmbedAt(idx) {
+      const it = resultState.pageItems[idx];
+      return new EmbedBuilder()
+        .setTitle(
+          `Card: ${idx + 1} / ${resultState.pageItems.length} **[${it.rarity}]** - ${escapeMarkdown(it.displayName)} - #${it.countAfter}`,
+        )
+        .setDescription(resultState.descriptionAll)
+        .setColor(0x00BB88)
+        .addFields({ name: 'Cost Paid', value: resultState.costText, inline: false })
+        .setImage(it.imageUrl)
+        .setURL(it.imageUrl)
+        .setFooter({ text: `Eggschange by: ${interaction.user.username}` });
+    }
+
+    async function showMenu() {
+      // Rebuild in case items changed (optional, cheap)
+      ({ pages, listEmbeds, listRows, imageEmbeds, imageRows } = buildUi(items));
+      listPage = Math.max(0, Math.min(listPage, listEmbeds.length - 1));
+      resultState = null;
+      await interaction.editReply({
+        embeds: [listEmbeds[listPage] || listEmbeds[0]],
+        components: [listRows[listPage] || listRows[0]],
+      });
+    }
+
+    const collector = message.createMessageComponentCollector({
+      componentType: ComponentType.Button,
+      time: IDLE_LIMIT,
+      filter: (comp) =>
+        comp.user.id === interaction.user.id &&
+        String(comp.customId).endsWith(`_${uid}`),
+    });
+
+    resetIdle(collector);
+
     collector.on('collect', async (comp) => {
-      resetIdle();
+      resetIdle(collector);
 
       if (isProcessing) {
         try {
@@ -302,7 +390,48 @@ module.exports = {
       const cid = comp.customId;
 
       try {
-        // LIST NAV
+        // ===== Result view controls =====
+        if (cid === resultMenuId) {
+          await comp.deferUpdate().catch(() => {});
+          await showMenu();
+          return;
+        }
+
+        // Again button encodes item id: egg_again_<itemId>_<uid>
+        if (cid.startsWith('egg_again_')) {
+          await comp.deferUpdate().catch(() => {});
+          if (!resultState?.item) return;
+          await handleExchange(resultState.item);
+          return;
+        }
+
+        // Gacha paging buttons (only valid if currently in gacha result)
+        if (cid === resultPrevId || cid === resultNextId) {
+          if (!resultState || resultState.type !== 'gacha') {
+            // Ignore if not in gacha result view
+            await comp.deferUpdate().catch(() => {});
+            return;
+          }
+          const len = resultState.pageItems.length;
+          if (len <= 1) {
+            await comp.deferUpdate().catch(() => {});
+            return;
+          }
+
+          if (cid === resultPrevId) {
+            resultState.pageIndex = (resultState.pageIndex - 1 + len) % len;
+          } else {
+            resultState.pageIndex = (resultState.pageIndex + 1) % len;
+          }
+
+          await comp.update({
+            embeds: [makeGachaEmbedAt(resultState.pageIndex)],
+            components: makeResultRows(),
+          });
+          return;
+        }
+
+        // ===== Menu UI controls (list) =====
         if (cid.startsWith('egg_list_prev_')) {
           listPage = (listPage - 1 + Math.max(1, pages.length)) % Math.max(1, pages.length);
           await comp.update({
@@ -324,7 +453,6 @@ module.exports = {
         if (cid.startsWith('egg_list_view_')) {
           imageIdx = listPage * ITEMS_PER_PAGE;
           imageIdx = Math.max(0, Math.min(imageIdx, imageEmbeds.length - 1));
-
           await comp.update({
             embeds: [imageEmbeds[imageIdx] || new EmbedBuilder().setTitle('No items')],
             components: [imageRows[imageIdx] || listRows[listPage]],
@@ -332,8 +460,9 @@ module.exports = {
           return;
         }
 
-        // IMAGE NAV
+        // ===== Menu UI controls (image preview) =====
         if (cid.startsWith('egg_img_prev_')) {
+          if (imageEmbeds.length <= 0) return;
           imageIdx = (imageIdx - 1 + imageEmbeds.length) % imageEmbeds.length;
           await comp.update({
             embeds: [imageEmbeds[imageIdx]],
@@ -343,6 +472,7 @@ module.exports = {
         }
 
         if (cid.startsWith('egg_img_next_')) {
+          if (imageEmbeds.length <= 0) return;
           imageIdx = (imageIdx + 1) % imageEmbeds.length;
           await comp.update({
             embeds: [imageEmbeds[imageIdx]],
@@ -360,34 +490,27 @@ module.exports = {
           return;
         }
 
-        // EXCHANGE from image (direct)
+        // ===== Exchange from image (direct) =====
         if (cid.startsWith('egg_img_exchange_')) {
           const parts = cid.split('_');
           const idx = Number(parts[3]);
           const item = items[idx];
-
           if (!item) {
             try {
               await comp.reply({ content: 'Item not found.', ephemeral: true });
             } catch {}
             return;
           }
-
-          try {
-            await comp.deferUpdate();
-          } catch {}
-
+          await comp.deferUpdate().catch(() => {});
           await handleExchange(item);
           return;
         }
 
-        // EXCHANGE from list -> modal selection
+        // ===== Exchange from list -> modal selection =====
         if (cid.startsWith('egg_list_exchange_')) {
           const totalItems = items.length;
           const modalId = `egg_exchange_modal_${listPage}_${uid}`;
-          const modal = new ModalBuilder()
-            .setCustomId(modalId)
-            .setTitle('Eggschange');
+          const modal = new ModalBuilder().setCustomId(modalId).setTitle('Eggschange');
 
           const itemInput = new TextInputBuilder()
             .setCustomId('item_global_index')
@@ -413,7 +536,6 @@ module.exports = {
 
             let entered = parseInt(modalInt.fields.getTextInputValue('item_global_index'), 10);
             if (Number.isNaN(entered) || entered < 1) entered = 1;
-
             const idx = entered - 1;
             const item = items[idx];
 
@@ -430,7 +552,6 @@ module.exports = {
               await comp.reply({ content: 'Eggschange cancelled or timed out.', ephemeral: true });
             } catch {}
           }
-
           return;
         }
       } catch (err) {
@@ -446,13 +567,11 @@ module.exports = {
     collector.on('end', async () => {
       try {
         if (idleTimer) clearTimeout(idleTimer);
-
         const disabled = message.components.map((r) => {
           const row = ActionRowBuilder.from(r);
           row.components.forEach((b) => b.setDisabled(true));
           return row;
         });
-
         await message.edit({ components: disabled });
       } catch {}
     });
@@ -461,19 +580,13 @@ module.exports = {
       isProcessing = true;
 
       try {
-        // stop menu collector to prevent double spends
-        try {
-          collector.stop('exchange');
-        } catch {}
-
-        // show reveal gif
+        // Show reveal gif
         try {
           const gif = REVEAL_GIFS[Math.floor(Math.random() * REVEAL_GIFS.length)];
           const emb = new EmbedBuilder()
             .setTitle('🥚 EGGSCHANGE IN PROGRESS…')
             .setColor(0xFFD700)
             .setImage(gif);
-
           await interaction.editReply({ embeds: [emb], components: [] });
           await sleep(REVEAL_DURATION);
         } catch {}
@@ -501,7 +614,6 @@ module.exports = {
             // Validate cost
             const costCards = Array.isArray(item.costCards) ? item.costCards : [];
             const missing = [];
-
             for (const req of costCards) {
               const have = getCardCount(userDoc, req.rarity, req.image);
               if (have < req.count) missing.push({ req, have });
@@ -511,7 +623,6 @@ module.exports = {
               const msg = missing
                 .map((m) => `${m.req.count - m.have}x [${m.req.rarity}] ${m.req.image} (You have ${m.have})`)
                 .join('\n');
-
               throw new Error(`MISSING_COST::${msg}`);
             }
 
@@ -531,13 +642,10 @@ module.exports = {
                 const countAfter = getCardCount(userDoc, r.rarity, r.image);
                 rolled.push({ rarity: r.rarity, image: r.image, countAfter });
               }
-
               results = { kind: 'gacha', pulls, rolled };
-
             } else if (item.type === 'rewardgacha') {
               const rewardPool = Array.isArray(item.rewardPool) ? item.rewardPool : [];
               const cardPool = Array.isArray(item.cardPool) ? item.cardPool : [];
-
               if (rewardPool.length === 0) throw new Error('EMPTY_REWARD_POOL');
 
               const reward = pickWeightedEntry(rewardPool);
@@ -545,7 +653,6 @@ module.exports = {
 
               if (reward.rewardType === 'card') {
                 if (cardPool.length === 0) throw new Error('EMPTY_CARD_POOL');
-
                 const pickedCard = pickWeightedEntry(cardPool);
                 if (!pickedCard) throw new Error('INVALID_CARD_PICK');
 
@@ -559,10 +666,9 @@ module.exports = {
                   image: pickedCard.image,
                   countAfter,
                 };
-
               } else if (reward.rewardType === 'fans') {
                 const amt = Number(reward.amount ?? 25);
-                userDoc.points = (userDoc.points ?? 0) + amt;
+                userDoc.points = Number(userDoc.points ?? 0) + amt;
 
                 results = {
                   kind: 'rewardgacha',
@@ -570,10 +676,9 @@ module.exports = {
                   amount: amt,
                   newTotal: userDoc.points,
                 };
-
               } else if (reward.rewardType === 'eventpulls') {
                 const amt = Number(reward.amount ?? 1);
-                quotaDoc.eventPulls = (quotaDoc.eventPulls ?? 0) + amt;
+                quotaDoc.eventPulls = Number(quotaDoc.eventPulls ?? 0) + amt;
                 await quotaDoc.save({ session });
 
                 results = {
@@ -582,7 +687,6 @@ module.exports = {
                   amount: amt,
                   newTotal: quotaDoc.eventPulls,
                 };
-
               } else if (reward.rewardType === 'streamticketcard') {
                 const amt = Number(reward.amount ?? 1);
                 const rarity = reward.rarity ?? 'EAS';
@@ -599,14 +703,12 @@ module.exports = {
                   countAfter,
                   amount: amt,
                 };
-
               } else {
                 throw new Error('UNKNOWN_REWARD_TYPE');
               }
-
             } else if (item.type === 'eventpulls') {
               const amt = Number(item.amount ?? 0);
-              quotaDoc.eventPulls = (quotaDoc.eventPulls ?? 0) + amt;
+              quotaDoc.eventPulls = Number(quotaDoc.eventPulls ?? 0) + amt;
               await quotaDoc.save({ session });
 
               results = {
@@ -614,17 +716,15 @@ module.exports = {
                 amount: amt,
                 newTotal: quotaDoc.eventPulls,
               };
-
             } else if (item.type === 'fans') {
               const amt = Number(item.amount ?? 0);
-              userDoc.points = (userDoc.points ?? 0) + amt;
+              userDoc.points = Number(userDoc.points ?? 0) + amt;
 
               results = {
                 kind: 'fans',
                 amount: amt,
                 newTotal: userDoc.points,
               };
-
             } else {
               throw new Error('UNKNOWN_TYPE');
             }
@@ -637,11 +737,12 @@ module.exports = {
         }
 
         const costText =
-          (item.costCards || [])
-            .map((c) => `${c.count}x [${c.rarity}] ${c.image}`)
-            .join('\n') || 'None';
+          (item.costCards || []).map((c) => `${c.count}x [${c.rarity}] ${c.image}`).join('\n') || 'None';
 
-        // --- Gacha paged output like /pull ---
+        // Determine if we can run again (post-transaction inventory)
+        const canAgainNow = resultUser ? canAfford(resultUser, item.costCards) : false;
+
+        // ===== Results rendering =====
         if (results?.kind === 'gacha') {
           const rolled = results.rolled || [];
 
@@ -649,7 +750,6 @@ module.exports = {
             const displayName = String(r.image);
             const rarity = String(r.rarity);
             const imageUrl = buildImageUrl(rarity, `${displayName}.png`);
-
             return {
               rarity,
               displayName,
@@ -666,7 +766,6 @@ module.exports = {
 
           let descriptionAll = linesAll.join('\n');
           const MAX_DESC = 4096;
-
           if (descriptionAll.length > MAX_DESC) {
             const truncated = descriptionAll.slice(0, MAX_DESC - 80);
             const lastNl = truncated.lastIndexOf('\n');
@@ -676,99 +775,30 @@ module.exports = {
             descriptionAll = `${visible}\n...and ${omitted} more`;
           }
 
-          const prevId = `eggroll_prev_${uid}`;
-          const nextId = `eggroll_next_${uid}`;
+          resultState = {
+            type: 'gacha',
+            item,
+            pageItems,
+            descriptionAll,
+            costText,
+            pageIndex: 0,
+            canAgain: canAgainNow,
+          };
 
-          function makeEmbed(idx) {
-            const it = pageItems[idx];
-            return new EmbedBuilder()
-              .setTitle(
-                `Card: ${idx + 1} / ${pageItems.length} **[${it.rarity}]** - ${escapeMarkdown(it.displayName)} - #${it.countAfter}`
-              )
-              .setDescription(descriptionAll)
-              .setColor(0x00BB88)
-              .addFields({ name: 'Cost Paid', value: costText, inline: false })
-              .setImage(it.imageUrl)
-              .setURL(it.imageUrl)
-              .setFooter({ text: `Eggschange by: ${interaction.user.username}` });
-          }
-
-          const prevBtn = new ButtonBuilder()
-            .setCustomId(prevId)
-            .setLabel('◀ Prev')
-            .setStyle(ButtonStyle.Primary)
-            .setDisabled(pageItems.length <= 1);
-
-          const nextBtn = new ButtonBuilder()
-            .setCustomId(nextId)
-            .setLabel('Next ▶')
-            .setStyle(ButtonStyle.Primary)
-            .setDisabled(pageItems.length <= 1);
-
-          const row = new ActionRowBuilder().addComponents(prevBtn, nextBtn);
-          const disableRow = new ActionRowBuilder().addComponents(
-            ButtonBuilder.from(prevBtn).setDisabled(true),
-            ButtonBuilder.from(nextBtn).setDisabled(true)
-          );
-
-          const msg = await interaction.editReply({
-            embeds: [makeEmbed(0)],
-            components: [row],
-          });
-
-          if (!msg) return;
-
-          if (pageItems.length <= 1) {
-            setTimeout(async () => {
-              try {
-                await msg.edit({ components: [disableRow] });
-              } catch {}
-            }, Math.min(PAGE_TIMEOUT_MS, 10_000));
-            return;
-          }
-
-          let pageIndex = 0;
-
-          const pageCollector = msg.createMessageComponentCollector({
-            time: PAGE_TIMEOUT_MS,
-            filter: (i) =>
-              i.user.id === buyerId &&
-              (i.customId === prevId || i.customId === nextId),
-          });
-
-          pageCollector.on('collect', async (btnInt) => {
-            try {
-              if (btnInt.customId === prevId) {
-                pageIndex = (pageIndex - 1 + pageItems.length) % pageItems.length;
-              } else if (btnInt.customId === nextId) {
-                pageIndex = (pageIndex + 1) % pageItems.length;
-              }
-
-              await btnInt.update({
-                embeds: [makeEmbed(pageIndex)],
-                components: [row],
-              });
-            } catch (e) {
-              console.error('eggschange page collector error:', e);
-            }
-          });
-
-          pageCollector.on('end', async () => {
-            try {
-              await msg.edit({ components: [disableRow] });
-            } catch {}
+          await interaction.editReply({
+            embeds: [makeGachaEmbedAt(0)],
+            components: makeResultRows(),
           });
 
           return;
         }
 
-        // --- rewardgacha card-like result (normal card OR stream ticket card) ---
+        // rewardgacha card-like results (normal card OR stream ticket)
         if (
           results?.kind === 'rewardgacha' &&
-          (results?.rewardType === 'card' || results?.rewardType === 'streamticketcard')
+          (results.rewardType === 'card' || results.rewardType === 'streamticketcard')
         ) {
           const imageUrl = buildImageUrl(results.rarity, `${results.image}.png`);
-
           const titlePrefix =
             results.rewardType === 'streamticketcard'
               ? '🎉 Eggchange Reward: Stream Ticket!'
@@ -779,7 +809,7 @@ module.exports = {
             .setDescription(
               results.rewardType === 'streamticketcard'
                 ? `You rolled the **super rare Stream Ticket** reward!`
-                : `You rolled a **card reward**!`
+                : `You rolled a **card reward**!`,
             )
             .setColor(0x00BB88)
             .addFields({ name: 'Item', value: escapeMarkdown(item.name), inline: false })
@@ -788,11 +818,17 @@ module.exports = {
             .setURL(imageUrl)
             .setFooter({ text: `Eggschange by: ${interaction.user.username}` });
 
-          await interaction.editReply({ embeds: [final], components: [] });
+          resultState = {
+            type: 'single',
+            item,
+            canAgain: canAgainNow,
+          };
+
+          await interaction.editReply({ embeds: [final], components: makeResultRows() });
           return;
         }
 
-        // --- rewardgacha non-card result ---
+        // rewardgacha non-card results
         if (results?.kind === 'rewardgacha') {
           const final = new EmbedBuilder()
             .setTitle('✅ Eggschange Complete!')
@@ -812,11 +848,17 @@ module.exports = {
             final.setImage(buildImageUrl(item.banner.rarity, `${item.banner.image}.png`));
           }
 
-          await interaction.editReply({ embeds: [final], components: [] });
+          resultState = {
+            type: 'single',
+            item,
+            canAgain: canAgainNow,
+          };
+
+          await interaction.editReply({ embeds: [final], components: makeResultRows() });
           return;
         }
 
-        // --- Non-gacha (single embed) ---
+        // Non-gacha (single embed)
         const final = new EmbedBuilder()
           .setTitle('✅ Eggschange Complete!')
           .setColor(Colors.Green)
@@ -839,12 +881,17 @@ module.exports = {
           final.setImage(buildImageUrl(item.banner.rarity, `${item.banner.image}.png`));
         }
 
-        await interaction.editReply({ embeds: [final], components: [] });
+        resultState = {
+          type: 'single',
+          item,
+          canAgain: canAgainNow,
+        };
 
+        await interaction.editReply({ embeds: [final], components: makeResultRows() });
       } catch (err) {
         console.error('eggschange exchange error:', err);
-        const msg = String(err?.message || '');
 
+        const msg = String(err?.message || '');
         if (msg.startsWith('MISSING_COST::')) {
           const missingText = msg.replace('MISSING_COST::', '');
           const fail = new EmbedBuilder()
@@ -853,9 +900,14 @@ module.exports = {
             .addFields({ name: 'Missing', value: missingText.slice(0, 1000), inline: false })
             .setColor(Colors.Red);
 
-          try {
-            await interaction.editReply({ embeds: [fail], components: [] });
-          } catch {}
+          // keep the user in menu after failure? show result-style with Back
+          resultState = {
+            type: 'single',
+            item,
+            canAgain: false,
+          };
+
+          await interaction.editReply({ embeds: [fail], components: makeResultRows() });
           return;
         }
 
@@ -864,9 +916,13 @@ module.exports = {
           .setDescription('An internal error occurred. Please try again later.')
           .setColor(Colors.Red);
 
-        try {
-          await interaction.editReply({ embeds: [fail], components: [] });
-        } catch {}
+        resultState = {
+          type: 'single',
+          item,
+          canAgain: false,
+        };
+
+        await interaction.editReply({ embeds: [fail], components: makeResultRows() });
       } finally {
         isProcessing = false;
       }

@@ -86,12 +86,12 @@ function pickFileFromPool(rarity, userId, useSpecialRates = false, fileWeightsMa
  */
 const defaultExtraCardWeightsByRarity = {
   EAS: {
-    "White Egg": 14.166666666666666,
-    "Green Egg": 14.166666666666666,
-    "Red Egg": 14.166666666666666,
-    "Blue Egg": 14.166666666666666,
-    "Purple Egg": 14.166666666666666,
-    "Yellow Egg": 14.166666666666666,
+    "White Egg": 14.162666666666667,
+    "Green Egg": 14.162666666666667,
+    "Red Egg": 14.162666666666667,
+    "Blue Egg": 14.162666666666667,
+    "Purple Egg": 14.162666666666667,
+    "Yellow Egg": 14.162666666666667,
 
     "Koyori 001": 0.833,
     "Hajime 101": 0.833,
@@ -112,9 +112,9 @@ const defaultExtraCardWeightsByRarity = {
     "Watame 001": 0.833,
     "Nene 001": 0.833,
 
-    "Easter X": 0.002,
-    "Easter Y": 0.002,
-    "Easter O": 0.002,
+    "Easter X": 0.01,
+    "Easter Y": 0.01,
+    "Easter O": 0.01,
   },
 };
 

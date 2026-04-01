@@ -1,6 +1,6 @@
 const { EmbedBuilder } = require('discord.js');
 const User = require('../models/User');
-const { incOrUpsertCard, normalizeCardName } = require('../utils/liveAsync');
+const { normalizeCardName } = require('../utils/liveAsync');
 
 const ALLOWED_IDS = ['153551890976735232', '409717160995192832', '272129129841688577'];
 const PREFIX = '!';
@@ -99,23 +99,38 @@ module.exports = {
           // Ensure DB user exists
           await User.updateOne({ id: user.id }, { $setOnInsert: { pulls: 0, points: 0, cards: [], pendingAttempts: [] } }, { upsert: true }).exec();
 
-          let lastRes = null;
-          for (let i = 0; i < count; i++) {
-            const res = await incOrUpsertCard(user.id, rawName, rarity);
-            lastRes = res;
-            if (!res) {
-              results.push({ userId: user.id, tag: `${user.username}#${user.discriminator}`, ok: false, note: 'db-failed' });
-              break;
-            }
+          // Ensure DB user exists (same as you already do)
+          await User.updateOne(
+            { id: user.id },
+            { $setOnInsert: { pulls: 0, points: 0, cards: [], pendingAttempts: [] } },
+            { upsert: true }
+          ).exec();
+
+          const name = normName; // use normalized name consistently
+
+          // 1) Try to increment an existing card in one update
+          const incRes = await User.updateOne(
+            { id: user.id, cards: { $elemMatch: { name, rarity } } },
+            { $inc: { "cards.$.count": count } }
+          ).exec();
+
+          // 2) If no existing entry was incremented, push a new one
+          if ((incRes.modifiedCount ?? incRes.nModified ?? 0) === 0) {
+            await User.updateOne(
+              { id: user.id },
+              { $push: { cards: { name, rarity, count } } }
+            ).exec();
           }
 
-          if (lastRes && lastRes.card) {
-            results.push({ userId: user.id, tag: `${user.username}#${user.discriminator}`, ok: true, card: lastRes.card.name, rarity: lastRes.card.rarity, path: lastRes.path });
-          } else if (!lastRes) {
-            // already pushed above to results
-          } else {
-            results.push({ userId: user.id, tag: `${user.username}#${user.discriminator}`, ok: false, note: 'unknown-result' });
-          }
+          results.push({
+            userId: user.id,
+            tag: `${user.username}#${user.discriminator}`,
+            ok: true,
+            card: name,
+            rarity,
+            path: `${rarity}/${name}`, // optional; adjust to your real path style if you want
+          });
+
         } catch (err) {
           console.error('[admingive] error giving card to', user.id, err);
           results.push({ userId: user.id, tag: `${user.username}#${user.discriminator}`, ok: false, note: 'exception' });
