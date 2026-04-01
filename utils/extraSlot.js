@@ -45,9 +45,9 @@ const defaultExtraCardWeightsByRarity = {
     "Watame 001": 0.833,
     "Nene 001": 0.833,
 
-    "Easter X": 0.01,
-    "Easter Y": 0.01,
-    "Easter O": 0.01,
+    "Easter X": 0.00,
+    "Easter Y": 0.03,
+    "Easter O": 0.00,
   },
 };
 
