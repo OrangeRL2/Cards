@@ -3,6 +3,7 @@ const path = require('path');
 const pools = require('./loadImages');
 const { pickCardFromRarityFolder } = require('./cardPicker');
 const { pickWeighted, buildSlotOptions, getUserProfile, getOverrides } = require('./rates');
+const { rollExtraSlot } = require('./extraSlot');
 
 /**
  * Map a "special event label" -> list of folder labels it can become.
@@ -230,6 +231,27 @@ async function drawPackSpecial(userId, specialLabel, opts = {}) {
   if (opts && opts.withMeta) {
     return { results, baseLabel, variantLabel };
   }
+  // --- Extra slot (mirrors normal pack behavior) ---
+  const baseExtraChance = 0.40; // 40% base chance for the extra slot to appear
+  const extraChance = baseExtraChance * (profile.extraSlotRate ?? 1.0);
+
+  if (Math.random() < extraChance) {
+    // Keep rarity odds unchanged (same approach as newWeightedDraw)
+    const extraBase = [{ key: 'EAS', weight: 100 }];
+    const extraRarity = pickWeighted(extraBase);
+
+    // For special packs, it's usually nicer if the extra slot follows the same "variant label"
+    // so it feels themed with the pack. If you want it neutral, pass null instead.
+    const extraFile = await pickForSlot(extraRarity, variantLabel);
+
+    results.push({ rarity: extraRarity, file: extraFile, slot: 'extra' });
+  }
+
+  // Extra slot (same settings as newWeightedDraw.js: chance + weighted card selection)
+  // Special pack doesn't currently calculate "useSpecialRates", so we pass false.
+  const extra = rollExtraSlot(userId, profile, false, opts);
+  if (extra) results.push(extra);
+
   return results;
 }
 

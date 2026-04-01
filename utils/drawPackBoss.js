@@ -3,7 +3,7 @@ const path = require('path');
 const pools = require('./loadImages');
 const { pickCardFromRarityFolder } = require('./cardPicker');
 const { pickWeighted, buildSlotOptions, getUserProfile, getOverrides } = require('./rates');
-
+const { rollExtraSlot } = require('./extraSlot');
 // --- Boss alias exceptions map (kept from your file)
 const bossAliasMap = {
   Fuwawa: ['Fuwawa', 'Mococo', 'Fuwamoco'],
@@ -158,11 +158,14 @@ async function drawPackBoss(userId, bossLabel, opts = {}) {
     const rareFile = await pickForSlot(rareRarity, bossLabel);
     results.push({ rarity: rareRarity, file: rareFile });
   }
+  
+  const extra = rollExtraSlot(userId, profile, false, opts);
+  if (extra) results.push(extra);
 
-  if (!Array.isArray(results) || results.length !== 8) {
-    console.warn('[drawPackBoss] unexpected results length', { length: results.length });
+  if (!Array.isArray(results) || (results.length !== 8 && results.length !== 9)) {
+  console.warn('[drawPackBoss] unexpected results length', { length: results.length });
   }
-
+  
   return results;
 }
 

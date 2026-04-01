@@ -6,6 +6,7 @@ const COMMAND_NAME = 'gift-all';
 // Configure allowed users and roles here (strings)
 const ALLOWED_USER_IDS = new Set([
   '153551890976735232',
+  '409717160995192832',
 ]);
 const ALLOWED_ROLE_IDS = new Set([
   '844054364033384470',
