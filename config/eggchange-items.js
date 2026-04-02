@@ -1,25 +1,19 @@
 // config/eggchange-items.js
-// 100,000-scale weights (integer) for cleaner RNG resolution.
-// RewardPool sums to 100000. Each CardPool (per color) sums to 100000.
-
-// Reward weights (percent -> out of 100000)
-const DEFAULT_REWARD_WEIGHTS = {
-  card: 59900,        // 59.90%
-  fans: 30000,        // 30.00%
-  eventpulls: 10000,  // 10.00%
-  streamtickets: 100, // 0.10%
-};
-
 // Each color pool totals 100000.
 // Easter X/Y/O = 10 each => 0.01% each (10 / 100000).
-// Named cards share remaining 99970 as evenly as possible: 33324 + 33323 + 33323.
+// Named cards share remaining 99970 across 7 names:
+// 3 cards get 14282, 4 cards get 14281 (14282*3 + 14281*4 = 99970).
 const CARD_POOLS = {
   White: {
     rarity: 'EAS',
     cards: {
-      'Koyori 001': 33324,
-      'Hajime 101': 33323,
-      'Mumei 001': 33323,
+      'Hajime 101': 14282,
+      'Kanata 001': 14282,
+      'Koyori 001': 14282,
+      'Koyori 101': 14281,
+      'Mumei 001': 14281,
+      'Sora 001': 14281,
+      'Fubuki 001': 14281,
       'Easter X': 10,
       'Easter Y': 10,
       'Easter O': 10,
@@ -29,9 +23,13 @@ const CARD_POOLS = {
   Green: {
     rarity: 'EAS',
     cards: {
-      'Pekora 001': 33324,
-      'Mio 001': 33323,
-      'Raden 101': 33323,
+      'Fauna 001': 14282,
+      'Iroha 101': 14282,
+      'Mio 001': 14282,
+      'Pekora 001': 14281,
+      'Raden 101': 14281,
+      'AZKi 001': 14281,
+      'Cecilia 001': 14281,
       'Easter X': 10,
       'Easter Y': 10,
       'Easter O': 10,
@@ -41,9 +39,13 @@ const CARD_POOLS = {
   Red: {
     rarity: 'EAS',
     cards: {
-      'Miko 001': 33324,
-      'Polka 001': 33323,
-      'Ririka 101': 33323,
+      'Ayame 001': 14282,
+      'Miko 001': 14282,
+      'Mococo 001': 14282,
+      'Polka 001': 14281,
+      'Ririka 101': 14281,
+      'Marine 001': 14281,
+      'Lui 101': 14281,
       'Easter X': 10,
       'Easter Y': 10,
       'Easter O': 10,
@@ -53,9 +55,13 @@ const CARD_POOLS = {
   Blue: {
     rarity: 'EAS',
     cards: {
-      'Ao 101': 33324,
-      'Shiori 001': 33323,
-      'Okayu 001': 33323,
+      'Ao 101': 14282,
+      'Aqua 001': 14282,
+      'Chloe 101': 14282,
+      'Lamy 001': 14281,
+      'Okayu 001': 14281,
+      'Shiori 001': 14281,
+      'Suisei 001': 14281,
       'Easter X': 10,
       'Easter Y': 10,
       'Easter O': 10,
@@ -65,9 +71,13 @@ const CARD_POOLS = {
   Purple: {
     rarity: 'EAS',
     cards: {
-      'Bijou 001': 33324,
-      'Calli 001': 33323,
-      'Shion 001': 33323,
+      'Bijou 001': 14282,
+      'Calli 001': 14282,
+      'Shion 001': 14282,
+      'Towa 001': 14281,
+      'Ina 001': 14281,
+      'Roboco 001': 14281,
+      'La+ 101': 14281,
       'Easter X': 10,
       'Easter Y': 10,
       'Easter O': 10,
@@ -77,9 +87,13 @@ const CARD_POOLS = {
   Yellow: {
     rarity: 'EAS',
     cards: {
-      'Kanade 101': 33324,
-      'Watame 001': 33323,
-      'Nene 001': 33323,
+      'Flare 001': 14282,
+      'Kanade 101': 14282,
+      'Nene 001': 14282,
+      'Watame 001': 14281,
+      'Watame 002': 14281,
+      'Ame 001': 14281,
+      'Anya 001': 14281,
       'Easter X': 10,
       'Easter Y': 10,
       'Easter O': 10,

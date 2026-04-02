@@ -292,6 +292,20 @@ pekora_marine_flare_3: {
       { rarity: 'EAS', image: 'Ao 101', count: 1 },
     ],
   },
+
+  holoX: {
+    name: 'Spring holoX(Lappy + Lui + Iroha + Koyori + Chloe)',
+    rarity: 'COL',
+    image: 'ReGLOSS 101',
+    stock: -1,
+    requires: [
+      { rarity: 'EAS', image: 'La+ 101', count: 1 },
+      { rarity: 'EAS', image: 'Lui 101', count: 1 },
+      { rarity: 'EAS', image: 'Iroha 101', count: 1 },
+      { rarity: 'EAS', image: 'Koyori 101', count: 1 },
+      { rarity: 'EAS', image: 'Chloe 101', count: 1 },
+    ],
+  },
 };
 
 module.exports = FUSION_ITEMS;
