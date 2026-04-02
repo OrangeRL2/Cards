@@ -3,6 +3,15 @@
 // Easter X/Y/O = 10 each => 0.01% each (10 / 100000).
 // Named cards share remaining 99970 across 7 names:
 // 3 cards get 14282, 4 cards get 14281 (14282*3 + 14281*4 = 99970).
+
+// Reward weights (percent -> out of 100000)
+const DEFAULT_REWARD_WEIGHTS = {
+  card: 59900,        // 59.90%
+  fans: 30000,        // 30.00%
+  eventpulls: 10000,  // 10.00%
+  streamtickets: 100, // 0.10%
+};
+
 const CARD_POOLS = {
   White: {
     rarity: 'EAS',
