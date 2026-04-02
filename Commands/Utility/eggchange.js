@@ -20,7 +20,7 @@ const { pickWeighted, pickWeightedWithRoll } = require('../../utils/rates');
 const IMAGE_BASE = process.env.IMAGE_BASE || 'http://152.69.195.48/images';
 
 const ITEMS_PER_PAGE = 5;
-const IDLE_LIMIT = 120_000; // UI idle timeout
+const IDLE_LIMIT = 500_000; // UI idle timeout
 
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
