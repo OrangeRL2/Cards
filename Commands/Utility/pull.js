@@ -386,7 +386,7 @@ module.exports = {
     const discordUserId = interaction.user.id;
     const lockOwner = interaction.id;
 
-    // ✅ NEW: pity mode flags
+    // ✅ : pity mode flags
     const pityNoTrack = PITY_EXEMPT_IDS.has(discordUserId);
     const pityNoForce = pityNoTrack || PITY_EXEMPT_IDS2.has(discordUserId);
 

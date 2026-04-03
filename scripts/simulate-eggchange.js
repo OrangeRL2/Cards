@@ -49,8 +49,8 @@ const DEFAULT_EAS_WEIGHTS = {
 
 const DEFAULT_REWARD_WEIGHTS = {
   card: 59.95,
-  fans: 35.00,
-  eventpull: 5.00,
+  fans: 30.00,
+  eventpull: 10.00,
   stream_ticket: 0.05, // Stream Ticket is awarded as EAS card
 };
 
