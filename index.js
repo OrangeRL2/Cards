@@ -2,7 +2,7 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const mongoose = require('mongoose');
-const { Client, Collection, GatewayIntentBits } = require('discord.js');
+const { Client, Collection, GatewayIntentBits, EmbedBuilder } = require('discord.js');
 const config = require('./config.json');
 const { token, mongoUri } = config;
 const { startScheduler, grantBirthdayPulls } = require('./jobs/birthdayHandout');
@@ -17,6 +17,208 @@ const client = new Client({
     GatewayIntentBits.GuildMembers
   ]
 });
+
+// ===================== 🌸 SAKURA EMBED THEME (GLOBAL) =====================
+// Place this block right after: const config = require('./config.json');
+
+const EMBED_THEME = config.embedTheme || 'default';
+const KEEP_ERROR_RED = Boolean(config.embedKeepErrorRed);
+
+const DECORATE_ALL_TEXT = config.embedDecorateAllText !== false; // default true
+const DECORATE_PER_LINE = config.embedDecoratePerLine !== false; // default true
+
+// Emoji choices pool (prefix/suffix are chosen independently each time)
+const DEFAULT_CHOICES = ['🌸', '🍃'];
+const EMOJI_CHOICES = Array.isArray(config.embedDecorateEmojiChoices) && config.embedDecorateEmojiChoices.length
+  ? config.embedDecorateEmojiChoices.map(x => String(x)).filter(Boolean)
+  : DEFAULT_CHOICES;
+
+// Sakura pink
+const SAKURA_PINK = 0xFFB7C5;
+
+// Preserve certain colors even in sakura mode (optional)
+const KEEP_COLORS = new Set();
+if (KEEP_ERROR_RED) KEEP_COLORS.add(0xFF5555); // error red used in /pull
+
+// Discord embed text limits (prevents API errors)
+const LIMITS = {
+  title: 256,
+  description: 4096,
+  fieldName: 256,
+  fieldValue: 1024,
+  footerText: 2048,
+  authorName: 256,
+};
+
+function truncateTo(str, max) {
+  if (typeof str !== 'string') str = String(str ?? '');
+  if (str.length <= max) return str;
+  if (max <= 1) return '…'.slice(0, max);
+  return str.slice(0, max - 1) + '…';
+}
+
+function pickRandomEmoji() {
+  return EMOJI_CHOICES[Math.floor(Math.random() * EMOJI_CHOICES.length)];
+}
+
+// ---- "Already decorated" detection (prevents double-wrapping) ----
+// A line is considered decorated if it starts with (emoji + space) and ends with (space + emoji),
+// where emoji is ANY from EMOJI_CHOICES.
+function startsWithAnyEmojiPlusSpace(s) {
+  return EMOJI_CHOICES.some(e => s.startsWith(`${e} `));
+}
+function endsWithAnySpacePlusEmoji(s) {
+  return EMOJI_CHOICES.some(e => s.endsWith(` ${e}`));
+}
+
+function isAlreadyDecoratedLine(line) {
+  const raw = String(line ?? '');
+  const t = raw.trim();
+  if (!t) return false;
+  return startsWithAnyEmojiPlusSpace(t) && endsWithAnySpacePlusEmoji(t);
+}
+
+// Decorate a single line while preserving indentation
+function decorateOneLine(line) {
+  if (line == null) return line;
+  const raw = String(line);
+
+  // Leave blank/whitespace-only lines alone
+  if (!raw.trim()) return raw;
+
+  // Avoid double-wrapping
+  if (isAlreadyDecoratedLine(raw)) return raw;
+
+  // Preserve indentation (leading whitespace)
+  const indentMatch = raw.match(/^(\s*)/);
+  const indent = indentMatch ? indentMatch[1] : '';
+
+  // Keep the rest of the line but trim only the end (so indentation remains)
+  const content = raw.slice(indent.length).trimEnd();
+  if (!content.trim()) return raw;
+
+  // ✅ RNG prefix/suffix independently (this is what you asked for)
+  const prefix = pickRandomEmoji();
+  const suffix = pickRandomEmoji();
+
+  return `${indent}${prefix} ${content} ${suffix}`;
+}
+
+// Decorate multiline blocks line-by-line (preserves \n)
+function decorateMultiline(text) {
+  if (text == null) return text;
+  const raw = String(text);
+
+  if (!DECORATE_PER_LINE) {
+    const t = raw.trim();
+    if (!t) return raw;
+    if (isAlreadyDecoratedLine(t)) return raw;
+    const prefix = pickRandomEmoji();
+    const suffix = pickRandomEmoji();
+    return `${prefix} ${t} ${suffix}`;
+  }
+
+  return raw.split('\n').map(decorateOneLine).join('\n');
+}
+
+function decorateText(text, maxLen) {
+  if (!DECORATE_ALL_TEXT) return text;
+  const wrapped = decorateMultiline(text);
+  return truncateTo(wrapped, maxLen);
+}
+
+function enableSakuraEmbeds() {
+  if (EMBED_THEME !== 'sakura') return;
+
+  const originalSetColor = EmbedBuilder.prototype.setColor;
+  const originalSetTitle = EmbedBuilder.prototype.setTitle;
+  const originalSetDescription = EmbedBuilder.prototype.setDescription;
+  const originalAddFields = EmbedBuilder.prototype.addFields;
+  const originalSetFields = EmbedBuilder.prototype.setFields;
+  const originalSetFooter = EmbedBuilder.prototype.setFooter;
+  const originalSetAuthor = EmbedBuilder.prototype.setAuthor;
+  const originalToJSON = EmbedBuilder.prototype.toJSON;
+
+  // Force sakura color on any setColor(...) calls (unless preserved)
+  EmbedBuilder.prototype.setColor = function patchedSetColor(color) {
+    const n = typeof color === 'number' ? color : null;
+    if (n && KEEP_COLORS.has(n)) return originalSetColor.call(this, n);
+    return originalSetColor.call(this, SAKURA_PINK);
+  };
+
+  // Decorate title
+  EmbedBuilder.prototype.setTitle = function patchedSetTitle(title) {
+    return originalSetTitle.call(this, decorateText(title, LIMITS.title));
+  };
+
+  // Decorate description (multi-line friendly)
+  EmbedBuilder.prototype.setDescription = function patchedSetDescription(desc) {
+    return originalSetDescription.call(this, decorateText(desc, LIMITS.description));
+  };
+
+  // Decorate fields (name + value)
+  function decorateField(field) {
+    if (!field || typeof field !== 'object') return field;
+    const out = { ...field };
+    if ('name' in out) out.name = decorateText(out.name, LIMITS.fieldName);
+    if ('value' in out) out.value = decorateText(out.value, LIMITS.fieldValue);
+    return out;
+  }
+
+  EmbedBuilder.prototype.addFields = function patchedAddFields(...fields) {
+    const normalized = fields.length === 1 && Array.isArray(fields[0]) ? fields[0] : fields;
+    return originalAddFields.call(this, normalized.map(decorateField));
+  };
+
+  EmbedBuilder.prototype.setFields = function patchedSetFields(...fields) {
+    const normalized = fields.length === 1 && Array.isArray(fields[0]) ? fields[0] : fields;
+    return originalSetFields.call(this, normalized.map(decorateField));
+  };
+
+  // Decorate footer text (supports multi-line footers)
+  EmbedBuilder.prototype.setFooter = function patchedSetFooter(footer) {
+    if (!footer || typeof footer !== 'object') return originalSetFooter.call(this, footer);
+    const out = { ...footer };
+    if (out.text) out.text = decorateText(out.text, LIMITS.footerText);
+    return originalSetFooter.call(this, out);
+  };
+
+  // Decorate author name
+  EmbedBuilder.prototype.setAuthor = function patchedSetAuthor(author) {
+    if (!author || typeof author !== 'object') return originalSetAuthor.call(this, author);
+    const out = { ...author };
+    if (out.name) out.name = decorateText(out.name, LIMITS.authorName);
+    return originalSetAuthor.call(this, out);
+  };
+
+  // Safety net:
+  // - ensures embeds with no setColor still become pink
+  // - ensures raw-set data still gets decorated (without double-wrapping)
+  EmbedBuilder.prototype.toJSON = function patchedToJSON() {
+    if (!this.data?.color) originalSetColor.call(this, SAKURA_PINK);
+
+    if (this.data?.title) this.data.title = decorateText(this.data.title, LIMITS.title);
+    if (this.data?.description) this.data.description = decorateText(this.data.description, LIMITS.description);
+
+    if (this.data?.footer?.text) this.data.footer.text = decorateText(this.data.footer.text, LIMITS.footerText);
+    if (this.data?.author?.name) this.data.author.name = decorateText(this.data.author.name, LIMITS.authorName);
+
+    if (Array.isArray(this.data?.fields)) {
+      this.data.fields = this.data.fields.map(f => ({
+        ...f,
+        name: decorateText(f?.name, LIMITS.fieldName),
+        value: decorateText(f?.value, LIMITS.fieldValue),
+      }));
+    }
+
+    return originalToJSON.call(this);
+  };
+
+  console.log('[theme] Sakura mode enabled: pink embeds + per-line RNG 🌸/🍃');
+}
+
+enableSakuraEmbeds();
+// =================== END 🌸 SAKURA EMBED THEME (GLOBAL) ===================
 
 // collections
 client.cooldowns = new Collection();
