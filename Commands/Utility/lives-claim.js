@@ -11,6 +11,7 @@ const {
   TextInputStyle
 } = require('discord.js');
 const User = require('../../models/User');
+const { resolveCardColor, getAttributeEmoji } = require('../../config/holomemColor');
 const {
   resolveAttemptAtomic,
   getDurationForStage,
@@ -18,6 +19,13 @@ const {
   normalizeCardName
 } = require('../../utils/liveAsync');
 const { startAttemptAtomic } = require('../../utils/liveAsync');
+
+// Attribute emoji helper (emoji-only)
+function attrEmoji(name, rarity) {
+  const cc = resolveCardColor(name, rarity);
+  const emoji = cc ? getAttributeEmoji(cc) : '';
+  return emoji ? ` ${emoji}` : '';
+}
 
 // Helpers (copied/adapted from lives-start.js)
 function msToHuman(ms) {
@@ -141,13 +149,13 @@ module.exports = {
           if (readyNow) {
             embedEmpty.addFields({
               name: `${stageLabel}`,
-              value: `Occupied (ready) • **[${slot.rarity}]** ${slot.name} • Ready ${readyRelative}`,
+              value: `Occupied (ready) • **[${slot.rarity}]** ${slot.name}${attrEmoji(slot.name, slot.rarity)} • Ready ${readyRelative}`,
               inline: false
             });
           } else {
             embedEmpty.addFields({
               name: `${stageLabel}`,
-              value: `Occupied • **[${slot.rarity}]** ${slot.name} • Ready ${readyRelative}`,
+              value: `Occupied • **[${slot.rarity}]** ${slot.name}${attrEmoji(slot.name, slot.rarity)} • Ready ${readyRelative}`,
               inline: false
             });
           }
@@ -191,16 +199,16 @@ module.exports = {
               const formatCard = (c) => {
                 const gainedRarity = c?.rarity || 'P';
                 const gainedName = c?.displayName || c?.name || 'special guest';
-                return `**[${gainedRarity}] ${gainedName}**`;
+                return `**[${gainedRarity}] ${gainedName}**${attrEmoji(gainedName, gainedRarity)}`;
               };
             
               if (gainedCards.length >= 2) {
                 // Your requested format when 2 appeared:
                 // **[R] Name** & **[R] Name** showed up at **Sent**'s live!
                 const shown = gainedCards.slice(0, 2).map(formatCard).join(' & ');
-                note = `${shown} showed up at **${sentName}**'s live!`;
+                note = `${shown} showed up at **${sentName}**${attrEmoji(gainedName, gainedRarity)}'s live!`;
               } else if (gainedCards.length === 1) {
-                note = `${formatCard(gainedCards[0])} showed up at **${sentName}**'s live!`;
+                note = `${formatCard(gainedCards[0])} showed up at **${sentName}**${attrEmoji(gainedName, gainedRarity)}'s live!`;
               } else {
                 note = `**${sentName}** came home from the live`;
               }
@@ -282,13 +290,13 @@ module.exports = {
         if (readyNow) {
           embed.addFields({
             name: `${stageLabel}`,
-            value: `Occupied (ready) • **[${slot.rarity}]** ${slot.name} • Ready ${readyRelative}`,
+            value: `Occupied (ready) • **[${slot.rarity}]** ${slot.name}${attrEmoji(slot.name, slot.rarity)} • Ready ${readyRelative}`,
             inline: false
           });
         } else {
           embed.addFields({
             name: `${stageLabel}`,
-            value: `Occupied • **[${slot.rarity}]** ${slot.name} • Ready ${readyRelative}`,
+            value: `Occupied • **[${slot.rarity}]** ${slot.name}${attrEmoji(slot.name, slot.rarity)} • Ready ${readyRelative}`,
             inline: false
           });
         }
@@ -389,7 +397,7 @@ module.exports = {
         } catch (e) {
           console.warn('[live.claim] failed to persist lastLiveOptions on resend', e);
         }
-        summary.push(`Stage ${s}: resent as [${candidate.rarity}] ${candidate.name}`);
+        summary.push(`Stage ${s}: resent as [${candidate.rarity}] ${candidate.name}${attrEmoji(candidate.name, candidate.rarity)}`);
       } else {
         summary.push(`Stage ${s}: failed to resend (${startRes?.reason || 'unknown'})`);
       }
@@ -478,7 +486,7 @@ if (startRes2 && startRes2.success) {
     console.warn('[live.claim] failed to persist lastLiveOptions on resend (modal)', e);
   }
 
-  summary.push(`Stage ${s}: resent as [${candidate.rarity}] ${candidate.name}`);
+  summary.push(`Stage ${s}: resent as [${candidate.rarity}] ${candidate.name}${attrEmoji(candidate.name, candidate.rarity)}`);
 
   // clear the deferred ephemeral reply so the modal submit shows nothing
   if (deferred) {

@@ -13,9 +13,17 @@ const {
 } = require('discord.js');
 const mongoose = require('mongoose');
 const User = require('../../models/User');
+const { resolveCardColor, getAttributeEmoji } = require('../../config/holomemColor');
 const PullQuota = require('../../models/PullQuota');
 const EGGSCHANGE_ITEMS = require('../../config/eggchange-items');
 const { pickWeighted, pickWeightedWithRoll } = require('../../utils/rates');
+
+// Attribute emoji helper (emoji-only)
+function attrEmoji(name, rarity) {
+  const cc = resolveCardColor(name, rarity);
+  const emoji = cc ? getAttributeEmoji(cc) : '';
+  return emoji ? ` ${emoji}` : '';
+}
 
 const IMAGE_BASE = process.env.IMAGE_BASE || 'http://152.69.195.48/images';
 
@@ -169,7 +177,7 @@ module.exports = {
     function itemLine(it, index) {
       const costText =
         (it.costCards || [])
-          .map((c) => `${c.count}x [${c.rarity}] ${c.image}`)
+          .map((c) => `${c.count}x [${c.rarity}] ${c.image}${attrEmoji(c.image, c.rarity)}`)
           .join(', ') || 'None';
 
       if (it.type === 'rewardgacha') {
@@ -232,7 +240,7 @@ module.exports = {
       const imageEmbeds = activeItems.map((it, i) => {
         const costText =
           (it.costCards || [])
-            .map((c) => `${c.count}x [${c.rarity}] ${c.image}`)
+            .map((c) => `${c.count}x [${c.rarity}] ${c.image}${attrEmoji(c.image, c.rarity)}`)
             .join('\n') || 'None';
 
         let desc = `Cost:\n${costText}`;
@@ -338,7 +346,7 @@ module.exports = {
       const it = resultState.pageItems[idx];
       return new EmbedBuilder()
         .setTitle(
-          `Card: ${idx + 1} / ${resultState.pageItems.length} **[${it.rarity}]** - ${escapeMarkdown(it.displayName)} - #${it.countAfter}`,
+          `Card: ${idx + 1} / ${resultState.pageItems.length} **[${it.rarity}]** - ${escapeMarkdown(it.displayName)}${attrEmoji(it.displayName, it.rarity)} - #${it.countAfter}`,
         )
         .setDescription(resultState.descriptionAll)
         .setColor(0x00BB88)
@@ -729,7 +737,7 @@ const disabled = message.components.map((r) => {
         }
 
         const costText =
-          (item.costCards || []).map((c) => `${c.count}x [${c.rarity}] ${c.image}`).join('\n') || 'None';
+          (item.costCards || []).map((c) => `${c.count}x [${c.rarity}] ${c.image}${attrEmoji(c.image, c.rarity)}`).join('\n') || 'None';
 
         // Determine if we can run again (post-transaction inventory)
         const canAgainNow = resultUser ? canAfford(resultUser, item.costCards) : false;
@@ -753,7 +761,7 @@ const disabled = message.components.map((r) => {
           const linesAll = pageItems.map((it) => {
             const prefix = `[${it.rarity}] - `;
             const title = escapeMarkdown(it.displayName);
-            return `${prefix}[${title}](${it.imageUrl}) - #${it.countAfter}`;
+            return `${prefix}[${title}](${it.imageUrl})${attrEmoji(it.displayName, it.rarity)} - #${it.countAfter}`;
           });
 
           let descriptionAll = linesAll.join('\n');
@@ -793,8 +801,8 @@ const disabled = message.components.map((r) => {
           const imageUrl = buildImageUrl(results.rarity, `${results.image}.png`);
           const titlePrefix =
             results.rewardType === 'streamticketcard'
-              ? '🎉 Eggchange Reward: Stream Ticket!'
-              : `🎉 Eggchange Reward: [${results.rarity}] ${escapeMarkdown(results.image)}`;
+              ? `🎉 Eggchange Reward: Stream Ticket!${attrEmoji(results.image, results.rarity)}`
+              : `🎉 Eggchange Reward 🎉\n[${results.rarity}] ${escapeMarkdown(results.image)} ${attrEmoji(results.image, results.rarity)}`;
 
           const final = new EmbedBuilder()
             .setTitle(`${titlePrefix} - #${results.countAfter}`)

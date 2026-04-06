@@ -9,6 +9,7 @@ const {
 } = require('discord.js');
 const User = require('../../models/User');
 const { normalizeCards } = require('../../utils/normalizeCards');
+const { resolveCardColor, getAttributeEmoji } = require('../../config/holomemColor');
 
 const ITEMS_PER_PAGE = 10;
 const IDLE_LIMIT = 120_000;
@@ -62,7 +63,24 @@ module.exports = {
       opt.setName('search')
         .setDescription('Search by card name (optional)')
     )
-    .addStringOption(opt =>
+    
+  .addStringOption(opt =>
+    opt.setName('color')
+      .setDescription('Filter by attribute color')
+      .addChoices(
+        { name: 'White', value: 'white' },
+        { name: 'Green', value: 'green' },
+        { name: 'Red', value: 'red' },
+        { name: 'Blue', value: 'blue' },
+        { name: 'Purple', value: 'purple' },
+        { name: 'Yellow', value: 'yellow' },
+        { name: 'Support', value: 'support' },
+        { name: 'Typo', value: 'typo' },
+        { name: 'Mixed', value: 'mixed' },
+        { name: 'None', value: 'none' },
+      )
+  )
+.addStringOption(opt =>
       opt.setName('sort')
       .setDescription('Sort results by')
       .addChoices(
@@ -87,6 +105,7 @@ module.exports = {
     const mode = interaction.options.getString('mode');
     const filterR = interaction.options.getString('rarity');
     const filterQ = interaction.options.getString('search')?.toLowerCase();
+  const filterColor = interaction.options.getString('color');
     const sortBy = interaction.options.getString('sort') || 'rarity';
     const multiOnly = Boolean(interaction.options.getBoolean('multi'));
 
@@ -112,6 +131,15 @@ module.exports = {
         for (const c of themCards) {
           if (filterR && c.rarity !== filterR) continue;
           if (filterQ && !String(c.name).toLowerCase().includes(filterQ)) continue;
+      if (filterColor) {
+        const wanted = String(filterColor).trim().toLowerCase();
+        const cc = resolveCardColor(c.name, c.rarity);
+        if (wanted === 'none') {
+          if (cc !== null && cc !== 'none') continue;
+        } else {
+          if (cc !== wanted) continue;
+        }
+      }
           const k = keyOf(c);
           
           const youCount = normCount(youMap.get(k));
@@ -128,6 +156,15 @@ module.exports = {
         for (const c of youCards) {
           if (filterR && c.rarity !== filterR) continue;
           if (filterQ && !String(c.name).toLowerCase().includes(filterQ)) continue;
+      if (filterColor) {
+        const wanted = String(filterColor).trim().toLowerCase();
+        const cc = resolveCardColor(c.name, c.rarity);
+        if (wanted === 'none') {
+          if (cc !== null && cc !== 'none') continue;
+        } else {
+          if (cc !== wanted) continue;
+        }
+      }
           const k = keyOf(c);
           const themCount = themMap.get(k) || 0;
           const youCount = c.count || 0;
@@ -171,7 +208,10 @@ module.exports = {
       const buildEmbed = (pageIdx) => {
         const page = pages[pageIdx];
         const desc = page.map(c => {
-          return `**[${c.rarity}]** ${c.name} (${c.diff})`;
+        const cc = resolveCardColor(c.name, c.rarity);
+        const emoji = cc ? getAttributeEmoji(cc) : '';
+        const tag = emoji ? ` ${emoji}` : '';
+        return `**[${c.rarity}]** ${c.name}${tag} (${c.diff})`;
         }).join('\n');
         return new EmbedBuilder()
           .setTitle(mode === 'theirs-minus-yours'

@@ -1,6 +1,14 @@
 // Commands/Utility/gift.js
 const { SlashCommandBuilder } = require('discord.js');
 const User = require('../../models/User');
+const { resolveCardColor, getAttributeEmoji } = require('../../config/holomemColor');
+
+// Attribute emoji helper (emoji-only)
+function attrEmoji(name, rarity) {
+  const cc = resolveCardColor(name, rarity);
+  const emoji = cc ? getAttributeEmoji(cc) : '';
+  return emoji ? ` ${emoji}` : '';
+}
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -188,7 +196,7 @@ module.exports = {
       await toDoc.save();
 
       // Build reply summary
-      const summaryParts = transfers.map(t => `${t.amount} x **[${String(t.rarity || '').toUpperCase()}] ${t.name}**${t.locked ? ' (locked)' : ''}`);
+      const summaryParts = transfers.map(t => `${t.amount} x **[${String(t.rarity || '').toUpperCase()}] ${t.name}**${attrEmoji(t.name, t.rarity)}${t.locked ? ' (locked)' : ''}`);
       const summaryText = summaryParts.join(', ');
 
       const prefix = partialSend

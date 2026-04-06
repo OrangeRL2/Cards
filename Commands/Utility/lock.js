@@ -1,6 +1,14 @@
 // Commands/Utility/lock.js
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const User = require('../../models/User');
+const { resolveCardColor, getAttributeEmoji } = require('../../config/holomemColor');
+
+// Attribute emoji helper (emoji-only)
+function attrEmoji(name, rarity) {
+  const cc = resolveCardColor(name, rarity);
+  const emoji = cc ? getAttributeEmoji(cc) : '';
+  return emoji ? ` ${emoji}` : '';
+}
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -90,7 +98,7 @@ module.exports = {
     await userDoc.save();
 
     // Build lines for affected cards
-    const cardLines = matchingCards.map(c => `• **[${c.rarity}]** ${c.name} - ${c.locked ? '🔒' : '🔓'}`);
+    const cardLines = matchingCards.map(c => `• **[${c.rarity}]** ${c.name}${attrEmoji(c.name, c.rarity)} - ${c.locked ? '🔒' : '🔓'}`);
 
     // Split into chunks where each chunk's joined string <= 1024 chars
     const MAX_FIELD_LEN = 1024;

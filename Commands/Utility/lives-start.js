@@ -13,6 +13,14 @@ const {
 } = require('discord.js');
 const { startAttemptAtomic, getDurationForStage, getStageName } = require('../../utils/liveAsync');
 const User = require('../../models/User');
+const { resolveCardColor, getAttributeEmoji } = require('../../config/holomemColor');
+
+// Attribute emoji helper (emoji-only)
+function attrEmoji(name, rarity) {
+  const cc = resolveCardColor(name, rarity);
+  const emoji = cc ? getAttributeEmoji(cc) : '';
+  return emoji ? ` ${emoji}` : '';
+}
 
 // helpers
 function msToHuman(ms) {
@@ -164,7 +172,7 @@ module.exports = {
       const durationMs = getDurationForStage(stage);
       const confirmEmbed = new EmbedBuilder()
         .setTitle('Confirm Live Send (Random Pick)')
-        .setDescription(`A random matching card was selected: **[${candidate.rarity}] ${candidate.name}**. Send it to **${stageName}**?`)
+        .setDescription(`A random matching card was selected: **[${candidate.rarity}] ${candidate.name}${attrEmoji(candidate.name, candidate.rarity)}**. Send it to **${stageName}**?`)
         .setColor(Colors.Blue)
         .addFields(
           { name: 'Card count', value: `${candidate.count}`, inline: true },
@@ -225,7 +233,7 @@ module.exports = {
               return;
             }
             if (startRes.reason === 'no-card') {
-              const noCardMsg = `You don't have any **[${candidate.rarity}] ${candidate.name}** left to send.`;
+              const noCardMsg = `You don't have any **[${candidate.rarity}] ${candidate.name}${attrEmoji(candidate.name, candidate.rarity)}** left to send.`;
               try { await btn.update({ content: noCardMsg, embeds: [], components: [] }); } catch {
                 try { await btn.followUp({ content: noCardMsg, flags: EPHEMERAL_FLAG }); } catch {}
               }
@@ -253,7 +261,7 @@ module.exports = {
           const readyAt = startRes.readyAt instanceof Date ? startRes.readyAt : new Date(startRes.readyAt);
           const outEmbed = new EmbedBuilder()
             .setTitle('Live Attempt Started')
-            .setDescription(`**[${candidate.rarity}] ${candidate.name}** has started a live at **${stageName}**.`)
+            .setDescription(`**[${candidate.rarity}] ${candidate.name}${attrEmoji(candidate.name, candidate.rarity)}** has started a live at **${stageName}**.`)
             .addFields(
               { name: 'Ready', value: `<t:${Math.floor(readyAt.getTime() / 1000)}:f>`, inline: true },
               { name: 'Duration', value: msToHuman(getDurationForStage(stage)), inline: true }
@@ -333,7 +341,7 @@ module.exports = {
     const durationMs = getDurationForStage(stage);
     const confirmEmbed = new EmbedBuilder()
       .setTitle('Confirm Live Send')
-      .setDescription(`You're about to send **[${candidate.rarity}] ${candidate.name}** to **${stageName}**.`)
+      .setDescription(`You're about to send **[${candidate.rarity}] ${candidate.name}${attrEmoji(candidate.name, candidate.rarity)}** to **${stageName}**.`)
       .setColor(Colors.Blue)
       .addFields(
         { name: 'Card count', value: `${candidate.count}`, inline: true },
@@ -402,7 +410,7 @@ module.exports = {
             return;
           }
           if (startRes.reason === 'no-card') {
-            const noCardMsg = `You don't have any **[${candidate.rarity}] ${candidate.name}** left to send.`;
+            const noCardMsg = `You don't have any **[${candidate.rarity}] ${candidate.name}${attrEmoji(candidate.name, candidate.rarity)}** left to send.`;
             try { await btn.update({ content: noCardMsg, embeds: [], components: [] }); } catch {
               try { await btn.followUp({ content: noCardMsg, flags: EPHEMERAL_FLAG }); } catch {}
             }
@@ -430,7 +438,7 @@ module.exports = {
         const readyAt = startRes.readyAt instanceof Date ? startRes.readyAt : new Date(startRes.readyAt);
         const outEmbed = new EmbedBuilder()
           .setTitle('Live Attempt Started')
-          .setDescription(`**[${candidate.rarity}] ${candidate.name}** has started a live at **${stageName}**.`)
+          .setDescription(`**[${candidate.rarity}] ${candidate.name}${attrEmoji(candidate.name, candidate.rarity)}** has started a live at **${stageName}**.`)
           .addFields(
             { name: 'Ready', value: `<t:${Math.floor(readyAt.getTime() / 1000)}:f>`, inline: true },
             { name: 'Duration', value: msToHuman(getDurationForStage(stage)), inline: true }

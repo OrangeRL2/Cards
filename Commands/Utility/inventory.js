@@ -12,6 +12,7 @@ const {
 } = require('discord.js');
 const path = require('path');
 const User = require('../../models/User');
+const { resolveCardColor, getAttributeEmoji } = require('../../config/holomemColor');
 
 const IMAGE_BASE = 'http://152.69.195.48/images';
 const ITEMS_PER_PAGE = 10;
@@ -75,7 +76,24 @@ module.exports = {
       opt.setName('search')
         .setDescription('Search by card name'),
     )
-    .addStringOption(opt =>
+    
+  .addStringOption(opt =>
+    opt.setName('color')
+      .setDescription('Filter by attribute color (member default, can be wrong for some cards due to exceptions)')
+      .addChoices(
+        { name: 'White', value: 'white' },
+        { name: 'Green', value: 'green' },
+        { name: 'Red', value: 'red' },
+        { name: 'Blue', value: 'blue' },
+        { name: 'Purple', value: 'purple' },
+        { name: 'Yellow', value: 'yellow' },
+        { name: 'Support', value: 'support' },
+        { name: 'Typo', value: 'typo' },
+        { name: 'Mixed', value: 'mixed' },
+        { name: 'None', value: 'none' },
+      )
+  )
+.addStringOption(opt =>
       opt.setName('sort')
         .setDescription('Sort order')
         .addChoices(
@@ -105,6 +123,7 @@ module.exports = {
 
     const filterR = interaction.options.getString('rarity');
     const filterQ = interaction.options.getString('search')?.toLowerCase();
+  const filterColor = interaction.options.getString('color');
     const sortBy = interaction.options.getString('sort') || 'rarity';
     const multiFilter = interaction.options.getBoolean('multi') || false;
 
@@ -124,13 +143,25 @@ module.exports = {
     }));
 
     // Apply filters
-    let entries = allEntries.filter(c =>
-  (!filterR || c.rarity === filterR) &&
-  (!filterQ || c.name.toLowerCase().includes(filterQ)) &&
-  (!multiFilter || c.count >= 2) &&
-  !isExcludedCardName(c.name)
-);
+    let entries = allEntries.filter(c => {
+    if (filterR && c.rarity !== filterR) return false;
+    if (filterQ && !c.name.toLowerCase().includes(filterQ)) return false;
+    if (multiFilter && c.count < 2) return false;
+    if (isExcludedCardName(c.name)) return false;
 
+    if (filterColor) {
+      const wanted = String(filterColor).trim().toLowerCase();
+      // 'none' means: show cards with no resolved attribute
+      const cc = resolveCardColor(c.name, c.rarity);
+      if (wanted === 'none') {
+        if (cc !== null && cc !== 'none') return false;
+      } else {
+        if (cc !== wanted) return false;
+      }
+    }
+
+    return true;
+  });
     if (!entries.length) {
       const filterMessage = multiFilter ?
         'No cards match filters (or no cards with 2 or more copies).' :
@@ -212,7 +243,10 @@ module.exports = {
           chunk.map(c => {
             const url = `${IMAGE_BASE}/${encodeURIComponent(c.rarity)}/${encodeURIComponent(c.name)}.png`;
             const lockEmoji = c.locked ? ' 🔒' : '';
-            return `**[${c.rarity}]** [${escapeMarkdown(c.name)}](${url}) (x${c.count}) ${lockEmoji}`;
+            const cc = resolveCardColor(c.name, c.rarity);
+            const emoji = cc ? getAttributeEmoji(cc) : '';
+            const attrTag = cc ? ` ${emoji}` : '';
+            return `**[${c.rarity}]** [${escapeMarkdown(c.name)}](${url})${attrTag} (x${c.count}) ${lockEmoji}`;
           }).join('\n')
         )
         .setColor(Colors.Blue)
@@ -227,36 +261,40 @@ module.exports = {
       return new ActionRowBuilder().addComponents(prev, view, next, skip);
     });
 
-    const imageEmbeds = imageResults.map(({ c, url }, i) =>
-      new EmbedBuilder()
-        .setTitle(`**[${c.rarity}]** ${escapeMarkdown(c.name)} (x${c.count})${c.locked ? ' 🔒' : ''}`)
-        .setImage(url)
-        .setColor({
-        XMAS:   0x05472A, // XMAS Green
-        C:    Colors.Grey, 
-        U:    Colors.White,
-        R:    0x7bacec, // R Light Blue
-        S:    0x55DDEE, // S Cyan
-        RR:   0x2A69FB, // RR Blue
-        OC:   Colors.Fuchsia, 
-        SR:   0xEE7744, // SR Orange
-        COL:  0xFF3377, // COL Pink
-        OSR:  0xB19CD9, // OSR Purple
-        P:    0xDDFFEE, // P Pastel Green
-        SP:   0x33DDAA, // SP Aqua
-        SY:   Colors.DarkAqua, 
-        UR:   0xFF9922, // UR Orange
-        OUR:  Colors.DarkPurple,
-        HR:    Colors.Gold,
-        BDAY:  0xF9CDCF, //Bday Pink
-        UP:    0xFFEE22, // UP Yellow
-        SEC:  0x6CCDF8, // SEC Light Blue
-        VAL:  Colors.Red,
-        ORI:  Colors.Orange,
-        EAS:  0xFF2301,
-        }[c.rarity] ?? Colors.Default)
-        .setFooter({ text: `Card ${i + 1} of ${imageResults.length}` })
-    );
+    const imageEmbeds = imageResults.map(({ c, url }, i) => {
+  const cc = resolveCardColor(c.name, c.rarity);           // attribute (blue/support/etc.)
+  const emoji = cc ? getAttributeEmoji(cc) : '';
+  const attrTag = cc ? ` ${emoji}` : '';
+
+  return new EmbedBuilder()
+    .setTitle(`**[${c.rarity}]** ${escapeMarkdown(c.name)}${attrTag} (x${c.count})${c.locked ? ' 🔒' : ''}`)
+    .setImage(url)
+    .setColor({
+      XMAS:  0x05472A,
+      C:     Colors.Grey,
+      U:     Colors.White,
+      R:     0x7bacec,
+      S:     0x55DDEE,
+      RR:    0x2A69FB,
+      OC:    Colors.Fuchsia,
+      SR:    0xEE7744,
+      COL:   0xFF3377,
+      OSR:   0xB19CD9,
+      P:     0xDDFFEE,
+      SP:    0x33DDAA,
+      SY:    Colors.DarkAqua,
+      UR:    0xFF9922,
+      OUR:   Colors.DarkPurple,
+      HR:    Colors.Gold,
+      BDAY:  0xF9CDCF,
+      UP:    0xFFEE22,
+      SEC:   0x6CCDF8,
+      VAL:   Colors.Red,
+      ORI:   Colors.Orange,
+      EAS:   0xFF2301,
+    }[c.rarity] ?? Colors.Default)
+    .setFooter({ text: `Card ${i + 1} of ${imageResults.length}` });
+});
 
     const imageRows = imageResults.map((_, i) => {
       const prev = new ButtonBuilder().setCustomId(cid(`img_prev_${i}`)).setLabel('◀ Prev').setStyle(ButtonStyle.Primary).setDisabled(false);

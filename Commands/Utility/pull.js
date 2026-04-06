@@ -8,7 +8,7 @@ const PullQuota = require('../../utils/pullQuota'); // helper with getUpdatedQuo
 const PullQuotaModel = require('../../models/PullQuota'); // direct model for atomic updates
 const SpecialPullGrant = require('../../models/SpecialPullGrant'); // active 24h grants
 const PullLock = require('../../models/PullLock'); // per-user advisory lock (Mongo-backed)
-
+const { resolveCardColor, getAttributeEmoji } = require('../../config/holomemColor'); // for attribute emojis in pull results
 // === Draw functions ===
 const { drawPack } = require('../../utils/newWeightedDraw'); // normal draw
 const { drawPackBoss } = require('../../utils/drawPackBoss'); // boss-channel biased draw
@@ -755,10 +755,14 @@ module.exports = {
           const titleBody = `${displayName}`;
           const titleCount = ` - #${currentCount}`;
           const titleLine = `${visiblePrefix}${titleBody}`;
+          
+          const cc = resolveCardColor(displayName, rarity);
+          const emoji = cc ? getAttributeEmoji(cc) : '';
+          const tag = emoji ? ` ${emoji}` : '';
 
           pageItems.push({ rarity, rawName: raw, displayName, titleLine, imageUrl: encodedUrl });
 
-          allNames.push(`${visiblePrefix}[${escapeLinkText(titleBody)}](${encodedUrl})${titleCount}`);
+          allNames.push(`${visiblePrefix}[${escapeLinkText(titleBody)}](${encodedUrl})${tag}${titleCount}`);
         }
       } catch (err) {
         console.error('atomic update error after consume:', err);
@@ -858,10 +862,14 @@ module.exports = {
 
       function makeEmbed(idx) {
         const it = pageItems[idx];
+        
+        const cc = resolveCardColor(it.displayName, it.rarity);
+        const emoji = cc ? getAttributeEmoji(cc) : '';
+        const tag = emoji ? ` ${emoji}` : '';
 
         if (useSpecial) {
           return new EmbedBuilder()
-            .setTitle(`Card: ${idx + 1} **[${it.rarity}]** - ${it.displayName}`)
+            .setTitle(`Card: ${idx + 1} **[${it.rarity}]** - ${it.displayName}${tag}`)
             .setDescription(descriptionAll)
             .setColor(0x87CEFA)
             .addFields({ name: 'Special pulls remaining', value: `${consumeResult.remainingSpecial ?? 0}`, inline: true })
@@ -871,7 +879,7 @@ module.exports = {
         }
 
         return new EmbedBuilder()
-          .setTitle(`Card: ${idx + 1} **[${it.rarity}]** - ${it.displayName}`)
+          .setTitle(`Card: ${idx + 1} **[${it.rarity}]** - ${it.displayName}${tag}`)
           .setDescription(descriptionAll)
           .setColor(0x00BB88)
           .addFields(

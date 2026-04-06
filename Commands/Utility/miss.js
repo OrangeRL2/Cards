@@ -13,6 +13,7 @@ const {
 } = require('discord.js');
 const path = require('node:path');
 const User = require('../../models/User');
+const { resolveCardColor, getAttributeEmoji } = require('../../config/holomemColor');
 const pools = require('../../utils/loadImages');
 
 const IMAGE_BASE = process.env.IMAGE_BASE || 'http://152.69.195.48/images';
@@ -63,8 +64,24 @@ module.exports = {
     .addStringOption(opt =>
       opt.setName('search')
         .setDescription('Search missing card names'),
-    ),
-  requireOshi: true,
+    )
+  .addStringOption(opt =>
+    opt.setName('color')
+      .setDescription('Filter by attribute')
+      .addChoices(
+        { name: 'White', value: 'white' },
+        { name: 'Green', value: 'green' },
+        { name: 'Red', value: 'red' },
+        { name: 'Blue', value: 'blue' },
+        { name: 'Purple', value: 'purple' },
+        { name: 'Yellow', value: 'yellow' },
+        { name: 'Support', value: 'support' },
+        { name: 'Typo', value: 'typo' },
+        { name: 'Mixed', value: 'mixed' },
+        { name: 'None', value: 'none' },
+      )
+  ),
+requireOshi: true,
 
   async execute(interaction) {
     await interaction.deferReply();
@@ -72,6 +89,7 @@ module.exports = {
     try {
       const filterR = interaction.options.getString('rarity') || 'ALL';
       const filterQ = interaction.options.getString('search')?.toLowerCase();
+  const filterColor = interaction.options.getString('color');
 
       // load user doc and owned map
       const userDoc = await User.findOne({ id: interaction.user.id });
@@ -91,6 +109,15 @@ module.exports = {
       let missing = universe.filter(card => {
         if (filterR !== 'ALL' && card.rarity !== filterR) return false;
         if (filterQ && !card.name.toLowerCase().includes(filterQ)) return false;
+    if (filterColor) {
+      const wanted = String(filterColor).trim().toLowerCase();
+      const cc = resolveCardColor(card.name, card.rarity);
+      if (wanted === 'none') {
+        if (cc !== null && cc !== 'none') return false;
+      } else {
+        if (cc !== wanted) return false;
+      }
+    }
 
         const info = owned.find(c => c.name === card.name && c.rarity === card.rarity);
 
@@ -155,7 +182,10 @@ module.exports = {
                   ? 'secret.png'
                   : `${encodeURIComponent(String(c.name))}.png`;
                 const url = `${IMAGE_BASE}/${encodeURIComponent(c.rarity)}/${imageFile}`;
-                return `**[${c.rarity}]** [${escapeMarkdown(c.name)}](${url})`;
+                const cc = resolveCardColor(c.name, c.rarity);
+                const emoji = cc ? getAttributeEmoji(cc) : '';
+                const attrTag = emoji ? ` ${emoji}` : '';
+                return `**[${c.rarity}]** [${escapeMarkdown(c.name)}](${url})${attrTag}`;
               })
               .join('\n')
           )
@@ -172,13 +202,17 @@ module.exports = {
       });
 
       // image embeds and rows
-      const imageEmbeds = imageResults.map(({ c, url }, i) =>
-        new EmbedBuilder()
-          .setTitle(`**[${c.rarity}]** ${escapeMarkdown(c.name)}`)
-          .setImage(url)
-          .setColor(COLOR_MAP[c.rarity] ?? Colors.Default)
-          .setFooter({ text: `Card ${i + 1} of ${imageResults.length}` })
-      );
+      const imageEmbeds = imageResults.map(({ c, url }, i) => {
+      const cc = resolveCardColor(c.name, c.rarity);
+      const emoji = cc ? getAttributeEmoji(cc) : '';
+      const attrTag = emoji ? ` ${emoji}` : '';
+
+      return new EmbedBuilder()
+      .setTitle(`**[${c.rarity}]** ${escapeMarkdown(c.name)}${attrTag}`)
+      .setImage(url)
+      .setColor(COLOR_MAP[c.rarity] ?? Colors.Default)
+      .setFooter({ text: `Card ${i + 1} of ${imageResults.length}` });
+});
 
       const imageRows = imageResults.map((_, i) => {
         const prev = new ButtonBuilder().setCustomId(cid(`img_prev_${i}`)).setLabel('◀ Prev').setStyle(ButtonStyle.Primary).setDisabled(false);

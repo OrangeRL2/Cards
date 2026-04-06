@@ -13,7 +13,15 @@ const {
 } = require('discord.js');
 const mongoose = require('mongoose');
 const User = require('../../models/User');
+const { resolveCardColor, getAttributeEmoji } = require('../../config/holomemColor');
 const FUSION_ITEMS = require('../../config/fusion-items');
+
+// Attribute emoji helper (emoji-only)
+function attrEmoji(name, rarity) {
+  const cc = resolveCardColor(name, rarity);
+  const emoji = cc ? getAttributeEmoji(cc) : '';
+  return emoji ? ` ${emoji}` : '';
+}
 
 const IMAGE_BASE = process.env.IMAGE_BASE || 'http://152.69.195.48/images';
 const ITEMS_PER_PAGE = 5;
@@ -85,7 +93,7 @@ module.exports = {
         const listEmbeds = pages.map((chunk, pageIdx) => {
           const description = chunk.map((it, idx) => {
             const globalIndex = pageIdx * ITEMS_PER_PAGE + idx + 1;
-            const reqs = (it.requires || []).map(r => `${r.count}x [${r.rarity}] ${r.image}`).join(', ');
+            const reqs = (it.requires || []).map(r => `\n${r.count}x [${r.rarity}] ${r.image}${attrEmoji(r.image, r.rarity)}`).join(',');
             return `**${globalIndex}. [${it.rarity}] ${escapeMarkdown(it.name)}**\nRequires: ${reqs || 'None'}`;
           }).join('\n\n');
 
@@ -106,7 +114,7 @@ module.exports = {
 
         const imageEmbeds = items.map((it, i) =>
           new EmbedBuilder()
-            .setTitle(`**[${it.rarity}]** ${escapeMarkdown(it.name)}`)
+            .setTitle(`**[${it.rarity}]** ${escapeMarkdown(it.name)}${attrEmoji(it.image ?? it.name, it.rarity)}`)
             .setDescription((it.requires || []).map(r => `${r.count}x [${r.rarity}] ${r.image}`).join('\n') || 'No requirements')
             //.setImage(buildImageUrl(it.rarity, `${it.image}.png`))
             .setColor(Colors.Green)
@@ -398,14 +406,14 @@ module.exports = {
           await userDoc.save();
 
           // Build requirements text for embed
-          const reqText = recipe.requires.map(req => `${req.count}x [${req.rarity}] ${req.image}`).join('\n');
+          const reqText = recipe.requires.map(req => `${req.count}x [${req.rarity}] ${req.image}${attrEmoji(req.image, req.rarity)}`).join('\n');
 
           const embed = new EmbedBuilder()
             .setTitle('Collab Stream Complete!')
             .setDescription(`You collabed cards turned into **${recipe.name}**!`)
             .addFields(
               { name: 'Required Cards', value: reqText || 'None', inline: false },
-              { name: 'Result', value: `[${recipe.rarity}] ${recipe.image}`, inline: false }
+              { name: 'Result', value: `[${recipe.rarity}] ${recipe.image}${attrEmoji(recipe.image, recipe.rarity)}`, inline: false }
             )
             .setColor(Colors.Green)
             .setImage(buildImageUrl(recipe.rarity, `${recipe.image}.png`));
