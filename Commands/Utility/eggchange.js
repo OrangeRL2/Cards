@@ -802,7 +802,7 @@ const disabled = message.components.map((r) => {
           const titlePrefix =
             results.rewardType === 'streamticketcard'
               ? `🎉 Eggchange Reward: Stream Ticket!${attrEmoji(results.image, results.rarity)}`
-              : `🎉 Eggchange Reward 🎉\n[${results.rarity}] ${escapeMarkdown(results.image)} ${attrEmoji(results.image, results.rarity)}`;
+              : `🎉 Eggchange Reward:\n[${results.rarity}] ${escapeMarkdown(results.image)} ${attrEmoji(results.image, results.rarity)}`;
 
           const final = new EmbedBuilder()
             .setTitle(`${titlePrefix} - #${results.countAfter}`)

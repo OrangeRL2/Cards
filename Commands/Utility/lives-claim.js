@@ -206,14 +206,18 @@ module.exports = {
                 // Your requested format when 2 appeared:
                 // **[R] Name** & **[R] Name** showed up at **Sent**'s live!
                 const shown = gainedCards.slice(0, 2).map(formatCard).join(' & ');
-                note = `${shown} showed up at **${sentName}**${attrEmoji(gainedName, gainedRarity)}'s live!`;
+                const sentRarity = att.rarity || 'P';
+                note = `${shown} showed up at **${sentName}${attrEmoji(sentName, sentRarity)}**'s live!`;
               } else if (gainedCards.length === 1) {
-                note = `${formatCard(gainedCards[0])} showed up at **${sentName}**${attrEmoji(gainedName, gainedRarity)}'s live!`;
+                const sentRarity = att.rarity || 'P';
+                note = `${formatCard(gainedCards[0])} showed up at **${sentName}${attrEmoji(sentName, sentRarity)}**'s live!`;
               } else {
-                note = `**${sentName}** came home from the live`;
+                const sentRarity = att.rarity || 'P';
+                note = `**${sentName}${attrEmoji(sentName, sentRarity)}** came home from the live`;
               }
             } else {
-              note = `**${sentName}** Live Failed.. - Graduated from sadness`;
+              const sentRarity = att.rarity || 'P';
+              note = `**${sentName}${attrEmoji(sentName, sentRarity)}** Live Failed.. - Graduated from sadness`;
             }
 
           results.push({

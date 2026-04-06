@@ -49,6 +49,24 @@ const COLOR_MAP = {
   EAS:  0xFF2301,
 };
 
+
+// Attribute (color/type) sort order
+const COLOR_SORT_ORDER = {
+  white: 1,
+  green: 2,
+  red: 3,
+  blue: 4,
+  purple: 5,
+  yellow: 6,
+  support: 7,
+  mixed: 8,
+  typo: 9,
+  none: 10,
+};
+function colorRankOf(name, rarity) {
+  const c = resolveCardColor(name, rarity) ?? 'none';
+  return COLOR_SORT_ORDER[String(c).toLowerCase()] ?? 999;
+}
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('miss')
@@ -65,6 +83,14 @@ module.exports = {
       opt.setName('search')
         .setDescription('Search missing card names'),
     )
+  .addStringOption(opt =>
+    opt.setName('sort')
+      .setDescription('Sort order')
+      .addChoices(
+        { name: 'Rarity (default)', value: 'rarity' },
+        { name: 'Color (attribute)', value: 'color' },
+      ),
+  )
   .addStringOption(opt =>
     opt.setName('color')
       .setDescription('Filter by attribute')
@@ -90,6 +116,7 @@ requireOshi: true,
       const filterR = interaction.options.getString('rarity') || 'ALL';
       const filterQ = interaction.options.getString('search')?.toLowerCase();
   const filterColor = interaction.options.getString('color');
+  const sortBy = interaction.options.getString('sort') || 'rarity';
 
       // load user doc and owned map
       const userDoc = await User.findOne({ id: interaction.user.id });
@@ -140,10 +167,21 @@ requireOshi: true,
         const idx = RARITY_ORDER.indexOf(r);
         return idx === -1 ? 999 : idx;
       };
-      missing.sort((a, b) => {
+      if (sortBy === 'color') {
+    missing.sort((a, b) => {
+      const ca = colorRankOf(a.name, a.rarity);
+      const cb = colorRankOf(b.name, b.rarity);
+      if (ca !== cb) return ca - cb;
+      const d = orderIndex(a.rarity) - orderIndex(b.rarity);
+      if (d !== 0) return d;
+      return a.name.localeCompare(b.name);
+    });
+  } else {
+    missing.sort((a, b) => {
         const d = orderIndex(a.rarity) - orderIndex(b.rarity);
         return d || a.name.localeCompare(b.name);
       });
+  }
 
       // paginate
       const pages = [];

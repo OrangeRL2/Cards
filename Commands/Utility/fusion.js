@@ -115,7 +115,7 @@ module.exports = {
         const imageEmbeds = items.map((it, i) =>
           new EmbedBuilder()
             .setTitle(`**[${it.rarity}]** ${escapeMarkdown(it.name)}${attrEmoji(it.image ?? it.name, it.rarity)}`)
-            .setDescription((it.requires || []).map(r => `${r.count}x [${r.rarity}] ${r.image}`).join('\n') || 'No requirements')
+            .setDescription((it.requires || []).map(r => `${r.count}x [${r.rarity}] ${r.image}${attrEmoji(r.image, r.rarity)}`).join('\n') || 'No requirements')
             //.setImage(buildImageUrl(it.rarity, `${it.image}.png`))
             .setColor(Colors.Green)
             .setFooter({ text: `Recipe ${i + 1} of ${items.length}` })

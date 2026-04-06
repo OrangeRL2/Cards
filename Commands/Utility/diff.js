@@ -37,6 +37,24 @@ function normCount(v) {
 }
 
 
+
+// Attribute (color/type) sort order
+const COLOR_SORT_ORDER = {
+  white: 1,
+  green: 2,
+  red: 3,
+  blue: 4,
+  purple: 5,
+  yellow: 6,
+  support: 7,
+  mixed: 8,
+  typo: 9,
+  none: 10,
+};
+function colorRankOf(name, rarity) {
+  const c = resolveCardColor(name, rarity) ?? 'none';
+  return COLOR_SORT_ORDER[String(c).toLowerCase()] ?? 999;
+}
 // RARITY order consistent with inventory / miss (later items considered rarer)
 const RARITY_ORDER = [
   'XMAS', "VAL", 'C', 'U', 'R', 'S', 'RR', 'OC', 'SR', 'COL', 'OSR', 'P', 'SP', 'SY', 'UR', 'OUR', 'HR', 'BDAY', 'UP', 'SEC',  "ORI"
@@ -85,7 +103,8 @@ module.exports = {
       .setDescription('Sort results by')
       .addChoices(
         { name: 'Rarity (default)', value: 'rarity' },
-        { name: 'Amount difference', value: 'amount' }
+        { name: 'Amount difference', value: 'amount' },
+ { name: 'Color (attribute)', value: 'color' }
       )
       .setRequired(false)
     )
@@ -187,7 +206,14 @@ module.exports = {
       RARITY_ORDER.forEach((r, i) => { ORDER[r] = i + 1; });
 
       results.sort((a, b) => {
-        if (sortBy === 'amount') {
+        if (sortBy === 'color') {
+      const ca = colorRankOf(a.name, a.rarity);
+      const cb = colorRankOf(b.name, b.rarity);
+      const dc = ca - cb;
+      if (dc !== 0) return dc;
+      // tie-breakers below
+    }
+    if (sortBy === 'amount') {
           // primary sort: difference amount desc
           const dd = b.diff - a.diff;
           if (dd !== 0) return dd;

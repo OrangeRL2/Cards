@@ -36,6 +36,24 @@ function isExcludedCardName(name) {
   return EXCEPTION_SET.has(String(name).trim().toLowerCase());
 }
 
+
+// Attribute (color/type) sort order
+const COLOR_SORT_ORDER = {
+  white: 1,
+  green: 2,
+  red: 3,
+  blue: 4,
+  purple: 5,
+  yellow: 6,
+  support: 7,
+  mixed: 8,
+  typo: 9,
+  none: 10,
+};
+function colorRankOf(name, rarity) {
+  const c = resolveCardColor(name, rarity) ?? 'none';
+  return COLOR_SORT_ORDER[String(c).toLowerCase()] ?? 999;
+}
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('inventory')
@@ -101,7 +119,8 @@ module.exports = {
           { name: 'Newest first', value: 'newest' },
           { name: 'Oldest first', value: 'oldest' },
           { name: 'Amount (count)', value: 'amount' },
-        ),
+         { name: 'Color (attribute)', value: 'color' },
+ ),
     )
     .addBooleanOption(opt =>
       opt.setName('multi')
@@ -185,8 +204,41 @@ module.exports = {
         if (cb !== ca) return cb - ca;
         return a.name.localeCompare(b.name);
       });
-    } else {
-      const order = {
+    } else if (sortBy === 'color') {
+    const order = {
+      XMAS : 1,
+      VAL : 2,
+      C : 3,
+      U : 4,
+      R : 5,
+      S : 6,
+      RR : 7,
+      OC : 8,
+      SR : 9,
+      OSR : 10,
+      COL : 11,
+      P : 12,
+      SP : 13,
+      UP : 14,
+      SY : 15,
+      UR : 16,
+      OUR : 17,
+      HR : 18,
+      BDAY : 19,
+      SEC : 20,
+      ORI : 21,
+      EAS : 22,
+    };
+    entries.sort((a, b) => {
+      const ca = colorRankOf(a.name, a.rarity);
+      const cb = colorRankOf(b.name, b.rarity);
+      if (ca !== cb) return ca - cb;
+      const dr = (order[b.rarity] ?? 999) - (order[a.rarity] ?? 999);
+      if (dr !== 0) return dr;
+      return a.name.localeCompare(b.name);
+    });
+  } else {
+    const order = {
         XMAS  : 1,
         VAL   : 2,
         C     : 3, 

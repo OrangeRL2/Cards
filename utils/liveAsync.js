@@ -16,11 +16,11 @@ const SUCCESS_RATES = { C:0.01, OC:0.09, U:0.05, S:0.29, R:0.19, RR:0.39, SR:0.4
 // 4: 8h -> 4h
 // 5: 22h -> 12h
 const DURATION_MS = {
-1: 30 * 60 * 1000,
-2: 3.6e6,
-3: 2 * 3.6e6,
-4: 4 * 3.6e6,
-5: 12 * 3.6e6,
+1: 1,
+2: 1,
+3: 1,
+4: 1,
+5: 1,
 };
 
 // Stage 5 reward setup (UPDATED)

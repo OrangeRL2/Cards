@@ -10,6 +10,25 @@ function attrEmoji(name, rarity) {
   return emoji ? ` ${emoji}` : '';
 }
 
+
+// Split an array of lines into message-sized chunks (Discord content max 2000)
+function chunkLines(lines, maxLen = 2000) {
+  const out = [];
+  let cur = '';
+  for (const line of lines) {
+    const l = String(line);
+    const addLen = (cur.length ? 1 : 0) + l.length;
+    if (cur.length + addLen > maxLen) {
+      if (cur.length) out.push(cur);
+      cur = l;
+    } else {
+      cur = cur.length ? (cur + '\n' + l) : l;
+    }
+  }
+  if (cur.length) out.push(cur);
+  return out;
+}
+
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('gift')
@@ -195,20 +214,33 @@ module.exports = {
       toDoc.markModified('cards');
       await toDoc.save();
 
-      // Build reply summary
-      const summaryParts = transfers.map(t => `${t.amount} x **[${String(t.rarity || '').toUpperCase()}] ${t.name}**${attrEmoji(t.name, t.rarity)}${t.locked ? ' (locked)' : ''}`);
-      const summaryText = summaryParts.join(', ');
+      // Build reply summary (chunked to avoid 2000 char limit)
+    const summaryLines = transfers.map(t => {
+      const r = String(t.rarity ?? '').toUpperCase();
+      const lockNote = t.locked ? ' (locked)' : '';
+      return `• ${t.amount} x **[${r}] ${t.name}**${attrEmoji(t.name, t.rarity)}${lockNote}`;
+    });
 
-      const prefix = partialSend
-        ? `You requested ${requestedCount} but only ${sendCount} ${sendCount === 1 ? 'card' : 'cards'} were available${multi ? ' (multi prevented taking last copies)' : ''}.\n`
-        : '';
+    const prefix = partialSend
+      ? `You requested ${requestedCount} but only ${sendCount} ${sendCount === 1 ? 'card' : 'cards'} were available${multi ? ' (multi prevented taking last copies)' : ''}.`
+      : '';
 
-      const lockedNote = allowLocked ? '' : '';
+    const header = `${prefix}${prefix ? '\n' : ''}You sent **${sendCount}** ${sendCount === 1 ? 'card' : 'cards'} to ${toUser.toString()}.`;
 
-      // Final success response via editReply (we deferred at the start)
-      return await interaction.editReply({
-        content: `${prefix}You sent ${summaryText} to ${toUser.toString()}.${lockedNote}`
-      });
+    // Build chunks so each message stays <= 2000 chars.
+    // First message includes the header.
+    const firstBudget = Math.max(1, 2000 - (header.length + 1));
+    const chunks = chunkLines(summaryLines, firstBudget);
+    const firstBody = chunks.length ? `${header}\n${chunks[0]}` : header;
+
+    await interaction.editReply({ content: firstBody });
+
+    // Remaining chunks as follow-ups
+    for (let i = 1; i < chunks.length; i++) {
+      await interaction.followUp({ content: chunks[i] });
+    }
+
+    return;
     } catch (err) {
       console.error('[INT] command execute error', err);
 

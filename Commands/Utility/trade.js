@@ -11,8 +11,16 @@ const {
   Colors,
 } = require('discord.js');
 const User = require('../../models/User');
+const { resolveCardColor, getAttributeEmoji } = require('../../config/holomemColor');
 
 const sessions = new Map();
+
+// Attribute emoji helper (emoji-only)
+function attrEmoji(name, rarity) {
+  const cc = resolveCardColor(name, rarity);
+  const emoji = cc ? getAttributeEmoji(cc) : '';
+  return emoji ? ` ${emoji}` : '';
+}
 
 // ---------- Safe helpers ----------
 async function safeDefer(interaction) {
@@ -151,11 +159,11 @@ module.exports = {
       const toMark = session.accepted?.[session.toId] ? '✅' : '❌';
 
       const senderOffer = (session.offers[session.fromId] || [])
-        .map(o => `• ${o.count} x **[${String(o.rarity ?? '').toUpperCase()}] ${o.name}**`)
+        .map(o => `• ${o.count} x **[${String(o.rarity ?? '').toUpperCase()}] ${o.name}**${attrEmoji(o.name, o.rarity)}`)
         .join('\n') || 'None';
 
       const recipientOffer = (session.offers[session.toId] || [])
-        .map(o => `• ${o.count} x **[${String(o.rarity ?? '').toUpperCase()}] ${o.name}**`)
+        .map(o => `• ${o.count} x **[${String(o.rarity ?? '').toUpperCase()}] ${o.name}**${attrEmoji(o.name, o.rarity)}`)
         .join('\n') || 'None';
 
       return (
