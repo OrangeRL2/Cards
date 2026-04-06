@@ -15,6 +15,25 @@ const SHOP_ITEMS = {
     bloomPol: { name: 'Bloom Cup Polka Top 48', rarity: 'UP',           cost: t1,  image: 'Polka 001',  stock: -1 },
     sparkleGen0: { name: 'Shiny Sparkles Symphony Gen 0', rarity: 'UP',  cost: t1,  image: 'Gen 0 001',  stock: -1 },
     anniSorAZ:  { name: 'Anniversary SorAZ',  rarity: 'UP',               cost: t1,   image: 'SorAZ 001', stock: -1 },
+
+    holoDoriAyame:  { name: 'HoloDori Ayame',  rarity: 'UP',               cost: t1,   image: 'Ayame 001', stock: -1 },
+    holoDoriBaelz:  { name: 'HoloDori Baelz',  rarity: 'UP',               cost: t1,   image: 'Baelz 001', stock: -1 },
+    holoDoriBotan:  { name: 'HoloDori Botan',  rarity: 'UP',               cost: t1,   image: 'Botan 001', stock: -1 },
+    bloomCupFubukiEN:  { name: 'Bloom Cup Fubuki EN',  rarity: 'UP',               cost: t1,   image: 'Fubuki 001', stock: -1 },
+    holoDoriKiara:  { name: 'HoloDori Kiara',  rarity: 'UP',               cost: t1,   image: 'Kiara 001', stock: -1 },
+    holoDoriKobo:  { name: 'HoloDori Kobo',  rarity: 'UP',               cost: t1,   image: 'Kobo 001', stock: -1 },
+    holoDoriLa:  { name: 'HoloDori La+',  rarity: 'UP',               cost: t1,   image: 'La+ 001', stock: -1 },
+    holoDoriMatsuri:  { name: 'HoloDori Matsuri',  rarity: 'UP',               cost: t1,   image: 'Matsuri 001', stock: -1 },
+    holoDoriNerissa:  { name: 'HoloDori Nerissa',  rarity: 'UP',               cost: t1,   image: 'Nerissa 001', stock: -1 },
+    holoDoriOkayu:  { name: 'HoloDori Okayu',  rarity: 'UP',               cost: t1,   image: 'Okayu 001', stock: -1 },
+    holoDoriPekora002:  { name: 'HoloDori Pekora',  rarity: 'UP',               cost: t1,   image: 'Pekora 002', stock: -1 },
+    holoDoriRaden002:  { name: 'HoloDori Raden',  rarity: 'UP',               cost: t1,   image: 'Raden 002', stock: -1 },
+    holoDoriReine:  { name: 'HoloDori Reine',  rarity: 'UP',               cost: t1,   image: 'Reine 001', stock: -1 },
+    holoDoriSora:  { name: 'HoloDori Sora',  rarity: 'UP',               cost: t1,   image: 'Sora 001', stock: -1 },
+    bloomCupSoraEN:  { name: 'Bloom Cup Sora EN',  rarity: 'UP',               cost: t1,   image: 'Sora 501', stock: -1 },
+
+
+
   //tier2
     witch1: { name: 'HoloWitch Holowitches', rarity: 'UP', cost: t2,  image: 'Holowitches 001',  stock: -1 },
     worldTour1: { name: 'WorldTour25 -Synchronize!- Calli, IRyS, Nerissa, Ollie, Nene', rarity: 'UP', cost: t2, image: 'Calli, IRyS, Nerissa , Ollie, Nene 501', stock: -1 },
@@ -24,6 +43,7 @@ const SHOP_ITEMS = {
     bloomMik: { name: 'Bloom Cup Champion Miko', rarity: 'UP',       cost: t3,  image: 'Miko 001',  stock: -1 },
     exstreamerTop8Sui: { name: 'Exstreamer Cup Top 8 Suisei', rarity: 'UP', cost: t3, image: 'Suisei 005', stock: -1 },
     bloom6: { name: 'Bloom Cup Reine Top8', rarity: 'UP',                 cost: t3,  image: 'Reine 501',  stock: -1 },
+    bloomMiko: { name: 'Bloom Cup Miko EN', rarity: 'UP',                 cost: t3,  image: 'Miko 501',  stock: -1 },
   //tier4
     wgSubaLuna: { name: 'World Grand Prix Top 8 SubaLuna', rarity: 'UP',       cost: t4,  image: 'SubaLuna 001',  stock: -1 },
     wgpTop16Koy: { name: 'World Grand Prix Top 16 Koyori', rarity: 'UP',          cost: t4,  image: 'Koyori 001',  stock: -1 },
