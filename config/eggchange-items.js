@@ -101,7 +101,7 @@ const CARD_POOLS = {
       'Nene 001': 14282,
       'Watame 001': 14281,
       'Watame 002': 14281,
-      'Ame 001': 14281,
+      'Amelia 001': 14281,
       'Anya 001': 14281,
       'Easter X': 10,
       'Easter Y': 10,

@@ -18,29 +18,67 @@ const client = new Client({
   ]
 });
 
-// ===================== 🌸 SAKURA EMBED THEME (GLOBAL) =====================
-// Place this block right after: const config = require('./config.json');
+// ===================== 🌸 SAKURA EMBED THEME (CONFIGURABLE) =====================
+// Paste this block right after: const config = require('./config.json');
+// Make sure discord.js import includes EmbedBuilder:
+// const { Client, Collection, GatewayIntentBits, EmbedBuilder } = require('discord.js');
+//
+// Config shape (all optional):
+// {
+//   "embedTheme": "sakura",
+//   "embedKeepErrorRed": true,
+//   "embedDecorate": {
+//     "mode": "wrap",                 // "wrap" (prefix+suffix) or "suffix" or "prefix"
+//     "perLine": true,                 // if text contains \n, decorate each line
+//     "emojiChoices": ["🌸","🍃"],
+//     "rng": { "prefix": true, "suffix": true, "sameBothSides": false },
+//     "sections": {
+//       "title": true,
+//       "description": true,
+//       "fields": { "name": true, "value": true },
+//       "footer": true,
+//       "author": true
+//     }
+//   }
+// }
 
 const EMBED_THEME = config.embedTheme || 'default';
 const KEEP_ERROR_RED = Boolean(config.embedKeepErrorRed);
 
-const DECORATE_ALL_TEXT = config.embedDecorateAllText !== false; // default true
-const DECORATE_PER_LINE = config.embedDecoratePerLine !== false; // default true
+const DECORATE = (config.embedDecorate && typeof config.embedDecorate === 'object') ? config.embedDecorate : {};
 
-// Emoji choices pool (prefix/suffix are chosen independently each time)
-const DEFAULT_CHOICES = ['🌸', '🍃'];
-const EMOJI_CHOICES = Array.isArray(config.embedDecorateEmojiChoices) && config.embedDecorateEmojiChoices.length
-  ? config.embedDecorateEmojiChoices.map(x => String(x)).filter(Boolean)
-  : DEFAULT_CHOICES;
+const MODE = String(DECORATE.mode || 'wrap').toLowerCase(); // wrap | suffix | prefix
+const PER_LINE = DECORATE.perLine !== false; // default true
 
-// Sakura pink
+const RNG = (DECORATE.rng && typeof DECORATE.rng === 'object') ? DECORATE.rng : {};
+const RNG_PREFIX = RNG.prefix !== false; // default true
+const RNG_SUFFIX = RNG.suffix !== false; // default true
+const SAME_BOTH_SIDES = Boolean(RNG.sameBothSides); // default false
+
+const SECTIONS = (DECORATE.sections && typeof DECORATE.sections === 'object') ? DECORATE.sections : {};
+const DO_TITLE = SECTIONS.title !== false; // default true
+const DO_DESC = SECTIONS.description !== false; // default true
+const DO_FOOTER = SECTIONS.footer !== false; // default true
+const DO_AUTHOR = SECTIONS.author !== false; // default true
+
+const FIELDS = (SECTIONS.fields && typeof SECTIONS.fields === 'object') ? SECTIONS.fields : {};
+const DO_FIELD_NAME = FIELDS.name !== false;  // default true
+const DO_FIELD_VALUE = FIELDS.value !== false; // default true
+
+// Sakura pink (global embed color)
 const SAKURA_PINK = 0xFFB7C5;
 
 // Preserve certain colors even in sakura mode (optional)
 const KEEP_COLORS = new Set();
-if (KEEP_ERROR_RED) KEEP_COLORS.add(0xFF5555); // error red used in /pull
+if (KEEP_ERROR_RED) KEEP_COLORS.add(0xFF5555);
 
-// Discord embed text limits (prevents API errors)
+// Emoji pool
+const DEFAULT_CHOICES = ['🌸', '🍃'];
+const EMOJI_CHOICES = Array.isArray(DECORATE.emojiChoices) && DECORATE.emojiChoices.length
+  ? DECORATE.emojiChoices.map(x => String(x)).filter(Boolean)
+  : DEFAULT_CHOICES;
+
+// Discord embed text limits
 const LIMITS = {
   title: 256,
   description: 4096,
@@ -57,77 +95,75 @@ function truncateTo(str, max) {
   return str.slice(0, max - 1) + '…';
 }
 
-function pickRandomEmoji() {
+function pickEmoji() {
   return EMOJI_CHOICES[Math.floor(Math.random() * EMOJI_CHOICES.length)];
 }
 
-// ---- "Already decorated" detection (prevents double-wrapping) ----
-// A line is considered decorated if it starts with (emoji + space) and ends with (space + emoji),
-// where emoji is ANY from EMOJI_CHOICES.
-function startsWithAnyEmojiPlusSpace(s) {
-  return EMOJI_CHOICES.some(e => s.startsWith(`${e} `));
-}
-function endsWithAnySpacePlusEmoji(s) {
-  return EMOJI_CHOICES.some(e => s.endsWith(` ${e}`));
+function endsWithAnyEmoji(s) {
+  const t = String(s ?? '').trimEnd();
+  return EMOJI_CHOICES.some(e => t.endsWith(e) || t.endsWith(` ${e}`));
 }
 
-function isAlreadyDecoratedLine(line) {
-  const raw = String(line ?? '');
-  const t = raw.trim();
-  if (!t) return false;
-  return startsWithAnyEmojiPlusSpace(t) && endsWithAnySpacePlusEmoji(t);
+function startsWithAnyEmoji(s) {
+  const t = String(s ?? '').trimStart();
+  return EMOJI_CHOICES.some(e => t.startsWith(e) || t.startsWith(`${e} `));
 }
 
-// Decorate a single line while preserving indentation
 function decorateOneLine(line) {
-  if (line == null) return line;
-  const raw = String(line);
-
-  // Leave blank/whitespace-only lines alone
+  const raw = String(line ?? '');
   if (!raw.trim()) return raw;
 
-  // Avoid double-wrapping
-  if (isAlreadyDecoratedLine(raw)) return raw;
+  const indent = raw.match(/^(\s*)/)?.[1] ?? '';
+  const body = raw.slice(indent.length).trimEnd();
+  if (!body.trim()) return raw;
 
-  // Preserve indentation (leading whitespace)
-  const indentMatch = raw.match(/^(\s*)/);
-  const indent = indentMatch ? indentMatch[1] : '';
+  // Avoid double-wrapping based on current mode
+  const trimmed = body.trim();
+  const alreadyPrefix = startsWithAnyEmoji(trimmed);
+  const alreadySuffix = endsWithAnyEmoji(trimmed);
 
-  // Keep the rest of the line but trim only the end (so indentation remains)
-  const content = raw.slice(indent.length).trimEnd();
-  if (!content.trim()) return raw;
+  let prefix = '';
+  let suffix = '';
 
-  // ✅ RNG prefix/suffix independently (this is what you asked for)
-  const prefix = pickRandomEmoji();
-  const suffix = pickRandomEmoji();
-
-  return `${indent}${prefix} ${content} ${suffix}`;
-}
-
-// Decorate multiline blocks line-by-line (preserves \n)
-function decorateMultiline(text) {
-  if (text == null) return text;
-  const raw = String(text);
-
-  if (!DECORATE_PER_LINE) {
-    const t = raw.trim();
-    if (!t) return raw;
-    if (isAlreadyDecoratedLine(t)) return raw;
-    const prefix = pickRandomEmoji();
-    const suffix = pickRandomEmoji();
-    return `${prefix} ${t} ${suffix}`;
+  if (MODE === 'wrap' || MODE === 'prefix') {
+    if (!alreadyPrefix) {
+      prefix = RNG_PREFIX ? pickEmoji() : (EMOJI_CHOICES[0] || '🌸');
+    }
   }
 
-  return raw.split('\n').map(decorateOneLine).join('\n');
+  if (MODE === 'wrap' || MODE === 'suffix') {
+    if (!alreadySuffix) {
+      if (SAME_BOTH_SIDES && prefix) {
+        suffix = prefix;
+      } else {
+        suffix = RNG_SUFFIX ? pickEmoji() : (EMOJI_CHOICES[0] || '🌸');
+      }
+    }
+  }
+
+  // If mode is wrap/prefix and we already had prefix, don't add again.
+  // Same for suffix.
+  let out = body;
+  if (prefix) out = `${prefix} ${out}`;
+  if (suffix) out = `${out} ${suffix}`;
+  return `${indent}${out}`;
 }
 
 function decorateText(text, maxLen) {
-  if (!DECORATE_ALL_TEXT) return text;
-  const wrapped = decorateMultiline(text);
-  return truncateTo(wrapped, maxLen);
+  if (text == null) return text;
+  const raw = String(text);
+
+  let out;
+  if (PER_LINE && raw.includes('\n')) {
+    out = raw.split('\n').map(decorateOneLine).join('\n');
+  } else {
+    out = decorateOneLine(raw);
+  }
+
+  return truncateTo(out, maxLen);
 }
 
-function enableSakuraEmbeds() {
+function enableSakuraEmbeds_Configurable() {
   if (EMBED_THEME !== 'sakura') return;
 
   const originalSetColor = EmbedBuilder.prototype.setColor;
@@ -139,29 +175,26 @@ function enableSakuraEmbeds() {
   const originalSetAuthor = EmbedBuilder.prototype.setAuthor;
   const originalToJSON = EmbedBuilder.prototype.toJSON;
 
-  // Force sakura color on any setColor(...) calls (unless preserved)
+  // Global color theme (pink), unless preserved
   EmbedBuilder.prototype.setColor = function patchedSetColor(color) {
     const n = typeof color === 'number' ? color : null;
     if (n && KEEP_COLORS.has(n)) return originalSetColor.call(this, n);
     return originalSetColor.call(this, SAKURA_PINK);
   };
 
-  // Decorate title
   EmbedBuilder.prototype.setTitle = function patchedSetTitle(title) {
-    return originalSetTitle.call(this, decorateText(title, LIMITS.title));
+    return originalSetTitle.call(this, DO_TITLE ? decorateText(title, LIMITS.title) : title);
   };
 
-  // Decorate description (multi-line friendly)
   EmbedBuilder.prototype.setDescription = function patchedSetDescription(desc) {
-    return originalSetDescription.call(this, decorateText(desc, LIMITS.description));
+    return originalSetDescription.call(this, DO_DESC ? decorateText(desc, LIMITS.description) : desc);
   };
 
-  // Decorate fields (name + value)
   function decorateField(field) {
     if (!field || typeof field !== 'object') return field;
     const out = { ...field };
-    if ('name' in out) out.name = decorateText(out.name, LIMITS.fieldName);
-    if ('value' in out) out.value = decorateText(out.value, LIMITS.fieldValue);
+    if (DO_FIELD_NAME && 'name' in out) out.name = decorateText(out.name, LIMITS.fieldName);
+    if (DO_FIELD_VALUE && 'value' in out) out.value = decorateText(out.value, LIMITS.fieldValue);
     return out;
   }
 
@@ -175,50 +208,49 @@ function enableSakuraEmbeds() {
     return originalSetFields.call(this, normalized.map(decorateField));
   };
 
-  // Decorate footer text (supports multi-line footers)
   EmbedBuilder.prototype.setFooter = function patchedSetFooter(footer) {
     if (!footer || typeof footer !== 'object') return originalSetFooter.call(this, footer);
+    if (!DO_FOOTER) return originalSetFooter.call(this, footer);
     const out = { ...footer };
     if (out.text) out.text = decorateText(out.text, LIMITS.footerText);
     return originalSetFooter.call(this, out);
   };
 
-  // Decorate author name
   EmbedBuilder.prototype.setAuthor = function patchedSetAuthor(author) {
     if (!author || typeof author !== 'object') return originalSetAuthor.call(this, author);
+    if (!DO_AUTHOR) return originalSetAuthor.call(this, author);
     const out = { ...author };
     if (out.name) out.name = decorateText(out.name, LIMITS.authorName);
     return originalSetAuthor.call(this, out);
   };
 
-  // Safety net:
-  // - ensures embeds with no setColor still become pink
-  // - ensures raw-set data still gets decorated (without double-wrapping)
+  // Safety net: decorate raw-set properties too
   EmbedBuilder.prototype.toJSON = function patchedToJSON() {
     if (!this.data?.color) originalSetColor.call(this, SAKURA_PINK);
 
-    if (this.data?.title) this.data.title = decorateText(this.data.title, LIMITS.title);
-    if (this.data?.description) this.data.description = decorateText(this.data.description, LIMITS.description);
+    if (DO_TITLE && this.data?.title) this.data.title = decorateText(this.data.title, LIMITS.title);
+    if (DO_DESC && this.data?.description) this.data.description = decorateText(this.data.description, LIMITS.description);
 
-    if (this.data?.footer?.text) this.data.footer.text = decorateText(this.data.footer.text, LIMITS.footerText);
-    if (this.data?.author?.name) this.data.author.name = decorateText(this.data.author.name, LIMITS.authorName);
+    if (DO_FOOTER && this.data?.footer?.text) this.data.footer.text = decorateText(this.data.footer.text, LIMITS.footerText);
+    if (DO_AUTHOR && this.data?.author?.name) this.data.author.name = decorateText(this.data.author.name, LIMITS.authorName);
 
     if (Array.isArray(this.data?.fields)) {
       this.data.fields = this.data.fields.map(f => ({
         ...f,
-        name: decorateText(f?.name, LIMITS.fieldName),
-        value: decorateText(f?.value, LIMITS.fieldValue),
+        name: DO_FIELD_NAME ? decorateText(f?.name, LIMITS.fieldName) : f?.name,
+        value: DO_FIELD_VALUE ? decorateText(f?.value, LIMITS.fieldValue) : f?.value,
       }));
     }
 
     return originalToJSON.call(this);
   };
 
-  console.log('[theme] Sakura mode enabled: pink embeds + per-line RNG 🌸/🍃');
+  console.log('[theme] Sakura mode enabled: configurable wrap/prefix/suffix + per-section toggles');
 }
 
-enableSakuraEmbeds();
-// =================== END 🌸 SAKURA EMBED THEME (GLOBAL) ===================
+enableSakuraEmbeds_Configurable();
+
+// =================== END 🌸 SAKURA EMBED THEME (CONFIGURABLE) ===================
 
 // collections
 client.cooldowns = new Collection();
