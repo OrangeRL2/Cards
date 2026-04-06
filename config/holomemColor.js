@@ -31,10 +31,10 @@ const ATTRIBUTE_EMOJIS2 = {
   purple: '<:purple:1490582784169738392>',
 
   // Fallback category emoji
-  others: '<:others:1490582781732847797>',
+  others: '<:others:1490610693530058782>',
 
   // Non-color attributes
-  support: '<:others:1490582781732847797>',
+  support: '<:others:1490610693530058782>',
   typo:    '<:typo:1490616602037583933>',
   mixed:   '<:white:1490582793678229607>,<:yellow:1490582791895650456>,<:green:1490582789425336320>,<:blue:1490582787407740949>,<:red:1490582785692274742>,<:purple:1490582784169738392>',
 
@@ -54,7 +54,7 @@ const ATTRIBUTE_EMOJIS = {
   others: '<:others:1490610693530058782>',
 
   // Non-color attributes
-  support: '<:others:1490582781732847797>',
+  support: '<:others:1490610693530058782>',
   typo:    '<:typo:1490617070184955984>',
   mixed:   '<:white:1490610704674324520>,<:yellow:1490610703143538698>,<:green:1490610701515882569>,<:blue:1490610699859267664>,<:red:1490610698135273492>,<:purple:1490610695803240541>',
 
