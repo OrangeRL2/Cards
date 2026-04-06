@@ -21,6 +21,7 @@ const IMAGE_BASE = process.env.IMAGE_BASE || 'http://152.69.195.48/images';
 
 const ITEMS_PER_PAGE = 5;
 const IDLE_LIMIT = 500_000; // UI idle timeout
+const TOTAL_LIMIT = 6 * 60 * 60 * 1000; // safety cap (reset on each press)
 
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -292,13 +293,6 @@ module.exports = {
 
     // Result state (so we can support Prev/Next + Again + Back)
     let resultState = null; // { type: 'gacha'|'single', item, pageItems, descriptionAll, costText, pageIndex, canAgain }
-
-    let idleTimer = null;
-    function resetIdle(collector) {
-      if (idleTimer) clearTimeout(idleTimer);
-      idleTimer = setTimeout(() => collector.stop('idle'), IDLE_LIMIT);
-    }
-
     let isProcessing = false;
 
     // IDs for result buttons (use item.id so "again" repeats the same purchase)
@@ -367,16 +361,15 @@ module.exports = {
 
     const collector = message.createMessageComponentCollector({
       componentType: ComponentType.Button,
-      time: IDLE_LIMIT,
+      idle: IDLE_LIMIT,
+ time: TOTAL_LIMIT,
       filter: (comp) =>
         comp.user.id === interaction.user.id &&
         String(comp.customId).endsWith(`_${uid}`),
     });
-
-    resetIdle(collector);
-
-    collector.on('collect', async (comp) => {
-      resetIdle(collector);
+collector.on('collect', async (comp) => {
+  // Keep the UI alive while the user is actively pressing buttons
+  collector.resetTimer({ idle: IDLE_LIMIT, time: TOTAL_LIMIT });
 
       if (isProcessing) {
         try {
@@ -566,8 +559,7 @@ module.exports = {
 
     collector.on('end', async () => {
       try {
-        if (idleTimer) clearTimeout(idleTimer);
-        const disabled = message.components.map((r) => {
+const disabled = message.components.map((r) => {
           const row = ActionRowBuilder.from(r);
           row.components.forEach((b) => b.setDisabled(true));
           return row;
