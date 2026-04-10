@@ -305,8 +305,15 @@ const EXCEPTION_CARD_COLOR = {
     'Dorobo Construction 501': 'support',
     'Choco, Luna, Subaru 002': 'support',
     'holoForce 001::S': 'support',
+    'holoForce 501::S': 'support',
     'holoForce 001::U': 'support',
+    'holoForce 501::U': 'support',
     'holoForce 001::P': 'support',
+    'holoForce 501::P': 'support',
+
+    'holoForce 502::S': 'support',
+    'holoForce 002::U': 'support',
+    'holoForce 502::U': 'support',
 
     'MiKorone 001': 'typo',
     'Ayama 001': 'typo',
@@ -319,6 +326,7 @@ const EXCEPTION_CARD_COLOR = {
     'Sora & Iofi 501': 'typo',
     'Force 001': 'typo',
     'Dorobo Contsruction 501': 'typo',
+    'Lamy 501::BDAY': 'typo',
 
     'PekoMari 001::P': 'mixed',
     'SorAZ 001::P': 'mixed',
@@ -341,6 +349,7 @@ const EXCEPTION_CARD_COLOR = {
     'FUWAMOCO 501::C': 'support',
 
     'Watame 002::OSR': 'white',
+    'Watame 002::P': 'support',
 };
 
 function normKey(s) {
