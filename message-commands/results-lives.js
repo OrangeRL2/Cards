@@ -80,7 +80,8 @@ const ENV_ALLOWED_TARGETERS = (process.env.RESULTS_LIVES_ALLOWED_TARGETERS_USER_
 
 // Replace or append here as needed
 const ALLOWED_TARGETERS = new Set([
-  '153551890976735232', // e.g., your ID
+  '153551890976735232',
+  '409717160995192832', // e.g., your ID
   ...ENV_ALLOWED_TARGETERS,
 ]);
 

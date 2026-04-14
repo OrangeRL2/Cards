@@ -296,7 +296,7 @@ pekora_marine_flare_3: {
   holoX: {
     name: 'Spring holoX(Lappy + Lui + Iroha + Koyori + Chloe)',
     rarity: 'COL',
-    image: 'ReGLOSS 101',
+    image: 'holoX 101',
     stock: -1,
     requires: [
       { rarity: 'EAS', image: 'La+ 101', count: 1 },
