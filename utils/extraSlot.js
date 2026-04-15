@@ -120,7 +120,7 @@ function pickFileFromPool(rarity, userId, useSpecialRates = false, fileWeightsMa
  * - card is selected using runtime weights or defaultExtraCardWeightsByRarity
  */
 function rollExtraSlot(userId, profile, useSpecialRates = false, opts = {}) {
-  const baseExtraChance = 0.40;
+  const baseExtraChance = 0.00;
   const extraChance = baseExtraChance * (profile.extraSlotRate ?? 1.0);
 
   if (Math.random() >= extraChance) return null;
