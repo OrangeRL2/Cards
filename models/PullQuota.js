@@ -7,7 +7,8 @@ const PullQuotaSchema = new Schema({
   eventPulls: { type: Number, required: true, default: 0 },
   lastBirthdayGivenAt: { type: Date, required: false }, // new: last time birthday bonus was applied
   specialPulls: { type: Map, of: Number, default: {} }, // keys: normalized label -> remaining count
-  lastSpecialGivenAt: { type: Date } // optional: track when special was first given
+  lastSpecialGivenAt: { type: Date }, // optional: track when special was first given
+  pausedRemainingMs: { type: Number, default: null }
 }, { timestamps: true });
 
 module.exports = model('PullQuota', PullQuotaSchema);

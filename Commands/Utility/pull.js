@@ -13,7 +13,7 @@ const { resolveCardColor, getAttributeEmoji } = require('../../config/holomemCol
 const { drawPack } = require('../../utils/newWeightedDraw'); // normal draw
 const { drawPackBoss } = require('../../utils/drawPackBoss'); // boss-channel biased draw
 const { getBossChannelDrawToken } = require('../../utils/bossPullBias');
-
+const { isFrozen } = require('../../utils/freeze'); // for freeze status check in quota calculation
 // Tolerant import for special draw
 let drawPackSpecial;
 try {
@@ -136,16 +136,25 @@ async function ensureUserSpecialKey(userId, labelKey, defaultVal) {
  * Authoritative pulls consumption.
  * (Special path already uses atomic $inc. We'll harden timed-only to use $inc too.)
  */
-async function consumePulls(discordUserId, amount, allowEvent, specialLabel = null) {
+
+async function consumePulls(discordUserId, amount, allowEvent, specialLabel = null, options = {}) {
+
+  const frozen = Boolean(options?.frozen || options?.isFrozen);
+
   function computeNextRefill(doc) {
     if (!doc) return null;
+
+    // ✅ frozen cooldown is always "15 minutes remaining"
+    if (frozen) return PullQuota.REFILL_INTERVAL_MS;
+
+    // If already full, no timer
+    if ((doc.pulls ?? 0) >= PullQuota.MAX_STOCK) return 0;
+
     const now = Date.now();
-    if (doc.lastRefill) {
-      const last = new Date(doc.lastRefill).getTime();
-      return Math.max(0, PullQuota.REFILL_INTERVAL_MS - (now - last));
-    }
-    return (doc.pulls >= PullQuota.MAX_STOCK) ? 0 : PullQuota.REFILL_INTERVAL_MS;
+    const last = doc.lastRefill ? new Date(doc.lastRefill).getTime() : now;
+    return Math.max(0, PullQuota.REFILL_INTERVAL_MS - (now - last));
   }
+
 
   // --- Special path (kept as-is; already atomic) ---
   if (specialLabel) {
@@ -163,7 +172,7 @@ async function consumePulls(discordUserId, amount, allowEvent, specialLabel = nu
       };
     }
 
-    const { doc: initialDoc } = await PullQuota.getUpdatedQuota(discordUserId);
+    const { doc: initialDoc } = await PullQuota.getUpdatedQuota(discordUserId, options);
     if (!initialDoc) {
       try {
         const init = { userId: discordUserId, pulls: 0, eventPulls: 0, specialPulls: {} };
@@ -178,7 +187,7 @@ async function consumePulls(discordUserId, amount, allowEvent, specialLabel = nu
 
     await ensureUserSpecialKey(discordUserId, labelKey, grant.pullsPerUser);
 
-    const { doc } = await PullQuota.getUpdatedQuota(discordUserId);
+    const { doc } = await PullQuota.getUpdatedQuota(discordUserId, { frozen });
     if (!doc) {
       return {
         success: false,
@@ -222,7 +231,7 @@ async function consumePulls(discordUserId, amount, allowEvent, specialLabel = nu
       };
     }
 
-    const { doc: afterDoc } = await PullQuota.getUpdatedQuota(discordUserId);
+    const { doc: afterDoc } = await PullQuota.getUpdatedQuota(discordUserId, options);
 
     let afterRemainingSpecial = 0;
     if (afterDoc) {
@@ -246,7 +255,7 @@ async function consumePulls(discordUserId, amount, allowEvent, specialLabel = nu
   }
 
   // --- Non-special path (original logic + atomic $inc for timed-only) ---
-  const { doc } = await PullQuota.getUpdatedQuota(discordUserId);
+  const { doc } = await PullQuota.getUpdatedQuota(discordUserId, { frozen });
   if (!doc) {
     return {
       success: false,
@@ -318,7 +327,7 @@ async function consumePulls(discordUserId, amount, allowEvent, specialLabel = nu
   ).exec();
 
   if (dec && dec.modifiedCount === 1) {
-    const { doc: afterDoc } = await PullQuota.getUpdatedQuota(discordUserId);
+    const { doc: afterDoc } = await PullQuota.getUpdatedQuota(discordUserId, options);
     const nextIn = computeNextRefill(afterDoc);
     return {
       success: true,
@@ -385,7 +394,15 @@ module.exports = {
 
     const discordUserId = interaction.user.id;
     const lockOwner = interaction.id;
+    // --- Freeze check (users/roles) ---
+    const guild = interaction.guild;
+    let member = interaction.member;
 
+    if (guild && (!member || !member.roles?.cache)) {
+      member = await guild.members.fetch(discordUserId).catch(() => null);
+    }
+
+const frozen = isFrozen(discordUserId, member);
     // ✅ : pity mode flags
     const pityNoTrack = PITY_EXEMPT_IDS.has(discordUserId);
     const pityNoForce = pityNoTrack || PITY_EXEMPT_IDS2.has(discordUserId);
@@ -510,7 +527,7 @@ module.exports = {
       let consumeResult;
       try {
         const consumeLabel = consumeLabelKey ?? null;
-        consumeResult = await consumePulls(discordUserId, amount, allowEvent, consumeLabel);
+        consumeResult = await consumePulls(discordUserId, amount, allowEvent, consumeLabel, { frozen });
       } catch (err) {
         console.error('consumePulls error (pre-draw):', err);
         inFlightInteractions.delete(interaction.id);
@@ -619,7 +636,7 @@ module.exports = {
 
         // Refund on failure
         try {
-          const { doc } = await PullQuota.getUpdatedQuota(discordUserId);
+          const { doc } = await PullQuota.getUpdatedQuota(discordUserId, { frozen });
           if (doc) {
             const inc = {};
             if (consumeResult.consumedFromEvent) inc.eventPulls = consumeResult.consumedFromEvent;
@@ -769,7 +786,7 @@ module.exports = {
 
         // refund because we consumed earlier but failed to persist cards
         try {
-          const { doc } = await PullQuota.getUpdatedQuota(discordUserId);
+          const { doc } = await PullQuota.getUpdatedQuota(discordUserId, { frozen });
           if (doc) {
             const inc = {};
             if (consumeResult.consumedFromEvent) inc.eventPulls = consumeResult.consumedFromEvent;

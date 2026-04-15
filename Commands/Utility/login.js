@@ -1,12 +1,17 @@
 // commands/login.js
 // Slash command: /login
 // Grants a daily random amount of points (fans). Resets at midnight Japan time (JST).
-// Configurable ranges at the top of the file.
+// Frozen users also get +86 pulls on login.
 
 const { SlashCommandBuilder } = require('discord.js');
 const mongoose = require('mongoose');
-const User = require('../../models/User'); // your existing User model
 const { Schema } = require('mongoose');
+
+const User = require('../../models/User'); // your existing User model
+
+// ✅ Add these two utils:
+const { addPulls } = require('../../utils/pullQuota'); // already exists in your pullQuota utils [2](https://ace00101-my.sharepoint.com/personal/nauldee_nawill_ace00101_onmicrosoft_com/Documents/Microsoft%20Copilot%20Chat%20%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB/pullQuota.js)
+const { isFrozen } = require('../../utils/freeze');
 
 // ----------------- Configuration (edit these) -----------------
 const DEFAULT_RANGE = { min: 25, max: 100 }; // default daily fans range
@@ -120,10 +125,24 @@ module.exports = {
    * @param {import('discord.js').CommandInteraction} interaction
    */
   async execute(interaction) {
-    await interaction.deferReply({ ephemeral: false });
+    await interaction.deferReply();
 
     try {
       const userId = interaction.user.id;
+
+      // -----------------------------
+      // Determine if user is frozen
+      // (checks both frozen user IDs + frozen roles)
+      // -----------------------------
+      const guild = interaction.guild;
+      let member = interaction.member;
+
+      // Ensure member is fetched (role cache)
+      if (guild && (!member || !member.roles?.cache)) {
+        member = await guild.members.fetch(userId).catch(() => null);
+      }
+
+      const frozen = isFrozen(userId, member);
 
       // Determine today's JST date string
       const todayJST = jstDateStringFor();
@@ -148,21 +167,11 @@ module.exports = {
         range = SPECIAL_USER_RANGES[userId];
       } else {
         // 2) Check roles (if in a guild)
-        const guild = interaction.guild;
-        if (guild) {
-          // Ensure member is fetched
-          let member = interaction.member;
-          if (!member || !member.roles) {
-            member = await guild.members.fetch(userId).catch(() => null);
-          }
-
-          if (member && member.roles && member.roles.cache) {
-            // Iterate SPECIAL_ROLE_RANGES keys in insertion order
-            for (const [roleId, r] of Object.entries(SPECIAL_ROLE_RANGES)) {
-              if (member.roles.cache.has(roleId)) {
-                range = r;
-                break;
-              }
+        if (member && member.roles && member.roles.cache) {
+          for (const [roleId, r] of Object.entries(SPECIAL_ROLE_RANGES)) {
+            if (member.roles.cache.has(roleId)) {
+              range = r;
+              break;
             }
           }
         }
@@ -188,10 +197,24 @@ module.exports = {
         { upsert: true, new: true }
       ).exec();
 
+      // ✅ Frozen bonus: +86 pulls (ONLY for frozen users)
+      let pullsGranted = 0;
+      if (frozen) {
+        pullsGranted = 86;
+        await addPulls(userId, pullsGranted);
+      }
+
       // Reply to user
-      await interaction.editReply(
-        `You logged in for the day and earned **${fans}** fans 🎉`
-      );
+      if (frozen) {
+        await interaction.editReply(
+          `You logged in for the day and earned **${fans}** fans 🎉\n` +
+          `Frozen bonus: **+${pullsGranted} pulls** 🎟️`
+        );
+      } else {
+        await interaction.editReply(
+          `You logged in for the day and earned **${fans}** fans 🎉`
+        );
+      }
     } catch (err) {
       console.error('[cmd:login] error', err);
       try {
