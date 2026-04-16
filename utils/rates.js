@@ -232,27 +232,6 @@ const rateProfiles = (() => {
     },
   });
 
-  m.set('409717160995192832', {
-    pullRate: 1.0,
-    extraSlotRate: 1.0,
-    specialPullRate: 1.1,
-    overrides: {
-      normal: {
-        common1: { S: 7.5, HR: 0.5, BDAY: 0.5 },
-        uncommon2: { SR: 7.5 },
-        uncommon3: { OSR: 6.0 },
-        rare: { OUR: 0.9 },
-      },
-      special: {},
-      boss: {
-        common1: { S: 7.5, HR: 0.5, BDAY: 0.5 },
-        uncommon2: { SR: 7.5 },
-        uncommon3: { OSR: 6.0 },
-        rare: { OUR: 0.9 },
-      },
-    },
-  });
-
   return m;
 })();
 
