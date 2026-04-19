@@ -232,7 +232,7 @@ async function drawPackSpecial(userId, specialLabel, opts = {}) {
     return { results, baseLabel, variantLabel };
   }
   // --- Extra slot (mirrors normal pack behavior) ---
-  const baseExtraChance = 0.40; // 40% base chance for the extra slot to appear
+  const baseExtraChance = 0.00; // 40% base chance for the extra slot to appear
   const extraChance = baseExtraChance * (profile.extraSlotRate ?? 1.0);
 
   if (Math.random() < extraChance) {
