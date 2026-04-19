@@ -1,0 +1,19 @@
+{
+  "backedUpAt": "2026-04-19T11:42:35.920Z",
+  "targetId": "153551890976735232",
+  "existed": true,
+  "targetSnapshot": {
+    "id": "153551890976735232",
+    "cards": [
+      {
+        "name": "Suisei 001",
+        "rarity": "OSR",
+        "count": 1,
+        "firstAcquiredAt": "2026-04-19T11:38:20.560Z",
+        "lastAcquiredAt": "2026-04-19T11:38:20.560Z",
+        "locked": false,
+        "_id": "69e4beac529ddcb18251853c"
+      }
+    ]
+  }
+}

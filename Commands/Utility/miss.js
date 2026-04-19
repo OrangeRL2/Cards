@@ -16,7 +16,7 @@ const User = require('../../models/User');
 const { resolveCardColor, getAttributeEmoji } = require('../../config/holomemColor');
 const pools = require('../../utils/loadImages');
 
-const IMAGE_BASE = process.env.IMAGE_BASE || 'http://152.69.195.48/newimagetest';
+const IMAGE_BASE = process.env.IMAGE_BASE || 'http://152.69.195.48/images';
 const PAGE_SIZE = 10;
 const IDLE_LIMIT = 120_000; // 2 minutes
 
