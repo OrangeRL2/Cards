@@ -96,6 +96,7 @@ async function announceSyPull(interaction, pulledCards) {
   const arr = Array.isArray(pulledCards) ? pulledCards : [pulledCards];
   if (!arr.length) return;
 
+  // Only SY cards
   const syCards = arr.filter(c => String(c?.rarity).toUpperCase() === 'SY');
   if (!syCards.length) return;
 
@@ -105,19 +106,20 @@ async function announceSyPull(interaction, pulledCards) {
   const channel = await interaction.client.channels.fetch(channelId).catch(() => null);
   if (!channel || !channel.isTextBased()) return;
 
-  const userTag = `${interaction.user}`;
+  const userTag = `${interaction.user}`; // mention the puller
 
-
-  // Option A: one message per SY card (what you asked)
   for (const card of syCards) {
-    const safeName = String(card.name ?? 'Unknown').replace(/@/g, '@\u200b'); // prevent ping tricks
-    await channel.send(`**SY** card pulled! **${safeName}** has been pulled by ${userTag}`);
-  }
+    const safeName = String(card?.name ?? 'Unknown').replace(/@/g, '@\u200b');
 
-  // Option B (alternative): one message for all SY cards (less spam)
-  // const names = syCards.map(c => `**${String(c.name ?? 'Unknown').replace(/@/g, '@\u200b')}**`).join(', ');
-  // await channel.send(`✨ **SY** cards pulled! ${names} has been pulled by ${userTag}`);
+    // Attribute/color emoji (same logic as your embed display)
+    const cc = resolveCardColor(safeName, 'SY');
+    const emoji = cc ? getAttributeEmoji(cc) : '';
+    const tag = emoji ? ` ${emoji}` : '';
+
+    await channel.send(`**[SY]** **${safeName}**${tag} has been pulled by ${userTag}`);
+  }
 }
+
 async function releasePullLock(userId, owner) {
   try { await PullLock.deleteOne({ userId, owner }).exec(); } catch {}
 }
