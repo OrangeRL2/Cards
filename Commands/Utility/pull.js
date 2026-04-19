@@ -54,7 +54,7 @@ const PITY_EXEMPT_IDS2 = new Set([
 // but it doesn't stop two different interactions from the same user.
 const inFlightInteractions = new Map();
 
-const IMAGE_BASE = process.env.IMAGE_BASE || 'http://152.69.195.48/images';
+const IMAGE_BASE = process.env.IMAGE_BASE || 'http://152.69.195.48/newimagetest';
 
 const PAGE_TIMEOUT_MS = 2 * 60 * 1000; // 2 minutes
 const DEFAULT_GIF_DURATION_MS = 1200; // base animation delay for first/solo pulls
