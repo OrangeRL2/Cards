@@ -21,7 +21,7 @@ function readRarityFolders(baseDir) {
 }
 
 function loadPools() {
-  const assetsBase = path.join(__dirname, '..', 'assets', 'images');
+  const assetsBase = path.join(__dirname, '..', 'assets', 'newimagetest');
 
   // Default (top-level) pools: assets/images/<Rarity>/*
   const defaultPools = readRarityFolders(assetsBase);

@@ -14,6 +14,7 @@ const { drawPack } = require('../../utils/newWeightedDraw'); // normal draw
 const { drawPackBoss } = require('../../utils/drawPackBoss'); // boss-channel biased draw
 const { getBossChannelDrawToken } = require('../../utils/bossPullBias');
 const { isFrozen } = require('../../utils/freeze'); // for freeze status check in quota calculation
+const { birthdayChannelId } = require('../../config.json');
 // Tolerant import for special draw
 let drawPackSpecial;
 try {
@@ -91,6 +92,32 @@ async function acquirePullLock(userId, owner, ttlMs = 8000) {
   }
 }
 
+async function announceSyPull(interaction, pulledCards) {
+  const arr = Array.isArray(pulledCards) ? pulledCards : [pulledCards];
+  if (!arr.length) return;
+
+  const syCards = arr.filter(c => String(c?.rarity).toUpperCase() === 'SY');
+  if (!syCards.length) return;
+
+  const channelId = birthdayChannelId;
+  if (!channelId) return;
+
+  const channel = await interaction.client.channels.fetch(channelId).catch(() => null);
+  if (!channel || !channel.isTextBased()) return;
+
+  const userTag = `${interaction.user}`;
+
+
+  // Option A: one message per SY card (what you asked)
+  for (const card of syCards) {
+    const safeName = String(card.name ?? 'Unknown').replace(/@/g, '@\u200b'); // prevent ping tricks
+    await channel.send(`**SY** card pulled! **${safeName}** has been pulled by ${userTag}`);
+  }
+
+  // Option B (alternative): one message for all SY cards (less spam)
+  // const names = syCards.map(c => `**${String(c.name ?? 'Unknown').replace(/@/g, '@\u200b')}**`).join(', ');
+  // await channel.send(`✨ **SY** cards pulled! ${names} has been pulled by ${userTag}`);
+}
 async function releasePullLock(userId, owner) {
   try { await PullLock.deleteOne({ userId, owner }).exec(); } catch {}
 }
@@ -675,6 +702,7 @@ const frozen = isFrozen(discordUserId, member);
       // --- Persist cards + build page items ---
       const pageItems = [];
       const allNames = [];
+      const syToAnnounce = [];
       const now = new Date();
 
       try {
@@ -690,6 +718,10 @@ const frozen = isFrozen(discordUserId, member);
           const displayName = raw.replace(/[_-\s]+/g, ' ').trim();
           const key = displayName.replace(/[_\s\-]+/g, ' ').replace(/\s+/g, ' ').trim();
           const nameRegex = new RegExp(`^${escapeRegex(key)}$`, 'i');
+
+if (String(rarity).toUpperCase() === 'SY') {
+  syToAnnounce.push({ rarity: 'SY', name: displayName });
+}
 
           const incResult = await User.updateOne(
             {
@@ -820,6 +852,10 @@ const frozen = isFrozen(discordUserId, member);
         await interaction.editReply({ content: 'An error occurred while saving your pull. Your pull has been refunded. Please try again.', components: [] }).catch(() => null);
         await release();
         return;
+      }
+      
+      if (syToAnnounce.length) {
+        void announceSyPull(interaction, syToAnnounce);
       }
 
       // --- Build description and show results ---
