@@ -14,7 +14,7 @@ const { drawPack } = require('../../utils/newWeightedDraw'); // normal draw
 const { drawPackBoss } = require('../../utils/drawPackBoss'); // boss-channel biased draw
 const { getBossChannelDrawToken } = require('../../utils/bossPullBias');
 const { isFrozen } = require('../../utils/freeze'); // for freeze status check in quota calculation
-const { birthdayChannelId } = require('../../config.json');
+const { syChannelId } = require('../../config.json');
 // Tolerant import for special draw
 let drawPackSpecial;
 try {
@@ -49,7 +49,11 @@ const PITY_EXEMPT_IDS2 = new Set([
   '1311652316973240380', //Kasumi
   '399631405228752897', //Saori
 ]);
-
+// === SY announcement ignore list ===
+// Users in this set will NOT trigger the SY announcer message.
+const SY_ANNOUNCE_EXEMPT_IDS = new Set([
+  '511182422340272128',
+]);
 // In-process guard still useful for same-interaction re-entry,
 // but it doesn't stop two different interactions from the same user.
 const inFlightInteractions = new Map();
@@ -93,6 +97,9 @@ async function acquirePullLock(userId, owner, ttlMs = 8000) {
 }
 
 async function announceSyPull(interaction, pulledCards) {
+  // Skip announcements for ignored users
+  if (SY_ANNOUNCE_EXEMPT_IDS.has(interaction.user.id)) return;
+
   const arr = Array.isArray(pulledCards) ? pulledCards : [pulledCards];
   if (!arr.length) return;
 
@@ -100,7 +107,7 @@ async function announceSyPull(interaction, pulledCards) {
   const syCards = arr.filter(c => String(c?.rarity).toUpperCase() === 'SY');
   if (!syCards.length) return;
 
-  const channelId = birthdayChannelId;
+  const channelId = syChannelId;
   if (!channelId) return;
 
   const channel = await interaction.client.channels.fetch(channelId).catch(() => null);
@@ -721,7 +728,7 @@ const frozen = isFrozen(discordUserId, member);
           const key = displayName.replace(/[_\s\-]+/g, ' ').replace(/\s+/g, ' ').trim();
           const nameRegex = new RegExp(`^${escapeRegex(key)}$`, 'i');
 
-if (String(rarity).toUpperCase() === 'SY') {
+if (!SY_ANNOUNCE_EXEMPT_IDS.has(discordUserId) && String(rarity).toUpperCase() === 'SY') {
   syToAnnounce.push({ rarity: 'SY', name: displayName });
 }
 
