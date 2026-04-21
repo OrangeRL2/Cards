@@ -21,7 +21,7 @@ const PAGE_SIZE = 10;
 const IDLE_LIMIT = 120_000; // 2 minutes
 
 const RARITY_ORDER = [
-  'XMAS', 'VAL', 'C', 'U', 'R', 'S', 'RR', 'OC', 'SR', 'COL', 'OSR', 'P', 'SP', 'UP', 'SY', 'UR', 'OUR', 'HR', 'BDAY',  'SEC','ORI','EAS'
+  'XMAS', "VAL", "EAS", 'C', 'U', 'R', 'S', 'RR', 'OC', 'SR', 'COL', 'OSR', 'P', 'SP', 'SY', 'UR', 'OUR', 'HR', 'BDAY', 'UP', 'SEC',  "ORI"
 ];
 
 const COLOR_MAP = {
