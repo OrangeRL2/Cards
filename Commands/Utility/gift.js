@@ -2,7 +2,7 @@
 const { SlashCommandBuilder } = require('discord.js');
 const User = require('../../models/User');
 const { resolveCardColor, getAttributeEmoji } = require('../../config/holomemColor');
-
+const { rarityChoices, parseRarityFilter } = require('../../utils/rarities');
 // Attribute emoji helper (emoji-only)
 function attrEmoji(name, rarity) {
   const cc = resolveCardColor(name, rarity);
@@ -45,12 +45,12 @@ module.exports = {
         .setDescription('Card name prefix to match (case-insensitive)')
         .setRequired(true)
     )
-    .addStringOption(option =>
-      option
-        .setName('rarity')
-        .setDescription('Rarity of the card (use "any" or "all" to match any rarity)')
-        .setRequired(true)
-    )
+.addStringOption(opt =>
+  opt.setName('rarity')
+    .setDescription('Rarity')
+    .setRequired(true)
+    .addChoices(...rarityChoices({ includeAnyAll: true }))
+)
     .addIntegerOption(option =>
       option
         .setName('count')
@@ -74,6 +74,8 @@ module.exports = {
 
   async execute(interaction) {
     // Defer immediately to avoid "Unknown interaction" when processing takes time
+        const { any, rarity } = parseRarityFilter(interaction.options.getString('rarity'));
+    // if (!any) then filter by rarity
     await interaction.deferReply({ ephemeral: false });
 
     try {
