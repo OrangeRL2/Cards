@@ -12,7 +12,7 @@ const {
 } = require('discord.js');
 const User = require('../../models/User');
 const { resolveCardColor, getAttributeEmoji } = require('../../config/holomemColor');
-
+const { rarityChoices, parseRarityFilter } = require('../../utils/rarities');
 const sessions = new Map();
 
 // Attribute emoji helper (emoji-only)
@@ -71,6 +71,7 @@ module.exports = {
       opt.setName('rarity')
          .setDescription('Rarity of the offered card (required)')
          .setRequired(true)
+         .addChoices(...rarityChoices())
     )
     .addIntegerOption(opt =>
       opt.setName('count')
@@ -79,6 +80,7 @@ module.exports = {
     ),
 
   async execute(interaction) {
+    const { any, rarity } = parseRarityFilter(interaction.options.getString('rarity'));
     await safeDefer(interaction);
 
     const fromId = interaction.user.id;
@@ -88,6 +90,8 @@ module.exports = {
     const tradeCount = interaction.options.getInteger('count');
     const rarityReq = String(interaction.options.getString('rarity') ?? '').toLowerCase();
     const rarityDisplay = String(interaction.options.getString('rarity') ?? '').toUpperCase();
+
+
 
     if (toId === fromId) {
       return interaction.followUp?.({ content: "You can’t trade with yourself.", ephemeral: true }) ?? null;
@@ -104,7 +108,7 @@ module.exports = {
 
     // Find matching card (prefix + rarity)
     const fromIdx = fromDoc.cards.findIndex(c =>
-      String(c.name).toLowerCase().startsWith(partial) &&
+      String(c.name).toLowerCase().includes(partial) &&
       String(c.rarity || '').toLowerCase() === rarityReq &&
       !c.locked
     );

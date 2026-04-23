@@ -2,7 +2,7 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const User = require('../../models/User');
 const { resolveCardColor, getAttributeEmoji } = require('../../config/holomemColor');
-
+const { rarityChoices, parseRarityFilter } = require('../../utils/rarities');
 // Attribute emoji helper (emoji-only)
 function attrEmoji(name, rarity) {
   const cc = resolveCardColor(name, rarity);
@@ -20,8 +20,10 @@ module.exports = {
         .setRequired(true))
     .addStringOption(option =>
       option.setName('rarity')
-        .setDescription('Rarity of the card (required). Use "all"/"any"/* to target every rarity')
-        .setRequired(true))
+        .setDescription('Rarity of the card (required). Use "all" or "any" to target every rarity')
+        .setRequired(true)
+        .addChoices(...rarityChoices({ includeAnyAll: true }))
+    )
     .addStringOption(option =>
       option.setName('action')
         .setDescription('Lock or unlock')
@@ -33,6 +35,7 @@ module.exports = {
   requireOshi: true,
 
   async execute(interaction) {
+    const { any, rarity } = parseRarityFilter(interaction.options.getString('rarity'));
     const userId = interaction.user.id;
 
     const cardReqRaw = interaction.options.getString('card');

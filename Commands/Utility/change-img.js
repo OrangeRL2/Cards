@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const OshiUser = require('../../models/Oshi');
 const User = require('../../models/User');
 const OSHI_LIST = require('../../config/oshis');
-
+const { rarityChoices, parseRarityFilter } = require('../../utils/rarities');
 const EXCEPTIONS = {
   // values are arrays of exception names or prefixes that should be allowed
   // Example:
@@ -30,10 +30,11 @@ module.exports = {
   data: new SlashCommandBuilder()
     .setName('img')
     .setDescription('Set a custom card image for a user (must own the card).')
-    .addStringOption(opt => opt.setName('rarity').setDescription('Rarity (e.g., C,U,R,S,P,SEC)').setRequired(true))
+    .addStringOption(opt => opt.setName('rarity').setDescription('Rarity (e.g., C,U,R,S,P,SEC)').setRequired(true).addChoices(...rarityChoices()))
     .addStringOption(opt => opt.setName('card').setDescription('Card name (e.g., "Reine 001")').setRequired(true)),
 
   async execute(interaction) {
+    const { any, rarity } = parseRarityFilter(interaction.options.getString('rarity'));
     await interaction.deferReply({ ephemeral: true });
     try {
       const targetUser = interaction.options.getUser('target') ?? interaction.user;

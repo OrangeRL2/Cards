@@ -144,7 +144,7 @@ module.exports = {
     const filterQ = interaction.options.getString('search')?.toLowerCase();
   const filterColor = interaction.options.getString('color');
     const sortBy = interaction.options.getString('sort') || 'rarity';
-    const multiFilter = interaction.options.getBoolean('multi') || false;
+    const multiFilter = interaction.options.getBoolean('multi'); // can be true, false, or null
 
     const userDoc = await User.findOne({ id: targetUser.id });
     if (!userDoc || !userDoc.cards || userDoc.cards.length === 0) {
@@ -165,7 +165,8 @@ module.exports = {
     let entries = allEntries.filter(c => {
     if (filterR && c.rarity !== filterR) return false;
     if (filterQ && !c.name.toLowerCase().includes(filterQ)) return false;
-    if (multiFilter && c.count < 2) return false;
+    if (multiFilter === true && c.count < 2) return false;
+    if (multiFilter === false && c.count !== 1) return false;
     if (isExcludedCardName(c.name)) return false;
 
     if (filterColor) {

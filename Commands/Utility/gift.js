@@ -111,7 +111,7 @@ module.exports = {
         .filter(({ entry }) => {
           if (entry.locked && !allowLocked) return false;
 
-          const nameMatch = String(entry.name || '').toLowerCase().startsWith(partialName);
+          const nameMatch = String(entry.name || '').toLowerCase().includes(partialName);
           if (!nameMatch) return false;
           if (!matchAnyRarity && String(entry.rarity || '').toLowerCase() !== rarityOpt) return false;
 

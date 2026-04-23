@@ -10,7 +10,7 @@ const {
 const User = require('../../models/User');
 const { normalizeCards } = require('../../utils/normalizeCards');
 const { resolveCardColor, getAttributeEmoji } = require('../../config/holomemColor');
-
+const { rarityChoices, parseRarityFilter } = require('../../utils/rarities');
 const ITEMS_PER_PAGE = 10;
 const IDLE_LIMIT = 120_000;
 
@@ -73,10 +73,11 @@ module.exports = {
           { name: 'For', value: 'yours-minus-theirs' },
         ).setRequired(true)
     )
-    .addStringOption(opt =>
-      opt.setName('rarity')
-        .setDescription('Filter by rarity (optional)')
-    )
+.addStringOption(opt =>
+  opt.setName('rarity')
+    .setDescription('Rarity')
+    .addChoices(...rarityChoices({ includeAnyAll: true }))
+)
     .addStringOption(opt =>
       opt.setName('search')
         .setDescription('Search by card name (optional)')
@@ -116,6 +117,7 @@ module.exports = {
   requireOshi: true,
 
   async execute(interaction) {
+    const { any, rarity } = parseRarityFilter(interaction.options.getString('rarity'));
     const targetUser = interaction.options.getUser('user');
     if (!targetUser || targetUser.bot) {
       await interaction.reply({ content: 'Please specify a valid user (not a bot).', ephemeral: true });
