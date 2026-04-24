@@ -46,8 +46,7 @@ const PITY_EXEMPT_IDS = new Set([
 ]);
 
 const PITY_EXEMPT_IDS2 = new Set([
-  '1311652316973240380', //Kasumi
-  '399631405228752897', //Saori
+''
 ]);
 // === SY announcement ignore list ===
 // Users in this set will NOT trigger the SY announcer message.
