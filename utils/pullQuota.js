@@ -157,6 +157,14 @@ async function addPulls(userId, amount = 1) {
   return doc;
 }
 
+async function setPulls(userId, amount = 1) {
+  if (amount <= 0) return null;
+  const doc = await getOrCreate(userId);
+  doc.pulls = amount;
+  await doc.save();
+  return doc;
+}
+
 async function addEventPulls(userId, amount = 1) {
   if (amount <= 0) return null;
   const doc = await getOrCreate(userId);
@@ -181,6 +189,7 @@ module.exports = {
   getUpdatedQuota,
   consumePulls,
   addPulls,
+  setPulls,
   addEventPulls,
   getEventPulls,
   resetEventPulls,

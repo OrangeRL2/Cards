@@ -10,7 +10,7 @@ const { Schema } = require('mongoose');
 const User = require('../../models/User'); // your existing User model
 
 // ✅ Add these two utils:
-const { addPulls } = require('../../utils/pullQuota'); // already exists in your pullQuota utils [2](https://ace00101-my.sharepoint.com/personal/nauldee_nawill_ace00101_onmicrosoft_com/Documents/Microsoft%20Copilot%20Chat%20%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB/pullQuota.js)
+const { addPulls, setPulls } = require('../../utils/pullQuota'); // already exists in your pullQuota utils [2](https://ace00101-my.sharepoint.com/personal/nauldee_nawill_ace00101_onmicrosoft_com/Documents/Microsoft%20Copilot%20Chat%20%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB/pullQuota.js)
 const { isFrozen } = require('../../utils/freeze');
 
 // ----------------- Configuration (edit these) -----------------
@@ -201,7 +201,7 @@ module.exports = {
       let pullsGranted = 0;
       if (frozen) {
         pullsGranted = 86;
-        await addPulls(userId, pullsGranted);
+        await setPulls(userId, pullsGranted);
       }
 
       // Reply to user
