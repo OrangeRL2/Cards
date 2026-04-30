@@ -201,7 +201,7 @@ module.exports = {
       let pullsGranted = 0;
       if (frozen) {
         pullsGranted = 86;
-        await setPulls(userId, pullsGranted);
+        await addPulls(userId, pullsGranted);
       }
 
       // Reply to user

@@ -7,6 +7,7 @@ const { rollExtraSlot } = require('./extraSlot');
 // --- Boss alias exceptions map (kept from your file)
 const bossAliasMap = {
   Fuwawa: ['Fuwawa', 'Mococo', 'Fuwamoco'],
+  Mococo: ['Fuwawa', 'Mococo', 'Fuwamoco'],
 };
 
 function uniformPick(arr) {
