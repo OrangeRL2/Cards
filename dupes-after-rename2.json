@@ -1,0 +1,184 @@
+{
+  "generatedAt": "2026-05-03T02:42:32.190Z",
+  "mapFile": "/root/4botstuff/Cards/scripts/card-name-map.txt",
+  "raritiesUsed": [
+    "C",
+    "U",
+    "R",
+    "S",
+    "SR",
+    "OSR",
+    "SEC",
+    "COL",
+    "ORI",
+    "BDAY",
+    "UP",
+    "SP",
+    "P"
+  ],
+  "totalRules": 34,
+  "usersMatchedByRelevantNames": 52,
+  "usersWithDuplicateGroups": 5,
+  "results": [
+    {
+      "userId": "701960122251083807",
+      "duplicateGroups": [
+        {
+          "rarity": "P",
+          "finalName": "Baelz 501",
+          "sources": [
+            "Baelz 501",
+            "Baelze 501"
+          ],
+          "entries": 2,
+          "totalCount": 4,
+          "anyLocked": false,
+          "items": [
+            {
+              "originalName": "Baelz 501",
+              "finalName": "Baelz 501",
+              "count": 1,
+              "locked": false,
+              "cardSubId": "693ae449d69637cd5230d983"
+            },
+            {
+              "originalName": "Baelze 501",
+              "finalName": "Baelz 501",
+              "count": 3,
+              "locked": false,
+              "cardSubId": "69ee7d88214a5667d37f0b05"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "userId": "399631405228752897",
+      "duplicateGroups": [
+        {
+          "rarity": "P",
+          "finalName": "Baelz 501",
+          "sources": [
+            "Baelz 501",
+            "Baelze 501"
+          ],
+          "entries": 2,
+          "totalCount": 2,
+          "anyLocked": false,
+          "items": [
+            {
+              "originalName": "Baelz 501",
+              "finalName": "Baelz 501",
+              "count": 1,
+              "locked": false,
+              "cardSubId": "69e6af7497b6d73a164ea65d"
+            },
+            {
+              "originalName": "Baelze 501",
+              "finalName": "Baelz 501",
+              "count": 1,
+              "locked": false,
+              "cardSubId": "69f5037a6a6408b52fc07fdf"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "userId": "409724952091295745",
+      "duplicateGroups": [
+        {
+          "rarity": "P",
+          "finalName": "Baelz 501",
+          "sources": [
+            "Baelz 501",
+            "Baelze 501"
+          ],
+          "entries": 2,
+          "totalCount": 2,
+          "anyLocked": false,
+          "items": [
+            {
+              "originalName": "Baelz 501",
+              "finalName": "Baelz 501",
+              "count": 1,
+              "locked": false,
+              "cardSubId": "69e6af3897b6d73a164e8c5d"
+            },
+            {
+              "originalName": "Baelze 501",
+              "finalName": "Baelz 501",
+              "count": 1,
+              "locked": false,
+              "cardSubId": "69f085db847438cdf7c995fc"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "userId": "91098889796481024",
+      "duplicateGroups": [
+        {
+          "rarity": "P",
+          "finalName": "Baelz 501",
+          "sources": [
+            "Baelz 501",
+            "Baelze 501"
+          ],
+          "entries": 2,
+          "totalCount": 4,
+          "anyLocked": false,
+          "items": [
+            {
+              "originalName": "Baelz 501",
+              "finalName": "Baelz 501",
+              "count": 1,
+              "locked": false,
+              "cardSubId": "69b7ae202c2f75ddef114c9a"
+            },
+            {
+              "originalName": "Baelze 501",
+              "finalName": "Baelz 501",
+              "count": 3,
+              "locked": false,
+              "cardSubId": "69e81f9dffa46a224c5a5094"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "userId": "153551890976735232",
+      "duplicateGroups": [
+        {
+          "rarity": "P",
+          "finalName": "Baelz 501",
+          "sources": [
+            "Baelz 501",
+            "Baelze 501"
+          ],
+          "entries": 2,
+          "totalCount": 13,
+          "anyLocked": false,
+          "items": [
+            {
+              "originalName": "Baelz 501",
+              "finalName": "Baelz 501",
+              "count": 12,
+              "locked": false,
+              "cardSubId": "694bf7eda5fa0fdc2459b814"
+            },
+            {
+              "originalName": "Baelze 501",
+              "finalName": "Baelz 501",
+              "count": 1,
+              "locked": false,
+              "cardSubId": "69e861a2dd113a134d90c2b6"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,609 @@
+{
+  "generatedAt": "2026-05-03T07:32:38.779Z",
+  "listFile": "/root/4botstuff/Cards/scripts/delete-cards-list.txt",
+  "dryRun": false,
+  "onlyUserId": null,
+  "caseInsensitive": false,
+  "targets": [
+    {
+      "rarity": "C",
+      "name": "desktop"
+    },
+    {
+      "rarity": "OC",
+      "name": "Flare 002"
+    },
+    {
+      "rarity": "OC",
+      "name": "Flare 003"
+    },
+    {
+      "rarity": "OSR",
+      "name": "A chan 001"
+    },
+    {
+      "rarity": "OSR",
+      "name": "Liz 001"
+    },
+    {
+      "rarity": "P",
+      "name": "Azki 004"
+    },
+    {
+      "rarity": "P",
+      "name": "Baelz 501"
+    },
+    {
+      "rarity": "P",
+      "name": "FANTASY 001"
+    },
+    {
+      "rarity": "P",
+      "name": "IRys 501"
+    },
+    {
+      "rarity": "P",
+      "name": "Regloss 001"
+    },
+    {
+      "rarity": "P",
+      "name": "holoforce 001"
+    },
+    {
+      "rarity": "RR",
+      "name": "Ayama 001"
+    },
+    {
+      "rarity": "R",
+      "name": "desktop"
+    },
+    {
+      "rarity": "R",
+      "name": "hSD19 008 R"
+    },
+    {
+      "rarity": "SEC",
+      "name": "MiKorone 001"
+    },
+    {
+      "rarity": "SP",
+      "name": "Calli 501"
+    },
+    {
+      "rarity": "SP",
+      "name": "FUWAMOCO 501"
+    },
+    {
+      "rarity": "SR",
+      "name": "Irys 501"
+    },
+    {
+      "rarity": "SR",
+      "name": "MiKorone 001"
+    },
+    {
+      "rarity": "SR",
+      "name": "ROBOCO 002"
+    },
+    {
+      "rarity": "SR",
+      "name": "ROBOCO 003"
+    },
+    {
+      "rarity": "S",
+      "name": "Area 15 001"
+    },
+    {
+      "rarity": "S",
+      "name": "Bakatare Circus 001"
+    },
+    {
+      "rarity": "S",
+      "name": "FANTASY 001"
+    },
+    {
+      "rarity": "S",
+      "name": "FANTASY 501"
+    },
+    {
+      "rarity": "S",
+      "name": "Okakoro 001"
+    },
+    {
+      "rarity": "S",
+      "name": "Sora & Iofi 501"
+    },
+    {
+      "rarity": "S",
+      "name": "holoForce 502"
+    },
+    {
+      "rarity": "S",
+      "name": "holoforce 001"
+    },
+    {
+      "rarity": "S",
+      "name": "holoforce 501"
+    },
+    {
+      "rarity": "UP",
+      "name": "Calli, IRyS, Nerissa , Ollie, Nene 501"
+    },
+    {
+      "rarity": "UP",
+      "name": "Holowitches 001"
+    },
+    {
+      "rarity": "UP",
+      "name": "Reine 501"
+    },
+    {
+      "rarity": "UP",
+      "name": "Sora 501"
+    },
+    {
+      "rarity": "UR",
+      "name": "Azki 001"
+    },
+    {
+      "rarity": "U",
+      "name": "Bakatare Circus 001"
+    },
+    {
+      "rarity": "U",
+      "name": "Dorobo Contsruction 501"
+    },
+    {
+      "rarity": "U",
+      "name": "FANTASY 001"
+    },
+    {
+      "rarity": "U",
+      "name": "FANTASY 002"
+    },
+    {
+      "rarity": "U",
+      "name": "FANTASY 501"
+    },
+    {
+      "rarity": "U",
+      "name": "Force 001"
+    },
+    {
+      "rarity": "U",
+      "name": "Force 002"
+    },
+    {
+      "rarity": "U",
+      "name": "Force 501"
+    },
+    {
+      "rarity": "U",
+      "name": "Gen0 001"
+    },
+    {
+      "rarity": "U",
+      "name": "Gen0 501"
+    },
+    {
+      "rarity": "U",
+      "name": "Gen2 001"
+    },
+    {
+      "rarity": "U",
+      "name": "Holoro 501"
+    },
+    {
+      "rarity": "U",
+      "name": "desktop"
+    },
+    {
+      "rarity": "HR",
+      "name": "desktop"
+    },
+    {
+      "rarity": "S",
+      "name": "holoForce 701"
+    }
+  ],
+  "totals": {
+    "users": 28,
+    "uniqueCards": 28,
+    "totalEntries": 28,
+    "totalCount": 57
+  },
+  "results": [
+    {
+      "userId": "1311652316973240380",
+      "removedCards": [
+        {
+          "rarity": "S",
+          "name": "holoForce 701",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6aefd97b6d73a164e74d5"
+          ]
+        }
+      ]
+    },
+    {
+      "userId": "944335506165104640",
+      "removedCards": [
+        {
+          "rarity": "S",
+          "name": "holoForce 701",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "6975786ff349271e482fd763"
+          ]
+        }
+      ]
+    },
+    {
+      "userId": "578146378501324812",
+      "removedCards": [
+        {
+          "rarity": "S",
+          "name": "holoForce 701",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "6959475ae60e6509877d9691"
+          ]
+        }
+      ]
+    },
+    {
+      "userId": "113125715771232256",
+      "removedCards": [
+        {
+          "rarity": "S",
+          "name": "holoForce 701",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e702e3fa63e6e916d6659c"
+          ]
+        }
+      ]
+    },
+    {
+      "userId": "976054769774903346",
+      "removedCards": [
+        {
+          "rarity": "S",
+          "name": "holoForce 701",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69a8bed006fef0be642c87a6"
+          ]
+        }
+      ]
+    },
+    {
+      "userId": "409717160995192832",
+      "removedCards": [
+        {
+          "rarity": "S",
+          "name": "holoForce 701",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69f59f95b4ede39a41d7fb01"
+          ]
+        }
+      ]
+    },
+    {
+      "userId": "975246037914624030",
+      "removedCards": [
+        {
+          "rarity": "S",
+          "name": "holoForce 701",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "6976cc599bb8351b351f3ac1"
+          ]
+        }
+      ]
+    },
+    {
+      "userId": "701960122251083807",
+      "removedCards": [
+        {
+          "rarity": "S",
+          "name": "holoForce 701",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "695f5f9662b4a8bfb35ed5eb"
+          ]
+        }
+      ]
+    },
+    {
+      "userId": "443061305721618432",
+      "removedCards": [
+        {
+          "rarity": "S",
+          "name": "holoForce 701",
+          "entries": 1,
+          "totalCount": 3,
+          "subIds": [
+            "696e6cade5776b61443bdaca"
+          ]
+        }
+      ]
+    },
+    {
+      "userId": "409724952091295745",
+      "removedCards": [
+        {
+          "rarity": "S",
+          "name": "holoForce 701",
+          "entries": 1,
+          "totalCount": 21,
+          "subIds": [
+            "69e6af3897b6d73a164e8ef0"
+          ]
+        }
+      ]
+    },
+    {
+      "userId": "402522309606375434",
+      "removedCards": [
+        {
+          "rarity": "S",
+          "name": "holoForce 701",
+          "entries": 1,
+          "totalCount": 3,
+          "subIds": [
+            "69e6afad97b6d73a164ec2e0"
+          ]
+        }
+      ]
+    },
+    {
+      "userId": "1312674257104539761",
+      "removedCards": [
+        {
+          "rarity": "S",
+          "name": "holoForce 701",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "6976761d9bb8351b3519f361"
+          ]
+        }
+      ]
+    },
+    {
+      "userId": "495185224628699137",
+      "removedCards": [
+        {
+          "rarity": "S",
+          "name": "holoForce 701",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69cb75f950cb1b570742a495"
+          ]
+        }
+      ]
+    },
+    {
+      "userId": "409728788117848074",
+      "removedCards": [
+        {
+          "rarity": "S",
+          "name": "holoForce 701",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b08c97b6d73a164f3f34"
+          ]
+        }
+      ]
+    },
+    {
+      "userId": "511182422340272128",
+      "removedCards": [
+        {
+          "rarity": "S",
+          "name": "holoForce 701",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69f448840688067591abc350"
+          ]
+        }
+      ]
+    },
+    {
+      "userId": "1290221000872562734",
+      "removedCards": [
+        {
+          "rarity": "S",
+          "name": "holoForce 701",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69c31a5adfdeb3d59a17055c"
+          ]
+        }
+      ]
+    },
+    {
+      "userId": "153551890976735232",
+      "removedCards": [
+        {
+          "rarity": "S",
+          "name": "holoForce 701",
+          "entries": 1,
+          "totalCount": 2,
+          "subIds": [
+            "6962fb1880db65167bbf3c9c"
+          ]
+        }
+      ]
+    },
+    {
+      "userId": "1229807763132125188",
+      "removedCards": [
+        {
+          "rarity": "S",
+          "name": "holoForce 701",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6156b97b6d73a164089af"
+          ]
+        }
+      ]
+    },
+    {
+      "userId": "953552994232852490",
+      "removedCards": [
+        {
+          "rarity": "S",
+          "name": "holoForce 701",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "695f8d5962b4a8bfb3649b2b"
+          ]
+        }
+      ]
+    },
+    {
+      "userId": "986725004483903570",
+      "removedCards": [
+        {
+          "rarity": "S",
+          "name": "holoForce 701",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69bd571e3ce32d9951fc9182"
+          ]
+        }
+      ]
+    },
+    {
+      "userId": "408400038767624195",
+      "removedCards": [
+        {
+          "rarity": "S",
+          "name": "holoForce 701",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e79cc3320fd4a2b769968a"
+          ]
+        }
+      ]
+    },
+    {
+      "userId": "443047182619377676",
+      "removedCards": [
+        {
+          "rarity": "S",
+          "name": "holoForce 701",
+          "entries": 1,
+          "totalCount": 2,
+          "subIds": [
+            "69e6afe797b6d73a164edc8e"
+          ]
+        }
+      ]
+    },
+    {
+      "userId": "399631405228752897",
+      "removedCards": [
+        {
+          "rarity": "S",
+          "name": "holoForce 701",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6af7497b6d73a164ea8e9"
+          ]
+        }
+      ]
+    },
+    {
+      "userId": "409720567588061184",
+      "removedCards": [
+        {
+          "rarity": "S",
+          "name": "holoForce 701",
+          "entries": 1,
+          "totalCount": 3,
+          "subIds": [
+            "69e6b01c97b6d73a164ef615"
+          ]
+        }
+      ]
+    },
+    {
+      "userId": "399012422805094410",
+      "removedCards": [
+        {
+          "rarity": "S",
+          "name": "holoForce 701",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b05597b6d73a164f0f7a"
+          ]
+        }
+      ]
+    },
+    {
+      "userId": "272129129841688577",
+      "removedCards": [
+        {
+          "rarity": "S",
+          "name": "holoForce 701",
+          "entries": 1,
+          "totalCount": 2,
+          "subIds": [
+            "69e6b0f497b6d73a164f70f5"
+          ]
+        }
+      ]
+    },
+    {
+      "userId": "413015553519648769",
+      "removedCards": [
+        {
+          "rarity": "S",
+          "name": "holoForce 701",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "698a486657796bad63a31781"
+          ]
+        }
+      ]
+    },
+    {
+      "userId": "581483331548348416",
+      "removedCards": [
+        {
+          "rarity": "S",
+          "name": "holoForce 701",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b0c297b6d73a164f5832"
+          ]
+        }
+      ]
+    }
+  ]
+}

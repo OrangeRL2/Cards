@@ -1,0 +1,227 @@
+{
+  "generatedAt": "2026-05-03T07:31:44.397Z",
+  "listFile": "/root/4botstuff/Cards/scripts/delete-cards-list.txt",
+  "dryRun": false,
+  "onlyUserId": null,
+  "caseInsensitive": false,
+  "targets": [
+    {
+      "rarity": "C",
+      "name": "desktop"
+    },
+    {
+      "rarity": "OC",
+      "name": "Flare 002"
+    },
+    {
+      "rarity": "OC",
+      "name": "Flare 003"
+    },
+    {
+      "rarity": "OSR",
+      "name": "A chan 001"
+    },
+    {
+      "rarity": "OSR",
+      "name": "Liz 001"
+    },
+    {
+      "rarity": "P",
+      "name": "Azki 004"
+    },
+    {
+      "rarity": "P",
+      "name": "Baelz 501"
+    },
+    {
+      "rarity": "P",
+      "name": "FANTASY 001"
+    },
+    {
+      "rarity": "P",
+      "name": "IRys 501"
+    },
+    {
+      "rarity": "P",
+      "name": "Regloss 001"
+    },
+    {
+      "rarity": "P",
+      "name": "holoforce 001"
+    },
+    {
+      "rarity": "RR",
+      "name": "Ayama 001"
+    },
+    {
+      "rarity": "R",
+      "name": "desktop"
+    },
+    {
+      "rarity": "R",
+      "name": "hSD19 008 R"
+    },
+    {
+      "rarity": "SEC",
+      "name": "MiKorone 001"
+    },
+    {
+      "rarity": "SP",
+      "name": "Calli 501"
+    },
+    {
+      "rarity": "SP",
+      "name": "FUWAMOCO 501"
+    },
+    {
+      "rarity": "SR",
+      "name": "Irys 501"
+    },
+    {
+      "rarity": "SR",
+      "name": "MiKorone 001"
+    },
+    {
+      "rarity": "SR",
+      "name": "ROBOCO 002"
+    },
+    {
+      "rarity": "SR",
+      "name": "ROBOCO 003"
+    },
+    {
+      "rarity": "S",
+      "name": "Area 15 001"
+    },
+    {
+      "rarity": "S",
+      "name": "Bakatare Circus 001"
+    },
+    {
+      "rarity": "S",
+      "name": "FANTASY 001"
+    },
+    {
+      "rarity": "S",
+      "name": "FANTASY 501"
+    },
+    {
+      "rarity": "S",
+      "name": "Okakoro 001"
+    },
+    {
+      "rarity": "S",
+      "name": "Sora & Iofi 501"
+    },
+    {
+      "rarity": "S",
+      "name": "holoForce 502"
+    },
+    {
+      "rarity": "S",
+      "name": "holoforce 001"
+    },
+    {
+      "rarity": "S",
+      "name": "holoforce 501"
+    },
+    {
+      "rarity": "UP",
+      "name": "Calli, IRyS, Nerissa , Ollie, Nene 501"
+    },
+    {
+      "rarity": "UP",
+      "name": "Holowitches 001"
+    },
+    {
+      "rarity": "UP",
+      "name": "Reine 501"
+    },
+    {
+      "rarity": "UP",
+      "name": "Sora 501"
+    },
+    {
+      "rarity": "UR",
+      "name": "Azki 001"
+    },
+    {
+      "rarity": "U",
+      "name": "Bakatare Circus 001"
+    },
+    {
+      "rarity": "U",
+      "name": "Dorobo Contsruction 501"
+    },
+    {
+      "rarity": "U",
+      "name": "FANTASY 001"
+    },
+    {
+      "rarity": "U",
+      "name": "FANTASY 002"
+    },
+    {
+      "rarity": "U",
+      "name": "FANTASY 501"
+    },
+    {
+      "rarity": "U",
+      "name": "Force 001"
+    },
+    {
+      "rarity": "U",
+      "name": "Force 002"
+    },
+    {
+      "rarity": "U",
+      "name": "Force 501"
+    },
+    {
+      "rarity": "U",
+      "name": "Gen0 001"
+    },
+    {
+      "rarity": "U",
+      "name": "Gen0 501"
+    },
+    {
+      "rarity": "U",
+      "name": "Gen2 001"
+    },
+    {
+      "rarity": "U",
+      "name": "Holoro 501"
+    },
+    {
+      "rarity": "U",
+      "name": "desktop"
+    },
+    {
+      "rarity": "HR",
+      "name": "desktop"
+    }
+  ],
+  "totals": {
+    "users": 1,
+    "uniqueCards": 1,
+    "totalEntries": 1,
+    "totalCount": 1
+  },
+  "results": [
+    {
+      "userId": "153551890976735232",
+      "removedCards": [
+        {
+          "rarity": "HR",
+          "name": "desktop",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e8243add113a134d8d848c"
+          ]
+        }
+      ]
+    }
+  ]
+}

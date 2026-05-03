@@ -12,7 +12,7 @@
     "axios": "^1.13.1",
     "bottleneck": "^2.19.5",
     "cheerio": "^1.1.2",
-    "discord.js": "^14.25.1",
+    "discord.js": "^14.26.4",
     "ioredis": "^5.8.2",
     "mongodb": "^6.18.0",
     "mongoose": "^8.21.0",

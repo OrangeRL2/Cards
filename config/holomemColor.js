@@ -5,29 +5,35 @@
 // - EXCEPTION_CARD_COLOR: per-card overrides, with optional rarity specificity.
 //
 // Exceptions supported:
-//   A) 'Name::RARITY': 'attribute'
-//      { 'SorAZ 001::P': 'support' }
-//   B) 'Name': { RARITY: 'attribute' }
-//      { 'SorAZ 001': { P: 'support', EAS: 'blue' } }
-//   C) 'Name': 'attribute' (applies to all rarities)
+// A) 'Name::RARITY': 'attribute'
+//    { 'SorAZ 001::P': 'support' }
+// B) 'Name': { RARITY: 'attribute' }
+//    { 'SorAZ 001': { P: 'support', EAS: 'blue' } }
+// C) 'Name': 'attribute' (applies to all rarities)
 //
 // Returned values are normalized to lowercase and validated against ALLOWED_COLORS.
 
+// ✅ Excel-derived mapping (auto-generated from your Excel)
+const { EXCEL_CARD_COLOR } = require('../utils/holomemColor.excel'); // utils/holomemColor.excel.js [2](https://ace00101-my.sharepoint.com/personal/nauldee_nawill_ace00101_onmicrosoft_com/Documents/Microsoft%20Copilot%20Chat%20%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB/card-name-map.txt)[1](https://ace00101-my.sharepoint.com/personal/nauldee_nawill_ace00101_onmicrosoft_com/Documents/Microsoft%20Copilot%20Chat%20%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB/holomemColor.js)
+
+// Returned values are normalized to lowercase and validated against ALLOWED_COLORS.
 const ALLOWED_COLORS = new Set([
   'white', 'green', 'red', 'blue', 'purple', 'yellow',
   'support', 'typo', 'mixed',
   // 'none' is a special value you can explicitly set, and also used as a filter for unmapped.
   'none',
+  // Excel includes Grey/Spot entries → allow it explicitly.
+  'grey',
 ]);
 
 // Emoji mentions for attributes (Application emojis)
 // Format: <:name:id>  (use <a:name:id> if animated)
-const ATTRIBUTE_EMOJIS2 = {
-  white:  '<:white:1490582793678229607>',
+const ATTRIBUTE_EMOJIS = {
+  white: '<:white:1490582793678229607>',
   yellow: '<:yellow:1490582791895650456>',
-  green:  '<:green:1490582789425336320>',
-  blue:   '<:blue:1490582787407740949>',
-  red:    '<:red:1490582785692274742>',
+  green: '<:green:1490582789425336320>',
+  blue: '<:blue:1490582787407740949>',
+  red: '<:red:1490582785692274742>',
   purple: '<:purple:1490582784169738392>',
 
   // Fallback category emoji
@@ -35,19 +41,21 @@ const ATTRIBUTE_EMOJIS2 = {
 
   // Non-color attributes
   support: '<:others:1490610693530058782>',
-  typo:    '<:typo:1490616602037583933>',
-  mixed:   '<:white:1490582793678229607>,<:yellow:1490582791895650456>,<:green:1490582789425336320>,<:blue:1490582787407740949>,<:red:1490582785692274742>,<:purple:1490582784169738392>',
+  typo: '<:typo:1490616602037583933>',
+  mixed: '<:white:1490582793678229607>,<:yellow:1490582791895650456>,<:green:1490582789425336320>,<:blue:1490582787407740949>,<:red:1490582785692274742>,<:purple:1490582784169738392>',
 
   // none = intentionally show nothing
   none: '',
+  // grey = treat as "others"
+  grey: '<:others:1490610693530058782>',
 };
 
-const ATTRIBUTE_EMOJIS = {
-  white:  '<:white:1490610704674324520>',
+const ATTRIBUTE_EMOJIS2 = {
+  white: '<:white:1490610704674324520>',
   yellow: '<:yellow:1490610703143538698>',
-  green:  '<:green:1490610701515882569>',
-  blue:   '<:blue:1490610699859267664>',
-  red:    '<:red:1490610698135273492>',
+  green: '<:green:1490610701515882569>',
+  blue: '<:blue:1490610699859267664>',
+  red: '<:red:1490610698135273492>',
   purple: '<:purple:1490610695803240541>',
 
   // Fallback category emoji
@@ -55,11 +63,13 @@ const ATTRIBUTE_EMOJIS = {
 
   // Non-color attributes
   support: '<:others:1490610693530058782>',
-  typo:    '<:typo:1490617070184955984>',
-  mixed:   '<:white:1490610704674324520>,<:yellow:1490610703143538698>,<:green:1490610701515882569>,<:blue:1490610699859267664>,<:red:1490610698135273492>,<:purple:1490610695803240541>',
+  typo: '<:typo:1490617070184955984>',
+  mixed: '<:white:1490610704674324520>,<:yellow:1490610703143538698>,<:green:1490610701515882569>,<:blue:1490610699859267664>,<:red:1490610698135273492>,<:purple:1490610695803240541>',
 
   // none = intentionally show nothing
   none: '',
+  // grey = treat as "others"
+  grey: '<:others:1490610693530058782>',
 };
 
 function getAttributeEmoji(attr) {
@@ -69,287 +79,300 @@ function getAttributeEmoji(attr) {
 
 // Default attribute by member (no numeric suffix).
 const DEFAULT_MEMBER_COLOR = {
-    'Miko': 'red',
-    'Suisei': 'blue',
-    'Sora': 'white',
-    'Roboco': 'purple',
-    'ROBOCO': 'purple',
-    'AZKi': 'green',
-    'Azki': 'green',
-// Gen1
-    'Aki': 'green',
-    'Matsuri': 'yellow',
-    'Haato': 'red',
-    'Fubuki': 'white',
-    'Mel': 'yellow',
-// Gen2
+  'Miko': 'red',
+  'Suisei': 'blue',
+  'Sora': 'white',
+  'Roboco': 'purple',
+  'ROBOCO': 'purple',
+  'AZKi': 'green',
+  'Azki': 'green',
 
-    'Choco': 'purple',
-    'Subaru': 'yellow',
-    'Aqua': 'blue',
-    'Shion': 'purple',
-    'Ayame': 'red',
-//Gamers
-    'Okayu': 'blue',
-    'Mio': 'green',
-    'Korone': 'yellow',
-//Gen3
-    'Pekora': 'green',
-    'Marine': 'red',
-    'Rushia': 'green',
-    'Flare': 'yellow',
-    'Noel': 'white',
-//Gen4
-    'Kanata': 'white',
-    'Watame': 'yellow',
-    'Towa': 'purple',
-    'Luna': 'white',
-    'Coco': 'yellow',
-//NePoLaBo
-    'Nene': 'yellow',
-    'Polka': 'red',
-    'Botan': 'green',
-    'Lamy': 'blue',
-    'Aloe': 'purple',
-//HoloX
-    'Koyori': 'white',
-    'Chloe': 'blue',
-    'La+': 'purple',
-    'Lui': 'red',
-    'Iroha': 'green',
-//ReGLOSS
-    'Raden': 'green',
-    'Ao': 'blue',
-    'Ririka': 'red',
-    'Kanade': 'yellow',
-    'Hajime': 'white',
+  // Gen1
+  'Aki': 'green',
+  'Matsuri': 'yellow',
+  'Haato': 'red',
+  'Fubuki': 'white',
+  'Mel': 'yellow',
 
-//FLOW GLOW
-    'Riona': 'white',
-    'Su': 'blue',
-    'Chihaya': 'green',
-    'Niko': 'yellow',
-    'Vivi': 'purple',
+  // Gen2
+  'Choco': 'purple',
+  'Subaru': 'yellow',
+  'Aqua': 'blue',
+  'Shion': 'purple',
+  'Ayame': 'red',
 
-//ID Gen1
-    'Risu': 'yellow',
-    'Moona': 'blue',
-    'Iofi': 'green',
+  // Gamers
+  'Okayu': 'blue',
+  'Mio': 'green',
+  'Korone': 'yellow',
 
-//ID Gen2
-    'Anya': 'yellow',
-    'Reine': 'green',
-    'Ollie': 'purple',
+  // Gen3
+  'Pekora': 'green',
+  'Marine': 'red',
+  'Rushia': 'green',
+  'Flare': 'yellow',
+  'Noel': 'white',
 
-//ID Gen3
-    'Kaela': 'red',
-    'Zeta': 'white',
-    'Kobo': 'blue',
+  // Gen4
+  'Kanata': 'white',
+  'Watame': 'yellow',
+  'Towa': 'purple',
+  'Luna': 'white',
+  'Coco': 'yellow',
 
-//Myth
-    'Amelia': 'yellow',
-    'Calli': 'purple',
-    'Ina': 'purple',
-    'Gura': 'blue',
-    'Kiara': 'red',
+  // NePoLaBo
+  'Nene': 'yellow',
+  'Polka': 'red',
+  'Botan': 'green',
+  'Lamy': 'blue',
+  'Aloe': 'purple',
 
-//Council
-    'Baelz': 'red',
-    'IRyS': 'white',
-    'IRys': 'white',
-    'Irys': 'white',
-    'Kronii': 'blue',
-    'Fauna': 'green',
-    'Sana': 'purple',
-    'Mumei': 'white',
+  // HoloX
+  'Koyori': 'white',
+  'Chloe': 'blue',
+  'La+': 'purple',
+  'Lui': 'red',
+  'Iroha': 'green',
 
-//Advent
-    'Fuwawa': 'blue',
-    'Mococo': 'red',
-    'Bijou': 'purple',
-    'Shiori': 'blue',
-    'Nerissa': 'purple',
+  // ReGLOSS
+  'Raden': 'green',
+  'Ao': 'blue',
+  'Ririka': 'red',
+  'Kanade': 'yellow',
+  'Hajime': 'white',
 
-//Justice
-    'Elizabeth': 'red',
-    'Raora': 'white',
-    'Gigi': 'yellow',
-    'Cecilia': 'green',
+  // FLOW GLOW
+  'Riona': 'white',
+  'Su': 'blue',
+  'Chihaya': 'green',
+  'Niko': 'yellow',
+  'Vivi': 'purple',
 
-//Staff
-    'Achan': 'blue',
-    'Nodoka': 'white',
+  // ID Gen1
+  'Risu': 'yellow',
+  'Moona': 'blue',
+  'Iofi': 'green',
 
-//Eggs
-    'Easter X': 'green',
-    'Easter Y': 'blue',
-    'Easter O': 'blue',
-    'Blue Egg': 'blue',
-    'Green Egg': 'green',
-    'Red Egg': 'red',
-    'Yellow Egg': 'yellow',
-    'Purple Egg': 'purple',
-    'White Egg': 'white',
+  // ID Gen2
+  'Anya': 'yellow',
+  'Reine': 'green',
+  'Ollie': 'purple',
 
-    'Support': 'support',
-    'Mikkorone': 'support',
-    'SorAZ': 'support',
-    'holoX': 'support',
-    'AyaFubuMi': 'support',
-    'Fantasy': 'support',
-    'FANTASY': 'support',
-    'FLOW GLOW': 'support',
-    'holoForce': 'support',
-    'holoX': 'support',
-    'Promise': 'support',
-    'ReGLOSS': 'support',
-    'Shiranui Construction': 'support',
-    'ReGLOSS': 'support',
-    'Advent': 'support',
-    'AREA 15': 'support',
-    'Bakatare Circus': 'support',
-    'GAMERS': 'support',
-    'Gen 0': 'support',
-    'Gen 1': 'support',
-    'Gen 2': 'support',
-    'Gen 3': 'support',
-    'Gen 4': 'support',
-    'holoh3ro': 'support',
-    'holoro': 'support',
-    'Kanata Construction': 'support',
-    'Lamy, Noel, Lui, Aki': 'support',
-    'NePoLaBo': 'support',
-    'Nerissa & Elizabeth': 'support',
-    'Pekora & Moona': 'support',
-    'Sora & Iroha': 'support',
-    'Towa & La+': 'support',
-    'Choco, Luna, Subaru': 'purple',
-    'Dorobo Construction': 'support',
-    'Justice': 'support',
-    'Raora & Bijou': 'support',
-    'Calli, IRyS, Nerissa , Ollie, Nene': 'white',
-    'Holowitches': 'white',
-    'SubaLuna': 'white',
-//Duos
-    'FUWAMOCO': 'blue',
-    'OkaKoro': 'yellow',
-    'Flare & Hajime': 'yellow',
-    'Lamy & Nene': 'blue',
-    'Matsuri & Marine': 'red',
-    'Ina & Ririka': 'red',
+  // ID Gen3
+  'Kaela': 'red',
+  'Zeta': 'white',
+  'Kobo': 'blue',
 
-    //mixxx
-    'miComet': 'Mixed',
-    'MariFure': 'Mixed',
-    'Noel & Pekora': 'Mixed',
-    'Noel, Pekora, Marine, Flare': 'Mixed',
-    'Pekora, Marine, Flare': 'Mixed',
-    'PekoMari': 'Mixed',
-    
+  // Myth
+  'Amelia': 'yellow',
+  'Calli': 'purple',
+  'Ina': 'purple',
+  'Gura': 'blue',
+  'Kiara': 'red',
 
-    'Force': 'typo',
-    'Gen0': 'typo',
-    'Gen2': 'typo',
-    'holoforce': 'typo',
+  // Council
+  'Baelz': 'red',
+  'IRyS': 'white',
+  'IRys': 'white',
+  'Irys': 'white',
+  'Kronii': 'blue',
+  'Fauna': 'green',
+  'Sana': 'purple',
+  'Mumei': 'white',
 
-    //cheers
-    'Cheer Blue': 'blue',
-    'Cheer Green': 'green',
-    'Cheer Red': 'red',
-    'Cheer Purple': 'purple',
-    'Cheer Yellow': 'yellow',
-    'Cheer White': 'white',
+  // Advent
+  'Fuwawa': 'blue',
+  'Mococo': 'red',
+  'Bijou': 'purple',
+  'Shiori': 'blue',
+  'Nerissa': 'purple',
 
-    //padoru
-    'Padoru Chloe': 'blue',
-    'Padoru Flare': 'yellow',
-    'Padoru Kanata': 'white',
-    'Padoru Lamy': 'blue',
-    'Padoru Moona': 'blue',
-    'Padoru Subaru': 'yellow',
-    'Padoru Suisei': 'blue',
-    'Padoru Towa': 'purple',
-    'Padoru Zeta': 'yellow',
-    'Padoru Mumei': 'white',
-    
+  // Justice
+  'Elizabeth': 'red',
+  'Raora': 'white',
+  'Gigi': 'yellow',
+  'Cecilia': 'green',
+
+  // Staff
+  'Achan': 'blue',
+  'Nodoka': 'white',
+
+  // Eggs
+  'Easter X': 'green',
+  'Easter Y': 'blue',
+  'Easter O': 'blue',
+  'Blue Egg': 'blue',
+  'Green Egg': 'green',
+  'Red Egg': 'red',
+  'Yellow Egg': 'yellow',
+  'Purple Egg': 'purple',
+  'White Egg': 'white',
+
+  // Support / Groups
+  'Support': 'support',
+  'Mikkorone': 'support',
+  'SorAZ': 'support',
+  'holoX': 'support',
+  'AyaFubuMi': 'support',
+  'Fantasy': 'support',
+  'FANTASY': 'support',
+  'FLOW GLOW': 'support',
+  'holoForce': 'support',
+  'Promise': 'support',
+  'ReGLOSS': 'support',
+  'Shiranui Construction': 'support',
+  'Advent': 'support',
+  'AREA 15': 'support',
+  'Bakatare Circus': 'support',
+  'GAMERS': 'support',
+  'Gen 0': 'support',
+  'Gen 1': 'support',
+  'Gen 2': 'support',
+  'Gen 3': 'support',
+  'Gen 4': 'support',
+  'holoh3ro': 'support',
+  'holoro': 'support',
+  'Kanata Construction': 'support',
+  'Lamy, Noel, Lui, Aki': 'support',
+  'NePoLaBo': 'support',
+  'Nerissa & Elizabeth': 'support',
+  'Pekora & Moona': 'support',
+  'Sora & Iroha': 'support',
+  'Towa & La+': 'support',
+  'Dorobo Construction': 'support',
+  'Justice': 'support',
+  'Raora & Bijou': 'support',
+
+  // Notable strings seen in your data
+  'Calli, IRyS, Nerissa , Ollie, Nene': 'white',
+  'Holowitches': 'white',
+  'SubaLuna': 'white',
+
+  // Duos
+  'FUWAMOCO': 'blue',
+  'OkaKoro': 'yellow',
+  'Flare & Hajime': 'yellow',
+  'Lamy & Nene': 'blue',
+  'Matsuri & Marine': 'red',
+  'Ina & Ririka': 'red',
+
+  // “Mixed” labels (normalizeAttr will lowercase)
+  'miComet': 'mixed',
+  'MariFure': 'mixed',
+  'Noel & Pekora': 'mixed',
+  'Noel, Pekora, Marine, Flare': 'mixed',
+  'Pekora, Marine, Flare': 'mixed',
+  'PekoMari': 'mixed',
+
+  // typo bucket
+  'Force': 'typo',
+  'Gen0': 'typo',
+  'Gen2': 'typo',
+  'holoforce': 'typo',
+
+  // cheers
+  'Cheer Blue': 'blue',
+  'Cheer Green': 'green',
+  'Cheer Red': 'red',
+  'Cheer Purple': 'purple',
+  'Cheer Yellow': 'yellow',
+  'Cheer White': 'white',
+
+  // padoru
+  'Padoru Chloe': 'blue',
+  'Padoru Flare': 'yellow',
+  'Padoru Kanata': 'white',
+  'Padoru Lamy': 'blue',
+  'Padoru Moona': 'blue',
+  'Padoru Subaru': 'yellow',
+  'Padoru Suisei': 'blue',
+  'Padoru Towa': 'purple',
+  'Padoru Zeta': 'yellow',
+  'Padoru Mumei': 'white',
 };
 
 // Card-specific overrides.
 const EXCEPTION_CARD_COLOR = {
   // Examples:
   'FUWAMOCO 001': 'blue',
-    'Flare & Hajime 001': 'yellow',
-    'Lamy & Nene 001': 'blue',
-    'Matsuri & Marine 001': 'red',
-    'Ina & Ririka 001': 'red',
-    'Ollie & Baelz 001': 'purple',
-    'Pekora & Riona 001': 'white',
-    'Subaru & Watame 001': 'yellow',
-    'Suisei & Iroha 001': 'green',
-    'Aqua & Aya 101': 'blue',
-    'Botan & Tomori 101': 'green',
-    'Botan & Tomori 001': 'green',
-    'Chloe & Yukina 101': 'blue',
-    'Fubuki & Kokoro 101': 'white',
-    'Lamy & Mashiro 101': 'blue',
-    'Marine & Ran 101': 'red',
-    'Sora & Kasumi 101': 'white',
-    'Suisei & LAYER 101': 'blue',
-    'Watame & Subaru 001': 'yellow',
-    'Watame & Subaru 002': 'yellow',
-    'Pekora, Subaru, Calli, Kobo 001': 'blue',
+  'Flare & Hajime 001': 'yellow',
+  'Lamy & Nene 001': 'blue',
+  'Matsuri & Marine 001': 'red',
+  'Ina & Ririka 001': 'red',
+  'Ollie & Baelz 001': 'purple',
+  'Pekora & Riona 001': 'white',
+  'Subaru & Watame 001': 'yellow',
+  'Suisei & Iroha 001': 'green',
 
-    'La+ & AZKi 001': 'support',
-    'Lamy, Noel, Lui, Aki': 'support',
-    'Nerissa & Elizabeth 001': 'support',
-    'Dorobo Construction 501': 'support',
-    'Choco, Luna, Subaru 002': 'support',
-    'holoForce 001::S': 'support',
-    'holoForce 501::S': 'support',
-    'holoForce 001::U': 'support',
-    'holoForce 501::U': 'support',
-    'holoForce 001::P': 'support',
-    'holoForce 501::P': 'support',
+  'Aqua & Aya 101': 'blue',
+  'Botan & Tomori 101': 'green',
+  'Botan & Tomori 001': 'green',
+  'Chloe & Yukina 101': 'blue',
+  'Fubuki & Kokoro 101': 'white',
+  'Lamy & Mashiro 101': 'blue',
+  'Marine & Ran 101': 'red',
+  'Sora & Kasumi 101': 'white',
+  'Suisei & LAYER 101': 'blue',
 
-    'holoForce 502::S': 'support',
-    'holoForce 002::U': 'support',
-    'holoForce 502::U': 'support',
+  'Watame & Subaru 001': 'yellow',
+  'Watame & Subaru 002': 'yellow',
+  'Pekora, Subaru, Calli, Kobo 001': 'blue',
+  'La+ & AZKi 001': 'support',
+  'Lamy, Noel, Lui, Aki': 'support',
+  'Nerissa & Elizabeth 001': 'support',
+  'Dorobo Construction 501': 'support',
+  'Choco, Luna, Subaru 002': 'support',
 
-    'MiKorone 001': 'typo',
-    'Ayama 001': 'typo',
-    'Area 15 001': 'typo',
-    'GEN 0 001': 'typo',
-    'Regloss 001': 'typo',
-    'holoforce 001': 'typo',
-    'Okakoro 001': 'typo',
-    'Sora & Iofi 001': 'typo',
-    'Sora & Iofi 501': 'typo',
-    'Force 001': 'typo',
-    'Dorobo Contsruction 501': 'typo',
-    'Lamy 501::BDAY': 'typo',
+  // Rarity-specific examples
+  'holoForce 001::S': 'support',
+  'holoForce 501::S': 'support',
+  'holoForce 001::U': 'support',
+  'holoForce 501::U': 'support',
+  'holoForce 001::P': 'support',
+  'holoForce 501::P': 'support',
+  'holoForce 502::S': 'support',
+  'holoForce 002::U': 'support',
+  'holoForce 502::U': 'support',
+  'holoForce 701::S': 'support',
+  // typo tags
+  'MiKorone 001': 'typo',
+  'Ayama 001': 'typo',
+  'Area 15 001': 'typo',
+  'GEN 0 001': 'typo',
+  'Regloss 001': 'typo',
+  'holoforce 001': 'typo',
+  'Okakoro 001': 'typo',
+  'Sora & Iofi 001': 'typo',
+  'Sora & Iofi 501': 'typo',
+  'Force 001': 'typo',
+  'Dorobo Contsruction 501': 'typo',
+  'Lamy 501::BDAY': 'typo',
 
-    'PekoMari 001::P': 'mixed',
-    'SorAZ 001::P': 'mixed',
-    'SorAZ 501::P': 'mixed',
-    'SorAZ 001::R': 'mixed',
-    'SorAZ 501::R': 'mixed',
-    'FUWAMOCO 001::SR': 'mixed',
-    'FUWAMOCO 501::SR': 'mixed',
-    'FUWAMOCO 001::S': 'support',
-    'FUWAMOCO 501::S': 'support',
-    'FUWAMOCO 002::S': 'support',
-    'FUWAMOCO 502::S': 'support',
-    'FUWAMOCO 001::R': 'mixed',
-    'FUWAMOCO 501::R': 'mixed',
-    'FUWAMOCO 001::C': 'support',
-    'FUWAMOCO 501::C': 'support',
+  // mixed
+  'PekoMari 001::P': 'mixed',
+  'SorAZ 001::P': 'mixed',
+  'SorAZ 501::P': 'mixed',
+  'SorAZ 001::R': 'mixed',
+  'SorAZ 501::R': 'mixed',
 
-    'FUWAMOCO 002::C': 'support',
-    'FUWAMOCO 502::C': 'support',
-    'FUWAMOCO 501::C': 'support',
+  'FUWAMOCO 001::SR': 'mixed',
+  'FUWAMOCO 501::SR': 'mixed',
+  'FUWAMOCO 001::R': 'mixed',
+  'FUWAMOCO 501::R': 'mixed',
 
-    'Watame 002::OSR': 'white',
-    'Watame 002::P': 'support',
+  // support overrides
+  'FUWAMOCO 001::S': 'support',
+  'FUWAMOCO 501::S': 'support',
+  'FUWAMOCO 002::S': 'support',
+  'FUWAMOCO 502::S': 'support',
+  'FUWAMOCO 001::C': 'support',
+  'FUWAMOCO 501::C': 'support',
+  'FUWAMOCO 002::C': 'support',
+  'FUWAMOCO 502::C': 'support',
+
+  // specific exceptions
+  'Watame 002::OSR': 'white',
+  'Watame 002::P': 'support',
 };
 
 function normKey(s) {
@@ -377,8 +400,17 @@ function getExceptionAttr(cardName, rarity) {
   const nName = normKey(cardName);
   const nR = normKey(rarity);
 
+  // ✅ Excel-derived overrides (highest priority)
+  // Supports both exact-key and normalized-key lookups. [2](https://ace00101-my.sharepoint.com/personal/nauldee_nawill_ace00101_onmicrosoft_com/Documents/Microsoft%20Copilot%20Chat%20%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB/card-name-map.txt)[1](https://ace00101-my.sharepoint.com/personal/nauldee_nawill_ace00101_onmicrosoft_com/Documents/Microsoft%20Copilot%20Chat%20%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB/holomemColor.js)
+  const excelDirect =
+    EXCEL_CARD_COLOR[`${cardName}::${rarity}`] ||
+    EXCEL_CARD_COLOR[`${nName}::${nR}`];
+  if (typeof excelDirect === 'string') return normalizeAttr(excelDirect);
+
   // A) direct key "name::rarity"
-  const direct = EXCEPTION_CARD_COLOR[`${nName}::${nR}`] ?? EXCEPTION_CARD_COLOR[`${cardName}::${rarity}`];
+  const direct =
+    EXCEPTION_CARD_COLOR[`${nName}::${nR}`] ??
+    EXCEPTION_CARD_COLOR[`${cardName}::${rarity}`];
   if (typeof direct === 'string') return normalizeAttr(direct);
   if (direct && typeof direct === 'object') {
     const v = direct[nR] ?? direct[rarity];
@@ -415,6 +447,7 @@ module.exports = {
   EXCEPTION_CARD_COLOR,
   resolveCardColor,
   extractMember,
- ATTRIBUTE_EMOJIS,
- getAttributeEmoji,
+  ATTRIBUTE_EMOJIS,
+  ATTRIBUTE_EMOJIS2,
+  getAttributeEmoji,
 };

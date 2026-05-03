@@ -1,346 +1,108 @@
-SR
-Advent 501 -> Advent 701
-Aki 501 -> Aki 701
-Aki 502 -> Aki 501
-NEW -> Aki 502
-Ayame 501 <-> Ayame 502
-AZKi 501 -> AZKi 701
-AZKi 502 -> AZKi 702
-AZKi NEW -> AZKi 501
-Baelz 501 -> Baelz 701
-Botan 501 -> Botan 502
-Botan 502 -> Botan 503
-Calli 005 -> Calli 004
-Calli 006 -> Calli 005
-Choco 501 <-> Choco 502
-Flare 501 -> Flare 701
-Flare 503 -> Flare 501
-NEW -> Flare 503
-Hajime 501 <-> Hajime 502
-Iofi 501 -> Iofi 701
-NEW -> Iofi 501
-Iroha 501 -> Iroha 701
-Iroha 503 -> Iroha 501
-IRyS 501 -> IRyS 701
-IRyS 502 -> IRyS 501
-Kanata 501 -> Kanata 701
-Kanata 502 -> Kanata 702
-Kanata 503 -> Kanata 501
-Kanata 504 -> Kanata 703
-Kanata 505 -> Kanata 704
-Kiara 501 -> Kiara 701
-Kiara 502 -> Kiara 702
-Kiara 503 -> Kiara 501
-Kobo 501 -> Kobo 701
-Kobo 502 -> Kobo 501
-NEW -> Kobo 502
-Koyori 501 -> Koyori 502
-Koyori 502 -> Koyori 503
-Kronii 501 -> Kronii 701
-Lui 501 -> Lui 701
-Lui 502 -> Lui 501
-Luna 502 -> Luna 503
-Luna 503 -> Luna 504
-Marine 501 -> Marine 701
-Marine 504 -> Marine 501
-Marine 505 -> Marine 504
-Moona 501 -> Moona 701
-Moona 502 -> Moona 501
-Mumei 501 -> Mumei 701
-Noel 501 -> Noel 701
-Noel 502 -> Noel 501
-NEW -> Noel 502
-Okayu 501 <-> Okayu 502
-Pekora 501 -> Pekora 701
-Pekora 502 -> Pekora 702
-Pekora 503 -> Pekora 703
-Pekora 504 -> Pekora 501
-NEW -> Pekora 502
-Polka 501 -> Polka 701
-NEW -> Polka 501
-Ririka 501 -> Ririka 502
-Ririka 502 -> Ririka 503
-Shion 501 -> Shion 502
-Shion 502 -> Shion 503
-Shion 503 -> Shion 501
-Sora 501 -> Sora 701
-Sora 502 -> Sora 702
-NEW -> Sora 501
-Subaru 501 -> Subaru 502
-Subaru 502 -> Subaru 503
-Suisei 501 -> Suisei 701
-Suisei 502 -> Suisei 702
-Suisei 503 -> Suisei 501
-NEW -> Suisei 503
-Zeta 501 -> Zeta 701
-NEW -> Zeta 501
-
-RR
-Ayame 501 <-> Ayame 502
-Flare 501 <-> Flare 502
-Hajime 501 <-> Hajime 502
-Iroha 502 <-> Iroha 503
-Okayu 501 <-> Okayu 502
+C
+Fuwawa 003 -> FUWAMOCO 003
+Fuwawa 503 -> FUWAMOCO 003
+Fuwawa 004 -> Fuwawa 003
+Kronii 0057 -> Kronii 007
+NePoLaBo 001 -> Lamy 004
+Lamy 004 -> Lamy 005
+Lamy 005 -> Lamy 006
+NePoLaBo 501 -> Lamy 504
 
 U
-Flare 501 <-> Flare 502
-Korone 501 -> Korone 504
-Korone 502 -> Korone 501
-Korone 503 -> Korone 502
-Korone 504 -> Korone 503
-Koyori 501 <-> Koyori 502
-Mikkorone 501 <-> Mikkorone 502
-Miko 506 -> Miko 507
-NEW -> Miko 506
-Noel 502 -> Noel 505
-Okayu 501 -> Okayu 503
-Okayu 502 -> Okayu 504
-NEW -> Okayu 501
-NEW -> Okayu 502
-Polka 502 -> Polka 504
-Raden 501 -> Raden 504
-Raden 502 -> Raden 501
-Raden 503 -> Raden 502
-Raden 504 -> Raden 503
-Ririka 501 -> Ririka 504
-Ririka 502 -> Ririka 501
-Ririka 503 -> Ririka 502
-Ririka 504 -> Ririka 503
-Subaru 501 -> Subaru 503
-Subaru 502 -> Subaru 501
-Subaru 503 -> Subaru 502
+Subaru & Watame 001 -> LambDuck 001
 
-C
-NEW -> Aki 501
-Aki 501 -> Aki 502
-Aki 502 -> Aki 503
-Aki 503 -> Aki 504
-Aki 504 -> Aki 505
-Aki 505 -> Aki 506
-Aki 506 -> Aki 507
-Support 006 -> Choco 007
-Choco 007 -> Choco 008
-NEW -> Choco 501
-Choco 501 -> Choco 502
-Choco 502 -> Choco 503
-Choco 503 -> Choco 504
-Choco 504 -> Choco 505
-Choco 505 -> Choco 507
-NEW -> Flare 501
-Flare 501 -> Flare 502
-Flare 502 -> Flare 503
-Flare 503 -> Flare 504
-Flare 504 -> Flare 505
-Flare 505 -> Flare 506
-NEW -> Fubuki 501
-Fubuki 501 -> Fubuki 502
-Fubuki 502 -> Fubuki 503
-Fubuki 503 -> Fubuki 504
-Fubuki 504 -> Fubuki 505
-Fubuki 505 -> Fubuki 506
-Fubuki 506 -> Fubuki 507
-Fubuki 507 -> Fubuki 508
-NEW -> Iofi 501
-Iofi 501 -> Iofi 502
-Iofi 502 -> Iofi 503
-Iofi 503 -> Iofi 504
-Iroha 502 <-> Iroha 503
-Iroha 506 -> Iroha 504
-Iroha 504 -> Iroha 505
-Iroha 505 -> Iroha 506
-NEW -> Kobo 501
-Kobo 501 -> Kobo 502
-Kobo 502 -> Kobo 503
-Kobo 503 -> Kobo 504
-NEW -> Nerissa 501
-Nerissa 501 -> Nerissa 502
-Nerissa 502 -> Nerissa 503
-NEW -> Noel 501
-Noel 501 -> Noel 502
-Noel 502 -> Noel 503
-Noel 503 -> Noel 504
-NEW -> Okayu 501
-Okayu 501 -> Okayu 502
-Okayu 502 -> Okayu 503
-Okayu 503 -> Okayu 504
-Okayu 504 -> Okayu 505
-Okayu 505 -> Okayu 506
-Okayu 506 -> Okayu 507
-NEW -> Pekora 501
-Pekora 501 -> Pekora 502
-Pekora 502 -> Pekora 503
-Pekora 503 -> Pekora 504
-NEW -> Polka 501
-Polka 501 -> Polka 502
-Polka 502 -> Polka 503
-Polka 503 -> Polka 504
-NEW -> Suisei 501
-Suisei 501 -> Suisei 502
-Suisei 502 -> Suisei 503
-Suisei 503 -> Suisei 504
-Support 007 -> Support 006
-Support 008 -> Support 007
-Support 009 -> Support 008
-Support 010 -> Support 009
-Support 504 -> Support 508
-Support 508 -> Support 505
-Support 505 -> Support 503
-Support 502 <-> Support 506
-Support 507 -> Support 504
-Support 503 -> Support 507
+R
+Watame & Subaru 001 -> LambDuck 001
 
 S
-NEW -> Aki 501
-NEW -> Aki 502
-NEW -> Aki 503
-Aki 501 -> Aki 701
-Aki 502 -> Aki 702
-Aki 503 -> Aki 703
-Aki 504 -> Aki 704
-Aki 505 -> Aki 705
-Aki 506 -> Aki 706
-Aki 507 -> Aki 707
-Amelia 501 -> Amelia 701
-AZKi 501 -> AZKi 701
-AZKi 502 -> AZKi 702
-AZKi 503 -> AZKi 703
-Baelz 501 -> Baelz 701
-Baelz 502 -> Baelz 702
-Botan 504 <-> Botan 505
-Calli 501 -> Calli 701
-Calli 502 -> Calli 501
-Calli 503 -> Calli 502
-Calli 504 -> Calli 503
-Calli 505 -> Calli 504
-Calli 506 -> Calli 505
-holoForce 501 -> holoForce 701
-holoh3ro 501 -> holoh3ro 701
-NEW -> Iofi 501
-NEW -> Iofi 502
-Iofi 501 -> Iofi 701
-Iofi 502 -> Iofi 702
-Iroha 501 -> Iroha 701
-Iroha 502 -> Iroha 702
-IRyS 501 -> IRyS 701
-IRyS 502 -> IRyS 702
-Kanata 501 -> Kanata 701
-Kanata 502 -> Kanata 702
-Kanata 503 -> Kanata 703
-Kanata 504 -> Kanata 704
-Kanata 505 -> Kanata 705
-Kiara 501 -> Kiara 701
-Kiara 502 -> Kiara 702
-Kiara 503 -> Kiara 703
-Kiara 504 -> Kiara 704
-Kiara 505 -> Kiara 705
-Kiara 506 -> Kiara 501
-NEW -> Kobo 501
-NEW -> Kobo 502
-NEW -> Kobo 503
-Kobo 501 -> Kobo 701
-Kobo 502 -> Kobo 702
-Kobo 503 -> Kobo 703
-Kobo 504 -> Kobo 704
-Kobo 505 -> Kobo 705
-Kronii 501 -> Kronii 701
-Kronii 502 -> Kronii 702
-Lui 501 -> Lui 701
-Lui 502 -> Lui 702
-Lui 503 -> Lui 703
-Lui 504 -> Lui 704
-Lui 505 -> Lui 705
-Luna 505 -> Luna 701
-Moona 501 -> Moona 701
-Moona 502 -> Moona 702
-Mumei 501 -> Mumei 701
-Mumei 502 -> Mumei 702
-Mumei 503 -> Mumei 703
-Mumei 504 -> Mumei 704
-Mumei 505 -> Mumei 705
-Mumei 506 -> Mumei 706
-Pekora & Moona 501 -> Pekora & Moona 701
-NEW -> Pekora 501
-NEW -> Pekora 502
-Pekora 501 -> Pekora 701
-Pekora 502 -> Pekora 702
-Pekora 503 -> Pekora 703
-Pekora 504 -> Pekora 704
-NEW -> Polka 501
-NEW -> Polka 502
-NEW -> Polka 503
-Polka 501 -> Polka 701
-Polka 502 -> Polka 702
-Polka 503 -> Polka 703
-Promise 501 -> Promise 701
-Sora & Iroha 501 -> Sora & Iroha 701
+Fuwawa 003 -> FUWAMOCO 003
+Fuwawa 503 -> FUWAMOCO 503
+Luna 006 -> Luna 005
+Luna 007 -> Luna 006
+NePoLaBo 002 -> Lamy 007
+NePoLaBo 502 -> Lamy 507
+Lamy 007 -> Lamy 508
+Towa 506 -> Towa 701
+
+SR
+NEW -> AZKi 004
+NEW -> Calli 006
+NEW -> Fubuki 006
+NEW -> Mio 006
+NEW -> Okayu 006
+NEW -> Sora 002
+NEW -> Suisei 004
+NEW -> Towa 004
+Watame & Subaru 001 -> LambDuck 001
+
+OSR
+A-chan 001 -> Achan 001
+Achan + Nodoka color change
+
+SEC
+NEW -> Kanata 001
+NEW -> Kanata 501
+NEW -> Mumei 001
+NEW -> Mumei 501
+NEW -> Shion 001
+NEW -> Shion 501
+
+COL
+Fantasy -> Fantasy 101
+MariFure -> MariFure 101
+Noel & Pekora -> Noel & Pekora 101
+Noel, Pekora, Marine -> Noel, Pekora, Marine 101
+PekoMari -> PekoMari 101
+Pekora, Marine, Flare -> Pekora, Marine, Flare 101
+
+ORI
+A-chan 001 -> Achan 001 
+FubuMio 001 -> FubuMio 002
+Saaba 002 -> Saba 002
+Achan + Nodoka color change
+
+BDAY
+Achan + Nodoka color change
+
+UP
+NEW -> Ayame 002
+NEW -> Roboco 001
+NEW -> Suisei 006
+NEW -> Watame 001
 Sora 501 -> Sora 701
-Sora 502 -> Sora 702
-Sora 503 -> Sora 703
-NEW -> Suisei 501
-Suisei 501 -> Suisei 701
-Suisei 502 -> Suisei 702
-Suisei 503 -> Suisei 703
-Suisei 504 -> Suisei 704
-Suisei 505 -> Suisei 502
-Support 501 -> Support 701
-Support 502 -> Support 702
-Support 503 -> Support 703
-Support 504 -> Support 704
-Support 505 -> Support 705
-Support 506 -> Support 501
-Support 507 -> Support 502
-Support 508 -> Support 503
-Support 509 -> Support 504
-Support 510 -> Support 505
-Support 511 -> Support 506
-NEW -> Watame 506
-Watame 506 -> Watame 701
-Zeta 501 -> Zeta 701
-Zeta 502 -> Zeta 702
+Holowitches 001 -> holoWitches 001
+Calli, IRyS, Nerissa , Ollie, Nene 501 -> Calli, IRyS, Nerissa, Ollie, Nene 701
+Reine 501 -> Reine 701
+
+SP
+NEW -> Bijou 001
+NEW -> Chihaya 001
+NEW -> Elizabeth 001
+NEW -> Gigi 001
+NEW -> Mio 001
+NEW -> Niko 001
+NEW -> Riona 001
+NEW -> Shiori 001
+NEW -> Su 001
+NEW -> Vivi 001
 
 P
-Ayame 501 -> Ayame 502
-Ayame 502 -> Ayame 701
-AZKi 502 -> AZKi 503
-Choco 501 -> Choco 502
-Choco 502 -> Choco 701
-Flare 501 -> Flare 701
-Hajime 501 -> Hajime 701
-Hajime 502 -> Hajime 501
-Fubuki 501 -> Fubuki 502
-Iofi 501 -> Iofi 502
-Iroha 503 -> Iroha 701
-Iroha 504 -> Iroha 503
-IRyS 501 -> IRyS 701
-Kanata 501 -> Kanata 502
-Kanata 502 -> Kanata 504
-Kanata 503 -> Kanata 501
-Marine 502 -> Marine 503
-Marine 503 -> Marine 504
-Miko 502 -> Miko 503
-Moona 501 -> Moona 502
-Okayu 501 -> Okayu 701
-Okayu 502 -> Okayu 504
-Pekora 501 -> Pekora 502
-Shion 501 <-> Shion 502
-Sora 502 -> Sora 505
-Support 001 -> Vivi 002
-Support 002 -> Support 001
-Support 003 -> Support 002
-
-VAL
-Botan & Tomori 001 -> Botan & Tomori 101
-
-COL 
-Botan & Tomori 001 -> Botan & Tomori 101
-
-
-
-
-
-
-
-
-
-
-
+Baelze 501 -> Baelz 501
+Polka 005 = Polka 002 same image/card
+Subaru & Watame 001 -> LambDuck 001
+NEW -> Choco 501
+NEW -> Flare 501
+NEW -> Fuwawa 501
+NEW -> Iofi 501
+NEW -> Kobo 501
+NEW -> Miko 504
+NEW -> Miko 505
+NEW -> Mococo 501
+NEW -> Nerissa 501
+NEW -> Noel 501
+NEW -> Okayu 501
+NEW -> Okayu 503
+NEW -> Pekora 501
+NEW -> Polka 503
+NEW -> Miko 011
+NEW -> Miko 012
