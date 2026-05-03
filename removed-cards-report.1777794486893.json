@@ -1,0 +1,8058 @@
+{
+  "generatedAt": "2026-05-03T07:48:08.454Z",
+  "listFile": "/root/4botstuff/Cards/scripts/delete-cards-list.txt",
+  "dryRun": false,
+  "onlyUserId": null,
+  "caseInsensitive": false,
+  "targets": [
+    {
+      "rarity": "C",
+      "name": "desktop"
+    },
+    {
+      "rarity": "OC",
+      "name": "Flare 002"
+    },
+    {
+      "rarity": "OC",
+      "name": "Flare 003"
+    },
+    {
+      "rarity": "OSR",
+      "name": "A chan 001"
+    },
+    {
+      "rarity": "OSR",
+      "name": "Liz 001"
+    },
+    {
+      "rarity": "P",
+      "name": "Azki 004"
+    },
+    {
+      "rarity": "P",
+      "name": "Baelz 501"
+    },
+    {
+      "rarity": "P",
+      "name": "FANTASY 001"
+    },
+    {
+      "rarity": "P",
+      "name": "IRys 501"
+    },
+    {
+      "rarity": "P",
+      "name": "Regloss 001"
+    },
+    {
+      "rarity": "P",
+      "name": "holoforce 001"
+    },
+    {
+      "rarity": "RR",
+      "name": "Ayama 001"
+    },
+    {
+      "rarity": "R",
+      "name": "desktop"
+    },
+    {
+      "rarity": "R",
+      "name": "hSD19 008 R"
+    },
+    {
+      "rarity": "SEC",
+      "name": "MiKorone 001"
+    },
+    {
+      "rarity": "SP",
+      "name": "Calli 501"
+    },
+    {
+      "rarity": "SP",
+      "name": "FUWAMOCO 501"
+    },
+    {
+      "rarity": "SR",
+      "name": "Irys 501"
+    },
+    {
+      "rarity": "SR",
+      "name": "MiKorone 001"
+    },
+    {
+      "rarity": "SR",
+      "name": "ROBOCO 002"
+    },
+    {
+      "rarity": "SR",
+      "name": "ROBOCO 003"
+    },
+    {
+      "rarity": "S",
+      "name": "Area 15 001"
+    },
+    {
+      "rarity": "S",
+      "name": "Bakatare Circus 001"
+    },
+    {
+      "rarity": "S",
+      "name": "FANTASY 001"
+    },
+    {
+      "rarity": "S",
+      "name": "FANTASY 501"
+    },
+    {
+      "rarity": "S",
+      "name": "Okakoro 001"
+    },
+    {
+      "rarity": "S",
+      "name": "Sora & Iofi 501"
+    },
+    {
+      "rarity": "S",
+      "name": "holoForce 502"
+    },
+    {
+      "rarity": "S",
+      "name": "holoforce 001"
+    },
+    {
+      "rarity": "S",
+      "name": "holoforce 501"
+    },
+    {
+      "rarity": "UP",
+      "name": "Calli, IRyS, Nerissa , Ollie, Nene 501"
+    },
+    {
+      "rarity": "UP",
+      "name": "Holowitches 001"
+    },
+    {
+      "rarity": "UP",
+      "name": "Reine 501"
+    },
+    {
+      "rarity": "UP",
+      "name": "Sora 501"
+    },
+    {
+      "rarity": "UR",
+      "name": "Azki 001"
+    },
+    {
+      "rarity": "U",
+      "name": "Bakatare Circus 001"
+    },
+    {
+      "rarity": "U",
+      "name": "Dorobo Contsruction 501"
+    },
+    {
+      "rarity": "U",
+      "name": "FANTASY 001"
+    },
+    {
+      "rarity": "U",
+      "name": "FANTASY 002"
+    },
+    {
+      "rarity": "U",
+      "name": "FANTASY 501"
+    },
+    {
+      "rarity": "U",
+      "name": "Force 001"
+    },
+    {
+      "rarity": "U",
+      "name": "Force 002"
+    },
+    {
+      "rarity": "U",
+      "name": "Force 501"
+    },
+    {
+      "rarity": "U",
+      "name": "Gen0 001"
+    },
+    {
+      "rarity": "U",
+      "name": "Gen0 501"
+    },
+    {
+      "rarity": "U",
+      "name": "Gen2 001"
+    },
+    {
+      "rarity": "U",
+      "name": "Holoro 501"
+    },
+    {
+      "rarity": "U",
+      "name": "desktop"
+    },
+    {
+      "rarity": "HR",
+      "name": "desktop"
+    }
+  ],
+  "totals": {
+    "users": 48,
+    "uniqueCards": 845,
+    "totalEntries": 845,
+    "totalCount": 4220
+  },
+  "results": [
+    {
+      "userId": "701960122251083807",
+      "removedCards": [
+        {
+          "rarity": "U",
+          "name": "Holoro 501",
+          "entries": 1,
+          "totalCount": 11,
+          "subIds": [
+            "692aed638f6358917b98c7a0"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "holoForce 502",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69a9682006fef0be647a292f"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "desktop",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69a2b9f5f41972ceea3a945b"
+          ]
+        },
+        {
+          "rarity": "RR",
+          "name": "Ayama 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "691815f285251ea2d9a4cfea"
+          ]
+        },
+        {
+          "rarity": "P",
+          "name": "FANTASY 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "6959f057e60e650987899d8d"
+          ]
+        },
+        {
+          "rarity": "R",
+          "name": "desktop",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69aa1329b65c70261df34065"
+          ]
+        },
+        {
+          "rarity": "P",
+          "name": "Baelz 501",
+          "entries": 1,
+          "totalCount": 4,
+          "subIds": [
+            "693ae449d69637cd5230d983"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "Bakatare Circus 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69225ff16da53b77f640c268"
+          ]
+        },
+        {
+          "rarity": "SR",
+          "name": "ROBOCO 003",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "6949a51fdd7a8f2ce43bc894"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Gen2 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "691801be002cba50f3feecfe"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 002",
+          "entries": 1,
+          "totalCount": 3,
+          "subIds": [
+            "691a984d32ded643cb9e7db0"
+          ]
+        },
+        {
+          "rarity": "C",
+          "name": "desktop",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69a2b9f5f41972ceea3a945a"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "Okakoro 001",
+          "entries": 1,
+          "totalCount": 2,
+          "subIds": [
+            "69266ceed39e61e064f95b39"
+          ]
+        },
+        {
+          "rarity": "SR",
+          "name": "Irys 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "693b46d6fcc61b413c4c1798"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 001",
+          "entries": 1,
+          "totalCount": 3,
+          "subIds": [
+            "691801be002cba50f3feecf9"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Force 002",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "6919590902d612ae7cac296b"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Gen0 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69416a99a2079d50d822e284"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 501",
+          "entries": 1,
+          "totalCount": 10,
+          "subIds": [
+            "692b68118f6358917bac5232"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "Sora & Iofi 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "692df9a2bd37deba35119ee4"
+          ]
+        },
+        {
+          "rarity": "OC",
+          "name": "Flare 003",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "692a0e11511a34d576018f6e"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Force 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "6918d3ae369de6b8269eb7e5"
+          ]
+        },
+        {
+          "rarity": "P",
+          "name": "holoforce 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "6933e1fc25b084330c13ec35"
+          ]
+        },
+        {
+          "rarity": "SP",
+          "name": "Calli 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69307d545ddd3084a0cfe8bd"
+          ]
+        },
+        {
+          "rarity": "P",
+          "name": "IRys 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "6931a77361987fead1c0e30e"
+          ]
+        },
+        {
+          "rarity": "OSR",
+          "name": "A chan 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6ae1297b6d73a164e2e3f"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "Area 15 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "691ecdc9ce62b4e0424b2c3d"
+          ]
+        },
+        {
+          "rarity": "OSR",
+          "name": "Liz 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "698de91170778f1a1dbee5b0"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Dorobo Contsruction 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "692b68008f6358917bac4800"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "holoforce 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "691ae0c232ded643cba6501d"
+          ]
+        },
+        {
+          "rarity": "P",
+          "name": "Regloss 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "692858c4271ffb0608d9007b"
+          ]
+        },
+        {
+          "rarity": "R",
+          "name": "hSD19 008 R",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e5a66c97b6d73a163a055f"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "FANTASY 501",
+          "entries": 1,
+          "totalCount": 2,
+          "subIds": [
+            "692f3545bd37deba354be368"
+          ]
+        },
+        {
+          "rarity": "P",
+          "name": "Azki 004",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "692a0ceb511a34d57600511c"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Gen0 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69188053450a3d5e7092cffd"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Bakatare Circus 001",
+          "entries": 1,
+          "totalCount": 7,
+          "subIds": [
+            "691a722232ded643cb9bdeb7"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "holoforce 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "695f5f9662b4a8bfb35ed5ea"
+          ]
+        },
+        {
+          "rarity": "SR",
+          "name": "ROBOCO 002",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "694890b3dd7a8f2ce4ebf8bd"
+          ]
+        },
+        {
+          "rarity": "OC",
+          "name": "Flare 002",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69281194271ffb0608cf32b2"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "FANTASY 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "696a74953e11d3384625f435"
+          ]
+        },
+        {
+          "rarity": "SP",
+          "name": "FUWAMOCO 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69a9665206fef0be647834f1"
+          ]
+        },
+        {
+          "rarity": "SR",
+          "name": "MiKorone 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69281114271ffb0608ce8903"
+          ]
+        },
+        {
+          "rarity": "SEC",
+          "name": "MiKorone 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "6959ee7fe60e650987892f55"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Force 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "693f2a3754f0b4a2e3b038c3"
+          ]
+        }
+      ]
+    },
+    {
+      "userId": "153551890976735232",
+      "removedCards": [
+        {
+          "rarity": "OSR",
+          "name": "A chan 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e8243add113a134d8d845d"
+          ]
+        },
+        {
+          "rarity": "RR",
+          "name": "Ayama 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69180f6c9bbf4a5d00fff327"
+          ]
+        },
+        {
+          "rarity": "HR",
+          "name": "desktop",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e8243add113a134d8d848c"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "holoforce 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "694bf7c3a5fa0fdc24595079"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Force 501",
+          "entries": 1,
+          "totalCount": 3,
+          "subIds": [
+            "693eca3754f0b4a2e399eb77"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 501",
+          "entries": 1,
+          "totalCount": 7,
+          "subIds": [
+            "692c061e8f6358917bcc79e0"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "FANTASY 501",
+          "entries": 1,
+          "totalCount": 3,
+          "subIds": [
+            "6935e7194f9c844dd33a1d92"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "Sora & Iofi 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "6935e7394f9c844dd33a52fc"
+          ]
+        },
+        {
+          "rarity": "C",
+          "name": "desktop",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69c99ac12c6f0ad334738fc1"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "holoForce 502",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69a910ea06fef0be6461bcfa"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "Bakatare Circus 001",
+          "entries": 1,
+          "totalCount": 11,
+          "subIds": [
+            "691b0318a7bdba0acfb9aeaa"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "FANTASY 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69760eec9bb8351b3506ecd9"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Holoro 501",
+          "entries": 1,
+          "totalCount": 7,
+          "subIds": [
+            "692c06218f6358917bcc84fb"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Gen2 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "6917feae002cba50f3fe4b1f"
+          ]
+        },
+        {
+          "rarity": "P",
+          "name": "FANTASY 001",
+          "entries": 1,
+          "totalCount": 9,
+          "subIds": [
+            "6962faf080db65167bbf1d5a"
+          ]
+        },
+        {
+          "rarity": "SR",
+          "name": "Irys 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "6962fc5f80db65167bbfec29"
+          ]
+        },
+        {
+          "rarity": "P",
+          "name": "IRys 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "6948917add7a8f2ce4ed6270"
+          ]
+        },
+        {
+          "rarity": "SR",
+          "name": "ROBOCO 003",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "695034910830d86146843d70"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Force 002",
+          "entries": 1,
+          "totalCount": 4,
+          "subIds": [
+            "6919c0897b3c72e6201bdce7"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "Area 15 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "691a326532ded643cb99e7af"
+          ]
+        },
+        {
+          "rarity": "P",
+          "name": "holoforce 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "692c049a8f6358917bc96aa4"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "holoforce 001",
+          "entries": 1,
+          "totalCount": 2,
+          "subIds": [
+            "692c4df68f6358917bdf7176"
+          ]
+        },
+        {
+          "rarity": "P",
+          "name": "Azki 004",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "694bf47ba5fa0fdc2452ebd7"
+          ]
+        },
+        {
+          "rarity": "P",
+          "name": "Regloss 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "694122198717c32b7819de23"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Force 001",
+          "entries": 1,
+          "totalCount": 5,
+          "subIds": [
+            "6917feae002cba50f3fe4b1e"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 001",
+          "entries": 1,
+          "totalCount": 3,
+          "subIds": [
+            "6919d137f8329af1d7f6e67f"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Dorobo Contsruction 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "692c48868f6358917bdc7222"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Gen0 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "691872cd77d2f2f848e536d2"
+          ]
+        },
+        {
+          "rarity": "P",
+          "name": "Baelz 501",
+          "entries": 1,
+          "totalCount": 13,
+          "subIds": [
+            "694bf7eda5fa0fdc2459b814"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Gen0 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "693f591c54f0b4a2e3c49dfd"
+          ]
+        },
+        {
+          "rarity": "SR",
+          "name": "MiKorone 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "692c03fb8f6358917bc812fa"
+          ]
+        },
+        {
+          "rarity": "SR",
+          "name": "ROBOCO 002",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "6946ac9d941266b230c6c8f1"
+          ]
+        },
+        {
+          "rarity": "SP",
+          "name": "Calli 501",
+          "entries": 1,
+          "totalCount": 4,
+          "subIds": [
+            "694c751fa5fa0fdc246b9dc3"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 002",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69180c669bbf4a5d00ffded5"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Bakatare Circus 001",
+          "entries": 1,
+          "totalCount": 3,
+          "subIds": [
+            "6918c993369de6b8269da150"
+          ]
+        },
+        {
+          "rarity": "UR",
+          "name": "Azki 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "6924c1ed6db7ae68020361a8"
+          ]
+        },
+        {
+          "rarity": "SP",
+          "name": "FUWAMOCO 501",
+          "entries": 1,
+          "totalCount": 2,
+          "subIds": [
+            "69a9107f06fef0be645fa79c"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "Okakoro 001",
+          "entries": 1,
+          "totalCount": 4,
+          "subIds": [
+            "69358afe4f9c844dd318bb6c"
+          ]
+        }
+      ]
+    },
+    {
+      "userId": "511182422340272128",
+      "removedCards": [
+        {
+          "rarity": "SR",
+          "name": "MiKorone 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69f448850688067591abc721"
+          ]
+        },
+        {
+          "rarity": "P",
+          "name": "FANTASY 001",
+          "entries": 1,
+          "totalCount": 5,
+          "subIds": [
+            "69f448840688067591abc204"
+          ]
+        },
+        {
+          "rarity": "RR",
+          "name": "Ayama 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69f448840688067591abc021"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Bakatare Circus 001",
+          "entries": 1,
+          "totalCount": 8,
+          "subIds": [
+            "69f448840688067591abc0b8"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Force 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69f448840688067591abc253"
+          ]
+        },
+        {
+          "rarity": "UR",
+          "name": "Azki 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69f448840688067591abc05c"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Force 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69f448840688067591abc255"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 002",
+          "entries": 1,
+          "totalCount": 8,
+          "subIds": [
+            "69f448840688067591abc207"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Force 002",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69f448840688067591abc254"
+          ]
+        },
+        {
+          "rarity": "P",
+          "name": "holoforce 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69f448840688067591abc346"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Gen0 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69f448840688067591abc2ea"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Gen0 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69f448840688067591abc2eb"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 001",
+          "entries": 1,
+          "totalCount": 8,
+          "subIds": [
+            "69f448840688067591abc206"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "Okakoro 001",
+          "entries": 1,
+          "totalCount": 5,
+          "subIds": [
+            "69f448850688067591abc85d"
+          ]
+        },
+        {
+          "rarity": "SP",
+          "name": "FUWAMOCO 501",
+          "entries": 1,
+          "totalCount": 3,
+          "subIds": [
+            "69f448840688067591abc2be"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "holoforce 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69f448840688067591abc347"
+          ]
+        },
+        {
+          "rarity": "SP",
+          "name": "Calli 501",
+          "entries": 1,
+          "totalCount": 2,
+          "subIds": [
+            "69f448840688067591abc136"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Dorobo Contsruction 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69f448840688067591abc1ea"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Gen2 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69f448840688067591abc2ec"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "FANTASY 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69f448840688067591abc205"
+          ]
+        },
+        {
+          "rarity": "SR",
+          "name": "ROBOCO 002",
+          "entries": 1,
+          "totalCount": 3,
+          "subIds": [
+            "69f448850688067591abca56"
+          ]
+        },
+        {
+          "rarity": "SR",
+          "name": "Irys 501",
+          "entries": 1,
+          "totalCount": 2,
+          "subIds": [
+            "69f448840688067591abc3fa"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "holoforce 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69f448840688067591abc34c"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "Area 15 001",
+          "entries": 1,
+          "totalCount": 2,
+          "subIds": [
+            "69f448840688067591abc018"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Holoro 501",
+          "entries": 1,
+          "totalCount": 2,
+          "subIds": [
+            "69f448840688067591abc356"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "FANTASY 501",
+          "entries": 1,
+          "totalCount": 3,
+          "subIds": [
+            "69f448840688067591abc209"
+          ]
+        },
+        {
+          "rarity": "P",
+          "name": "Azki 004",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69f448840688067591abc079"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "holoForce 502",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69f448840688067591abc34e"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "Bakatare Circus 001",
+          "entries": 1,
+          "totalCount": 7,
+          "subIds": [
+            "69f448840688067591abc0b7"
+          ]
+        },
+        {
+          "rarity": "SR",
+          "name": "ROBOCO 003",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69f448850688067591abca5b"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 501",
+          "entries": 1,
+          "totalCount": 4,
+          "subIds": [
+            "69f448840688067591abc20a"
+          ]
+        },
+        {
+          "rarity": "P",
+          "name": "Regloss 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69f448850688067591abc9ae"
+          ]
+        },
+        {
+          "rarity": "P",
+          "name": "Baelz 501",
+          "entries": 1,
+          "totalCount": 6,
+          "subIds": [
+            "69f448840688067591abc0b0"
+          ]
+        },
+        {
+          "rarity": "P",
+          "name": "IRys 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69f448840688067591abc3fb"
+          ]
+        }
+      ]
+    },
+    {
+      "userId": "1311652316973240380",
+      "removedCards": [
+        {
+          "rarity": "P",
+          "name": "Azki 004",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6aefd97b6d73a164e7207"
+          ]
+        },
+        {
+          "rarity": "SR",
+          "name": "MiKorone 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6aefe97b6d73a164e789a"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "FANTASY 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6aefd97b6d73a164e7392"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Holoro 501",
+          "entries": 1,
+          "totalCount": 10,
+          "subIds": [
+            "69e6aefd97b6d73a164e74dc"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "Area 15 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6aefd97b6d73a164e71a7"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Gen0 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6aefd97b6d73a164e7471"
+          ]
+        },
+        {
+          "rarity": "SR",
+          "name": "ROBOCO 003",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6aeff97b6d73a164e7bdc"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "Okakoro 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6aefe97b6d73a164e79e3"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "Bakatare Circus 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6aefd97b6d73a164e7244"
+          ]
+        },
+        {
+          "rarity": "P",
+          "name": "Baelz 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6aefd97b6d73a164e723d"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Force 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6aefd97b6d73a164e73dc"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Bakatare Circus 001",
+          "entries": 1,
+          "totalCount": 6,
+          "subIds": [
+            "69e6aefd97b6d73a164e7245"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Force 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6aefd97b6d73a164e73de"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "FANTASY 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6aefd97b6d73a164e738f"
+          ]
+        },
+        {
+          "rarity": "P",
+          "name": "holoforce 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b19c97b6d73a164fad4f"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "holoforce 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6aefd97b6d73a164e74d1"
+          ]
+        },
+        {
+          "rarity": "R",
+          "name": "hSD19 008 R",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6aefd97b6d73a164e74e9"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 501",
+          "entries": 1,
+          "totalCount": 7,
+          "subIds": [
+            "69e6aefd97b6d73a164e7393"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 002",
+          "entries": 1,
+          "totalCount": 9,
+          "subIds": [
+            "69e6aefd97b6d73a164e7391"
+          ]
+        },
+        {
+          "rarity": "SR",
+          "name": "Irys 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6aefd97b6d73a164e7580"
+          ]
+        },
+        {
+          "rarity": "SP",
+          "name": "FUWAMOCO 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6aefd97b6d73a164e7444"
+          ]
+        },
+        {
+          "rarity": "SP",
+          "name": "Calli 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6aefd97b6d73a164e72c5"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "holoforce 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6aefd97b6d73a164e74cc"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "holoForce 502",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6aefd97b6d73a164e74d3"
+          ]
+        },
+        {
+          "rarity": "P",
+          "name": "Regloss 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6aefe97b6d73a164e7b2f"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Gen0 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6aefd97b6d73a164e7470"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Gen2 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6aefd97b6d73a164e7472"
+          ]
+        },
+        {
+          "rarity": "SR",
+          "name": "ROBOCO 002",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6aeff97b6d73a164e7bd7"
+          ]
+        },
+        {
+          "rarity": "RR",
+          "name": "Ayama 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6aefd97b6d73a164e71b0"
+          ]
+        },
+        {
+          "rarity": "P",
+          "name": "IRys 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6aefd97b6d73a164e7581"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Force 002",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6aefd97b6d73a164e73dd"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Dorobo Contsruction 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6aefd97b6d73a164e7377"
+          ]
+        },
+        {
+          "rarity": "P",
+          "name": "FANTASY 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6aefd97b6d73a164e738e"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 001",
+          "entries": 1,
+          "totalCount": 8,
+          "subIds": [
+            "69e6aefd97b6d73a164e7390"
+          ]
+        }
+      ]
+    },
+    {
+      "userId": "409724952091295745",
+      "removedCards": [
+        {
+          "rarity": "U",
+          "name": "FANTASY 002",
+          "entries": 1,
+          "totalCount": 7,
+          "subIds": [
+            "69e6af3897b6d73a164e8dae"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Force 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6af3897b6d73a164e8df8"
+          ]
+        },
+        {
+          "rarity": "SR",
+          "name": "ROBOCO 002",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6af3997b6d73a164e95df"
+          ]
+        },
+        {
+          "rarity": "P",
+          "name": "FANTASY 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6af3897b6d73a164e8dab"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Bakatare Circus 001",
+          "entries": 1,
+          "totalCount": 4,
+          "subIds": [
+            "69e6af3897b6d73a164e8c65"
+          ]
+        },
+        {
+          "rarity": "SP",
+          "name": "FUWAMOCO 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6af3897b6d73a164e8e60"
+          ]
+        },
+        {
+          "rarity": "SR",
+          "name": "Irys 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6af3897b6d73a164e8f99"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Holoro 501",
+          "entries": 1,
+          "totalCount": 3,
+          "subIds": [
+            "69e6af3897b6d73a164e8ef7"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "Bakatare Circus 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6af3897b6d73a164e8c64"
+          ]
+        },
+        {
+          "rarity": "P",
+          "name": "Regloss 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6af3997b6d73a164e9538"
+          ]
+        },
+        {
+          "rarity": "P",
+          "name": "Baelz 501",
+          "entries": 1,
+          "totalCount": 2,
+          "subIds": [
+            "69e6af3897b6d73a164e8c5d"
+          ]
+        },
+        {
+          "rarity": "SP",
+          "name": "Calli 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6af3897b6d73a164e8ce4"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Dorobo Contsruction 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6af3897b6d73a164e8d95"
+          ]
+        },
+        {
+          "rarity": "RR",
+          "name": "Ayama 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6af3897b6d73a164e8bd1"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Force 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6af3897b6d73a164e8dfa"
+          ]
+        },
+        {
+          "rarity": "SR",
+          "name": "ROBOCO 003",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6af3997b6d73a164e95e4"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "Okakoro 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6af3897b6d73a164e93f0"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 001",
+          "entries": 1,
+          "totalCount": 8,
+          "subIds": [
+            "69e6af3897b6d73a164e8dad"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "holoforce 501",
+          "entries": 1,
+          "totalCount": 7,
+          "subIds": [
+            "69e6af3897b6d73a164e8eec"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "Area 15 001",
+          "entries": 1,
+          "totalCount": 2,
+          "subIds": [
+            "69e6af3897b6d73a164e8bc8"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "holoforce 001",
+          "entries": 1,
+          "totalCount": 48,
+          "subIds": [
+            "69e6af3897b6d73a164e8ee7"
+          ]
+        },
+        {
+          "rarity": "SR",
+          "name": "MiKorone 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6af3897b6d73a164e92ab"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 501",
+          "entries": 1,
+          "totalCount": 8,
+          "subIds": [
+            "69e6af3897b6d73a164e8db0"
+          ]
+        },
+        {
+          "rarity": "P",
+          "name": "IRys 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6af3897b6d73a164e8f9a"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "FANTASY 501",
+          "entries": 1,
+          "totalCount": 2,
+          "subIds": [
+            "69e6af3897b6d73a164e8daf"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "FANTASY 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6af3897b6d73a164e8dac"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Gen0 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6af3897b6d73a164e8e8d"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Force 002",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6af3897b6d73a164e8df9"
+          ]
+        },
+        {
+          "rarity": "P",
+          "name": "Azki 004",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6af3897b6d73a164e8c27"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "holoForce 502",
+          "entries": 1,
+          "totalCount": 25,
+          "subIds": [
+            "69e6af3897b6d73a164e8eee"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Gen0 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6af3897b6d73a164e8e8c"
+          ]
+        },
+        {
+          "rarity": "R",
+          "name": "hSD19 008 R",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6af3897b6d73a164e8f04"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Gen2 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6af3897b6d73a164e8e8e"
+          ]
+        }
+      ]
+    },
+    {
+      "userId": "399631405228752897",
+      "removedCards": [
+        {
+          "rarity": "U",
+          "name": "Force 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6af7497b6d73a164ea7f5"
+          ]
+        },
+        {
+          "rarity": "P",
+          "name": "Regloss 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6af7597b6d73a164eaf22"
+          ]
+        },
+        {
+          "rarity": "P",
+          "name": "FANTASY 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6af7497b6d73a164ea7a6"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Force 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6af7497b6d73a164ea7f3"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "Area 15 001",
+          "entries": 1,
+          "totalCount": 2,
+          "subIds": [
+            "69e6af7497b6d73a164ea5c8"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Dorobo Contsruction 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6af7497b6d73a164ea790"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "holoforce 001",
+          "entries": 1,
+          "totalCount": 3,
+          "subIds": [
+            "69e6af7497b6d73a164ea8e0"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Bakatare Circus 001",
+          "entries": 1,
+          "totalCount": 7,
+          "subIds": [
+            "69e6af7497b6d73a164ea665"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Holoro 501",
+          "entries": 1,
+          "totalCount": 3,
+          "subIds": [
+            "69e6af7497b6d73a164ea8f0"
+          ]
+        },
+        {
+          "rarity": "SR",
+          "name": "MiKorone 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b1b997b6d73a164fe0e0"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "Bakatare Circus 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6af7497b6d73a164ea664"
+          ]
+        },
+        {
+          "rarity": "P",
+          "name": "Azki 004",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6af7497b6d73a164ea627"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "FANTASY 501",
+          "entries": 1,
+          "totalCount": 3,
+          "subIds": [
+            "69e6af7497b6d73a164ea7aa"
+          ]
+        },
+        {
+          "rarity": "P",
+          "name": "Baelz 501",
+          "entries": 1,
+          "totalCount": 2,
+          "subIds": [
+            "69e6af7497b6d73a164ea65d"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 501",
+          "entries": 1,
+          "totalCount": 3,
+          "subIds": [
+            "69e6af7497b6d73a164ea7ab"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 001",
+          "entries": 1,
+          "totalCount": 4,
+          "subIds": [
+            "69e6af7497b6d73a164ea7a8"
+          ]
+        },
+        {
+          "rarity": "SR",
+          "name": "ROBOCO 002",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6af7597b6d73a164eafc8"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Force 002",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6af7497b6d73a164ea7f4"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Gen0 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6af7497b6d73a164ea887"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Gen2 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6af7497b6d73a164ea888"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "FANTASY 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6af7497b6d73a164ea7a7"
+          ]
+        },
+        {
+          "rarity": "P",
+          "name": "IRys 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6af7497b6d73a164ea991"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "Okakoro 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6af7597b6d73a164eaddd"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Gen0 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6af7497b6d73a164ea886"
+          ]
+        },
+        {
+          "rarity": "R",
+          "name": "hSD19 008 R",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6af7497b6d73a164ea8fd"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 002",
+          "entries": 1,
+          "totalCount": 9,
+          "subIds": [
+            "69e6af7497b6d73a164ea7a9"
+          ]
+        },
+        {
+          "rarity": "RR",
+          "name": "Ayama 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6af7497b6d73a164ea5d1"
+          ]
+        },
+        {
+          "rarity": "SR",
+          "name": "Irys 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6af7497b6d73a164ea990"
+          ]
+        },
+        {
+          "rarity": "SP",
+          "name": "Calli 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6af7497b6d73a164ea6e0"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "holoforce 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6af7497b6d73a164ea8e5"
+          ]
+        },
+        {
+          "rarity": "SR",
+          "name": "ROBOCO 003",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6af7597b6d73a164eafcd"
+          ]
+        },
+        {
+          "rarity": "SP",
+          "name": "FUWAMOCO 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6af7497b6d73a164ea85a"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "holoForce 502",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6af7497b6d73a164ea8e7"
+          ]
+        }
+      ]
+    },
+    {
+      "userId": "402522309606375434",
+      "removedCards": [
+        {
+          "rarity": "P",
+          "name": "Azki 004",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6afad97b6d73a164ec027"
+          ]
+        },
+        {
+          "rarity": "SP",
+          "name": "FUWAMOCO 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6afad97b6d73a164ec251"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Force 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6afad97b6d73a164ec1eb"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "FANTASY 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6afad97b6d73a164ec1a2"
+          ]
+        },
+        {
+          "rarity": "P",
+          "name": "Baelz 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6afad97b6d73a164ec05c"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "holoforce 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6afad97b6d73a164ec2d7"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Force 002",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6afad97b6d73a164ec1ec"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 001",
+          "entries": 1,
+          "totalCount": 7,
+          "subIds": [
+            "69e6afad97b6d73a164ec1a0"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "holoforce 501",
+          "entries": 1,
+          "totalCount": 2,
+          "subIds": [
+            "69e6afad97b6d73a164ec2dc"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Gen0 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6afad97b6d73a164ec27d"
+          ]
+        },
+        {
+          "rarity": "P",
+          "name": "FANTASY 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6afad97b6d73a164ec19e"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "Okakoro 001",
+          "entries": 1,
+          "totalCount": 2,
+          "subIds": [
+            "69e6afae97b6d73a164ec7c9"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "Bakatare Circus 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6afad97b6d73a164ec063"
+          ]
+        },
+        {
+          "rarity": "P",
+          "name": "IRys 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6afad97b6d73a164ec388"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "FANTASY 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6afad97b6d73a164ec19f"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Bakatare Circus 001",
+          "entries": 1,
+          "totalCount": 4,
+          "subIds": [
+            "69e6afad97b6d73a164ec064"
+          ]
+        },
+        {
+          "rarity": "SR",
+          "name": "ROBOCO 002",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6afae97b6d73a164ec9ae"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Holoro 501",
+          "entries": 1,
+          "totalCount": 10,
+          "subIds": [
+            "69e6afad97b6d73a164ec2e7"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 501",
+          "entries": 1,
+          "totalCount": 6,
+          "subIds": [
+            "69e6afad97b6d73a164ec1a3"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "holoForce 502",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6afad97b6d73a164ec2de"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Force 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6afad97b6d73a164ec1ed"
+          ]
+        },
+        {
+          "rarity": "P",
+          "name": "Regloss 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b1c297b6d73a164ffa3e"
+          ]
+        },
+        {
+          "rarity": "RR",
+          "name": "Ayama 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6afad97b6d73a164ebfd1"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 002",
+          "entries": 1,
+          "totalCount": 2,
+          "subIds": [
+            "69e6afad97b6d73a164ec1a1"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Gen0 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6afad97b6d73a164ec27e"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Dorobo Contsruction 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6afad97b6d73a164ec188"
+          ]
+        },
+        {
+          "rarity": "SR",
+          "name": "ROBOCO 003",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6afae97b6d73a164ec9b3"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Gen2 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6afad97b6d73a164ec27f"
+          ]
+        },
+        {
+          "rarity": "SR",
+          "name": "Irys 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6afad97b6d73a164ec387"
+          ]
+        },
+        {
+          "rarity": "SP",
+          "name": "Calli 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6afad97b6d73a164ec0db"
+          ]
+        },
+        {
+          "rarity": "R",
+          "name": "hSD19 008 R",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6afad97b6d73a164ec2f4"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "Area 15 001",
+          "entries": 1,
+          "totalCount": 3,
+          "subIds": [
+            "69e6afad97b6d73a164ebfc8"
+          ]
+        }
+      ]
+    },
+    {
+      "userId": "443047182619377676",
+      "removedCards": [
+        {
+          "rarity": "S",
+          "name": "Okakoro 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6afe897b6d73a164ee16c"
+          ]
+        },
+        {
+          "rarity": "SR",
+          "name": "ROBOCO 002",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6afe897b6d73a164ee349"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "Area 15 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6afe797b6d73a164ed981"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Bakatare Circus 001",
+          "entries": 1,
+          "totalCount": 4,
+          "subIds": [
+            "69e6afe797b6d73a164eda1b"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Force 002",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6afe797b6d73a164edb9e"
+          ]
+        },
+        {
+          "rarity": "SR",
+          "name": "Irys 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6afe797b6d73a164edd34"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Gen0 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6afe797b6d73a164edc2e"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "FANTASY 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6afe797b6d73a164edb52"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "FANTASY 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6afe797b6d73a164edb55"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "holoforce 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6afe797b6d73a164edc85"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Holoro 501",
+          "entries": 1,
+          "totalCount": 7,
+          "subIds": [
+            "69e6afe797b6d73a164edc95"
+          ]
+        },
+        {
+          "rarity": "P",
+          "name": "Baelz 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6afe797b6d73a164eda13"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Force 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6afe797b6d73a164edb9f"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "holoforce 501",
+          "entries": 1,
+          "totalCount": 2,
+          "subIds": [
+            "69e6afe797b6d73a164edc8a"
+          ]
+        },
+        {
+          "rarity": "P",
+          "name": "IRys 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6afe797b6d73a164edd35"
+          ]
+        },
+        {
+          "rarity": "SP",
+          "name": "Calli 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6afe797b6d73a164eda90"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Dorobo Contsruction 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6afe797b6d73a164edb3b"
+          ]
+        },
+        {
+          "rarity": "R",
+          "name": "hSD19 008 R",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6afe797b6d73a164edca2"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Force 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6afe797b6d73a164edb9d"
+          ]
+        },
+        {
+          "rarity": "RR",
+          "name": "Ayama 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6afe797b6d73a164ed98a"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Gen0 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6afe797b6d73a164edc2d"
+          ]
+        },
+        {
+          "rarity": "SR",
+          "name": "ROBOCO 003",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6afe897b6d73a164ee34e"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "Bakatare Circus 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6afe797b6d73a164eda1a"
+          ]
+        },
+        {
+          "rarity": "P",
+          "name": "FANTASY 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6afe797b6d73a164edb51"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "holoForce 502",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6afe797b6d73a164edc8c"
+          ]
+        },
+        {
+          "rarity": "P",
+          "name": "Azki 004",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6afe797b6d73a164ed9de"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 501",
+          "entries": 1,
+          "totalCount": 12,
+          "subIds": [
+            "69e6afe797b6d73a164edb56"
+          ]
+        },
+        {
+          "rarity": "SP",
+          "name": "FUWAMOCO 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6afe797b6d73a164edc03"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 001",
+          "entries": 1,
+          "totalCount": 9,
+          "subIds": [
+            "69e6afe797b6d73a164edb53"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 002",
+          "entries": 1,
+          "totalCount": 9,
+          "subIds": [
+            "69e6afe797b6d73a164edb54"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Gen2 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6afe797b6d73a164edc2f"
+          ]
+        }
+      ]
+    },
+    {
+      "userId": "409720567588061184",
+      "removedCards": [
+        {
+          "rarity": "R",
+          "name": "hSD19 008 R",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b01c97b6d73a164ef629"
+          ]
+        },
+        {
+          "rarity": "P",
+          "name": "IRys 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b01c97b6d73a164ef6bb"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Holoro 501",
+          "entries": 1,
+          "totalCount": 7,
+          "subIds": [
+            "69e6b01c97b6d73a164ef61c"
+          ]
+        },
+        {
+          "rarity": "P",
+          "name": "FANTASY 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b01b97b6d73a164ef4e1"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 001",
+          "entries": 1,
+          "totalCount": 4,
+          "subIds": [
+            "69e6b01b97b6d73a164ef4e3"
+          ]
+        },
+        {
+          "rarity": "SP",
+          "name": "Calli 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b01b97b6d73a164ef424"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 002",
+          "entries": 1,
+          "totalCount": 9,
+          "subIds": [
+            "69e6b01b97b6d73a164ef4e4"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 501",
+          "entries": 1,
+          "totalCount": 11,
+          "subIds": [
+            "69e6b01b97b6d73a164ef4e6"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Gen0 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b01c97b6d73a164ef5b5"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "FANTASY 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b01b97b6d73a164ef4e2"
+          ]
+        },
+        {
+          "rarity": "P",
+          "name": "Baelz 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b01b97b6d73a164ef3a7"
+          ]
+        },
+        {
+          "rarity": "SR",
+          "name": "Irys 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b01c97b6d73a164ef6ba"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "holoForce 502",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b01c97b6d73a164ef613"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Force 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b01c97b6d73a164ef52c"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "FANTASY 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b01b97b6d73a164ef4e5"
+          ]
+        },
+        {
+          "rarity": "P",
+          "name": "Azki 004",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b1e197b6d73a16502c05"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "holoforce 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b01c97b6d73a164ef611"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "Area 15 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b01b97b6d73a164ef319"
+          ]
+        },
+        {
+          "rarity": "SR",
+          "name": "ROBOCO 002",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b01c97b6d73a164efcc0"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Bakatare Circus 001",
+          "entries": 1,
+          "totalCount": 6,
+          "subIds": [
+            "69e6b01b97b6d73a164ef3af"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Force 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b01c97b6d73a164ef52a"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Gen2 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b01c97b6d73a164ef5b7"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Dorobo Contsruction 501",
+          "entries": 1,
+          "totalCount": 61,
+          "subIds": [
+            "69e6b01b97b6d73a164ef4cb"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "holoforce 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b01c97b6d73a164ef60c"
+          ]
+        },
+        {
+          "rarity": "SP",
+          "name": "FUWAMOCO 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b01c97b6d73a164ef58c"
+          ]
+        },
+        {
+          "rarity": "RR",
+          "name": "Ayama 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b01b97b6d73a164ef322"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Force 002",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b01c97b6d73a164ef52b"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Gen0 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b01c97b6d73a164ef5b6"
+          ]
+        },
+        {
+          "rarity": "SR",
+          "name": "ROBOCO 003",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b01c97b6d73a164efcc5"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "Bakatare Circus 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b01b97b6d73a164ef3ae"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "Okakoro 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b01c97b6d73a164efaeb"
+          ]
+        }
+      ]
+    },
+    {
+      "userId": "399012422805094410",
+      "removedCards": [
+        {
+          "rarity": "U",
+          "name": "Gen0 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b05597b6d73a164f0f1b"
+          ]
+        },
+        {
+          "rarity": "RR",
+          "name": "Ayama 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b05597b6d73a164f0c90"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "holoForce 502",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b05597b6d73a164f0f78"
+          ]
+        },
+        {
+          "rarity": "SP",
+          "name": "Calli 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b05597b6d73a164f0d8f"
+          ]
+        },
+        {
+          "rarity": "SR",
+          "name": "ROBOCO 002",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b05697b6d73a164f160f"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 501",
+          "entries": 1,
+          "totalCount": 9,
+          "subIds": [
+            "69e6b05597b6d73a164f0e51"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Gen2 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b05597b6d73a164f0f1c"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Force 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b05597b6d73a164f0e94"
+          ]
+        },
+        {
+          "rarity": "P",
+          "name": "IRys 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b05597b6d73a164f101e"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "Bakatare Circus 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b05597b6d73a164f0d1a"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "holoforce 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b05597b6d73a164f0f71"
+          ]
+        },
+        {
+          "rarity": "SP",
+          "name": "FUWAMOCO 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b05597b6d73a164f0ef2"
+          ]
+        },
+        {
+          "rarity": "SR",
+          "name": "Irys 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b05597b6d73a164f101d"
+          ]
+        },
+        {
+          "rarity": "P",
+          "name": "Baelz 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b05597b6d73a164f0d13"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 001",
+          "entries": 1,
+          "totalCount": 4,
+          "subIds": [
+            "69e6b05597b6d73a164f0e4e"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Dorobo Contsruction 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b05597b6d73a164f0e36"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Gen0 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b05597b6d73a164f0f1a"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Force 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b05597b6d73a164f0e96"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "Okakoro 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b05697b6d73a164f1444"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "FANTASY 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b05597b6d73a164f0e4d"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Holoro 501",
+          "entries": 1,
+          "totalCount": 6,
+          "subIds": [
+            "69e6b05597b6d73a164f0f81"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Bakatare Circus 001",
+          "entries": 1,
+          "totalCount": 8,
+          "subIds": [
+            "69e6b05597b6d73a164f0d1b"
+          ]
+        },
+        {
+          "rarity": "R",
+          "name": "hSD19 008 R",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b1e997b6d73a16504481"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 002",
+          "entries": 1,
+          "totalCount": 6,
+          "subIds": [
+            "69e6b05597b6d73a164f0e4f"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "holoforce 501",
+          "entries": 1,
+          "totalCount": 4,
+          "subIds": [
+            "69e6b05597b6d73a164f0f76"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "FANTASY 501",
+          "entries": 1,
+          "totalCount": 2,
+          "subIds": [
+            "69e6b05597b6d73a164f0e50"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Force 002",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b05597b6d73a164f0e95"
+          ]
+        },
+        {
+          "rarity": "P",
+          "name": "FANTASY 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b05597b6d73a164f0e4c"
+          ]
+        },
+        {
+          "rarity": "SR",
+          "name": "ROBOCO 003",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b05697b6d73a164f1614"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "Area 15 001",
+          "entries": 1,
+          "totalCount": 2,
+          "subIds": [
+            "69e6b05597b6d73a164f0c87"
+          ]
+        }
+      ]
+    },
+    {
+      "userId": "409728788117848074",
+      "removedCards": [
+        {
+          "rarity": "U",
+          "name": "FANTASY 002",
+          "entries": 1,
+          "totalCount": 2,
+          "subIds": [
+            "69e6b08c97b6d73a164f3e0a"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "holoforce 001",
+          "entries": 1,
+          "totalCount": 2,
+          "subIds": [
+            "69e6b08c97b6d73a164f3f2b"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Dorobo Contsruction 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b08c97b6d73a164f3df3"
+          ]
+        },
+        {
+          "rarity": "SR",
+          "name": "ROBOCO 002",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b08c97b6d73a164f45a9"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "Bakatare Circus 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b08c97b6d73a164f3cda"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Gen0 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b08c97b6d73a164f3ed5"
+          ]
+        },
+        {
+          "rarity": "P",
+          "name": "Baelz 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b08c97b6d73a164f3cd3"
+          ]
+        },
+        {
+          "rarity": "SP",
+          "name": "FUWAMOCO 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b08c97b6d73a164f3eac"
+          ]
+        },
+        {
+          "rarity": "RR",
+          "name": "Ayama 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b08c97b6d73a164f3c53"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "FANTASY 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b08c97b6d73a164f3e08"
+          ]
+        },
+        {
+          "rarity": "SR",
+          "name": "ROBOCO 003",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b1f797b6d73a16505cb3"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "FANTASY 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b08c97b6d73a164f3e0b"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "Okakoro 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b08c97b6d73a164f43e2"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 001",
+          "entries": 1,
+          "totalCount": 8,
+          "subIds": [
+            "69e6b08c97b6d73a164f3e09"
+          ]
+        },
+        {
+          "rarity": "P",
+          "name": "FANTASY 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b08c97b6d73a164f3e07"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 501",
+          "entries": 1,
+          "totalCount": 5,
+          "subIds": [
+            "69e6b08c97b6d73a164f3e0c"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Gen2 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b08c97b6d73a164f3ed6"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Gen0 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b08c97b6d73a164f3ed4"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "Area 15 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b08c97b6d73a164f3c4a"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "holoforce 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b08c97b6d73a164f3f30"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "holoForce 502",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b08c97b6d73a164f3f32"
+          ]
+        },
+        {
+          "rarity": "P",
+          "name": "IRys 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b1f797b6d73a16505c98"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Bakatare Circus 001",
+          "entries": 1,
+          "totalCount": 6,
+          "subIds": [
+            "69e6b08c97b6d73a164f3cdb"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Force 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b08c97b6d73a164f3e51"
+          ]
+        },
+        {
+          "rarity": "SP",
+          "name": "Calli 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b08c97b6d73a164f3d4e"
+          ]
+        },
+        {
+          "rarity": "SR",
+          "name": "Irys 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b08c97b6d73a164f3fd2"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Force 002",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b08c97b6d73a164f3e50"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Force 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b08c97b6d73a164f3e4f"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Holoro 501",
+          "entries": 1,
+          "totalCount": 4,
+          "subIds": [
+            "69e6b08c97b6d73a164f3f3b"
+          ]
+        }
+      ]
+    },
+    {
+      "userId": "443061305721618432",
+      "removedCards": [
+        {
+          "rarity": "P",
+          "name": "Baelz 501",
+          "entries": 1,
+          "totalCount": 3,
+          "subIds": [
+            "69b1131701e45d263a69b60d"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 002",
+          "entries": 1,
+          "totalCount": 118,
+          "subIds": [
+            "69180036002cba50f3fea1b8"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Force 501",
+          "entries": 1,
+          "totalCount": 11,
+          "subIds": [
+            "694172cfa2079d50d8258516"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Gen0 501",
+          "entries": 1,
+          "totalCount": 4,
+          "subIds": [
+            "694172a3a2079d50d8254a9f"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "holoForce 502",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69acf77bb711dd085dc62b3c"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 001",
+          "entries": 1,
+          "totalCount": 110,
+          "subIds": [
+            "691871ee77d2f2f848e4c2ff"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "Bakatare Circus 001",
+          "entries": 1,
+          "totalCount": 8,
+          "subIds": [
+            "69183b6785251ea2d9a63c0b"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Force 002",
+          "entries": 1,
+          "totalCount": 43,
+          "subIds": [
+            "691959ab02d612ae7cacbca2"
+          ]
+        },
+        {
+          "rarity": "SR",
+          "name": "ROBOCO 003",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69da57d4b8b59dbeba3f6dfb"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Force 001",
+          "entries": 1,
+          "totalCount": 40,
+          "subIds": [
+            "69197e8a439c2453d0991744"
+          ]
+        },
+        {
+          "rarity": "SR",
+          "name": "ROBOCO 002",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69da57d4b8b59dbeba3f6dfa"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Bakatare Circus 001",
+          "entries": 1,
+          "totalCount": 119,
+          "subIds": [
+            "691816fb85251ea2d9a4fc28"
+          ]
+        },
+        {
+          "rarity": "RR",
+          "name": "Ayama 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "691959b102d612ae7cacc540"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "holoforce 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69da57d4b8b59dbeba3f6dcb"
+          ]
+        },
+        {
+          "rarity": "SP",
+          "name": "Calli 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69da57d4b8b59dbeba3f6db9"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Gen2 001",
+          "entries": 1,
+          "totalCount": 46,
+          "subIds": [
+            "691881be450a3d5e70933560"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Dorobo Contsruction 501",
+          "entries": 1,
+          "totalCount": 4,
+          "subIds": [
+            "692c468d8f6358917bd9c1f5"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "FANTASY 001",
+          "entries": 1,
+          "totalCount": 7,
+          "subIds": [
+            "696572ac57ad9bd2587edb36"
+          ]
+        },
+        {
+          "rarity": "SR",
+          "name": "MiKorone 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "692d6b4c8f6358917b1503b6"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 501",
+          "entries": 1,
+          "totalCount": 88,
+          "subIds": [
+            "692b8c6b8f6358917bb4b28a"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "Area 15 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69da57d4b8b59dbeba3f6db4"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "FANTASY 501",
+          "entries": 1,
+          "totalCount": 4,
+          "subIds": [
+            "694c50e6a5fa0fdc246b1e4e"
+          ]
+        },
+        {
+          "rarity": "SR",
+          "name": "Irys 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69da57d4b8b59dbeba3f6dd1"
+          ]
+        },
+        {
+          "rarity": "SP",
+          "name": "FUWAMOCO 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69da5753b8b59dbeba3f3d3b"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "Okakoro 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69da57d4b8b59dbeba3f6dee"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Gen0 001",
+          "entries": 1,
+          "totalCount": 48,
+          "subIds": [
+            "69180028002cba50f3fe9ccf"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Holoro 501",
+          "entries": 1,
+          "totalCount": 77,
+          "subIds": [
+            "692b4cca8f6358917ba715e2"
+          ]
+        },
+        {
+          "rarity": "P",
+          "name": "FANTASY 001",
+          "entries": 1,
+          "totalCount": 3,
+          "subIds": [
+            "69c8a2282c6f0ad334540a3a"
+          ]
+        }
+      ]
+    },
+    {
+      "userId": "272129129841688577",
+      "removedCards": [
+        {
+          "rarity": "U",
+          "name": "Holoro 501",
+          "entries": 1,
+          "totalCount": 13,
+          "subIds": [
+            "69e6b0f497b6d73a164f70fc"
+          ]
+        },
+        {
+          "rarity": "SR",
+          "name": "ROBOCO 002",
+          "entries": 1,
+          "totalCount": 2,
+          "subIds": [
+            "69e6b20797b6d73a16508bb8"
+          ]
+        },
+        {
+          "rarity": "SP",
+          "name": "Calli 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b0f397b6d73a164f6f22"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "FANTASY 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b0f397b6d73a164f6fd8"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Force 002",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b0f397b6d73a164f701d"
+          ]
+        },
+        {
+          "rarity": "P",
+          "name": "Baelz 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b0f397b6d73a164f6ead"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "holoforce 501",
+          "entries": 1,
+          "totalCount": 2,
+          "subIds": [
+            "69e6b0f497b6d73a164f70f1"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Gen2 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b20797b6d73a16508b94"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Gen0 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b20797b6d73a16508b93"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "Okakoro 001",
+          "entries": 1,
+          "totalCount": 2,
+          "subIds": [
+            "69e6b0f497b6d73a164f7579"
+          ]
+        },
+        {
+          "rarity": "SR",
+          "name": "Irys 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b0f497b6d73a164f718f"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "FANTASY 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b0f397b6d73a164f6fdb"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "holoForce 502",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b0f497b6d73a164f70f3"
+          ]
+        },
+        {
+          "rarity": "RR",
+          "name": "Ayama 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b20797b6d73a16508b85"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 001",
+          "entries": 1,
+          "totalCount": 9,
+          "subIds": [
+            "69e6b0f397b6d73a164f6fd9"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Dorobo Contsruction 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b0f397b6d73a164f6fc3"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "Area 15 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b0f397b6d73a164f6e2a"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Force 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b0f397b6d73a164f701c"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 501",
+          "entries": 1,
+          "totalCount": 10,
+          "subIds": [
+            "69e6b0f397b6d73a164f6fdc"
+          ]
+        },
+        {
+          "rarity": "SP",
+          "name": "FUWAMOCO 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b0f497b6d73a164f7075"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Bakatare Circus 001",
+          "entries": 1,
+          "totalCount": 8,
+          "subIds": [
+            "69e6b0f397b6d73a164f6eb5"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 002",
+          "entries": 1,
+          "totalCount": 10,
+          "subIds": [
+            "69e6b0f397b6d73a164f6fda"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "holoforce 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b0f497b6d73a164f70ec"
+          ]
+        },
+        {
+          "rarity": "P",
+          "name": "FANTASY 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b0f397b6d73a164f6fd7"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Gen0 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b20797b6d73a16508b92"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "Bakatare Circus 001",
+          "entries": 1,
+          "totalCount": 2,
+          "subIds": [
+            "69e6b0f397b6d73a164f6eb4"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Force 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b0f397b6d73a164f701e"
+          ]
+        }
+      ]
+    },
+    {
+      "userId": "581483331548348416",
+      "removedCards": [
+        {
+          "rarity": "U",
+          "name": "Force 002",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b0c297b6d73a164f5752"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Force 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b0c297b6d73a164f5753"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "holoForce 502",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b0c297b6d73a164f5830"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "Bakatare Circus 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b0c297b6d73a164f55e2"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Holoro 501",
+          "entries": 1,
+          "totalCount": 9,
+          "subIds": [
+            "69e6b0c297b6d73a164f5839"
+          ]
+        },
+        {
+          "rarity": "SR",
+          "name": "ROBOCO 002",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b0c297b6d73a164f5e8f"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "Area 15 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b0c297b6d73a164f5555"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Gen2 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b0c297b6d73a164f57d7"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "holoforce 001",
+          "entries": 1,
+          "totalCount": 2,
+          "subIds": [
+            "69e6b0c297b6d73a164f5829"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 501",
+          "entries": 1,
+          "totalCount": 8,
+          "subIds": [
+            "69e6b0c297b6d73a164f570e"
+          ]
+        },
+        {
+          "rarity": "RR",
+          "name": "Ayama 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b0c297b6d73a164f555e"
+          ]
+        },
+        {
+          "rarity": "P",
+          "name": "FANTASY 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b0c297b6d73a164f5709"
+          ]
+        },
+        {
+          "rarity": "P",
+          "name": "Baelz 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b0c297b6d73a164f55db"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Gen0 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b0c297b6d73a164f57d5"
+          ]
+        },
+        {
+          "rarity": "SR",
+          "name": "Irys 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b0c297b6d73a164f58cd"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "holoforce 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b0c297b6d73a164f582e"
+          ]
+        },
+        {
+          "rarity": "SP",
+          "name": "Calli 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b0c297b6d73a164f5653"
+          ]
+        },
+        {
+          "rarity": "SP",
+          "name": "FUWAMOCO 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b0c297b6d73a164f57ad"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Dorobo Contsruction 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b0c297b6d73a164f56f5"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "FANTASY 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b0c297b6d73a164f570a"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "FANTASY 501",
+          "entries": 1,
+          "totalCount": 2,
+          "subIds": [
+            "69e6b0c297b6d73a164f570d"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Gen0 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b0c297b6d73a164f57d6"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 002",
+          "entries": 1,
+          "totalCount": 13,
+          "subIds": [
+            "69e6b0c297b6d73a164f570c"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Bakatare Circus 001",
+          "entries": 1,
+          "totalCount": 7,
+          "subIds": [
+            "69e6b0c297b6d73a164f55e3"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "Okakoro 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b0c297b6d73a164f5ccb"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Force 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6b0c297b6d73a164f5751"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 001",
+          "entries": 1,
+          "totalCount": 14,
+          "subIds": [
+            "69e6b0c297b6d73a164f570b"
+          ]
+        }
+      ]
+    },
+    {
+      "userId": "615094014575902720",
+      "removedCards": [
+        {
+          "rarity": "U",
+          "name": "Bakatare Circus 001",
+          "entries": 1,
+          "totalCount": 58,
+          "subIds": [
+            "691812619bbf4a5d00001280"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 501",
+          "entries": 1,
+          "totalCount": 40,
+          "subIds": [
+            "692d072e8f6358917b047071"
+          ]
+        },
+        {
+          "rarity": "SP",
+          "name": "Calli 501",
+          "entries": 1,
+          "totalCount": 4,
+          "subIds": [
+            "6942c0e0d5f565b62ad0a96c"
+          ]
+        },
+        {
+          "rarity": "SP",
+          "name": "FUWAMOCO 501",
+          "entries": 1,
+          "totalCount": 3,
+          "subIds": [
+            "69bbdd513ce32d9951aff5d9"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "holoforce 001",
+          "entries": 1,
+          "totalCount": 2,
+          "subIds": [
+            "692977d1c871042fed3fe596"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "Area 15 001",
+          "entries": 1,
+          "totalCount": 2,
+          "subIds": [
+            "6939c48451e59f17d0245061"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Holoro 501",
+          "entries": 1,
+          "totalCount": 15,
+          "subIds": [
+            "692b21de8f6358917b9e8714"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Force 002",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "6919f6ef32ded643cb9437e8"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Gen2 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "6918a173ea2196702572ce82"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Gen0 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "691812619bbf4a5d000012f8"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "holoForce 502",
+          "entries": 1,
+          "totalCount": 3,
+          "subIds": [
+            "69a1e5d4f41972ceea07d6ca"
+          ]
+        },
+        {
+          "rarity": "P",
+          "name": "FANTASY 001",
+          "entries": 1,
+          "totalCount": 3,
+          "subIds": [
+            "697e3b6a71f22e5cb5f867b5"
+          ]
+        },
+        {
+          "rarity": "R",
+          "name": "hSD19 008 R",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e6872d97b6d73a1649e252"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Gen0 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "694595b85c37e9db0cac19b5"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 001",
+          "entries": 1,
+          "totalCount": 57,
+          "subIds": [
+            "691877fc450a3d5e70926477"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Force 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "694049658717c32b78ed1965"
+          ]
+        },
+        {
+          "rarity": "P",
+          "name": "Baelz 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "6951fb6a14efc9faaf0631f6"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 002",
+          "entries": 1,
+          "totalCount": 66,
+          "subIds": [
+            "691812619bbf4a5d00001240"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Dorobo Contsruction 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "692c58598f6358917be9dc43"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Force 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "691812619bbf4a5d00001249"
+          ]
+        },
+        {
+          "rarity": "P",
+          "name": "Regloss 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "6921dc56ef31102ae33d47c3"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "Bakatare Circus 001",
+          "entries": 1,
+          "totalCount": 4,
+          "subIds": [
+            "6927b907271ffb0608c369b8"
+          ]
+        },
+        {
+          "rarity": "P",
+          "name": "holoforce 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69549e3d93596e54c3d80ca6"
+          ]
+        },
+        {
+          "rarity": "RR",
+          "name": "Ayama 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "6918ad50e9585241ed7895ff"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "holoforce 501",
+          "entries": 1,
+          "totalCount": 3,
+          "subIds": [
+            "69416444a2079d50d8205cc0"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "FANTASY 501",
+          "entries": 1,
+          "totalCount": 3,
+          "subIds": [
+            "693576ab7ed21e63eb31fdb4"
+          ]
+        }
+      ]
+    },
+    {
+      "userId": "1171127294413246567",
+      "removedCards": [
+        {
+          "rarity": "U",
+          "name": "Force 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "6918093e54dc4b35d7aeacf1"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Force 002",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "6918093e54dc4b35d7aeac80"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "Okakoro 001",
+          "entries": 1,
+          "totalCount": 2,
+          "subIds": [
+            "691eb7bdce62b4e042483ee3"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Holoro 501",
+          "entries": 1,
+          "totalCount": 7,
+          "subIds": [
+            "692b7b338f6358917bb36ec3"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Gen2 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "6918093e54dc4b35d7aeac86"
+          ]
+        },
+        {
+          "rarity": "SP",
+          "name": "Calli 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "6953bbda93596e54c3d1198b"
+          ]
+        },
+        {
+          "rarity": "C",
+          "name": "desktop",
+          "entries": 1,
+          "totalCount": 2,
+          "subIds": [
+            "6991f30cfac38e805597870b"
+          ]
+        },
+        {
+          "rarity": "SP",
+          "name": "FUWAMOCO 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69a081e58ec30e1ef580c4b8"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 001",
+          "entries": 1,
+          "totalCount": 7,
+          "subIds": [
+            "691adf1932ded643cba46bb2"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Dorobo Contsruction 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "692b52018f6358917ba82391"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Bakatare Circus 001",
+          "entries": 1,
+          "totalCount": 12,
+          "subIds": [
+            "6918093e54dc4b35d7aeac0c"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Force 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "6940f7f58717c32b78136aae"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Gen0 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "6919ae32439c2453d09c655d"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 002",
+          "entries": 1,
+          "totalCount": 9,
+          "subIds": [
+            "691893faea219670257169ee"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 501",
+          "entries": 1,
+          "totalCount": 8,
+          "subIds": [
+            "692b08b28f6358917b9a4867"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "Bakatare Circus 001",
+          "entries": 1,
+          "totalCount": 2,
+          "subIds": [
+            "69496607dd7a8f2ce4299f35"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "FANTASY 501",
+          "entries": 1,
+          "totalCount": 2,
+          "subIds": [
+            "697d39ede4de0e6ec1743312"
+          ]
+        },
+        {
+          "rarity": "P",
+          "name": "FANTASY 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69c8240bbbb4398a85f9bb91"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "holoforce 501",
+          "entries": 1,
+          "totalCount": 3,
+          "subIds": [
+            "6947bfa0238e8b87476943f9"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "holoForce 502",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69c8e18e2c6f0ad3345a8258"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "Area 15 001",
+          "entries": 1,
+          "totalCount": 2,
+          "subIds": [
+            "692306f47cfd6e66e90533be"
+          ]
+        },
+        {
+          "rarity": "RR",
+          "name": "Ayama 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "6918d769369de6b8269ed493"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Gen0 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "693f5f60288460b2741ac585"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "holoforce 001",
+          "entries": 1,
+          "totalCount": 2,
+          "subIds": [
+            "6937af47eb544b7007875527"
+          ]
+        },
+        {
+          "rarity": "P",
+          "name": "holoforce 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69307ec85ddd3084a0d0a90f"
+          ]
+        },
+        {
+          "rarity": "P",
+          "name": "Baelz 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "6946d76b941266b230dc8dd0"
+          ]
+        }
+      ]
+    },
+    {
+      "userId": "91098889796481024",
+      "removedCards": [
+        {
+          "rarity": "S",
+          "name": "FANTASY 501",
+          "entries": 1,
+          "totalCount": 4,
+          "subIds": [
+            "696a798f3e11d3384625fdcb"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "Okakoro 001",
+          "entries": 1,
+          "totalCount": 2,
+          "subIds": [
+            "691c6617c815ec933c1efad4"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Bakatare Circus 001",
+          "entries": 1,
+          "totalCount": 7,
+          "subIds": [
+            "6918f9451ba99d801d94188c"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Gen2 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "691ac33432ded643cba36999"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 001",
+          "entries": 1,
+          "totalCount": 7,
+          "subIds": [
+            "6917fe4d002cba50f3fe42b3"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Gen0 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "6917fe4d002cba50f3fe431f"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Force 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "6940a7488717c32b78008f8d"
+          ]
+        },
+        {
+          "rarity": "P",
+          "name": "Baelz 501",
+          "entries": 1,
+          "totalCount": 4,
+          "subIds": [
+            "69b7ae202c2f75ddef114c9a"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Dorobo Contsruction 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "692de733bd37deba3507dd5a"
+          ]
+        },
+        {
+          "rarity": "RR",
+          "name": "Ayama 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "692074f8cd5a9a5b849adb1a"
+          ]
+        },
+        {
+          "rarity": "SR",
+          "name": "MiKorone 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "6923b5121dd5e7ba260b8e17"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "holoForce 502",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e073829c3d193dedecb7ac"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Gen0 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "6942066a1ff3833bf1ebb20c"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "Bakatare Circus 001",
+          "entries": 1,
+          "totalCount": 4,
+          "subIds": [
+            "691eba82ce62b4e042489b14"
+          ]
+        },
+        {
+          "rarity": "SP",
+          "name": "Calli 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69704a3768bf6d7266de8fb4"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Force 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "6917fe4d002cba50f3fe4307"
+          ]
+        },
+        {
+          "rarity": "SEC",
+          "name": "MiKorone 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "6951843c4b8eb1472d5f59b5"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Holoro 501",
+          "entries": 1,
+          "totalCount": 7,
+          "subIds": [
+            "692c909a8f6358917bf11db3"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "Area 15 001",
+          "entries": 1,
+          "totalCount": 2,
+          "subIds": [
+            "69268431d39e61e064fabc47"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "holoforce 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "695056eb0830d8614692ca3a"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 501",
+          "entries": 1,
+          "totalCount": 7,
+          "subIds": [
+            "692c1df48f6358917bd381af"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Force 002",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "691913921ba99d801d947418"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "holoforce 001",
+          "entries": 1,
+          "totalCount": 3,
+          "subIds": [
+            "6929ed6e511a34d576fd67fb"
+          ]
+        },
+        {
+          "rarity": "P",
+          "name": "Regloss 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "691a8aa632ded643cb9e126c"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 002",
+          "entries": 1,
+          "totalCount": 7,
+          "subIds": [
+            "6917fe4d002cba50f3fe4260"
+          ]
+        }
+      ]
+    },
+    {
+      "userId": "284655499415126016",
+      "removedCards": [
+        {
+          "rarity": "RR",
+          "name": "Ayama 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "6919916d439c2453d09a550f"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Force 002",
+          "entries": 1,
+          "totalCount": 2,
+          "subIds": [
+            "6918c13a0fa745c784a5e80d"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 002",
+          "entries": 1,
+          "totalCount": 3,
+          "subIds": [
+            "69189971ea2196702571b4c2"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "Area 15 001",
+          "entries": 1,
+          "totalCount": 3,
+          "subIds": [
+            "6948cf57dd7a8f2ce4018a03"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "Sora & Iofi 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "692d20148f6358917b092039"
+          ]
+        },
+        {
+          "rarity": "P",
+          "name": "FANTASY 001",
+          "entries": 1,
+          "totalCount": 2,
+          "subIds": [
+            "69a867df06fef0be64146d02"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Bakatare Circus 001",
+          "entries": 1,
+          "totalCount": 2,
+          "subIds": [
+            "691a7e7e32ded643cb9dad6e"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 001",
+          "entries": 1,
+          "totalCount": 2,
+          "subIds": [
+            "6918ba12ad84e89e8e2ffd6c"
+          ]
+        },
+        {
+          "rarity": "R",
+          "name": "desktop",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69922cecfac38e80559b9a23"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "holoforce 001",
+          "entries": 1,
+          "totalCount": 3,
+          "subIds": [
+            "692634fdd39e61e064f36f00"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "Okakoro 001",
+          "entries": 1,
+          "totalCount": 4,
+          "subIds": [
+            "6945747a40afcfbadc2fcf1a"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Holoro 501",
+          "entries": 1,
+          "totalCount": 2,
+          "subIds": [
+            "692b80318f6358917bb3d3fc"
+          ]
+        },
+        {
+          "rarity": "SR",
+          "name": "MiKorone 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69243e401dd5e7ba2619d88d"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Force 001",
+          "entries": 1,
+          "totalCount": 2,
+          "subIds": [
+            "691b3cdeea36c8e5662fe16d"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Gen0 001",
+          "entries": 1,
+          "totalCount": 2,
+          "subIds": [
+            "69198aa6439c2453d09a2514"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "holoforce 501",
+          "entries": 1,
+          "totalCount": 5,
+          "subIds": [
+            "69417f9d916ee5a9cbd7fecf"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Gen0 501",
+          "entries": 1,
+          "totalCount": 2,
+          "subIds": [
+            "69417fac916ee5a9cbd81c63"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 501",
+          "entries": 1,
+          "totalCount": 2,
+          "subIds": [
+            "692b5ea38f6358917ba94b81"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Force 501",
+          "entries": 1,
+          "totalCount": 2,
+          "subIds": [
+            "693f9b5d795b69383b38f8ec"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Gen2 001",
+          "entries": 1,
+          "totalCount": 2,
+          "subIds": [
+            "691a01a432ded643cb949f23"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "Bakatare Circus 001",
+          "entries": 1,
+          "totalCount": 5,
+          "subIds": [
+            "692a11d5511a34d57605734f"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Dorobo Contsruction 501",
+          "entries": 1,
+          "totalCount": 2,
+          "subIds": [
+            "692b43008f6358917ba4ecb2"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "holoForce 502",
+          "entries": 1,
+          "totalCount": 3,
+          "subIds": [
+            "69a3445af41972ceea66e127"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "FANTASY 501",
+          "entries": 1,
+          "totalCount": 2,
+          "subIds": [
+            "69651a7357ad9bd2587b7c1c"
+          ]
+        }
+      ]
+    },
+    {
+      "userId": "875080998314975374",
+      "removedCards": [
+        {
+          "rarity": "U",
+          "name": "FANTASY 001",
+          "entries": 1,
+          "totalCount": 4,
+          "subIds": [
+            "69806755418cf0a23ce9931c"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 002",
+          "entries": 1,
+          "totalCount": 2,
+          "subIds": [
+            "6980acf7418cf0a23cec3b23"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "holoforce 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "694596b06ef8e07cca971d6b"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Bakatare Circus 001",
+          "entries": 1,
+          "totalCount": 7,
+          "subIds": [
+            "6981dea1418cf0a23c055d9c"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "holoForce 502",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69ac91fcb711dd085dbd03a0"
+          ]
+        },
+        {
+          "rarity": "P",
+          "name": "holoforce 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "6941474afd0924278b346db0"
+          ]
+        },
+        {
+          "rarity": "P",
+          "name": "Baelz 501",
+          "entries": 1,
+          "totalCount": 2,
+          "subIds": [
+            "693ddce5fb30772048b977ff"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "Sora & Iofi 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "692fdfea5ddd3084a0ad971b"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "Area 15 001",
+          "entries": 1,
+          "totalCount": 13,
+          "subIds": [
+            "694596b06ef8e07cca971d3a"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Holoro 501",
+          "entries": 1,
+          "totalCount": 3,
+          "subIds": [
+            "6980f449418cf0a23cf42df4"
+          ]
+        },
+        {
+          "rarity": "P",
+          "name": "Azki 004",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "694720b1941266b230f29c0e"
+          ]
+        },
+        {
+          "rarity": "C",
+          "name": "desktop",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69921267fac38e80559aaab8"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "Bakatare Circus 001",
+          "entries": 1,
+          "totalCount": 4,
+          "subIds": [
+            "694596b06ef8e07cca971d5a"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "desktop",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69921267fac38e80559aaaca"
+          ]
+        },
+        {
+          "rarity": "RR",
+          "name": "Ayama 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69226bffdf62a832a72e7ffd"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "FANTASY 501",
+          "entries": 1,
+          "totalCount": 2,
+          "subIds": [
+            "696030de62b4a8bfb36c2888"
+          ]
+        },
+        {
+          "rarity": "R",
+          "name": "desktop",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69931fb333f2ab7cbbc5f131"
+          ]
+        },
+        {
+          "rarity": "P",
+          "name": "Regloss 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "692456361dd5e7ba261a5073"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "FANTASY 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "697a029876a218bc3fcb2a73"
+          ]
+        },
+        {
+          "rarity": "SP",
+          "name": "FUWAMOCO 501",
+          "entries": 1,
+          "totalCount": 3,
+          "subIds": [
+            "69a75aa96c27ef1d2efcc163"
+          ]
+        },
+        {
+          "rarity": "P",
+          "name": "FANTASY 001",
+          "entries": 1,
+          "totalCount": 2,
+          "subIds": [
+            "6966b12b57ad9bd25886e9f7"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 501",
+          "entries": 1,
+          "totalCount": 3,
+          "subIds": [
+            "6981fdb0418cf0a23c06218d"
+          ]
+        }
+      ]
+    },
+    {
+      "userId": "1312674257104539761",
+      "removedCards": [
+        {
+          "rarity": "SP",
+          "name": "FUWAMOCO 501",
+          "entries": 1,
+          "totalCount": 2,
+          "subIds": [
+            "69c9a2302c6f0ad3347cad18"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Bakatare Circus 001",
+          "entries": 1,
+          "totalCount": 40,
+          "subIds": [
+            "6918b460ad84e89e8e2fd861"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "holoforce 501",
+          "entries": 1,
+          "totalCount": 2,
+          "subIds": [
+            "69e69dc097b6d73a164c4785"
+          ]
+        },
+        {
+          "rarity": "P",
+          "name": "Baelz 501",
+          "entries": 1,
+          "totalCount": 12,
+          "subIds": [
+            "69a9776fb65c70261dd39f08"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "holoforce 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e69dc097b6d73a164c4784"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 501",
+          "entries": 1,
+          "totalCount": 49,
+          "subIds": [
+            "692b8c9f8f6358917bb53683"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "Bakatare Circus 001",
+          "entries": 1,
+          "totalCount": 68,
+          "subIds": [
+            "69765e539bb8351b35153c20"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "FANTASY 001",
+          "entries": 1,
+          "totalCount": 16,
+          "subIds": [
+            "69765e539bb8351b35153c49"
+          ]
+        },
+        {
+          "rarity": "SR",
+          "name": "Irys 501",
+          "entries": 1,
+          "totalCount": 3,
+          "subIds": [
+            "69a9776fb65c70261dd39f22"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Dorobo Contsruction 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "692b4ca58f6358917ba660dd"
+          ]
+        },
+        {
+          "rarity": "P",
+          "name": "FANTASY 001",
+          "entries": 1,
+          "totalCount": 13,
+          "subIds": [
+            "69788b2e9bb8351b3542f47f"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 002",
+          "entries": 1,
+          "totalCount": 36,
+          "subIds": [
+            "691800da002cba50f3fec71f"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "Area 15 001",
+          "entries": 1,
+          "totalCount": 54,
+          "subIds": [
+            "69765e539bb8351b35153c11"
+          ]
+        },
+        {
+          "rarity": "SP",
+          "name": "Calli 501",
+          "entries": 1,
+          "totalCount": 13,
+          "subIds": [
+            "699ac3790c02b57cafafdb20"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "Okakoro 001",
+          "entries": 1,
+          "totalCount": 58,
+          "subIds": [
+            "69765e549bb8351b35153d20"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 001",
+          "entries": 1,
+          "totalCount": 37,
+          "subIds": [
+            "691800b7002cba50f3feb999"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "holoForce 502",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "699cf2ef497cbe8ba4433fb8"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Force 001",
+          "entries": 1,
+          "totalCount": 173,
+          "subIds": [
+            "6918b452ad84e89e8e2fd28e"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Force 501",
+          "entries": 1,
+          "totalCount": 99,
+          "subIds": [
+            "694044538717c32b78e9758f"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Holoro 501",
+          "entries": 1,
+          "totalCount": 43,
+          "subIds": [
+            "692c46b48f6358917bda5a97"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Force 002",
+          "entries": 1,
+          "totalCount": 168,
+          "subIds": [
+            "691800b7002cba50f3feb975"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "FANTASY 501",
+          "entries": 1,
+          "totalCount": 56,
+          "subIds": [
+            "69765e539bb8351b35153c4a"
+          ]
+        }
+      ]
+    },
+    {
+      "userId": "944335506165104640",
+      "removedCards": [
+        {
+          "rarity": "U",
+          "name": "Gen2 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "6939b0b151e59f17d01e425a"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "Area 15 001",
+          "entries": 1,
+          "totalCount": 2,
+          "subIds": [
+            "6954059893596e54c3d43df4"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Force 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69409b6a8717c32b78fc8959"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 001",
+          "entries": 1,
+          "totalCount": 3,
+          "subIds": [
+            "693a32b451e59f17d03a2861"
+          ]
+        },
+        {
+          "rarity": "P",
+          "name": "Baelz 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "6964af96eab4488d3f570f3f"
+          ]
+        },
+        {
+          "rarity": "C",
+          "name": "desktop",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69921ec5fac38e80559b0eda"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 002",
+          "entries": 1,
+          "totalCount": 5,
+          "subIds": [
+            "6939a91a51e59f17d01d57d9"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "FANTASY 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "695afed891c69c33addc7944"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Holoro 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "693a32b451e59f17d03a2862"
+          ]
+        },
+        {
+          "rarity": "SP",
+          "name": "Calli 501",
+          "entries": 1,
+          "totalCount": 2,
+          "subIds": [
+            "697047f368bf6d7266de5eb5"
+          ]
+        },
+        {
+          "rarity": "P",
+          "name": "FANTASY 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "699ce3a6497cbe8ba43dd40a"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Gen0 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "693a749451e59f17d04439d4"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "693bb97485c329b88aac5aa4"
+          ]
+        },
+        {
+          "rarity": "R",
+          "name": "desktop",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69933a8b33f2ab7cbbc7a48d"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "FANTASY 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "693b2028d69637cd52416b4e"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "Bakatare Circus 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "699a07630c02b57caf8f5eb0"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Force 002",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "693cfd99fb307720487d9c5a"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Gen0 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69414e0dfd0924278b39451c"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Force 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "693aee32d69637cd5231aafc"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "holoForce 502",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "699ded0e497cbe8ba46f8484"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Bakatare Circus 001",
+          "entries": 1,
+          "totalCount": 2,
+          "subIds": [
+            "6939f91151e59f17d02e2c93"
+          ]
+        }
+      ]
+    },
+    {
+      "userId": "113125715771232256",
+      "removedCards": [
+        {
+          "rarity": "U",
+          "name": "Gen0 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "6940482c8717c32b78ec6eff"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "holoforce 501",
+          "entries": 1,
+          "totalCount": 2,
+          "subIds": [
+            "694db22835e94e9bc673f8d9"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Bakatare Circus 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "693a146951e59f17d033b15e"
+          ]
+        },
+        {
+          "rarity": "SP",
+          "name": "FUWAMOCO 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69c2b98cdfdeb3d59afe6998"
+          ]
+        },
+        {
+          "rarity": "P",
+          "name": "FANTASY 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69d13083895357d94ba3986a"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "693b10b2d69637cd523994ee"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "Okakoro 001",
+          "entries": 1,
+          "totalCount": 2,
+          "subIds": [
+            "693cfbc7fb307720487d879b"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "Bakatare Circus 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69c69f23f63c74fc37139b7b"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "holoforce 001",
+          "entries": 1,
+          "totalCount": 2,
+          "subIds": [
+            "69447da0f5f2d438277dc898"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Force 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69423e87244a2827e4edf4f9"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Force 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "693a147551e59f17d033b239"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Gen2 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "693df3cefb30772048bce5dd"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Holoro 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "693b304ad69637cd5242b333"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "FANTASY 501",
+          "entries": 1,
+          "totalCount": 5,
+          "subIds": [
+            "69b10e7801e45d263a68d71b"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Gen0 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "693ae86cd69637cd523184a7"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 501",
+          "entries": 1,
+          "totalCount": 2,
+          "subIds": [
+            "693a80d451e59f17d0455c0e"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Force 002",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "693bc30a85c329b88aafb487"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 002",
+          "entries": 1,
+          "totalCount": 2,
+          "subIds": [
+            "693c464a39681947c99fca44"
+          ]
+        }
+      ]
+    },
+    {
+      "userId": "776481620949205042",
+      "removedCards": [
+        {
+          "rarity": "U",
+          "name": "Dorobo Contsruction 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "692f998c5ddd3084a0a48a88"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Gen0 501",
+          "entries": 1,
+          "totalCount": 5,
+          "subIds": [
+            "693f9865795b69383b387a18"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "holoforce 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69236ff21dd5e7ba26065c58"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "Bakatare Circus 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "692fd80b5ddd3084a0acab53"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "holoforce 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69532ee993596e54c3cd8dee"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Force 002",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "691ad4b732ded643cba3f55f"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Bakatare Circus 001",
+          "entries": 1,
+          "totalCount": 10,
+          "subIds": [
+            "691803a8002cba50f3ff28cc"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "Area 15 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69389db1387b819f23123d5f"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "Okakoro 001",
+          "entries": 1,
+          "totalCount": 2,
+          "subIds": [
+            "691a059632ded643cb94b5f9"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Gen2 001",
+          "entries": 1,
+          "totalCount": 128,
+          "subIds": [
+            "691803a8002cba50f3ff2815"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Force 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "693f5e52288460b2741a83cf"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 501",
+          "entries": 1,
+          "totalCount": 9,
+          "subIds": [
+            "692cd8818f6358917bfde05b"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Holoro 501",
+          "entries": 1,
+          "totalCount": 12,
+          "subIds": [
+            "692c9f168f6358917bf60ccf"
+          ]
+        },
+        {
+          "rarity": "RR",
+          "name": "Ayama 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69198f62439c2453d09a45b7"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Gen0 001",
+          "entries": 1,
+          "totalCount": 5,
+          "subIds": [
+            "691803a8002cba50f3ff28a0"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 002",
+          "entries": 1,
+          "totalCount": 9,
+          "subIds": [
+            "691803a8002cba50f3ff2919"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Force 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "691803a8002cba50f3ff285e"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 001",
+          "entries": 1,
+          "totalCount": 9,
+          "subIds": [
+            "691803b1002cba50f3ff2b9d"
+          ]
+        }
+      ]
+    },
+    {
+      "userId": "370081368274894849",
+      "removedCards": [
+        {
+          "rarity": "S",
+          "name": "holoforce 001",
+          "entries": 1,
+          "totalCount": 3,
+          "subIds": [
+            "6919465902d612ae7cab7d71"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Gen0 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "694279ee244a2827e4f9abca"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Gen0 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "6918f5cd1ba99d801d93eea7"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "Area 15 001",
+          "entries": 1,
+          "totalCount": 3,
+          "subIds": [
+            "69524f8814efc9faaf0d11c0"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "FANTASY 001",
+          "entries": 1,
+          "totalCount": 2,
+          "subIds": [
+            "69a40b372cb5985564522c4c"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Force 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69189c24ea21967025721136"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "6932dd20d6f049e5c4894524"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Bakatare Circus 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "6918f3b81ba99d801d93c1fc"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 002",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "6918f1e81ba99d801d931914"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Force 002",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "691ab53a32ded643cba0fb03"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "holoForce 502",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "699e662f497cbe8ba48a25ee"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "6918f2511ba99d801d933ebc"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Force 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69442305ae969f1f4602251b"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Holoro 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "692c03cc8f6358917bc77810"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "Bakatare Circus 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "697f284b2fd57c730f7cceb5"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Gen2 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "691ab54232ded643cba0fffa"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Dorobo Contsruction 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "692fe01d5ddd3084a0adc943"
+          ]
+        }
+      ]
+    },
+    {
+      "userId": "444185330661195786",
+      "removedCards": [
+        {
+          "rarity": "U",
+          "name": "Holoro 501",
+          "entries": 1,
+          "totalCount": 3,
+          "subIds": [
+            "692bdd908f6358917bbe55c6"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "Bakatare Circus 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69184e92acc471272e1dadbd"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Gen0 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "6917fed7002cba50f3fe4ef8"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Dorobo Contsruction 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "692bca4a8f6358917bba92de"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Gen0 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69413af1fd0924278b33a1eb"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Force 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "693fc38a6d94a7475d8047ce"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 501",
+          "entries": 1,
+          "totalCount": 6,
+          "subIds": [
+            "692bca518f6358917bba96ee"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 002",
+          "entries": 1,
+          "totalCount": 2,
+          "subIds": [
+            "6917fed7002cba50f3fe4f53"
+          ]
+        },
+        {
+          "rarity": "RR",
+          "name": "Ayama 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "691b2f34ea36c8e5662f5fb0"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Force 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "6918aafbe9585241ed786e83"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Gen2 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "6917fed7002cba50f3fe4f15"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "Okakoro 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69234da71dd5e7ba2602f1bb"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Bakatare Circus 001",
+          "entries": 1,
+          "totalCount": 8,
+          "subIds": [
+            "691a0f2032ded643cb968400"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "holoforce 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "691d3449c815ec933c31ccc2"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 001",
+          "entries": 1,
+          "totalCount": 3,
+          "subIds": [
+            "691850f121a1ec3e0dcd5171"
+          ]
+        },
+        {
+          "rarity": "SR",
+          "name": "Irys 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "692ae9af8f6358917b95631f"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Force 002",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69195a6902d612ae7cad68f1"
+          ]
+        }
+      ]
+    },
+    {
+      "userId": "495185224628699137",
+      "removedCards": [
+        {
+          "rarity": "S",
+          "name": "holoForce 502",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69ab992e380e309f8c1b646d"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "Bakatare Circus 001",
+          "entries": 1,
+          "totalCount": 2,
+          "subIds": [
+            "697c4cfce4de0e6ec1651339"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Bakatare Circus 001",
+          "entries": 1,
+          "totalCount": 4,
+          "subIds": [
+            "693a81f551e59f17d045a0e5"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Holoro 501",
+          "entries": 1,
+          "totalCount": 5,
+          "subIds": [
+            "6939b16b51e59f17d01e8a75"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Force 002",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "6931aefa61987fead1c1ba1c"
+          ]
+        },
+        {
+          "rarity": "P",
+          "name": "FANTASY 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "698782e1c436be35e3818b99"
+          ]
+        },
+        {
+          "rarity": "R",
+          "name": "hSD19 008 R",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69e622d297b6d73a16411b1b"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 002",
+          "entries": 1,
+          "totalCount": 6,
+          "subIds": [
+            "693718510768b93c227d0689"
+          ]
+        },
+        {
+          "rarity": "P",
+          "name": "holoforce 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "694ee362f1262ae88bb57520"
+          ]
+        },
+        {
+          "rarity": "P",
+          "name": "Baelz 501",
+          "entries": 1,
+          "totalCount": 2,
+          "subIds": [
+            "694d7c34a5fa0fdc24817580"
+          ]
+        },
+        {
+          "rarity": "SP",
+          "name": "Calli 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69aa91a95471406017e98e77"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "FANTASY 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69a4831415d8a8eea0c5204c"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "FANTASY 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69bc29723ce32d9951c59273"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 001",
+          "entries": 1,
+          "totalCount": 9,
+          "subIds": [
+            "693e11b6fb30772048c45aa3"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 501",
+          "entries": 1,
+          "totalCount": 7,
+          "subIds": [
+            "69398f1e51e59f17d016dfba"
+          ]
+        }
+      ]
+    },
+    {
+      "userId": "879614865956827197",
+      "removedCards": [
+        {
+          "rarity": "U",
+          "name": "Force 501",
+          "entries": 1,
+          "totalCount": 2,
+          "subIds": [
+            "6943aaa1b70e4814af755a9a"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Gen0 001",
+          "entries": 1,
+          "totalCount": 9,
+          "subIds": [
+            "692e3ad3bd37deba351c00c9"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Force 002",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69306cc05ddd3084a0cd1290"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Gen0 501",
+          "entries": 1,
+          "totalCount": 4,
+          "subIds": [
+            "6941233ed55a04b7744eafe7"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 002",
+          "entries": 1,
+          "totalCount": 7,
+          "subIds": [
+            "6931542161987fead1b0739a"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Bakatare Circus 001",
+          "entries": 1,
+          "totalCount": 7,
+          "subIds": [
+            "692fc9c05ddd3084a0ab36dd"
+          ]
+        },
+        {
+          "rarity": "RR",
+          "name": "Ayama 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "692e27bcbd37deba351b618b"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Force 001",
+          "entries": 1,
+          "totalCount": 3,
+          "subIds": [
+            "692f79edbd37deba3559f490"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Gen2 001",
+          "entries": 1,
+          "totalCount": 2,
+          "subIds": [
+            "692e0d6bbd37deba351736a6"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "Bakatare Circus 001",
+          "entries": 1,
+          "totalCount": 2,
+          "subIds": [
+            "693e6337fb30772048d2f2ba"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 001",
+          "entries": 1,
+          "totalCount": 11,
+          "subIds": [
+            "692e3ad6bd37deba351c01e1"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Holoro 501",
+          "entries": 1,
+          "totalCount": 9,
+          "subIds": [
+            "692e5586bd37deba3522af36"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 501",
+          "entries": 1,
+          "totalCount": 9,
+          "subIds": [
+            "692eaf8bbd37deba352fb452"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Dorobo Contsruction 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "692e9da5bd37deba352ae360"
+          ]
+        }
+      ]
+    },
+    {
+      "userId": "406878482107334656",
+      "removedCards": [
+        {
+          "rarity": "U",
+          "name": "Force 002",
+          "entries": 1,
+          "totalCount": 2,
+          "subIds": [
+            "6932fd2461987fead1d7e722"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 001",
+          "entries": 1,
+          "totalCount": 9,
+          "subIds": [
+            "693344f525b084330c030538"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "Sora & Iofi 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "693417e161987fead1e54d29"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Gen0 501",
+          "entries": 1,
+          "totalCount": 2,
+          "subIds": [
+            "69416c63a2079d50d824dd49"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Bakatare Circus 001",
+          "entries": 1,
+          "totalCount": 4,
+          "subIds": [
+            "693c11e385c329b88abbebc7"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Gen0 001",
+          "entries": 1,
+          "totalCount": 2,
+          "subIds": [
+            "69324753dc55e1b3462bbb85"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "FANTASY 501",
+          "entries": 1,
+          "totalCount": 2,
+          "subIds": [
+            "6935acbc4f9c844dd3243e0a"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 002",
+          "entries": 1,
+          "totalCount": 4,
+          "subIds": [
+            "6932db0cd6f049e5c485f140"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Holoro 501",
+          "entries": 1,
+          "totalCount": 10,
+          "subIds": [
+            "69348ce97ed21e63ebfe203c"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Gen2 001",
+          "entries": 1,
+          "totalCount": 2,
+          "subIds": [
+            "693468817ed21e63ebf0ebcc"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Force 501",
+          "entries": 1,
+          "totalCount": 2,
+          "subIds": [
+            "693edb0e54f0b4a2e39fc67a"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Force 001",
+          "entries": 1,
+          "totalCount": 2,
+          "subIds": [
+            "6931c5db61987fead1c87a4c"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 501",
+          "entries": 1,
+          "totalCount": 8,
+          "subIds": [
+            "693334534f5832055cee00e5"
+          ]
+        }
+      ]
+    },
+    {
+      "userId": "578146378501324812",
+      "removedCards": [
+        {
+          "rarity": "S",
+          "name": "FANTASY 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "6991d55f0552c532b7163e6c"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "Area 15 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "694587787ca58fa30fd6d482"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 002",
+          "entries": 1,
+          "totalCount": 4,
+          "subIds": [
+            "69aec0aa554200fda41edf0c"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Bakatare Circus 001",
+          "entries": 1,
+          "totalCount": 10,
+          "subIds": [
+            "69ae073b554200fda4e805c4"
+          ]
+        },
+        {
+          "rarity": "P",
+          "name": "Baelz 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69a11cd78ec30e1ef59e7e8f"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "holoforce 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "693e4309fb30772048d0ae21"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Holoro 501",
+          "entries": 1,
+          "totalCount": 4,
+          "subIds": [
+            "69ae2ecc554200fda4f7a641"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "Bakatare Circus 001",
+          "entries": 1,
+          "totalCount": 3,
+          "subIds": [
+            "69841ca7c436be35e3482fa7"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "FANTASY 501",
+          "entries": 1,
+          "totalCount": 2,
+          "subIds": [
+            "6997c29d7dd2a1d22e4eee3b"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 001",
+          "entries": 1,
+          "totalCount": 9,
+          "subIds": [
+            "69ae074d554200fda4e806cb"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 501",
+          "entries": 1,
+          "totalCount": 7,
+          "subIds": [
+            "69b0effd01e45d263a648e5a"
+          ]
+        },
+        {
+          "rarity": "P",
+          "name": "FANTASY 001",
+          "entries": 1,
+          "totalCount": 3,
+          "subIds": [
+            "6977a6ff9bb8351b353320cc"
+          ]
+        },
+        {
+          "rarity": "P",
+          "name": "Regloss 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "694f5c200830d8614671d1bd"
+          ]
+        }
+      ]
+    },
+    {
+      "userId": "986725004483903570",
+      "removedCards": [
+        {
+          "rarity": "U",
+          "name": "FANTASY 002",
+          "entries": 1,
+          "totalCount": 3,
+          "subIds": [
+            "6997dbff7dd2a1d22e5000a8"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "699892eaf1e87826e7b32063"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Holoro 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "6998edb248324fc8af2d1094"
+          ]
+        },
+        {
+          "rarity": "P",
+          "name": "FANTASY 001",
+          "entries": 1,
+          "totalCount": 3,
+          "subIds": [
+            "69d541498dbd6efb5af3528f"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 001",
+          "entries": 1,
+          "totalCount": 3,
+          "subIds": [
+            "69dec13d8408d29c9ca69542"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Bakatare Circus 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "699ff2aae6d8c76f059045da"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "holoForce 502",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69cd4fc699a10bd4fad27f5e"
+          ]
+        },
+        {
+          "rarity": "SP",
+          "name": "Calli 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69d60d1bdc02ddd8fdc5866e"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "Bakatare Circus 001",
+          "entries": 1,
+          "totalCount": 2,
+          "subIds": [
+            "69ac94d1b711dd085dbd633f"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "FANTASY 501",
+          "entries": 1,
+          "totalCount": 2,
+          "subIds": [
+            "69abbc12380e309f8c2136bd"
+          ]
+        }
+      ]
+    },
+    {
+      "userId": "768092840373911554",
+      "removedCards": [
+        {
+          "rarity": "U",
+          "name": "Gen0 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "6952718614efc9faaf0e8fdf"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 002",
+          "entries": 1,
+          "totalCount": 2,
+          "subIds": [
+            "69563bd281c47e2caac766fb"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Bakatare Circus 001",
+          "entries": 1,
+          "totalCount": 3,
+          "subIds": [
+            "695cbb783ab457547a0fd5d6"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Force 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "6950f7474b8eb1472d55847d"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Force 002",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "695129254b8eb1472d577703"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 501",
+          "entries": 1,
+          "totalCount": 2,
+          "subIds": [
+            "6952285614efc9faaf0ab7e4"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Holoro 501",
+          "entries": 1,
+          "totalCount": 2,
+          "subIds": [
+            "6950d9fd4b8eb1472d545be7"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Force 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "695427e093596e54c3d559a1"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 001",
+          "entries": 1,
+          "totalCount": 4,
+          "subIds": [
+            "6952284e14efc9faaf0ab7c3"
+          ]
+        }
+      ]
+    },
+    {
+      "userId": "624905979049279524",
+      "removedCards": [
+        {
+          "rarity": "U",
+          "name": "FANTASY 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "693ae286d69637cd522faa7b"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Gen0 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69487b01dd7a8f2ce4e6d0ba"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Gen0 001",
+          "entries": 1,
+          "totalCount": 2,
+          "subIds": [
+            "693760590768b93c228d3696"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Force 002",
+          "entries": 1,
+          "totalCount": 2,
+          "subIds": [
+            "6937314d0768b93c228553fa"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Force 001",
+          "entries": 1,
+          "totalCount": 3,
+          "subIds": [
+            "69384146387b819f23f735a2"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Bakatare Circus 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "6956df2481c47e2caacf8b65"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 002",
+          "entries": 1,
+          "totalCount": 2,
+          "subIds": [
+            "69426ec7244a2827e4f9318e"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Gen2 001",
+          "entries": 1,
+          "totalCount": 4,
+          "subIds": [
+            "6937d194eb544b70078e321b"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 501",
+          "entries": 1,
+          "totalCount": 4,
+          "subIds": [
+            "693922e60ef6ed25382f3111"
+          ]
+        }
+      ]
+    },
+    {
+      "userId": "1229807763132125188",
+      "removedCards": [
+        {
+          "rarity": "S",
+          "name": "FANTASY 001",
+          "entries": 1,
+          "totalCount": 2,
+          "subIds": [
+            "69dde2fb6d7af8a8589cd0d5"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 001",
+          "entries": 1,
+          "totalCount": 4,
+          "subIds": [
+            "69c3ffdbdfdeb3d59a51737a"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 002",
+          "entries": 1,
+          "totalCount": 2,
+          "subIds": [
+            "69bed58f97ba811bdedad30e"
+          ]
+        },
+        {
+          "rarity": "SP",
+          "name": "FUWAMOCO 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69995d403c0027dc602f396a"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Bakatare Circus 001",
+          "entries": 1,
+          "totalCount": 2,
+          "subIds": [
+            "69c219fde8eb065f855cd668"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 501",
+          "entries": 1,
+          "totalCount": 2,
+          "subIds": [
+            "69c96a4b2c6f0ad33463a1da"
+          ]
+        },
+        {
+          "rarity": "P",
+          "name": "FANTASY 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69c02777e8eb065f85dd1245"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Holoro 501",
+          "entries": 1,
+          "totalCount": 2,
+          "subIds": [
+            "69c0d1fbe8eb065f850a82ba"
+          ]
+        },
+        {
+          "rarity": "P",
+          "name": "Baelz 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69d9e9f363da91f1eb3b77b8"
+          ]
+        }
+      ]
+    },
+    {
+      "userId": "1188023588926795827",
+      "removedCards": [
+        {
+          "rarity": "U",
+          "name": "FANTASY 501",
+          "entries": 1,
+          "totalCount": 3,
+          "subIds": [
+            "6993194533f2ab7cbbc3e549"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Holoro 501",
+          "entries": 1,
+          "totalCount": 4,
+          "subIds": [
+            "699287dcfac38e8055a5127f"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 002",
+          "entries": 1,
+          "totalCount": 2,
+          "subIds": [
+            "69900dec58664d7951c4a03a"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 001",
+          "entries": 1,
+          "totalCount": 3,
+          "subIds": [
+            "699345fcb9aafafdd19cc9b2"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "Bakatare Circus 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69857c22c436be35e369c58b"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Bakatare Circus 001",
+          "entries": 1,
+          "totalCount": 2,
+          "subIds": [
+            "6994003f92e9f456a64d8362"
+          ]
+        },
+        {
+          "rarity": "C",
+          "name": "desktop",
+          "entries": 1,
+          "totalCount": 2,
+          "subIds": [
+            "699287effac38e8055a5137e"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "desktop",
+          "entries": 1,
+          "totalCount": 2,
+          "subIds": [
+            "699287e6fac38e8055a51306"
+          ]
+        }
+      ]
+    },
+    {
+      "userId": "1416081468794339479",
+      "removedCards": [
+        {
+          "rarity": "S",
+          "name": "FANTASY 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69725e93e66ffa4b2b0dfae5"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 501",
+          "entries": 1,
+          "totalCount": 4,
+          "subIds": [
+            "6991315d482bdab1782895f6"
+          ]
+        },
+        {
+          "rarity": "C",
+          "name": "desktop",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "6992874ffac38e8055a50e91"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 002",
+          "entries": 1,
+          "totalCount": 5,
+          "subIds": [
+            "6991a39b482bdab1782dde7d"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 001",
+          "entries": 1,
+          "totalCount": 6,
+          "subIds": [
+            "6996926224092b298388438b"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Holoro 501",
+          "entries": 1,
+          "totalCount": 5,
+          "subIds": [
+            "69928755fac38e8055a50ee3"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "desktop",
+          "entries": 1,
+          "totalCount": 2,
+          "subIds": [
+            "6993199333f2ab7cbbc430dc"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Bakatare Circus 001",
+          "entries": 1,
+          "totalCount": 4,
+          "subIds": [
+            "69913158482bdab1782895ae"
+          ]
+        }
+      ]
+    },
+    {
+      "userId": "413015553519648769",
+      "removedCards": [
+        {
+          "rarity": "S",
+          "name": "Bakatare Circus 001",
+          "entries": 1,
+          "totalCount": 2,
+          "subIds": [
+            "6991fb12fac38e805597f4db"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Holoro 501",
+          "entries": 1,
+          "totalCount": 15,
+          "subIds": [
+            "69810704418cf0a23cf4ca4f"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 001",
+          "entries": 1,
+          "totalCount": 16,
+          "subIds": [
+            "69826d672de84331e8c943bf"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 501",
+          "entries": 1,
+          "totalCount": 12,
+          "subIds": [
+            "698255d52de84331e8c8116b"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 002",
+          "entries": 1,
+          "totalCount": 13,
+          "subIds": [
+            "6980e8cf418cf0a23cf2b180"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "FANTASY 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "698e15ff70778f1a1dc34670"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Bakatare Circus 001",
+          "entries": 1,
+          "totalCount": 10,
+          "subIds": [
+            "698250372de84331e8c79a90"
+          ]
+        }
+      ]
+    },
+    {
+      "userId": "953552994232852490",
+      "removedCards": [
+        {
+          "rarity": "S",
+          "name": "Bakatare Circus 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "6966164957ad9bd25882a420"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "FANTASY 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "6960ce1c9f2b86924cb70106"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 501",
+          "entries": 1,
+          "totalCount": 10,
+          "subIds": [
+            "695bc7c09b333d699a80b8d3"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 001",
+          "entries": 1,
+          "totalCount": 10,
+          "subIds": [
+            "695fcf9d62b4a8bfb367f985"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Holoro 501",
+          "entries": 1,
+          "totalCount": 15,
+          "subIds": [
+            "6959744ce60e65098783e446"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 002",
+          "entries": 1,
+          "totalCount": 15,
+          "subIds": [
+            "695a507ce60e65098791be5e"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Bakatare Circus 001",
+          "entries": 1,
+          "totalCount": 16,
+          "subIds": [
+            "695e3ef0bcdec2a4102f2617"
+          ]
+        }
+      ]
+    },
+    {
+      "userId": "1290221000872562734",
+      "removedCards": [
+        {
+          "rarity": "U",
+          "name": "Bakatare Circus 001",
+          "entries": 1,
+          "totalCount": 28,
+          "subIds": [
+            "69b2f56bb87ec0c6d517f717"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "FANTASY 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69c76863f63c74fc372568ab"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 001",
+          "entries": 1,
+          "totalCount": 10,
+          "subIds": [
+            "69b3609725377a7ebc0ce81b"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "Bakatare Circus 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69cfa8dcaf4155481d205548"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 002",
+          "entries": 1,
+          "totalCount": 18,
+          "subIds": [
+            "69b3570525377a7ebc0c69e9"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 501",
+          "entries": 1,
+          "totalCount": 24,
+          "subIds": [
+            "69b2d9e3b87ec0c6d50ed9a1"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Holoro 501",
+          "entries": 1,
+          "totalCount": 18,
+          "subIds": [
+            "69b9fe60f4bbcc8b6653fa10"
+          ]
+        }
+      ]
+    },
+    {
+      "userId": "975246037914624030",
+      "removedCards": [
+        {
+          "rarity": "U",
+          "name": "FANTASY 001",
+          "entries": 1,
+          "totalCount": 4,
+          "subIds": [
+            "696491252f555861d48fea69"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Bakatare Circus 001",
+          "entries": 1,
+          "totalCount": 3,
+          "subIds": [
+            "695b9ade9b333d699a7d8c53"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "695af95a91c69c33addc1e82"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "FANTASY 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69da5c107e7a507694d9f82e"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Holoro 501",
+          "entries": 1,
+          "totalCount": 2,
+          "subIds": [
+            "695f4be062b4a8bfb35b6f3d"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 002",
+          "entries": 1,
+          "totalCount": 4,
+          "subIds": [
+            "695dc3fcbcdec2a4102033d6"
+          ]
+        }
+      ]
+    },
+    {
+      "userId": "1161868280731009125",
+      "removedCards": [
+        {
+          "rarity": "U",
+          "name": "Force 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69417b7537b7373578f99fd7"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Holoro 501",
+          "entries": 1,
+          "totalCount": 3,
+          "subIds": [
+            "69417b7237b7373578f99f15"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Gen2 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69417ccb8abff7ec85f22079"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 002",
+          "entries": 1,
+          "totalCount": 2,
+          "subIds": [
+            "69412321d55a04b7744e9d11"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Gen0 001",
+          "entries": 1,
+          "totalCount": 2,
+          "subIds": [
+            "69412321d55a04b7744e9cef"
+          ]
+        }
+      ]
+    },
+    {
+      "userId": "993482560627810385",
+      "removedCards": [
+        {
+          "rarity": "U",
+          "name": "FANTASY 501",
+          "entries": 1,
+          "totalCount": 8,
+          "subIds": [
+            "69b55ebb3ee5c20fd7f00d76"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Holoro 501",
+          "entries": 1,
+          "totalCount": 6,
+          "subIds": [
+            "69b4bd4902f3ce19a507b76e"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 001",
+          "entries": 1,
+          "totalCount": 4,
+          "subIds": [
+            "69b6ba022c2f75ddefc87cb8"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 002",
+          "entries": 1,
+          "totalCount": 9,
+          "subIds": [
+            "69b696c02c2f75ddefc28a88"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Bakatare Circus 001",
+          "entries": 1,
+          "totalCount": 12,
+          "subIds": [
+            "69b67f162c2f75ddefbba46b"
+          ]
+        }
+      ]
+    },
+    {
+      "userId": "1037144851814301776",
+      "removedCards": [
+        {
+          "rarity": "U",
+          "name": "Gen0 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "6938b363387b819f231680d7"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 501",
+          "entries": 1,
+          "totalCount": 2,
+          "subIds": [
+            "69373db30768b93c2287a820"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Gen2 001",
+          "entries": 1,
+          "totalCount": 2,
+          "subIds": [
+            "693b33d9d69637cd52431cfb"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Holoro 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "693a38f251e59f17d03a8107"
+          ]
+        }
+      ]
+    },
+    {
+      "userId": "408400038767624195",
+      "removedCards": [
+        {
+          "rarity": "P",
+          "name": "Baelz 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69eaac0ff888b60516a725c4"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "holoForce 502",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69d696ffdc02ddd8fdea7ba9"
+          ]
+        },
+        {
+          "rarity": "S",
+          "name": "Bakatare Circus 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69d5f318dc02ddd8fdc2f257"
+          ]
+        }
+      ]
+    },
+    {
+      "userId": "976054769774903346",
+      "removedCards": [
+        {
+          "rarity": "U",
+          "name": "FANTASY 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69b0cd4701e45d263a59d740"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "FANTASY 002",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69b3bb3f25377a7ebc25d202"
+          ]
+        },
+        {
+          "rarity": "U",
+          "name": "Bakatare Circus 001",
+          "entries": 1,
+          "totalCount": 2,
+          "subIds": [
+            "69a9c0e5b65c70261dde1be6"
+          ]
+        }
+      ]
+    },
+    {
+      "userId": "409717160995192832",
+      "removedCards": [
+        {
+          "rarity": "P",
+          "name": "Baelz 501",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69f59f95b4ede39a41d7fdeb"
+          ]
+        }
+      ]
+    },
+    {
+      "userId": "773996410123059202",
+      "removedCards": [
+        {
+          "rarity": "U",
+          "name": "Gen0 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "6940ce7d8717c32b7806fda4"
+          ]
+        }
+      ]
+    },
+    {
+      "userId": "1074329400692183090",
+      "removedCards": [
+        {
+          "rarity": "U",
+          "name": "FANTASY 002",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "69a5953b15d8a8eea0fab983"
+          ]
+        }
+      ]
+    },
+    {
+      "userId": "1212365367733919757",
+      "removedCards": [
+        {
+          "rarity": "U",
+          "name": "FANTASY 001",
+          "entries": 1,
+          "totalCount": 1,
+          "subIds": [
+            "6992b491fac38e8055a94a7a"
+          ]
+        }
+      ]
+    }
+  ]
+}

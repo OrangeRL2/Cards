@@ -114,6 +114,7 @@ requireOshi: true,
 
     try {
       const filterR = interaction.options.getString('rarity') || 'ALL';
+  const filterRNorm = String(filterR).trim().toUpperCase();
       const filterQ = interaction.options.getString('search')?.toLowerCase();
   const filterColor = interaction.options.getString('color');
   const sortBy = interaction.options.getString('sort') || 'rarity';
@@ -134,7 +135,7 @@ requireOshi: true,
 
       // filter and select missing: consider owned only when exact rarity matches
       let missing = universe.filter(card => {
-        if (filterR !== 'ALL' && card.rarity !== filterR) return false;
+        if (filterRNorm !== 'ALL' && String(card.rarity).trim().toUpperCase() !== filterRNorm) return false;
         if (filterQ && !card.name.toLowerCase().includes(filterQ)) return false;
     if (filterColor) {
       const wanted = String(filterColor).trim().toLowerCase();

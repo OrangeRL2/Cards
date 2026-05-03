@@ -1,108 +1,12 @@
-C
-Fuwawa 003 -> FUWAMOCO 003
-Fuwawa 503 -> FUWAMOCO 003
-Fuwawa 004 -> Fuwawa 003
-Kronii 0057 -> Kronii 007
-NePoLaBo 001 -> Lamy 004
-Lamy 004 -> Lamy 005
-Lamy 005 -> Lamy 006
-NePoLaBo 501 -> Lamy 504
-
-U
-Subaru & Watame 001 -> LambDuck 001
-
-R
-Watame & Subaru 001 -> LambDuck 001
-
-S
-Fuwawa 003 -> FUWAMOCO 003
-Fuwawa 503 -> FUWAMOCO 503
-Luna 006 -> Luna 005
-Luna 007 -> Luna 006
-NePoLaBo 002 -> Lamy 007
-NePoLaBo 502 -> Lamy 507
-Lamy 007 -> Lamy 508
-Towa 506 -> Towa 701
-
-SR
-NEW -> AZKi 004
-NEW -> Calli 006
-NEW -> Fubuki 006
-NEW -> Mio 006
-NEW -> Okayu 006
-NEW -> Sora 002
-NEW -> Suisei 004
-NEW -> Towa 004
-Watame & Subaru 001 -> LambDuck 001
-
-OSR
-A-chan 001 -> Achan 001
-Achan + Nodoka color change
-
-SEC
-NEW -> Kanata 001
-NEW -> Kanata 501
-NEW -> Mumei 001
-NEW -> Mumei 501
-NEW -> Shion 001
-NEW -> Shion 501
-
-COL
-Fantasy -> Fantasy 101
-MariFure -> MariFure 101
-Noel & Pekora -> Noel & Pekora 101
-Noel, Pekora, Marine -> Noel, Pekora, Marine 101
-PekoMari -> PekoMari 101
-Pekora, Marine, Flare -> Pekora, Marine, Flare 101
-
-ORI
-A-chan 001 -> Achan 001 
-FubuMio 001 -> FubuMio 002
-Saaba 002 -> Saba 002
-Achan + Nodoka color change
+EAS
+Green -> Green Egg
+Red -> Red Egg
+Purple -> Purple Egg
+Yellow -> Yellow Egg
+Mumei 101 -> Mumei 001
 
 BDAY
-Achan + Nodoka color change
+Lamy 501 -> Lamy 001
 
-UP
-NEW -> Ayame 002
-NEW -> Roboco 001
-NEW -> Suisei 006
-NEW -> Watame 001
-Sora 501 -> Sora 701
-Holowitches 001 -> holoWitches 001
-Calli, IRyS, Nerissa , Ollie, Nene 501 -> Calli, IRyS, Nerissa, Ollie, Nene 701
-Reine 501 -> Reine 701
-
-SP
-NEW -> Bijou 001
-NEW -> Chihaya 001
-NEW -> Elizabeth 001
-NEW -> Gigi 001
-NEW -> Mio 001
-NEW -> Niko 001
-NEW -> Riona 001
-NEW -> Shiori 001
-NEW -> Su 001
-NEW -> Vivi 001
-
-P
-Baelze 501 -> Baelz 501
-Polka 005 = Polka 002 same image/card
-Subaru & Watame 001 -> LambDuck 001
-NEW -> Choco 501
-NEW -> Flare 501
-NEW -> Fuwawa 501
-NEW -> Iofi 501
-NEW -> Kobo 501
-NEW -> Miko 504
-NEW -> Miko 505
-NEW -> Mococo 501
-NEW -> Nerissa 501
-NEW -> Noel 501
-NEW -> Okayu 501
-NEW -> Okayu 503
-NEW -> Pekora 501
-NEW -> Polka 503
-NEW -> Miko 011
-NEW -> Miko 012
+OSR
+Fuwawa 001 -> FUWAMOCO 001

@@ -83,10 +83,12 @@ module.exports = {
 
     // Update lock status for all matching cards
     let updatedCount = 0;
+    const changedCards = [];
     for (const card of matchingCards) {
       if (card.locked !== newLockState) {
         card.locked = newLockState;
         updatedCount++;
+        changedCards.push(card);
       }
     }
 
@@ -97,11 +99,11 @@ module.exports = {
       });
     }
 
-    userDoc.markModified('cards');
+userDoc.markModified('cards');
     await userDoc.save();
 
     // Build lines for affected cards
-    const cardLines = matchingCards.map(c => `• **[${c.rarity}]** ${c.name}${attrEmoji(c.name, c.rarity)} - ${c.locked ? '🔒' : '🔓'}`);
+    const cardLines = changedCards.map(c => `• **[${c.rarity}]** ${c.name}${attrEmoji(c.name, c.rarity)} - ${c.locked ? '🔒' : '🔓'}`);
 
     // Split into chunks where each chunk's joined string <= 1024 chars
     const MAX_FIELD_LEN = 1024;

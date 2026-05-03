@@ -109,12 +109,13 @@ module.exports = {
       )
       .setRequired(false)
     )
-    .addBooleanOption(opt =>
-      opt.setName('multi')
-        .setDescription('Only show cards where the source user has more than 1 copy')
-        .setRequired(false)
-    ),
-  requireOshi: true,
+ .addBooleanOption(opt =>
+ opt.setName('allowlocked')
+ .setDescription('Include locked cards in diff results')
+ .setRequired(false)
+ )
+,
+ requireOshi: true,
 
   async execute(interaction) {
     const { any, rarity } = parseRarityFilter(interaction.options.getString('rarity'));
@@ -125,10 +126,15 @@ module.exports = {
     }
     const mode = interaction.options.getString('mode');
     const filterR = interaction.options.getString('rarity');
+  const filterRNorm = filterR ? String(filterR).trim().toUpperCase() : null;
+  const targetAllRarities = !filterRNorm || filterRNorm === 'ALL' || filterRNorm === 'ANY' || filterRNorm === '*';
     const filterQ = interaction.options.getString('search')?.toLowerCase();
   const filterColor = interaction.options.getString('color');
     const sortBy = interaction.options.getString('sort') || 'rarity';
-    const multiOnly = Boolean(interaction.options.getBoolean('multi'));
+    const multiFilter = interaction.options.getBoolean('multi'); // true, false, or null
+  const multiOnly = multiFilter === true;
+  const singleOnly = multiFilter === false;
+  const allowLocked = Boolean(interaction.options.getBoolean('allowlocked'));
 
     await interaction.deferReply({ ephemeral: false });
 
@@ -143,6 +149,10 @@ module.exports = {
 
       // Build maps keyed by lower-case name::rarity -> count
       const keyOf = c => `${String(c.name)}::${String(c.rarity)}`;
+ // Lock maps (keyed by name::rarity) so we can exclude locked cards by default
+ const youLockedMap = new Map((youDoc?.cards || []).map(c => [keyOf(c), Boolean(c.locked)]));
+ const themLockedMap = new Map((themDoc?.cards || []).map(c => [keyOf(c), Boolean(c.locked)]));
+
       const youMap = new Map(youCards.map(c => [keyOf(c), normCount(c.count)]));
       const themMap = new Map(themCards.map(c => [keyOf(c), normCount(c.count)]));
 
@@ -150,7 +160,7 @@ module.exports = {
       let results = [];
       if (mode === 'theirs-minus-yours') {
         for (const c of themCards) {
-          if (filterR && c.rarity !== filterR) continue;
+          if (!targetAllRarities && String(c.rarity).trim().toUpperCase() !== filterRNorm) continue;
           if (filterQ && !String(c.name).toLowerCase().includes(filterQ)) continue;
       if (filterColor) {
         const wanted = String(filterColor).trim().toLowerCase();
@@ -162,6 +172,9 @@ module.exports = {
         }
       }
           const k = keyOf(c);
+ // Exclude locked cards by default (unless allowlocked=true)
+ const sourceLocked = Boolean(themLockedMap.get(k) ?? c.locked);
+ if (!allowLocked && sourceLocked) continue;
           
           const youCount = normCount(youMap.get(k));
           const themCount = normCount(c.count);
@@ -170,12 +183,13 @@ module.exports = {
           if (youCount !== 0) continue;
           if (themCount <= 0) continue;
           if (multiOnly && themCount <= 1) continue;
+      if (singleOnly && themCount !== 1) continue;
           const diff = themCount - youCount; // effectively themCount
           results.push({ name: c.name, rarity: c.rarity, youCount, themCount, diff });
         }
       } else {
         for (const c of youCards) {
-          if (filterR && c.rarity !== filterR) continue;
+          if (!targetAllRarities && String(c.rarity).trim().toUpperCase() !== filterRNorm) continue;
           if (filterQ && !String(c.name).toLowerCase().includes(filterQ)) continue;
       if (filterColor) {
         const wanted = String(filterColor).trim().toLowerCase();
@@ -187,12 +201,16 @@ module.exports = {
         }
       }
           const k = keyOf(c);
+ // Exclude locked cards by default (unless allowlocked=true)
+ const sourceLocked = Boolean(youLockedMap.get(k) ?? c.locked);
+ if (!allowLocked && sourceLocked) continue;
           const themCount = themMap.get(k) || 0;
           const youCount = c.count || 0;
           // show only cards you have that the other user has zero of
           if (themCount !== 0) continue;
           if (youCount <= 0) continue;
           if (multiOnly && youCount <= 1) continue;
+      if (singleOnly && youCount !== 1) continue;
           const diff = youCount - themCount; // effectively youCount
           results.push({ name: c.name, rarity: c.rarity, youCount, themCount, diff });
         }
