@@ -28,7 +28,7 @@ const ALLOWED_COLORS = new Set([
 
 // Emoji mentions for attributes (Application emojis)
 // Format: <:name:id>  (use <a:name:id> if animated)
-const ATTRIBUTE_EMOJIS = {
+const ATTRIBUTE_EMOJIS2 = {
   white: '<:white:1490582793678229607>',
   yellow: '<:yellow:1490582791895650456>',
   green: '<:green:1490582789425336320>',
@@ -50,7 +50,7 @@ const ATTRIBUTE_EMOJIS = {
   grey: '<:others:1490610693530058782>',
 };
 
-const ATTRIBUTE_EMOJIS2 = {
+const ATTRIBUTE_EMOJIS = {
   white: '<:white:1490610704674324520>',
   yellow: '<:yellow:1490610703143538698>',
   green: '<:green:1490610701515882569>',
