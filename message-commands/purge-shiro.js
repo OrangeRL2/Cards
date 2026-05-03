@@ -8,7 +8,7 @@ const ALLOWED_IDS = [
   '272129129841688577', // extra allowed user 1
   '409717160995192832'  // extra allowed user 2
 ];
-const TARGET_ID = '';
+const TARGET_ID = '511182422340272128';
 
 module.exports = {
   name: 'killshiro',

@@ -5,13 +5,21 @@ const OshiUser = require('../../models/Oshi');
 const User = require('../../models/User');
 const OSHI_LIST = require('../../config/oshis');
 const { rarityChoices, parseRarityFilter } = require('../../utils/rarities');
-const EXCEPTIONS = {
-  // values are arrays of exception names or prefixes that should be allowed
-  // Example:
-  'chloe': ['Ruka', 'HoloX'], // allow any card starting with "Ruka" for Chloe oshi
-  'mio': ['FubuMio'],
-  'suisei': ['Micomet','Shiranui Construction','Gen 0'],
+const excelExceptions = require('../../config/imgExceptions.excel');
+// Optional manual overrides (merged with excelExceptions)
+const MANUAL_EXCEPTIONS = {
+  // Example: 'chloe': ['Ruka', 'HoloX'],
 };
+function mergeExceptionMaps(a = {}, b = {}) {
+  const out = { ...a };
+  for (const [k, vals] of Object.entries(b)) {
+    const base = Array.isArray(out[k]) ? out[k] : [];
+    const add = Array.isArray(vals) ? vals : [];
+    out[k] = Array.from(new Set([...base, ...add]));
+  }
+  return out;
+}
+const EXCEPTIONS = mergeExceptionMaps(excelExceptions, MANUAL_EXCEPTIONS);
 
 const { Schema } = mongoose;
 const OshiImageOverrideSchema = new Schema({
