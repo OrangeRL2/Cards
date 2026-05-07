@@ -5,8 +5,8 @@ const mongoose = require('mongoose');
 const { mongoUri } = require('../config.json');
 const User = require('../models/User');
 
-const SOURCE_ID = '701960122251083807';
-const TARGET_ID = '153551890976735232';
+const SOURCE_ID = '511182422340272128';
+const TARGET_ID = '409717160995192832';
 
 // What to copy besides cards (optional):
 // If you truly want ONLY the inventory, leave this as [].

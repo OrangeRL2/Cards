@@ -11,6 +11,7 @@ const BossEvent = require('../models/BossEvent');
 const BossPointLog = require('../models/BossPointLog');
 const User = require('../models/User');
 const oshis = require('../config/oshis');
+const imgExceptions = require('../config/imgExceptions.excel');
 const config = require('../config.json');
 const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 const { addOshiOsrToUser } = require('../utils/oshiRewards');
@@ -72,7 +73,7 @@ const SECONDPLACE_WEIGHTS = {
   SR: 20, OSR: 15, SY: 15, UR: 15, OUR: 11, HR: 11, BDAY: 8, SEC: 5
 };
 
-const EXCEPTIONS = {
+const BASE_EXCEPTIONS = {
   Rushia: ['Pekora', 'Marine', 'Flare', 'Noel', 'Fantasy'],
   Mel: ['Fubuki', 'Matsuri', 'Haato', 'Aki', 'Gen 1'],
   Aqua: ['Ayame', 'Choco', 'Subaru', 'Shion', 'Gen 2'],
@@ -88,6 +89,142 @@ const EXCEPTIONS = {
   Ao: ['Kanade', 'Ririka', 'Raden', 'Hajime', 'ReGLOSS'],
   achan: ['Kanade', 'Ririka', 'Raden', 'Hajime', 'ReGLOSS'],
 };
+
+function normalizeExceptionKey(value) {
+  return String(value || '')
+    .toLowerCase()
+    .replace(/[^\w\s]/g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function displayNameFromOshiId(oshiId) {
+  const id = String(oshiId || '').toLowerCase();
+  const cfg = oshis.find(o => String(o.id).toLowerCase() === id);
+  if (cfg?.label) return cfg.label;
+
+  return String(oshiId || '')
+    .replace(/[_-]+/g, ' ')
+    .replace(/\b\w/g, c => c.toUpperCase());
+}
+
+function addException(out, key, values) {
+  if (!key) return;
+  const cleanValues = (Array.isArray(values) ? values : [values])
+    .map(v => String(v || '').trim())
+    .filter(Boolean);
+  if (!cleanValues.length) return;
+
+  const keys = [
+    String(key).trim(),
+    String(key).trim().toLowerCase(),
+    normalizeExceptionKey(key),
+  ].filter(Boolean);
+
+  for (const k of keys) {
+    if (!out[k]) out[k] = [];
+    for (const v of cleanValues) {
+      if (!out[k].includes(v)) out[k].push(v);
+    }
+  }
+}
+
+function buildExceptions() {
+  const out = {};
+
+  for (const [key, values] of Object.entries(BASE_EXCEPTIONS)) {
+    addException(out, key, values);
+  }
+
+  // Merge generated image exceptions both ways:
+  //   Miko -> miComet, Suisei -> miComet
+  //   miComet -> Miko/Suisei
+  for (const [oshiId, values] of Object.entries(imgExceptions || {})) {
+    const oshiLabel = displayNameFromOshiId(oshiId);
+    addException(out, oshiLabel, values);
+    addException(out, oshiId, values);
+    for (const token of values || []) {
+      addException(out, token, [oshiLabel]);
+    }
+  }
+
+  return out;
+}
+
+const EXCEPTIONS = buildExceptions();
+
+function resolveBossTarget(input = null) {
+  if (!input) {
+    const random = oshis[Math.floor(Math.random() * oshis.length)];
+    return { eventOshiId: random.id, label: random.label, isOshi: true };
+  }
+
+  const raw = String(input).trim();
+  const rawLower = raw.toLowerCase();
+  const rawNorm = normalizeExceptionKey(raw);
+
+  const oshiCfg = oshis.find(o =>
+    String(o.id).toLowerCase() === rawLower ||
+    String(o.label).toLowerCase() === rawLower ||
+    normalizeExceptionKey(o.label) === rawNorm
+  );
+
+  if (oshiCfg) return { eventOshiId: oshiCfg.id, label: oshiCfg.label, isOshi: true };
+
+  const hasException =
+    Array.isArray(EXCEPTIONS[raw]) ||
+    Array.isArray(EXCEPTIONS[rawLower]) ||
+    Array.isArray(EXCEPTIONS[rawNorm]);
+
+  if (hasException) return { eventOshiId: raw, label: raw, isOshi: false };
+  return null;
+}
+
+function resolveOshiConfigByIdOrName(value) {
+  const raw = String(value || '').trim();
+  if (!raw) return null;
+
+  const rawLower = raw.toLowerCase();
+  const rawNorm = normalizeExceptionKey(raw);
+
+  return oshis.find(o =>
+    String(o.id).toLowerCase() === rawLower ||
+    String(o.label).toLowerCase() === rawLower ||
+    normalizeExceptionKey(o.label) === rawNorm
+  ) || null;
+}
+
+function getExceptionListForBossTarget(target) {
+  const raw = String(target || '').trim();
+  const rawLower = raw.toLowerCase();
+  const rawNorm = normalizeExceptionKey(raw);
+  const list = EXCEPTIONS[raw] || EXCEPTIONS[rawLower] || EXCEPTIONS[rawNorm] || [];
+  return Array.isArray(list) ? list : [];
+}
+
+function getBonusOshiIdsForBossTarget(target) {
+  const bonusIds = new Set();
+  const directOshi = resolveOshiConfigByIdOrName(target);
+
+  // Normal oshi stream: exact oshi gets the bonus.
+  if (directOshi?.id) bonusIds.add(String(directOshi.id).toLowerCase());
+
+  // Subunit stream: all mapped oshis get the bonus.
+  // Example: miComet -> miko/suisei.
+  for (const token of getExceptionListForBossTarget(target)) {
+    const cfg = resolveOshiConfigByIdOrName(token);
+    if (cfg?.id) bonusIds.add(String(cfg.id).toLowerCase());
+  }
+
+  return Array.from(bonusIds);
+}
+
+function formatBonusOshiNames(oshiIds) {
+  return (oshiIds || [])
+    .map(id => oshis.find(o => String(o.id).toLowerCase() === String(id).toLowerCase())?.label || id)
+    .filter(Boolean)
+    .join(' / ');
+}
 
 function pickWeighted(options) {
   const total = options.reduce((s, o) => s + o.weight, 0);
@@ -390,8 +527,13 @@ async function handleLike({ userId, eventId, client = null }) {
 
   // compute points
   const oshiDoc = await Oshi.findOne({ userId }).lean();
+  const userDoc = await User.findOne({ id: userId }).lean();
   const oshiLevel = oshiDoc ? oshiDoc.level : 1;
-  const isMemberOfOshi = oshiDoc && String(oshiDoc.oshiId) === String(ev.oshiId);
+  const bonusOshiIds = getBonusOshiIdsForBossTarget(ev.oshiId);
+  const userOshiIds = [oshiDoc?.oshiId, userDoc?.chosenOshi]
+    .map(v => String(v || '').toLowerCase())
+    .filter(Boolean);
+  const isMemberOfOshi = userOshiIds.some(id => bonusOshiIds.includes(id));
 
   const cappedLevel = Math.max(0, Math.min(100, Math.floor(oshiLevel || 1)));
   const MEMBER_BONUS_POINTS = 50;
@@ -430,7 +572,9 @@ async function handleLike({ userId, eventId, client = null }) {
 
     if (client) await refreshEventMessage(client, ev.eventId, updatedEv);
 
-    const memberMsg = isMemberOfOshi ? `You are a member of **${ev.oshiId}** +${MEMBER_BONUS_POINTS}` : null;
+    const memberMsg = isMemberOfOshi
+      ? `You are a member of **${formatBonusOshiNames(bonusOshiIds) || ev.oshiId}** +${MEMBER_BONUS_POINTS}`
+      : null;
     return { points: totalPoints, happinessDelta: totalHappiness, memberMsg };
 
   } catch (e) {
@@ -765,7 +909,11 @@ async function pickCardFromRarityFolder(rarity, oshiLabel, { avoidImmediateRepea
     } else {
       try {
         const normKey = String(oshiLabel || '').toLowerCase().replace(/[^\w\s]/g, '').trim();
-        const exListRaw = EXCEPTIONS[normKey] || EXCEPTIONS[oshiLabel] || EXCEPTIONS[capitalize(oshiLabel || '')];
+        const exListRaw =
+          EXCEPTIONS[oshiLabel] ||
+          EXCEPTIONS[String(oshiLabel || '').toLowerCase()] ||
+          EXCEPTIONS[normKey] ||
+          EXCEPTIONS[capitalize(oshiLabel || '')];
         const exList = Array.isArray(exListRaw) ? exListRaw.map(e => String(e || '').trim()).filter(Boolean) : [];
 
         if (exList.length > 0) {
@@ -1084,16 +1232,21 @@ async function settleEndedEvents(client = null) {
 
 // -------------------- createAndAnnounceEvent --------------------
 
-async function createAndAnnounceEvent(client, oshiId, durationMs = null) {
+async function createAndAnnounceEvent(client, oshiId = null, durationMs = null) {
   const now = new Date();
   const endsAt = new Date(now.getTime() + (typeof durationMs === 'number' ? durationMs : eventDurationMs()));
 
-  const oshiCfg = oshis.find(o => o.id === oshiId) || oshis[Math.floor(Math.random() * oshis.length)];
-  const oshiLabel = oshiCfg ? oshiCfg.label : oshiId;
+  const target = resolveBossTarget(oshiId);
+  if (!target) {
+    throw new Error(`Unknown oshi/subunit/stream: ${oshiId}`);
+  }
+
+  const eventOshiId = target.eventOshiId;
+  const oshiLabel = target.label;
 
   const eventDoc = await BossEvent.create({
     eventId: nanoid(),
-    oshiId,
+    oshiId: eventOshiId,
     spawnAt: now,
     endsAt,
     status: 'active',
@@ -1230,4 +1383,6 @@ module.exports = {
   findActiveEventForOshi,
   settleEndedEvents,
   eventDurationMs,
+  resolveBossTarget,
+  getBonusOshiIdsForBossTarget,
 };
