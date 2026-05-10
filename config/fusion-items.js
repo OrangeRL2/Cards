@@ -306,6 +306,67 @@ pekora_marine_flare_3: {
       { rarity: 'EAS', image: 'Chloe 101', count: 1 },
     ],
   },
+    holoXEVAll: {
+    name: 'First MISSION holoX ALL(Lappy + Lui + Koyori + Iroha)',
+    rarity: 'COL',
+    image: 'holoX 102',
+    stock: -1,
+    requires: [
+      { rarity: 'EV', image: 'La+ 103', count: 1 },
+      { rarity: 'EV', image: 'Lui 104', count: 1 },
+      { rarity: 'EV', image: 'Koyori 105', count: 1 },
+      { rarity: 'EV', image: 'Iroha 106', count: 1 },
+
+    ],
+  },
+      holoXEVLappy: {
+    name: 'First MISSION holoX Lappy(Lappy + Lui + Koyori + Iroha)',
+    rarity: 'COL',
+    image: 'holoX 103',
+    stock: -1,
+    requires: [
+      { rarity: 'EV', image: 'La+ 103', count: 1 },
+      { rarity: 'EV', image: 'Lui 104', count: 1 },
+      { rarity: 'EV', image: 'Koyori 105', count: 1 },
+      { rarity: 'EV', image: 'Iroha 106', count: 1 },
+    ],
+  },
+        holoXEVLui: {
+    name: 'First MISSION holoX Lui(Lappy + Lui + Koyori + Iroha)',
+    rarity: 'COL',
+    image: 'holoX 104',
+    stock: -1,
+    requires: [
+      { rarity: 'EV', image: 'La+ 103', count: 1 },
+      { rarity: 'EV', image: 'Lui 104', count: 1 },
+      { rarity: 'EV', image: 'Koyori 105', count: 1 },
+      { rarity: 'EV', image: 'Iroha 106', count: 1 },
+    ],
+  },
+          holoXEVKoyori: {
+    name: 'First MISSION holoX Koyori(Lappy + Lui + Koyori + Iroha)',
+    rarity: 'COL',
+    image: 'holoX 105',
+    stock: -1,
+    requires: [
+      { rarity: 'EV', image: 'La+ 103', count: 1 },
+      { rarity: 'EV', image: 'Lui 104', count: 1 },
+      { rarity: 'EV', image: 'Koyori 105', count: 1 },
+      { rarity: 'EV', image: 'Iroha 106', count: 1 },
+    ],
+  },
+            holoXEVIroha: {
+    name: 'First MISSION holoX Iroha(Lappy + Lui + Koyori + Iroha)',
+    rarity: 'COL',
+    image: 'holoX 106',
+    stock: -1,
+    requires: [
+      { rarity: 'EV', image: 'La+ 103', count: 1 },
+      { rarity: 'EV', image: 'Lui 104', count: 1 },
+      { rarity: 'EV', image: 'Koyori 105', count: 1 },
+      { rarity: 'EV', image: 'Iroha 106', count: 1 },
+    ],
+  },
 };
 
 module.exports = FUSION_ITEMS;

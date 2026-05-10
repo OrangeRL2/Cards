@@ -203,14 +203,20 @@ function getExceptionListForBossTarget(target) {
 }
 
 function getBonusOshiIdsForBossTarget(target) {
-  const bonusIds = new Set();
   const directOshi = resolveOshiConfigByIdOrName(target);
 
-  // Normal oshi stream: exact oshi gets the bonus.
-  if (directOshi?.id) bonusIds.add(String(directOshi.id).toLowerCase());
+  // Normal oshi stream:
+  // Only the exact oshi should get the member bonus.
+  // Do NOT apply exception/subunit mappings here.
+  if (directOshi?.id) {
+    return [String(directOshi.id).toLowerCase()];
+  }
 
-  // Subunit stream: all mapped oshis get the bonus.
-  // Example: miComet -> miko/suisei.
+  // Subunit stream:
+  // All mapped oshis get the bonus.
+  // Example: Promise -> IRyS / Kronii / Baelz / Fauna / Mumei
+  const bonusIds = new Set();
+
   for (const token of getExceptionListForBossTarget(target)) {
     const cfg = resolveOshiConfigByIdOrName(token);
     if (cfg?.id) bonusIds.add(String(cfg.id).toLowerCase());
