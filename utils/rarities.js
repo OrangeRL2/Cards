@@ -1,5 +1,5 @@
 const RARITIES = [
-  'XMAS','VAL','EAS','C','U','R','S','RR','OC','SR','COL','OSR','P','SP','UP','SY','UR','OUR','HR','BDAY','SEC','ORI',
+  'XMAS','VAL','EAS','C','U','R','S','RR','OC','SR','COL','OSR','P','SP','UP','SY','UR','OUR','HR','BDAY','SEC','ORI','EV'
 ];
 
 function rarityChoices({ includeAnyAll = false } = {}) {

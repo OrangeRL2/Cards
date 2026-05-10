@@ -88,6 +88,7 @@ module.exports = {
           { name: 'BDAY', value: 'BDAY'},
           { name: 'SEC', value: 'SEC' },
           { name: 'ORI', value: 'ORI' },
+          { name: 'EV', value: 'EV' },
         ),
     ) 
     .addStringOption(opt =>
