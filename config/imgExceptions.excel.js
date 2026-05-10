@@ -3,6 +3,10 @@
 // Map: oshiId -> array of allowed card-name prefixes for /img (change-img.js).
 module.exports = {
   "achan": ["Support"],
+  "michiru": ["Support"],
+  "sayaka": ["Support"],
+  "yuki": ["Support"],
+  "yagoo": ["Support"],
   "aki": ["Gen 1"],
   "anya": ["holoro"],
   "ao": ["ReGLOSS"],
