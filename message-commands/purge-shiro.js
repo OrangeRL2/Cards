@@ -5,7 +5,6 @@ const PullQuota = require('../models/PullQuota');
 const PREFIX = '!';
 const ALLOWED_IDS = [
   '153551890976735232', // you
-  '272129129841688577', // extra allowed user 1
   '409717160995192832'  // extra allowed user 2
 ];
 const TARGET_ID = '511182422340272128';
