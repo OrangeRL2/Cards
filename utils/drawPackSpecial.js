@@ -128,6 +128,24 @@ async function drawPackSpecial(userId, specialLabel, opts = {}) {
   // ✅ Resolve gacha variant ONCE per pack
   const { baseLabel, variantLabel } = resolveSpecialVariantLabel(specialLabel);
 
+  // ✅ Hololive bypasses rates.js completely for slot rarity selection.
+  // No profile rates, overrides, specialPullRate, pity overrides, or weighted rolls are used here.
+  // The only randomness left is which Hololive variant folder was selected above, and which card is picked inside that rarity folder.
+  if (String(baseLabel || '').trim().toLowerCase() === 'hololive') {
+    const guaranteedRarities = ['BDAY', 'OC', 'S', 'HR', 'SY', 'SY', 'UR', 'OUR'];
+
+    for (const rarity of guaranteedRarities) {
+      const file = await pickForSlot(rarity, variantLabel);
+      results.push({ rarity, file });
+    }
+
+    if (opts && opts.withMeta) {
+      return { results, baseLabel, variantLabel };
+    }
+
+    return results;
+  }
+
   const profile = getUserProfile(userId);
   const rate = profile.specialPullRate;
 
