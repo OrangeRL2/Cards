@@ -8,8 +8,8 @@
 // - configurable start/end JST dates
 // - configurable card pool
 // - streak resets if user misses a day
-// - day N gives N random cards from the pool
-// - exact-day bonus rewards are separate/additional
+// - day N gives N total cards from the pool
+// - exact-day bonus rewards are guaranteed cards included within that total
 // - reward cards are shown with pull-style pagination
 
 const {
@@ -86,8 +86,8 @@ const LOGIN_CARD_EVENT = {
     { rarity: 'EV', name: 'Iroha 106' },
   ],
 
-  // Additional rewards. These do NOT replace random cards.
-  // Day 7 = 7 random cards + this bonus card.
+  // Guaranteed rewards included within the day's total card count.
+  // Day 7 = 7 total cards, including these guaranteed cards.
   exactDayBonusRewards: {
     7: [
     { rarity: 'EV', name: 'La+ 103' },
@@ -259,33 +259,32 @@ function getExactDayBonusCards(streak) {
     .filter(Boolean)
     .map(card => ({
       ...card,
-      bonus: true,
+      bonus: false,
+      guaranteed: true,
     }));
 }
 
 function buildLoginEventRewardCardsForStreak(streak) {
-  const rewards = [];
+  const guaranteedCards = getExactDayBonusCards(streak);
+  const rewards = [...guaranteedCards];
+  const randomCardsToPick = Math.max(0, Number(streak || 0) - guaranteedCards.length);
 
-  // Day N gives N random cards.
-  for (let i = 0; i < streak; i++) {
+  // Day N gives N total cards. Exact-day rewards are guaranteed within that total.
+  for (let i = 0; i < randomCardsToPick; i++) {
     const picked = pickRandomLoginEventCard();
 
     if (picked) {
       rewards.push({
         ...picked,
         bonus: false,
+        guaranteed: false,
       });
     }
   }
 
-  // Exact-day bonus cards are extra.
-  const bonusCards = getExactDayBonusCards(streak);
-  for (const card of bonusCards) {
-    rewards.push(card);
-  }
-
   return rewards;
 }
+
 
 function summarizeCards(cards) {
   const map = new Map();
@@ -301,6 +300,7 @@ function summarizeCards(cards) {
       name,
       count: 0,
       bonusCount: 0,
+      guaranteedCount: 0,
     };
 
     current.count += 1;
@@ -308,12 +308,16 @@ function summarizeCards(cards) {
     if (card.bonus) {
       current.bonusCount += 1;
     }
+    if (card.guaranteed) {
+      current.guaranteedCount += 1;
+    }
 
     map.set(key, current);
   }
 
   return Array.from(map.values());
 }
+
 
 async function addCardsToUser(userId, cards) {
   const summary = summarizeCards(cards);
@@ -404,7 +408,9 @@ function buildLoginEventCardEmbed({ user, streak, card, index, total }) {
   const color = getCardColor(rarity, name);
   const imageUrl = buildCardImageUrl(card);
 
-  const title = card.bonus
+  const title = card.guaranteed
+    ? `✅ ${rarity} Guaranteed Reward`
+    : card.bonus
     ? `🌟 ${rarity} Bonus Reward`
     : `${rarity} Reward`;
 
@@ -416,7 +422,9 @@ function buildLoginEventCardEmbed({ user, streak, card, index, total }) {
     `Login Streak: Day ${streak}`,
   ];
 
-  if (card.bonus) {
+  if (card.guaranteed) {
+    footerParts.push('Guaranteed Streak Reward');
+  } else if (card.bonus) {
     footerParts.push('Bonus Streak Reward');
   }
 
@@ -606,11 +614,14 @@ function buildLoginReplyContent({ fans, frozen, pullsGranted, eventCardsAwarded,
     );
 
     for (const item of summary) {
+      const guaranteedText = item.guaranteedCount > 0
+        ? ` ✅ guaranteed x${item.guaranteedCount}`
+        : '';
       const bonusText = item.bonusCount > 0
         ? ` 🌟 bonus x${item.bonusCount}`
         : '';
 
-      lines.push(`- **${item.rarity} ${item.name}** x${item.count}${bonusText}`);
+      lines.push(`- **${item.rarity} ${item.name}** x${item.count}${guaranteedText}${bonusText}`);
     }
   }
 
