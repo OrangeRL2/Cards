@@ -367,6 +367,18 @@ pekora_marine_flare_3: {
       { rarity: 'EV', image: 'Iroha 106', count: 1 },
     ],
   },
+              holoXEV2: {
+    name: 'First MISSION holoX 2 (Lappy + Lui + Koyori + Iroha)',
+    rarity: 'COL',
+    image: 'holoX 107',
+    stock: -1,
+    requires: [
+      { rarity: 'EV', image: 'La+ 103', count: 1 },
+      { rarity: 'EV', image: 'Lui 104', count: 1 },
+      { rarity: 'EV', image: 'Koyori 105', count: 1 },
+      { rarity: 'EV', image: 'Iroha 106', count: 1 },
+    ],
+  },
 };
 
 module.exports = FUSION_ITEMS;
