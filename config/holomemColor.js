@@ -289,6 +289,7 @@ const DEFAULT_MEMBER_COLOR = {
   'Padoru Towa': 'purple',
   'Padoru Zeta': 'yellow',
   'Padoru Mumei': 'white',
+  'BAKATARE CIRCUS': 'support',
 };
 
 // Card-specific overrides.
@@ -303,7 +304,7 @@ const EXCEPTION_CARD_COLOR = {
   'Pekora & Riona 001': 'white',
   'Subaru & Watame 001': 'yellow',
   'Suisei & Iroha 001': 'green',
-
+  
   'Aqua & Aya 101': 'blue',
   'Botan & Tomori 101': 'green',
   'Botan & Tomori 001': 'green',
@@ -334,6 +335,9 @@ const EXCEPTION_CARD_COLOR = {
   'holoForce 002::U': 'support',
   'holoForce 502::U': 'support',
   'holoForce 701::S': 'support',
+  'Hajime & Baelz 701::S': 'support',
+
+  'FubuMio 001 701::S': 'support',
   // typo tags
   'MiKorone 001': 'typo',
   'Ayama 001': 'typo',
