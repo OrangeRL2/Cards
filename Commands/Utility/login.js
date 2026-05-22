@@ -40,27 +40,27 @@ try {
 
 // ----------------- Configuration -----------------
 
-const DEFAULT_RANGE = { min: 50, max: 100 };
+const DEFAULT_RANGE = { min: 25, max: 100 };
 
 const SPECIAL_USER_RANGES = {
   // MOOMOO min1
-  '875533483051712543': { min: 50, max: 80 },
-  '647219814011502607': { min: 50, max: 80 },
-  '91103688415776768': { min: 50, max: 100 },
+  '875533483051712543': { min: 25, max: 80 },
+  '647219814011502607': { min: 25, max: 80 },
+  '91103688415776768': { min: 25, max: 90 },
 
   // char
-  '879614865956827197': { min: 50, max: 100 },
+  '879614865956827197': { min: 25, max: 100 },
 
   // aerestria
-  '953552994232852490': { min: 50, max: 50 },
-  '1188023588926795827': { min: 50, max: 50 },
-  '1300468334474690583': { min: 50, max: 50 },
+  '953552994232852490': { min: 1, max: 50 },
+  '1188023588926795827': { min: 1, max: 50 },
+  '1300468334474690583': { min: 1, max: 50 },
 
   // blacky
-  '1416081468794339479': { min: 50, max: 50 },
+  '1416081468794339479': { min: 1, max: 50 },
 
   // MAINS
-  '1334914199968677941': { min: 50, max: 53 },
+  '1334914199968677941': { min: 1, max: 53 },
 };
 
 const SPECIAL_ROLE_RANGES = {
@@ -72,7 +72,7 @@ const LOGIN_CARD_EVENT = {
 
   // Inclusive JST dates.
   startJST: '2026-05-10',
-  endJST: '2026-05-18',
+  endJST: '2026-05-17',
 
   // Change this for each new event.
   eventKey: 'may-2026-login-card-event',
@@ -80,10 +80,11 @@ const LOGIN_CARD_EVENT = {
   resetOnMissedDay: true,
 
   cards: [
+    { rarity: 'EV', name: 'Iroha 106' },
     { rarity: 'EV', name: 'La+ 103' },
     { rarity: 'EV', name: 'Lui 104' },
     { rarity: 'EV', name: 'Koyori 105' },
-    { rarity: 'EV', name: 'Iroha 106' },
+
   ],
 
   // Guaranteed rewards included within the day's total card count.
