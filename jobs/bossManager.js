@@ -1162,10 +1162,23 @@ async function settleEndedEvents(client = null) {
           const oshiCfg = oshis.find(o => o.id === ev.oshiId);
           const oshiLabel = oshiCfg ? oshiCfg.label : ev.oshiId;
 
-          const pickedOri = await pickCardFromRarityFolder('ORI', oshiLabel);
-          const cardName = (pickedOri && pickedOri.name) ? pickedOri.name : `${oshiLabel} 001`;
+          const isDirectOshi = !!resolveOshiConfigByIdOrName(ev.oshiId);
 
+          let cardName;
+                  
+          if (!isDirectOshi) {
+            // Subunit/group boss, e.g. Gen 1, Promise, miComet
+            // Award the group ORI directly.
+            cardName = `${oshiLabel} 001`;
+          } else {
+            // Normal oshi boss
+            const pickedOri = await pickCardFromRarityFolder('ORI', oshiLabel);
+            cardName = (pickedOri && pickedOri.name) ? pickedOri.name : `${oshiLabel} 001`;
+          }
+          
           await addCardToUser(winners[0].userId, cardName, 'ORI', 1);
+
+
           await BossPointLog.create({
             eventId: ev.eventId,
             userId: winners[0].userId,

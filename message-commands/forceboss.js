@@ -8,40 +8,56 @@ module.exports = {
 
   async execute(message, args) {
     try {
-      // Allowlist check (by Discord user ID)
+      // Allowlist check by Discord user ID
       const authorId = message?.author?.id;
+
       if (!authorId || !allowedBossSpawners.includes(authorId)) {
         return message.reply('You do not have permission to use this command.');
       }
 
       // Resolve oshi/subunit/stream target.
-      // Supports multi-word subunits by treating the last numeric arg as duration
-      // and joining everything before it as the target.
-      // Examples:
+      //
+      // Supports:
+      // !forceboss fauna
       // !forceboss fauna 60
-      // !forceboss Fauna 60
-      // !forceboss FauMei 60
-      // !forceboss miComet 60
+      // !forceboss Gen 1
+      // !forceboss Gen 1 60
+      // !forceboss Shiranui Construction
       // !forceboss Shiranui Construction 60
+      //
+      // Important:
+      // We try the full input first so names like "Gen 1" do not get parsed
+      // as target="Gen", duration=1.
       const rawArgs = Array.isArray(args)
         ? args.map(a => String(a).trim()).filter(Boolean)
         : [];
+
+      const fullRequestedTarget = rawArgs.length ? rawArgs.join(' ') : null;
+
+      let requestedTarget = fullRequestedTarget;
+      let durationSecArg = NaN;
 
       const maybeDurationSec = rawArgs.length
         ? parseInt(rawArgs[rawArgs.length - 1], 10)
         : NaN;
 
-      // Only treat the final argument as duration if it is purely numeric.
-      // This avoids accidentally parsing names like "Gen 1" as target="Gen", duration=1.
-      const hasDurationArg =
+      const lastArgIsNumber =
         Number.isFinite(maybeDurationSec) &&
         /^\d+$/.test(rawArgs[rawArgs.length - 1] || '');
 
-      const durationSecArg = hasDurationArg ? maybeDurationSec : NaN;
-      const requestedTargetParts = hasDurationArg ? rawArgs.slice(0, -1) : rawArgs;
-      const requestedTarget = requestedTargetParts.length
-        ? requestedTargetParts.join(' ')
-        : null;
+      if (lastArgIsNumber) {
+        // First try the whole input as a target.
+        // Example: "Gen 1" should resolve as a boss target, not duration 1.
+        const fullTarget = bossManager.resolveBossTarget(fullRequestedTarget);
+
+        // If the full input is not a valid target, treat the last number as duration.
+        // Example: "fauna 60" => target="fauna", duration=60
+        // Example: "Gen 1 60" => target="Gen 1", duration=60
+        if (!fullTarget) {
+          durationSecArg = maybeDurationSec;
+          requestedTarget = rawArgs.slice(0, -1).join(' ') || null;
+        }
+      }
 
       const bossTarget = bossManager.resolveBossTarget(requestedTarget);
 
@@ -61,11 +77,18 @@ module.exports = {
           : null;
 
       // Use centralized helper in bossManager to create and announce the event
-      const { event } = await bossManager.createAndAnnounceEvent(message.client, oshiId, durationMs);
+      const { event } = await bossManager.createAndAnnounceEvent(
+        message.client,
+        oshiId,
+        durationMs
+      );
 
-      await message.reply(`Stream for **${oshiLabel}** spawned and announced (event ${event.eventId}).`);
+      await message.reply(
+        `Stream for **${oshiLabel}** spawned and announced (event ${event.eventId}).`
+      );
     } catch (err) {
       console.error('forceboss error', err);
+
       try {
         await message.reply('Failed to force spawn boss. Check logs.');
       } catch (e) {

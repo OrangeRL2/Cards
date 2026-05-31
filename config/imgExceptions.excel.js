@@ -77,4 +77,5 @@ module.exports = {
   "vivi": ["FLOW GLOW"],
   "watame": ["BAKATARE CIRCUS", "holoForce", "LambDuck"],
   "zeta": ["holoh3ro", "Padoru Zeta", "BoZet"],
+  "Gen 1": ["Fubuki", "Matsuri", "Mel", "Haato", "Aki"]
 };
