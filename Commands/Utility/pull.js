@@ -14,7 +14,14 @@ const { drawPack } = require('../../utils/newWeightedDraw'); // normal draw
 const { drawPackBoss } = require('../../utils/drawPackBoss'); // boss-channel biased draw
 const { getBossChannelDrawToken } = require('../../utils/bossPullBias');
 const { isFrozen } = require('../../utils/freeze'); // for freeze status check in quota calculation
-const { syChannelId } = require('../../config.json');
+const {
+  syChannelId,
+  kunChannel,
+  chanChannel,
+  samaChannel,
+  tanChannel,
+  kunchansamatanSRplusChannel,
+} = require('../../config.json');
 // Tolerant import for special draw
 let drawPackSpecial;
 try {
@@ -53,6 +60,26 @@ const PITY_EXEMPT_IDS2 = new Set([
 const SY_ANNOUNCE_EXEMPT_IDS = new Set([
   '511182422340272128',
 ]);
+
+// === Kun/Chan/Sama/Tan SR+ announcement config ===
+// Announce pulls from these four channels when the rarity is SR or higher.
+const KUNCHANSAMATAN_SOURCE_CHANNEL_IDS = new Set([
+  kunChannel,
+  chanChannel,
+  samaChannel,
+  tanChannel,
+].filter(Boolean));
+
+const SR_PLUS_ANNOUNCE_RARITY_ORDER = [
+  'XMAS', 'VAL', 'EAS', 'C', 'U', 'R', 'S', 'RR', 'OC', 'SR', 'COL', 'OSR',
+  'P', 'SP', 'UP', 'SY', 'UR', 'OUR', 'HR', 'BDAY', 'SEC', 'ORI', 'EV',
+];
+const SR_PLUS_THRESHOLD_INDEX = SR_PLUS_ANNOUNCE_RARITY_ORDER.indexOf('SR');
+
+function isSrPlusRarity(rarity) {
+  const idx = SR_PLUS_ANNOUNCE_RARITY_ORDER.indexOf(String(rarity ?? '').toUpperCase());
+  return idx >= SR_PLUS_THRESHOLD_INDEX && SR_PLUS_THRESHOLD_INDEX >= 0;
+}
 // In-process guard still useful for same-interaction re-entry,
 // but it doesn't stop two different interactions from the same user.
 const inFlightInteractions = new Map();
@@ -124,6 +151,56 @@ async function announceSyPull(interaction, pulledCards) {
 
     await channel.send(`**[SY]** **${safeName}**${tag} has been pulled by ${userTag}`);
   }
+}
+
+
+async function announceKunChanSamaTanSrPlusPull(interaction, pulledCards, pullMessage = null) {
+  if (!KUNCHANSAMATAN_SOURCE_CHANNEL_IDS.has(interaction.channelId)) return;
+
+  const arr = Array.isArray(pulledCards) ? pulledCards : [pulledCards];
+  const srPlusCards = arr.filter(c => isSrPlusRarity(c?.rarity));
+  if (!srPlusCards.length) return;
+
+  const channelId = kunchansamatanSRplusChannel;
+  if (!channelId) return;
+
+  const channel = await interaction.client.channels.fetch(channelId).catch(() => null);
+  if (!channel || !channel.isTextBased()) return;
+
+  const userTag = `${interaction.user}`;
+  const jumpUrl = pullMessage?.url;
+
+  const lines = srPlusCards.map(card => {
+    const rarity = String(card?.rarity ?? 'Unknown').toUpperCase();
+    const safeName = String(card?.displayName ?? card?.name ?? 'Unknown').replace(/@/g, '@\u200b');
+    const cc = resolveCardColor(safeName, rarity);
+    const emoji = cc ? getAttributeEmoji(cc) : '';
+    const tag = emoji ? ` ${emoji}` : '';
+    return `**[${rarity}]** **${safeName}**${tag}`;
+  });
+
+  const content = [
+    `SR+ pull in ${interaction.channel} by ${userTag}!`,
+    ...lines,
+    jumpUrl ? `Original pull: ${jumpUrl}` : null,
+  ].filter(Boolean).join('\n');
+
+  const payload = { content };
+
+  // Discord bots cannot truly "forward" an existing message in every server/client like a user can,
+  // so this adds a direct jump link button to the original pull message when Discord gives us the URL.
+  if (jumpUrl) {
+    payload.components = [
+      new ActionRowBuilder().addComponents(
+        new ButtonBuilder()
+          .setLabel('Jump to pull')
+          .setStyle(ButtonStyle.Link)
+          .setURL(jumpUrl)
+      )
+    ];
+  }
+
+  await channel.send(payload).catch(err => console.error('[SR+ announce] failed:', err));
 }
 
 async function releasePullLock(userId, owner) {
@@ -862,10 +939,6 @@ if (!SY_ANNOUNCE_EXEMPT_IDS.has(discordUserId) && String(rarity).toUpperCase() =
         return;
       }
       
-      if (syToAnnounce.length) {
-        void announceSyPull(interaction, syToAnnounce);
-      }
-
       // --- Build description and show results ---
       let descriptionAll = allNames.join('\n');
       const MAX_DESC = 4096;
@@ -966,6 +1039,12 @@ if (!SY_ANNOUNCE_EXEMPT_IDS.has(discordUserId) && String(rarity).toUpperCase() =
         inFlightInteractions.delete(interaction.id);
         return;
       }
+
+      if (syToAnnounce.length) {
+        void announceSyPull(interaction, syToAnnounce);
+      }
+
+      void announceKunChanSamaTanSrPlusPull(interaction, pageItems, message);
 
       if (pageItems.length <= 1) {
         setTimeout(async () => {
