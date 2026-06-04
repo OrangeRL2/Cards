@@ -36,6 +36,8 @@ const SHOP_ITEMS = {
     holoDoriRisu:  { name: 'HoloDori Risu',  rarity: 'UP',               cost: t1,   image: 'Risu 001', stock: -1 },
     bloomCupRobocoEN:  { name: 'Bloom Cup Roboco',  rarity: 'UP',               cost: t1,   image: 'Roboco 001', stock: -1 },
 
+    bloomCupSui:  { name: 'Bloom Cup Suisei',  rarity: 'UP',               cost: t1,   image: 'Suisei 006', stock: -1 },
+
   //tier2
     witch1: { name: 'holoWitch holoWitches', rarity: 'UP', cost: t2,  image: 'holoWitches 001',  stock: -1 },
     worldTour1: { name: 'WorldTour25 -Synchronize!- Calli, IRyS, Nerissa, Ollie, Nene', rarity: 'UP', cost: t2, image: 'Calli, IRyS, Nerissa, Ollie, Nene 701', stock: -1 },
