@@ -86,13 +86,13 @@ async function drawPack(userId, useSpecialRatesOverride = null, opts = {}) {
       { key: 'SY', weight: 0.25 },
     ],
     [
-      { key: 'U', weight: 94.75 },
-      { key: 'SR', weight: 5.0 },
+      { key: 'U', weight: 95.75 },
+      { key: 'SR', weight: 4.0 },
       { key: 'SY', weight: 0.25 },
     ],
     [
-      { key: 'U', weight: 95.5 },
-      { key: 'OSR', weight: 4.0 },
+      { key: 'U', weight: 96.5 },
+      { key: 'OSR', weight: 3.0 },
       { key: 'UR', weight: 0.5 },
     ],
   ];

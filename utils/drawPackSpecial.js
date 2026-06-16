@@ -207,13 +207,13 @@ async function drawPackSpecial(userId, specialLabel, opts = {}) {
       { key: 'SY', weight: 1.25 },
     ],
     [
-      { key: 'U', weight: 95.75 },
-      { key: 'SR', weight: 3.0 },
+      { key: 'U', weight: 94.75 },
+      { key: 'SR', weight: 5.0 },
       { key: 'SY', weight: 1.25 },
     ],
     [
-      { key: 'U', weight: 95.5 },
-      { key: 'OSR', weight: 3.0 },
+      { key: 'U', weight: 94.5 },
+      { key: 'OSR', weight: 4.0 },
       { key: 'UR', weight: 1.5 },
     ],
   ];
