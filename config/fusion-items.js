@@ -1,7 +1,37 @@
 // data/fusion-items.js
 const FUSION_ITEMS = {
   // --- Seven Fantasy variants (same card, different requirements) ---
-  // 1) noel + pekora + marine + flare (all SR)
+    FubuMio1: {
+    name: 'FubuMio',
+    rarity: 'COL',
+    image: 'FubuMio 001',
+    stock: -1,
+    requires: [
+      { rarity: 'ORI', image: 'Fubuki 001', count: 1 },
+      { rarity: 'ORI', image: 'Mio 001', count: 1 },
+    ],
+  },
+      FuwaMoco1: {
+    name: 'FUWAMOCO 101',
+    rarity: 'COL',
+    image: 'FUWAMOCO 101',
+    stock: -1,
+    requires: [
+      { rarity: 'SP', image: 'Fuwawa 101', count: 1 },
+      { rarity: 'SP', image: 'Mococo 101', count: 1 },
+    ],
+  },
+        FuwaMoco2: {
+    name: 'FUWAMOCO 002',
+    rarity: 'COL',
+    image: 'FUWAMOCO 002',
+    stock: -1,
+    requires: [
+      { rarity: 'ORI', image: 'Mococo 002', count: 1 },
+      { rarity: 'ORI', image: 'Fuwawa 002', count: 1 },
+    ],
+  },
+    // 1) noel + pekora + marine + flare (all SR)
   fantasy1: {
     name: 'FANTASY (noel + pekora + marine + flare)',
     rarity: 'COL',
@@ -446,12 +476,12 @@ holoWitchesEV1: {
     image: 'holoWitches 005',
     stock: -1,
     requires: [
-      { rarity: 'EV', image: 'Luna 001', count: 1 },
-      { rarity: 'EV', image: 'Miko 001', count: 1 },
-      { rarity: 'EV', image: 'Kanata 001', count: 1 },
-      { rarity: 'EV', image: 'Marine 001', count: 1 },
-      { rarity: 'EV', image: 'Chloe 001', count: 1 },
-      { rarity: 'EV', image: 'Shion 001', count: 1 },
+      { rarity: 'EV', image: 'Luna 002', count: 1 },
+      { rarity: 'EV', image: 'Miko 002', count: 1 },
+      { rarity: 'EV', image: 'Kanata 002', count: 1 },
+      { rarity: 'EV', image: 'Marine 002', count: 1 },
+      { rarity: 'EV', image: 'Chloe 002', count: 1 },
+      { rarity: 'EV', image: 'Shion 002', count: 1 },
     ],
   },
 
