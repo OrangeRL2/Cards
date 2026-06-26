@@ -35,7 +35,7 @@ const SHOP_ITEMS = {
     bloomCupSoraEN:  { name: 'Bloom Cup Sora EN',  rarity: 'UP',               cost: t1,   image: 'Sora 701', stock: -1 },
     holoDoriRisu:  { name: 'HoloDori Risu',  rarity: 'UP',               cost: t1,   image: 'Risu 001', stock: -1 },
     bloomCupRobocoEN:  { name: 'Bloom Cup Roboco',  rarity: 'UP',               cost: t1,   image: 'Roboco 001', stock: -1 },
-
+    bloomCupFinalistIrohaEN:  { name: 'Bloom Cup Iroha',  rarity: 'UP',               cost: t1,   image: 'Iroha 501', stock: -1 },
     
 
   //tier2
@@ -50,11 +50,14 @@ const SHOP_ITEMS = {
     bloom6: { name: 'Bloom Cup Reine Top8', rarity: 'UP',                 cost: t3,  image: 'Reine 701',  stock: -1 },
     bloomMiko: { name: 'Bloom Cup Miko EN', rarity: 'UP',                 cost: t3,  image: 'Miko 501',  stock: -1 },
     bloomCupSui:  { name: 'Bloom Cup Suisei',  rarity: 'UP',               cost: t3,   image: 'Suisei 006', stock: -1 },
+        bloomCupFinalistRaoraEN:  { name: 'Bloom Cup Raora',  rarity: 'UP',               cost: t3,   image: 'Raora 701', stock: -1 },
+                bloomCupFinalistRandomEN:  { name: 'Bloom Cup Final Challenger Bijou, Ina, Baelz, Cecilia',  rarity: 'UP',               cost: t3,   image: 'Bijou, Ina, Baelz, Cecilia 701', stock: -1 },
   //tier4
     wgSubaLuna: { name: 'World Grand Prix Top 8 SubaLuna', rarity: 'UP',       cost: t4,  image: 'SubaLuna 001',  stock: -1 },
     wgpTop16Koy: { name: 'World Grand Prix Top 16 Koyori', rarity: 'UP',          cost: t4,  image: 'Koyori 001',  stock: -1 },
     wgpTop16Koy: { name: 'World Grand Prix Top 16 Ayame', rarity: 'UP',          cost: t4,  image: 'Ayame 002',  stock: -1 },
     wgpTop8Shion: { name: 'World Grand Prix Top 8 Shion', rarity: 'UP',            cost: t4,  image: 'Shion 001',  stock: -1 },
+    bloomCupFinalistRandomEN:  { name: 'Bloom Cup Final Challenger Top 8 Calli',  rarity: 'UP',               cost: t3,   image: 'Calli 701', stock: -1 },
   //tier5
     wgpTop4: { name: 'World Grand Prix Top4 OkaKoro', rarity: 'UP',       cost: t5,  image: 'OkaKoro 001',  stock: -1 },
     exstreamerTop4Sui: { name: 'Exstreamer Cup Top 4 Suisei', rarity: 'UP', cost: t5, image: 'Suisei 004', stock: -1 },

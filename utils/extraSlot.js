@@ -18,36 +18,18 @@ function cardKeyFromFile(filePath) {
  * Keys must match cardKeyFromFile() output.
  */
 const defaultExtraCardWeightsByRarity = {
-  EAS: {
-    "White Egg": 16.166666666666667,
-    "Green Egg": 16.166666666666667,
-    "Red Egg": 16.166666666666667,
-    "Blue Egg": 16.166666666666667,
-    "Purple Egg": 16.166666666666667,
-    "Yellow Egg": 16.166666666666667,
+  EV: {
+"Chloe 002": 12.375,
+"Fubuki 002": 12.375,
+"Kanata 002": 12.375,
+"Lamy 002": 12.375,
+"Luna 002": 12.375,
+"Marine 002": 12.375,
+"Miko 002": 12.375,
+"Shion 002": 12.375,
 
-    "Koyori 001": 0.165,
-    "Hajime 101": 0.165,
-    "Mumei 001": 0.165,
-    "Pekora 001": 0.165,
-    "Mio 001": 0.165,
-    "Raden 101": 0.165,
-    "Miko 001": 0.165,
-    "Polka 001": 0.165,
-    "Ririka 101": 0.165,
-    "Ao 101": 0.165,
-    "Shiori 001": 0.165,
-    "Okayu 001": 0.165,
-    "Bijou 001": 0.165,
-    "Calli 001": 0.165,
-    "Shion 001": 0.165,
-    "Kanade 101": 0.165,
-    "Watame 001": 0.165,
-    "Nene 001": 0.165,
-
-    "Easter X": 0.00,
-    "Easter Y": 0.03,
-    "Easter O": 0.00,
+"Aelu 001": 0.5,
+"Lagu 001": 0.5,
   },
 };
 
@@ -120,14 +102,14 @@ function pickFileFromPool(rarity, userId, useSpecialRates = false, fileWeightsMa
  * - card is selected using runtime weights or defaultExtraCardWeightsByRarity
  */
 function rollExtraSlot(userId, profile, useSpecialRates = false, opts = {}) {
-  const baseExtraChance = 0.00;
+  const baseExtraChance = 0.10;
   const extraChance = baseExtraChance * (profile.extraSlotRate ?? 1.0);
 
   if (Math.random() >= extraChance) return null;
 
   // In newWeightedDraw.js, your extra slot ends up always being "EAS"
   // (extraBase had duplicate 'EAS' keys). We keep behavior consistent.
-  const extraRarity = 'EAS';
+  const extraRarity = 'EV';
 
   const runtimeWeights =
     (opts.extraCardWeightsByRarity && opts.extraCardWeightsByRarity[extraRarity]) || null;

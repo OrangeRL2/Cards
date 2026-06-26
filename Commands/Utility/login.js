@@ -8,8 +8,8 @@
 // - configurable start/end JST dates
 // - configurable card pool
 // - streak resets if user misses a day
-// - day N gives N total cards from the pool
-// - exact-day bonus rewards are guaranteed cards included within that total
+// - each day gives 4 random cards from the pool
+// - exact-day bonus rewards are guaranteed cards added on top
 // - reward cards are shown with pull-style pagination
 
 const {
@@ -71,30 +71,76 @@ const LOGIN_CARD_EVENT = {
   enabled: true,
 
   // Inclusive JST dates.
-  startJST: '2026-05-10',
-  endJST: '2026-05-17',
+  startJST: '2026-06-26',
+  endJST: '2026-07-05',
 
   // Change this for each new event.
-  eventKey: 'may-2026-login-card-event',
+  eventKey: 'june-2026-login-card-event',
 
   resetOnMissedDay: true,
 
-  cards: [
-    { rarity: 'EV', name: 'Iroha 106' },
-    { rarity: 'EV', name: 'La+ 103' },
-    { rarity: 'EV', name: 'Lui 104' },
-    { rarity: 'EV', name: 'Koyori 105' },
+  // Each login event day gives this many random cards,
+  // plus any exact-day guaranteed bonus cards below.
+  randomCardsPerLogin: 4,
 
+  // Login event random card rates:
+  // - First roll picks a member/mascot bucket.
+  // - Each regular member bucket has a 12.3% chance.
+  // - If a regular member bucket is picked, it then does a 50/50 roll
+  //   between that member's 001 regular card and 002 chibi card.
+  // - Aelu 001 has a 0.8% chance.
+  // - Lagu 001 has a 0.8% chance.
+  // Total = 8 regular member buckets * 12.3 + 2 mascots * 0.8 = 100%.
+  cards: [
+    { rarity: 'EV', weight: 12.3, variants: ['Chloe 001'] },
+    { rarity: 'EV', weight: 12.3, variants: ['Fubuki 001'] },
+    { rarity: 'EV', weight: 12.3, variants: ['Kanata 001'] },
+    { rarity: 'EV', weight: 12.3, variants: ['Lamy 001'] },
+    { rarity: 'EV', weight: 12.3, variants: ['Luna 001'] },
+    { rarity: 'EV', weight: 12.3, variants: ['Marine 001'] },
+    { rarity: 'EV', weight: 12.3, variants: ['Miko 001'] },
+    { rarity: 'EV', weight: 12.3, variants: ['Shion 001'] },
+    { rarity: 'EV', name: 'Aelu 001', weight: 0.8 },
+    { rarity: 'EV', name: 'Lagu 001', weight: 0.8 },
   ],
 
-  // Guaranteed rewards included within the day's total card count.
-  // Day 7 = 7 total cards, including these guaranteed cards.
+  // Guaranteed rewards included in addition to the 4 random cards.
   exactDayBonusRewards: {
+    1: [
+      { rarity: 'EV', name: 'Chloe 001' },
+      { rarity: 'EV', name: 'Chloe 002' },
+    ],
+    2: [
+      { rarity: 'EV', name: 'Fubuki 001' },
+      { rarity: 'EV', name: 'Fubuki 002' },
+    ],
+    3: [
+      { rarity: 'EV', name: 'Kanata 001' },
+      { rarity: 'EV', name: 'Kanata 002' },
+    ],
+    4: [
+      { rarity: 'EV', name: 'Lamy 001' },
+      { rarity: 'EV', name: 'Lamy 002' },
+    ],
+    5: [
+      { rarity: 'EV', name: 'Luna 001' },
+      { rarity: 'EV', name: 'Luna 002' },
+    ],
+    6: [
+      { rarity: 'EV', name: 'Marine 001' },
+      { rarity: 'EV', name: 'Marine 002' },
+    ],
     7: [
-    { rarity: 'EV', name: 'La+ 103' },
-    { rarity: 'EV', name: 'Lui 104' },
-    { rarity: 'EV', name: 'Koyori 105' },
-    { rarity: 'EV', name: 'Iroha 106' },
+      { rarity: 'EV', name: 'Miko 001' },
+      { rarity: 'EV', name: 'Miko 002' },
+    ],
+    8: [
+      { rarity: 'EV', name: 'Shion 001' },
+      { rarity: 'EV', name: 'Shion 002' },
+    ],
+    9: [
+      { rarity: 'EV', name: 'Lamy 001' },
+      { rarity: 'EV', name: 'Lamy 002' },
     ],
   },
 
@@ -235,15 +281,81 @@ function normalizeCard(card) {
 
   if (!rarity || !name) return null;
 
-  return { rarity, name };
+  const normalized = { rarity, name };
+
+  // Keep optional weight when this card is used in a weighted random pool.
+  if (card?.weight !== undefined) {
+    const weight = Number(card.weight);
+    if (Number.isFinite(weight) && weight > 0) {
+      normalized.weight = weight;
+    }
+  }
+
+  return normalized;
 }
 
 function pickRandomLoginEventCard() {
-  const pool = LOGIN_CARD_EVENT.cards || [];
-  if (!pool.length) return null;
+  const rawPool = Array.isArray(LOGIN_CARD_EVENT.cards) ? LOGIN_CARD_EVENT.cards : [];
+  if (!rawPool.length) return null;
 
-  const idx = randIntInclusive(0, pool.length - 1);
-  return normalizeCard(pool[idx]);
+  const weightedPool = [];
+
+  for (const rawCard of rawPool) {
+    const rarity = String(rawCard?.rarity || '').trim().toUpperCase();
+    if (!rarity) continue;
+
+    const weight = Number.isFinite(Number(rawCard?.weight)) && Number(rawCard.weight) > 0
+      ? Number(rawCard.weight)
+      : 1;
+
+    const variants = Array.isArray(rawCard?.variants)
+      ? rawCard.variants
+          .map(name => String(name || '').trim())
+          .filter(Boolean)
+      : [];
+
+    if (variants.length > 0) {
+      weightedPool.push({ rarity, variants, weight });
+      continue;
+    }
+
+    const card = normalizeCard(rawCard);
+    if (card) {
+      weightedPool.push({ rarity: card.rarity, name: card.name, weight });
+    }
+  }
+
+  if (!weightedPool.length) return null;
+
+  // Weighted bucket selection:
+  // Regular member buckets are 12.3% each.
+  // Mascot buckets are 0.8% each.
+  const totalWeight = weightedPool.reduce((sum, item) => sum + item.weight, 0);
+  let roll = Math.random() * totalWeight;
+  let pickedBucket = weightedPool[weightedPool.length - 1];
+
+  for (const item of weightedPool) {
+    roll -= item.weight;
+    if (roll < 0) {
+      pickedBucket = item;
+      break;
+    }
+  }
+
+  // If the bucket has variants, do an equal second roll.
+  // Example: Chloe bucket is 12.3%; then Chloe 001 vs Chloe 002 is 50/50.
+  if (Array.isArray(pickedBucket.variants) && pickedBucket.variants.length > 0) {
+    const idx = randIntInclusive(0, pickedBucket.variants.length - 1);
+    return {
+      rarity: pickedBucket.rarity,
+      name: pickedBucket.variants[idx],
+    };
+  }
+
+  return {
+    rarity: pickedBucket.rarity,
+    name: pickedBucket.name,
+  };
 }
 
 function getExactDayBonusCards(streak) {
@@ -268,9 +380,10 @@ function getExactDayBonusCards(streak) {
 function buildLoginEventRewardCardsForStreak(streak) {
   const guaranteedCards = getExactDayBonusCards(streak);
   const rewards = [...guaranteedCards];
-  const randomCardsToPick = Math.max(0, Number(streak || 0) - guaranteedCards.length);
+  const randomCardsToPick = Math.max(0, Number(LOGIN_CARD_EVENT.randomCardsPerLogin || 0));
 
-  // Day N gives N total cards. Exact-day rewards are guaranteed within that total.
+  // Each login event day gives a fixed number of random cards,
+  // plus exact-day guaranteed rewards.
   for (let i = 0; i < randomCardsToPick; i++) {
     const picked = pickRandomLoginEventCard();
 
