@@ -553,7 +553,7 @@ holoWitchesEV1: {
       { rarity: 'SR', image: 'Luna 001', count: 1 },
       { rarity: 'SR', image: 'Chloe 003', count: 1 },
       { rarity: 'SR', image: 'Shion 001', count: 1 },
-      { rarity: 'SR', image: 'Kanta 001', count: 1 },
+      { rarity: 'SR', image: 'Kanata 001', count: 1 },
     ],
   },
 };
