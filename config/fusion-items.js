@@ -542,7 +542,7 @@ holoWitchesEV1: {
       { rarity: 'EV', image: 'Kanata 002', count: 1 },
     ],
   },
-        holoWitchesEV9: {
+        holoWitchesEV10: {
     name: 'holoWitches 010',
     rarity: 'COL',
     image: 'holoWitches 010',
