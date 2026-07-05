@@ -72,7 +72,7 @@ const LOGIN_CARD_EVENT = {
 
   // Inclusive JST dates.
   startJST: '2026-06-26',
-  endJST: '2026-07-05',
+  endJST: '2026-07-06',
 
   // Change this for each new event.
   eventKey: 'june-2026-login-card-event',
@@ -141,6 +141,10 @@ const LOGIN_CARD_EVENT = {
     9: [
       { rarity: 'EV', name: 'Lamy 001' },
       { rarity: 'EV', name: 'Lamy 002' },
+    ],
+        10: [
+      { rarity: 'EV', name: 'Luna 001' },
+      { rarity: 'EV', name: 'Luna 002' },
     ],
   },
 
