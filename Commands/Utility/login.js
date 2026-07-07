@@ -72,7 +72,7 @@ const LOGIN_CARD_EVENT = {
 
   // Inclusive JST dates.
   startJST: '2026-06-26',
-  endJST: '2026-07-06',
+  endJST: '2026-07-05',
 
   // Change this for each new event.
   eventKey: 'june-2026-login-card-event',
