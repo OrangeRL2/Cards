@@ -1,8 +1,9 @@
+
 // utils/sunPull.js
 const path = require('path');
 const User = require('../models/User');
 const SummerUser = require('../models/SummerUser');
-const { getAllStandardSummerCards } = require('../config/summer-cards');
+const { getAllSunCardsFromFolders } = require('./summerCardFiles');
 
 const IMAGE_BASE = process.env.IMAGE_BASE || 'http://152.69.195.48/images';
 const inFlightUsers = new Set();
@@ -17,7 +18,7 @@ function buildSummerImageUrl(card) {
 }
 
 function chooseRandomStandardSunCard() {
-  const pool = getAllStandardSummerCards();
+  const pool = getAllSunCardsFromFolders();
   if (!Array.isArray(pool) || pool.length === 0) {
     throw new Error('The standard SUN card pool is empty.');
   }
@@ -178,3 +179,5 @@ module.exports = {
   performSunPull,
   awardSunCard,
 };
+
+

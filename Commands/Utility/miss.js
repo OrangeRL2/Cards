@@ -1,3 +1,4 @@
+
 // commands/Utility/miss.js
 const {
   SlashCommandBuilder,
@@ -11,20 +12,29 @@ const {
   TextInputBuilder,
   TextInputStyle,
 } = require('discord.js');
+const fs = require('node:fs');
 const path = require('node:path');
 const User = require('../../models/User');
 const { resolveCardColor, getAttributeEmoji } = require('../../config/holomemColor');
 const pools = require('../../utils/loadImages');
+const { rarityChoices } = require('../../utils/rarities');
 
 const IMAGE_BASE = process.env.IMAGE_BASE || 'http://152.69.195.48/images';
 const PAGE_SIZE = 10;
 const IDLE_LIMIT = 120_000; // 2 minutes
 
 const RARITY_ORDER = [
-  'XMAS', "VAL", "EAS", 'C', 'U', 'R', 'S', 'RR', 'OC', 'SR', 'COL', 'OSR', 'P', 'SP', 'SY', 'UR', 'OUR', 'HR', 'BDAY', 'UP', 'SEC',  "ORI","EV"
+  'C', 'U', 'R', 'S', 'RR', 'OC', 'SR', 'COL', 'OSR',
+  'P', 'SP', 'SY', 'UR', 'OUR', 'HR', 'BDAY', 'UP', 'SEC', 'ORI', 'EV',
 ];
+const RARITY2_ORDER = ['XMAS', 'VAL', 'EAS', 'SUN', '★★★', '★★★★', '★★★★★'];
+const ALL_RARITY_ORDER = [...RARITY2_ORDER, ...RARITY_ORDER];
 
 const COLOR_MAP = {
+  SUN: 0xF4C542,
+  '★★★': 0xF5C2E7,
+  '★★★★': 0xE8B4F8,
+  '★★★★★': 0xFFD166,
   XMAS:   0x05472A, // XMAS Green
   C:    Colors.Grey, 
   U:    Colors.White,
@@ -67,17 +77,39 @@ function colorRankOf(name, rarity) {
   const c = resolveCardColor(name, rarity) ?? 'none';
   return COLOR_SORT_ORDER[String(c).toLowerCase()] ?? 999;
 }
+
+function buildMissingCardImageUrl(card) {
+  const baseUrl = IMAGE_BASE.replace(/\/$/, '');
+  const rarity = String(card?.rarity || '').trim().toUpperCase();
+  const encodedName = encodeURIComponent(String(card?.name || '').trim());
+  if (rarity === 'SUN' && card.folder) {
+    return `${baseUrl}/SUN/${encodeURIComponent(card.folder)}/${encodedName}.png`;
+  }
+  if (/^★{3,5}$/.test(rarity)) {
+    return `${baseUrl}/HOLODORI/${encodeURIComponent(rarity)}/${encodedName}.png`;
+  }
+  if (rarity === 'COL' || rarity === 'ORI') {
+    return `${baseUrl}/${encodeURIComponent(rarity)}/secret.png`;
+  }
+  return `${baseUrl}/${encodeURIComponent(rarity)}/${encodedName}.png`;
+}
+
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('miss')
     .setDescription('Show which cards you do not have yet')
     .addStringOption(opt =>
       opt.setName('rarity')
-        .setDescription('Filter by rarity')
+        .setDescription('Filter by standard rarity')
         .addChoices(
           { name: 'All', value: 'ALL' },
-          ...RARITY_ORDER.map(r => ({ name: r, value: r })),
-        ),
+          ...rarityChoices(),
+        )
+    )
+    .addStringOption(opt =>
+      opt.setName('rarity2')
+        .setDescription('Filter by event or special rarity')
+        .addChoices(...rarityChoices({ group: 'special' }))
     )
     .addStringOption(opt =>
       opt.setName('search')
@@ -113,8 +145,13 @@ requireOshi: true,
     await interaction.deferReply();
 
     try {
-      const filterR = interaction.options.getString('rarity') || 'ALL';
-  const filterRNorm = String(filterR).trim().toUpperCase();
+      const filterR1 = interaction.options.getString('rarity');
+      const filterR2 = interaction.options.getString('rarity2');
+      if (filterR1 && filterR2) {
+        return interaction.editReply({ content: 'Choose either `rarity` or `rarity2`, not both.', ephemeral: true });
+      }
+      const filterR = filterR2 || filterR1 || 'ALL';
+      const filterRNorm = String(filterR).trim().toUpperCase();
       const filterQ = interaction.options.getString('search')?.toLowerCase();
   const filterColor = interaction.options.getString('color');
   const sortBy = interaction.options.getString('sort') || 'rarity';
@@ -123,13 +160,53 @@ requireOshi: true,
       const userDoc = await User.findOne({ id: interaction.user.id });
       const owned = Array.isArray(userDoc?.cards) ? userDoc.cards : [];
 
-      // build universe from pools in desired order
+      // Build the complete card universe. SUN and HOLODORI use nested folders.
       const universe = [];
-      for (const rarity of RARITY_ORDER) {
-        const files = Array.isArray(pools[rarity]) ? pools[rarity] : [];
-        for (const f of files) {
-          const name = path.basename(f, path.extname(f));
-          universe.push({ rarity, name, file: f });
+      const assetsBase = path.join(__dirname, '..', '..', 'assets', 'images');
+
+      for (const rarity of ALL_RARITY_ORDER) {
+        if (rarity === 'SUN') {
+          // SUN's source of truth is the image folders on disk.
+          // Scan only island folders and intentionally exclude "Full Art".
+          const sunBase = path.join(assetsBase, 'SUN');
+          const islandFolders = ['Blue', 'Green', 'Red', 'Yellow'];
+
+          for (const folder of islandFolders) {
+            const folderPath = path.join(sunBase, folder);
+            if (!fs.existsSync(folderPath)) continue;
+
+            const files = fs.readdirSync(folderPath, { withFileTypes: true })
+              .filter(entry => entry.isFile() && /\.(png|jpe?g|webp|gif)$/i.test(entry.name))
+              .map(entry => entry.name);
+
+            for (const file of files) {
+              universe.push({
+                rarity: 'SUN',
+                name: path.basename(file, path.extname(file)),
+                folder,
+                file: path.join(folderPath, file),
+              });
+            }
+          }
+
+          continue;
+        }
+
+        if (/^★{3,5}$/.test(rarity)) {
+          const starFolder = path.join(assetsBase, 'HOLODORI', rarity);
+          if (fs.existsSync(starFolder)) {
+            const starFiles = fs.readdirSync(starFolder)
+              .filter(file => /\.(png|jpe?g|webp|gif)$/i.test(file));
+            for (const file of starFiles) {
+              universe.push({ rarity, name: path.basename(file, path.extname(file)), file });
+            }
+          }
+          continue;
+        }
+
+        const rarityFiles = Array.isArray(pools[rarity]) ? pools[rarity] : [];
+        for (const file of rarityFiles) {
+          universe.push({ rarity, name: path.basename(file, path.extname(file)), file });
         }
       }
 
@@ -165,7 +242,7 @@ requireOshi: true,
 
       // order by rarity (RARITY_ORDER) then name
       const orderIndex = r => {
-        const idx = RARITY_ORDER.indexOf(r);
+        const idx = ALL_RARITY_ORDER.indexOf(r);
         return idx === -1 ? 999 : idx;
       };
       if (sortBy === 'color') {
@@ -196,12 +273,7 @@ requireOshi: true,
       }
 
       // prepare imageResults (flat list of missing cards for image view)
-      const imageResults = missing.map(c => {
-        // If rarity is COL, show secret.png instead of the card image
-        const imageFile = c.rarity === 'COL' ? 'secret.png' : `${encodeURIComponent(String(c.name))}.png`;
-        const url = `${IMAGE_BASE}/${encodeURIComponent(c.rarity)}/${imageFile}`;
-        return { c, url };
-      });
+      const imageResults = missing.map(c => ({ c, url: buildMissingCardImageUrl(c) }));
 
       // uid and cid helpers to avoid collisions
       const uid = interaction.id || `${Date.now()}_${Math.floor(Math.random() * 1000)}`;
@@ -214,13 +286,7 @@ requireOshi: true,
           .setDescription(
             chunk
               .map(c => {
-                // If rarity is COL, link to secret.png instead of the card image
-                const secretRarities = ['ORI', 'COL'];
-
-                const imageFile = secretRarities.includes(c.rarity)
-                  ? 'secret.png'
-                  : `${encodeURIComponent(String(c.name))}.png`;
-                const url = `${IMAGE_BASE}/${encodeURIComponent(c.rarity)}/${imageFile}`;
+                const url = buildMissingCardImageUrl(c);
                 const cc = resolveCardColor(c.name, c.rarity);
                 const emoji = cc ? getAttributeEmoji(cc) : '';
                 const attrTag = emoji ? ` ${emoji}` : '';

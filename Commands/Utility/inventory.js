@@ -1,3 +1,4 @@
+
 const {
   SlashCommandBuilder,
   EmbedBuilder,
@@ -17,6 +18,7 @@ const {
 } = require('../../config/summer-cards');
 
 const User = require('../../models/User');
+const { rarityChoices } = require('../../utils/rarities');
 const { resolveCardColor, getAttributeEmoji } = require('../../config/holomemColor');
 
 const IMAGE_BASE = 'http://152.69.195.48/images';
@@ -174,43 +176,14 @@ module.exports = {
     .addStringOption(opt =>
       opt
         .setName('rarity')
-        .setDescription('Filter by rarity')
-        .addChoices(
-          { name: 'XMAS', value: 'XMAS' },
-          { name: 'VAL', value: 'VAL' },
-          { name: 'EAS', value: 'EAS' },
-          { name: 'SUN', value: 'SUN' },
-          { name: 'C', value: 'C' },
-          { name: 'U', value: 'U' },
-          { name: 'R', value: 'R' },
-          { name: 'S', value: 'S' },
-          { name: 'RR', value: 'RR' },
-          { name: 'OC', value: 'OC' },
-          { name: 'SR', value: 'SR' },
-          { name: 'COL', value: 'COL' },
-          { name: 'OSR', value: 'OSR' },
-          { name: 'P', value: 'P' },
-          { name: 'SP', value: 'SP' },
-          { name: 'UP', value: 'UP' },
-          { name: 'SY', value: 'SY' },
-          { name: 'UR', value: 'UR' },
-          { name: 'OUR', value: 'OUR' },
-          { name: 'HR', value: 'HR' },
-          { name: 'BDAY', value: 'BDAY' },
-          { name: 'SEC', value: 'SEC' },
-          { name: 'ORI', value: 'ORI' },
-          { name: 'EV', value: 'EV' },
-        )
+        .setDescription('Filter by standard rarity')
+        .addChoices(...rarityChoices())
     )
     .addStringOption(opt =>
       opt
         .setName('rarity2')
-        .setDescription('Filter by HOLODORI star rarity')
-        .addChoices(
-          { name: '★★★', value: '★★★' },
-          { name: '★★★★', value: '★★★★' },
-          { name: '★★★★★', value: '★★★★★' },
-        )
+        .setDescription('Filter by event or special rarity')
+        .addChoices(...rarityChoices({ group: 'special' }))
     )
     .addStringOption(opt =>
       opt

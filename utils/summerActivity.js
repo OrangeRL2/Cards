@@ -1,9 +1,11 @@
+
 const activities = require('../config/summer-activities.json');
 const rewardTables = require('../config/summer-rewards');
 const SummerUser = require('../models/SummerUser');
 const User = require('../models/User');
 const { findCardIsland, getIslandFolder } = require('../config/summer-cards');
 
+const { findSunCardFile } = require('./summerCardFiles');
 const IMAGE_BASE = process.env.IMAGE_BASE || 'http://152.69.195.48/images';
 const WINDOWS = ['morning','noon','evening'];
 const inFlight = new Set();
@@ -28,11 +30,11 @@ function getWindowState(summerUser, day, windowName) {
 }
 function chooseWeighted(items) { const total=items.reduce((s,x)=>s+Number(x.weight||0),0); let roll=Math.random()*total; for (const x of items){ roll-=Number(x.weight||0); if(roll<0)return x; } return items[items.length-1]; }
 function unique(values){ return [...new Set((values||[]).filter(Boolean))]; }
-function cardImageUrl(name){ const island=findCardIsland(name); const folder=getIslandFolder(island); return folder ? `${IMAGE_BASE.replace(/\/$/,'')}/SUN/${encodeURIComponent(folder)}/${encodeURIComponent(name)}.png` : null; }
+function cardImageUrl(name){ const card=findSunCardFile(name); return card ? `${IMAGE_BASE.replace(/\/$/,'')}/SUN/${encodeURIComponent(card.folder)}/${encodeURIComponent(card.filename)}` : null; }
 async function awardCard(userId,name,storedName=name){ const now=new Date(); await User.updateOne({id:userId},{$setOnInsert:{id:userId,cards:[],points:0,pulls:0}},{upsert:true}).exec(); const hit=await User.updateOne({id:userId,cards:{$elemMatch:{name:storedName,rarity:'SUN'}}},{$inc:{'cards.$.count':1},$set:{'cards.$.lastAcquiredAt':now}}).exec(); if(!hit.matchedCount){ await User.updateOne({id:userId},{$push:{cards:{name:storedName,rarity:'SUN',count:1,firstAcquiredAt:now,lastAcquiredAt:now,locked:false}}}).exec(); } }
 async function saveState(userId,key,state){ await SummerUser.updateOne({userId},{$set:{[`activityProgress.${key}`]:state}}).exec(); }
 async function selectCore(userId,day,windowName,coreId){ const doc=await SummerUser.findOne({userId}).lean().exec(); const win=getDayData(day)?.windows?.[windowName]; const core=win?.coreActivities?.find(x=>x.id===coreId); if(!core)return {success:false,reason:'INVALID'}; const key=progressKey(day,windowName), old=getWindowState(doc,day,windowName); if(old.completed)return {success:false,reason:'COMPLETED'}; if(old.coreId && old.coreId!==coreId)return {success:false,reason:'LOCKED'}; const state={...old,coreId,stepId:core.steps[0]?.id||'',eligibleSunMembers:old.eligibleSunMembers||[],choices:old.choices||[],flags:old.flags||[],startedAt:old.startedAt||new Date()}; await saveState(userId,key,state); return {success:true,core,state}; }
-async function chooseOption(userId,day,windowName,coreId,stepId,optionId){ const key=String(userId); if(inFlight.has(key))return {success:false,reason:'BUSY'}; inFlight.add(key); try { const doc=await SummerUser.findOne({userId:key}).lean().exec(); const win=getDayData(day)?.windows?.[windowName], core=win?.coreActivities?.find(x=>x.id===coreId), step=core?.steps?.find(x=>x.id===stepId), option=step?.options?.find(x=>x.id===optionId); if(!core||!step||!option)return {success:false,reason:'INVALID'}; const pkey=progressKey(day,windowName), old=getWindowState(doc,day,windowName); if(old.completed)return {success:false,reason:'COMPLETED'}; if(old.coreId!==coreId || old.stepId!==stepId)return {success:false,reason:'STALE'}; const eligible=unique([...(old.eligibleSunMembers||[]),...(option.eligibleSunMembers||[])]); const choices=[...(old.choices||[]),{stepId,optionId}]; const flags=unique([...(old.flags||[]),option.setFlag]); if(option.nextStepId){ const state={...old,stepId:option.nextStepId,eligibleSunMembers:eligible,choices,flags,lastResultDialogue:option.resultDialogue}; await saveState(key,pkey,state); return {success:true,completed:false,core,option,state}; }
+async function chooseOption(userId,day,windowName,coreId,stepId,optionId){ const key=String(userId); if(inFlight.has(key))return {success:false,reason:'BUSY'}; inFlight.add(key); try { const doc=await SummerUser.findOne({userId:key}).lean().exec(); const win=getDayData(day)?.windows?.[windowName], core=win?.coreActivities?.find(x=>x.id===coreId), step=core?.steps?.find(x=>x.id===stepId), option=step?.options?.find(x=>x.id===optionId); if(!core||!step||!option)return {success:false,reason:'INVALID'}; const pkey=progressKey(day,windowName), old=getWindowState(doc,day,windowName); if(old.completed)return {success:false,reason:'COMPLETED'}; if(old.coreId!==coreId || old.stepId!==stepId)return {success:false,reason:'STALE'}; const eligible=unique([...(old.eligibleSunMembers||[]),...(option.eligibleSunMembers||[])]).filter(name=>Boolean(findSunCardFile(name))); const choices=[...(old.choices||[]),{stepId,optionId}]; const flags=unique([...(old.flags||[]),option.setFlag]); if(option.nextStepId){ const state={...old,stepId:option.nextStepId,eligibleSunMembers:eligible,choices,flags,lastResultDialogue:option.resultDialogue}; await saveState(key,pkey,state); return {success:true,completed:false,core,option,state}; }
     const table=rewardTables[core.rewardTableId]||rewardTables.summer_activity_default; let reward=chooseWeighted(table); if(reward.type==='sunCard' && eligible.length===0) reward={type:'shells',amount:20};
     const state={...old,stepId:'',eligibleSunMembers:eligible,choices,flags,lastResultDialogue:option.resultDialogue,completed:true,completedAt:new Date(),reward};
     const guard=await SummerUser.updateOne({userId:key,[`activityProgress.${pkey}.completed`]:{$ne:true}},{$set:{[`activityProgress.${pkey}`]:state,'stats.lastActivityAt':new Date()},$inc:{'stats.activitiesCompleted':1}}).exec(); if(!guard.modifiedCount)return {success:false,reason:'COMPLETED'};
@@ -43,3 +45,5 @@ async function chooseOption(userId,day,windowName,coreId,stepId,optionId){ const
   } catch(error){ console.error('[summerActivity]',error); return {success:false,reason:'ERROR',error}; } finally { inFlight.delete(key); }
 }
 module.exports={ WINDOWS,jstParts,currentWindow,progressKey,getDayNumber,getDayData,isWindowAvailable,getWindowState,selectCore,chooseOption };
+
+

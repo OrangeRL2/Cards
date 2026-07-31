@@ -1,8 +1,9 @@
+
 // Commands/Utility/gift.js
 const { SlashCommandBuilder } = require('discord.js');
 const User = require('../../models/User');
 const { resolveCardColor, getAttributeEmoji } = require('../../config/holomemColor');
-const { rarityChoices, parseRarityFilter } = require('../../utils/rarities');
+const { rarityChoices, resolveRarityOptions } = require('../../utils/rarities');
 // Attribute emoji helper (emoji-only)
 function attrEmoji(name, rarity) {
   const cc = resolveCardColor(name, rarity);
@@ -33,39 +34,39 @@ module.exports = {
   data: new SlashCommandBuilder()
     .setName('gift')
     .setDescription('Give cards to another user (no acceptance needed)')
+    // Required options must precede optional rarity selectors.
     .addUserOption(option =>
-      option
-        .setName('user')
+      option.setName('user')
         .setDescription('Who to send cards to')
         .setRequired(true)
     )
     .addStringOption(option =>
-      option
-        .setName('card')
+      option.setName('card')
         .setDescription('Card name prefix to match (case-insensitive)')
         .setRequired(true)
     )
-.addStringOption(opt =>
-  opt.setName('rarity')
-    .setDescription('Rarity')
-    .setRequired(true)
-    .addChoices(...rarityChoices({ includeAnyAll: true }))
-)
     .addIntegerOption(option =>
-      option
-        .setName('count')
+      option.setName('count')
         .setDescription('How many cards to send (total across matches)')
         .setRequired(true)
     )
+    .addStringOption(opt =>
+      opt.setName('rarity')
+        .setDescription('Standard rarity')
+        .addChoices(...rarityChoices({ includeAnyAll: true }))
+    )
+    .addStringOption(opt =>
+      opt.setName('rarity2')
+        .setDescription('Event or special rarity')
+        .addChoices(...rarityChoices({ group: 'special' }))
+    )
     .addBooleanOption(option =>
-      option
-        .setName('multi')
+      option.setName('multi')
         .setDescription('If true, do not take the last copy from any matched stack')
         .setRequired(false)
     )
     .addBooleanOption(option =>
-      option
-        .setName('allowlocked')
+      option.setName('allowlocked')
         .setDescription('If true, include locked stacks in the matches (default: false)')
         .setRequired(false)
     ),
@@ -74,16 +75,18 @@ module.exports = {
 
   async execute(interaction) {
     // Defer immediately to avoid "Unknown interaction" when processing takes time
-        const { any, rarity } = parseRarityFilter(interaction.options.getString('rarity'));
-    // if (!any) then filter by rarity
+    const raritySelection = resolveRarityOptions(interaction, { required: true });
     await interaction.deferReply({ ephemeral: false });
+    if (raritySelection.error) {
+      return interaction.editReply({ content: raritySelection.error });
+    }
 
     try {
       const fromId = interaction.user.id;
       const toUser = interaction.options.getUser('user');
       const partialName = String(interaction.options.getString('card') || '').toLowerCase().trim();
       let sendCount = interaction.options.getInteger('count');
-      const rarityOpt = (interaction.options.getString('rarity') || 'any').toLowerCase().trim();
+      const rarityOpt = String(raritySelection.raw || 'any').toLowerCase().trim();
       const multi = Boolean(interaction.options.getBoolean('multi'));
       const allowLocked = Boolean(interaction.options.getBoolean('allowlocked'));
 
@@ -124,7 +127,7 @@ module.exports = {
 
       if (!matches.length) {
         return await interaction.editReply({
-          content: `No card in your inventory starts with "${partialName}"${matchAnyRarity ? '' : ` and rarity "${interaction.options.getString('rarity')}"`}.`
+          content: `No card in your inventory starts with "${partialName}"${matchAnyRarity ? '' : ` and rarity "${raritySelection.raw}"`}.`
         });
       }
 

@@ -1,3 +1,4 @@
+
 const {
   SlashCommandBuilder,
   EmbedBuilder,
@@ -12,7 +13,7 @@ const {
 } = require('discord.js');
 const User = require('../../models/User');
 const { resolveCardColor, getAttributeEmoji } = require('../../config/holomemColor');
-const { rarityChoices, parseRarityFilter } = require('../../utils/rarities');
+const { rarityChoices, resolveRarityOptions } = require('../../utils/rarities');
 const sessions = new Map();
 
 // Attribute emoji helper (emoji-only)
@@ -57,39 +58,47 @@ module.exports = {
   data: new SlashCommandBuilder()
     .setName('trade')
     .setDescription('Propose a trade (both must accept)')
+    // Required options must precede optional rarity selectors.
     .addUserOption(opt =>
       opt.setName('user')
-         .setDescription('Who to trade with')
-         .setRequired(true)
+        .setDescription('Who to trade with')
+        .setRequired(true)
     )
     .addStringOption(opt =>
       opt.setName('card')
-         .setDescription('Card name prefix to offer')
-         .setRequired(true)
-    )
-    .addStringOption(opt =>
-      opt.setName('rarity')
-         .setDescription('Rarity of the offered card (required)')
-         .setRequired(true)
-         .addChoices(...rarityChoices())
+        .setDescription('Card name prefix to offer')
+        .setRequired(true)
     )
     .addIntegerOption(opt =>
       opt.setName('count')
-         .setDescription('How many cards to offer')
-         .setRequired(true)
+        .setDescription('How many cards to offer')
+        .setRequired(true)
+    )
+    .addStringOption(opt =>
+      opt.setName('rarity')
+        .setDescription('Standard rarity of the offered card')
+        .addChoices(...rarityChoices())
+    )
+    .addStringOption(opt =>
+      opt.setName('rarity2')
+        .setDescription('Event or special rarity of the offered card')
+        .addChoices(...rarityChoices({ group: 'special' }))
     ),
 
   async execute(interaction) {
-    const { any, rarity } = parseRarityFilter(interaction.options.getString('rarity'));
+    const raritySelection = resolveRarityOptions(interaction, { required: true });
     await safeDefer(interaction);
+    if (raritySelection.error) {
+      return interaction.editReply({ content: raritySelection.error });
+    }
 
     const fromId = interaction.user.id;
     const toUser = interaction.options.getUser('user');
     const toId = toUser.id;
     const partial = interaction.options.getString('card').toLowerCase();
     const tradeCount = interaction.options.getInteger('count');
-    const rarityReq = String(interaction.options.getString('rarity') ?? '').toLowerCase();
-    const rarityDisplay = String(interaction.options.getString('rarity') ?? '').toUpperCase();
+    const rarityReq = String(raritySelection.raw ?? '').toLowerCase();
+    const rarityDisplay = String(raritySelection.raw ?? '').toUpperCase();
 
 
 
@@ -115,7 +124,7 @@ module.exports = {
 
     if (fromIdx === -1) {
       return interaction.followUp?.({
-        content: `No card starts with "${partial}" and rarity "${interaction.options.getString('rarity')}".`,
+        content: `No card starts with "${partial}" and rarity "${raritySelection.raw}".`,
         ephemeral: true
       }) ?? null;
     }

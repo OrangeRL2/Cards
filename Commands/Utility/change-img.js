@@ -1,10 +1,11 @@
+
 // commands/change-img.js
 const { SlashCommandBuilder, EmbedBuilder, PermissionFlagsBits } = require('discord.js');
 const mongoose = require('mongoose');
 const OshiUser = require('../../models/Oshi');
 const User = require('../../models/User');
 const OSHI_LIST = require('../../config/oshis');
-const { rarityChoices, parseRarityFilter } = require('../../utils/rarities');
+const { rarityChoices, resolveRarityOptions } = require('../../utils/rarities');
 const excelExceptions = require('../../config/imgExceptions.excel');
 // Optional manual overrides (merged with excelExceptions)
 const MANUAL_EXCEPTIONS = {
@@ -38,12 +39,29 @@ module.exports = {
   data: new SlashCommandBuilder()
     .setName('img')
     .setDescription('Set a custom card image for a user (must own the card).')
-    .addStringOption(opt => opt.setName('rarity').setDescription('Rarity (e.g., C,U,R,S,P,SEC)').setRequired(true).addChoices(...rarityChoices()))
-    .addStringOption(opt => opt.setName('card').setDescription('Card name (e.g., "Reine 001")').setRequired(true)),
+    // Discord requires every required option to appear before optional options.
+    .addStringOption(opt =>
+      opt.setName('card')
+        .setDescription('Card name (e.g., "Reine 001")')
+        .setRequired(true)
+    )
+    .addStringOption(opt =>
+      opt.setName('rarity')
+        .setDescription('Standard rarity')
+        .addChoices(...rarityChoices())
+    )
+    .addStringOption(opt =>
+      opt.setName('rarity2')
+        .setDescription('Event or special rarity')
+        .addChoices(...rarityChoices({ group: 'special' }))
+    ),
 
   async execute(interaction) {
-    const { any, rarity } = parseRarityFilter(interaction.options.getString('rarity'));
+    const raritySelection = resolveRarityOptions(interaction, { required: true });
     await interaction.deferReply({ ephemeral: true });
+    if (raritySelection.error) {
+      return interaction.editReply({ content: raritySelection.error });
+    }
     try {
       const targetUser = interaction.options.getUser('target') ?? interaction.user;
       const targetId = targetUser.id;
@@ -57,7 +75,7 @@ module.exports = {
         }
       }
 
-      const rarityRaw = (interaction.options.getString('rarity') || '').trim();
+      const rarityRaw = String(raritySelection.raw || '').trim();
       const cardRaw = (interaction.options.getString('card') || '').trim();
       if (!rarityRaw || !cardRaw) {
         return interaction.editReply({ content: 'Both rarity and card name are required.' });

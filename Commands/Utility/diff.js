@@ -1,3 +1,4 @@
+
 const {
   SlashCommandBuilder,
   EmbedBuilder,
@@ -11,7 +12,7 @@ const {
 const User = require('../../models/User');
 const { normalizeCards } = require('../../utils/normalizeCards');
 const { resolveCardColor, getAttributeEmoji } = require('../../config/holomemColor');
-const { rarityChoices, parseRarityFilter } = require('../../utils/rarities');
+const { rarityChoices, resolveRarityOptions } = require('../../utils/rarities');
 
 const ITEMS_PER_PAGE = 10;
 const IDLE_LIMIT = 120_000;
@@ -58,28 +59,9 @@ function colorRankOf(name, rarity) {
 
 // RARITY order consistent with inventory / miss (later items considered rarer)
 const RARITY_ORDER = [
-  'XMAS',
-  'VAL',
-  'EAS',
-  'C',
-  'U',
-  'R',
-  'S',
-  'RR',
-  'OC',
-  'SR',
-  'COL',
-  'OSR',
-  'P',
-  'SP',
-  'SY',
-  'UR',
-  'OUR',
-  'HR',
-  'BDAY',
-  'UP',
-  'SEC',
-  'ORI',
+  'XMAS', 'VAL', 'EAS', 'SUN', '★★★', '★★★★', '★★★★★',
+  'C', 'U', 'R', 'S', 'RR', 'OC', 'SR', 'COL', 'OSR',
+  'P', 'SP', 'SY', 'UR', 'OUR', 'HR', 'BDAY', 'UP', 'SEC', 'ORI', 'EV',
 ];
 
 module.exports = {
@@ -105,8 +87,14 @@ module.exports = {
     .addStringOption(opt =>
       opt
         .setName('rarity')
-        .setDescription('Rarity')
+        .setDescription('Standard rarity')
         .addChoices(...rarityChoices({ includeAnyAll: true }))
+    )
+    .addStringOption(opt =>
+      opt
+        .setName('rarity2')
+        .setDescription('Event or special rarity')
+        .addChoices(...rarityChoices({ group: 'special' }))
     )
     .addStringOption(opt =>
       opt
@@ -157,7 +145,11 @@ module.exports = {
   requireOshi: true,
 
   async execute(interaction) {
-    parseRarityFilter(interaction.options.getString('rarity'));
+    const raritySelection = resolveRarityOptions(interaction);
+    if (raritySelection.error) {
+      await interaction.reply({ content: raritySelection.error, ephemeral: true });
+      return;
+    }
 
     const targetUser = interaction.options.getUser('user');
     if (!targetUser || targetUser.bot) {
@@ -170,7 +162,7 @@ module.exports = {
 
     const mode = interaction.options.getString('mode');
 
-    const filterR = interaction.options.getString('rarity');
+    const filterR = raritySelection.raw;
     const filterRNorm = filterR ? String(filterR).trim().toUpperCase() : null;
     const targetAllRarities =
       !filterRNorm ||

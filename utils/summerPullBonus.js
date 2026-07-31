@@ -1,5 +1,7 @@
+
 // utils/summerPullBonus.js
 const path = require('node:path');
+const { readIslandSunCards } = require('./summerCardFiles');
 const SummerUser = require('../models/SummerUser');
 const config = require('../config.json');
 const {
@@ -168,14 +170,23 @@ function rollSummerBonus({
   const normalizedChance = Math.max(0, Math.min(1, Number(chance) || 0));
   if (rng() >= normalizedChance) return null;
 
-  const cards = getIslandCards(island);
-  const cardName = randomItem(cards, rng);
   const folder = getIslandFolder(island);
+  if (!folder) return null;
 
-  if (!cardName || !folder) return null;
+  // Island config controls original-rarity candidates/channel membership,
+  // but only members with a real SUN image may become a SUN bonus card.
+  const configuredNames = new Set(
+    getIslandCards(island).map(name => String(name).trim().toLowerCase())
+  );
+  const availableCards = readIslandSunCards(folder, assetsRoot)
+    .filter(card => configuredNames.has(card.cardName.toLowerCase()));
+  const selected = randomItem(availableCards, rng);
 
-  const filename = `${cardName}.png`;
-  const file = path.join(assetsRoot, EVENT_RARITY, folder, filename);
+  if (!selected) return null;
+
+  const cardName = selected.cardName;
+  const filename = selected.filename;
+  const file = selected.file;
 
   return {
     rarity: EVENT_RARITY,
@@ -203,3 +214,5 @@ module.exports = {
   rollSummerBonus,
   hasStaffChannelBypass,
 };
+
+

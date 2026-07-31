@@ -1,8 +1,9 @@
+
 // Commands/Utility/lock.js
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const User = require('../../models/User');
 const { resolveCardColor, getAttributeEmoji } = require('../../config/holomemColor');
-const { rarityChoices, parseRarityFilter } = require('../../utils/rarities');
+const { rarityChoices, resolveRarityOptions } = require('../../utils/rarities');
 // Attribute emoji helper (emoji-only)
 function attrEmoji(name, rarity) {
   const cc = resolveCardColor(name, rarity);
@@ -14,15 +15,11 @@ module.exports = {
   data: new SlashCommandBuilder()
     .setName('lock')
     .setDescription('Lock or unlock cards to prevent them from being traded, gifted, burned, or used in lives')
+    // Required options must precede optional rarity selectors.
     .addStringOption(option =>
       option.setName('card')
         .setDescription('Card name (prefix) OR "all"/"any"/* to target all cards')
-        .setRequired(true))
-    .addStringOption(option =>
-      option.setName('rarity')
-        .setDescription('Rarity of the card (required). Use "all" or "any" to target every rarity')
         .setRequired(true)
-        .addChoices(...rarityChoices({ includeAnyAll: true }))
     )
     .addStringOption(option =>
       option.setName('action')
@@ -31,17 +28,31 @@ module.exports = {
         .addChoices(
           { name: '🔒 Lock', value: 'lock' },
           { name: '🔓 Unlock', value: 'unlock' }
-        )),
+        )
+    )
+    .addStringOption(option =>
+      option.setName('rarity')
+        .setDescription('Standard rarity; use Any rarity to target every rarity')
+        .addChoices(...rarityChoices({ includeAnyAll: true }))
+    )
+    .addStringOption(option =>
+      option.setName('rarity2')
+        .setDescription('Event or special rarity')
+        .addChoices(...rarityChoices({ group: 'special' }))
+    ),
   requireOshi: true,
 
   async execute(interaction) {
-    const { any, rarity } = parseRarityFilter(interaction.options.getString('rarity'));
+    const raritySelection = resolveRarityOptions(interaction, { required: true });
+    if (raritySelection.error) {
+      return interaction.reply({ content: raritySelection.error, flags: 64 });
+    }
     const userId = interaction.user.id;
 
     const cardReqRaw = interaction.options.getString('card');
     const cardReq = String(cardReqRaw).trim().toLowerCase();
 
-    const rarityReqRaw = interaction.options.getString('rarity');
+    const rarityReqRaw = raritySelection.raw;
     const rarityReq = String(rarityReqRaw).trim().toLowerCase();
 
     const action = interaction.options.getString('action');
