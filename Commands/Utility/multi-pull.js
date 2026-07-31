@@ -487,12 +487,8 @@ function escapeLinkText(text) {
 
 async function getInteractionRoleIds(interaction) {
   const cachedRoles = interaction.member?.roles?.cache;
-  if (cachedRoles && typeof cachedRoles.keys === 'function') {
-    return [...cachedRoles.keys()].map(String);
-  }
-  if (Array.isArray(interaction.member?.roles)) {
-    return interaction.member.roles.map(String);
-  }
+  if (cachedRoles && typeof cachedRoles.keys === 'function') return [...cachedRoles.keys()].map(String);
+  if (Array.isArray(interaction.member?.roles)) return interaction.member.roles.map(String);
   if (interaction.guild && interaction.user?.id) {
     const member = await interaction.guild.members.fetch(interaction.user.id).catch(() => null);
     if (member?.roles?.cache) return [...member.roles.cache.keys()].map(String);
@@ -811,7 +807,10 @@ const frozen = isFrozen(discordUserId, member);
           forceSEC = (!pityNoForce) && (runningSinceSEC >= 1999);
           let drawnPack;
           if (!useSpecial && bossChannelBias && bossChannelBias.biased && bossChannelBias.drawToken) {
-            drawnPack = await drawPackBoss(discordUserId, bossChannelBias.drawToken, { forceSEC });
+            drawnPack = await drawPackBoss(discordUserId, bossChannelBias.drawToken, {
+            forceSEC,
+            summerIsland: summerContext?.summerActive ? summerContext.island : null,
+          });
           } else if (useSpecial && drawPackSpecial && specialDrawToken) {
             drawnPack = await drawPackSpecial(discordUserId, specialDrawToken, { forceSEC });
           } else {

@@ -1,14 +1,66 @@
+
 // utils/drawPackBoss.js
 const path = require('path');
 const pools = require('./loadImages');
 const { pickCardFromRarityFolder } = require('./cardPicker');
 const { pickWeighted, buildSlotOptions, getUserProfile, getOverrides } = require('./rates');
 const { rollExtraSlot } = require('./extraSlot');
+const { normalizeIsland, getIslandCards } = require('../config/summer-cards');
 // --- Boss alias exceptions map (kept from your file)
 const bossAliasMap = {
   Fuwawa: ['Fuwawa', 'Mococo', 'Fuwamoco'],
   Mococo: ['Fuwawa', 'Mococo', 'Fuwamoco'],
 };
+
+
+const SUMMER_MEMBER_ALIASES = Object.freeze({
+  Elizabeth: ['Liz'],
+  'Fubuki G': ['Fubuki G'],
+  'La+': ['Laplus'],
+  Achan: ['A-chan'],
+});
+
+function getCardBaseName(file) {
+  return path.basename(String(file || ''), path.extname(String(file || ''))).trim();
+}
+
+function getAllowedNamesForIsland(island) {
+  const names = new Set();
+  for (const member of getIslandCards(island)) {
+    names.add(member);
+    for (const alias of SUMMER_MEMBER_ALIASES[member] || []) names.add(alias);
+  }
+  return [...names];
+}
+
+function isIslandMemberFile(file, island) {
+  const normalizedIsland = normalizeIsland(island);
+  if (!normalizedIsland) return true;
+  const cardName = getCardBaseName(file);
+  if (/^support(?:\s|$)/i.test(cardName)) return false;
+  return getAllowedNamesForIsland(normalizedIsland).some(memberName => {
+    const escaped = String(memberName).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    return new RegExp(`^${escaped}(?:\\s|$)`, 'i').test(cardName);
+  });
+}
+
+function getIslandPoolFiles(rarity, island) {
+  const all = [
+    ...(Array.isArray(pools.special?.[rarity]) ? pools.special[rarity] : []),
+    ...(Array.isArray(pools.other?.[rarity]) ? pools.other[rarity] : []),
+    ...(Array.isArray(pools[rarity]) ? pools[rarity] : []),
+  ];
+  return Array.from(new Set(all)).filter(file => isIslandMemberFile(file, island));
+}
+
+function pickIslandFallback(rarity, island) {
+  const eligible = getIslandPoolFiles(rarity, island);
+  if (!eligible.length) {
+    throw new Error(`No eligible ${rarity} cards for Summer island "${island}".`);
+  }
+  const raw = uniformPick(eligible);
+  return path.basename(raw, path.extname(raw));
+}
 
 function uniformPick(arr) {
   return arr[Math.floor(Math.random() * arr.length)];
@@ -27,34 +79,42 @@ function fallbackPickFromPools(rarity) {
   return `${rarity}-unknown-001.png`;
 }
 
-async function pickForSlot(rarity, bossLabel) {
-  const tryBoss = !!bossLabel && Math.random() < 0.1; // 10% boss bias
+async function pickForSlot(rarity, bossLabel, summerIsland = null) {
+  const tryBoss = !!bossLabel && Math.random() < 0.1; // 10% boss-bias exception
   if (tryBoss) {
     try {
       const aliases = bossAliasMap[bossLabel];
-      const candidates = Array.from(new Set((Array.isArray(aliases) && aliases.length > 0) ? aliases : [bossLabel]));
+      const candidates = Array.from(new Set(
+        Array.isArray(aliases) && aliases.length > 0 ? aliases : [bossLabel]
+      ));
       const first = uniformPick(candidates);
-      const ordered = [first, ...candidates.filter((c) => c !== first)];
+      const ordered = [first, ...candidates.filter(candidate => candidate !== first)];
 
       for (const candidateLabel of ordered) {
         try {
-          const picked = await pickCardFromRarityFolder(rarity, candidateLabel, { avoidImmediateRepeat: true });
+          const picked = await pickCardFromRarityFolder(
+            rarity,
+            candidateLabel,
+            { avoidImmediateRepeat: true }
+          );
+          // A successful boss-biased card is intentionally allowed even if the
+          // boss member is outside the player's Summer island.
           if (picked) return picked;
-        } catch (err) {
-          // continue
-        }
+        } catch {}
       }
-    } catch (err) {
-      // fall through
-    }
+    } catch {}
+  }
+
+  const normalizedIsland = normalizeIsland(summerIsland);
+  if (normalizedIsland) {
+    // No boss-bias result: strictly use the player's island pool.
+    return pickIslandFallback(rarity, normalizedIsland);
   }
 
   try {
     const fallback = await pickCardFromRarityFolder(rarity, null, { avoidImmediateRepeat: true });
     if (fallback) return fallback;
-  } catch (err) {
-    // fall through
-  }
+  } catch {}
 
   const raw = fallbackPickFromPools(rarity);
   return path.basename(raw, path.extname(raw));
@@ -63,6 +123,7 @@ async function pickForSlot(rarity, bossLabel) {
 async function drawPackBoss(userId, bossLabel, opts = {}) {
   const results = [];
   const profile = getUserProfile(userId);
+  const summerIsland = normalizeIsland(opts?.summerIsland);
 
   // Common slots (4)
   const commonSlot1Base = [
@@ -74,7 +135,7 @@ async function drawPackBoss(userId, bossLabel, opts = {}) {
   {
     const options = buildSlotOptions(commonSlot1Base, profile.pullRate, getOverrides(profile, 'boss', 'common1'));
     const rarity = pickWeighted(options);
-    const file = await pickForSlot(rarity, bossLabel);
+    const file = await pickForSlot(rarity, bossLabel, summerIsland);
     results.push({ rarity, file });
   }
 
@@ -86,7 +147,7 @@ async function drawPackBoss(userId, bossLabel, opts = {}) {
   {
     const options = buildSlotOptions(commonSlot2Base, profile.pullRate, getOverrides(profile, 'boss', 'common2'));
     const rarity = pickWeighted(options);
-    const file = await pickForSlot(rarity, bossLabel);
+    const file = await pickForSlot(rarity, bossLabel, summerIsland);
     results.push({ rarity, file });
   }
 
@@ -98,7 +159,7 @@ async function drawPackBoss(userId, bossLabel, opts = {}) {
   {
     const options = buildSlotOptions(commonSlot3Base, profile.pullRate, getOverrides(profile, 'boss', 'common3'));
     const rarity = pickWeighted(options);
-    const file = await pickForSlot(rarity, bossLabel);
+    const file = await pickForSlot(rarity, bossLabel, summerIsland);
     results.push({ rarity, file });
   }
 
@@ -110,7 +171,7 @@ async function drawPackBoss(userId, bossLabel, opts = {}) {
   {
     const options = buildSlotOptions(commonSlot4Base, profile.pullRate, getOverrides(profile, 'boss', 'common4'));
     const rarity = pickWeighted(options);
-    const file = await pickForSlot(rarity, bossLabel);
+    const file = await pickForSlot(rarity, bossLabel, summerIsland);
     results.push({ rarity, file });
   }
 
@@ -137,7 +198,7 @@ async function drawPackBoss(userId, bossLabel, opts = {}) {
     const slotName = `uncommon${i + 1}`;
     const options = buildSlotOptions(uncommonSlotBases[i], profile.pullRate, getOverrides(profile, 'boss', slotName));
     const rarity = pickWeighted(options);
-    const file = await pickForSlot(rarity, bossLabel);
+    const file = await pickForSlot(rarity, bossLabel, summerIsland);
     results.push({ rarity, file });
   }
 
@@ -156,12 +217,14 @@ async function drawPackBoss(userId, bossLabel, opts = {}) {
 
     const options = buildSlotOptions(rareBase, profile.pullRate, mergedOverrides);
     const rareRarity = pickWeighted(options);
-    const rareFile = await pickForSlot(rareRarity, bossLabel);
+    const rareFile = await pickForSlot(rareRarity, bossLabel, summerIsland);
     results.push({ rarity: rareRarity, file: rareFile });
   }
   
   const extra = rollExtraSlot(userId, profile, false, opts);
-  if (extra) results.push(extra);
+  if (extra && (!summerIsland || isIslandMemberFile(extra.file, summerIsland))) {
+    results.push(extra);
+  }
 
   if (!Array.isArray(results) || (results.length !== 8 && results.length !== 9)) {
   console.warn('[drawPackBoss] unexpected results length', { length: results.length });
@@ -171,3 +234,4 @@ async function drawPackBoss(userId, bossLabel, opts = {}) {
 }
 
 module.exports = { drawPackBoss };
+
