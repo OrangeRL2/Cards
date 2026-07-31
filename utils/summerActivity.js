@@ -24,16 +24,28 @@ function getDayData(day) { return activities.days.find(d => Number(d.day)===Numb
 function isWindowAvailable(summerUser, windowName, now = new Date()) {
   if (summerUser?.testing?.unlockAllWindows) return true;
 
-  // Windows unlock cumulatively during the JST day. Earlier windows remain
-  // available until midnight so busy players can complete them later.
   const windowOrder = { morning: 0, noon: 1, evening: 2 };
   const current = currentWindow(jstParts(now).hour);
   const wantedRank = windowOrder[windowName];
   const currentRank = windowOrder[current];
 
-  return Number.isInteger(wantedRank)
-    && Number.isInteger(currentRank)
-    && wantedRank <= currentRank;
+  // A window cannot open before its scheduled JST start time.
+  if (!Number.isInteger(wantedRank) || !Number.isInteger(currentRank)) return false;
+  if (wantedRank > currentRank) return false;
+
+  // Earlier windows remain available until midnight, but progression is linear.
+  if (windowName === 'morning') return true;
+
+  const day = getDayNumber(summerUser, now);
+  if (!day) return false;
+
+  const morningComplete = Boolean(getWindowState(summerUser, day, 'morning').completed);
+  if (windowName === 'noon') return morningComplete;
+
+  const noonComplete = Boolean(getWindowState(summerUser, day, 'noon').completed);
+  if (windowName === 'evening') return morningComplete && noonComplete;
+
+  return false;
 }
 function getWindowState(summerUser, day, windowName) {
   return summerUser?.activityProgress?.[progressKey(day,windowName)] || {};
