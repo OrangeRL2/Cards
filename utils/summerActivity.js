@@ -23,7 +23,17 @@ function getDayNumber(summerUser, now = new Date()) {
 function getDayData(day) { return activities.days.find(d => Number(d.day)===Number(day)) || null; }
 function isWindowAvailable(summerUser, windowName, now = new Date()) {
   if (summerUser?.testing?.unlockAllWindows) return true;
-  return currentWindow(jstParts(now).hour) === windowName;
+
+  // Windows unlock cumulatively during the JST day. Earlier windows remain
+  // available until midnight so busy players can complete them later.
+  const windowOrder = { morning: 0, noon: 1, evening: 2 };
+  const current = currentWindow(jstParts(now).hour);
+  const wantedRank = windowOrder[windowName];
+  const currentRank = windowOrder[current];
+
+  return Number.isInteger(wantedRank)
+    && Number.isInteger(currentRank)
+    && wantedRank <= currentRank;
 }
 function getWindowState(summerUser, day, windowName) {
   return summerUser?.activityProgress?.[progressKey(day,windowName)] || {};
