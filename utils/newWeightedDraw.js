@@ -1,45 +1,203 @@
-// newWeightedDraw.js
+// utils/newWeightedDraw.js
+const path = require('path');
+
 const PullQuota = require('../models/PullQuota');
-const { pickWeighted, buildSlotOptions, getUserProfile, getOverrides } = require('../utils/rates');
+const pools = require('../utils/loadImages');
 
-// IMPORTANT: use the shared versions
-const { pickFileFromPool, rollExtraSlot, specialUserIds, otherUserIds } = require('../utils/extraSlot');
+const {
+  pickWeighted,
+  buildSlotOptions,
+  getUserProfile,
+  getOverrides,
+} = require('../utils/rates');
 
-// --- Main draw (async because of DB read)
-// Accept an override flag so callers can decide special-rate eligibility before consuming the pull
+const {
+  pickFileFromPool,
+  rollExtraSlot,
+  specialUserIds,
+  otherUserIds,
+} = require('../utils/extraSlot');
+
+const {
+  getIslandCards,
+  normalizeIsland,
+} = require('../config/summer-cards');
+
+const SUMMER_MEMBER_ALIASES = Object.freeze({
+  'Fubuki G': ['Fubuki'],
+  Fuwawa: ['Fuwawa', 'Fuwamoco'],
+  Mococo: ['Mococo', 'Fuwamoco'],
+});
+
+function getBasePool(rarity, userId, useSpecialRates) {
+  const idStr = String(userId);
+
+  if (
+    useSpecialRates &&
+    specialUserIds.has(idStr) &&
+    pools.special &&
+    Array.isArray(pools.special[rarity]) &&
+    pools.special[rarity].length > 0
+  ) {
+    return pools.special[rarity];
+  }
+
+  if (
+    otherUserIds.has(idStr) &&
+    pools.other &&
+    Array.isArray(pools.other[rarity]) &&
+    pools.other[rarity].length > 0
+  ) {
+    return pools.other[rarity];
+  }
+
+  if (Array.isArray(pools[rarity]) && pools[rarity].length > 0) {
+    return pools[rarity];
+  }
+
+  return [];
+}
+
+function getCardBaseName(file) {
+  const base = path.basename(String(file));
+  return base.slice(0, base.length - path.extname(base).length).trim();
+}
+
+function getAllowedNamesForIsland(island) {
+  const members = getIslandCards(island);
+  const names = new Set();
+
+  for (const member of members) {
+    names.add(member);
+
+    const aliases = SUMMER_MEMBER_ALIASES[member] || [];
+    for (const alias of aliases) {
+      names.add(alias);
+    }
+  }
+
+  return [...names];
+}
+
+function isMemberCardAllowed(file, allowedNames) {
+  const cardName = getCardBaseName(file);
+
+  if (/^support(?:\s|$)/i.test(cardName)) {
+    return false;
+  }
+
+  return allowedNames.some(memberName => {
+    const escaped = String(memberName)
+      .replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+    return new RegExp(`^${escaped}(?:\\s|$)`, 'i').test(cardName);
+  });
+}
+
+function getEligibleIslandFiles(rarity, userId, useSpecialRates, island) {
+  const normalizedIsland = normalizeIsland(island);
+
+  if (!normalizedIsland) {
+    return [];
+  }
+
+  const allowedNames = getAllowedNamesForIsland(normalizedIsland);
+  const pool = getBasePool(rarity, userId, useSpecialRates);
+
+  return pool.filter(file => isMemberCardAllowed(file, allowedNames));
+}
+
+function chooseRarityAndFile(options, userId, useSpecialRates, summerIsland) {
+  const normalizedIsland = normalizeIsland(summerIsland);
+
+  if (!normalizedIsland) {
+    const rarity = pickWeighted(options);
+    const file = pickFileFromPool(rarity, userId, useSpecialRates);
+    return { rarity, file };
+  }
+
+  const eligibleOptions = options.filter(option => {
+    const rarity = option.key;
+    return getEligibleIslandFiles(
+      rarity,
+      userId,
+      useSpecialRates,
+      normalizedIsland
+    ).length > 0;
+  });
+
+  if (eligibleOptions.length === 0) {
+    throw new Error(
+      `No eligible Summer island cards were found for island "${normalizedIsland}".`
+    );
+  }
+
+  const rarity = pickWeighted(eligibleOptions);
+  const eligibleFiles = getEligibleIslandFiles(
+    rarity,
+    userId,
+    useSpecialRates,
+    normalizedIsland
+  );
+
+  const file = eligibleFiles[Math.floor(Math.random() * eligibleFiles.length)];
+
+  return { rarity, file };
+}
+
 async function drawPack(userId, useSpecialRatesOverride = null, opts = {}) {
   const results = [];
   const idStr = String(userId);
 
-  // preserve original "special rate" eligibility gate
   let useSpecialRates = false;
+
   if (useSpecialRatesOverride !== null) {
     useSpecialRates = Boolean(useSpecialRatesOverride);
   } else {
     try {
-      const quota = await PullQuota.findOne({ userId: idStr }).lean().exec();
-      if (quota && typeof quota.pulls === 'number' && quota.pulls >= 0 && specialUserIds.has(idStr)) {
+      const quota = await PullQuota
+        .findOne({ userId: idStr })
+        .lean()
+        .exec();
+
+      if (
+        quota &&
+        typeof quota.pulls === 'number' &&
+        quota.pulls >= 0 &&
+        specialUserIds.has(idStr)
+      ) {
         useSpecialRates = true;
       }
-    } catch (err) {
+    } catch {
       useSpecialRates = false;
     }
   }
 
   const profile = getUserProfile(userId);
+  const summerIsland = normalizeIsland(opts?.summerIsland);
 
-  // Common Slots
   const commonSlot1Base = [
     { key: 'C', weight: 94.8 },
     { key: 'S', weight: 5.0 },
     { key: 'HR', weight: 0.1 },
     { key: 'BDAY', weight: 0.1 },
   ];
+
   {
-    const options = buildSlotOptions(commonSlot1Base, profile.pullRate, getOverrides(profile, 'normal', 'common1'));
-    const rarity = pickWeighted(options);
-    const file = pickFileFromPool(rarity, userId, useSpecialRates);
-    results.push({ rarity, file });
+    const options = buildSlotOptions(
+      commonSlot1Base,
+      profile.pullRate,
+      getOverrides(profile, 'normal', 'common1')
+    );
+
+    results.push(
+      chooseRarityAndFile(
+        options,
+        userId,
+        useSpecialRates,
+        summerIsland
+      )
+    );
   }
 
   const commonSlot2Base = [
@@ -47,11 +205,22 @@ async function drawPack(userId, useSpecialRatesOverride = null, opts = {}) {
     { key: 'S', weight: 5.0 },
     { key: 'OC', weight: 2.0 },
   ];
+
   {
-    const options = buildSlotOptions(commonSlot2Base, profile.pullRate, getOverrides(profile, 'normal', 'common2'));
-    const rarity = pickWeighted(options);
-    const file = pickFileFromPool(rarity, userId, useSpecialRates);
-    results.push({ rarity, file });
+    const options = buildSlotOptions(
+      commonSlot2Base,
+      profile.pullRate,
+      getOverrides(profile, 'normal', 'common2')
+    );
+
+    results.push(
+      chooseRarityAndFile(
+        options,
+        userId,
+        useSpecialRates,
+        summerIsland
+      )
+    );
   }
 
   const commonSlot3Base = [
@@ -59,11 +228,22 @@ async function drawPack(userId, useSpecialRatesOverride = null, opts = {}) {
     { key: 'S', weight: 5.0 },
     { key: 'BDAY', weight: 0.1 },
   ];
+
   {
-    const options = buildSlotOptions(commonSlot3Base, profile.pullRate, getOverrides(profile, 'normal', 'common3'));
-    const rarity = pickWeighted(options);
-    const file = pickFileFromPool(rarity, userId, useSpecialRates);
-    results.push({ rarity, file });
+    const options = buildSlotOptions(
+      commonSlot3Base,
+      profile.pullRate,
+      getOverrides(profile, 'normal', 'common3')
+    );
+
+    results.push(
+      chooseRarityAndFile(
+        options,
+        userId,
+        useSpecialRates,
+        summerIsland
+      )
+    );
   }
 
   const commonSlot4Base = [
@@ -71,14 +251,24 @@ async function drawPack(userId, useSpecialRatesOverride = null, opts = {}) {
     { key: 'S', weight: 5.0 },
     { key: 'HR', weight: 0.1 },
   ];
+
   {
-    const options = buildSlotOptions(commonSlot4Base, profile.pullRate, getOverrides(profile, 'normal', 'common4'));
-    const rarity = pickWeighted(options);
-    const file = pickFileFromPool(rarity, userId, useSpecialRates);
-    results.push({ rarity, file });
+    const options = buildSlotOptions(
+      commonSlot4Base,
+      profile.pullRate,
+      getOverrides(profile, 'normal', 'common4')
+    );
+
+    results.push(
+      chooseRarityAndFile(
+        options,
+        userId,
+        useSpecialRates,
+        summerIsland
+      )
+    );
   }
 
-  // Uncommon Slots
   const uncommonSlotBases = [
     [
       { key: 'U', weight: 87.75 },
@@ -97,36 +287,70 @@ async function drawPack(userId, useSpecialRatesOverride = null, opts = {}) {
     ],
   ];
 
-  for (let i = 0; i < uncommonSlotBases.length; i++) {
+  for (let i = 0; i < uncommonSlotBases.length; i += 1) {
     const slotName = `uncommon${i + 1}`;
-    const options = buildSlotOptions(uncommonSlotBases[i], profile.pullRate, getOverrides(profile, 'normal', slotName));
-    const rarity = pickWeighted(options);
-    const file = pickFileFromPool(rarity, userId, useSpecialRates);
-    results.push({ rarity, file });
+
+    const options = buildSlotOptions(
+      uncommonSlotBases[i],
+      profile.pullRate,
+      getOverrides(profile, 'normal', slotName)
+    );
+
+    results.push(
+      chooseRarityAndFile(
+        options,
+        userId,
+        useSpecialRates,
+        summerIsland
+      )
+    );
   }
 
-  // Rare slot
   const rareBase = [
     { key: 'R', weight: 99.58 },
     { key: 'OUR', weight: 0.39 },
     { key: 'SEC', weight: 0.03 },
   ];
+
   {
     const baseOverrides = getOverrides(profile, 'normal', 'rare');
-    const pityOverrides = (opts && opts.forceSEC) ? { SEC: 100 } : null;
+
+    const pityOverrides = opts?.forceSEC
+      ? { SEC: 100 }
+      : null;
+
     const mergedOverrides = pityOverrides
       ? { ...(baseOverrides || {}), ...pityOverrides }
       : baseOverrides;
 
-    const options = buildSlotOptions(rareBase, profile.pullRate, mergedOverrides);
-    const rareRarity = pickWeighted(options);
-    const rareFile = pickFileFromPool(rareRarity, userId, useSpecialRates);
-    results.push({ rarity: rareRarity, file: rareFile });
+    const options = buildSlotOptions(
+      rareBase,
+      profile.pullRate,
+      mergedOverrides
+    );
+
+    results.push(
+      chooseRarityAndFile(
+        options,
+        userId,
+        useSpecialRates,
+        summerIsland
+      )
+    );
   }
 
-  // Extra slot (shared logic: same defaults + same weighting as normal pack)
-  const extra = rollExtraSlot(userId, profile, useSpecialRates, opts);
-  if (extra) results.push(extra);
+  // Existing extra slot is left unchanged.
+  // Its configured chance is currently zero in extraSlot.js.
+  const extra = rollExtraSlot(
+    userId,
+    profile,
+    useSpecialRates,
+    opts
+  );
+
+  if (extra) {
+    results.push(extra);
+  }
 
   return results;
 }

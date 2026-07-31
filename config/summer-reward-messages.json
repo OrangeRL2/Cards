@@ -1,0 +1,62 @@
+{
+  "shells_10": {
+    "title": "SUCCESS!",
+    "emoji": "🐚",
+    "color": 5025616,
+    "messages": [
+      "The activity went smoothly. You earned {amount} Summer Shells.",
+      "Your steady work paid off with {amount} Summer Shells.",
+      "A productive outing brought you {amount} Summer Shells."
+    ]
+  },
+  "shells_20": {
+    "title": "GREAT SUCCESS!",
+    "emoji": "✨",
+    "color": 3525003,
+    "messages": [
+      "Everyone was impressed by the result. You earned {amount} Summer Shells!",
+      "The team worked together perfectly and found {amount} Summer Shells!",
+      "Your plan worked better than expected. You received {amount} Summer Shells!"
+    ]
+  },
+  "shells_40": {
+    "title": "BIG SUCCESS!",
+    "emoji": "🌟",
+    "color": 16041282,
+    "messages": [
+      "Today went exceptionally well! You earned {amount} Summer Shells!",
+      "The activity exceeded every expectation, earning {amount} Summer Shells!",
+      "A fantastic result brought in {amount} Summer Shells!"
+    ]
+  },
+  "sun_pull": {
+    "title": "SPECIAL SUCCESS!",
+    "emoji": "☀️",
+    "color": 16041282,
+    "messages": [
+      "Your efforts uncovered a special opportunity. You received {amount} SUN Pull!",
+      "A shining reward appeared at the end of {activity}: {amount} SUN Pull!",
+      "Everyone praised your work and presented you with {amount} SUN Pull!"
+    ]
+  },
+  "sun_card": {
+    "title": "CRITICAL SUCCESS!",
+    "emoji": "💫",
+    "color": 16766720,
+    "messages": [
+      "{member} was so impressed that she decided to join your agency!",
+      "Your actions caught {member}'s attention. She has joined your agency!",
+      "{member} enjoyed the day so much that she chose to stay by your side!",
+      "An unforgettable activity led to an unforgettable meeting—{member} joined your agency!",
+      "Your work during {activity} left a lasting impression on {member}. She joined your agency!"
+    ]
+  },
+  "fallback": {
+    "title": "SUCCESS!",
+    "emoji": "🎁",
+    "color": 16041282,
+    "messages": [
+      "The activity was a success and earned you a reward!"
+    ]
+  }
+}

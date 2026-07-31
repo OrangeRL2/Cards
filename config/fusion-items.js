@@ -1,7 +1,37 @@
 // data/fusion-items.js
 const FUSION_ITEMS = {
   // --- Seven Fantasy variants (same card, different requirements) ---
-  // 1) noel + pekora + marine + flare (all SR)
+    FubuMio1: {
+    name: 'FubuMio',
+    rarity: 'COL',
+    image: 'FubuMio 001',
+    stock: -1,
+    requires: [
+      { rarity: 'ORI', image: 'Fubuki 001', count: 1 },
+      { rarity: 'ORI', image: 'Mio 001', count: 1 },
+    ],
+  },
+      FuwaMoco1: {
+    name: 'FUWAMOCO 101',
+    rarity: 'COL',
+    image: 'FUWAMOCO 101',
+    stock: -1,
+    requires: [
+      { rarity: 'SP', image: 'Fuwawa 101', count: 1 },
+      { rarity: 'SP', image: 'Mococo 101', count: 1 },
+    ],
+  },
+        FuwaMoco2: {
+    name: 'FUWAMOCO 002',
+    rarity: 'COL',
+    image: 'FUWAMOCO 002',
+    stock: -1,
+    requires: [
+      { rarity: 'ORI', image: 'Mococo 002', count: 1 },
+      { rarity: 'ORI', image: 'Fuwawa 002', count: 1 },
+    ],
+  },
+    // 1) noel + pekora + marine + flare (all SR)
   fantasy1: {
     name: 'FANTASY (noel + pekora + marine + flare)',
     rarity: 'COL',
@@ -377,6 +407,153 @@ pekora_marine_flare_3: {
       { rarity: 'EV', image: 'Lui 104', count: 1 },
       { rarity: 'EV', image: 'Koyori 105', count: 1 },
       { rarity: 'EV', image: 'Iroha 106', count: 1 },
+    ],
+  },
+
+holoWitchesEV1: {
+    name: 'holoWitches 001',
+    rarity: 'COL',
+    image: 'holoWitches 001',
+    stock: -1,
+    requires: [
+      { rarity: 'EV', image: 'Luna 001', count: 1 },
+      { rarity: 'EV', image: 'Miko 001', count: 1 },
+      { rarity: 'EV', image: 'Kanata 001', count: 1 },
+      { rarity: 'EV', image: 'Marine 001', count: 1 },
+      { rarity: 'EV', image: 'Chloe 001', count: 1 },
+      { rarity: 'EV', image: 'Shion 001', count: 1 },
+    ],
+  },
+
+  holoWitchesEV2: {
+    name: 'holoWitches 002',
+    rarity: 'COL',
+    image: 'holoWitches 002',
+    stock: -1,
+    requires: [
+      { rarity: 'EV', image: 'Luna 002', count: 1 },
+      { rarity: 'EV', image: 'Miko 002', count: 1 },
+      { rarity: 'EV', image: 'Kanata 002', count: 1 },
+      { rarity: 'EV', image: 'Marine 002', count: 1 },
+      { rarity: 'EV', image: 'Chloe 002', count: 1 },
+      { rarity: 'EV', image: 'Shion 002', count: 1 },
+    ],
+  },
+
+  holoWitchesEV3: {
+    name: 'holoWitches 003',
+    rarity: 'COL',
+    image: 'holoWitches 003',
+    stock: -1,
+    requires: [
+      { rarity: 'EV', image: 'Luna 001', count: 1 },
+      { rarity: 'EV', image: 'Miko 001', count: 1 },
+      { rarity: 'EV', image: 'Kanata 001', count: 1 },
+      { rarity: 'EV', image: 'Marine 001', count: 1 },
+      { rarity: 'EV', image: 'Chloe 001', count: 1 },
+      { rarity: 'EV', image: 'Shion 001', count: 1 },
+    ],
+  },
+
+  holoWitchesEV4: {
+    name: 'holoWitches 004',
+    rarity: 'COL',
+    image: 'holoWitches 004',
+    stock: -1,
+    requires: [
+      { rarity: 'EV', image: 'Luna 001', count: 1 },
+      { rarity: 'EV', image: 'Miko 001', count: 1 },
+      { rarity: 'EV', image: 'Kanata 001', count: 1 },
+      { rarity: 'EV', image: 'Marine 001', count: 1 },
+      { rarity: 'EV', image: 'Chloe 001', count: 1 },
+      { rarity: 'EV', image: 'Shion 001', count: 1 },
+    ],
+  },
+
+  holoWitchesEV5: {
+    name: 'holoWitches 005',
+    rarity: 'COL',
+    image: 'holoWitches 005',
+    stock: -1,
+    requires: [
+      { rarity: 'EV', image: 'Luna 002', count: 1 },
+      { rarity: 'EV', image: 'Miko 002', count: 1 },
+      { rarity: 'EV', image: 'Kanata 002', count: 1 },
+      { rarity: 'EV', image: 'Marine 002', count: 1 },
+      { rarity: 'EV', image: 'Chloe 002', count: 1 },
+      { rarity: 'EV', image: 'Shion 002', count: 1 },
+    ],
+  },
+
+  holoWitchesEV6: {
+    name: 'holoWitches 006',
+    rarity: 'COL',
+    image: 'holoWitches 006',
+    stock: -1,
+    requires: [
+      { rarity: 'EV', image: 'Luna 001', count: 1 },
+      { rarity: 'EV', image: 'Miko 001', count: 1 },
+      { rarity: 'EV', image: 'Kanata 001', count: 1 },
+      { rarity: 'EV', image: 'Marine 001', count: 1 },
+      { rarity: 'EV', image: 'Lamy 001', count: 1 },
+      { rarity: 'EV', image: 'Fubuki 001', count: 1 },
+    ],
+  },
+
+  holoWitchesEV7: {
+    name: 'holoWitches 007',
+    rarity: 'COL',
+    image: 'holoWitches 007',
+    stock: -1,
+    requires: [
+      { rarity: 'EV', image: 'Luna 001', count: 1 },
+      { rarity: 'EV', image: 'Miko 001', count: 1 },
+      { rarity: 'EV', image: 'Kanata 001', count: 1 },
+      { rarity: 'EV', image: 'Marine 001', count: 1 },
+      { rarity: 'EV', image: 'Lamy 001', count: 1 },
+      { rarity: 'EV', image: 'Fubuki 001', count: 1 },
+    ],
+  },
+    holoWitchesEV8: {
+    name: 'holoWitches 008',
+    rarity: 'COL',
+    image: 'holoWitches 008',
+    stock: -1,
+    requires: [
+      { rarity: 'EV', image: 'Marine 002', count: 1 },
+      { rarity: 'EV', image: 'Miko 002', count: 1 },
+      { rarity: 'EV', image: 'Luna 002', count: 1 },
+      { rarity: 'EV', image: 'Chloe 002', count: 1 },
+      { rarity: 'EV', image: 'Shion 002', count: 1 },
+      { rarity: 'EV', image: 'Kanata 002', count: 1 },
+    ],
+  },
+      holoWitchesEV9: {
+    name: 'holoWitches 009',
+    rarity: 'COL',
+    image: 'holoWitches 009',
+    stock: -1,
+    requires: [
+      { rarity: 'EV', image: 'Marine 002', count: 1 },
+      { rarity: 'EV', image: 'Miko 002', count: 1 },
+      { rarity: 'EV', image: 'Luna 002', count: 1 },
+      { rarity: 'EV', image: 'Chloe 002', count: 1 },
+      { rarity: 'EV', image: 'Shion 002', count: 1 },
+      { rarity: 'EV', image: 'Kanata 002', count: 1 },
+    ],
+  },
+        holoWitchesEV10: {
+    name: 'holoWitches 010',
+    rarity: 'COL',
+    image: 'holoWitches 010',
+    stock: -1,
+    requires: [
+      { rarity: 'SR', image: 'Marine 001', count: 1 },
+      { rarity: 'SR', image: 'Miko 001', count: 1 },
+      { rarity: 'SR', image: 'Luna 001', count: 1 },
+      { rarity: 'SR', image: 'Chloe 003', count: 1 },
+      { rarity: 'SR', image: 'Shion 001', count: 1 },
+      { rarity: 'SR', image: 'Kanata 001', count: 1 },
     ],
   },
 };
