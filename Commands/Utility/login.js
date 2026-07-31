@@ -26,6 +26,7 @@ const { Schema } = require('mongoose');
 const User = require('../../models/User');
 const { addPulls } = require('../../utils/pullQuota');
 const { isFrozen } = require('../../utils/freeze');
+const { pickHolodoriLoginReward, buildHolodoriImageUrl } = require('../../utils/holodoriLoginReward');
 
 let resolveCardColor = null;
 let getAttributeEmoji = null;
@@ -287,6 +288,9 @@ function normalizeCard(card) {
 
   const normalized = { rarity, name };
 
+  const variant = String(card?.variant || '').trim();
+  if (variant) normalized.variant = variant;
+
   // Keep optional weight when this card is used in a weighted random pool.
   if (card?.weight !== undefined) {
     const weight = Number(card.weight);
@@ -412,9 +416,11 @@ function summarizeCards(cards) {
     const name = String(card.name || '').trim();
     if (!rarity || !name) continue;
 
-    const key = `${rarity}||${name}`;
+    const variant = String(card.variant || '').trim();
+    const key = `${rarity}||${variant}||${name}`;
     const current = map.get(key) || {
       rarity,
+      variant,
       name,
       count: 0,
       bonusCount: 0,
@@ -452,7 +458,9 @@ async function addCardsToUser(userId, cards) {
 
     const cardsArray = Array.isArray(user.cards) ? user.cards : [];
     const idx = cardsArray.findIndex(
-      c => String(c.name) === item.name && String(c.rarity).toUpperCase() === item.rarity
+      c => String(c.name) === item.name &&
+        String(c.rarity).toUpperCase() === item.rarity &&
+        String(c.variant || '') === String(item.variant || '')
     );
 
     if (idx !== -1) {
@@ -472,6 +480,7 @@ async function addCardsToUser(userId, cards) {
             cards: {
               name: item.name,
               rarity: item.rarity,
+              variant: item.variant || null,
               count: item.count,
               firstAcquiredAt: new Date(),
               lastAcquiredAt: new Date(),
@@ -486,6 +495,15 @@ async function addCardsToUser(userId, cards) {
 function buildCardImageUrl(card) {
   const rarity = String(card.rarity || '').trim().toUpperCase();
   const name = String(card.name || '').trim();
+
+  if (/^★{3,5}$/.test(rarity)) {
+    return buildHolodoriImageUrl({ ...card, rarity: 'HOLODORI', variant: rarity }, IMAGE_BASE);
+  }
+
+  // Backward compatibility before migration.
+  if (rarity === 'HOLODORI') {
+    return buildHolodoriImageUrl(card, IMAGE_BASE);
+  }
 
   return `${IMAGE_BASE.replace(/\/$/, '')}/${encodeURIComponent(rarity)}/${encodeURIComponent(name)}.png`;
 }
@@ -526,19 +544,28 @@ function buildLoginEventCardEmbed({ user, streak, card, index, total }) {
   const color = getCardColor(rarity, name);
   const imageUrl = buildCardImageUrl(card);
 
-  const title = card.guaranteed
+  const holodoriTitle = /^★{3,5}$/.test(rarity)
+    ? `${card.signed ? '✍️ SIGNED ' : ''}${rarity} Daily Reward`
+    : rarity === 'HOLODORI'
+    ? `${card.signed ? '✍️ SIGNED ' : ''}${card.variant || ''} Daily Reward`
+    : null;
+
+  const title = holodoriTitle || (card.guaranteed
     ? `✅ ${rarity} Guaranteed Reward`
     : card.bonus
     ? `🌟 ${rarity} Bonus Reward`
-    : `${rarity} Reward`;
+    : `${rarity} Reward`);
 
   const description =
     `${attrEmoji ? `${attrEmoji} ` : ''}**${name}**`;
 
   const footerParts = [
     `Reward ${index}/${total}`,
-    `Login Streak: Day ${streak}`,
   ];
+
+  if (!/^★{3,5}$/.test(rarity) && rarity !== 'HOLODORI' && streak > 0) {
+    footerParts.push(`Login Streak: Day ${streak}`);
+  }
 
   if (card.guaranteed) {
     footerParts.push('Guaranteed Streak Reward');
@@ -713,13 +740,18 @@ async function sendPaginatedLoginRewardReply({
 // Reply content
 // =====================
 
-function buildLoginReplyContent({ fans, frozen, pullsGranted, eventCardsAwarded, eventStreak }) {
+function buildLoginReplyContent({ fans, frozen, pullsGranted, eventCardsAwarded, eventStreak, holodoriCard }) {
   const lines = [
     `You logged in for the day and earned **${fans}** fans 🎉`,
   ];
 
   if (frozen) {
     lines.push(`Frozen bonus: **+${pullsGranted} pulls** 🎟️`);
+  }
+
+  if (holodoriCard) {
+    const signedText = holodoriCard.signed ? ' **SIGNED**' : '';
+    lines.push(`Daily card: **${holodoriCard.rarity} ${holodoriCard.name}**${signedText}`);
   }
 
   if (eventCardsAwarded.length > 0) {
@@ -826,6 +858,7 @@ module.exports = {
       // -----------------------------
       let eventCardsAwarded = [];
       let eventStreak = 0;
+      let holodoriCard = null;
 
       const eventActive = isLoginCardEventActive(todayJST);
 
@@ -870,6 +903,18 @@ module.exports = {
         eventCardsAwarded = buildLoginEventRewardCardsForStreak(eventStreak);
       }
 
+      // One HOLODORI card is awarded on every successful daily login.
+      holodoriCard = pickHolodoriLoginReward();
+
+      // Store HOLODORI cards using their star tier as the actual rarity.
+      if (holodoriCard) {
+        const stars = String(holodoriCard.variant || '').match(/^★{3,5}/)?.[0];
+        if (stars) {
+          holodoriCard.rarity = stars;
+          holodoriCard.variant = null;
+        }
+      }
+
       // -----------------------------
       // Persist normal daily login record
       // -----------------------------
@@ -901,8 +946,13 @@ module.exports = {
       // -----------------------------
       // Add event cards
       // -----------------------------
-      if (eventCardsAwarded.length > 0) {
-        await addCardsToUser(userId, eventCardsAwarded);
+      const allLoginCards = [
+        ...eventCardsAwarded,
+        ...(holodoriCard ? [holodoriCard] : []),
+      ];
+
+      if (allLoginCards.length > 0) {
+        await addCardsToUser(userId, allLoginCards);
       }
 
       // -----------------------------
@@ -924,13 +974,19 @@ module.exports = {
         pullsGranted,
         eventCardsAwarded,
         eventStreak,
+        holodoriCard,
       });
 
-      if (eventCardsAwarded.length > 0) {
+      const displayedLoginCards = [
+        ...(holodoriCard ? [holodoriCard] : []),
+        ...eventCardsAwarded,
+      ];
+
+      if (displayedLoginCards.length > 0) {
         await sendPaginatedLoginRewardReply({
           interaction,
           content,
-          cards: eventCardsAwarded,
+          cards: displayedLoginCards,
           streak: eventStreak,
         });
       } else {

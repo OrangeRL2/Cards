@@ -15,6 +15,11 @@ const { drawPackBoss } = require('../../utils/drawPackBoss'); // boss-channel bi
 const { getBossChannelDrawToken } = require('../../utils/bossPullBias');
 const { isFrozen } = require('../../utils/freeze'); // for freeze status check in quota calculation
 const {
+  validateSummerPullChannel,
+  rollSummerBonus,
+} = require('../../utils/summerPullBonus');
+const { getSummerBonusChance } = require('../../utils/summerEvent');
+const {
   syChannelId,
   kunChannel,
   chanChannel,
@@ -574,6 +579,31 @@ const frozen = isFrozen(discordUserId, member);
       const allowEvent = Boolean(interaction.options.getBoolean('event'));
       const useSpecial = Boolean(interaction.options.getBoolean('special'));
 
+      // --- Summer island restriction ---
+      // This runs before quota consumption, so wrong-channel attempts cost nothing.
+      const summerContext = await validateSummerPullChannel({
+        userId: discordUserId,
+        channelId: interaction.channelId,
+      });
+
+      if (!summerContext.allowed) {
+        inFlightInteractions.delete(interaction.id);
+
+        const elapsed = Date.now() - gifShownAt;
+        if (elapsed < ANIM_MS) {
+          await sleep(ANIM_MS - elapsed);
+        }
+
+        await interaction.editReply({
+          content: summerContext.message,
+          embeds: [],
+          components: [],
+        }).catch(() => null);
+
+        await release();
+        return;
+      }
+
       // --- Resolve active special grant (if requested) ---
       let consumeLabelKey = null; // quota key (grant.label)
       let specialDrawToken = null; // draw token (grant.displayLabel ?? label)
@@ -761,8 +791,24 @@ const frozen = isFrozen(discordUserId, member);
           } else if (useSpecial && drawPackSpecial && specialDrawToken) {
             drawnPack = await drawPackSpecial(discordUserId, specialDrawToken, { forceSEC });
           } else {
-            drawnPack = await drawPack(discordUserId, null, { forceSEC });
+            drawnPack = await drawPack(discordUserId, null, {
+            forceSEC,
+            summerIsland: summerContext?.summerActive
+              ? summerContext.island
+              : null,
+          });
           }
+
+          // Each pack independently rolls for an optional ninth SUN card.
+          const summerBonus = rollSummerBonus({
+          summerContext,
+          chance: getSummerBonusChance(),
+        });
+
+          if (summerBonus) {
+            drawnPack.push(summerBonus);
+          }
+
           packs.push(drawnPack);
           if (!pityNoTrack) {
             const packHasSEC = drawnPack.some(item => String(item?.rarity ?? '').toUpperCase() === 'SEC');
@@ -912,7 +958,12 @@ if (!SY_ANNOUNCE_EXEMPT_IDS.has(discordUserId) && String(rarity).toUpperCase() =
             }
           }
 
-          const encodedUrl = `${IMAGE_BASE.replace(/\/$/, '')}/${rarity}/${encodeURIComponent(raw)}.png`;
+          const encodedUrl = item.relativeImagePath
+            ? `${IMAGE_BASE.replace(/\/$/, '')}/${item.relativeImagePath
+                .split('/')
+                .map(encodeURIComponent)
+                .join('/')}`
+            : `${IMAGE_BASE.replace(/\/$/, '')}/${encodeURIComponent(rarity)}/${encodeURIComponent(raw)}.png`;
           const visiblePrefix = `[${rarity}] - `;
           const titleBody = `${displayName}`;
           const titleCount = ` - #${currentCount}`;

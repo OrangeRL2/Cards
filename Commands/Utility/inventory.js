@@ -9,7 +9,12 @@ const {
   ModalBuilder,
   TextInputBuilder,
   TextInputStyle,
+  
 } = require('discord.js');
+const {
+  findCardIsland,
+  getIslandFolder,
+} = require('../../config/summer-cards');
 
 const User = require('../../models/User');
 const { resolveCardColor, getAttributeEmoji } = require('../../config/holomemColor');
@@ -35,7 +40,45 @@ const EXCEPTION_SET = new Set(
 function isExcludedCardName(name) {
   return EXCEPTION_SET.has(String(name).trim().toLowerCase());
 }
+function buildCardImageUrl(name, rarity, variant = null) {
+  const baseUrl = IMAGE_BASE.replace(/\/$/, '');
+  const normalizedRarity = String(rarity || '').trim().toUpperCase();
+  const encodedName = encodeURIComponent(String(name || '').trim());
 
+  if (
+    normalizedRarity === 'SUN' &&
+    String(variant || '').trim().toLowerCase() === 'full art'
+  ) {
+    return `${baseUrl}/SUN/Full%20Art/${encodedName}.png`;
+  }
+
+  if (/^★{3,5}$/.test(normalizedRarity)) {
+    return `${baseUrl}/HOLODORI/${encodeURIComponent(normalizedRarity)}/${encodedName}.png`;
+  }
+
+  // Backward compatibility before migration.
+  if (normalizedRarity === 'HOLODORI') {
+    const stars = String(variant || '').match(/^★{3,5}/)?.[0] || '★★★';
+    return `${baseUrl}/HOLODORI/${encodeURIComponent(stars)}/${encodedName}.png`;
+  }
+
+  // Backward compatibility until the migration script has been run.
+  if (normalizedRarity === 'SUN' && String(name || '').startsWith('Full Art: ')) {
+    const legacyName = encodeURIComponent(String(name).slice('Full Art: '.length).trim());
+    return `${baseUrl}/SUN/Full%20Art/${legacyName}.png`;
+  }
+
+  if (normalizedRarity === 'SUN') {
+    const island = findCardIsland(name);
+    const folder = getIslandFolder(island);
+
+    if (folder) {
+      return `${baseUrl}/SUN/${folder}/${encodedName}.png`;
+    }
+  }
+
+  return `${baseUrl}/${normalizedRarity}/${encodedName}.png`;
+}
 // Attribute (color/type) sort order
 const COLOR_SORT_ORDER = {
   white: 1,
@@ -63,29 +106,39 @@ const RARITY_ORDER = {
   XMAS: 1,
   VAL: 2,
   EAS: 3,
-  C: 4,
-  U: 5,
-  R: 6,
-  S: 7,
-  RR: 8,
-  OC: 9,
-  SR: 10,
-  OSR: 11,
-  COL: 12,
-  P: 13,
-  SP: 14,
-  UP: 15,
-  SY: 16,
-  UR: 17,
-  OUR: 18,
-  HR: 19,
-  BDAY: 20,
-  SEC: 21,
-  ORI: 22,
+  SUN: 4,
+  '★★★': 5,
+  '★★★★': 6,
+  '★★★★★': 7,
+  HOLODORI: 7,
+  C: 8,
+  U: 9,
+  R: 10,
+  S: 11,
+  RR: 12,
+  OC: 13,
+  SR: 14,
+  OSR: 15,
+  COL: 16,
+  P: 17,
+  SP: 18,
+  UP: 19,
+  SY: 20,
+  UR: 21,
+  OUR: 22,
+  HR: 23,
+  BDAY: 24,
+  SEC: 25,
+  ORI: 26,
 };
 
 const RARITY_COLORS = {
   XMAS: 0x05472A,
+  SUN: 0xF4C542,
+  '★★★': 0xF5C2E7,
+  '★★★★': 0xE8B4F8,
+  '★★★★★': 0xFFD166,
+  HOLODORI: 0xF5C2E7,
   C: Colors.Grey,
   U: Colors.White,
   R: 0x7bacec,
@@ -126,6 +179,7 @@ module.exports = {
           { name: 'XMAS', value: 'XMAS' },
           { name: 'VAL', value: 'VAL' },
           { name: 'EAS', value: 'EAS' },
+          { name: 'SUN', value: 'SUN' },
           { name: 'C', value: 'C' },
           { name: 'U', value: 'U' },
           { name: 'R', value: 'R' },
@@ -146,6 +200,16 @@ module.exports = {
           { name: 'SEC', value: 'SEC' },
           { name: 'ORI', value: 'ORI' },
           { name: 'EV', value: 'EV' },
+        )
+    )
+    .addStringOption(opt =>
+      opt
+        .setName('rarity2')
+        .setDescription('Filter by HOLODORI star rarity')
+        .addChoices(
+          { name: '★★★', value: '★★★' },
+          { name: '★★★★', value: '★★★★' },
+          { name: '★★★★★', value: '★★★★★' },
         )
     )
     .addStringOption(opt =>
@@ -207,7 +271,17 @@ module.exports = {
     const ephemeralReply = targetUser.id !== interaction.user.id;
     await interaction.deferReply();
 
-    const filterR = interaction.options.getString('rarity');
+    const filterR1 = interaction.options.getString('rarity');
+    const filterR2 = interaction.options.getString('rarity2');
+
+    if (filterR1 && filterR2) {
+      return interaction.editReply({
+        content: 'Choose either `rarity` or `rarity2`, not both.',
+        ephemeral: true,
+      });
+    }
+
+    const filterR = filterR2 || filterR1;
     const filterQ = interaction.options.getString('search')?.toLowerCase();
     const filterColor = interaction.options.getString('color');
     const sortBy = interaction.options.getString('sort') || 'rarity';
@@ -229,6 +303,7 @@ module.exports = {
     const allEntries = userDoc.cards.map(c => ({
       name: c.name,
       rarity: c.rarity,
+      variant: c.variant || null,
       count: Number(c.count || 0),
       locked: Boolean(c.locked),
       firstAcquiredAt: c.firstAcquiredAt ? new Date(c.firstAcquiredAt).getTime() : 0,
@@ -314,7 +389,7 @@ module.exports = {
     // Prepare image data
     const imageResults = entries.map(c => ({
       c,
-      url: `${IMAGE_BASE}/${encodeURIComponent(c.rarity)}/${encodeURIComponent(c.name)}.png`,
+      url: buildCardImageUrl(c.name, c.rarity, c.variant),
     }));
 
     // Unique customId helper
@@ -339,12 +414,13 @@ module.exports = {
         .setTitle(`${targetUser.username}'s Inventory${titleSuffix}`)
         .setDescription(
           chunk.map(c => {
-            const url = `${IMAGE_BASE}/${encodeURIComponent(c.rarity)}/${encodeURIComponent(c.name)}.png`;
+            const url = buildCardImageUrl(c.name, c.rarity, c.variant);
             const lockEmoji = c.locked ? ' 🔒' : '';
             const cc = resolveCardColor(c.name, c.rarity);
             const emoji = cc ? getAttributeEmoji(cc) : '';
             const attrTag = cc ? ` ${emoji}` : '';
-            return `**[${c.rarity}]** [${escapeMarkdown(c.name)}](${url})${attrTag} (x${c.count})${lockEmoji}`;
+            const variantTag = c.rarity === 'HOLODORI' && c.variant ? ` ${c.variant}` : '';
+            return `**[${c.rarity}${variantTag}]** [${escapeMarkdown(c.name)}](${url})${attrTag} (x${c.count})${lockEmoji}`;
           }).join('\n')
         )
         .setColor(Colors.Blue)
@@ -385,7 +461,7 @@ module.exports = {
       const attrTag = cc ? ` ${emoji}` : '';
 
       return new EmbedBuilder()
-        .setTitle(`**[${c.rarity}]** ${escapeMarkdown(c.name)}${attrTag} (x${c.count})${c.locked ? ' 🔒' : ''}`)
+        .setTitle(`**[${c.rarity}${c.rarity === 'HOLODORI' && c.variant ? ` ${c.variant}` : ''}]** ${escapeMarkdown(c.name)}${attrTag} (x${c.count})${c.locked ? ' 🔒' : ''}`)
         .setImage(url)
         .setColor(RARITY_COLORS[c.rarity] ?? Colors.Default)
         .setFooter({ text: `Card ${i + 1} of ${imageResults.length}` });

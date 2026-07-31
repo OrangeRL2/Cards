@@ -15,6 +15,11 @@ const { drawPackBoss } = require('../../utils/drawPackBoss'); // boss-channel bi
 const { getBossChannelDrawToken } = require('../../utils/bossPullBias');
 const { isFrozen } = require('../../utils/freeze'); // for freeze status check in quota calculation
 const {
+  validateSummerPullChannel,
+  rollSummerBonus,
+} = require('../../utils/summerPullBonus');
+const { getSummerBonusChance } = require('../../utils/summerEvent');
+const {
   syChannelId,
   kunChannel,
   chanChannel,
@@ -558,6 +563,46 @@ const frozen = isFrozen(discordUserId, member);
       const allowEvent = Boolean(interaction.options.getBoolean('event'));
       const useSpecial = Boolean(interaction.options.getBoolean('special'));
 
+      // --- Hello! A Brand New Summer! island validation ---
+      // This runs before any pull is consumed. During the active event, every
+      // player must pull in the channel belonging to their permanently chosen island.
+      let summerContext;
+      try {
+        summerContext = await validateSummerPullChannel({
+          userId: discordUserId,
+          channelId: interaction.channelId,
+        });
+      } catch (err) {
+        console.error('[pull] Summer island validation failed:', err);
+        inFlightInteractions.delete(interaction.id);
+
+        const elapsed = Date.now() - gifShownAt;
+        if (elapsed < ANIM_MS) await sleep(ANIM_MS - elapsed);
+
+        await interaction.editReply({
+          content: 'Unable to verify your Summer island right now. Please try again later.',
+          embeds: [],
+          components: [],
+        }).catch(() => null);
+        await release();
+        return;
+      }
+
+      if (!summerContext.allowed) {
+        inFlightInteractions.delete(interaction.id);
+
+        const elapsed = Date.now() - gifShownAt;
+        if (elapsed < ANIM_MS) await sleep(ANIM_MS - elapsed);
+
+        await interaction.editReply({
+          content: summerContext.message || 'This pull is not available in this channel.',
+          embeds: [],
+          components: [],
+        }).catch(() => null);
+        await release();
+        return;
+      }
+
       // --- Resolve active special grant (if requested) ---
       let consumeLabelKey = null; // quota key (grant.label)
       let specialDrawToken = null; // draw token (grant.displayLabel ?? label)
@@ -741,7 +786,12 @@ const frozen = isFrozen(discordUserId, member);
         } else if (useSpecial && drawPackSpecial && specialDrawToken) {
           pack = await drawPackSpecial(discordUserId, specialDrawToken, { forceSEC });
         } else {
-          pack = await drawPack(discordUserId, null, { forceSEC });
+          pack = await drawPack(discordUserId, null, {
+            forceSEC,
+            summerIsland: summerContext?.summerActive
+              ? summerContext.island
+              : null,
+          });
         }
       } catch (err) {
         console.error('drawPack error after consume:', err);
@@ -782,6 +832,23 @@ const frozen = isFrozen(discordUserId, member);
         await interaction.editReply({ content: 'An error occurred while drawing the pack. Your pull has been refunded. Please try again.', components: [] }).catch(() => null);
         await release();
         return;
+      }
+
+      // --- Optional ninth [SUN] card for the player's chosen island ---
+      // The normal eight-card draw remains unchanged. A failed SUN roll simply
+      // leaves the pack at eight cards.
+      try {
+        const summerBonus = rollSummerBonus({
+          summerContext,
+          chance: getSummerBonusChance(),
+        });
+
+        if (summerBonus) {
+          pack.push(summerBonus);
+        }
+      } catch (err) {
+        // The normal pull should still succeed if only the optional SUN roll fails.
+        console.error('[pull] Summer bonus roll failed:', err);
       }
 
       // --- Persist cards + build page items ---
@@ -884,7 +951,12 @@ if (!SY_ANNOUNCE_EXEMPT_IDS.has(discordUserId) && String(rarity).toUpperCase() =
             }
           }
 
-          const encodedUrl = `${IMAGE_BASE.replace(/\/$/, '')}/${rarity}/${encodeURIComponent(raw)}.png`;
+          const encodedUrl = item.relativeImagePath
+            ? `${IMAGE_BASE.replace(/\/$/, '')}/${String(item.relativeImagePath)
+                .split('/')
+                .map(part => encodeURIComponent(part))
+                .join('/')}`
+            : `${IMAGE_BASE.replace(/\/$/, '')}/${encodeURIComponent(rarity)}/${encodeURIComponent(raw)}.png`;
           const visiblePrefix = `[${rarity}] - `;
           const titleBody = `${displayName}`;
           const titleCount = ` - #${currentCount}`;
