@@ -1,3 +1,4 @@
+
 // jobs/bossManager.js
 // Centralized boss manager implementing scheduled spawns, announcements, actions, and settlement.
 
@@ -73,6 +74,22 @@ const SECONDPLACE_WEIGHTS = {
   SR: 20, OSR: 15, SY: 15, UR: 15, OUR: 11, HR: 11, BDAY: 8, SEC: 5
 };
 
+// Boss-only group definitions. These do not need to be duplicated in imgExceptions.excel.js.
+const MANUAL_BOSS_GROUPS = Object.freeze({
+  'Hoshimatic Project': Object.freeze([
+    'suisei',
+    'sora',
+    'matsuri',
+    'aki',
+    'subaru',
+    'towa',
+    'nene',
+    'koyori',
+    'iroha',
+    'chloe',
+  ]),
+});
+
 const BASE_EXCEPTIONS = {
   Rushia: ['Pekora', 'Marine', 'Flare', 'Noel', 'Fantasy'],
   Mel: ['Fubuki', 'Matsuri', 'Haato', 'Aki', 'Gen 1'],
@@ -147,6 +164,49 @@ function buildExceptions() {
       addException(out, token, [oshiLabel]);
     }
   }
+
+  // Merge dedicated boss groups into the same bidirectional exception map.
+  // Group name -> member IDs allows !forceboss to resolve the group.
+  // Member ID -> group name preserves member/card matching behavior.
+  for (const [groupName, memberIds] of Object.entries(MANUAL_BOSS_GROUPS)) {
+    const groupKeys = [
+      groupName,
+      String(groupName).toLowerCase(),
+      normalizeExceptionKey(groupName),
+    ].filter(Boolean);
+
+    const resolvedMembers = memberIds
+      .map(memberId => resolveOshiConfigByIdOrName(memberId))
+      .filter(Boolean);
+
+    const memberLabels = resolvedMembers.map(member => member.label);
+
+    for (const groupKey of groupKeys) {
+      out[groupKey] = Array.from(new Set([
+        ...(out[groupKey] || []),
+        ...memberLabels,
+      ]));
+    }
+
+    for (const member of resolvedMembers) {
+      const memberKeys = [
+        member.id,
+        member.label,
+        String(member.id).toLowerCase(),
+        String(member.label).toLowerCase(),
+        normalizeExceptionKey(member.id),
+        normalizeExceptionKey(member.label),
+      ].filter(Boolean);
+
+      for (const memberKey of memberKeys) {
+        out[memberKey] = Array.from(new Set([
+          ...(out[memberKey] || []),
+          groupName,
+        ]));
+      }
+    }
+  }
+
 
   return out;
 }
