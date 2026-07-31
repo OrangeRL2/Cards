@@ -1,3 +1,4 @@
+
 // Commands/Utility/pull.js
 const { SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 const path = require('path');
@@ -474,6 +475,22 @@ function escapeLinkText(text) {
   return text.replace(/(_*\[\~`>#+\-=|{}.!\\])/g, '\\$1');
 }
 
+
+async function getInteractionRoleIds(interaction) {
+  const cachedRoles = interaction.member?.roles?.cache;
+  if (cachedRoles && typeof cachedRoles.keys === 'function') {
+    return [...cachedRoles.keys()].map(String);
+  }
+  if (Array.isArray(interaction.member?.roles)) {
+    return interaction.member.roles.map(String);
+  }
+  if (interaction.guild && interaction.user?.id) {
+    const member = await interaction.guild.members.fetch(interaction.user.id).catch(() => null);
+    if (member?.roles?.cache) return [...member.roles.cache.keys()].map(String);
+  }
+  return [];
+}
+
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('pull')
@@ -568,9 +585,16 @@ const frozen = isFrozen(discordUserId, member);
       // player must pull in the channel belonging to their permanently chosen island.
       let summerContext;
       try {
+        const summerRoleIds = await getInteractionRoleIds(interaction);
+
         summerContext = await validateSummerPullChannel({
+
           userId: discordUserId,
+
           channelId: interaction.channelId,
+
+          roleIds: summerRoleIds,
+
         });
       } catch (err) {
         console.error('[pull] Summer island validation failed:', err);
@@ -1157,3 +1181,4 @@ if (!SY_ANNOUNCE_EXEMPT_IDS.has(discordUserId) && String(rarity).toUpperCase() =
     }
   },
 };
+

@@ -1,3 +1,4 @@
+
 // Commands/Utility/pull.js
 const { SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, ModalBuilder, TextInputBuilder, TextInputStyle } = require('discord.js');
 const path = require('path');
@@ -483,6 +484,22 @@ function escapeLinkText(text) {
   return text.replace(/(_*\[\~`>#+\-=|{}.!\\])/g, '\\$1');
 }
 
+
+async function getInteractionRoleIds(interaction) {
+  const cachedRoles = interaction.member?.roles?.cache;
+  if (cachedRoles && typeof cachedRoles.keys === 'function') {
+    return [...cachedRoles.keys()].map(String);
+  }
+  if (Array.isArray(interaction.member?.roles)) {
+    return interaction.member.roles.map(String);
+  }
+  if (interaction.guild && interaction.user?.id) {
+    const member = await interaction.guild.members.fetch(interaction.user.id).catch(() => null);
+    if (member?.roles?.cache) return [...member.roles.cache.keys()].map(String);
+  }
+  return [];
+}
+
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('multi-pull')
@@ -581,9 +598,16 @@ const frozen = isFrozen(discordUserId, member);
 
       // --- Summer island restriction ---
       // This runs before quota consumption, so wrong-channel attempts cost nothing.
+      const summerRoleIds = await getInteractionRoleIds(interaction);
+
       const summerContext = await validateSummerPullChannel({
+
         userId: discordUserId,
+
         channelId: interaction.channelId,
+
+        roleIds: summerRoleIds,
+
       });
 
       if (!summerContext.allowed) {
@@ -1217,3 +1241,4 @@ if (!SY_ANNOUNCE_EXEMPT_IDS.has(discordUserId) && String(rarity).toUpperCase() =
     }
   },
 };
+
