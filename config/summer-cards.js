@@ -82,6 +82,7 @@ yellow: Object.freeze([
   'Koyori',
   'Miko',
   'Mio',
+  'Mumei',
   'Polka',
   'Reine',
   'Ririka',
