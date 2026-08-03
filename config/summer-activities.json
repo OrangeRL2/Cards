@@ -6,348 +6,676 @@
   "rewardTableId": "summer_activity_default",
   "days": [
     {
-      "day": 1,
-      "date": "2026-08-01",
-      "chapter": "Chapter 1 — Arrival",
-      "storyBeat": "The ferry arrives. Everyone is scrambling to set up their favorite spots.",
+      "day": 2,
+      "date": "2026-08-02",
+      "chapter": "Chapter 2 — The Echoing Shores",
+      "storyBeat": "The staff notices extra sets of footprints in the sand. None of them belong to the talents.",
       "windows": {
         "morning": {
-          "sceneId": "AUG01_MORNING",
-          "title": "Day 1 — Morning Arrival",
-          "openingDialogue": "Welcome to Hololive Island! The sun is bright, the sand is hot, and three groups are currently fighting for the Manager's attention.",
+          "sceneId": "AUG02_MORNING",
+          "title": "Day 2 — Morning Beach Sweep",
+          "openingDialogue": "The sun rises, but the tide didn't go out. The water is oddly still today.",
           "coreActivities": [
             {
-              "id": "AUG01_MORNING_CORE_A",
-              "fullArtRoute": "Gen 0",
-              "buttonText": "Holo-Mall Opening",
-              "previewDialogue": "Help Sora and Suisei open the mall. Miko found the snacks.",
-              "selectedDialogue": "You enter the mall. Suisei is checking the edge of a display axe. 'It’s too dull, Manager. How can we sell this?'",
+              "id": "AUG02_MORNING_CORE_A",
+              "fullArtRoute": "Gen 1",
+              "buttonText": "Shoreline Cleanup",
+              "previewDialogue": "Help Fubuki and Matsuri clear the strange blue seaweed.",
+              "selectedDialogue": "Fubuki is poking a pile of glowing kelp with a stick. 'Manager, I think this seaweed just meowed...'",
               "steps": [
                 {
-                  "id": "AUG01_MORNING_CORE_A_STEP_1",
-                  "prompt": "The luxury floor needs a lead. Who do you assign?",
+                  "id": "AUG02_MORNING_CORE_A_STEP_1",
+                  "prompt": "The 'seaweed' is actually a group of confused sea-spirits. How to move them?",
                   "options": [
-                    { "id": "A", "text": "Assign Suisei", "resultDialogue": "Suisei turns on her 'Stellar' intensity. The customers are too intimidated to say no to her recommendations.", "eligibleSunMembers": ["Suisei"], "nextStepId": "AUG01_MORNING_CORE_A_STEP_2", "setFlag": "suisei_sales" },
-                    { "id": "B", "text": "Assign Sora", "resultDialogue": "Sora’s pure idol energy makes the store look like a holy landmark. Fans are lining up just to see her.", "eligibleSunMembers": ["Sora"], "nextStepId": "AUG01_MORNING_CORE_A_STEP_2", "setFlag": "sora_lead" },
-                    { "id": "C", "text": "Assign Roboco", "resultDialogue": "She automates the boutiques. High-spec efficiency, though she keeps trying to charge for 'battery cooling.'", "eligibleSunMembers": ["Roboco"], "nextStepId": "AUG01_MORNING_CORE_A_STEP_2", "setFlag": "roboco_tech" }
+                    { "id": "A", "text": "Let Fubuki lead them", "resultDialogue": "She plays a flute. The spirits follow her like the Pied Piper. 'Corn-luck!' she cheers.", "eligibleSunMembers": ["Fubuki"], "nextStepId": "AUG02_MORNING_CORE_A_STEP_2", "setFlag": "fubuki_flute" },
+                    { "id": "B", "text": "Matsuri's Energy", "resultDialogue": "She screams 'WASSHOI!' so loud the spirits dissipate into sparkles. Effective, if aggressive.", "eligibleSunMembers": ["Matsuri"], "nextStepId": "AUG02_MORNING_CORE_A_STEP_2", "setFlag": "matsuri_scream" },
+                    { "id": "C", "text": "Haachama Cooking?", "resultDialogue": "She offers to cook the spirits. They flee in terror. Even ghosts fear the Haachama Sundae.", "eligibleSunMembers": ["Haato"], "nextStepId": "AUG02_MORNING_CORE_A_STEP_2", "setFlag": "haato_cook" }
                   ]
                 },
                 {
-                  "id": "AUG01_MORNING_CORE_A_STEP_2",
-                  "prompt": "Miko has gotten her head stuck in a snack machine. She claims it 'grabbed' her.",
+                  "id": "AUG02_MORNING_CORE_A_STEP_2",
+                  "prompt": "A locked treasure chest is found. It's vibrating.",
                   "options": [
-                    { "id": "A", "text": "Pull her out", "resultDialogue": "You pull. *POP!* Miko is free, clutching three bags of Elite Taiyaki. She insists she was just 'scouting' the inventory.", "eligibleSunMembers": ["Miko"], "nextStepId": "AUG01_MORNING_CORE_A_STEP_3", "setFlag": "miko_pull" },
-                    { "id": "B", "text": "Ask Roboco to hack it", "resultDialogue": "Roboco opens the machine remotely. Miko falls out, buried in snacks. 'I'm okay-nye! This was all planned!'", "eligibleSunMembers": ["Roboco"], "nextStepId": "AUG01_MORNING_CORE_A_STEP_3", "setFlag": "roboco_hack" },
-                    { "id": "C", "text": "Let Sora help", "resultDialogue": "Sora gently talks to Miko, calming her until she can wiggle out. 'Don't do that again, Miko-chan!'", "eligibleSunMembers": ["Sora"], "nextStepId": "AUG01_MORNING_CORE_A_STEP_3", "setFlag": "sora_rescue" }
+                    { "id": "A", "text": "Fubuki's Intuition", "resultDialogue": "She finds a hidden latch. Inside is just a single, very old corn cob made of glass.", "eligibleSunMembers": ["Fubuki"], "nextStepId": "AUG02_MORNING_CORE_A_STEP_3", "setFlag": "glass_corn" },
+                    { "id": "B", "text": "Matsuri's Strength", "resultDialogue": "She kicks it open. It's full of 'Ghost Beer' (it's just cold soda). 'A God's reward!'", "eligibleSunMembers": ["Matsuri"], "nextStepId": "AUG02_MORNING_CORE_A_STEP_3", "setFlag": "matsuri_loot" },
+                    { "id": "C", "text": "Manager opens it", "resultDialogue": "It's a trap! Blue slime covers you. The girls laugh for ten minutes straight.", "eligibleSunMembers": [], "nextStepId": "AUG02_MORNING_CORE_A_STEP_3", "setFlag": "manager_pranked" }
                   ]
                 },
-                { "id": "AUG01_MORNING_CORE_A_STEP_3", "prompt": "The first hour is done. Success?", "options": [
-                    { "id": "A", "text": "Profit Check", "resultDialogue": "Suisei is already counting the shells. 'Decent start, Manager.'", "eligibleSunMembers": ["Suisei"], "nextStepId": "", "setFlag": "finish_bold" },
-                    { "id": "B", "text": "Idol Smile", "resultDialogue": "Sora bows to the guests. The mall feels warm and professional.", "eligibleSunMembers": ["Sora"], "nextStepId": "", "setFlag": "finish_safe" },
-                    { "id": "C", "text": "Elite Snack Time", "resultDialogue": "Miko shares her taiyaki. It’s warm, delicious, and suspiciously smells like incense.", "eligibleSunMembers": ["Miko"], "nextStepId": "", "setFlag": "finish_fun" }
+                { "id": "AUG02_MORNING_CORE_A_STEP_3", "prompt": "Beach status?", "options": [
+                    { "id": "A", "text": "Sparkling Clean", "resultDialogue": "The beach is pristine. The spirits are gone... for now.", "eligibleSunMembers": [], "nextStepId": "", "setFlag": "finish_safe" },
+                    { "id": "B", "text": "Chaos End", "resultDialogue": "The beach is covered in blue slime and glass corn. 'Good job, Manager!' Fubuki says sarcastically.", "eligibleSunMembers": ["Fubuki"], "nextStepId": "", "setFlag": "finish_fun" }
                   ] 
                 }
               ],
-              "completionDialogue": "Mall is open. You found a cold silver medal in the register tray. It looks like an old mirror piece.",
+              "completionDialogue": "Cleanup done. You found a silver mirror shard in a pile of glowing kelp.",
               "rewardTableId": "summer_activity_default"
             },
             {
-              "id": "AUG01_MORNING_CORE_B",
-              "fullArtRoute": "AREA 15",
-              "buttonText": "Fruit Stand Setup",
-              "previewDialogue": "Help AREA 15 set up the pier market.",
-              "selectedDialogue": "Risu is currently trying to hide a crate of expensive almonds. 'Squirrel instincts, Manager!'",
+              "id": "AUG02_MORNING_CORE_B",
+              "fullArtRoute": "Myth",
+              "buttonText": "Grotto Exploration",
+              "previewDialogue": "Explore the blue cave with Gura and Calli.",
+              "selectedDialogue": "Gura is trying to talk to a crab. Calli is checking her scythe. 'Something feels... dead in here. Even for me.'",
               "steps": [
                 {
-                  "id": "AUG01_MORNING_CORE_B_STEP_1",
-                  "prompt": "The mangoes are rolling down the pier. Help?",
+                  "id": "AUG02_MORNING_CORE_B_STEP_1",
+                  "prompt": "The cave path splits. The left smells like salt, the right smells like... old library books?",
                   "options": [
-                    { "id": "A", "text": "Help Moona", "resultDialogue": "She uses gravity to stop the fruit. It's efficient, but now the mangoes are floating 5 feet up. Reach for them!", "eligibleSunMembers": ["Moona"], "nextStepId": "AUG01_MORNING_CORE_B_STEP_2", "setFlag": "moona_gravity" },
-                    { "id": "B", "text": "Help Risu", "resultDialogue": "She offers to help... if you sign a contract giving her 10% of your nuts. You negotiate her down to a headpat.", "eligibleSunMembers": ["Risu"], "nextStepId": "AUG01_MORNING_CORE_B_STEP_2", "setFlag": "risu_contract" },
-                    { "id": "C", "text": "Help Iofi", "resultDialogue": "She is painting the stand. It looks incredibly vibrant. 'Alien colors for island summer-na!'", "eligibleSunMembers": ["Iofi"], "nextStepId": "AUG01_MORNING_CORE_B_STEP_2", "setFlag": "iofi_paint" }
+                    { "id": "A", "text": "Follow Gura (Salt)", "resultDialogue": "Gura leads you to a secret tidal pool. She immediately belly-flops in. 'I found home!'", "eligibleSunMembers": ["Gura"], "nextStepId": "AUG02_MORNING_CORE_B_STEP_2", "setFlag": "gura_swim" },
+                    { "id": "B", "text": "Follow Calli (Books)", "resultDialogue": "You find a skeleton holding a cookbook. Calli looks annoyed. 'Who dies with a recipe for lasagna?!'", "eligibleSunMembers": ["Calli"], "nextStepId": "AUG02_MORNING_CORE_B_STEP_2", "setFlag": "calli_skeleton" },
+                    { "id": "C", "text": "Ask Ina", "resultDialogue": "She points at a wall. 'The writing says... turn back or pay the WAH tax.' You pay 5 cookies.", "eligibleSunMembers": ["Inanis"], "nextStepId": "AUG02_MORNING_CORE_B_STEP_2", "setFlag": "ina_tax" }
                   ]
                 },
-                {
-                  "id": "AUG01_MORNING_CORE_B_STEP_2",
-                  "prompt": "A tropical bird steals the Manager's sunglasses! Who catches it?",
-                  "options": [
-                    { "id": "A", "text": "Let Risu pounce", "resultDialogue": "She leaps through the air like a ninja. She gets the glasses back and barks at the bird. Squirrel power!", "eligibleSunMembers": ["Risu"], "nextStepId": "AUG01_MORNING_CORE_B_STEP_3", "setFlag": "risu_ninja" },
-                    { "id": "B", "text": "Let Iofi use a decoy", "resultDialogue": "She draws a perfect, juicy berry on a leaf. The bird drops the glasses and falls for the drawing. Art wins!", "eligibleSunMembers": ["Iofi"], "nextStepId": "AUG01_MORNING_CORE_B_STEP_3", "setFlag": "iofi_decoy" },
-                    { "id": "C", "text": "Let Moona use light", "resultDialogue": "She shimmers brightly, startling the bird. It drops the glasses and bows to her. Ethereal!", "eligibleSunMembers": ["Moona"], "nextStepId": "AUG01_MORNING_CORE_B_STEP_3", "setFlag": "moona_glow" }
-                  ]
+                { "id": "AUG02_MORNING_CORE_B_STEP_2", "prompt": "A ghost pirate appears! He wants a rap battle.", "options": [
+                    { "id": "A", "text": "Send Calli", "resultDialogue": "She destroys him with three verses. The ghost is so impressed he gives her his hat and vanishes.", "eligibleSunMembers": ["Calli"], "nextStepId": "AUG02_MORNING_CORE_B_STEP_3", "setFlag": "calli_rap" },
+                    { "id": "B", "text": "Let Gura 'Sing'", "resultDialogue": "She sings 'Baby Shark.' The pirate is so confused he sinks into the floor. A win is a win.", "eligibleSunMembers": ["Gura"], "nextStepId": "AUG02_MORNING_CORE_B_STEP_3", "setFlag": "gura_shark" }
+                  ] 
                 },
-                { "id": "AUG01_MORNING_CORE_B_STEP_3", "prompt": "Stand status?", "options": [
-                    { "id": "A", "text": "Profitable!", "resultDialogue": "Risu is hugging the cash box. 'My precious shells-mogu!'", "eligibleSunMembers": ["Risu"], "nextStepId": "", "setFlag": "finish_bold" },
-                    { "id": "B", "text": "Fresh and Sweet", "resultDialogue": "The stand is the talk of the pier. Great PR for ID Gen 1.", "eligibleSunMembers": ["Moona"], "nextStepId": "", "setFlag": "finish_safe" },
-                    { "id": "C", "text": "Alien Marketing", "resultDialogue": "Iofi convinces tourists that the pineapples are UFO parts. They sell out instantly.", "eligibleSunMembers": ["Iofi"], "nextStepId": "", "setFlag": "finish_fun" }
+                { "id": "AUG02_MORNING_CORE_B_STEP_3", "prompt": "Exit the cave?", "options": [
+                    { "id": "A", "text": "Quickly", "resultDialogue": "You leave before Gura tries to eat a ghost-crab. Safety first.", "eligibleSunMembers": [], "nextStepId": "", "setFlag": "finish_safe" },
+                    { "id": "B", "text": "Loot everything", "resultDialogue": "You carry out bags of 'Ethereal Sand.' It's heavy and glows in the dark.", "eligibleSunMembers": ["Calli"], "nextStepId": "", "setFlag": "finish_bold" }
                   ] 
                 }
               ],
-              "completionDialogue": "Stand is open. You found an old, heavy ritual bell buried in the sand.",
+              "completionDialogue": "Cave explored. Calli found a silver mirror shard in the pirate's hat.",
               "rewardTableId": "summer_activity_default"
             },
             {
-              "id": "AUG01_MORNING_CORE_C",
-              "fullArtRoute": "Advent",
-              "buttonText": "Base Camp Prep",
-              "previewDialogue": "Help Advent unpack their plane-wreck base.",
-              "selectedDialogue": "Shiori is carefully sniffing an old suitcase. 'It smells like... secrets and 1920s travel lotion.'",
-              "steps": [
-                {
-                  "id": "AUG01_MORNING_CORE_C_STEP_1",
-                  "prompt": "The furniture is heavy. Who needs a hand?",
-                  "options": [
-                    { "id": "A", "text": "Help Nerissa", "resultDialogue": "She’s moving a crate. She hums a work song, and before you know it, the whole room is unpacked.", "eligibleSunMembers": ["Nerissa"], "nextStepId": "AUG01_MORNING_CORE_C_STEP_2", "setFlag": "nerissa_song" },
-                    { "id": "B", "text": "Help Bijou", "resultDialogue": "She's organizing 'shiny things' she found. Most are just broken glass, but one is a polished silver disc.", "eligibleSunMembers": ["Bijou"], "nextStepId": "AUG01_MORNING_CORE_C_STEP_2", "setFlag": "bijou_shiny" },
-                    { "id": "C", "text": "Help Shiori", "resultDialogue": "She wants you to catalog 'The History of Abandoned Sandwiches.' You decline and move some chairs instead.", "eligibleSunMembers": ["Shiori"], "nextStepId": "AUG01_MORNING_CORE_C_STEP_2", "setFlag": "shiori_boring" }
-                  ]
-                },
-                {
-                  "id": "AUG01_MORNING_CORE_C_STEP_2",
-                  "prompt": "The twins have found a 'Forbidden Button' in the wall. Push it?",
-                  "options": [
-                    { "id": "A", "text": "YES! PUSH IT!", "resultDialogue": "A secret panel opens revealing a stash of blue energy drinks. BAU BAU! The twins are delighted.", "eligibleSunMembers": ["Fuwawa", "Mococo"], "nextStepId": "AUG01_MORNING_CORE_C_STEP_3", "setFlag": "twins_drink" },
-                    { "id": "B", "text": "Stop them!", "resultDialogue": "You stay professional. You find a manual for the plane instead. Safety over chaos.", "eligibleSunMembers": [], "nextStepId": "AUG01_MORNING_CORE_C_STEP_3", "setFlag": "manager_safe" },
-                    { "id": "C", "text": "Let Bijou Tax it", "resultDialogue": "She claims the button. Now anyone who wants to push it has to pay her one shiny rock. Economic genius.", "eligibleSunMembers": ["Bijou"], "nextStepId": "AUG01_MORNING_CORE_C_STEP_3", "setFlag": "bijou_tax" }
-                  ]
-                },
-                { "id": "AUG01_MORNING_CORE_C_STEP_3", "prompt": "Base check?", "options": [
-                    { "id": "A", "text": "All secure", "resultDialogue": "The base feels like a home now. A very strange, metallic home.", "eligibleSunMembers": [], "nextStepId": "", "setFlag": "finish_safe" },
-                    { "id": "B", "text": "BAU BAU!", "resultDialogue": "The twins are happy. The base is full of energy.", "eligibleSunMembers": ["Fuwawa"], "nextStepId": "", "setFlag": "finish_bold" },
-                    { "id": "C", "text": "Research Notes", "resultDialogue": "Shiori scribbles in her journal. 'The air in this wreckage feels... old.'", "eligibleSunMembers": ["Shiori"], "nextStepId": "", "setFlag": "finish_fun" }
-                  ] 
-                }
-              ],
-              "completionDialogue": "Basecamp established. Shiori found an old piece of mirror-glass in a drawer.",
-              "rewardTableId": "summer_activity_default"
-            }
+                "id": "AUG02_MORNING_CORE_C",
+                "fullArtRoute": "Promise",
+                "buttonText": "Island Greenhouse",
+                "previewDialogue": "Help Fauna and Mumei with the strange flora.",
+                "selectedDialogue": "Fauna is talking to a sunflower that is currently frowning. Mumei is eating a berry that makes her transparent.",
+                "steps": [
+                  {
+                    "id": "AUG02_MORNING_CORE_C_STEP_1",
+                    "prompt": "The plants are growing too fast! They're trapping the exit!",
+                    "options": [
+                      { "id": "A", "text": "Calm Nature (Fauna)", "resultDialogue": "She whispers to the vines. They relax and bloom into beautiful, non-threatening roses.", "eligibleSunMembers": ["Fauna"], "nextStepId": "AUG02_MORNING_CORE_C_STEP_2", "setFlag": "fauna_calm" },
+                      { "id": "B", "text": "Cut them back (Mumei)", "resultDialogue": "She pulls out a dagger. 'I forgot why I'm doing this, but I like it.' The plants shrink away in fear.", "eligibleSunMembers": ["Mumei"], "nextStepId": "AUG02_MORNING_CORE_C_STEP_2", "setFlag": "mumei_slash" }
+                    ]
+                  },
+                  {
+                    "id": "AUG02_MORNING_CORE_C_STEP_2",
+                    "prompt": "You find a 'Ghost Orchid.' It only blooms when someone tells a secret.",
+                    "options": [
+                      { "id": "A", "text": "Tell a secret", "resultDialogue": "You admit you once hid Miko's snacks. The orchid blooms, revealing a silver coin.", "eligibleSunMembers": [], "nextStepId": "AUG02_MORNING_CORE_C_STEP_3", "setFlag": "manager_secret" },
+                      { "id": "B", "text": "Let Mumei speak", "resultDialogue": "She whispers something so dark the orchid turns black and withers. 'Oops,' she says.", "eligibleSunMembers": ["Mumei"], "nextStepId": "AUG02_MORNING_CORE_C_STEP_3", "setFlag": "mumei_dark" }
+                    ]
+                  },
+                  { "id": "AUG02_MORNING_CORE_C_STEP_3", "prompt": "Greenhouse status?", "options": [
+                      { "id": "A", "text": "Peaceful", "resultDialogue": "Nature is beautiful, if a bit creepy.", "eligibleSunMembers": ["Fauna"], "nextStepId": "", "setFlag": "finish_safe" }
+                    ] 
+                  }
+                ],
+                "completionDialogue": "Greenhouse secure. Fauna found a shard of silver glass in a flowerpot.",
+                "rewardTableId": "summer_activity_default"
+              }
           ]
         },
         "noon": {
-          "sceneId": "AUG01_NOON",
-          "title": "Day 1 — The Midday Heat",
-          "openingDialogue": "It's scorching. Choose a group to manage through the noon rush.",
+          "sceneId": "AUG02_NOON",
+          "title": "Day 2 — Midday Glitches",
+          "openingDialogue": "The resort's AC is failing. Strangely, the vents are blowing cold, blue mist instead of air.",
           "coreActivities": [
             {
-              "id": "AUG01_NOON_CORE_A",
-              "fullArtRoute": "Fantasy",
-              "buttonText": "Bistro Peak Rush",
-              "previewDialogue": "Manage the Gen 3 girls during the peak noodle rush.",
-              "selectedDialogue": "Flare is sweating over the grill. Marine is complaining that her outfit was 'not made for humidity.'",
+              "id": "AUG02_NOON_CORE_A",
+              "fullArtRoute": "Gamers",
+              "buttonText": "Arcade Overdrive",
+              "previewDialogue": "Manage the arcade with Korone and Okayu.",
+              "selectedDialogue": "The claw machine is moving by itself. Korone is trying to 'punish' the machine with her fists.",
               "steps": [
                 {
-                  "id": "AUG01_NOON_CORE_A_STEP_1",
-                  "prompt": "The register line is 100 people long. Who goes there?",
+                  "id": "AUG02_NOON_CORE_A_STEP_1",
+                  "prompt": "The Pac-Man ghost is actually coming out of the screen! Help?",
                   "options": [
-                    { "id": "A", "text": "Assign Pekora", "resultDialogue": "She processes payments like a machine. 'No refunds-peko!' The line moves out of fear.", "eligibleSunMembers": ["Pekora"], "nextStepId": "AUG01_NOON_CORE_A_STEP_2", "setFlag": "peko_cash" },
-                    { "id": "B", "text": "Assign Noel", "resultDialogue": "She carries 10 plates at once. She is clearing the counter by herself. Knight power!", "eligibleSunMembers": ["Noel"], "nextStepId": "AUG01_NOON_CORE_A_STEP_2", "setFlag": "noel_muscle" },
-                    { "id": "C", "text": "Let Flare lead", "resultDialogue": "She coordinates the workflow like a general. The throughput is perfect. Flare is a pro.", "eligibleSunMembers": ["Flare"], "nextStepId": "AUG01_NOON_CORE_A_STEP_2", "setFlag": "flare_lead" }
+                    { "id": "A", "text": "Give Korone a bat", "resultDialogue": "She treats it like a baseball game. 'HOME RUN!' The ghost is knocked back into the 80s.", "eligibleSunMembers": ["Korone"], "nextStepId": "AUG02_NOON_CORE_A_STEP_2", "setFlag": "korone_bat" },
+                    { "id": "B", "text": "Let Okayu eat it", "resultDialogue": "She casually bites the ghost. 'Tastes like blueberry.' The machine resets.", "eligibleSunMembers": ["Okayu"], "nextStepId": "AUG02_NOON_CORE_A_STEP_2", "setFlag": "okayu_snack" }
                   ]
                 },
-                {
-                  "id": "AUG01_NOON_CORE_A_STEP_2",
-                  "prompt": "Marine is trying to sell 'Treasure Juice' (just standard OJ) for double price.",
-                  "options": [
-                    { "id": "A", "text": "Strict Ban", "resultDialogue": "You give her the 'Manager Stare.' She pouts and returns to normal waitressing. Honesty wins.", "eligibleSunMembers": [], "nextStepId": "AUG01_NOON_CORE_A_STEP_3", "setFlag": "manager_strict" },
-                    { "id": "B", "text": "Pivot the PR", "resultDialogue": "You help her set up a 'Captain's Corner' photo-op instead. It's a huge hit! Profit UP!", "eligibleSunMembers": ["Marine"], "nextStepId": "AUG01_NOON_CORE_A_STEP_3", "setFlag": "marine_pr" },
-                    { "id": "C", "text": "Let Pekora help", "resultDialogue": "She starts a raffle. 'Buy a juice, win a carrot!' The fans are strangely competitive about it.", "eligibleSunMembers": ["Pekora"], "nextStepId": "AUG01_NOON_CORE_A_STEP_3", "setFlag": "peko_game" }
-                  ]
-                },
-                { "id": "AUG01_NOON_CORE_A_STEP_3", "prompt": "Rush wrap?", "options": [
-                    { "id": "A", "text": "Flare’s Lunch", "resultDialogue": "She cooks you a special bowl. Your stamina is refilled instantly!", "eligibleSunMembers": ["Flare"], "nextStepId": "", "setFlag": "finish_safe" },
-                    { "id": "B", "text": "Gold for the Rabbit", "resultDialogue": "Pekora counts the cash. 'We're rich-peko!'", "eligibleSunMembers": ["Pekora"], "nextStepId": "", "setFlag": "finish_bold" },
-                    { "id": "C", "text": "Marine’s Nap", "resultDialogue": "She’s already asleep in the shade. Don't wake her.", "eligibleSunMembers": ["Marine"], "nextStepId": "", "setFlag": "finish_fun" }
+                { "id": "AUG02_NOON_CORE_A_STEP_2", "prompt": "High score check?", "options": [
+                    { "id": "A", "text": "Korone Wins", "resultDialogue": "She demands 'yubi' as payment from the loser. You give her a chocolate finger instead.", "eligibleSunMembers": ["Korone"], "nextStepId": "", "setFlag": "finish_bold" },
+                    { "id": "B", "text": "Okayu Wins", "resultDialogue": "She fell asleep during the final boss but still won. Remarkable.", "eligibleSunMembers": ["Okayu"], "nextStepId": "", "setFlag": "finish_safe" }
                   ] 
                 }
               ],
-              "completionDialogue": "Bistro survived. You found an old, heavy silver spoon in the sink.",
+              "completionDialogue": "Arcade fixed. You found a silver mirror shard inside the coin slot.",
               "rewardTableId": "summer_activity_default"
             },
             {
-              "id": "AUG01_NOON_CORE_B",
-              "fullArtRoute": "holoX",
-              "buttonText": "Water Park Patrol",
-              "previewDialogue": "Manage holoX at the splash zone.",
-              "selectedDialogue": "La+ is currently trying to declare the wave pool her sovereign territory.",
-              "steps": [
-                {
-                  "id": "AUG01_NOON_CORE_B_STEP_1",
-                  "prompt": "The slides are jammed. Who flushes them out?",
-                  "options": [
-                    { "id": "A", "text": "Send Iroha", "resultDialogue": "She uses ninja-agility to clear the jam in seconds. 'De gozaru!' The kids think she's a hero.", "eligibleSunMembers": ["Iroha"], "nextStepId": "AUG01_NOON_CORE_B_STEP_2", "setFlag": "iroha_ninja" },
-                    { "id": "B", "text": "Send Chloe", "resultDialogue": "She gets stuck too. Now you have to rescue the rescuer. Managerial nightmare!", "eligibleSunMembers": ["Chloe"], "nextStepId": "AUG01_NOON_CORE_B_STEP_2", "setFlag": "chloe_stuck" },
-                    { "id": "C", "text": "Lui handles the line", "resultDialogue": "She uses a whistle and a mom-stare. The chaos stops immediately.", "eligibleSunMembers": ["Lui"], "nextStepId": "AUG01_NOON_CORE_B_STEP_2", "setFlag": "lui_order" }
-                  ]
-                },
-                {
-                  "id": "AUG01_NOON_CORE_B_STEP_2",
-                  "prompt": "Koyori wants to test a 'High-Velocity' lotion on the guests. Risk it?",
-                  "options": [
-                    { "id": "A", "text": "YES! FOR SCIENCE!", "resultDialogue": "The fan hits 80mph on the slide. They land in the next lagoon. They love it!", "eligibleSunMembers": ["Koyori"], "nextStepId": "AUG01_NOON_CORE_B_STEP_3", "setFlag": "koyori_science" },
-                    { "id": "B", "text": "Stop the test", "resultDialogue": "Safety first. Koyori pouts but the island's safety rating stays perfect.", "eligibleSunMembers": [], "nextStepId": "AUG01_NOON_CORE_B_STEP_3", "setFlag": "manager_safe" },
-                    { "id": "C", "text": "Let La+ 'Bless' it", "resultDialogue": "She calls it 'Dark Energy Lotion.' It’s just normal cream with food coloring. The fans pay double.", "eligibleSunMembers": ["La+"], "nextStepId": "AUG01_NOON_CORE_B_STEP_3", "setFlag": "laplus_bless" }
-                  ]
-                },
-                { "id": "AUG01_NOON_CORE_B_STEP_3", "prompt": "Splash status?", "options": [
-                    { "id": "A", "text": "Soaked and Happy", "resultDialogue": "Lui gives you a dry towel. You needed that.", "eligibleSunMembers": ["Lui"], "nextStepId": "", "setFlag": "finish_safe" },
-                    { "id": "B", "text": "Dark Lady Victory", "resultDialogue": "La+ stands on a floatie. 'The ocean obeys me!' Sure, kid.", "eligibleSunMembers": ["La+"], "nextStepId": "", "setFlag": "finish_bold" },
-                    { "id": "C", "text": "Data Logged", "resultDialogue": "Koyori is scribbling notes. 'The friction levels were fascinating!'", "eligibleSunMembers": ["Koyori"], "nextStepId": "", "setFlag": "finish_fun" }
-                  ] 
-                }
-              ],
-              "completionDialogue": "Water park is a hit. You found an old, rusty key in the pool filter.",
-              "rewardTableId": "summer_activity_default"
-            },
-            {
-              "id": "AUG01_NOON_CORE_C",
-              "fullArtRoute": "NePoLaBo",
-              "buttonText": "Sandcastle Defense",
-              "previewDialogue": "Help NePoLaBo build a beach fortress.",
-              "selectedDialogue": "Botan is currently mounting a high-pressure water cannon on a tower made of sand.",
-              "steps": [
-                {
-                  "id": "AUG01_NOON_CORE_C_STEP_1",
-                  "prompt": "The tide is coming in! Who fortifies the walls?",
-                  "options": [
-                    { "id": "A", "text": "Help Lamy", "resultDialogue": "She uses ice to freeze the wet sand. The walls are now rock-hard and ice-cold. Perfect defense!", "eligibleSunMembers": ["Lamy"], "nextStepId": "AUG01_NOON_CORE_C_STEP_2", "setFlag": "lamy_ice" },
-                    { "id": "B", "text": "Help Nene", "resultDialogue": "She adds 100 seal statues for 'spiritual protection.' It's not sturdy, but it is adorable.", "eligibleSunMembers": ["Nene"], "nextStepId": "AUG01_NOON_CORE_C_STEP_2", "setFlag": "nene_seal" },
-                    { "id": "C", "text": "Help Polka", "resultDialogue": "She fills the moat with glitter. The beach is now visible from space. Polka magic!", "eligibleSunMembers": ["Polka"], "nextStepId": "AUG01_NOON_CORE_C_STEP_2", "setFlag": "polka_sparkle" }
-                  ]
-                },
-                {
-                  "id": "AUG01_NOON_CORE_C_STEP_2",
-                  "prompt": "Botan wants to test the cannon on an 'unauthorized' observer in the forest. Stop her?",
-                  "options": [
-                    { "id": "A", "text": "Fire for Hype!", "resultDialogue": "The cannon blast reveals a lost fan who was trying to climb a tree. Botan smirks. 'Target neutralized.'", "eligibleSunMembers": ["Botan"], "nextStepId": "AUG01_NOON_CORE_C_STEP_3", "setFlag": "botan_snipe" },
-                    { "id": "B", "text": "Safety Shutdown", "resultDialogue": "You stay professional. You find a rare tropical flower instead. Lamy is pleased.", "eligibleSunMembers": ["Lamy"], "nextStepId": "AUG01_NOON_CORE_C_STEP_3", "setFlag": "manager_safe" },
-                    { "id": "C", "text": "Let Nene sing to it", "resultDialogue": "She sings a seal-song. The water cannon turns into a bubble machine. The fans love it!", "eligibleSunMembers": ["Nene"], "nextStepId": "AUG01_NOON_CORE_C_STEP_3", "setFlag": "nene_bubble" }
-                  ]
-                },
-                { "id": "AUG01_NOON_CORE_C_STEP_3", "prompt": "Who is the King of the Fort?", "options": [
-                    { "id": "A", "text": "Botan (The Tactician)", "resultDialogue": "A sturdy, professional sand-fortress.", "eligibleSunMembers": ["Botan"], "nextStepId": "", "setFlag": "finish_bold" },
-                    { "id": "B", "text": "Lamy (The Queen)", "resultDialogue": "A beautiful, frozen castle in the sun.", "eligibleSunMembers": ["Lamy"], "nextStepId": "", "setFlag": "finish_safe" },
-                    { "id": "C", "text": "Polka (The Circus)", "resultDialogue": "It sparkles brilliantly before partially collapsing. Iconic.", "eligibleSunMembers": ["Polka"], "nextStepId": "", "setFlag": "finish_fun" }
-                  ] 
-                }
-              ],
-              "completionDialogue": "Castle is finished. Botan found a strange metallic chip deep in the sand.",
-              "rewardTableId": "summer_activity_default"
-            }
+                "id": "AUG02_NOON_CORE_B",
+                "fullArtRoute": "ID Gen 2",
+                "buttonText": "Vanishing Buffet",
+                "previewDialogue": "Help Ollie and Reine manage the lunch buffet.",
+                "selectedDialogue": "The food keeps disappearing the moment customers look away. Ollie is being blamed because she's a zombie.",
+                "steps": [
+                  {
+                    "id": "AUG02_NOON_CORE_B_STEP_1",
+                    "prompt": "The invisible thief is stealing the satay! Who catches them?",
+                    "options": [
+                      { "id": "A", "text": "Ollie's Screech", "resultDialogue": "She screams at a frequency that reveals the ghosts. They're just small island spirits. 'HEY! THAT'S FOR CUSTOMERS!'", "eligibleSunMembers": ["Ollie"], "nextStepId": "AUG02_NOON_CORE_B_STEP_2", "setFlag": "ollie_scream" },
+                      { "id": "B", "text": "Reine's Elegance", "resultDialogue": "She places a 'Royal Barrier' around the food. The ghosts bounce off it like rubber balls.", "eligibleSunMembers": ["Reine"], "nextStepId": "AUG02_NOON_CORE_B_STEP_2", "setFlag": "reine_magic" }
+                    ]
+                  },
+                  { "id": "AUG02_NOON_CORE_B_STEP_2", "prompt": "Buffet status?", "options": [
+                      { "id": "A", "text": "Full and Tasty", "resultDialogue": "Reine serves tea. The ghosts are now acting as waiters. High efficiency!", "eligibleSunMembers": ["Reine"], "nextStepId": "", "setFlag": "finish_safe" }
+                    ] 
+                  }
+                ],
+                "completionDialogue": "Buffet saved. Ollie found a silver mirror piece in a bowl of soup.",
+                "rewardTableId": "summer_activity_default"
+              },
+              {
+                "id": "AUG02_NOON_CORE_C",
+                "fullArtRoute": "Gen 5",
+                "buttonText": "Foggy Poolside",
+                "previewDialogue": "Manage the pool with Polka and Lamy.",
+                "selectedDialogue": "Polka is trying to perform a circus act, but the fog is making her disappear mid-jump.",
+                "steps": [
+                  {
+                    "id": "AUG02_NOON_CORE_C_STEP_1",
+                    "prompt": "A 'Ghost Lifeguard' is blowing his whistle at everyone. How to handle him?",
+                    "options": [
+                      { "id": "A", "text": "Let Polka hire him", "resultDialogue": "She gives him a clown hat. Now he's part of the show. 'POLKA OR DIE!' she yells.", "eligibleSunMembers": ["Polka"], "nextStepId": "AUG02_NOON_CORE_C_STEP_2", "setFlag": "polka_hire" },
+                      { "id": "B", "text": "Let Lamy freeze him", "resultDialogue": "She turns the fog into snow. The ghost becomes a snowman. Very festive for August.", "eligibleSunMembers": ["Lamy"], "nextStepId": "AUG02_NOON_CORE_C_STEP_2", "setFlag": "lamy_snow" }
+                    ]
+                  },
+                  { "id": "AUG02_NOON_CORE_C_STEP_2", "prompt": "Pool status?", "options": [
+                      { "id": "A", "text": "Winter Wonderland", "resultDialogue": "Lamy is happy. The fans are shivering but enjoying the vibe.", "eligibleSunMembers": ["Lamy"], "nextStepId": "", "setFlag": "finish_safe" }
+                    ] 
+                  }
+                ],
+                "completionDialogue": "Pool area cleared. Polka found a silver mirror shard in the filter.",
+                "rewardTableId": "summer_activity_default"
+              }
           ]
         },
         "evening": {
-          "sceneId": "AUG01_EVENING",
-          "title": "Day 1 — Evening Glow",
-          "openingDialogue": "Lanterns are flickering to life. The first night ceremony is starting near the shrine.",
+          "sceneId": "AUG02_EVENING",
+          "title": "Day 2 — The Whispering Forest",
+          "openingDialogue": "The stars are out, but they're purple tonight. The trees are leaning toward the Manager.",
           "coreActivities": [
             {
-              "id": "AUG01_EVENING_CORE_A",
-              "fullArtRoute": "holoForce",
-              "buttonText": "Sky Lantern Launch",
-              "previewDialogue": "Help Gen 4 prepare the opening lanterns.",
-              "selectedDialogue": "Watame is currently trying to write 'I am not delicious' on every single lantern.",
+              "id": "AUG02_EVENING_CORE_A",
+              "fullArtRoute": "holoX",
+              "buttonText": "Dark Ritual (Maybe?)",
+              "previewDialogue": "Join La+ and Koyori in the woods.",
+              "selectedDialogue": "La+ is standing on a stump. 'I shall summon the ancient lords of this island!' It looks like she's just summoning mosquitoes.",
               "steps": [
                 {
-                  "id": "AUG01_EVENING_CORE_A_STEP_1",
-                  "prompt": "The lighter is missing. Who provides the spark?",
+                  "id": "AUG02_EVENING_CORE_A_STEP_1",
+                  "prompt": "A giant shadow appears! It looks like a massive crow. What's the plan?",
                   "options": [
-                    { "id": "A", "text": "Trust Towa", "resultDialogue": "She handles the flame with devilish grace. TMT! TMT! The lanterns glow holy-blue.", "eligibleSunMembers": ["Towa"], "nextStepId": "AUG01_EVENING_CORE_A_STEP_2", "setFlag": "towa_light" },
-                    { "id": "B", "text": "Ask Kanata", "resultDialogue": "She accidentally snaps the bamboo frame with her 50kg grip. You use your lighter instead. Overkill.", "eligibleSunMembers": ["Kanata"], "nextStepId": "AUG01_EVENING_CORE_A_STEP_2", "setFlag": "kanata_fail" },
-                    { "id": "C", "text": "Let Watame hum it", "resultDialogue": "The sheer warmth of her song lights the wick. The lantern feels cozy and safe.", "eligibleSunMembers": ["Watame"], "nextStepId": "AUG01_EVENING_CORE_A_STEP_2", "setFlag": "watame_warm" }
+                    { "id": "A", "text": "La+ Commands it", "resultDialogue": "She shouts 'KNEEL!' The shadow turns out to be a cardboard cutout. 'I... I KNEW THAT!'", "eligibleSunMembers": ["Laplus"], "nextStepId": "AUG02_EVENING_CORE_A_STEP_2", "setFlag": "laplus_fail" },
+                    { "id": "B", "text": "Koyori Analyzes it", "resultDialogue": "She shines a blacklight. It's a projection from an old hidden camera. 'Interesting science!'", "eligibleSunMembers": ["Koyori"], "nextStepId": "AUG02_EVENING_CORE_A_STEP_2", "setFlag": "koyori_tech" }
                   ]
                 },
-                {
-                  "id": "AUG01_EVENING_CORE_A_STEP_2",
-                  "prompt": "Luna demands a 'Royal Escort' to the launch pad. Be her horse?",
-                  "options": [
-                    { "id": "A", "text": "Carry the Princess", "resultDialogue": "You carry her. Your back cracks. But the fans are crying from the cuteness. Naano!", "eligibleSunMembers": ["Luna"], "nextStepId": "AUG01_EVENING_CORE_A_STEP_3", "setFlag": "manager_horse" },
-                    { "id": "B", "text": "Professional Escort", "resultDialogue": "You walk beside her with a clipboard. Formal and efficient. She pouts for three hours.", "eligibleSunMembers": [], "nextStepId": "AUG01_EVENING_CORE_A_STEP_3", "setFlag": "manager_dry" },
-                    { "id": "C", "text": "Let Towa carry her", "resultDialogue": "Towa sighs but does it. 'I'm a devil, not a nanny!' The fans cheer for TMT.", "eligibleSunMembers": ["Towa"], "nextStepId": "AUG01_EVENING_CORE_A_STEP_3", "setFlag": "towa_nanny" }
-                  ]
-                },
-                { "id": "AUG01_EVENING_CORE_A_STEP_3", "prompt": "Launch status?", "options": [
-                    { "id": "A", "text": "Perfect Flight", "resultDialogue": "The lanterns rise in a perfect line. A peaceful first night.", "eligibleSunMembers": [], "nextStepId": "", "setFlag": "finish_safe" },
-                    { "id": "B", "text": "Devil’s Glow", "resultDialogue": "Towa leads a synchronized launch. Breathtaking and slightly eerie.", "eligibleSunMembers": ["Towa"], "nextStepId": "", "setFlag": "finish_bold" },
-                    { "id": "C", "text": "Naano Night", "resultDialogue": "Luna watches with a smile. 'Good job, Manager.' Night 1 is done.", "eligibleSunMembers": ["Luna"], "nextStepId": "", "setFlag": "finish_fun" }
+                { "id": "AUG02_EVENING_CORE_A_STEP_2", "prompt": "Who is the 'Darkness'?", "options": [
+                    { "id": "A", "text": "La+ (The Leader)", "resultDialogue": "She feels cool for 5 seconds until she trips. Still, the fans cheered.", "eligibleSunMembers": ["Laplus"], "nextStepId": "", "setFlag": "finish_bold" }
                   ] 
                 }
               ],
-              "completionDialogue": "Ceremony ends. You found an ancient silver coin in the lantern crate.",
+              "completionDialogue": "Forest walk over. You found a silver mirror piece in the cardboard bird.",
               "rewardTableId": "summer_activity_default"
             },
             {
-              "id": "AUG01_EVENING_CORE_B",
-              "fullArtRoute": "Justice",
-              "buttonText": "Vigilante Patrol",
-              "previewDialogue": "Help Justice keep the first night secure.",
-              "selectedDialogue": "Elizabeth is checking the perimeter. Gigi is trying to arrest a statue for 'loitering.'",
-              "steps": [
-                {
-                  "id": "AUG01_EVENING_CORE_B_STEP_1",
-                  "prompt": "A mysterious shadow moves near the mall. Who investigates?",
-                  "options": [
-                    { "id": "A", "text": "Send Elizabeth", "resultDialogue": "She uses her royal voice. The shadow stops. It's just a tourist. She sings an apology. PR saved!", "eligibleSunMembers": ["Elizabeth"], "nextStepId": "AUG01_EVENING_CORE_B_STEP_2", "setFlag": "elizabeth_lead" },
-                    { "id": "B", "text": "Let Cecilia scout", "resultDialogue": "She uses mechanical sensors. 'It's a low-frequency broadcast.' Justice is on the case!", "eligibleSunMembers": ["Cecilia"], "nextStepId": "AUG01_EVENING_CORE_B_STEP_2", "setFlag": "cecilia_spy" },
-                    { "id": "C", "text": "Send Gigi", "resultDialogue": "She pounces. It's a trash can. She interrogation-mode: 'Who sent you?!'", "eligibleSunMembers": ["Gigi"], "nextStepId": "AUG01_EVENING_CORE_B_STEP_2", "setFlag": "gigi_tackle" }
-                  ]
-                },
-                {
-                  "id": "AUG01_EVENING_CORE_B_STEP_2",
-                  "prompt": "Raora found a 'Secret Map' on a bench. Show the group?",
-                  "options": [
-                    { "id": "A", "text": "Yes, Tactical Analysis!", "resultDialogue": "The team studies it. Justice is now 100% more efficient at scouting. Let's go!", "eligibleSunMembers": ["Raora"], "nextStepId": "AUG01_EVENING_CORE_B_STEP_3", "setFlag": "raora_map" },
-                    { "id": "B", "text": "Keep it quiet", "resultDialogue": "You stay focused on safety. The night is quiet and peaceful. Good job, Manager.", "eligibleSunMembers": [], "nextStepId": "AUG01_EVENING_CORE_B_STEP_3", "setFlag": "manager_quiet" },
-                    { "id": "C", "text": "Let Gigi 'Draw' on it", "resultDialogue": "She turns the map into a coloring book. All tactical value is lost, but morale is high.", "eligibleSunMembers": ["Gigi"], "nextStepId": "AUG01_EVENING_CORE_B_STEP_3", "setFlag": "gigi_chaos" }
-                  ]
-                },
-                { "id": "AUG01_EVENING_CORE_B_STEP_3", "prompt": "End of shift?", "options": [
-                    { "id": "A", "text": "Justice Served!", "resultDialogue": "The team stands tall under the moon. The island is safe.", "eligibleSunMembers": ["Elizabeth"], "nextStepId": "", "setFlag": "finish_bold" },
-                    { "id": "B", "text": "All Clear", "resultDialogue": "A quiet, successful first patrol. 5-star report.", "eligibleSunMembers": [], "nextStepId": "", "setFlag": "finish_safe" },
-                    { "id": "C", "text": "Wait... look there!", "resultDialogue": "Cecilia stares at the lighthouse. 'The shadow doesn't match the light.'", "eligibleSunMembers": ["Cecilia"], "nextStepId": "", "setFlag": "finish_fun" }
-                  ] 
-                }
-              ],
-              "completionDialogue": "Patrol wrap. Elizabeth found a heavy silver piece that looks like a mirror fragment.",
-              "rewardTableId": "summer_activity_default"
-            },
-            {
-              "id": "AUG01_EVENING_CORE_C",
-              "fullArtRoute": "Gen 2",
-              "buttonText": "Night Dive Adventure",
-              "previewDialogue": "Manage the boat tour with Subaru and Choco.",
-              "selectedDialogue": "Subaru is currently hyperventilating into a paper bag because 'the water is looking at her.'",
-              "steps": [
-                {
-                  "id": "AUG01_EVENING_CORE_C_STEP_1",
-                  "prompt": "Something is glowing deep below. Who dives?",
-                  "options": [
-                    { "id": "A", "text": "Let Choco-sensei go", "resultDialogue": "She dives and comes back with a beautiful pearl. The fans are staring... at the pearl, of course.", "eligibleSunMembers": ["Choco"], "nextStepId": "AUG01_EVENING_CORE_C_STEP_2", "setFlag": "choco_dive" },
-                    { "id": "B", "text": "Force Subaru to look", "resultDialogue": "You push her head toward the glass. She screams, then sees a pretty turtle. 'Cute-shuba!' Fear gone.", "eligibleSunMembers": ["Subaru"], "nextStepId": "AUG01_EVENING_CORE_C_STEP_2", "setFlag": "subaru_brave" },
-                    { "id": "C", "text": "Ayame’s Giggle-Defense", "resultDialogue": "She giggles so much the fans forget they were scared of the dark. Best light source!", "eligibleSunMembers": ["Ayame"], "nextStepId": "AUG01_EVENING_CORE_C_STEP_2", "setFlag": "ayame_giggle" }
-                  ]
-                },
-                {
-                  "id": "AUG01_EVENING_CORE_C_STEP_2",
-                  "prompt": "A hidden cave door is spotted underwater! Open it?",
-                  "options": [
-                    { "id": "A", "text": "Yes, for the mystery!", "resultDialogue": "The gate leads to an underwater shrine. You see an old stone altar. The boat shakes!", "eligibleSunMembers": [], "nextStepId": "AUG01_EVENING_CORE_C_STEP_3", "setFlag": "manager_curious" },
-                    { "id": "B", "text": "No, stay on route", "resultDialogue": "You maintain a safe tour. No tremors, just happy fans and lots of fish photos.", "eligibleSunMembers": [], "nextStepId": "AUG01_EVENING_CORE_C_STEP_3", "setFlag": "manager_safe" },
-                    { "id": "C", "text": "Let Choco 'Seduce' the door", "resultDialogue": "She blows it a kiss. The door... actually opens? 'Everything has a heart, Manager.' Wow.", "eligibleSunMembers": ["Choco"], "nextStepId": "AUG01_EVENING_CORE_C_STEP_3", "setFlag": "choco_magic" }
-                  ]
-                },
-                { "id": "AUG01_EVENING_CORE_C_STEP_3", "prompt": "Landing status?", "options": [
-                    { "id": "A", "text": "SHUBA-Success!", "resultDialogue": "Subaru falls off the boat one last time. Iconic finale.", "eligibleSunMembers": ["Subaru"], "nextStepId": "", "setFlag": "finish_bold" },
-                    { "id": "B", "text": "Safe and Sound", "resultDialogue": "The tour ends with 5-star reviews and zero possession cases.", "eligibleSunMembers": [], "nextStepId": "", "setFlag": "finish_safe" },
-                    { "id": "C", "text": "Nakiri-Power!", "resultDialogue": "Ayame waves goodbye. The fans are now her loyal oni-servants.", "eligibleSunMembers": ["Ayame"], "nextStepId": "", "setFlag": "finish_fun" }
-                  ] 
-                }
-              ],
-              "completionDialogue": "Tour is over. Choco found an **Old Ceremonial Knife** at the bottom of the reef.",
-              "rewardTableId": "summer_activity_default"
-            }
+                "id": "AUG02_EVENING_CORE_B",
+                "fullArtRoute": "Gen 3",
+                "buttonText": "Phantom Ship Sightings",
+                "previewDialogue": "Help Marine and Pekora investigate the harbor.",
+                "selectedDialogue": "Marine is convinced a ghost pirate wants to marry her. Pekora is trying to load a cannon with carrots.",
+                "steps": [
+                  {
+                    "id": "AUG02_EVENING_CORE_B_STEP_1",
+                    "prompt": "The 'Phantom Ship' is actually a giant glowing floatie. Who boards it?",
+                    "options": [
+                      { "id": "A", "text": "Captain Marine", "resultDialogue": "She strikes a pose. The floatie pops. She's now just floating in the water. 'Help me-desu!'", "eligibleSunMembers": ["Marine"], "nextStepId": "AUG02_EVENING_CORE_B_STEP_2", "setFlag": "marine_wet" },
+                      { "id": "B", "text": "Pekora's Prank", "resultDialogue": "She pushes a button. The floatie launches into the sky like a rocket. 'HA-HA-HA-HA!'", "eligibleSunMembers": ["Pekora"], "nextStepId": "AUG02_EVENING_CORE_B_STEP_2", "setFlag": "peko_rocket" }
+                    ]
+                  },
+                  { "id": "AUG02_EVENING_CORE_B_STEP_2", "prompt": "Harbor Status?", "options": [
+                      { "id": "A", "text": "Safe (Mostly)", "resultDialogue": "Pekora is banned from the harbor for a week. Marine is drying off.", "eligibleSunMembers": [], "nextStepId": "", "setFlag": "finish_safe" }
+                    ] 
+                  }
+                ],
+                "completionDialogue": "Harbor patrol done. You found a silver mirror piece inside the cannon.",
+                "rewardTableId": "summer_activity_default"
+              },
+              {
+                "id": "AUG02_EVENING_CORE_C",
+                "fullArtRoute": "Advent",
+                "buttonText": "Nightly Research",
+                "previewDialogue": "Help Shiori and Nerissa catalog the ghosts.",
+                "selectedDialogue": "Shiori is holding a jar with a glowing blue flame in it. 'I think it's lonely, Manager. Do you want to be its friend?'",
+                "steps": [
+                  {
+                    "id": "AUG02_EVENING_CORE_C_STEP_1",
+                    "prompt": "The flame starts whispering your browser history. Stop it!",
+                    "options": [
+                      { "id": "A", "text": "Nerissa's Song", "resultDialogue": "She sings a lullaby. The flame falls asleep. Crisis averted.", "eligibleSunMembers": ["Nerissa"], "nextStepId": "AUG02_EVENING_CORE_C_STEP_2", "setFlag": "nerissa_song" },
+                      { "id": "B", "text": "Shiori's Scissors", "resultDialogue": "She 'snips' the sound out of the air. The room goes silent. Extremely eerie.", "eligibleSunMembers": ["Shiori"], "nextStepId": "AUG02_EVENING_CORE_C_STEP_2", "setFlag": "shiori_quiet" }
+                    ]
+                  },
+                  { "id": "AUG02_EVENING_CORE_C_STEP_2", "prompt": "End of Night?", "options": [
+                      { "id": "A", "text": "Scientific Success", "resultDialogue": "You learned that island ghosts are very judgmental.", "eligibleSunMembers": [], "nextStepId": "", "setFlag": "finish_safe" }
+                    ] 
+                  }
+                ],
+                "completionDialogue": "Research finished. Shiori found a silver mirror fragment in the jar.",
+                "rewardTableId": "summer_activity_default"
+              }
           ]
         }
       }
+    },
+    {
+    "day": 3,
+    "date": "2026-08-03",
+    "chapter": "Chapter 1 — Arrival",
+    "storyBeat": "The island's digital displays are glitching, showing reflections of the 'Silver Shards.' The Manager must keep the peace while investigating these anomalies.",
+    "windows": {
+        "morning": {
+            "sceneId": "AUG03_MORNING",
+            "title": "Day 3 — Morning Tensions",
+            "openingDialogue": "A misunderstanding about 'glitchy' coffee beans has sparked a rivalry. Three groups are looking for a manager to steer the ship.",
+            "coreActivities": [
+                {
+                    "id": "AUG03_MORNING_CORE_A",
+                    "fullArtRoute": "Advent",
+                    "buttonText": "Coffee Raid",
+                    "previewDialogue": "Help Advent 'reclaim' the coffee beans from a glitchy Robo-Sentry.",
+                    "selectedDialogue": "Shiori is pointing at a crate. 'That's our coffee, I know it by its dark, brooding aura.'",
+                    "steps": [
+                        {
+                            "id": "AUG03_MORNING_CORE_A_STEP_1",
+                            "prompt": "A Robo-Sentry is blocking the crate. It's beeping in binary. Who disables it?",
+                            "options": [
+                                { "id": "A", "text": "Let Bijou 'hack' it", "resultDialogue": "She just throws a shiny rock at its sensor. 'I'm a pro gamer, I found the weak point!' It reboots in safe mode.", "eligibleSunMembers": ["Bijou"], "nextStepId": "AUG03_MORNING_CORE_A_STEP_2", "setFlag": "bijou_bonk" },
+                                { "id": "B", "text": "Let Shiori talk to it", "resultDialogue": "She reads it an excerpt from an 18th-century medical journal. The Sentry’s CPU overheats from sheer confusion.", "eligibleSunMembers": ["Shiori"], "nextStepId": "AUG03_MORNING_CORE_A_STEP_2", "setFlag": "shiori_logic" },
+                                { "id": "C", "text": "Try the 'Manager Override'", "resultDialogue": "You press a button labeled 'REBOOT.' It works. The girls look at you like you're a wizard. 'I am the tech-god,' you lie.", "eligibleSunMembers": [], "nextStepId": "AUG03_MORNING_CORE_A_STEP_2", "setFlag": "manager_tech" }
+                            ]
+                        },
+                        {
+                            "id": "AUG03_MORNING_CORE_A_STEP_2",
+                            "prompt": "It wasn't coffee—the crate is full of 'Silver Mirror Shards.' How to react?",
+                            "options": [
+                                { "id": "A", "text": "Improvisational PR", "resultDialogue": "You tell the nearby fans they are 'Limited Quest Items.' Advent starts selling them for 500 shells each. Profit!", "eligibleSunMembers": ["Nerissa"], "nextStepId": "AUG03_MORNING_CORE_A_STEP_3", "setFlag": "merch_pivot" },
+                                { "id": "B", "text": "FuwaMoco BAU BAU!", "resultDialogue": "The twins think the shards are toys. They start a 'Shard-Tag' game. No progress is made, but morale is through the roof.", "eligibleSunMembers": ["Fuwawa", "Mococo"], "nextStepId": "AUG03_MORNING_CORE_A_STEP_3", "setFlag": "bau_bau_chaos" },
+                                { "id": "C", "text": "Let Nerissa analyze them", "resultDialogue": "She hums a note near the glass. It vibrates and shows a reflection of a hidden basement. 'The plot thickens, yo!'", "eligibleSunMembers": ["Nerissa"], "nextStepId": "AUG03_MORNING_CORE_A_STEP_3", "setFlag": "nerissa_song" }
+                            ]
+                        },
+                        {
+                            "id": "AUG03_MORNING_CORE_A_STEP_3",
+                            "prompt": "Raid over. Closing statement?",
+                            "options": [
+                                { "id": "A", "text": "'We're rich!'", "resultDialogue": "Bijou is already counting the shards. 'These are mine now. Tax time!'", "eligibleSunMembers": ["Bijou"], "nextStepId": "", "setFlag": "finish_bold" },
+                                { "id": "B", "text": "'We're in trouble, aren't we?'", "resultDialogue": "Shiori smiles. 'I hope so. Trouble is the best research material.'", "eligibleSunMembers": ["Shiori"], "nextStepId": "", "setFlag": "finish_safe" },
+                                { "id": "C", "text": "BAU BAU!", "resultDialogue": "The twins pounce on you. You are now part of the puppy pile. Work is canceled.", "eligibleSunMembers": ["Fuwawa"], "nextStepId": "", "setFlag": "finish_fun" }
+                            ]
+                        }
+                    ],
+                    "completionDialogue": "Raid finished. You found an 'Advent Keycard' inside the Sentry's battery port.",
+                    "rewardTableId": "summer_activity_default"
+                },
+                {
+                    "id": "AUG03_MORNING_CORE_B",
+                    "fullArtRoute": "Fantasy",
+                    "buttonText": "Bistro Rivalry",
+                    "previewDialogue": "Help Fantasy outshine the mall's food court after a supply glitch.",
+                    "selectedDialogue": "Pekora is staring at the mall. 'Their taiyaki is suspiciously shiny-peko! We need better bait!'",
+                    "steps": [
+                        {
+                            "id": "AUG03_MORNING_CORE_B_STEP_1",
+                            "prompt": "The menu needs a 'Super-Item' to draw crowds. Who designs it?",
+                            "options": [
+                                { "id": "A", "text": "Let Flare cook", "resultDialogue": "She creates 'The Dragon’s Spice Yakisoba.' It glows. Literally. The fans are lining up for blocks.", "eligibleSunMembers": ["Flare"], "nextStepId": "AUG03_MORNING_CORE_B_STEP_2", "setFlag": "flare_cook" },
+                                { "id": "B", "text": "Let Marine design 'Art'", "resultDialogue": "She draws 'Lewd' faces on the rice balls. You censor them with stickers. They sell out in three seconds.", "eligibleSunMembers": ["Marine"], "nextStepId": "AUG03_MORNING_CORE_B_STEP_2", "setFlag": "marine_art" },
+                                { "id": "C", "text": "Let Pekora add TNT", "resultDialogue": "You stop her. You settle for 'Popping Rock' candy instead. 'It’s basically an explosion-peko!'", "eligibleSunMembers": ["Pekora"], "nextStepId": "AUG03_MORNING_CORE_B_STEP_2", "setFlag": "peko_spice" }
+                            ]
+                        },
+                        {
+                            "id": "AUG03_MORNING_CORE_B_STEP_2",
+                            "prompt": "A fan from the mall tries to steal your 'Silver Shard' decor! Catch them?",
+                            "options": [
+                                { "id": "A", "text": "Noel, Tackle!", "resultDialogue": "She 'gently' stops them. The thief realizes the weight of a knight's arm and surrenders immediately. 'Justice is served!'", "eligibleSunMembers": ["Noel"], "nextStepId": "AUG03_MORNING_CORE_B_STEP_3", "setFlag": "noel_tackle" },
+                                { "id": "B", "text": "Pekora, Laugh them away!", "resultDialogue": "Her 'Crazy Rabbit' laughter echoes through the mall. The thief drops the shard and runs, crying. Effective.", "eligibleSunMembers": ["Pekora"], "nextStepId": "AUG03_MORNING_CORE_B_STEP_3", "setFlag": "peko_laugh" },
+                                { "id": "C", "text": "Marine, Flirt with them", "resultDialogue": "The thief is so flustered they forget they were stealing. They end up buying 50 rice balls and leaving the shard. Profit!", "eligibleSunMembers": ["Marine"], "nextStepId": "AUG03_MORNING_CORE_B_STEP_3", "setFlag": "marine_flirt" }
+                            ]
+                        },
+                        {
+                            "id": "AUG03_MORNING_CORE_B_STEP_3",
+                            "prompt": "Shift wrap. Who is the Bistro Queen?",
+                            "options": [
+                                { "id": "A", "text": "Fantasy Forever!", "resultDialogue": "The group cheers. The mall is defeated (for now).", "eligibleSunMembers": ["Flare"], "nextStepId": "", "setFlag": "finish_safe" },
+                                { "id": "B", "text": "Profit Rabbit!", "resultDialogue": "Pekora is already swimming in a pile of shells. 'My plan was perfect-peko!'", "eligibleSunMembers": ["Pekora"], "nextStepId": "", "setFlag": "finish_bold" },
+                                { "id": "C", "text": "Marine’s Nap-Time", "resultDialogue": "She’s exhausted from 'working' (flirting). She’s sleeping in the fridge.", "eligibleSunMembers": ["Marine"], "nextStepId": "", "setFlag": "finish_fun" }
+                            ]
+                        }
+                    ],
+                    "completionDialogue": "Bistro shift over. You found a 'Silver Fork' that reflects the coordinates of the volcano.",
+                    "rewardTableId": "summer_activity_default"
+                },
+                {
+                    "id": "AUG03_MORNING_CORE_C",
+                    "fullArtRoute": "FLOW GLOW",
+                    "buttonText": "Street Stage Promotion",
+                    "previewDialogue": "Help FLOW GLOW win the morning popularity poll despite some 'digital glitches.'",
+                    "selectedDialogue": "Riona is practicing her walk, but the digital screens are flashing 'SYSTEM ERROR.'",
+                    "steps": [
+                        {
+                            "id": "AUG03_MORNING_CORE_C_STEP_1",
+                            "prompt": "The flyers are glitching into unreadable code. How to distribute?",
+                            "options": [
+                                { "id": "A", "text": "Vivi's 'Flash Mob'", "resultDialogue": "She starts beatboxing. A crowd gathers to see the 'performance art.' The glitches look intentional and cool!", "eligibleSunMembers": ["Vivi"], "nextStepId": "AUG03_MORNING_CORE_C_STEP_2", "setFlag": "vivi_mob" },
+                                { "id": "B", "text": "Niko's 'Charm Offensive'", "resultDialogue": "She hands them out with a wink. 'It’s a secret code for my true fans!' They sell out instantly.", "eligibleSunMembers": ["Niko"], "nextStepId": "AUG03_MORNING_CORE_C_STEP_2", "setFlag": "niko_charm" },
+                                { "id": "C", "text": "Su's Tech Repair", "resultDialogue": "She re-codes the flyers on the fly. They now glow in the dark. High-spec performance!", "eligibleSunMembers": ["Su"], "nextStepId": "AUG03_MORNING_CORE_C_STEP_2", "setFlag": "su_hack" }
+                            ]
+                        },
+                        {
+                            "id": "AUG03_MORNING_CORE_C_STEP_2",
+                            "prompt": "A 'Silver Mirror Shard' is reflecting a giant logo onto the mall. Stop it?",
+                            "options": [
+                                { "id": "A", "text": "NO! LEAVE IT!", "resultDialogue": "The FLOW GLOW logo is now visible from space. You are a marketing genius. Riona is impressed.", "eligibleSunMembers": ["Riona"], "nextStepId": "AUG03_MORNING_CORE_C_STEP_3", "setFlag": "riona_big" },
+                                { "id": "B", "text": "Try to fix it", "resultDialogue": "You accidentally reflect the light into the Manager's office. Your desk is on fire. Chihaya laughs.", "eligibleSunMembers": ["Chihaya"], "nextStepId": "AUG03_MORNING_CORE_C_STEP_3", "setFlag": "manager_fire" },
+                                { "id": "C", "text": "Let Su optimize it", "resultDialogue": "She turns the reflection into a laser light show. The fans are losing their minds. Iconic.", "eligibleSunMembers": ["Su"], "nextStepId": "AUG03_MORNING_CORE_C_STEP_3", "setFlag": "su_laser" }
+                            ]
+                        },
+                        {
+                            "id": "AUG03_MORNING_CORE_C_STEP_3",
+                            "prompt": "Status Check?",
+                            "options": [
+                                { "id": "A", "text": "Rising Stars!", "resultDialogue": "The poll is a blowout. FLOW GLOW is #1.", "eligibleSunMembers": ["Vivi"], "nextStepId": "", "setFlag": "finish_bold" },
+                                { "id": "B", "text": "Professionalism Maintained", "resultDialogue": "Chihaya nods. 'A clean show, Manager.'", "eligibleSunMembers": ["Chihaya"], "nextStepId": "", "setFlag": "finish_safe" },
+                                { "id": "C", "text": "Neon Glow", "resultDialogue": "The whole group is covered in neon paint. You are too. It won't wash off.", "eligibleSunMembers": ["Niko"], "nextStepId": "", "setFlag": "finish_fun" }
+                            ]
+                        }
+                    ],
+                    "completionDialogue": "Promotion complete. Su found a 'Silver Spray Can' that draws in pure light.",
+                    "rewardTableId": "summer_activity_default"
+                }
+            ]
+        },
+        "noon": {
+            "sceneId": "AUG03_NOON",
+            "title": "Day 3 — Midday Challenges",
+            "openingDialogue": "The sun is at its peak, and the 'Silver Shards' are getting hot to the touch. Choose your zone.",
+            "coreActivities": [
+                {
+                    "id": "AUG03_NOON_CORE_A",
+                    "fullArtRoute": "Gamers",
+                    "buttonText": "Arcade Overdrive",
+                    "previewDialogue": "Help Gamers manage the high-score tournament and the glitchy machines.",
+                    "selectedDialogue": "Korone is trying to 'punish' a beeping machine with her boxing gloves. It’s not working.",
+                    "steps": [
+                        {
+                            "id": "AUG03_NOON_CORE_A_STEP_1",
+                            "prompt": "A professional 'Gamer-Ghost' has taken over the Claw Machine! Who challenges it?",
+                            "options": [
+                                { "id": "A", "text": "Let Korone fight", "resultDialogue": "She beats the ghost in a digital match. The ghost gives her its 'Silver Shard' and a thumbs up. 'Yubi yubi!'", "eligibleSunMembers": ["Korone"], "nextStepId": "AUG03_NOON_CORE_A_STEP_2", "setFlag": "korone_win" },
+                                { "id": "B", "text": "Let Fubuki host", "resultDialogue": "She turns the glitch into a 'Bonus Round.' Everyone gets double tickets! The ghost is now a staff member.", "eligibleSunMembers": ["Fubuki"], "nextStepId": "AUG03_NOON_CORE_A_STEP_2", "setFlag": "fubuki_host" },
+                                { "id": "C", "text": "Let Okayu snack near it", "resultDialogue": "She eats a rice ball so casually the ghost gets bored and leaves. 'Mogu mogu... I won?'", "eligibleSunMembers": ["Okayu"], "nextStepId": "AUG03_NOON_CORE_A_STEP_2", "setFlag": "okayu_mogu" }
+                            ]
+                        },
+                        {
+                            "id": "AUG03_NOON_CORE_A_STEP_2",
+                            "prompt": "Mio-mama wants to organize a 'Healthy Break.' The others want more gaming. Your call?",
+                            "options": [
+                                { "id": "A", "text": "Mio’s Choice (Veggie Sticks)", "resultDialogue": "The girls feel refreshed. Your management score goes up! Korone pouts but her focus is 100%.", "eligibleSunMembers": ["Mio"], "nextStepId": "AUG03_NOON_CORE_A_STEP_3", "setFlag": "mio_health" },
+                                { "id": "B", "text": "Manager’s Choice (Donuts)", "resultDialogue": "Sugar rush! Everyone is playing at Mach speed. The machines are literally smoking. Okayu is in heaven.", "eligibleSunMembers": ["Okayu"], "nextStepId": "AUG03_NOON_CORE_A_STEP_3", "setFlag": "sugar_rush" },
+                                { "id": "C", "text": "Fubuki’s 'Friend' Burger", "resultDialogue": "You order 50 burgers. Everyone is happy, but you are bankrupt. Fubuki calls you a 'Best Friend.' Ouch.", "eligibleSunMembers": ["Fubuki"], "nextStepId": "AUG03_NOON_CORE_A_STEP_3", "setFlag": "fubuki_friend" }
+                            ]
+                        },
+                        {
+                            "id": "AUG03_NOON_CORE_A_STEP_3",
+                            "prompt": "Arcade Status?",
+                            "options": [
+                                { "id": "A", "text": "Tournament Success!", "resultDialogue": "A new record is set. The arcade is the #1 spot on the island today.", "eligibleSunMembers": ["Korone"], "nextStepId": "", "setFlag": "finish_bold" },
+                                { "id": "B", "text": "Safe and Sound", "resultDialogue": "Mio cleans the joysticks. A responsible and fun afternoon.", "eligibleSunMembers": ["Mio"], "nextStepId": "", "setFlag": "finish_safe" },
+                                { "id": "C", "text": "Glitchy Fun", "resultDialogue": "The machines are still beeping, but the music is catchy. You start dancing.", "eligibleSunMembers": ["Okayu"], "nextStepId": "", "setFlag": "finish_fun" }
+                            ]
+                        }
+                    ],
+                    "completionDialogue": "Arcade fixed. You found a 'Save Data' chip hidden in the coin slot.",
+                    "rewardTableId": "summer_activity_default"
+                },
+                {
+                    "id": "AUG03_NOON_CORE_B",
+                    "fullArtRoute": "Gen 0",
+                    "buttonText": "Mall Rehearsal",
+                    "previewDialogue": "Help Gen 0 prepare for the evening live show amid screen glitches.",
+                    "selectedDialogue": "Sora is hitting high notes that are shattering the glitchy digital displays. Powerful!",
+                    "steps": [
+                        {
+                            "id": "AUG03_NOON_CORE_B_STEP_1",
+                            "prompt": "The lighting rig is flashing 'PURPLE.' It should be 'BLUE.' Who fixes it?",
+                            "options": [
+                                { "id": "A", "text": "Help Roboco", "resultDialogue": "You hold her cables while she syncs with the mainframe. The lights turn a beautiful, holy blue. Sora is pleased.", "eligibleSunMembers": ["Roboco"], "nextStepId": "AUG03_NOON_CORE_B_STEP_2", "setFlag": "roboco_light" },
+                                { "id": "B", "text": "Ask Miko to 'Shine'", "resultDialogue": "She stands on a stool and holds a flashlight. It’s... surprisingly bright? 'ELITE GLOW-NYE!'", "eligibleSunMembers": ["Miko"], "nextStepId": "AUG03_NOON_CORE_B_STEP_2", "setFlag": "miko_shine" },
+                                { "id": "C", "text": "Let Suisei 'Adjust' it", "resultDialogue": "She kicks the generator. It starts working perfectly. You don't ask questions. You value your life.", "eligibleSunMembers": ["Suisei"], "nextStepId": "AUG03_NOON_CORE_B_STEP_2", "setFlag": "suisei_kick" }
+                            ]
+                        },
+                        {
+                            "id": "AUG03_NOON_CORE_B_STEP_2",
+                            "prompt": "AZKi found a 'Silver Shard' stuck in the speakers. It’s distorting her voice into a robot melody. Use it?",
+                            "options": [
+                                { "id": "A", "text": "Yes! Techno-AZKi!", "resultDialogue": "She sings a futuristic remix of 'Inochi.' The staff starts a rave. You are now the 'Techno-Manager.'", "eligibleSunMembers": ["AZKi"], "nextStepId": "AUG03_NOON_CORE_B_STEP_3", "setFlag": "azki_rave" },
+                                { "id": "B", "text": "Remove it for safety", "resultDialogue": "You pull it out. Sora’s pure voice returns, clearing the air. The 'Mirror Shard' is added to your collection.", "eligibleSunMembers": ["Sora"], "nextStepId": "AUG03_NOON_CORE_B_STEP_3", "setFlag": "sora_pure" },
+                                { "id": "C", "text": "Let Miko 'Elite-Mix' it", "resultDialogue": "She adds a drum beat. It sounds like a car crash, but Sora makes it work. Somehow.", "eligibleSunMembers": ["Miko"], "nextStepId": "AUG03_NOON_CORE_B_STEP_3", "setFlag": "miko_mix" }
+                            ]
+                        },
+                        {
+                            "id": "AUG03_NOON_CORE_B_STEP_3",
+                            "prompt": "Rehearsal Status?",
+                            "options": [
+                                { "id": "A", "text": "Idol Level: MAX", "resultDialogue": "Sora smiles. 'We're ready to give them a great show!'", "eligibleSunMembers": ["Sora"], "nextStepId": "", "setFlag": "finish_safe" },
+                                { "id": "B", "text": "Stellar Performance", "resultDialogue": "Suisei is sharpening her... microphone? Rehearsal was a cut above the rest.", "eligibleSunMembers": ["Suisei"], "nextStepId": "", "setFlag": "finish_bold" },
+                                { "id": "C", "text": "High-Spec Complete", "resultDialogue": "Roboco reboots. 'All systems optimized. Manager-san, 10/10.'", "eligibleSunMembers": ["Roboco"], "nextStepId": "", "setFlag": "finish_fun" }
+                            ]
+                        }
+                    ],
+                    "completionDialogue": "Rehearsal ends. AZKi found a 'Digital Score' hidden in the shard's reflections.",
+                    "rewardTableId": "summer_activity_default"
+                },
+                {
+                    "id": "AUG03_NOON_CORE_C",
+                    "fullArtRoute": "Gen 1",
+                    "buttonText": "Beach PR Shoot",
+                    "previewDialogue": "Help Gen 1 take promo photos while ignoring the 'glitchy' reflections in the water.",
+                    "selectedDialogue": "Matsuri is trying to 'photobomb' the ocean. Aki is posing with a cocktail that keeps changing colors.",
+                    "steps": [
+                        {
+                            "id": "AUG03_NOON_CORE_C_STEP_1",
+                            "prompt": "The camera lens is picking up 'Ghost-Fubuki' figures in the background. What to do?",
+                            "options": [
+                                { "id": "A", "text": "Call it 'Artistic Filter'", "resultDialogue": "You market the photos as 'Spiritual Summer.' They get 10 million likes. Fubuki is confused but happy.", "eligibleSunMembers": ["Fubuki"], "nextStepId": "AUG03_NOON_CORE_C_STEP_2", "setFlag": "fubuki_ghost" },
+                                { "id": "B", "text": "Let Haato pose with them", "resultDialogue": "She treats the ghosts like backup dancers. The resulting photos are legendary. Haachama-chama!", "eligibleSunMembers": ["Haato"], "nextStepId": "AUG03_NOON_CORE_C_STEP_2", "setFlag": "haato_pose" },
+                                { "id": "C", "text": "Clean the lens", "resultDialogue": "You use a 'Silver Shard' to wipe it. The ghosts disappear, revealing a hidden chest in the sand. Treasure!", "eligibleSunMembers": ["Aki"], "nextStepId": "AUG03_NOON_CORE_C_STEP_2", "setFlag": "aki_treasure" }
+                            ]
+                        },
+                        {
+                            "id": "AUG03_NOON_CORE_C_STEP_2",
+                            "prompt": "Matsuri wants to jump off the lighthouse for a 'God-Tier' photo. Stop her?!",
+                            "options": [
+                                { "id": "A", "text": "NO! SAFETY FIRST!", "resultDialogue": "You grab her collar. She pouts but stays safe. You take a nice photo of her with a sunflower instead.", "eligibleSunMembers": ["Matsuri"], "nextStepId": "AUG03_NOON_CORE_C_STEP_3", "setFlag": "manager_safe" },
+                                { "id": "B", "text": "Only if Fubuki helps", "resultDialogue": "Fubuki uses a giant trampoline. Matsuri flies 50 feet up and takes a selfie. The photo of the year!", "eligibleSunMembers": ["Fubuki"], "nextStepId": "AUG03_NOON_CORE_C_STEP_3", "setFlag": "matsuri_jump" },
+                                { "id": "C", "text": "Let Haachama cook the camera", "resultDialogue": "Wait, what? You stop her just in time. The camera survived, but it now smells like spider-ramen.", "eligibleSunMembers": ["Haato"], "nextStepId": "AUG03_NOON_CORE_C_STEP_3", "setFlag": "haachama_cook" }
+                            ]
+                        },
+                        {
+                            "id": "AUG03_NOON_CORE_C_STEP_3",
+                            "prompt": "PR Shoot Status?",
+                            "options": [
+                                { "id": "A", "text": "Viral Success!", "resultDialogue": "The island pass sales are skyrocketing. Aki is the new face of the resort.", "eligibleSunMembers": ["Aki"], "nextStepId": "", "setFlag": "finish_bold" },
+                                { "id": "B", "text": "Friendship Forever", "resultDialogue": "Fubuki smiles. 'Just a normal day with friends, right Manager?' Ouch.", "eligibleSunMembers": ["Fubuki"], "nextStepId": "", "setFlag": "finish_safe" },
+                                { "id": "C", "text": "God-Level PR", "resultDialogue": "Matsuri is shouting her name into a megaphone. Everyone knows who she is now. Whether they want to or not.", "eligibleSunMembers": ["Matsuri"], "nextStepId": "", "setFlag": "finish_fun" }
+                            ]
+                        }
+                    ],
+                    "completionDialogue": "PR Shoot done. Matsuri found a 'Silver Mirror' piece in a crab's claw.",
+                    "rewardTableId": "summer_activity_default"
+                }
+            ]
+        },
+        "evening": {
+            "sceneId": "AUG03_EVENING",
+            "title": "Day 3 — Night Watch",
+            "openingDialogue": "Lanterns are glowing. Three groups are reporting 'strange humming' from the shards. Choose your celebration.",
+            "coreActivities": [
+                {
+                    "id": "AUG03_EVENING_CORE_A",
+                    "fullArtRoute": "Gen 2",
+                    "buttonText": "Marine Sports Night",
+                    "previewDialogue": "Help Subaru and Gen 2 manage the evening boat tours and the 'Glow' in the water.",
+                    "selectedDialogue": "Subaru is wearing three life jackets. Choco is checking her reflection in a 'Silver Shard.'",
+                    "steps": [
+                        {
+                            "id": "AUG03_EVENING_CORE_A_STEP_1",
+                            "prompt": "A giant 'Blue Tentacle' rises from the water! Subaru starts screaming.",
+                            "options": [
+                                { "id": "A", "text": "Calm her down", "resultDialogue": "You give her a whistle. She starts blowing it so loud the tentacle gets a headache and sinks. 'SHUBA-POWER!'", "eligibleSunMembers": ["Subaru"], "nextStepId": "AUG03_EVENING_CORE_A_STEP_2", "setFlag": "subaru_whistle" },
+                                { "id": "B", "text": "Let Choco charm it", "resultDialogue": "She blows it a kiss. The tentacle turns pink and offers you a 'Mirror Shard.' Choco is dangerous.", "eligibleSunMembers": ["Choco"], "nextStepId": "AUG03_EVENING_CORE_A_STEP_2", "setFlag": "choco_charm" },
+                                { "id": "C", "text": "Call Ayame", "resultDialogue": "Ayame giggles. The tentacle realizes how wholesome the situation is and turns into a friendly dolphin.", "eligibleSunMembers": ["Ayame"], "nextStepId": "AUG03_EVENING_CORE_A_STEP_2", "setFlag": "ayame_giggle" }
+                            ]
+                        },
+                        {
+                            "id": "AUG03_EVENING_CORE_A_STEP_2",
+                            "prompt": "The 'Mirror Shard' is reflecting a map of the buffet. It's empty?!",
+                            "options": [
+                                { "id": "A", "text": "Sprint to the buffet", "resultDialogue": "You find Shion eating the last of the pudding. You confiscated her 'Mirror Shard' as punishment.", "eligibleSunMembers": ["Shion"], "nextStepId": "AUG03_EVENING_CORE_A_STEP_3", "setFlag": "shion_thief" },
+                                { "id": "B", "text": "Let Choco investigate", "resultDialogue": "She finds 'residue' on the shard. 'It’s not glass, Manager... it’s frozen light.'", "eligibleSunMembers": ["Choco"], "nextStepId": "AUG03_EVENING_CORE_A_STEP_3", "setFlag": "choco_analysis" },
+                                { "id": "C", "text": "Ask Ayame to pray", "resultDialogue": "She does a little dance. The 'Mirror Shard' starts glowing, lighting up the entire pier. So bright!", "eligibleSunMembers": ["Ayame"], "nextStepId": "AUG03_EVENING_CORE_A_STEP_3", "setFlag": "ayame_light" }
+                            ]
+                        },
+                        {
+                            "id": "AUG03_EVENING_CORE_A_STEP_3",
+                            "prompt": "End of boat tour?",
+                            "options": [
+                                { "id": "A", "text": "SHUBA-Goodnight", "resultDialogue": "Subaru falls off the boat. You fish her out. Just a normal Monday.", "eligibleSunMembers": ["Subaru"], "nextStepId": "", "setFlag": "finish_bold" },
+                                { "id": "B", "text": "Safe Landing", "resultDialogue": "A peaceful end to a weird day. Choco gives you a 'Mirror Shard' she found in her hair.", "eligibleSunMembers": ["Choco"], "nextStepId": "", "setFlag": "finish_safe" },
+                                { "id": "C", "text": "Nakiri-Energy", "resultDialogue": "Ayame waves at the moon. The moon waves back. (Probably a hallucination).", "eligibleSunMembers": ["Ayame"], "nextStepId": "", "setFlag": "finish_fun" }
+                            ]
+                        }
+                    ],
+                    "completionDialogue": "Pier secured. You realized that all the 'Mirror Shards' belong to a single device located in the Lighthouse.",
+                    "rewardTableId": "summer_activity_default"
+                },
+                {
+                    "id": "AUG03_EVENING_CORE_B",
+                    "fullArtRoute": "Justice",
+                    "buttonText": "Island Patrol Mission",
+                    "previewDialogue": "Help Justice track a 'Blue Shadow' seen near the lighthouse.",
+                    "selectedDialogue": "Elizabeth has a tactical flashlight. Gigi is trying to catch a firefly with her mouth.",
+                    "steps": [
+                        {
+                            "id": "AUG03_EVENING_CORE_B_STEP_1",
+                            "prompt": "A suspicious sound from the bushes! Action?",
+                            "options": [
+                                { "id": "A", "text": "Gigi, Pounce!", "resultDialogue": "She flies into the bush. It's just a robot crab. She's now wrestling it. 'I GOT THE SUSPECT, MANAGER!'", "eligibleSunMembers": ["Gigi"], "nextStepId": "AUG03_EVENING_CORE_B_STEP_2", "setFlag": "gigi_tackle" },
+                                { "id": "B", "text": "Raora, Sketch the scene", "resultDialogue": "She draws the 'Shadow' before it disappears. 'It looks like... a very tall duck with a hat.' Subaru?!", "eligibleSunMembers": ["Raora"], "nextStepId": "AUG03_EVENING_CORE_B_STEP_2", "setFlag": "raora_sketch" },
+                                { "id": "C", "text": "Elizabeth, Use Authority", "resultDialogue": "She shouts 'HALT!' The shadow freezes for 2 seconds, revealing a metallic pulse. She's onto something.", "eligibleSunMembers": ["Elizabeth"], "nextStepId": "AUG03_EVENING_CORE_B_STEP_2", "setFlag": "elizabeth_halt" }
+                            ]
+                        },
+                        {
+                            "id": "AUG03_EVENING_CORE_B_STEP_2",
+                            "prompt": "Cecilia found a 'Broken Drone' on the path. Repair or Salvage?",
+                            "options": [
+                                { "id": "A", "text": "Repair it (Cecilia)", "resultDialogue": "She uses her clockwork magic. The drone flies up and starts projecting a countdown to 'August 31st.' Spooky.", "eligibleSunMembers": ["Cecilia"], "nextStepId": "AUG03_EVENING_CORE_B_STEP_3", "setFlag": "cecilia_repair" },
+                                { "id": "B", "text": "Salvage for Parts (Manager)", "resultDialogue": "You find a 'Justice Keycard' inside. Raora looks impressed. 'Good eye, Manager!'", "eligibleSunMembers": ["Raora"], "nextStepId": "AUG03_EVENING_CORE_B_STEP_3", "setFlag": "manager_salvage" },
+                                { "id": "C", "text": "Let Gigi 'interrogate' it", "resultDialogue": "She barks at the drone until a small hidden camera drops out. 'IT SNITCHED!' she yells proudly.", "eligibleSunMembers": ["Gigi"], "nextStepId": "AUG03_EVENING_CORE_B_STEP_3", "setFlag": "gigi_snitch" }
+                            ]
+                        },
+                        {
+                            "id": "AUG03_EVENING_CORE_B_STEP_3",
+                            "prompt": "Patrol wrap-up. Status?",
+                            "options": [
+                                { "id": "A", "text": "Justice Prevails!", "resultDialogue": "The team salutes. The mystery is still there, but you're winning.", "eligibleSunMembers": ["Elizabeth"], "nextStepId": "", "setFlag": "finish_justice" },
+                                { "id": "B", "text": "Too many cats/dogs.", "resultDialogue": "Gigi and Raora are currently chasing each other. Elizabeth sighs. 'Typical.'", "eligibleSunMembers": ["Elizabeth"], "nextStepId": "", "setFlag": "finish_zoo" },
+                                { "id": "C", "text": "Automaton is best.", "resultDialogue": "Cecilia curtsies. 'I shall continue my analysis, Manager.'", "eligibleSunMembers": ["Cecilia"], "nextStepId": "", "setFlag": "finish_bot" }
+                            ]
+                        }
+                    ],
+                    "completionDialogue": "Patrol complete. You found a 'Tactical Flashlight' that reveals invisible blue digital footprints.",
+                    "rewardTableId": "summer_activity_default"
+                },
+                {
+                    "id": "AUG03_EVENING_CORE_C",
+                    "fullArtRoute": "Myth",
+                    "buttonText": "Ancient Ruins Tour",
+                    "previewDialogue": "Help Myth investigate the strange 'Mirror Portal' in the ruins.",
+                    "selectedDialogue": "Ame is using a magnifying glass on a digital portal. Ina is drawing little eyes on the rocks.",
+                    "steps": [
+                        {
+                            "id": "AUG03_EVENING_CORE_C_STEP_1",
+                            "prompt": "The portal is beeping. Who will you help first?",
+                            "options": [
+                                { "id": "A", "text": "Help Calli", "resultDialogue": "You help her move a heavy stone slab. Underneath is a terminal beeping in time with your 'Mirror Shard.'", "eligibleSunMembers": ["Calli"], "nextStepId": "AUG03_EVENING_CORE_C_STEP_2", "setFlag": "helped_calli" },
+                                { "id": "B", "text": "Help Kiara", "resultDialogue": "You hold a torch for her. She finds a lever shaped like a chicken. 'Why is everything on this island a chicken?!'", "eligibleSunMembers": ["Kiara"], "nextStepId": "AUG03_EVENING_CORE_C_STEP_2", "setFlag": "helped_kiara" },
+                                { "id": "C", "text": "Help Ina", "resultDialogue": "You hold her paints. She draws a bridge over a gap. The bridge becomes real. 'Magic? No, high-spec rendering,' she says.", "eligibleSunMembers": ["Ina"], "nextStepId": "AUG03_EVENING_CORE_C_STEP_2", "setFlag": "helped_ina" }
+                            ]
+                        },
+                        {
+                            "id": "AUG03_EVENING_CORE_C_STEP_2",
+                            "prompt": "The terminal asks for a 'Code.' What's the input?",
+                            "options": [
+                                { "id": "A", "text": "Take charge (Brute Force)", "resultDialogue": "You smash the keyboard. The portal turns green. 'Professional,' Ame says sarcastically.", "eligibleSunMembers": ["Amelia"], "nextStepId": "AUG03_EVENING_CORE_C_STEP_3", "setFlag": "approach_lead" },
+                                { "id": "B", "text": "Make it entertaining (Dance!)", "resultDialogue": "You and Gura do a little dance. The motion sensor triggers and opens the door. 'A!'", "eligibleSunMembers": ["Gura"], "nextStepId": "AUG03_EVENING_CORE_C_STEP_3", "setFlag": "approach_fun" },
+                                { "id": "C", "text": "Ina's Interpretation", "resultDialogue": "She reads the binary as poetry. The portal opens smoothly. 'Less paperwork-wah.'", "eligibleSunMembers": ["Ina"], "nextStepId": "AUG03_EVENING_CORE_C_STEP_3", "setFlag": "ina_read" }
+                            ]
+                        },
+                        {
+                            "id": "AUG03_EVENING_CORE_C_STEP_3",
+                            "prompt": "Final thought?",
+                            "options": [
+                                { "id": "A", "text": "Ancient times were better.", "resultDialogue": "Ina agrees. 'Less lag in the stone age.'", "eligibleSunMembers": ["Ina"], "nextStepId": "", "setFlag": "finish_wah" },
+                                { "id": "B", "text": "Detectives win!", "resultDialogue": "Ame adjusts her hat. 'Case closed for tonight.'", "eligibleSunMembers": ["Amelia"], "nextStepId": "", "setFlag": "finish_detective" },
+                                { "id": "C", "text": "I'm hungry.", "resultDialogue": "Gura nods. 'Salmon time.'", "eligibleSunMembers": ["Gura"], "nextStepId": "", "setFlag": "finish_shark" }
+                            ]
+                        }
+                    ],
+                    "completionDialogue": "The ancient ruins tour finishes successfully. You found a 'Terminal Key' shaped like a mirror.",
+                    "rewardTableId": "summer_activity_default"
+                }
+            ]
+        }
+    }
+},
+    {
+        "day": 4,
+        "date": "2026-08-04",
+        "chapter": "Chapter 4 — The Silent Carnival",
+        "storyBeat": "A thick, neon-pink fog has rolled in. Everyone's voices sound like they're underwater.",
+        "windows": {
+          "morning": {
+            "sceneId": "AUG04_MORNING",
+            "title": "Day 4 — Foggy Breakfast",
+            "openingDialogue": "You can't see your own feet. Matsuri is using a megaphone, but she sounds like a tiny squeaky toy.",
+            "coreActivities": [
+              {
+                "id": "AUG04_MORNING_CORE_A",
+                "fullArtRoute": "Gen 1",
+                "buttonText": "Fog Clearing",
+                "previewDialogue": "Help Mel and Haachama find the kitchen.",
+                "selectedDialogue": "Mel is trying to guide people by glowing, but she's accidentally attracting giant moths.",
+                "steps": [
+                  {
+                    "id": "AUG04_MORNING_CORE_A_STEP_1",
+                    "prompt": "The moths are trying to eat the Manager's hat! Who saves it?",
+                    "options": [
+                      { "id": "A", "text": "Mel's Charm", "resultDialogue": "She talks to the moths. They become her loyal servants. 'Cute, right?'", "eligibleSunMembers": ["Mel"], "nextStepId": "AUG04_MORNING_CORE_A_STEP_2", "setFlag": "mel_moth" },
+                      { "id": "B", "text": "Haachama's Spice", "resultDialogue": "She throws pepper into the air. The moths sneeze and fly away. So do the customers.", "eligibleSunMembers": ["Haato"], "nextStepId": "AUG04_MORNING_CORE_A_STEP_2", "setFlag": "haato_pepper" }
+                    ]
+                  },
+                  { "id": "AUG04_MORNING_CORE_A_STEP_2", "prompt": "Fog Status?", "options": [
+                      { "id": "A", "text": "Still Thick", "resultDialogue": "Well, at least the moths are gone.", "eligibleSunMembers": [], "nextStepId": "", "setFlag": "finish_safe" }
+                    ] 
+                  }
+                ],
+                "completionDialogue": "Breakfast served. Mel found a silver mirror shard in a moth's cocoon.",
+                "rewardTableId": "summer_activity_default"
+              }
+            ]
+          }
+        }
     }
   ]
 }
