@@ -6,7 +6,10 @@ const SummerUserSchema = new Schema({
   sunPulls: { type: Number, default: 0, min: 0 },
   summerShells: { type: Number, default: 0, min: 0 },
   welcomeShellsClaimed: { type: Boolean, default: false },
+  holodoriFirstPurchaseClaimed: { type: Boolean, default: false },
+  holodoriFirstPurchaseToken: { type: String, default: null },
   activityProgress: { type: Schema.Types.Mixed, default: {} },
+  storyFlags: { type: [String], default: [] },
   fusedFullArts: { type: [String], default: [] },
   shopPurchaseIds: { type: [String], default: [] },
   testing: {
@@ -19,6 +22,7 @@ const SummerUserSchema = new Schema({
     activitiesCompleted: { type: Number, default: 0, min: 0 },
     fullArtsFused: { type: Number, default: 0, min: 0 },
     shopPurchases: { type: Number, default: 0, min: 0 },
+    holodoriPacksPurchased: { type: Number, default: 0, min: 0 },
     lastSunPullAt: { type: Date, default: null },
     lastActivityAt: { type: Date, default: null },
   },
