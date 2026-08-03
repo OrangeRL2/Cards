@@ -6,7 +6,8 @@ module.exports = Object.freeze({
     { type: 'sunPulls', amount: 1, weight: 10 },
     { type: 'sunCard', amount: 1, weight: 7 },
   ],
+
+  summer_activity_exception: [
+    { type: 'shells', amount: 500, weight: 100 },
+  ],
 });
-summer_activity_exception: [
-  { type: 'shells', amount: 500, weight: 100 }
-]

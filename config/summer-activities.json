@@ -732,7 +732,7 @@
                                 ]
                             }
                         ],
-                        "completionDialogue": "The pier is covered in ink and broken dreams. You walked away with a heavy bag of shells. 500 shells acquired!",
+                        "completionDialogue": "The pier is covered in ink and broken dreams. You walked away with a heavy bag of shells.",
                         "rewardTableId": "summer_activity_exception"
                     },
                     {
@@ -817,7 +817,7 @@
                                 ]
                             }
                         ],
-                        "completionDialogue": "Kaela mined enough gold to fund a small country. You took your 500 shell management fee. 500 shells acquired!",
+                        "completionDialogue": "Kaela mined enough gold to fund a small country. You took your shell management fee. Big bag of shells acquired!",
                         "rewardTableId": "summer_activity_exception"
                     },
                     {
@@ -902,7 +902,7 @@
                                 ]
                             }
                         ],
-                        "completionDialogue": "The lottery was definitely rigged in your favor. You took the prize and ran. 500 shells acquired!",
+                        "completionDialogue": "The lottery was definitely rigged in your favor. You took the prize and ran. Large bag of shells acquired!",
                         "rewardTableId": "summer_activity_exception"
                     }
                 ]
@@ -1019,7 +1019,7 @@
                                     {
                                         "id": "B",
                                         "text": "Help Nene (Husbands)",
-                                        "resultDialogue": "She calls 500 fans to stand in a line and block the water. The wall of humans is surprisingly effective. 'NENECHI ARMY, PROTECT!'",
+                                        "resultDialogue": "She calls 500 husbands to stand in a line and block the water. The wall of humans is surprisingly effective. 'NENECHI ARMY, PROTECT!'",
                                         "eligibleSunMembers": [ "Nene" ],
                                         "nextStepId": "STEP_2",
                                         "setFlag": "nene_human_wall"
@@ -2325,7 +2325,7 @@
                                     {
                                         "id": "B",
                                         "text": "Let Nene declare them husbands",
-                                        "resultDialogue": "She shouts, 'YOU ARE ALL PART OF THE NENE-FAMILY!' 500 fans arrive to carry the cans away for her. Logistics through polygamy.",
+                                        "resultDialogue": "She shouts, 'YOU ARE ALL PART OF THE NENE-FAMILY!' thousands of husbands arrive to carry the cans away for her. Logistics through polygamy.",
                                         "eligibleSunMembers": [ "Nene" ],
                                         "nextStepId": "STEP_2",
                                         "setFlag": "nene_can_husbands"
@@ -2485,7 +2485,7 @@
                         "fullArtRoute": "ReGLOSS",
                         "buttonText": "Ao-ium Overload",
                         "previewDialogue": "Help Ao maintain her 'Ikemen' aura in 100-degree heat.",
-                        "selectedDialogue": "Ao is leaning against a wall, but her hair gel is melting into her eyes. Ririka is selling 'Sweat-wiped Tissues' for 500 shells.",
+                        "selectedDialogue": "Ao is leaning against a wall, but her hair gel is melting into her eyes. Ririka is selling 'Sweat-wiped Tissues' for 1000 shells.",
                         "steps": [
                             {
                                 "id": "STEP_1",
