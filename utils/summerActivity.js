@@ -159,6 +159,85 @@ function cardImageUrl(name) {
     : null;
 }
 
+
+function normalizeRewardItems(reward) {
+  if (!reward) return [];
+  if (reward.type === 'bundle') return Array.isArray(reward.rewards) ? reward.rewards : [];
+  return [reward];
+}
+
+function prepareReward(reward, eligible) {
+  const items = normalizeRewardItems(reward).map(item => ({ ...item }));
+
+  const prepared = items.map(item => {
+    if (item.type === 'sunCard' && eligible.length === 0) {
+      return { type: 'shells', amount: 20, convertedFrom: 'sunCard' };
+    }
+    return item;
+  });
+
+  return reward?.type === 'bundle'
+    ? { ...reward, rewards: prepared }
+    : prepared[0];
+}
+
+async function grantRewardItems(userId, reward, eligible, progressPath) {
+  const granted = [];
+
+  for (const rawItem of normalizeRewardItems(reward)) {
+    const item = { ...rawItem };
+
+    if (item.type === 'shells') {
+      const amount = Number(item.amount || 0);
+      if (amount > 0) {
+        await SummerUser.updateOne({ userId }, { $inc: { summerShells: amount } }).exec();
+      }
+      granted.push({ ...item, amount });
+      continue;
+    }
+
+    if (item.type === 'sunPulls') {
+      const amount = Number(item.amount || 0);
+      if (amount > 0) {
+        await SummerUser.updateOne({ userId }, { $inc: { sunPulls: amount } }).exec();
+      }
+      granted.push({ ...item, amount });
+      continue;
+    }
+
+    if (item.type === 'sunCard') {
+      if (!eligible.length) {
+        await SummerUser.updateOne({ userId }, { $inc: { summerShells: 20 } }).exec();
+        granted.push({ type: 'shells', amount: 20, convertedFrom: 'sunCard' });
+        continue;
+      }
+
+      const name = eligible[Math.floor(Math.random() * eligible.length)];
+      const resolved = { ...item, name, imageUrl: cardImageUrl(name) };
+      await awardCard(userId, name);
+      await SummerUser.updateOne(
+        { userId },
+        { $inc: { 'stats.sunCardsEarned': 1 } }
+      ).exec();
+      granted.push(resolved);
+      continue;
+    }
+
+    granted.push(item);
+  }
+
+  const resolvedReward = reward?.type === 'bundle'
+    ? { ...reward, rewards: granted }
+    : granted[0];
+
+  await SummerUser.updateOne(
+    { userId },
+    { $set: { [progressPath]: resolvedReward } }
+  ).exec();
+
+  return resolvedReward;
+}
+
 async function awardCard(userId, name, storedName = name) {
   const now = new Date();
 
@@ -316,15 +395,11 @@ async function chooseOption(userId, day, windowName, coreId, stepId, optionId) {
       };
 
       await saveState(key, pkey, state, storyFlags);
-      return { success: true, completed: false, core, option, state };
+      return { success: true, completed: false, core, step, option, state };
     }
 
     const table = rewardTables[core.rewardTableId] || rewardTables.summer_activity_default;
-    let reward = chooseWeighted(table);
-
-    if (reward.type === 'sunCard' && eligible.length === 0) {
-      reward = { type: 'shells', amount: 20 };
-    }
+    let reward = prepareReward(chooseWeighted(table), eligible);
 
     const state = {
       ...old,
@@ -355,32 +430,18 @@ async function chooseOption(userId, day, windowName, coreId, stepId, optionId) {
 
     if (!guard.modifiedCount) return { success: false, reason: 'COMPLETED' };
 
-    if (reward.type === 'shells') {
-      await SummerUser.updateOne({ userId: key }, { $inc: { summerShells: reward.amount } }).exec();
-    }
-
-    if (reward.type === 'sunPulls') {
-      await SummerUser.updateOne({ userId: key }, { $inc: { sunPulls: reward.amount } }).exec();
-    }
-
-    if (reward.type === 'sunCard') {
-      const name = eligible[Math.floor(Math.random() * eligible.length)];
-      reward = { ...reward, name, imageUrl: cardImageUrl(name) };
-
-      await awardCard(key, name);
-      await SummerUser.updateOne(
-        { userId: key },
-        {
-          $inc: { 'stats.sunCardsEarned': 1 },
-          $set: { [`activityProgress.${pkey}.reward`]: reward },
-        }
-      ).exec();
-    }
+    reward = await grantRewardItems(
+      key,
+      reward,
+      eligible,
+      `activityProgress.${pkey}.reward`
+    );
 
     return {
       success: true,
       completed: true,
       core,
+      step,
       option,
       state: { ...state, reward },
       reward,

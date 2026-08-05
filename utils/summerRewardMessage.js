@@ -6,6 +6,7 @@ function pickRandom(items, rng = Math.random) {
 }
 
 function getMessageKey(reward = {}) {
+  if (reward.type === 'bundle') return 'bundle';
   if (reward.type === 'shells') return `shells_${Number(reward.amount || 0)}`;
   if (reward.type === 'sunPulls') return 'sun_pull';
   if (reward.type === 'sunCard') return 'sun_card';
@@ -19,17 +20,32 @@ function replaceTokens(text, values) {
   });
 }
 
+function rewardItemLabel(reward = {}) {
+  const amount = Number(reward.amount || 1);
+  if (reward.type === 'shells') return `${amount} Summer Shells`;
+  if (reward.type === 'sunPulls') return `${amount} SUN Pull${amount === 1 ? '' : 's'}`;
+  if (reward.type === 'sunCard') return `[SUN] ${reward.name || 'Card'}`;
+  return 'Reward';
+}
+
 function buildRewardPresentation(reward = {}, context = {}, rng = Math.random) {
+  if (reward.type === 'bundle') {
+    const rewards = Array.isArray(reward.rewards) ? reward.rewards : [];
+    const labels = rewards.map(rewardItemLabel);
+    return {
+      key: 'bundle',
+      title: 'MULTI-REWARD SUCCESS!',
+      emoji: '🎁',
+      color: 0xf4c542,
+      message: 'You received multiple activity rewards!',
+      rewardLabel: labels.join('\n'),
+    };
+  }
+
   const key = getMessageKey(reward);
   const entry = messageConfig[key] || messageConfig.fallback || {};
   const amount = Number(reward.amount || 1);
-  const rewardLabel = reward.type === 'shells'
-    ? `${amount} Summer Shells`
-    : reward.type === 'sunPulls'
-      ? `${amount} SUN Pull${amount === 1 ? '' : 's'}`
-      : reward.type === 'sunCard'
-        ? `[SUN] ${reward.name || 'Card'}`
-        : 'Reward';
+  const rewardLabel = rewardItemLabel(reward);
 
   const values = {
     member: reward.name || context.member || '',
@@ -53,4 +69,5 @@ module.exports = {
   messageConfig,
   getMessageKey,
   buildRewardPresentation,
+  rewardItemLabel,
 };

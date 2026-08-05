@@ -1950,261 +1950,634 @@
                 ]
             },
             "evening": {
-                "sceneId": "AUG05_EVENING",
-                "title": "Day 5 — The Night Scavenge",
-                "openingDialogue": "The lanterns are lit. It's time for the FINDING window. Keep your eyes on the sand and the tip jars.",
-                "coreActivities": [
-                    {
-                        "id": "AUG05_EVENING_JUSTICE_ART",
-                        "fullArtRoute": "Justice",
-                        "buttonText": "Raora's Sketch Museum",
-                        "previewDialogue": "Help Justice curate a pop-up art gallery of beach sketches.",
-                        "selectedDialogue": "Raora is sketching a tourist. Elizabeth is acting as 'Security' by staring intensely at anyone who gets too close to the art.",
-                        "steps": [
-                            {
-                                "id": "STEP_1",
-                                "prompt": "A fan wants a portrait of 'The bravest person on the island.' Who is it?",
-                                "options": [
-                                    {
-                                        "id": "A",
-                                        "text": "Gigi (The Brave!)",
-                                        "resultDialogue": "Raora draws Gigi wrestling a seagull. It's a masterpiece of action and fur. Gigi is very proud. 'I AM THE LAW!'",
-                                        "eligibleSunMembers": [ "Gigi" ],
-                                        "nextStepId": "STEP_2",
-                                        "setFlag": "gigi_portrait"
-                                    },
-                                    {
-                                        "id": "B",
-                                        "text": "The Manager (The Overworked!)",
-                                        "resultDialogue": "She draws you slumped over a pile of paperwork. It’s so realistic that Elizabeth offers you a 'Justice Nap.' You almost accept.",
-                                        "eligibleSunMembers": [ "Elizabeth" ],
-                                        "nextStepId": "STEP_2",
-                                        "setFlag": "manager_portrait"
-                                    },
-                                    {
-                                        "id": "C",
-                                        "text": "Cecilia (The Automaton!)",
-                                        "resultDialogue": "She poses perfectly still for 45 minutes. The drawing looks like a blueprint. 'I am very efficient for art purposes,' she says.",
-                                        "eligibleSunMembers": [ "Cecilia" ],
-                                        "nextStepId": "STEP_2",
-                                        "setFlag": "cecilia_portrait"
-                                    }
-                                ]
-                            },
-                            {
-                                "id": "STEP_2",
-                                "prompt": "A tourist dropped something under the easel. Who investigates?",
-                                "options": [
-                                    {
-                                        "id": "A",
-                                        "text": "Investigate (Finding)",
-                                        "resultDialogue": "You reach down and find **Broken Sunglasses**. They're missing a lens. You put them in the lost and found. Mundane junk acquired.",
-                                        "eligibleSunMembers": [ "Raora" ],
-                                        "nextStepId": "STEP_3",
-                                        "setFlag": "find_sunglasses"
-                                    },
-                                    {
-                                        "id": "B",
-                                        "text": "Let Gigi 'sniff' it out",
-                                        "resultDialogue": "She finds a **Discarded Napkin**. She barks at it until it stops being 'suspicious.' Justice is weird.",
-                                        "eligibleSunMembers": [ "Gigi" ],
-                                        "nextStepId": "STEP_3",
-                                        "setFlag": "find_napkin"
-                                    },
-                                    {
-                                        "id": "C",
-                                        "text": "Elizabeth: Official Inspection",
-                                        "resultDialogue": "She finds a **Lost 10-Shell Coin**. She logs it as 'Island Property #402.' Very thorough.",
-                                        "eligibleSunMembers": [ "Elizabeth" ],
-                                        "nextStepId": "STEP_3",
-                                        "setFlag": "find_coin"
-                                    }
-                                ]
-                            },
-                            {
-                                "id": "STEP_3",
-                                "prompt": "Museum closed. Final thought?",
-                                "options": [
-                                    {
-                                        "id": "A",
-                                        "text": "Art is Justice!",
-                                        "resultDialogue": "Raora winks. The night feels sophisticated and safe.",
-                                        "eligibleSunMembers": [ "Raora" ],
-                                        "nextStepId": "",
-                                        "setFlag": "finish_justice_eve"
-                                    }
-                                ]
-                            }
-                        ],
-                        "completionDialogue": "Gallery wrap-up. You found a pair of broken sunglasses. No artifacts found.",
-                        "rewardTableId": "summer_activity_default"
-                    },
-                    {
-                        "id": "AUG05_EVENING_FANTASY_FISH",
-                        "fullArtRoute": "Fantasy",
-                        "buttonText": "Pekora's TNT Fishing",
-                        "previewDialogue": "Help Fantasy speed up the night-fishing tournament.",
-                        "selectedDialogue": "Pekora is holding a bundle of sticks with 'TNT' written on them in crayon. Flare is trying to explain why this is a bad idea.",
-                        "steps": [
-                            {
-                                "id": "STEP_1",
-                                "prompt": "Pekora: 'Manager! If we blow up the pond, we win instantly-peko! Permit the explosive fishing?'",
-                                "options": [
-                                    {
-                                        "id": "A",
-                                        "text": "YES! BIG BOOM!  ",
-                                        "resultDialogue": "*BOOM!* The pond erupts. You find a **Singed Fish Scale**. The fish are gone, the water is purple, and the Manager is banned from the pond. But the explosion was 10/10.",
-                                        "eligibleSunMembers": [ "Pekora" ],
-                                        "nextStepId": "STEP_2",
-                                        "setFlag": "pond_exploded",
-                                        "removeFlag": "pond_peaceful"
-                                    },
-                                    {
-                                        "id": "B",
-                                        "text": "NO EXPLOSIVES.  ",
-                                        "resultDialogue": "You confiscate the TNT. Pekora pouts. You use traditional rods and find a **Rusty Fishing Hook**. It's boring, but safe. Flare thanks you.",
-                                        "eligibleSunMembers": [ "Flare" ],
-                                        "nextStepId": "STEP_2",
-                                        "setFlag": "pond_peaceful",
-                                        "removeFlag": "pond_exploded"
-                                    },
-                                    {
-                                        "id": "C",
-                                        "text": "Let Noel use muscle-fishing",
-                                        "resultDialogue": "She punches the water. A single fish flies into the air and lands in your bucket. You find an **Old Soda Tab**. 'Protein acquired,' Noel says.",
-                                        "eligibleSunMembers": [ "Noel" ],
-                                        "nextStepId": "STEP_2",
-                                        "setFlag": "noel_fishing"
-                                    }
-                                ]
-                            },
-                            {
-                                "id": "STEP_2",
-                                "prompt": "Marine is complaining that the 'Sea Spirits' aren't flirting with her. Action?",
-                                "options": [
-                                    {
-                                        "id": "A",
-                                        "text": "Throw a bucket of water on her",
-                                        "resultDialogue": "She screams. 'The ocean touched me! It's fate!' She's happy now. You are very tired.",
-                                        "eligibleSunMembers": [ "Marine" ],
-                                        "nextStepId": "STEP_3",
-                                        "setFlag": "marine_wet_fate"
-                                    },
-                                    {
-                                        "id": "B",
-                                        "text": "Give her a shiny rock",
-                                        "resultDialogue": "She thinks it's a treasure. It's just a piece of **Decorative Gravel**. She strikes a pirate pose. Morale restored.",
-                                        "eligibleSunMembers": [ "Marine" ],
-                                        "nextStepId": "STEP_3",
-                                        "setFlag": "marine_treasure"
-                                    }
-                                ]
-                            },
-                            {
-                                "id": "STEP_3",
-                                "prompt": "Tournament over. Winner?",
-                                "options": [
-                                    {
-                                        "id": "A",
-                                        "text": "Fantasy Wins (Somehow).",
-                                        "resultDialogue": "Even with the TNT (or lack thereof), they had the most fun. Pekora is already planning a bigger bomb.",
-                                        "eligibleSunMembers": [ "Pekora" ],
-                                        "nextStepId": "",
-                                        "setFlag": "finish_fantasy_eve"
-                                    }
-                                ]
-                            }
-                        ],
-                        "completionDialogue": "Fishing tournament concluded. You found either a singed scale or a rusty hook. No mystery items detected.",
-                        "rewardTableId": "summer_activity_default"
-                    },
-                    {
-                        "id": "AUG05_EVENING_GEN0_VENDING",
-                        "fullArtRoute": "Gen 0",
-                        "buttonText": "Elite Vending Repair",
-                        "previewDialogue": "Help Miko and Roboco fix a jammed snack machine.",
-                        "selectedDialogue": "Miko is yelling at the machine in ancient Japanese. Roboco is trying to hack the coin slot with a USB cable.",
-                        "steps": [
-                            {
-                                "id": "STEP_1",
-                                "prompt": "The machine asks for a 'Security Question.' It asks: 'Who is the most Elite?'",
-                                "options": [
-                                    {
-                                        "id": "A",
-                                        "text": "Type: MIKO",
-                                        "resultDialogue": "The machine emits a happy chime and spits out 50 bags of taiyaki. Miko is delighted. 'The machine knows the truth-nye!'",
-                                        "eligibleSunMembers": [ "Miko" ],
-                                        "nextStepId": "STEP_2",
-                                        "setFlag": "vending_miko"
-                                    },
-                                    {
-                                        "id": "B",
-                                        "text": "Type: ROBOCO",
-                                        "resultDialogue": "The machine glows blue and starts downloading its entire inventory into Roboco's storage. 'I am now 40% chocolate,' she says with a mechanical blush.",
-                                        "eligibleSunMembers": [ "Roboco" ],
-                                        "nextStepId": "STEP_2",
-                                        "setFlag": "vending_roboco"
-                                    },
-                                    {
-                                        "id": "C",
-                                        "text": "Type: SORA",
-                                        "resultDialogue": "The machine bows. It doesn't give any snacks, but it starts playing a beautiful idol song. Sora is very flattered.",
-                                        "eligibleSunMembers": [ "Sora" ],
-                                        "nextStepId": "STEP_2",
-                                        "setFlag": "vending_sora"
-                                    }
-                                ]
-                            },
-                            {
-                                "id": "STEP_2",
-                                "prompt": "Something is stuck in the coin return. Reach in?",
-                                "options": [
-                                    {
-                                        "id": "A",
-                                        "text": "Reach in (Finding)",
-                                        "resultDialogue": "You pull out a **Used Bus Ticket**. It's for a bus line on the mainland. How did it get here? You toss it in the bin. Mundane trash acquired.",
-                                        "eligibleSunMembers": [ "Roboco" ],
-                                        "nextStepId": "STEP_3",
-                                        "setFlag": "find_ticket"
-                                    },
-                                    {
-                                        "id": "B",
-                                        "text": "Let Miko reach",
-                                        "resultDialogue": "She finds an **Old Lollipop Stick**. She thinks it's a magic wand. She's currently 'cursing' the machine to give more taiyaki.",
-                                        "eligibleSunMembers": [ "Miko" ],
-                                        "nextStepId": "STEP_3",
-                                        "setFlag": "find_stick"
-                                    },
-                                    {
-                                        "id": "C",
-                                        "text": "Let Sora reach",
-                                        "resultDialogue": "She finds a **Lost Button**. She hands it to you. 'Someone might be looking for this, Manager!' She's too kind.",
-                                        "eligibleSunMembers": [ "Sora" ],
-                                        "nextStepId": "STEP_3",
-                                        "setFlag": "find_button"
-                                    }
-                                ]
-                            },
-                            {
-                                "id": "STEP_3",
-                                "prompt": "Machine fixed. Status?",
-                                "options": [
-                                    {
-                                        "id": "A",
-                                        "text": "Snacks for everyone!",
-                                        "resultDialogue": "Miko shares one taiyaki with you. It's cold, but the sentiment is elite.",
-                                        "eligibleSunMembers": [ "Miko" ],
-                                        "nextStepId": "",
-                                        "setFlag": "finish_gen0_eve"
-                                    }
-                                ]
-                            }
-                        ],
-                        "completionDialogue": "Snack machine secured. You found a used bus ticket. No artifacts found today.",
-                        "rewardTableId": "summer_activity_default"
-                    }
-                ]
+  "sceneId": "AUG05_EVENING",
+  "title": "Day 5 — The Great Reboot",
+  "openingDialogue": "The lanterns are flickering back to life. Earlier today, the entire island seemingly froze in time for four hours. Management is calling it a 'Scheduled Reality Refresh' and is handing out massive compensation to keep the peace.",
+  "coreActivities": [
+    {
+      "id": "AUG05_EVENING_JUSTICE_REBOOT",
+      "fullArtRoute": "Justice",
+      "buttonText": "Error Log Gallery",
+      "previewDialogue": "Elizabeth is investigating who 'unplugged' the resort's reality, while Raora is busy sketching the frozen sky.",
+      "selectedDialogue": "Raora is sketching a very artistic version of a '404 Not Found' screen. Gigi is currently trying to bite a power cable to see if it's 'real' or just a projection.",
+      "steps": [
+        {
+          "id": "STEP_1",
+          "prompt": "Elizabeth stands before a blank terminal screen. 'A major disruption has occurred, freezing the citizenry in place. Manager, we require a prime suspect to initiate our investigation.'",
+          "options": [
+            {
+              "id": "A",
+              "text": "Blame a rogue seagull",
+              "resultDialogue": "Elizabeth goes completely still. 'So the avian syndicate has finally moved against the island.' Before you can correct her, Gigi has drawn several circles on the incident map and labeled all of them BIRD.",
+              "eligibleSunMembers": ["Elizabeth", "Gigi"],
+              "nextStepId": "STEP_2A",
+              "setFlag": "justice_opened_bird_case"
+            },
+            {
+              "id": "B",
+              "text": "It was a 'Tactical Nap'",
+              "resultDialogue": "Raora giggles. 'A nap so powerful it froze the world? You truly are the King of Overwork, Manager!' She draws you slumped over the bench with Zzz's floating around your head.",
+              "eligibleSunMembers": ["Raora"],
+              "nextStepId": "STEP_2B",
+              "setFlag": "justice_nap_investigation"
+            },
+            {
+              "id": "C",
+              "text": "The server room got too hot",
+              "resultDialogue": "Cecilia calculates the thermal output. 'It seems my cooling fans were insufficient to offset the Manager's stress levels. System instability is currently at 84%.'",
+              "eligibleSunMembers": ["Cecilia"],
+              "nextStepId": "STEP_2C",
+              "setFlag": "justice_thermal_disaster"
             }
+          ]
+        },
+        {
+          "id": "STEP_2A",
+          "prompt": "A seagull lands outside the server room window carrying one of the missing staff keycards.",
+          "options": [
+            {
+              "id": "A",
+              "text": "Let Elizabeth conduct an interrogation",
+              "resultDialogue": "Elizabeth places a tiny chair in front of the gull. 'You may remain silent, but your expression has already betrayed you.' The gull steals her evidence tag and flies away. Gigi declares this a confession.",
+              "eligibleSunMembers": ["Elizabeth", "Gigi"],
+              "nextStepId": "STEP_3A",
+              "setFlag": "seagull_evaded_justice"
+            },
+            {
+              "id": "B",
+              "text": "Trade a snack for the keycard",
+              "resultDialogue": "Raora offers half her sandwich. The gull drops the keycard immediately. Elizabeth quietly crosses out three pages of interrogation notes in her binder.",
+              "eligibleSunMembers": ["Raora", "Elizabeth"],
+              "nextStepId": "STEP_3B",
+              "setFlag": "seagull_bribed_with_lunch"
+            },
+            {
+              "id": "C",
+              "text": "Let Gigi 'retrieve' the card",
+              "resultDialogue": "She launches herself out the window, barking wildly. She tackles the gull mid-air, tumbling into the sand. She returns proud, holding both the keycard and a single, confused crab in her mouth.",
+              "eligibleSunMembers": ["Gigi"],
+              "nextStepId": "STEP_3C",
+              "setFlag": "gigi_physical_retrieval"
+            }
+          ]
+        },
+        {
+          "id": "STEP_2B",
+          "prompt": "You lead Raora and Cecilia to the park bench where you took your rest. The air around it is still flickering with glitched polygons.",
+          "options": [
+            {
+              "id": "A",
+              "text": "Let Cecilia run a diagnostic on the bench",
+              "resultDialogue": "She sweeps her sensors over the wood. 'Residual heat levels suggest a highly inefficient nap duration of three hours. Also, you dropped a paperclip into the cooling vent below.'",
+              "eligibleSunMembers": ["Cecilia"],
+              "nextStepId": "STEP_3D",
+              "setFlag": "cecilia_bench_scanned"
+            },
+            {
+              "id": "B",
+              "text": "Let Raora draw a 'stable' version of the bench",
+              "resultDialogue": "She pulls out her sketchbook. 'The way you slumped over... it was a beautiful corporate tragedy!' She draws a masterpiece. The terminal seems satisfied by the art and stops glitching.",
+              "eligibleSunMembers": ["Raora"],
+              "nextStepId": "STEP_3C",
+              "setFlag": "raora_sketch_revelation"
+            },
+            {
+              "id": "C",
+              "text": "Have Gigi dig under the seat",
+              "resultDialogue": "Gigi dives headfirst into the sand under the bench, digging frantically and throwing dirt over your clipboard. She emerges growling, holding a dusty backup power cable.",
+              "eligibleSunMembers": ["Gigi"],
+              "nextStepId": "STEP_3C",
+              "setFlag": "gigi_sand_dig"
+            }
+          ]
+        },
+        {
+          "id": "STEP_2C",
+          "prompt": "You head to the server basement. The central cooling unit is humming weakly, covered in a thin crust of ocean salt.",
+          "options": [
+            {
+              "id": "A",
+              "text": "Let Cecilia optimize the intake fans",
+              "resultDialogue": "She taps her chest console. 'System is operating under 14% efficiency. Ocean spray has entered the intake valves. If only the local management was as precise as my internal clock.' She clears the vents.",
+              "eligibleSunMembers": ["Cecilia"],
+              "nextStepId": "STEP_3D",
+              "setFlag": "cecilia_fan_unclog"
+            },
+            {
+              "id": "B",
+              "text": "Let Elizabeth 'reboot' the generator",
+              "resultDialogue": "She delivers a swift, royal boot to the power supply. A spark flies, the console beeps, and the terminal reboots. 'Direct physical enforcement is sometimes necessary, Manager.'",
+              "eligibleSunMembers": ["Elizabeth"],
+              "nextStepId": "STEP_3A",
+              "setFlag": "manager_boot_repair"
+            },
+            {
+              "id": "C",
+              "text": "Let Gigi clear the debris",
+              "resultDialogue": "She leaps directly into the cable tray, growling as she claws out salt crust and dried kelp. Her frantic wriggling somehow reconnects a loose loose wire.",
+              "eligibleSunMembers": ["Gigi"],
+              "nextStepId": "STEP_3B",
+              "setFlag": "gigi_cleared_debris_wildly"
+            }
+          ]
+        },
+        {
+          "id": "STEP_3A",
+          "prompt": "The stolen keycard restores access to the server room. Elizabeth prepares her final case report.",
+          "options": [
+            {
+              "id": "A",
+              "text": "Approve the bird conspiracy theory",
+              "resultDialogue": "Elizabeth stamps the report before you even finish speaking. Gigi adds a muddy paw print as the second lead investigator. 'Justice is served!'",
+              "completionDialogue": "The island is online again. Officially, the outage was caused by an organized seagull operation. Management has declined to comment, and Gigi has put three local birds under surveillance.",
+              "eligibleSunMembers": ["Elizabeth", "Gigi"],
+              "nextStepId": "",
+              "setFlag": "seagulls_officially_suspected"
+            },
+            {
+              "id": "B",
+              "text": "Tell her it was probably an accident",
+              "resultDialogue": "Elizabeth slowly closes the forty-page case file. 'Then justice has once again been defeated by insufficient evidence.' She hands you the reboot vouchers.",
+              "completionDialogue": "The server was restored, the gull escaped prosecution, and Gigi remains convinced the case goes all the way to the top of the island's administration.",
+              "eligibleSunMembers": ["Elizabeth", "Gigi"],
+              "nextStepId": "",
+              "setFlag": "seagull_case_cold"
+            }
+          ]
+        },
+        {
+          "id": "STEP_3B",
+          "prompt": "Gigi is running in circles with the recovered data stick, growling as she shakes it. Elizabeth is watching with pure horror.",
+          "options": [
+            {
+              "id": "A",
+              "text": "Trade her a stick for the vouchers",
+              "resultDialogue": "She happily accepts the stick, dropping the vouchers and the data drive at your feet. 'GOOD TRADE, HUMAN!'",
+              "completionDialogue": "Gigi successfully barked the lag out of the system. You wrestled the data drive away from her teeth, and the resort is officially back online.",
+              "eligibleSunMembers": ["Gigi"],
+              "nextStepId": "",
+              "setFlag": "gigi_high_five_success"
+            },
+            {
+              "id": "B",
+              "text": "Tell her she did a messy job",
+              "resultDialogue": "She shakes her fur, scattering a cloud of server dust all over Elizabeth's cape. Elizabeth silently draws her rapier.",
+              "completionDialogue": "The server was restored by Gigi's wild claws. Unfortunately, the local station had to be evacuated briefly due to an explosive dust cloud on Elizabeth's uniform.",
+              "eligibleSunMembers": ["Gigi"],
+              "nextStepId": "",
+              "setFlag": "gigi_messy_cleanup"
+            }
+          ]
+        },
+        {
+          "id": "STEP_3C",
+          "prompt": "Raora is staring at the restored terminal screen. 'It looks much softer now! I think my art cured the machine!'",
+          "options": [
+            {
+              "id": "A",
+              "text": "Praise her artistic vision",
+              "resultDialogue": "She squeals happily, wrapping you in a quick hug before handing over the compensation vouchers.",
+              "completionDialogue": "Raora's pastel sketch successfully cured the island's digital glitches. The new user interface looks much cuter, and Raora has been awarded 'Artist of the Week.'",
+              "eligibleSunMembers": ["Raora"],
+              "nextStepId": ""
+            },
+            {
+              "id": "B",
+              "text": "Check the terminal's code",
+              "resultDialogue": "You inspect the screen. The machine didn't actually read her art; the terminal just rebooted because she accidentally pressed the power switch with her elbow.",
+              "completionDialogue": "The server is online. You proved that Raora's 'magic art' was actually just accidental physical contact with the reset switch, much to her disappointment.",
+              "eligibleSunMembers": ["Raora"],
+              "nextStepId": ""
+            }
+          ]
+        },
+        {
+          "id": "STEP_3D",
+          "prompt": "Cecilia's internal gears hum. 'Operating efficiency restored. Manager-related panic levels dropping.'",
+          "options": [
+            {
+              "id": "A",
+              "text": "Request a performance audit",
+              "resultDialogue": "She displays a hologram showing your reboot efficiency was 'adequate.' She hands you the vouchers with a mechanical curtsy.",
+              "completionDialogue": "The server is online and optimized to Cecilia's clinical standards. The local terminals now run 20% faster, though they beep condescendingly whenever you use them.",
+              "eligibleSunMembers": ["Cecilia"],
+              "nextStepId": ""
+            },
+            {
+              "id": "B",
+              "text": "Give her a mechanical wind-up",
+              "resultDialogue": "You turn the key on her back. She hums happily and hands over the vouchers. 'Your manual winding is... acceptable.'",
+              "completionDialogue": "You kept Cecilia fully wound during the server emergency. She rewarded your mechanical support by locking in the island's new high-speed firmware.",
+              "eligibleSunMembers": ["Cecilia"],
+              "nextStepId": ""
+            }
+          ]
+        }
+      ],
+      "completionDialogue": "The investigation concluded. Reality is restored.",
+      "rewardTableId": "summer_activity_sunPull_exception"
+    },
+    {
+      "id": "AUG05_EVENING_FANTASY_REBOOT",
+      "fullArtRoute": "Fantasy",
+      "buttonText": "TNT System Restart",
+      "previewDialogue": "Pekora thinks the island crashed because it didn't have enough explosions. She's offering a 'hard reboot' involving several sticks of dynamite.",
+      "selectedDialogue": "Pekora is standing over a pile of TNT near the server room. Flare is holding a bucket of water, looking very tired.",
+      "steps": [
+        {
+          "id": "STEP_1",
+          "prompt": "Pekora is reaching for her lighter. 'Time for a fresh start-peko!'",
+          "options": [
+            {
+              "id": "A",
+              "text": "Let her blow a small fuse",
+              "resultDialogue": "A tiny *pop* happens. The Wi-Fi signal immediately jumps to 5 bars. Pekora laughs maniacally.",
+              "eligibleSunMembers": ["Pekora"],
+              "nextStepId": "STEP_2A",
+              "setFlag": "pekora_created_server_crater"
+            },
+            {
+              "id": "B",
+              "text": "Flare, Douse the fuse!",
+              "resultDialogue": "Flare splashes the TNT. Pekora pouts. Flare gives you a thumbs up.",
+              "eligibleSunMembers": ["Flare"],
+              "nextStepId": "STEP_2B",
+              "setFlag": "flare_prevented_explosion"
+            },
+            {
+              "id": "C",
+              "text": "Let Noel 'Punch' the server",
+              "resultDialogue": "She gives the mainframe a light tap. The humming noise stops. 'It was just a loose screw,' Noel says.",
+              "eligibleSunMembers": ["Noel"],
+              "nextStepId": "STEP_2C",
+              "setFlag": "noel_muscle_override"
+            }
+          ]
+        },
+        {
+          "id": "STEP_2A",
+          "prompt": "The server is online, but the blast has created a smoking crater in the floor. Pekora is trying to look innocent.",
+          "options": [
+            {
+              "id": "A",
+              "text": "Confront her about the damage",
+              "resultDialogue": "Pekora kicks dirt over the crater. 'See? Perfectly normal server maintenance-peko.' Flare stares at her in exhausted silence.",
+              "eligibleSunMembers": ["Pekora", "Flare"],
+              "nextStepId": "STEP_3A",
+              "setFlag": "pekora_denies_damage"
+            },
+            {
+              "id": "B",
+              "text": "Let Marine pose over the crater",
+              "resultDialogue": "She strikes a pirate pose over the smoking hole. 'Ahoy! The Captain has conquered the digital deep!' Noel looks worriedly at the exposed wiring.",
+              "eligibleSunMembers": ["Marine", "Noel"],
+              "nextStepId": "STEP_3B",
+              "setFlag": "marine_crater_photoshoot"
+            }
+          ]
+        },
+        {
+          "id": "STEP_2B",
+          "prompt": "The server is safe from Pekora's fuse, but now the floor is covered in water. Flare is looking for a mop.",
+          "options": [
+            {
+              "id": "A",
+              "text": "Let Flare use a fire spirit to dry the room",
+              "resultDialogue": "She summons a tiny flame to evaporate the moisture. Pekora watches suspiciously, holding her ears. 'It's too warm-peko!'",
+              "eligibleSunMembers": ["Flare"],
+              "nextStepId": "STEP_3C",
+              "setFlag": "flare_spirit_dry"
+            },
+            {
+              "id": "B",
+              "text": "Have Marine mop the floor",
+              "resultDialogue": "She grabs the mop and does a dramatic 'cleaning pose.' Naturally, she slips on a puddle and slides headfirst into the server rack with a loud metal clang.",
+              "eligibleSunMembers": ["Marine"],
+              "nextStepId": "STEP_3D",
+              "setFlag": "marine_clumsy_mopping"
+            }
+          ]
+        },
+        {
+          "id": "STEP_2C",
+          "prompt": "The server is hums quietly, but the metal casing now features a perfect, Noel-sized fist impression. Noel looks embarrassed.",
+          "options": [
+            {
+              "id": "A",
+              "text": "Praise her 'technical' punch",
+              "resultDialogue": "She blushes. 'I just... found the sweet spot!' Flare sighs but agrees the results are undeniable.",
+              "eligibleSunMembers": ["Noel", "Flare"],
+              "nextStepId": "STEP_3E",
+              "setFlag": "noel_punched_server_success"
+            },
+            {
+              "id": "B",
+              "text": "Pekora, accuse Noel of property damage",
+              "resultDialogue": "Pekora gasps. 'Noel-chan! You broke the resort's heart-peko! Manager, I should be rewarded for witnessing this crime!' Noel's ears turn red.",
+              "eligibleSunMembers": ["Pekora", "Noel"],
+              "nextStepId": "STEP_3F",
+              "setFlag": "pekora_accuses_noel"
+            }
+          ]
+        },
+        {
+          "id": "STEP_3A",
+          "prompt": "Pekora is whistling innocently while the server fans blow soot into the hallway. Time to sign off on the case.",
+          "options": [
+            {
+              "id": "A",
+              "text": "Approve her 'maintenance' method",
+              "resultDialogue": "You sign off on her report. Pekora grins. 'A wise manager-peko!' Flare facepalms so hard she leaves a red mark.",
+              "completionDialogue": "The island is online. Officially, the server room underwent 'high-velocity thermal venting' under Pekora's supervision. Management has banned her from the hardware store.",
+              "eligibleSunMembers": ["Pekora", "Flare"],
+              "nextStepId": ""
+            },
+            {
+              "id": "B",
+              "text": "Report her to the local office",
+              "resultDialogue": "You write a note on your clipboard. Pekora gasps. 'Betrayal-peko!' She runs away, throwing a smoke bomb that turns out to be just flour.",
+              "completionDialogue": "The system was restored. Pekora is currently on probation for explosive maintenance, and Flare has spent the evening cleaning flour out of the server intake fans.",
+              "eligibleSunMembers": ["Pekora"],
+              "nextStepId": ""
+            }
+          ]
+        },
+        {
+          "id": "STEP_3B",
+          "prompt": "Marine is still posing. The exposed wiring behind her is sparking gently, matching her jewelry.",
+          "options": [
+            {
+              "id": "A",
+              "text": "Take the photo",
+              "resultDialogue": "You take a 5-star photo. 'I look so powerful-desu!' she squeals. Noel sighs and covers the sparks with a rubber mat.",
+              "completionDialogue": "The network is back online. Marine's 'Crater Captain' photo went viral among her crew, though the server room now requires significant rewiring.",
+              "eligibleSunMembers": ["Marine", "Noel"],
+              "nextStepId": ""
+            },
+            {
+              "id": "B",
+              "text": "Pull her away before she gets shocked",
+              "resultDialogue": "You grab her collar. She blushes. 'Manager-san! Is this... a pirate rescue?!' Noel safely insulates the wires.",
+              "completionDialogue": "The system is stable. Marine was successfully rescued from self-inflicted electrocution, and Noel has been assigned as her permanent beach escort.",
+              "eligibleSunMembers": ["Marine"],
+              "nextStepId": ""
+            }
+          ]
+        },
+        {
+          "id": "STEP_3C",
+          "prompt": "The room is dry, and the system is running smoothly. Flare looks at you, wiping some soot from her cheek.",
+          "options": [
+            {
+              "id": "A",
+              "text": "Thank her for the damage control",
+              "resultDialogue": "She smiles warmly. 'Someone has to keep this place from turning into a crater, Manager.' Pekora continues to glare.",
+              "completionDialogue": "The server is online. Flare's quick thinking kept Pekora's reboot plan from evaporating the building, earning her the official resort gratitude award.",
+              "eligibleSunMembers": ["Flare"],
+              "nextStepId": ""
+            }
+          ]
+        },
+        {
+          "id": "STEP_3D",
+          "prompt": "Marine is lying on the floor, groaning, but the server is oddly quiet. Noel's ears are twitching.",
+          "options": [
+            {
+              "id": "A",
+              "text": "Check the server display",
+              "resultDialogue": "Marine's crash pushed the loose power cord back into its slot. The system is 100% online. 'I... I planned that!' Marine mumbles.",
+              "completionDialogue": "The island has Wi-Fi again. The outage was resolved by Marine physically crashing into the hardware. She has claimed this as a 'tactical slide' in her logs.",
+              "eligibleSunMembers": ["Marine"],
+              "nextStepId": ""
+            }
+          ]
+        },
+        {
+          "id": "STEP_3E",
+          "prompt": "Noel is looking at her fist, slightly embarrassed by her strength.",
+          "options": [
+            {
+              "id": "A",
+              "text": "Praise her 'technical' punch",
+              "resultDialogue": "She blushes. 'I just... found the sweet spot!' Flare sighs but agrees the results are undeniable.",
+              "completionDialogue": "The island is back online. Noel's physical override solved the connection crisis. The server rack has been reinforced with steel plates to protect it from future 'tuning.'",
+              "eligibleSunMembers": ["Noel"],
+              "nextStepId": ""
+            }
+          ]
+        },
+        {
+          "id": "STEP_3F",
+          "prompt": "Noel looks like she's about to cry. Pekora is smugly pointing at her.",
+          "options": [
+            {
+              "id": "A",
+              "text": "Side with Noel",
+              "resultDialogue": "You tell Pekora that Noel's punch was a certified maintenance technique. Noel looks at you with sparkling eyes. Pekora's ears drop. 'Favoritism-peko!'",
+              "completionDialogue": "The connection is restored. Noel feels vindicated by your professional support, while Pekora has retired to her room to plan a 'legal appeal' against the manager.",
+              "eligibleSunMembers": ["Noel", "Pekora"],
+              "nextStepId": ""
+            }
+          ]
+        }
+      ],
+      "completionDialogue": "The system restart was successful. 5 Sun Pulls acquired!",
+      "rewardTableId": "summer_activity_sunPull_exception"
+    },
+    {
+      "id": "AUG05_EVENING_GEN0_PATCH",
+      "fullArtRoute": "Gen 0",
+      "buttonText": "High-Spec Patching",
+      "previewDialogue": "Roboco is trying to 'patch' the island's reality. Miko is currently trying to eat a 'Silver Shard'.",
+      "selectedDialogue": "Roboco has several cables coming out of her arm and into a palm tree. Miko is trying to use a 'Silver Shard' to scratch an itch on her back.",
+      "steps": [
+        {
+          "id": "STEP_1",
+          "prompt": "Roboco needs a rendering preset to restore the island's frozen environment. Which one?",
+          "options": [
+            {
+              "id": "A",
+              "text": "Elite Effects",
+              "resultDialogue": "Miko takes over the keyboard. Suddenly, the sky turns bright pink and it starts raining taiyaki. Roboco panics.",
+              "eligibleSunMembers": ["Miko"],
+              "nextStepId": "STEP_2A",
+              "setFlag": "miko_patch"
+            },
+            {
+              "id": "B",
+              "text": "Trust Sora's Purity",
+              "resultDialogue": "She hums a gentle tune. The blue 'error' tint on the horizon fades away, replaced by a holy glow.",
+              "eligibleSunMembers": ["Sora"],
+              "nextStepId": "STEP_2B",
+              "setFlag": "sora_patch"
+            },
+            {
+              "id": "C",
+              "text": "Let Roboco Brute-Force",
+              "resultDialogue": "She downloads 500GB of 'Safety Data.' The island feels 100% more corporate and 50% more robotic.",
+              "eligibleSunMembers": ["Roboco"],
+              "nextStepId": "STEP_2C",
+              "setFlag": "roboco_patch"
+            }
+          ]
+        },
+        {
+          "id": "STEP_2A",
+          "prompt": "A tourist is still partially frozen inside the premium snack dispenser. How do we get them out?",
+          "options": [
+            {
+              "id": "A",
+              "text": "Let Suisei use her mic stand",
+              "resultDialogue": "She swings it, shattering the glitched glass door. The tourist falls out, dropping their wallet as 'damages.' Suisei shrugs. 'Fixed.'",
+              "eligibleSunMembers": ["Suisei"],
+              "nextStepId": "STEP_3A"
+            },
+            {
+              "id": "B",
+              "text": "Let Roboco hack the dispenser",
+              "resultDialogue": "She runs a bypass script. The dispenser door slides open, releasing the tourist and a stash of old coins that had been jammed in the coin hopper.",
+              "eligibleSunMembers": ["Roboco"],
+              "nextStepId": "STEP_3D"
+            },
+            {
+              "id": "C",
+              "text": "Let Miko pull them by the feet",
+              "resultDialogue": "She pulls with all her Elite strength. *POP!* The tourist comes free, dragging a dusty purse out with them. Miko cheers!",
+              "eligibleSunMembers": ["Miko"],
+              "nextStepId": "STEP_3E"
+            }
+          ]
+        },
+        {
+          "id": "STEP_2B",
+          "prompt": "The digital displays near the beach bench are still flickering. The tourists are watching nervously.",
+          "options": [
+            {
+              "id": "A",
+              "text": "Let Sora sing to the bench",
+              "resultDialogue": "Sora hums a peaceful melody. The glitches on the display vanish, replaced by a beautiful beach graphic. The tourists applaud.",
+              "eligibleSunMembers": ["Sora"],
+              "nextStepId": "STEP_3B"
+            },
+            {
+              "id": "B",
+              "text": "Let Miko use her ceremonial broom",
+              "resultDialogue": "She sweeps the wood. 'Elite Purification-nye!' A small hidden compartment pops open under the seat.",
+              "eligibleSunMembers": ["Miko"],
+              "nextStepId": "STEP_3E"
+            },
+            {
+              "id": "C",
+              "text": "Let Roboco scan the wood",
+              "resultDialogue": "'Thermal anomaly detected.' She resets the bench's local circuit breaker, stabilizing the display.",
+              "eligibleSunMembers": ["Roboco"],
+              "nextStepId": "STEP_3D"
+            }
+          ]
+        },
+        {
+          "id": "STEP_2C",
+          "prompt": "Roboco's arm has detached and is currently stuck inside the server casing. Miko is laughing.",
+          "options": [
+            {
+              "id": "A",
+              "text": "Help Roboco reassemble",
+              "resultDialogue": "You screw her hand back on. She blushes. 'High-spec manual reassembly initiated. Thank you, Manager.'",
+              "eligibleSunMembers": ["Roboco"],
+              "nextStepId": "STEP_3D"
+            },
+            {
+              "id": "B",
+              "text": "Let Miko use her 'Elite Wand'",
+              "resultDialogue": "She pokes Roboco's arm. It sparks and shoots a laser, popping open a locked maintenance drawer.",
+              "eligibleSunMembers": ["Miko"],
+              "nextStepId": "STEP_3A"
+            },
+            {
+              "id": "C",
+              "text": "Let Suisei slice the casing open",
+              "resultDialogue": "She wedges her display axe into the gap, prying it open. Roboco retrieves her hand with a sigh.",
+              "eligibleSunMembers": ["Suisei"],
+              "nextStepId": "STEP_3C"
+            }
+          ]
+        },
+        {
+          "id": "STEP_3A",
+          "prompt": "The island is back at 60 FPS. Miko is standing proudly in front of the terminal.",
+          "options": [
+            {
+              "id": "A",
+              "text": "Praise her weather control",
+              "resultDialogue": "She strikes a victory pose and hands over the 5 golden vouchers. 'Elite weather is the best-nye!'",
+              "completionDialogue": "Miko enabled Elite Weather, turning the ocean into pink lemonade and the sky into taiyaki. You recovered some lost coins from the sky and received 5 Sun Pulls.",
+              "eligibleSunMembers": ["Miko"],
+              "nextStepId": ""
+            }
+          ]
+        },
+        {
+          "id": "STEP_3B",
+          "prompt": "The island is back at 60 FPS. Sora has the vouchers.",
+          "options": [
+            {
+              "id": "A",
+              "text": "Idol Apology!",
+              "resultDialogue": "Sora hands you the 5 golden vouchers with a gentle smile.",
+              "completionDialogue": "A holy idol melody completely cleared the lag. You recovered some lost coins from the bench and received 5 Sun Pulls from Sora's staff.",
+              "eligibleSunMembers": ["Sora"],
+              "nextStepId": ""
+            }
+          ]
+        },
+        {
+          "id": "STEP_3C",
+          "prompt": "The island is back at 60 FPS. Suisei has the vouchers ready.",
+          "options": [
+            {
+              "id": "A",
+              "text": "Claim Compensation!",
+              "resultDialogue": "She hands you the 5 golden vouchers with a smirk.",
+              "completionDialogue": "Suisei successfully cut through the lag with her mic stand. You recovered some lost coins from the shattered remnants of the glitch and got 5 Sun Pulls.",
+              "eligibleSunMembers": ["Suisei"],
+              "nextStepId": ""
+            }
+          ]
+        },
+        {
+          "id": "STEP_3D",
+          "prompt": "The island is back at 120 FPS. Roboco has the vouchers.",
+          "options": [
+            {
+              "id": "A",
+              "text": "High-Spec Spawning!",
+              "resultDialogue": "Roboco digitally spawns 5 golden vouchers into your hand.",
+              "completionDialogue": "A clinical, high-spec repair. The island runs at 120 FPS, and Roboco's high-spec sensors detected and recovered lost assets from the server.",
+              "eligibleSunMembers": ["Roboco"],
+              "nextStepId": ""
+            }
+          ]
+        },
+        {
+          "id": "STEP_3E",
+          "prompt": "Miko is holding her 'magic' paperclip and the vouchers. 'I am the ultimate technician!'",
+          "options": [
+            {
+              "id": "A",
+              "text": "Elite Victory!",
+              "resultDialogue": "Miko hands you the 5 golden vouchers. 'NYE!'",
+              "completionDialogue": "Miko's chaotic elite energy saved the resort. You found some lost coins in her hat and got 5 Sun Pulls from the Elite Shrine fund.",
+              "eligibleSunMembers": ["Miko"],
+              "nextStepId": ""
+            }
+          ]
+        }
+      ],
+      "completionDialogue": "The patch is live. Reality is optimized. 5 Sun Pulls acquired!",
+      "rewardTableId": "summer_activity_sunPull_exception"
+    }
+  ]
+}
         }
     },
     {
