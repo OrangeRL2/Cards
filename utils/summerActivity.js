@@ -54,22 +54,21 @@ function getWindowState(summerUser, day, windowName) {
 function isWindowAvailable(summerUser, windowName, now = new Date()) {
   if (summerUser?.testing?.unlockAllWindows) return true;
 
-  const windowOrder = { morning: 0, noon: 1, evening: 2 };
-  const current = currentWindow(jstParts(now).hour);
-  const wantedRank = windowOrder[windowName];
-  const currentRank = windowOrder[current];
-
-  if (!Number.isInteger(wantedRank) || !Number.isInteger(currentRank)) return false;
-  if (wantedRank > currentRank) return false;
-  if (windowName === 'morning') return true;
-
   const day = getDayNumber(summerUser, now);
   if (!day) return false;
 
-  const morningComplete = Boolean(getWindowState(summerUser, day, 'morning').completed);
+  if (windowName === 'morning') return true;
+
+  const morningComplete = Boolean(
+    getWindowState(summerUser, day, 'morning').completed
+  );
+
   if (windowName === 'noon') return morningComplete;
 
-  const noonComplete = Boolean(getWindowState(summerUser, day, 'noon').completed);
+  const noonComplete = Boolean(
+    getWindowState(summerUser, day, 'noon').completed
+  );
+
   if (windowName === 'evening') return morningComplete && noonComplete;
 
   return false;
