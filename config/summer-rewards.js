@@ -10,6 +10,9 @@ module.exports = Object.freeze({
   summer_activity_exception: [
     { type: 'shells', amount: 500, weight: 100 },
   ],
+    summer_activity_exception2: [
+    { type: 'shells', amount: 100, weight: 100 },
+  ],
   summer_activity_sunPull_exception: [
     {
       type: 'bundle',

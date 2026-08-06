@@ -6419,7 +6419,7 @@
             }
           ],
           "completionDialogue": "Shiranui Kensetsu completed the Summer Games. Whether through clean execution, spectacular destruction, or sportsmanship, the trophy revealed the Lighthouse Calibration Prism during the day's only finding window.",
-          "rewardTableId": "summer_activity_default"
+          "rewardTableId": "summer_activity_exception2"
         },
         {
           "id": "AUG07_NOON_FAMS_GAMES",
@@ -6883,7 +6883,7 @@
             }
           ],
           "completionDialogue": "FAMS completed the Summer Games through teamwork, loopholes, full-power competition, or sportsmanship. The trophy revealed the Lighthouse Calibration Prism during the Noon finding window.",
-          "rewardTableId": "summer_activity_default"
+          "rewardTableId": "summer_activity_exception2"
         },
         {
           "id": "AUG07_NOON_OKAKORO_GAMES",
@@ -7313,7 +7313,7 @@
             }
           ],
           "completionDialogue": "OkaKoro completed the Summer Games through combat relaxation, minimum effort, controlled chaos, or sportsmanship. The trophy revealed the Lighthouse Calibration Prism during Noon, the day's only finding window.",
-          "rewardTableId": "summer_activity_default"
+          "rewardTableId": "summer_activity_exception2"
         }
       ]
     },
