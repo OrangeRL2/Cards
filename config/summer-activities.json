@@ -7735,1262 +7735,1191 @@
 {
   "day": 8,
   "date": "2026-08-08",
-  "chapter": "Chapter 3 — After the Games",
-  "storyBeat": "The resort wakes to a damaged arena, disputed results, viral replay footage, and several hundred compensation claims. The Manager spends the day repairing the Summer Games aftermath while Justice quietly organizes everything known about the fourth pier. Morning is the only finding window, and every recovered item is mundane tournament debris.",
+  "chapter": "Chapter 3 — The Morning After",
+  "storyBeat": "The resort cleans up after the Summer Games. Everyone insists yesterday was a success, despite the evidence.",
   "windows": {
     "morning": {
       "sceneId": "AUG08_MORNING",
-      "title": "Day 8 — Damage, Debris & Denial",
-      "openingDialogue": "The Summer Games are over. The arena contains one embedded crate, two unauthorized shortcuts, half a parade float, and a sign reading HISTORIC VICTORY CRATER. Before guests arrive, three teams must repair the resort and process the wreckage. Morning is today's only finding window.",
+      "title": "Day 8 — Cleanup Bounty",
+      "openingDialogue": "The Summer Games are over. The debris is not. Morning cleanup pays a special 100-shell bounty.",
       "coreActivities": [
         {
-          "id": "AUG08_MORNING_SHIRAKEN_AUDIT",
-          "fullArtRoute": "Shiranui Kensetsu",
-          "buttonText": "Arena Damage Audit",
-          "previewDialogue": "Help Shiranui Kensetsu decide which parts of the arena are repairs and which parts Miko has declared cultural heritage.",
-          "selectedDialogue": "Flare has a clipboard thick enough to stop a hammer. Noel is holding the bent victory arch upright with one hand. Polka has opened a ticket booth beside the crater. Miko has placed a rope around her shortcut and labeled it ELITE HISTORIC SITE. Suisei is calmly sorting debris into 'reusable,' 'flammable,' and 'competitor-shaped.'",
+          "id": "AUG08_MORNING_GAMERS_LOSTFOUND",
+          "fullArtRoute": "Gamers",
+          "buttonText": "Lost-and-Found Battle Royale",
+          "previewDialogue": "Help Gamers sort the mountain of tournament debris before Korone legally adopts all of it.",
+          "selectedDialogue": "Mio has three neat lost-property tables. Fubuki relabeled them COMMON, RARE, and LEGENDARY. Okayu is asleep on LEGENDARY.",
           "steps": [
             {
               "id": "STEP_1",
-              "prompt": "Flare points at the arena. 'We repair the course, remove the hazards, and do not create new attractions.' Polka slowly closes a sign reading CRATER TOURS — 50 SHELLS.",
+              "prompt": "Guests arrive to reclaim their stuff. Fubuki wants loot reveals.",
               "options": [
                 {
                   "id": "A",
-                  "text": "Follow Flare's repair plan",
-                  "resultDialogue": "Flare assigns everyone a real job. Noel lifts the arch, Polka gathers foam blocks, and Miko is told to remove the glitter arrows. Miko peels off one arrow and gasps. 'But how will future generations know where not to go?' Suisei points at the crater. 'That communicates it.'",
+                  "text": "Run Mio's proper claim desk",
+                  "resultDialogue": "Mio runs proper claims. Korone puts a traffic cone on the desk. 'Owner?' 'Resort property.' Korone narrows her eyes. 'Prove it.'",
                   "eligibleSunMembers": [
-                    "Flare",
-                    "Noel",
-                    "Polka",
-                    "Miko",
-                    "Suisei"
+                    "Mio",
+                    "Fubuki",
+                    "Korone",
+                    "Okayu"
                   ],
                   "nextStepId": "STEP_2",
-                  "setFlag": "shiraken_followed_repair_plan"
+                  "setFlag": "gamers_claim_desk_proper"
                 },
                 {
                   "id": "B",
-                  "text": "Preserve Miko's elite shortcut",
-                  "resultDialogue": "Miko plants a tiny shrine gate over the shortcut. 'This path changed sports history-nye!' Flare looks at the route, which passes through a snack freezer and ends behind a locked restroom. 'It changed plumbing history.' Polka immediately begins selling commemorative maps.",
+                  "text": "Let Fubuki run loot reveals",
+                  "resultDialogue": "Fubuki lifts a towel. 'RARE DROP!' Its owner raises a hand. 'Congratulations on your pity pull.' Mio takes the microphone away.",
                   "eligibleSunMembers": [
-                    "Miko",
-                    "Flare",
-                    "Polka"
+                    "Fubuki",
+                    "Mio",
+                    "Okayu"
                   ],
                   "nextStepId": "STEP_2",
-                  "setFlag": "shiraken_preserved_elite_shortcut"
+                  "setFlag": "gamers_lostfound_gacha"
                 },
                 {
                   "id": "C",
-                  "text": "Let Suisei clear unsafe structures",
-                  "resultDialogue": "Suisei lifts a demolition hammer. Flare says, 'Only the unsafe parts.' One precise swing removes the damaged rail, the broken sign, and Pekora's unattended shortcut booth thirty meters away. Pekora's distant scream reaches the arena. Suisei rests the hammer on her shoulder. 'Unsafe booth.'",
+                  "text": "Let Korone identify owners by scent",
+                  "resultDialogue": "Korone sniffs a cap and points across the lobby. 'YUBI MAN!' The terrified guest admits it's his. Mio whispers, 'Do not encourage this.'",
                   "eligibleSunMembers": [
-                    "Suisei",
-                    "Flare",
-                    "Pekora"
+                    "Korone",
+                    "Mio",
+                    "Fubuki",
+                    "Okayu"
                   ],
                   "nextStepId": "STEP_2",
-                  "setFlag": "suisei_cleared_unsafe_structures"
+                  "setFlag": "korone_scent_claims"
                 }
               ]
             },
             {
               "id": "STEP_2",
-              "prompt": "Noel lifts a collapsed foam wall. Something ordinary from yesterday's tournament is trapped beneath it.",
+              "prompt": "A box marked ATHLETE DEBRIS rattles. Today's findings are mundane.",
               "options": [
                 {
                   "id": "A",
-                  "text": "Retrieve the lost whistle",
-                  "resultDialogue": "You pull out Subaru's whistle. Miko blows it once. Subaru appears from across the resort at full sprint. 'WHO AUTHORIZED THE START?!' Flare hands her the whistle. Subaru hugs it, then notices everyone staring. 'This is official safety equipment. I am not emotional.'",
+                  "text": "Open it carefully",
+                  "resultDialogue": "Inside: seventeen whistles and one wet foam finger. Fubuki whispers, 'Cursed legendary.' Korone somehow blows all seventeen whistles.",
                   "eligibleSunMembers": [
-                    "Subaru",
-                    "Miko",
-                    "Flare"
+                    "Fubuki",
+                    "Mio",
+                    "Korone"
                   ],
                   "nextStepId": "STEP_3",
-                  "setFlag": "find_subaru_whistle"
+                  "setFlag": "find_tournament_whistles"
                 },
                 {
                   "id": "B",
-                  "text": "Retrieve the shortcut sign",
-                  "resultDialogue": "You find a scorched arrow labeled DEFINITELY OFFICIAL. Pekora reaches for it from behind the barrier. Suisei places one foot on the sign. Pekora freezes. 'I was only checking the evidence-peko.' Suisei smiles. 'From there.'",
+                  "text": "Let Okayu inspect it",
+                  "resultDialogue": "Okayu pulls out sunglasses, an energy bar, and a medal ribbon. Mio asks which is treasure. Okayu puts on the sunglasses. 'Yes.'",
                   "eligibleSunMembers": [
-                    "Pekora",
-                    "Suisei"
+                    "Okayu",
+                    "Mio"
                   ],
                   "nextStepId": "STEP_3",
-                  "setFlag": "find_scorched_shortcut_sign"
+                  "setFlag": "find_lost_sunglasses"
                 },
                 {
                   "id": "C",
-                  "text": "Let Polka inspect the debris",
-                  "resultDialogue": "Polka pulls out a spectator ballot reading MORE EXPLOSIONS NEXT YEAR. She holds it up proudly. Flare takes it, flips it over, and finds the same handwriting as Polka's autograph. Polka points toward the crowd area. 'The people have a distinctive voice.'",
+                  "text": "Let Korone open it",
+                  "resultDialogue": "Korone finds a mascot glove with bite marks. She hides it behind her back. 'No witnesses.'",
                   "eligibleSunMembers": [
-                    "Polka",
-                    "Flare"
+                    "Korone",
+                    "Okayu"
                   ],
                   "nextStepId": "STEP_3",
-                  "setFlag": "find_suspicious_explosion_ballot"
+                  "setFlag": "find_bitten_mascot_glove",
+                  "requiredFlags": [
+                    "okakoro_wrestled_mascot"
+                  ]
+                },
+                {
+                  "id": "D",
+                  "text": "Check the backup crate",
+                  "resultDialogue": "You find sunscreen and one referee sock. Fubuki says, 'Mystery.' Mio says, 'Laundry.' 'You keep killing my genre.'",
+                  "eligibleSunMembers": [
+                    "Fubuki",
+                    "Mio"
+                  ],
+                  "nextStepId": "STEP_3",
+                  "setFlag": "find_referee_sock",
+                  "excludedFlags": [
+                    "okakoro_wrestled_mascot"
+                  ]
                 }
               ]
             },
             {
               "id": "STEP_3",
-              "prompt": "The course is nearly usable again. Flare asks whether the repaired area should return to normal or preserve one reminder of yesterday.",
+              "prompt": "One item remains: yesterday's giant mascot head.",
               "options": [
                 {
                   "id": "A",
-                  "text": "Restore the arena completely",
-                  "resultDialogue": "Shiranui Kensetsu restores every rail, platform, and lane marker. Noel straightens the final post with two fingers. Polka looks across the clean arena. 'It's beautiful.' Miko nods. 'Too beautiful. We should damage one corner for authenticity.' Flare raises the clipboard. Miko retreats.",
+                  "text": "Return it to resort storage",
+                  "resultDialogue": "Mio labels it RESORT PROPERTY. Fubuki changes the label to BOSS DROP the moment Mio turns around.",
                   "eligibleSunMembers": [
-                    "Flare",
-                    "Noel",
-                    "Polka",
-                    "Miko",
-                    "Suisei"
+                    "Mio",
+                    "Korone",
+                    "Okayu",
+                    "Fubuki"
                   ],
                   "nextStepId": "",
-                  "setFlag": "day8_arena_fully_restored",
-                  "completionDialogue": "Shiranui Kensetsu restored the Summer Games arena to safe operating condition. The morning finding was ordinary tournament debris, and Miko's shortcut has been removed from every official map except her own."
+                  "setFlag": "finish_gamers_storage",
+                  "completionDialogue": "The lost-property desk closes with actual ownership mostly restored. Korone has been formally banned from adopting infrastructure."
                 },
                 {
                   "id": "B",
-                  "text": "Keep one Historic Chaos Corner",
-                  "resultDialogue": "You preserve a padded section containing one bent hurdle, a harmless crater, and Polka's audience sign. Flare installs three safety rails. Miko cuts the ribbon. 'A monument to elite athletics!' Suisei reads the plaque. 'It says nobody knows who won here.' Polka wipes away a tear. 'Art.'",
+                  "text": "Display it as tournament history",
+                  "resultDialogue": "Fubuki displays it as an ANCIENT RELIC. Mio says, 'It was used yesterday.' Okayu adds CURSED.",
                   "eligibleSunMembers": [
-                    "Polka",
-                    "Miko",
-                    "Flare",
-                    "Suisei"
+                    "Fubuki",
+                    "Mio",
+                    "Okayu",
+                    "Korone"
                   ],
                   "nextStepId": "",
-                  "setFlag": "day8_historic_chaos_corner",
-                  "completionDialogue": "The arena reopened with a supervised Historic Chaos Corner commemorating the tournament's least explainable moments. Management insists it is an exhibit, not an invitation."
+                  "setFlag": "finish_gamers_museum",
+                  "completionDialogue": "The tournament debris became a one-day museum exhibit. Guests love it. Mio has stopped asking who authorized the museum because every answer is Fubuki."
                 }
               ]
             }
           ],
-          "completionDialogue": "Shiranui Kensetsu completed the damage audit. Nothing mysterious was recovered; the main unanswered question is why Polka already had printed crater tickets.",
-          "rewardTableId": "summer_activity_default"
+          "completionDialogue": "Lost property returns to normal. Fubuki still insists the wet foam finger was legendary.",
+          "rewardTableId": "summer_activity_exception2"
         },
         {
-          "id": "AUG08_MORNING_HOLOTORI_RECOVERY",
-          "fullArtRoute": "HoloTori",
-          "buttonText": "Float Recovery Operation",
-          "previewDialogue": "Recover HoloTori's parade float and settle Subaru's latest objection to being called a bird.",
-          "selectedDialogue": "The HoloTori float is lodged halfway inside the foam safety pit. Kiara calls it a successful landing. Lui calls it an obstruction. Reine is evaluating feather damage. Mumei is sitting inside the beak. Subaru has arrived with a folder labeled FORMAL NON-BIRD APPEAL — REVISION 14.",
+          "id": "AUG08_MORNING_FANTASY_CLEANUP",
+          "fullArtRoute": "Fantasy",
+          "buttonText": "Insurance-Free Demolition Cleanup",
+          "previewDialogue": "Help Fantasy dismantle yesterday's temporary structures before Pekora discovers they have resale value.",
+          "selectedDialogue": "Flare has a cleanup list. Pekora crossed out REMOVE and wrote MONETIZE. Marine is already selling battlefield photos.",
           "steps": [
             {
               "id": "STEP_1",
-              "prompt": "The float must be removed before the arena opens. Kiara proposes a triumphant relaunch. Subaru reads the words 'relaunch' and closes her eyes.",
+              "prompt": "The sponsorship kiosk blocks the service road. Remove it.",
               "options": [
                 {
                   "id": "A",
-                  "text": "Let Subaru command the recovery",
-                  "resultDialogue": "Subaru blows her recovered whistle. 'Lift on three! One, two—KIARA, STOP POSING!' Kiara lowers one wing. Reine coordinates the ropes, Lui directs the crane, and Mumei remains inside the beak because nobody noticed. The float rises perfectly. Mumei waves from above. 'I have become cargo.'",
+                  "text": "Let Noel carry the whole kiosk",
+                  "resultDialogue": "Noel lifts the kiosk. The foundation comes too. Flare runs after her. 'NOEL, PUT THE RESORT DOWN!' Noel blinks. 'Which part?'",
                   "eligibleSunMembers": [
-                    "Subaru",
-                    "Kiara",
-                    "Reine",
-                    "Lui",
-                    "Mumei"
-                  ],
-                  "nextStepId": "STEP_2",
-                  "setFlag": "subaru_commanded_float_recovery"
-                },
-                {
-                  "id": "B",
-                  "text": "Approve Kiara's phoenix lift",
-                  "resultDialogue": "Kiara warms the foam until it loosens. Lui stands beside her with two extinguishers. 'Small flame.' Kiara nods. 'Symbolic flame.' The float pops free, rolls backward, and gently traps Subaru against a padded wall. Kiara raises both hands. 'Rescue complete!' Subaru's voice comes from behind the float. 'RESCUE CONTINUES!'",
-                  "eligibleSunMembers": [
-                    "Kiara",
-                    "Lui",
-                    "Subaru"
-                  ],
-                  "nextStepId": "STEP_2",
-                  "setFlag": "kiara_phoenix_float_recovery"
-                },
-                {
-                  "id": "C",
-                  "text": "Use Reine and Lui's tow plan",
-                  "resultDialogue": "Reine arranges the ropes symmetrically while Lui checks every anchor. The float slides out without drama. Kiara watches in horror. 'It simply worked.' Reine adjusts one feather. 'Elegance often resembles competence.' Subaru points at Lui. 'Write that on the safety manual.'",
-                  "eligibleSunMembers": [
-                    "Reine",
-                    "Lui",
-                    "Kiara",
-                    "Subaru"
-                  ],
-                  "nextStepId": "STEP_2",
-                  "setFlag": "holotori_elegant_tow"
-                }
-              ]
-            },
-            {
-              "id": "STEP_2",
-              "prompt": "Something rattles inside the float's storage compartment. Morning rules permit one mundane recovery.",
-              "options": [
-                {
-                  "id": "A",
-                  "text": "Open the membership envelope",
-                  "resultDialogue": "Inside is a laminated HoloTori card reading SUBARU — FLOCK COMMANDER. Subaru stares at Kiara. Kiara whistles innocently. Reine examines the lamination. 'Professionally made.' Lui checks the date. 'Printed before the parade.' Mumei says, 'Destiny had office supplies.'",
-                  "eligibleSunMembers": [
-                    "Subaru",
-                    "Kiara",
-                    "Reine",
-                    "Lui",
-                    "Mumei"
-                  ],
-                  "nextStepId": "STEP_3",
-                  "setFlag": "find_subaru_flock_card"
-                },
-                {
-                  "id": "B",
-                  "text": "Retrieve the traffic cone",
-                  "resultDialogue": "You pull out the cone that landed on Subaru during rehearsal. It now has forty tourist autographs and the words DUCK COMMANDER. Subaru reaches for a marker. 'Good. I can correct it.' Kiara gives her a permanent marker with no eraser. 'Of course.'",
-                  "eligibleSunMembers": [
-                    "Subaru",
-                    "Kiara"
-                  ],
-                  "nextStepId": "STEP_3",
-                  "setFlag": "find_autographed_parade_cone"
-                },
-                {
-                  "id": "C",
-                  "text": "Let Mumei inspect the compartment",
-                  "resultDialogue": "Mumei produces a tourist's rubber duck. Everyone turns toward Subaru. Subaru points at Kiara. 'Say one word and I leave.' Kiara covers her mouth. Reine quietly places the duck beside Subaru. Lui looks away to preserve diplomatic relations.",
-                  "eligibleSunMembers": [
-                    "Mumei",
-                    "Subaru",
-                    "Kiara",
-                    "Reine",
-                    "Lui"
-                  ],
-                  "nextStepId": "STEP_3",
-                  "setFlag": "find_tourist_rubber_duck"
-                }
-              ]
-            },
-            {
-              "id": "STEP_3",
-              "prompt": "The float is recoverable. HoloTori must decide what happens to it next.",
-              "options": [
-                {
-                  "id": "A",
-                  "text": "Repair it as a parade attraction",
-                  "resultDialogue": "Lui removes the dangerous ramp controls. Reine restores the feathers. Kiara adds a plaque reading FIRST CONTROLLED FLIGHT. Subaru crosses out CONTROLLED. Mumei adds MOSTLY. The attraction opens to a line of delighted guests.",
-                  "eligibleSunMembers": [
-                    "Kiara",
-                    "Subaru",
-                    "Reine",
-                    "Lui",
-                    "Mumei"
-                  ],
-                  "nextStepId": "",
-                  "setFlag": "day8_holotori_float_attraction",
-                  "completionDialogue": "HoloTori repaired the parade float as a stationary guest attraction. It no longer flies, accelerates, or turns without permission, which Kiara considers a temporary design flaw."
-                },
-                {
-                  "id": "B",
-                  "text": "Retire it with a memorial ceremony",
-                  "resultDialogue": "Kiara delivers a speech about three seconds of flight. Reine lays down a feather. Lui removes the wheels. Mumei salutes the beak. Subaru is handed the permanent membership card. 'Why is this part of the ceremony?' Kiara smiles. 'Because the flock remembers.' Subaru tears up the appeal form and immediately begins Revision 15.",
-                  "eligibleSunMembers": [
-                    "Kiara",
-                    "Subaru",
-                    "Reine",
-                    "Lui",
-                    "Mumei"
-                  ],
-                  "nextStepId": "",
-                  "setFlag": "day8_holotori_float_retired",
-                  "completionDialogue": "HoloTori retired the parade float with full honors. Subaru remains an unwilling Flock Commander and has begun another formal appeal."
-                }
-              ]
-            }
-          ],
-          "completionDialogue": "HoloTori recovered the parade float and one piece of mundane parade debris. Subaru's species classification remains unresolved by management and extremely resolved by the tourists.",
-          "rewardTableId": "summer_activity_default"
-        },
-        {
-          "id": "AUG08_MORNING_PEKOMARI_CLAIMS",
-          "fullArtRoute": "PekoMari",
-          "buttonText": "Refund & Insurance Desk",
-          "previewDialogue": "Help Pekora and Marine process claims caused by questionable maps, dynamic pricing, and audience-funded sabotage.",
-          "selectedDialogue": "Pekora has built a claims desk from unsold shortcut maps. Marine is posing beside a sign reading SENCHOU'S OFFICIAL APOLOGY PHOTOS. A queue of guests is holding receipts, foam obstacles, and one helmet with rabbit ears. Pekora whispers, 'Remember, admitting responsibility is expensive-peko.'",
-          "steps": [
-            {
-              "id": "STEP_1",
-              "prompt": "The first guest paid for a shortcut map that led directly into the recovery lounge. Pekora calls this 'premium hydration routing.'",
-              "options": [
-                {
-                  "id": "A",
-                  "text": "Issue proper refunds",
-                  "resultDialogue": "You make Pekora return the fee. She hands over the shells one at a time. 'One... tragic... business unit-peko.' Marine signs the map. 'Senchou's autograph may restore its emotional value.' The guest asks for a second refund.",
-                  "eligibleSunMembers": [
-                    "Pekora",
-                    "Marine"
-                  ],
-                  "nextStepId": "STEP_2",
-                  "setFlag": "pekomari_issued_refunds"
-                },
-                {
-                  "id": "B",
-                  "text": "Offer replacement coupons",
-                  "resultDialogue": "Pekora prints coupons for one free harmless obstacle assignment next year. The guest asks whether there will be another tournament. Pekora looks at you. 'There is now-peko.' Marine poses with the coupon. 'Senchou supports recurring revenue.'",
-                  "eligibleSunMembers": [
-                    "Pekora",
-                    "Marine"
-                  ],
-                  "nextStepId": "STEP_2",
-                  "setFlag": "pekomari_compensation_coupons"
-                },
-                {
-                  "id": "C",
-                  "text": "Let Marine handle public relations",
-                  "resultDialogue": "Marine steps forward. 'Senchou sincerely apologizes that your illegal shortcut lacked sufficient romance.' The guest forgets the complaint long enough to take a photo. Pekora stamps the form RESOLVED. You stamp it NOT RESOLVED. Pekora stamps your stamp SOLD OUT.",
-                  "eligibleSunMembers": [
-                    "Marine",
+                    "Noel",
+                    "Flare",
                     "Pekora"
                   ],
                   "nextStepId": "STEP_2",
-                  "setFlag": "marine_apology_photo_pr"
-                }
-              ]
-            },
-            {
-              "id": "STEP_2",
-              "prompt": "Returned merchandise is piling up behind the desk. One mundane item must be checked before disposal.",
-              "options": [
-                {
-                  "id": "A",
-                  "text": "Inspect the gold immunity pass",
-                  "resultDialogue": "The pass says HOLDER CANNOT RECEIVE PENALTIES, TAXES, OR CRITICISM. Elizabeth has written INVALID across it in red ink. Pekora examines the mark. 'This increases collector value-peko.' Marine nods. 'A limited Justice collaboration.'",
-                  "eligibleSunMembers": [
-                    "Pekora",
-                    "Marine",
-                    "Elizabeth"
-                  ],
-                  "nextStepId": "STEP_3",
-                  "setFlag": "find_invalid_immunity_pass"
+                  "setFlag": "noel_moved_entire_kiosk"
                 },
                 {
                   "id": "B",
-                  "text": "Inspect the Senchou towel",
-                  "resultDialogue": "The returned towel is large enough to cover the desk and features Marine posing beside the words OFFICIAL WINNER. You point out that Marine did not compete. She places one hand on her chest. 'Senchou won the attention economy.' Pekora whispers, 'She has a point-peko.'",
+                  "text": "Make Pekora dismantle her own booth",
+                  "resultDialogue": "Pekora removes one screw and collapses. 'Manual labor defeated capitalism-peko.' Flare hands her another screwdriver. Capitalism recovers instantly.",
                   "eligibleSunMembers": [
-                    "Marine",
-                    "Pekora"
+                    "Pekora",
+                    "Flare",
+                    "Marine"
                   ],
-                  "nextStepId": "STEP_3",
-                  "setFlag": "find_senchou_victory_towel"
+                  "nextStepId": "STEP_2",
+                  "setFlag": "pekora_forced_cleanup"
                 },
                 {
                   "id": "C",
-                  "text": "Inspect the rabbit-ear helmet",
-                  "resultDialogue": "The helmet is undamaged despite several dents in the foam ears. Pekora puts it on. 'Proof our safety program worked-peko.' Marine taps one ear. It squeaks. 'And fashionable.' You keep it for next year's liability meeting.",
+                  "text": "Let Marine auction the wreckage",
+                  "resultDialogue": "Marine auctions broken planks as 'Senchou-certified historic debris.' Flare says one came from a toilet screen. The bidding increases.",
                   "eligibleSunMembers": [
-                    "Pekora",
-                    "Marine"
-                  ],
-                  "nextStepId": "STEP_3",
-                  "setFlag": "find_rabbit_safety_helmet"
-                }
-              ]
-            },
-            {
-              "id": "STEP_3",
-              "prompt": "The claims queue is shrinking. What happens to the remaining merchandise profits?",
-              "options": [
-                {
-                  "id": "A",
-                  "text": "Fund arena repairs",
-                  "resultDialogue": "You redirect the profits to Shiranui Kensetsu. Pekora watches the money leave. 'We earned it through innovation.' Marine adjusts her helmet. 'And lost it through consequences.' Flare sends a receipt labeled THANKS, CRIMINALS. Pekora frames it.",
-                  "eligibleSunMembers": [
-                    "Pekora",
                     "Marine",
                     "Flare"
                   ],
-                  "nextStepId": "",
-                  "setFlag": "day8_pekomari_funded_repairs",
-                  "completionDialogue": "PekoMari processed the claims and funded part of the arena repair bill. Pekora calls it involuntary sponsorship; Marine calls it Senchou's civic contribution."
+                  "nextStepId": "STEP_2",
+                  "setFlag": "marine_auctioned_wreckage"
+                }
+              ]
+            },
+            {
+              "id": "STEP_2",
+              "prompt": "Flare finds yesterday's sponsorship paperwork.",
+              "options": [
+                {
+                  "id": "A",
+                  "text": "Audit every charge",
+                  "resultDialogue": "Flare reads: 'Shortcut consultation. Emotional damages. Definitely not bribery.' Pekora stops backing toward the door. 'That last one explains itself-peko.'",
+                  "eligibleSunMembers": [
+                    "Flare",
+                    "Pekora"
+                  ],
+                  "nextStepId": "STEP_3",
+                  "setFlag": "pekomari_audit_started",
+                  "requiredFlags": [
+                    "day7_audience_obstacle_coupons"
+                  ]
                 },
                 {
                   "id": "B",
-                  "text": "Launch disaster-survivor merchandise",
-                  "resultDialogue": "Marine unveils a shirt reading I SURVIVED THE SUMMER GAMES AND ALL I GOT WAS TARGETED BY FOAM. Pekora adds premium scorch marks. The complaint queue becomes a sales queue in under a minute. You add a mandatory repair donation to every purchase before they notice.",
+                  "text": "Refund the questionable merchandise",
+                  "resultDialogue": "Marine refuses to refund upside-down towels. She rotates one. 'Limited inverted edition.' Pekora whispers, 'Raise the price-peko.'",
                   "eligibleSunMembers": [
                     "Marine",
+                    "Flare",
                     "Pekora"
                   ],
+                  "nextStepId": "STEP_3",
+                  "setFlag": "pekomari_refund_desk"
+                },
+                {
+                  "id": "C",
+                  "text": "Use the paperwork as packing material",
+                  "resultDialogue": "Noel wraps debris in the contracts. Pekora gasps, 'Those have legal value!' Flare smiles. 'Then rescue them.'",
+                  "eligibleSunMembers": [
+                    "Noel",
+                    "Pekora",
+                    "Flare"
+                  ],
+                  "nextStepId": "STEP_3",
+                  "setFlag": "pekomari_paperwork_recycled",
+                  "excludedFlags": [
+                    "day7_audience_obstacle_coupons"
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "STEP_3",
+              "prompt": "One sign survives: PEKOMARI OFFICIAL SHORTCUT.",
+              "options": [
+                {
+                  "id": "A",
+                  "text": "Destroy the sign",
+                  "resultDialogue": "Flare snaps the sign in half. Pekora falls to her knees. 'MY INFRASTRUCTURE-PEKO!' 'It pointed into a hedge.'",
+                  "eligibleSunMembers": [
+                    "Flare",
+                    "Pekora",
+                    "Marine"
+                  ],
                   "nextStepId": "",
-                  "setFlag": "day8_disaster_survivor_merch",
-                  "completionDialogue": "PekoMari converted the remaining complaints into disaster-survivor merchandise sales. Management recovered repair funds, and Marine has declared Senchou the face of athletic resilience."
+                  "setFlag": "finish_fantasy_sign_destroyed",
+                  "completionDialogue": "Fantasy clears the service road. Pekora mourns a fake shortcut, Marine sells memorial photographs, and Flare finally crosses one item off her clipboard."
+                },
+                {
+                  "id": "B",
+                  "text": "Keep it as a joke souvenir",
+                  "resultDialogue": "They hang it in the lobby under a giant FAKE label. Pekora adds a smaller sign beneath it: ALLEGEDLY.",
+                  "eligibleSunMembers": [
+                    "Marine",
+                    "Pekora",
+                    "Noel",
+                    "Flare"
+                  ],
+                  "nextStepId": "",
+                  "setFlag": "finish_fantasy_sign_preserved",
+                  "completionDialogue": "The fake shortcut sign survives as a lobby joke. Flare adds three warning labels; Pekora adds plausible deniability beneath each one."
                 }
               ]
             }
           ],
-          "completionDialogue": "The refund desk closed with fewer claims than it started and more merchandise than anyone approved. All recovered items were mundane tournament products.",
-          "rewardTableId": "summer_activity_default"
+          "completionDialogue": "Fantasy finishes cleanup without an explosion. Pekora calls this a narrative failure.",
+          "rewardTableId": "summer_activity_exception2"
+        },
+        {
+          "id": "AUG08_MORNING_AREA15_SHELLSHIFT",
+          "fullArtRoute": "AREA 15",
+          "buttonText": "Cleanup Bounty Shift",
+          "previewDialogue": "Help AREA 15 reopen the beach after the tournament without letting Risu invent a municipal currency.",
+          "selectedDialogue": "Moona organized cleanup zones. Iofi is painting signs. Risu opened a DEBRIS EXCHANGE before you arrived.",
+          "steps": [
+            {
+              "id": "STEP_1",
+              "prompt": "Volunteers keep bringing junk to Risu. She starts pricing it.",
+              "options": [
+                {
+                  "id": "A",
+                  "text": "Shut down the exchange",
+                  "resultDialogue": "You confiscate Risu's price board. She produces another. 'Markets anticipate regulation.' Moona confiscates that one too.",
+                  "eligibleSunMembers": [
+                    "Risu",
+                    "Iofi",
+                    "Moona"
+                  ],
+                  "nextStepId": "STEP_2",
+                  "setFlag": "area15_exchange_closed"
+                },
+                {
+                  "id": "B",
+                  "text": "Let Iofi turn it into an art station",
+                  "resultDialogue": "Iofi paints faces on broken cones. Risu stares. 'You increased the value.' 'Art.' Risu whispers, 'Asset appreciation.'",
+                  "eligibleSunMembers": [
+                    "Iofi",
+                    "Risu"
+                  ],
+                  "nextStepId": "STEP_2",
+                  "setFlag": "area15_debris_art"
+                },
+                {
+                  "id": "C",
+                  "text": "Let Moona impose order",
+                  "resultDialogue": "Moona creates four zones, including RISU STOP TOUCHING THAT. Risu calls it discriminatory zoning. Moona moves her into it.",
+                  "eligibleSunMembers": [
+                    "Moona",
+                    "Risu"
+                  ],
+                  "nextStepId": "STEP_2",
+                  "setFlag": "area15_moona_zoning"
+                }
+              ]
+            },
+            {
+              "id": "STEP_2",
+              "prompt": "A locked recovery cooler remains. Today's findings are mundane.",
+              "options": [
+                {
+                  "id": "A",
+                  "text": "Open it with the key",
+                  "resultDialogue": "Inside are melted ice packs and twelve wristbands. Risu holds one up. 'Limited edition.' 'There are twelve.' 'Limited compared with infinity.'",
+                  "eligibleSunMembers": [
+                    "Risu",
+                    "Iofi"
+                  ],
+                  "nextStepId": "STEP_3",
+                  "setFlag": "find_recovery_wristbands"
+                },
+                {
+                  "id": "B",
+                  "text": "Let Moona inspect it",
+                  "resultDialogue": "Moona finds towels, a spoon, and one flip-flop. 'Why only one?' Iofi nods solemnly. 'Character development.'",
+                  "eligibleSunMembers": [
+                    "Moona",
+                    "Iofi"
+                  ],
+                  "nextStepId": "STEP_3",
+                  "setFlag": "find_single_flipflop"
+                },
+                {
+                  "id": "C",
+                  "text": "Let Risu negotiate with the cooler",
+                  "resultDialogue": "Risu negotiates with the cooler. Moona opens it with the key. Risu looks betrayed. 'Hostile acquisition.'",
+                  "eligibleSunMembers": [
+                    "Risu",
+                    "Moona"
+                  ],
+                  "nextStepId": "STEP_3",
+                  "setFlag": "find_cooler_sunscreen"
+                }
+              ]
+            },
+            {
+              "id": "STEP_3",
+              "prompt": "Risu proposes a permanent Debris Futures Exchange.",
+              "options": [
+                {
+                  "id": "A",
+                  "text": "Absolutely not",
+                  "resultDialogue": "You say no. Risu folds the proposal. 'History fears innovators.' Moona points at the recycling bin. 'Your market.'",
+                  "eligibleSunMembers": [
+                    "Risu",
+                    "Iofi",
+                    "Moona"
+                  ],
+                  "nextStepId": "",
+                  "setFlag": "finish_area15_no_exchange",
+                  "completionDialogue": "AREA 15 reopens the beach with a normal recycling system. Risu considers this a recession."
+                },
+                {
+                  "id": "B",
+                  "text": "Allow a harmless souvenir table",
+                  "resultDialogue": "Risu gets one fixed-price souvenir table. Five minutes later the sign reads AREA 15 COMMODITY EXCHANGE.",
+                  "eligibleSunMembers": [
+                    "Risu",
+                    "Moona",
+                    "Iofi"
+                  ],
+                  "nextStepId": "",
+                  "setFlag": "finish_area15_souvenir_table",
+                  "completionDialogue": "The beach reopens with one tightly regulated souvenir table. Risu immediately begins lobbying for deregulation."
+                }
+              ]
+            }
+          ],
+          "completionDialogue": "AREA 15 clears the beach. Risu fails to create a derivatives market for garbage.",
+          "rewardTableId": "summer_activity_exception2"
         }
       ]
     },
     "noon": {
       "sceneId": "AUG08_NOON",
-      "title": "Day 8 — Replays, Recovery & Rematches",
-      "openingDialogue": "By noon, the arena is safe enough for guests again. Three groups are assigned to review tournament footage, run competitor recovery, and explain why yesterday's scoreboard briefly classified OkaKoro as one four-legged organism.",
+      "title": "Day 8 — Replays & Complaints",
+      "openingDialogue": "By noon, the physical damage is mostly gone. The arguments are thriving.",
       "coreActivities": [
         {
-          "id": "AUG08_NOON_FAMS_TRIBUNAL",
-          "fullArtRoute": "FAMS",
-          "buttonText": "Replay Tribunal",
-          "previewDialogue": "Review FAMS's tournament footage while Mio insists nobody became dangerously competitive.",
-          "selectedDialogue": "Fubuki has three rulebooks and a remote control. Subaru has filed protests against the word bird, the raft penalty, and Korone. Ayame is eating snacks beside the replay screen. Mio has written FRIENDLY REVIEW on the board hard enough to crack the chalk.",
+          "id": "AUG08_NOON_PROMISE_REPLAY",
+          "fullArtRoute": "Promise",
+          "buttonText": "Replay Court",
+          "previewDialogue": "Help Promise review yesterday's footage before Bae turns instant replay into a rematch generator.",
+          "selectedDialogue": "Kronii synced twelve replay angles. Bae brought a whistle. Mumei wrote WITNESS on her forehead.",
           "steps": [
             {
               "id": "STEP_1",
-              "prompt": "Fubuki asks which clip should open the review. Mio says, 'Choose something that shows teamwork.' The screen is paused on Mio smiling while every nearby competitor backs away.",
+              "prompt": "The first disputed finish includes three explosions. Kronii wants a factual ruling.",
               "options": [
                 {
                   "id": "A",
-                  "text": "Show the banner rescue",
-                  "resultDialogue": "The replay shows Subaru hanging from the banner while Ayame holds her ankle, Fubuki holds Ayame, and Mio anchors everyone. Subaru points at the screen. 'I was a kite!' Kiara shouts from the back row, 'A bird-shaped kite!' Subaru throws a cushion without looking. It hits Kiara perfectly.",
+                  "text": "Use Kronii's frame-by-frame analysis",
+                  "resultDialogue": "Kronii freezes the exact finish frame. Bae says, 'Enhance.' Mumei points at a blur. 'Enhance that duck.' Somewhere, Subaru gets angry.",
                   "eligibleSunMembers": [
-                    "Subaru",
-                    "Ayame",
-                    "Fubuki",
-                    "Mio",
-                    "Kiara"
+                    "Kronii",
+                    "Baelz",
+                    "Mumei"
                   ],
                   "nextStepId": "STEP_2",
-                  "setFlag": "fams_reviewed_banner_rescue",
-                  "requiredAnyFlags": [
-                    "fams_saved_crowd",
-                    "fams_subaru_banner_kite",
-                    "fams_trusted_shiraken"
-                  ]
+                  "setFlag": "promise_frame_ruling"
                 },
                 {
                   "id": "B",
-                  "text": "Show the hurdle dispute",
-                  "resultDialogue": "The footage shows Korone adopting a hurdle, Subaru adding more hurdles, and both teams building a foam wall. Mio pauses the video. 'This was not strategy.' Fubuki points at the final scoreboard. 'It produced a crowd bonus.' Mio resumes the video. 'This was regrettably strategy.'",
+                  "text": "Let Bae judge entertainment value",
+                  "resultDialogue": "Bae rewinds the explosion twice. 'Ten points.' Kronii asks, 'For what?' 'Commitment.'",
                   "eligibleSunMembers": [
-                    "Mio",
-                    "Fubuki",
-                    "Subaru",
-                    "Korone"
+                    "Baelz",
+                    "Kronii",
+                    "Fauna"
                   ],
                   "nextStepId": "STEP_2",
-                  "setFlag": "fams_reviewed_hurdle_dispute",
-                  "requiredAnyFlags": [
-                    "fams_resolved_korone_peacefully",
-                    "fams_hurdle_arms_race",
-                    "fams_okakoro_hurdle_duel"
-                  ]
+                  "setFlag": "promise_entertainment_ruling"
                 },
                 {
                   "id": "C",
-                  "text": "Show the official highlight montage",
-                  "resultDialogue": "The montage labels FAMS THE SMILING THREAT. Mio freezes the screen. 'Who approved that title?' Fubuki slowly hides a voting slip. Ayame smiles at the image. 'It is cute.' Subaru points at Mio's expression. 'That is the threat part.'",
+                  "text": "Accept Mumei's eyewitness account",
+                  "resultDialogue": "Mumei says she remembers everything. 'Who crossed first?' 'A person.' 'Which person?' 'Athletic.' Kronii closes her eyes.",
                   "eligibleSunMembers": [
-                    "Mio",
-                    "Fubuki",
-                    "Ayame",
-                    "Subaru"
+                    "Mumei",
+                    "Kronii",
+                    "IRyS"
                   ],
                   "nextStepId": "STEP_2",
-                  "setFlag": "fams_reviewed_public_montage"
+                  "setFlag": "promise_mumei_testimony"
                 }
               ]
             },
             {
               "id": "STEP_2",
-              "prompt": "Subaru demands one formal correction to the tournament record. Fubuki has already prepared six possible loopholes.",
+              "prompt": "The replay system can project the fastest runner as a ghost.",
               "options": [
                 {
                   "id": "A",
-                  "text": "Appeal the raft penalty",
-                  "resultDialogue": "Fubuki argues that a raft leaving the water remains a raft until emotionally reclassified. Elizabeth reads the appeal twice. 'Denied.' Subaru slams the table. 'WHY?' Elizabeth points to footage of the raft knocking over a lifeguard chair. 'The chair has submitted testimony.'",
+                  "text": "Use it only for analysis",
+                  "resultDialogue": "Kronii activates the ghost runner. Bae starts sprinting around the table. 'WHY IS IT WINNING?!' Fauna reminds her they're indoors.",
                   "eligibleSunMembers": [
-                    "Fubuki",
-                    "Subaru",
-                    "Elizabeth"
+                    "Baelz",
+                    "Kronii",
+                    "Fauna"
                   ],
                   "nextStepId": "STEP_3",
-                  "setFlag": "fams_raft_appeal_denied"
+                  "setFlag": "promise_ghost_analysis"
                 },
                 {
                   "id": "B",
-                  "text": "Accept the audience's threat award",
-                  "resultDialogue": "Mio receives a plaque reading MOST POLITE INTIMIDATION. 'I do not intimidate people.' The staff member handing it over takes one look at her smile and releases the plaque from two meters away. Ayame applauds. Fubuki whispers, 'Empirical evidence.'",
+                  "text": "Let everyone challenge the ghost",
+                  "resultDialogue": "Bae races the ghost. Mumei uses a side door. Kronii points. 'Disqualified.' Mumei shrugs. 'History will decide.'",
                   "eligibleSunMembers": [
-                    "Mio",
-                    "Ayame",
-                    "Fubuki"
+                    "IRyS",
+                    "Baelz",
+                    "Mumei",
+                    "Kronii"
                   ],
                   "nextStepId": "STEP_3",
-                  "setFlag": "mio_accepted_threat_award"
+                  "setFlag": "promise_ghost_rematch"
                 },
                 {
                   "id": "C",
-                  "text": "Approve Subaru's rematch request",
-                  "resultDialogue": "Subaru points at Korone. 'One clean hurdle race. No adoption, no walls, no body checks.' Korone raises her hand. 'Can there be friendship tackles?' 'NO.' Okayu offers Subaru a rice ball. 'You should define clean more carefully.' Subaru takes out a second rulebook.",
+                  "text": "Turn the ghost off",
+                  "resultDialogue": "Kronii turns it off. Bae points at the blank screen. 'Coward.' Fauna gives her tea.",
                   "eligibleSunMembers": [
-                    "Subaru",
-                    "Korone",
-                    "Okayu"
+                    "Kronii",
+                    "Baelz",
+                    "Fauna"
                   ],
                   "nextStepId": "STEP_3",
-                  "setFlag": "subaru_requested_clean_rematch"
+                  "setFlag": "promise_ghost_disabled"
                 }
               ]
             },
             {
               "id": "STEP_3",
-              "prompt": "The guests want a conclusion to the tribunal. Mio must decide whether FAMS closes the case or performs an exhibition rematch.",
+              "prompt": "Promise must publish an official ruling before rumors win.",
               "options": [
                 {
                   "id": "A",
-                  "text": "Close the record officially",
-                  "resultDialogue": "Mio stamps the report FINAL. Fubuki produces an addendum. Mio stamps that FINAL. Subaru raises another objection. Mio stamps Subaru's folder FINAL. Ayame places a snack on the stamp before Mio can use it on anyone else.",
+                  "text": "Publish only confirmed rulings",
+                  "resultDialogue": "Kronii publishes the facts. Bae adds EXPLOSIONS WERE SICK. Fauna crosses it out. Mumei adds 'allegedly.'",
                   "eligibleSunMembers": [
-                    "Mio",
-                    "Fubuki",
-                    "Subaru",
-                    "Ayame"
+                    "Kronii",
+                    "Baelz",
+                    "Fauna",
+                    "Mumei",
+                    "IRyS"
                   ],
                   "nextStepId": "",
-                  "setFlag": "day8_fams_record_closed",
-                  "completionDialogue": "FAMS closed the official tournament record after several rejected appeals. Mio maintains they were never overly competitive, and the replay remains available to contradict her."
+                  "setFlag": "finish_promise_precise",
+                  "completionDialogue": "Promise releases a factual replay report after removing twelve unauthorized adjectives and one drawing of an explosion."
                 },
                 {
                   "id": "B",
-                  "text": "Hold a foam exhibition rematch",
-                  "resultDialogue": "FAMS and OkaKoro enter a tiny padded course. Subaru and Korone collide at the first hurdle and disappear into foam. Ayame crosses the finish line while laughing. Okayu walks around the obstacle and sits beside her. Fubuki checks the rules. Mio tears the rules in half. 'Exhibition concluded.'",
+                  "text": "Publish the funniest clips too",
+                  "resultDialogue": "They add a highlight reel titled MOMENTS THAT SHOULD NOT HAVE WORKED. Kronii sees the engagement numbers. 'I hate measurable evidence.'",
                   "eligibleSunMembers": [
-                    "Subaru",
-                    "Korone",
-                    "Ayame",
-                    "Okayu",
-                    "Fubuki",
-                    "Mio"
+                    "Kronii",
+                    "Baelz",
+                    "IRyS"
                   ],
                   "nextStepId": "",
-                  "setFlag": "day8_fams_okakoro_exhibition",
-                  "completionDialogue": "The tribunal ended with a harmless foam rematch. Ayame and Okayu technically finished first, while Subaru and Korone achieved a draw by mutual knockout."
+                  "setFlag": "finish_promise_highlights",
+                  "completionDialogue": "Promise releases the official results alongside a chaotic highlight reel. The disputes decrease because everyone becomes too busy arguing about the funniest crash."
                 }
               ]
             }
           ],
-          "completionDialogue": "FAMS reviewed the tournament and preserved its most important conclusion: everybody remembers Mio becoming competitive except Mio.",
+          "completionDialogue": "Promise settles the replay disputes without accidentally starting another tournament.",
           "rewardTableId": "summer_activity_default"
         },
         {
-          "id": "AUG08_NOON_OKAKORO_RECOVERY",
-          "fullArtRoute": "OkaKoro",
-          "buttonText": "Competitor Recovery Clinic",
-          "previewDialogue": "Help OkaKoro run a recovery lounge where Korone treats rehabilitation as the final round.",
-          "selectedDialogue": "Okayu is reclining behind a desk labeled THERAPIST. Korone is wearing six ice packs like championship belts. A line of exhausted competitors waits for advice. Okayu has one rice ball, one clipboard, and no visible medical qualifications.",
+          "id": "AUG08_NOON_GEN1_HOTLINE",
+          "fullArtRoute": "Gen 1",
+          "buttonText": "Complaint Idol Hotline",
+          "previewDialogue": "Help Gen 1 answer post-tournament guest complaints before Haachama turns customer service into a cooking segment.",
+          "selectedDialogue": "Aki organized complaint forms. Matsuri already answered three calls with 'skill issue.' Haachama brought a stove.",
           "steps": [
             {
               "id": "STEP_1",
-              "prompt": "Korone announces a full-contact stretching program. Okayu takes a bite of her rice ball. 'Maybe begin with sitting.'",
+              "prompt": "The hotline lights up. Pick a complaint category.",
               "options": [
                 {
                   "id": "A",
-                  "text": "Use Okayu's snack therapy",
-                  "resultDialogue": "Okayu assigns one snack and ten minutes of silence to every competitor. Korone watches the room become peaceful. 'When do we fight the snacks?' Okayu hands her a hard rice cracker. 'Advanced patient.' Korone accepts the challenge with both hands.",
+                  "text": "Lost seating reservations",
+                  "resultDialogue": "Aki fixes duplicate seats. Matsuri suggests telling guests Seat 42 evolved into Seat 43. Aki mutes her.",
                   "eligibleSunMembers": [
-                    "Okayu",
-                    "Korone"
+                    "Aki",
+                    "Matsuri"
                   ],
                   "nextStepId": "STEP_2",
-                  "setFlag": "okakoro_snack_therapy"
+                  "setFlag": "gen1_seating_resolved"
                 },
                 {
                   "id": "B",
-                  "text": "Approve controlled combat stretching",
-                  "resultDialogue": "Korone demonstrates by grappling a foam roller. The roller loses. Okayu writes, 'Good range of motion.' Subaru enters, sees Korone pinning exercise equipment, and immediately turns around. Korone waves. 'Your appointment is next!' Subaru begins running.",
+                  "text": "Food complaints",
+                  "resultDialogue": "Haachama grabs the food line. 'HAACHAMA COOKING WILL—' Three hands hit mute. Mel whispers, 'We value your survival.'",
                   "eligibleSunMembers": [
-                    "Korone",
-                    "Okayu",
-                    "Subaru"
+                    "Haachama",
+                    "Mel",
+                    "Aki",
+                    "Matsuri"
                   ],
                   "nextStepId": "STEP_2",
-                  "setFlag": "korone_combat_stretching"
+                  "setFlag": "gen1_food_hotline"
                 },
                 {
                   "id": "C",
-                  "text": "Run a proper ice-pack station",
-                  "resultDialogue": "You organize the supplies while Okayu labels injuries by snack severity. 'Rice cracker, medium. Pudding, serious. Whole cake, Subaru.' Subaru points at her bandages. 'Why am I a cake?' Korone answers, 'Because you have layers.' Nobody understands, including Korone.",
+                  "text": "Noise complaints",
+                  "resultDialogue": "Matsuri asks how loud it was. 'Only that loud?' Aki takes the phone. 'They're threatening legal action.' 'Passionate compliment.'",
                   "eligibleSunMembers": [
-                    "Okayu",
-                    "Korone",
-                    "Subaru"
+                    "Matsuri",
+                    "Aki"
                   ],
                   "nextStepId": "STEP_2",
-                  "setFlag": "okakoro_ice_pack_station"
+                  "setFlag": "gen1_noise_hotline"
                 }
               ]
             },
             {
               "id": "STEP_2",
-              "prompt": "A group of guests asks for a safe demonstration of yesterday's OkaKoro teamwork. Korone hears only the word demonstration.",
+              "prompt": "A caller claims emotional damage because their favorite team lost.",
               "options": [
                 {
                   "id": "A",
-                  "text": "Demonstrate the mascot carry",
-                  "resultDialogue": "Korone straps a tiny mascot to her back. Okayu climbs on top as 'weight distribution.' They move three meters before Okayu falls asleep. Korone whispers, 'Manager, do I keep going?' Okayu raises one thumb without waking. Korone completes twelve victory laps.",
+                  "text": "Let Mel comfort them",
+                  "resultDialogue": "Mel calms the caller in thirty seconds. Matsuri whispers, 'Too powerful.' Haachama whispers back, 'Can we weaponize empathy?'",
                   "eligibleSunMembers": [
-                    "Korone",
-                    "Okayu"
+                    "Mel",
+                    "Matsuri",
+                    "Haachama"
                   ],
                   "nextStepId": "STEP_3",
-                  "setFlag": "okakoro_replayed_mascot_carry"
+                  "setFlag": "mel_customer_service_carry"
                 },
                 {
                   "id": "B",
-                  "text": "Make Korone apologize for obstacle adoption",
-                  "resultDialogue": "Korone faces the recovered hurdle. 'I am sorry I moved you without consent.' Subaru folds her arms. 'The apology is for FAMS.' Korone looks at Subaru. 'I am sorry the hurdle chose me.' Okayu writes, 'Progress.' Subaru writes, 'No progress.'",
+                  "text": "Let Matsuri explain sports",
+                  "resultDialogue": "Matsuri says losing builds character. The caller asks if her favorite lost. Silence. 'This conversation is over.'",
                   "eligibleSunMembers": [
-                    "Korone",
-                    "Subaru",
-                    "Okayu"
+                    "Matsuri",
+                    "Aki"
                   ],
                   "nextStepId": "STEP_3",
-                  "setFlag": "korone_hurdle_apology"
+                  "setFlag": "matsuri_sports_therapy"
                 },
                 {
                   "id": "C",
-                  "text": "Turn recovery into a resting contest",
-                  "resultDialogue": "Okayu announces the first competitor to move loses. Everyone lies down. Korone vibrates with competitive energy. 'Can I defeat stillness?' 'By not moving,' Okayu says. Korone freezes so intensely that a guest checks whether she is breathing. She is. Aggressively.",
+                  "text": "Offer Haachama's apology snack",
+                  "resultDialogue": "Haachama offers an apology snack. The caller somehow senses it through the phone. 'Actually, I'm fine now.'",
                   "eligibleSunMembers": [
-                    "Okayu",
-                    "Korone"
+                    "Haachama",
+                    "Mel"
                   ],
                   "nextStepId": "STEP_3",
-                  "setFlag": "okakoro_resting_contest"
+                  "setFlag": "haachama_apology_snack"
                 }
               ]
             },
             {
               "id": "STEP_3",
-              "prompt": "The recovery session needs a final activity that will not create another insurance claim.",
+              "prompt": "Management wants one standard response for future complaints.",
               "options": [
                 {
                   "id": "A",
-                  "text": "End with quiet nap time",
-                  "resultDialogue": "Okayu dims the lights. Korone lies beside the door to guard everyone from noise. Five minutes later, she is asleep with one fist raised. Subaru enters quietly, places the recovered whistle on the desk, and backs away. Korone's fist lowers. Crisis avoided.",
+                  "text": "Use Aki and Mel's polite script",
+                  "resultDialogue": "Aki and Mel write a polite script. Matsuri adds 'unless skill issue.' Aki deletes it. Matsuri adds it back smaller.",
                   "eligibleSunMembers": [
-                    "Okayu",
-                    "Korone",
-                    "Subaru"
+                    "Aki",
+                    "Mel",
+                    "Matsuri"
                   ],
                   "nextStepId": "",
-                  "setFlag": "day8_okakoro_recovery_success",
-                  "completionDialogue": "OkaKoro completed a peaceful recovery session. Korone finally rested, Okayu successfully delegated every task, and no therapy equipment required rescue."
+                  "setFlag": "finish_gen1_polite",
+                  "completionDialogue": "Gen 1 closes the complaint hotline with a usable customer-service script and a hidden phrase Aki will discover tomorrow."
                 },
                 {
                   "id": "B",
-                  "text": "Hold one padded challenge",
-                  "resultDialogue": "Korone challenges the foam roller to a rematch. She charges, the roller slips, and Korone launches gently into a pile of cushions. Okayu checks the time. 'Fast recovery.' Korone raises a thumb from the cushions and immediately falls asleep.",
+                  "text": "Publish a tournament FAQ",
+                  "resultDialogue": "The FAQ includes a red box: HAACHAMA COOKING IS NOT COMPENSATION. Haachama circles it and writes YET.",
                   "eligibleSunMembers": [
-                    "Korone",
-                    "Okayu"
+                    "Aki",
+                    "Haachama",
+                    "Matsuri",
+                    "Mel"
                   ],
                   "nextStepId": "",
-                  "setFlag": "day8_korone_final_knockout",
-                  "completionDialogue": "The recovery clinic ended with Korone temporarily knocking herself out on approved padding. Okayu classified this as successful enforced rest."
+                  "setFlag": "finish_gen1_faq",
+                  "completionDialogue": "The tournament FAQ reduces complaint calls immediately. Haachama begins drafting a competing document."
                 }
               ]
             }
           ],
-          "completionDialogue": "OkaKoro operated the competitor recovery clinic. Guests left relaxed, athletes left fed, and Korone left unconscious only in the safest available cushions.",
+          "completionDialogue": "Gen 1 clears the hotline. Nobody gets transferred to Haachama's kitchen.",
           "rewardTableId": "summer_activity_default"
         },
         {
-          "id": "AUG08_NOON_FLOWGLOW_REPLAY",
-          "fullArtRoute": "FLOW GLOW",
-          "buttonText": "Tournament Highlight Premiere",
-          "previewDialogue": "Help FLOW GLOW edit yesterday's chaos into a family-friendly resort film.",
-          "selectedDialogue": "Su has loaded twenty hours of footage. Chihaya is labeling accurate timestamps. Vivi is adding sound effects to every collision. Niko has renamed the project LEGENDS NEVER READ SAFETY SIGNS. Riona is trying to remove a frame where she was hit by her own smoke machine.",
+          "id": "AUG08_NOON_H3RO_AUTOPSY",
+          "fullArtRoute": "holoh3ro",
+          "buttonText": "Equipment Autopsy",
+          "previewDialogue": "Help holoh3ro determine which tournament equipment can be repaired and which pieces have earned a funeral.",
+          "selectedDialogue": "Kaela lined up broken equipment. Zeta treats it like a crime scene. Kobo put flowers on the relay baton.",
           "steps": [
             {
               "id": "STEP_1",
-              "prompt": "The resort needs a public highlight reel. FLOW GLOW disagrees on whether it should be heroic, honest, or legally survivable.",
+              "prompt": "The baton is cracked. Kobo demands a funeral before repairs.",
               "options": [
                 {
                   "id": "A",
-                  "text": "Make a heroic sports film",
-                  "resultDialogue": "Su adds dramatic music. Chihaya narrates every rescue. Vivi gives Noel's supply throw a meteor sound. The embedded crate now looks intentional. Riona watches Miko's cart explode through a foam gate. 'Can editing make that legal?' Su replies, 'Only cinematic.'",
+                  "text": "Repair it immediately",
+                  "resultDialogue": "Kaela takes the baton. Kobo clings to it. 'You can't operate before goodbye!' Kaela repairs it while Kobo is still hugging it.",
                   "eligibleSunMembers": [
-                    "Su",
-                    "Chihaya",
-                    "Vivi",
-                    "Riona"
+                    "Kaela",
+                    "Kobo",
+                    "Zeta"
                   ],
                   "nextStepId": "STEP_2",
-                  "setFlag": "flowglow_heroic_replay"
+                  "setFlag": "h3ro_baton_repaired"
                 },
                 {
                   "id": "B",
-                  "text": "Use the honest footage",
-                  "resultDialogue": "Chihaya removes the dramatic music. The raw audio contains sixteen whistles, nine explosions, and Flare shouting MIKO at regular intervals. Niko listens carefully. 'It has rhythm.' Vivi begins beatboxing along with the safety violations.",
+                  "text": "Allow a thirty-second funeral",
+                  "resultDialogue": "Kobo rings a bell. Zeta reads: 'Cause of death: being used as intended.' Kaela waits thirty seconds. 'Revived.' 'MIRACLE!'",
                   "eligibleSunMembers": [
-                    "Chihaya",
-                    "Niko",
-                    "Vivi",
-                    "Flare",
-                    "Miko"
+                    "Kobo",
+                    "Zeta",
+                    "Kaela"
                   ],
                   "nextStepId": "STEP_2",
-                  "setFlag": "flowglow_honest_replay"
+                  "setFlag": "h3ro_baton_funeral"
                 },
                 {
                   "id": "C",
-                  "text": "Build the film around team titles",
-                  "resultDialogue": "Niko introduces FAMS as THE SMILING THREAT, Shiraken as BUILDING CODE VIOLATION, and OkaKoro as CAT AND DOG, LEGALLY UNMONITORED. Mio appears in the editing room. 'Change ours.' Niko changes it to THE POLITELY REQUESTING THREAT. Mio leaves. Riona whispers, 'Improvement.'",
+                  "text": "Let Zeta investigate sabotage",
+                  "resultDialogue": "Zeta finds everyone's fingerprints. 'A conspiracy involving everyone.' Kaela says, 'Or sports.' Zeta writes SPORTS?",
                   "eligibleSunMembers": [
-                    "Niko",
-                    "Mio",
-                    "Riona"
+                    "Zeta",
+                    "Kaela"
                   ],
                   "nextStepId": "STEP_2",
-                  "setFlag": "flowglow_title_replay"
+                  "setFlag": "zeta_sports_conspiracy"
                 }
               ]
             },
             {
               "id": "STEP_2",
-              "prompt": "While scrubbing the lighthouse footage, Su notices one frame showing the fourth pier before the prism activates.",
+              "prompt": "A hurdle is bent beyond recognizable geometry.",
               "options": [
                 {
                   "id": "A",
-                  "text": "Treat it as a camera glitch",
-                  "resultDialogue": "Su checks three cameras. The same pier appears in all of them for one frame. Riona folds her arms. 'A synchronized glitch.' Chihaya marks the timestamp without comment. Vivi adds no sound effect for the first time all afternoon.",
+                  "text": "Let Kaela straighten it",
+                  "resultDialogue": "Kaela straightens the hurdle until it looks unnaturally perfect. Kobo whispers, 'She removed the curve from reality.'",
                   "eligibleSunMembers": [
-                    "Su",
-                    "Riona",
-                    "Chihaya",
-                    "Vivi"
+                    "Kaela",
+                    "Zeta",
+                    "Kobo"
                   ],
                   "nextStepId": "STEP_3",
-                  "setFlag": "fourth_pier_early_frame_logged"
+                  "setFlag": "kaela_hurdle_overfixed"
                 },
                 {
                   "id": "B",
-                  "text": "Hide it as an easter egg",
-                  "resultDialogue": "Niko leaves the frame in the public cut for exactly one twenty-fourth of a second. 'The fans will analyze it for weeks.' Su asks whether that is responsible. Niko smiles. 'No. It is engagement.' Chihaya adds a note for Justice before export.",
+                  "text": "Let Kobo test it",
+                  "resultDialogue": "Kobo tests it, flips into a foam mat, and raises one thumb. 'Still dangerous.' Zeta writes that down.",
                   "eligibleSunMembers": [
-                    "Niko",
-                    "Su",
-                    "Chihaya"
+                    "Kobo",
+                    "Zeta"
                   ],
                   "nextStepId": "STEP_3",
-                  "setFlag": "fourth_pier_replay_easter_egg"
+                  "setFlag": "kobo_hurdle_test"
                 },
                 {
                   "id": "C",
-                  "text": "Send the frame to Justice",
-                  "resultDialogue": "Chihaya exports the original frame. Cecilia replies within seconds: RECEIVED. Gigi replies one second later: PIER CAUGHT ON CAMERA. Elizabeth sends a formal request that nobody add stickers. Niko quietly removes three stickers.",
+                  "text": "Let Zeta reconstruct the impact",
+                  "resultDialogue": "Zeta rebuilds the collision with mannequins. Kobo adds hats. Soon the forensic reconstruction has an audience.",
                   "eligibleSunMembers": [
-                    "Chihaya",
-                    "Cecilia",
-                    "Gigi",
-                    "Elizabeth",
-                    "Niko"
+                    "Zeta",
+                    "Kobo",
+                    "Kaela"
                   ],
                   "nextStepId": "STEP_3",
-                  "setFlag": "fourth_pier_frame_sent_to_justice"
+                  "setFlag": "zeta_hurdle_reconstruction"
                 }
               ]
             },
             {
               "id": "STEP_3",
-              "prompt": "The screening room is full. Which version premieres to the guests?",
+              "prompt": "Rebuild everything, or make a damage museum?",
               "options": [
                 {
                   "id": "A",
-                  "text": "Premiere the official documentary",
-                  "resultDialogue": "Chihaya narrates the rescues, teamwork, and final lighthouse ceremony. The crowd applauds the competitors and laughs at the permitted mistakes. Riona watches her smoke-machine incident pass without comment. Su notices the pier frame. Nobody in the audience reacts. Yet.",
+                  "text": "Rebuild for the next games",
+                  "resultDialogue": "Kaela starts rebuilding. Kobo says, 'Stronger.' Zeta says, 'Not too strong.' Kaela asks, 'Define too strong.' Nobody can.",
                   "eligibleSunMembers": [
-                    "Chihaya",
-                    "Riona",
-                    "Su",
-                    "Vivi",
-                    "Niko"
+                    "Kaela",
+                    "Kobo",
+                    "Zeta"
                   ],
                   "nextStepId": "",
-                  "setFlag": "day8_official_games_documentary",
-                  "completionDialogue": "FLOW GLOW premiered an official Summer Games documentary. The crowd saw teamwork, destruction, and one unexplained frame that may become tomorrow's fan theory."
+                  "setFlag": "finish_h3ro_rebuild",
+                  "completionDialogue": "holoh3ro rebuilds the surviving equipment. The next tournament gear may be capable of surviving the tournament and several unrelated disasters."
                 },
                 {
                   "id": "B",
-                  "text": "Premiere the blooper cut",
-                  "resultDialogue": "The screen shows Subaru becoming a kite, Pekora being embedded in foam, Korone challenging furniture, and Miko driving through a snack station. Every featured member begins shouting objections at once. The guests laugh so hard the subtitles cannot keep up. Niko bows. 'Truth is the strongest genre.'",
+                  "text": "Create a damage museum",
+                  "resultDialogue": "They open a damage museum. One plaque reads: THIS HURDLE DREAMED OF BEING A BRIDGE.",
                   "eligibleSunMembers": [
-                    "Niko",
-                    "Subaru",
-                    "Pekora",
-                    "Korone",
-                    "Miko"
+                    "Zeta",
+                    "Kobo",
+                    "Kaela"
                   ],
                   "nextStepId": "",
-                  "setFlag": "day8_games_blooper_premiere",
-                  "completionDialogue": "FLOW GLOW premiered the tournament blooper reel. It became the resort's highest-rated screening and created six new personal grudges before the credits ended."
+                  "setFlag": "finish_h3ro_museum",
+                  "completionDialogue": "The worst tournament equipment becomes a temporary damage museum. Guests are surprisingly moved by the relay baton's thirty-second life story."
                 }
               ]
             }
           ],
-          "completionDialogue": "FLOW GLOW completed the Summer Games replay film. No object was found, but the cameras recorded the fourth pier one frame earlier than expected.",
+          "completionDialogue": "holoh3ro finishes the autopsy. Kobo's bereavement request for the baton is denied.",
           "rewardTableId": "summer_activity_default"
         }
       ]
     },
     "evening": {
       "sceneId": "AUG08_EVENING",
-      "title": "Day 8 — Awards After Dark",
-      "openingDialogue": "The repaired resort hosts one final evening of unofficial awards, quiet music, and administrative denial. The Lighthouse Calibration Prism remains secured. No findings are scheduled, but the fourth pier case refuses to become ordinary paperwork.",
+      "title": "Day 8 — The Official Version",
+      "openingDialogue": "The resort tries to close the Summer Games chapter with food, awards, and selective memory.",
       "coreActivities": [
         {
-          "id": "AUG08_EVENING_REGLOSS_AWARDS",
-          "fullArtRoute": "ReGLOSS",
-          "buttonText": "People's Choice Awards",
-          "previewDialogue": "Help ReGLOSS award the tournament's most memorable achievements without starting another competition.",
-          "selectedDialogue": "Ririka has sponsorship envelopes. Hajime has a strict seating plan. Kanade has a microphone set to a volume labeled DO NOT. Raden has prepared historical context for each award. The trophy table includes categories such as BEST RESCUE, BEST COLLISION, and MOST LEGALLY INTERESTING SHORTCUT.",
+          "id": "AUG08_EVENING_GEN0_AFTERPARTY",
+          "fullArtRoute": "Gen 0",
+          "buttonText": "Definitely Not an Awards Show",
+          "previewDialogue": "Help Gen 0 host a relaxed afterparty that Miko immediately turns into an unofficial awards ceremony.",
+          "selectedDialogue": "Sora planned a thank-you stage. Miko arrived with twenty homemade trophies. Suisei reads one: 'Best Elite Decision.'",
           "steps": [
             {
               "id": "STEP_1",
-              "prompt": "Ririka asks which category should open the ceremony. Hajime warns that the winners are already arguing backstage.",
+              "prompt": "Miko demands unofficial awards. Pick the first category.",
               "options": [
                 {
                   "id": "A",
-                  "text": "Open with Best Rescue",
-                  "resultDialogue": "Kanade announces every team that touched the falling banner. Six groups walk onstage. Hajime counts them. 'There is one trophy.' Ririka whispers, 'I can sell five runner-up trophies.' Raden says, 'You had them prepared.' Ririka says nothing, which is an answer.",
-                  "eligibleSunMembers": [
-                    "Kanade",
-                    "Hajime",
-                    "Ririka",
-                    "Raden"
-                  ],
-                  "nextStepId": "STEP_2",
-                  "setFlag": "regloss_best_rescue_award"
-                },
-                {
-                  "id": "B",
-                  "text": "Open with Best Collision",
-                  "resultDialogue": "The nominees include Subaru versus Korone, Pekora versus foam, and HoloTori versus the concept of landing. Subaru raises a hand. 'Why am I nominated twice?' Kanade checks the card. 'Consistency!' Subaru lowers her hand and begins reconsidering sports.",
-                  "eligibleSunMembers": [
-                    "Subaru",
-                    "Korone",
-                    "Pekora",
-                    "Kanade"
-                  ],
-                  "nextStepId": "STEP_2",
-                  "setFlag": "regloss_best_collision_award"
-                },
-                {
-                  "id": "C",
-                  "text": "Open with Most Creative Rule Use",
-                  "resultDialogue": "Fubuki, Miko, Pekora, and Okayu all step forward before their names are called. Hajime stares at them. 'This is not evidence in your favor.' Raden begins explaining the historical difference between interpretation and evasion. Pekora asks whether the lecture has a fast lane.",
-                  "eligibleSunMembers": [
-                    "Fubuki",
-                    "Miko",
-                    "Pekora",
-                    "Okayu",
-                    "Hajime",
-                    "Raden"
-                  ],
-                  "nextStepId": "STEP_2",
-                  "setFlag": "regloss_rule_use_award"
-                }
-              ]
-            },
-            {
-              "id": "STEP_2",
-              "prompt": "A four-way argument begins over the People's Choice trophy. Ririka asks the Manager to resolve it before Kanade turns the dispute into a chant.",
-              "options": [
-                {
-                  "id": "A",
-                  "text": "Award the crowd's loudest favorite",
-                  "resultDialogue": "Kanade measures applause with the microphone. Polka conducts one side of the audience, Korone flexes at another, and Kiara starts a HoloTori chant. The meter overloads and displays EVERYONE. Hajime points at the screen. 'Democracy has failed.' Ririka replies, 'Democracy has upsold.'",
-                  "eligibleSunMembers": [
-                    "Kanade",
-                    "Polka",
-                    "Korone",
-                    "Kiara",
-                    "Hajime",
-                    "Ririka"
-                  ],
-                  "nextStepId": "STEP_3",
-                  "setFlag": "awards_applause_overloaded"
-                },
-                {
-                  "id": "B",
-                  "text": "Let Hajime impose categories",
-                  "resultDialogue": "Hajime creates separate awards for athletic skill, audience impact, rescue work, and accidental infrastructure. Everyone receives exactly one category except Pekora, whose category reads UNDER REVIEW. Pekora holds it proudly. 'Exclusive-peko.'",
-                  "eligibleSunMembers": [
-                    "Hajime",
-                    "Pekora",
-                    "Ririka"
-                  ],
-                  "nextStepId": "STEP_3",
-                  "setFlag": "hajime_split_awards"
-                },
-                {
-                  "id": "C",
-                  "text": "Let Raden define historical significance",
-                  "resultDialogue": "Raden explains that history remembers events, not placements. Miko raises her hand. 'So the crater wins?' Raden pauses. Polka stands beside the crater trophy. 'The scholar has spoken.' Raden closes her notes. 'I regret leaving room for interpretation.'",
-                  "eligibleSunMembers": [
-                    "Raden",
-                    "Miko",
-                    "Polka"
-                  ],
-                  "nextStepId": "STEP_3",
-                  "setFlag": "raden_historical_awards"
-                }
-              ]
-            },
-            {
-              "id": "STEP_3",
-              "prompt": "The unofficial ceremony needs one final award that can end the night without causing a rematch.",
-              "options": [
-                {
-                  "id": "A",
-                  "text": "Award the entire resort staff",
-                  "resultDialogue": "Ririka presents one enormous certificate to every staff member, competitor, medic, repair crew, and unwilling Flock Commander. Subaru checks her copy. 'Why does mine still say bird division?' Kiara hugs her before she can file another appeal. Kanade shouts, 'EVERYONE WINS!' Hajime quietly locks the arena gates.",
-                  "eligibleSunMembers": [
-                    "Ririka",
-                    "Kanade",
-                    "Hajime",
-                    "Raden",
-                    "Subaru",
-                    "Kiara"
-                  ],
-                  "nextStepId": "",
-                  "setFlag": "day8_resort_staff_awarded",
-                  "completionDialogue": "ReGLOSS concluded the People's Choice Awards by honoring everyone who kept the Summer Games operating. The ceremony ended before anyone could challenge the certificate to a rematch."
-                },
-                {
-                  "id": "B",
-                  "text": "Award Most Memorable Disaster",
-                  "resultDialogue": "The nominees are the parade flight, Miko's cart, the banner rescue, and Pekora's shortcut economy. The audience votes for ALL OF THE ABOVE. Ririka unveils a trophy shaped like a repair invoice. Pekora asks whether it is tax-deductible. Hajime escorts her away from the microphone.",
-                  "eligibleSunMembers": [
-                    "Ririka",
-                    "Pekora",
-                    "Miko",
-                    "Kiara",
-                    "Hajime"
-                  ],
-                  "nextStepId": "",
-                  "setFlag": "day8_memorable_disaster_award",
-                  "completionDialogue": "ReGLOSS awarded the tournament's collective disasters with a trophy shaped like an invoice. The resort accepted the joke and kept the actual invoices."
-                }
-              ]
-            }
-          ],
-          "completionDialogue": "ReGLOSS completed the unofficial awards ceremony. No findings occurred, and every category has been closed to appeals until management recovers.",
-          "rewardTableId": "summer_activity_default"
-        },
-        {
-          "id": "AUG08_EVENING_SORAZ_ENCORE",
-          "fullArtRoute": "SorAZ",
-          "buttonText": "Quiet Thank-You Concert",
-          "previewDialogue": "Help Sora and AZKi give the exhausted resort a calm encore while the lighthouse remains under observation.",
-          "selectedDialogue": "Sora has chosen an acoustic set. AZKi is monitoring the sound system for the prism's frequency even though the prism is secured elsewhere. The audience is tired, the competitors are bandaged, and Korone has been asked not to challenge the speakers.",
-          "steps": [
-            {
-              "id": "STEP_1",
-              "prompt": "Sora asks what atmosphere the resort needs after the tournament. AZKi checks a waveform and says, 'Preferably one without an infrastructure response.'",
-              "options": [
-                {
-                  "id": "A",
-                  "text": "Play a gentle recovery set",
-                  "resultDialogue": "Sora begins a soft song. Conversations fade, ice packs stop rustling, and even Pekora lowers her voice to a whisper. 'This is suspiciously peaceful-peko.' Marine whispers back, 'Senchou believes we should sell the silence.' Flare turns around. Both stop talking.",
+                  "text": "Best Recovery",
+                  "resultDialogue": "Miko nominates herself for Best Recovery. Suisei says, 'That's repeatedly failing.' Miko points back. 'Repeatedly recovering.'",
                   "eligibleSunMembers": [
                     "Sora",
-                    "AZKi",
-                    "Pekora",
-                    "Marine",
-                    "Flare"
+                    "Miko",
+                    "Suisei",
+                    "AZKi"
                   ],
                   "nextStepId": "STEP_2",
-                  "setFlag": "soraz_recovery_set"
+                  "setFlag": "gen0_recovery_award"
                 },
                 {
                   "id": "B",
-                  "text": "Let the competitors choose requests",
-                  "resultDialogue": "Subaru requests something energetic, Okayu requests something sleepy, and Miko requests an elite anthem with explosions. AZKi creates one arrangement that begins fast, slows into a lullaby, and ends before Miko's explosion cue. Miko waits beside the button. Nothing happens. 'The song betrayed me-nye.'",
+                  "text": "Best Collision",
+                  "resultDialogue": "The applause meter spikes before nominees are announced. Suisei nods. 'They know what they came for.' Miko hides broken course pieces.",
                   "eligibleSunMembers": [
-                    "Sora",
-                    "AZKi",
-                    "Subaru",
-                    "Okayu",
+                    "Roboco",
+                    "Suisei",
                     "Miko"
                   ],
                   "nextStepId": "STEP_2",
-                  "setFlag": "soraz_competitor_requests"
+                  "setFlag": "gen0_collision_award"
                 },
                 {
                   "id": "C",
-                  "text": "Perform the Summer Games theme quietly",
-                  "resultDialogue": "AZKi strips the theme down to piano and voice. The audience recognizes the melody and begins swaying. Polka lifts a confetti cannon. Flare lowers it without looking away from the stage. Polka whispers, 'She has developed peripheral management.'",
+                  "text": "Best Strategy",
+                  "resultDialogue": "Miko nominates herself for Best Strategy. Suisei seconds it. 'For demonstrating what not to do.' Miko lowers her hand.",
                   "eligibleSunMembers": [
-                    "Sora",
-                    "AZKi",
-                    "Polka",
-                    "Flare"
+                    "Miko",
+                    "Suisei"
                   ],
                   "nextStepId": "STEP_2",
-                  "setFlag": "soraz_acoustic_games_theme"
+                  "setFlag": "gen0_strategy_award"
                 }
               ]
             },
             {
               "id": "STEP_2",
-              "prompt": "Halfway through the concert, the speakers reproduce a faint mechanical note matching the lighthouse signal from Day 7.",
+              "prompt": "Roboco's applause meter starts scoring every loud noise.",
               "options": [
                 {
                   "id": "A",
-                  "text": "Let AZKi isolate the tone",
-                  "resultDialogue": "AZKi lowers the music and separates the signal. It repeats once, then stops. 'Same frequency,' she says. Sora looks toward the dark lighthouse. 'But the prism is not here.' A staff member asks whether the audience noticed. Behind them, everyone is waving glowsticks perfectly in time with the tone.",
+                  "text": "Fix the meter",
+                  "resultDialogue": "Roboco says, 'High-spec diagnosis complete.' The meter gives her 98. Suisei taps the mic: 100. 'It has favorites.'",
                   "eligibleSunMembers": [
-                    "AZKi",
-                    "Sora"
+                    "Roboco",
+                    "Suisei"
                   ],
                   "nextStepId": "STEP_3",
-                  "setFlag": "lighthouse_tone_repeated_without_prism"
+                  "setFlag": "roboco_meter_fixedish"
                 },
                 {
                   "id": "B",
-                  "text": "Blend the tone into the song",
-                  "resultDialogue": "Sora matches the note gently while AZKi harmonizes around it. The lighthouse remains dark, but the ocean surface ripples in one straight line toward the missing pier's coordinates. The audience assumes it is part of the stage lighting. There is no stage lighting on the water.",
+                  "text": "Let the meter judge everything",
+                  "resultDialogue": "Dropped spoon: 73. 'Elite': 41. Sora says thank you: 100. Miko screams, 'BIAS!' The machine gives BIAS 86.",
                   "eligibleSunMembers": [
+                    "Miko",
+                    "Sora",
+                    "Roboco"
+                  ],
+                  "nextStepId": "STEP_3",
+                  "setFlag": "gen0_meter_judging"
+                },
+                {
+                  "id": "C",
+                  "text": "Let AZKi turn it into rhythm scoring",
+                  "resultDialogue": "AZKi turns cheers into rhythm scoring. Miko shouts 'ELITE' off-beat: 12. Suisei laughing gets 100.",
+                  "eligibleSunMembers": [
+                    "AZKi",
+                    "Miko",
+                    "Suisei"
+                  ],
+                  "nextStepId": "STEP_3",
+                  "setFlag": "azki_applause_rhythm"
+                }
+              ]
+            },
+            {
+              "id": "STEP_3",
+              "prompt": "Sora asks for one final toast.",
+              "options": [
+                {
+                  "id": "A",
+                  "text": "Keep it sincere",
+                  "resultDialogue": "Sora thanks everyone. Ten peaceful seconds pass. Miko's trophy table collapses. Suisei checks the clock. 'New record.'",
+                  "eligibleSunMembers": [
+                    "Sora",
+                    "Miko",
+                    "Suisei"
+                  ],
+                  "nextStepId": "",
+                  "setFlag": "finish_gen0_sincere",
+                  "completionDialogue": "The afterparty ends on a warm note followed immediately by structural failure, preserving the resort's brand consistency."
+                },
+                {
+                  "id": "B",
+                  "text": "Let Miko deliver the toast",
+                  "resultDialogue": "Miko begins, 'To elite management—' The meter displays 7. Suisei raises her glass. 'To seven points.'",
+                  "eligibleSunMembers": [
+                    "Miko",
+                    "Suisei",
+                    "Roboco",
                     "Sora",
                     "AZKi"
                   ],
-                  "nextStepId": "STEP_3",
-                  "setFlag": "ocean_ripple_followed_lighthouse_tone"
-                },
-                {
-                  "id": "C",
-                  "text": "Stop the speakers and continue unplugged",
-                  "resultDialogue": "AZKi disconnects the system. Sora continues without amplification, and the entire crowd becomes quiet enough to hear the waves. The mechanical tone does not return. Korone leans toward Okayu. 'Did we defeat it?' Okayu whispers, 'By unplugging it.' Korone nods with deep respect for technology.",
-                  "eligibleSunMembers": [
-                    "AZKi",
-                    "Sora",
-                    "Korone",
-                    "Okayu"
-                  ],
-                  "nextStepId": "STEP_3",
-                  "setFlag": "soraz_unplugged_lighthouse_tone"
-                }
-              ]
-            },
-            {
-              "id": "STEP_3",
-              "prompt": "The concert reaches its final song. Sora asks whether to end with a message to the guests or quietly close the night.",
-              "options": [
-                {
-                  "id": "A",
-                  "text": "Thank everyone for rebuilding",
-                  "resultDialogue": "Sora thanks the competitors, repair crews, medics, referees, and guests. AZKi adds, 'Tomorrow can be quieter.' From the back, Pekora asks, 'How much quieter?' Flare answers, 'You are not invited to test the limit.' The audience laughs, and the lights fade normally.",
-                  "eligibleSunMembers": [
-                    "Sora",
-                    "AZKi",
-                    "Pekora",
-                    "Flare"
-                  ],
                   "nextStepId": "",
-                  "setFlag": "day8_soraz_thank_you_concert",
-                  "completionDialogue": "SorAZ closed the aftermath day with a calm thank-you concert. A faint lighthouse tone returned briefly, but the night ended without another projection or artifact."
-                },
-                {
-                  "id": "B",
-                  "text": "End with a silent final bow",
-                  "resultDialogue": "Sora and AZKi finish the final chord and bow without speaking. The audience follows, quiet for one full second. Then Kanade shouts 'ENCORE!' from somewhere outside the venue. Hajime's voice follows: 'NO.' The applause resumes anyway.",
-                  "eligibleSunMembers": [
-                    "Sora",
-                    "AZKi",
-                    "Kanade",
-                    "Hajime"
-                  ],
-                  "nextStepId": "",
-                  "setFlag": "day8_soraz_silent_bow",
-                  "completionDialogue": "SorAZ ended the night with a silent bow and no further lighthouse response. The resort achieved one full second of peace before Kanade requested an encore."
+                  "setFlag": "finish_gen0_elite_toast",
+                  "completionDialogue": "Miko's unofficial awards show concludes with a seven-point toast that Suisei ensures nobody ever forgets."
                 }
               ]
             }
           ],
-          "completionDialogue": "SorAZ completed the quiet encore. No finding occurred; the only anomaly was a brief repetition of the known lighthouse signal.",
+          "completionDialogue": "Gen 0's quiet afterparty becomes an awards show whose machine openly dislikes Miko.",
           "rewardTableId": "summer_activity_default"
         },
         {
-          "id": "AUG08_EVENING_JUSTICE_DEBRIEF",
-          "fullArtRoute": "Justice",
-          "buttonText": "Fourth Pier Case Review",
-          "previewDialogue": "Help Justice organize the fourth pier evidence before Gigi arrests the ocean.",
-          "selectedDialogue": "Elizabeth has opened a formal case titled THE NONEXISTENT PIER. Cecilia has three data displays. Raora has pinned sketches across the wall. Gigi is wearing a life jacket and carrying handcuffs. 'If the pier is hiding in the ocean, the ocean is an accomplice.'",
+          "id": "AUG08_EVENING_FORCE_BANQUET",
+          "fullArtRoute": "holoForce",
+          "buttonText": "Recovery Banquet",
+          "previewDialogue": "Help holoForce serve the competitor recovery banquet without Kanata becoming furniture transport and Luna becoming the tax authority.",
+          "selectedDialogue": "Towa has a seating plan. Kanata is carrying the dessert table. Luna is sitting on top of it.",
           "steps": [
             {
               "id": "STEP_1",
-              "prompt": "Justice must choose the strongest evidence for the official file. Elizabeth refuses to list 'Gigi feels suspicious' as a technical source.",
+              "prompt": "Luna declares the dessert table royal territory.",
               "options": [
                 {
                   "id": "A",
-                  "text": "Use the recorded coordinates",
-                  "resultDialogue": "Cecilia projects the coordinates over the current resort map. They point to open water. Gigi circles the location twelve times. Elizabeth asks why. 'Tactical emphasis.' Raora draws a tiny pier inside the circles. Cecilia says, 'The drawing is not measurement data.' Raora adds a ruler.",
+                  "text": "Negotiate with the princess",
+                  "resultDialogue": "You offer Luna first dessert. She points at all of them. 'Those.' Towa says choose one. 'They are one category.'",
                   "eligibleSunMembers": [
-                    "Cecilia",
-                    "Gigi",
-                    "Elizabeth",
-                    "Raora"
+                    "Luna",
+                    "Towa",
+                    "Watame"
                   ],
                   "nextStepId": "STEP_2",
-                  "setFlag": "justice_used_pier_coordinates",
-                  "requiredFlags": [
-                    "fourth_pier_coordinates_recorded"
-                  ]
+                  "setFlag": "force_luna_negotiation"
                 },
                 {
                   "id": "B",
-                  "text": "Use the UNIT-Z connection",
-                  "resultDialogue": "Elizabeth places the old UNIT-Z badge record beside the lighthouse data. Cecilia confirms both use the same obsolete serial format. Gigi points at the page. 'So Z built the pier.' Elizabeth says, 'That is not what the letter means.' Gigi writes Z DID IT in the margin anyway.",
+                  "text": "Have Kanata relocate the table",
+                  "resultDialogue": "Kanata lifts the table, Luna, and two guests. Towa runs after her. 'PUT THE GUESTS DOWN!' One guest says the view is great.",
                   "eligibleSunMembers": [
-                    "Elizabeth",
-                    "Cecilia",
-                    "Gigi"
+                    "Kanata",
+                    "Luna",
+                    "Towa"
                   ],
                   "nextStepId": "STEP_2",
-                  "setFlag": "justice_used_unit_z_link",
-                  "requiredFlags": [
-                    "unit_z_linked_to_pier"
-                  ]
+                  "setFlag": "kanata_mobile_banquet"
                 },
                 {
                   "id": "C",
-                  "text": "Use the calibration message",
-                  "resultDialogue": "Cecilia displays CALIBRATION ONE OF FOUR COMPLETE. Elizabeth underlines ONE OF FOUR. Raora draws four empty boxes. Gigi fills the first with a bird. Elizabeth erases it. Gigi draws a smaller bird. Cecilia concludes, 'The island expects three additional calibration events.' Everyone stops joking for almost two seconds.",
+                  "text": "Let Watame distract Luna with bread",
+                  "resultDialogue": "Watame offers Luna bread as tribute. The dessert line opens. Towa stares. 'You solved territorial conflict with bread.' 'Civilization.'",
                   "eligibleSunMembers": [
-                    "Cecilia",
-                    "Elizabeth",
-                    "Raora",
-                    "Gigi"
+                    "Watame",
+                    "Luna",
+                    "Towa"
                   ],
                   "nextStepId": "STEP_2",
-                  "setFlag": "justice_used_calibration_message",
-                  "requiredAnyFlags": [
-                    "calibration_one_of_four_heard",
-                    "calibration_one_of_four_complete"
-                  ]
-                },
-                {
-                  "id": "D",
-                  "text": "Use the eyewitness reports",
-                  "resultDialogue": "Raora displays sketches from the crowd. Every drawing shows the pier differently: ancient, futuristic, covered in birds, or shaped like Korone. Elizabeth chooses the least artistic version. Raora looks wounded. 'That one has no atmosphere.' Cecilia replies, 'It has scale markings.'",
-                  "eligibleSunMembers": [
-                    "Raora",
-                    "Elizabeth",
-                    "Cecilia"
-                  ],
-                  "nextStepId": "STEP_2",
-                  "setFlag": "justice_used_eyewitness_reports"
+                  "setFlag": "watame_bread_diplomacy"
                 }
               ]
             },
             {
               "id": "STEP_2",
-              "prompt": "Guests are asking whether the fourth pier was part of the Summer Games finale. Justice needs a public position.",
+              "prompt": "Someone asks for an ice pack. Kanata returns with the freezer.",
               "options": [
                 {
                   "id": "A",
-                  "text": "Classify the area as restricted",
-                  "resultDialogue": "Elizabeth issues a temporary maritime restriction. Gigi runs outside with warning tape. Cecilia watches through the window. 'She cannot tape the ocean.' Raora says, 'She has already taped two waves.' Elizabeth closes her eyes. 'Add environmental cleanup to the order.'",
+                  "text": "Make Kanata put it back",
+                  "resultDialogue": "Kanata thought carrying the freezer was faster. Towa points back to the kitchen. 'The ice pack was inside it.'",
                   "eligibleSunMembers": [
-                    "Elizabeth",
-                    "Gigi",
-                    "Cecilia",
-                    "Raora"
+                    "Kanata",
+                    "Towa",
+                    "Luna"
                   ],
                   "nextStepId": "STEP_3",
-                  "setFlag": "fourth_pier_area_restricted"
+                  "setFlag": "kanata_returned_freezer"
                 },
                 {
                   "id": "B",
-                  "text": "Call it an unplanned visual effect",
-                  "resultDialogue": "Elizabeth delivers the statement with perfect authority. A reporter asks who designed the effect. Everyone looks at Raora. Raora points at Cecilia. Cecilia points at the lighthouse. Gigi points at the ocean. The reporter writes COLLABORATIVE INSTALLATION.",
+                  "text": "Turn the freezer into a recovery station",
+                  "resultDialogue": "Watame labels the freezer COOL DOWN HERE. Athletes gather around it. Towa sighs. 'I hate that this works.'",
                   "eligibleSunMembers": [
-                    "Elizabeth",
-                    "Raora",
-                    "Cecilia",
-                    "Gigi"
+                    "Watame",
+                    "Towa",
+                    "Kanata"
                   ],
                   "nextStepId": "STEP_3",
-                  "setFlag": "fourth_pier_publicly_called_effect"
+                  "setFlag": "force_freezer_station"
                 },
                 {
                   "id": "C",
-                  "text": "Publish Raora's sanitized sketch",
-                  "resultDialogue": "Raora removes the unknown symbols, Gigi's suspect arrows, and Elizabeth's legal notes. The final image shows only the outline of the pier. Guests immediately begin drawing theories around it. Raora watches the fan art multiply. 'We removed the speculation.' Cecilia replies, 'We provided a template.'",
+                  "text": "Let Luna charge admission",
+                  "resultDialogue": "Luna charges one candy to enter the Cold Kingdom. Towa says no. Luna lowers it to half a candy. 'Tax law.'",
                   "eligibleSunMembers": [
-                    "Raora",
-                    "Cecilia",
-                    "Elizabeth",
-                    "Gigi"
+                    "Luna",
+                    "Towa",
+                    "Watame"
                   ],
                   "nextStepId": "STEP_3",
-                  "setFlag": "raora_pier_sketch_published"
+                  "setFlag": "luna_cold_kingdom"
                 }
               ]
             },
             {
               "id": "STEP_3",
-              "prompt": "The prism remains secured in the resort vault. Justice must choose the next official action without beginning an unsafe nighttime expedition.",
+              "prompt": "One dessert tray remains. Everyone suddenly feels recovered.",
               "options": [
                 {
                   "id": "A",
-                  "text": "Schedule a controlled future survey",
-                  "resultDialogue": "Elizabeth approves a daylight survey for a later date. Cecilia begins equipment requirements. Raora volunteers to document it. Gigi raises both hands. 'I volunteer to tackle the pier.' Elizabeth writes NO TACKLING INFRASTRUCTURE as the first rule.",
+                  "text": "Split everything evenly",
+                  "resultDialogue": "Towa splits everything evenly. Kanata offers to carry the plates. Everyone shouts 'NO' at once.",
                   "eligibleSunMembers": [
-                    "Elizabeth",
-                    "Cecilia",
-                    "Raora",
-                    "Gigi"
+                    "Towa",
+                    "Watame",
+                    "Kanata"
                   ],
                   "nextStepId": "",
-                  "setFlag": "future_fourth_pier_survey_scheduled",
-                  "completionDialogue": "Justice scheduled a controlled future survey of the fourth pier coordinates. The prism remains secured, and no one is permitted to tackle the destination."
+                  "setFlag": "finish_force_even_split",
+                  "completionDialogue": "The recovery banquet ends peacefully after the group successfully prevents Kanata from moving any additional architecture."
                 },
                 {
                   "id": "B",
-                  "text": "Lock the case until new evidence appears",
-                  "resultDialogue": "Elizabeth seals the file. Cecilia encrypts the data. Raora stores the sketches. Gigi places handcuffs around the filing cabinet handles. 'Now the case cannot escape.' Elizabeth tests the cabinet. It is genuinely locked. 'Give me the key.' Gigi looks toward the ocean. 'The pier has it.'",
+                  "text": "Hold a dessert sprint",
+                  "resultDialogue": "Luna announces a dessert sprint. While everyone argues, Watame eats one pastry. Luna points. 'The sheep has won.'",
                   "eligibleSunMembers": [
-                    "Elizabeth",
-                    "Cecilia",
-                    "Raora",
-                    "Gigi"
+                    "Luna",
+                    "Kanata",
+                    "Watame",
+                    "Towa"
                   ],
                   "nextStepId": "",
-                  "setFlag": "fourth_pier_case_temporarily_sealed",
-                  "completionDialogue": "Justice sealed the fourth pier case pending new evidence. The documents are secure, although Gigi has misplaced the filing cabinet key in the name of operational realism."
-                },
-                {
-                  "id": "C",
-                  "text": "Establish a maritime watch",
-                  "resultDialogue": "Elizabeth authorizes observation shifts from the lighthouse. Cecilia installs sensors. Raora designs a watch log. Gigi appears in a captain's hat and points at the water. 'Ocean, you are under surveillance.' Elizabeth removes the hat. 'You are not in command.' Gigi produces a second hat.",
-                  "eligibleSunMembers": [
-                    "Elizabeth",
-                    "Cecilia",
-                    "Raora",
-                    "Gigi"
-                  ],
-                  "nextStepId": "",
-                  "setFlag": "fourth_pier_maritime_watch",
-                  "completionDialogue": "Justice established a non-invasive maritime watch over the missing pier's coordinates. The first watch report contains useful sensor data and seventeen drawings of suspicious waves."
+                  "setFlag": "finish_force_dessert_race",
+                  "completionDialogue": "The banquet concludes with an unauthorized dessert competition won by Watame before anyone officially started it."
                 }
               ]
             }
           ],
-          "completionDialogue": "Justice organized the known fourth pier evidence without discovering a new object or entering the water. The case remains open, documented, and heavily annotated by Gigi.",
+          "completionDialogue": "holoForce feeds everyone. Luna briefly governs a refrigerated microstate.",
+          "rewardTableId": "summer_activity_default"
+        },
+        {
+          "id": "AUG08_EVENING_FLOWGLOW_PREMIERE",
+          "fullArtRoute": "FLOW GLOW",
+          "buttonText": "Tournament Highlight Premiere",
+          "previewDialogue": "Help FLOW GLOW premiere the official Summer Games highlight reel without letting the editing room rewrite history.",
+          "selectedDialogue": "Ririka has sponsor notes. Hajime has timestamps. Kanade added explosion sounds where no explosions happened. Niko found a MORE DRAMA button.",
+          "steps": [
+            {
+              "id": "STEP_1",
+              "prompt": "The opening montage is eight minutes long. Cut it down.",
+              "options": [
+                {
+                  "id": "A",
+                  "text": "Let Hajime cut it ruthlessly",
+                  "resultDialogue": "Hajime cuts seven minutes. Kanade gasps. 'You deleted my scream.' 'There were fourteen.' 'They were emotionally different.'",
+                  "eligibleSunMembers": [
+                    "Hajime",
+                    "Kanade",
+                    "Raden"
+                  ],
+                  "nextStepId": "STEP_2",
+                  "setFlag": "flowglow_hajime_cut"
+                },
+                {
+                  "id": "B",
+                  "text": "Let Kanade edit by energy",
+                  "resultDialogue": "Kanade keeps only impacts, cheering, and one unexplained sandwich close-up. Ririka checks the numbers. 'The sandwich tested well.'",
+                  "eligibleSunMembers": [
+                    "Kanade",
+                    "Ririka"
+                  ],
+                  "nextStepId": "STEP_2",
+                  "setFlag": "flowglow_energy_cut"
+                },
+                {
+                  "id": "C",
+                  "text": "Let Raden narrate it like history",
+                  "resultDialogue": "Raden begins serious narration. Niko presses MORE DRAMA. Thunder sounds. 'There was no thunder.' Niko presses it again. 'There is now.'",
+                  "eligibleSunMembers": [
+                    "Raden",
+                    "Niko"
+                  ],
+                  "nextStepId": "STEP_2",
+                  "setFlag": "flowglow_history_cut"
+                }
+              ]
+            },
+            {
+              "id": "STEP_2",
+              "prompt": "One lighthouse shot shows the ocean from an impossible angle.",
+              "options": [
+                {
+                  "id": "A",
+                  "text": "Keep the strange frame in",
+                  "resultDialogue": "Hajime checks the frame twice. Kanade adds a horror sting. Everyone stares. She quietly removes it.",
+                  "eligibleSunMembers": [
+                    "Hajime",
+                    "Raden",
+                    "Kanade",
+                    "Ririka"
+                  ],
+                  "nextStepId": "STEP_3",
+                  "setFlag": "flowglow_kept_strange_frame"
+                },
+                {
+                  "id": "B",
+                  "text": "Cut around it",
+                  "resultDialogue": "Hajime deletes the frame. Niko restores it. Hajime deletes it again. Raden takes away the MORE DRAMA button.",
+                  "eligibleSunMembers": [
+                    "Hajime",
+                    "Niko",
+                    "Raden"
+                  ],
+                  "nextStepId": "STEP_3",
+                  "setFlag": "flowglow_cut_strange_frame"
+                },
+                {
+                  "id": "C",
+                  "text": "Turn it into an artistic transition",
+                  "resultDialogue": "Raden uses it as a one-second transition. Kanade asks, 'Can I whisper PIER?' Four people say no.",
+                  "eligibleSunMembers": [
+                    "Raden",
+                    "Ririka",
+                    "Kanade"
+                  ],
+                  "nextStepId": "STEP_3",
+                  "setFlag": "flowglow_art_transition"
+                }
+              ]
+            },
+            {
+              "id": "STEP_3",
+              "prompt": "The guests are seated. Pick the final cut.",
+              "options": [
+                {
+                  "id": "A",
+                  "text": "The heroic documentary",
+                  "resultDialogue": "The heroic cut lands perfectly. Then Kanade's hidden explosion sound triggers during a handshake. She sinks behind the console.",
+                  "eligibleSunMembers": [
+                    "Raden",
+                    "Hajime",
+                    "Ririka",
+                    "Kanade"
+                  ],
+                  "nextStepId": "",
+                  "setFlag": "finish_flowglow_documentary",
+                  "completionDialogue": "The official highlight film gives the Summer Games a surprisingly heroic ending, plus one unauthorized explosion during sportsmanship."
+                },
+                {
+                  "id": "B",
+                  "text": "The chaos cut",
+                  "resultDialogue": "Niko hits MORE DRAMA. Kanade restores six screams. Hajime names the file FINAL_FINAL_DO_NOT_TOUCH. Nobody listens.",
+                  "eligibleSunMembers": [
+                    "Niko",
+                    "Kanade",
+                    "Ririka",
+                    "Hajime",
+                    "Raden"
+                  ],
+                  "nextStepId": "",
+                  "setFlag": "finish_flowglow_chaoscut",
+                  "completionDialogue": "The Summer Games close with a hysterical highlight reel that turns yesterday's accidents into the resort's most popular screening of the week."
+                }
+              ]
+            }
+          ],
+          "completionDialogue": "FLOW GLOW premieres the tournament film. One strange lighthouse frame survives under several minutes of screaming.",
           "rewardTableId": "summer_activity_default"
         }
       ]
