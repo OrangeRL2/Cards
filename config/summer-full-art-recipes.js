@@ -25,7 +25,7 @@ module.exports = {
     "Vivi"
   ],
   "Gamers": [
-    "Fubuki",
+    "Fubuki G",
     "Mio",
     "Okayu",
     "Korone"
