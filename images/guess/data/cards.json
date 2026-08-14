@@ -1,0 +1,1016 @@
+[
+  {
+    "assetId": "00004-3-nrml-0005-00",
+    "member": "Aki",
+    "rarity": 3,
+    "image": "../cards/00004-3-nrml-0005-00.png"
+  },
+  {
+    "assetId": "03005-3-nrml-0037-00",
+    "member": "Anya",
+    "rarity": 3,
+    "image": "../cards/03005-3-nrml-0037-00.png"
+  },
+  {
+    "assetId": "00010-3-nrml-0010-00",
+    "member": "Ayame",
+    "rarity": 3,
+    "image": "../cards/00010-3-nrml-0010-00.png"
+  },
+  {
+    "assetId": "00013-3-nrml-0002-00",
+    "member": "AZKi",
+    "rarity": 3,
+    "image": "../cards/00013-3-nrml-0002-00.png"
+  },
+  {
+    "assetId": "04012-3-nrml-0051-00",
+    "member": "Baelz",
+    "rarity": 3,
+    "image": "../cards/04012-3-nrml-0051-00.png"
+  },
+  {
+    "assetId": "04014-3-nrml-0053-00",
+    "member": "Bijou",
+    "rarity": 3,
+    "image": "../cards/04014-3-nrml-0053-00.png"
+  },
+  {
+    "assetId": "00032-3-nrml-0026-00",
+    "member": "Botan",
+    "rarity": 3,
+    "image": "../cards/00032-3-nrml-0026-00.png"
+  },
+  {
+    "assetId": "04001-3-nrml-0042-00",
+    "member": "Calliope",
+    "rarity": 3,
+    "image": "../cards/04001-3-nrml-0042-00.png"
+  },
+  {
+    "assetId": "00011-3-nrml-0011-00",
+    "member": "Choco",
+    "rarity": 3,
+    "image": "../cards/00011-3-nrml-0011-00.png"
+  },
+  {
+    "assetId": "00021-3-nrml-0017-00",
+    "member": "Flare",
+    "rarity": 3,
+    "image": "../cards/00021-3-nrml-0017-00.png"
+  },
+  {
+    "assetId": "00006-3-nrml-0007-00",
+    "member": "Fubuki",
+    "rarity": 3,
+    "image": "../cards/00006-3-nrml-0007-00.png"
+  },
+  {
+    "assetId": "04016-3-nrml-0055-00",
+    "member": "Fuwawa",
+    "rarity": 3,
+    "image": "../cards/04016-3-nrml-0055-00.png"
+  },
+  {
+    "assetId": "00005-3-nrml-0006-00",
+    "member": "Haato",
+    "rarity": 3,
+    "image": "../cards/00005-3-nrml-0006-00.png"
+  },
+  {
+    "assetId": "06005-3-nrml-0061-00",
+    "member": "Hajime",
+    "rarity": 3,
+    "image": "../cards/06005-3-nrml-0061-00.png"
+  },
+  {
+    "assetId": "04003-3-nrml-0044-00",
+    "member": "Ina'nis",
+    "rarity": 3,
+    "image": "../cards/04003-3-nrml-0044-00.png"
+  },
+  {
+    "assetId": "03003-3-nrml-0035-00",
+    "member": "Iofi",
+    "rarity": 3,
+    "image": "../cards/03003-3-nrml-0035-00.png"
+  },
+  {
+    "assetId": "00039-3-nrml-0032-00",
+    "member": "Iroha",
+    "rarity": 3,
+    "image": "../cards/00039-3-nrml-0032-00.png"
+  },
+  {
+    "assetId": "04007-3-nrml-0047-00",
+    "member": "IRyS",
+    "rarity": 3,
+    "image": "../cards/04007-3-nrml-0047-00.png"
+  },
+  {
+    "assetId": "03008-3-nrml-0040-00",
+    "member": "Kaela",
+    "rarity": 3,
+    "image": "../cards/03008-3-nrml-0040-00.png"
+  },
+  {
+    "assetId": "06002-3-nrml-0058-00",
+    "member": "Kanade",
+    "rarity": 3,
+    "image": "../cards/06002-3-nrml-0058-00.png"
+  },
+  {
+    "assetId": "04002-3-nrml-0043-00",
+    "member": "Kiara",
+    "rarity": 3,
+    "image": "../cards/04002-3-nrml-0043-00.png"
+  },
+  {
+    "assetId": "03009-3-nrml-0041-00",
+    "member": "Kobo",
+    "rarity": 3,
+    "image": "../cards/03009-3-nrml-0041-00.png"
+  },
+  {
+    "assetId": "00017-3-nrml-0015-00",
+    "member": "Korone",
+    "rarity": 3,
+    "image": "../cards/00017-3-nrml-0015-00.png"
+  },
+  {
+    "assetId": "00037-3-nrml-0030-00",
+    "member": "Koyori",
+    "rarity": 3,
+    "image": "../cards/00037-3-nrml-0030-00.png"
+  },
+  {
+    "assetId": "04010-3-nrml-0049-00",
+    "member": "Kronii",
+    "rarity": 3,
+    "image": "../cards/04010-3-nrml-0049-00.png"
+  },
+  {
+    "assetId": "00035-3-nrml-0028-00",
+    "member": "La+",
+    "rarity": 3,
+    "image": "../cards/00035-3-nrml-0028-00.png"
+  },
+  {
+    "assetId": "00030-3-nrml-0024-00",
+    "member": "Lamy",
+    "rarity": 3,
+    "image": "../cards/00030-3-nrml-0024-00.png"
+  },
+  {
+    "assetId": "00036-3-nrml-0029-00",
+    "member": "Lui",
+    "rarity": 3,
+    "image": "../cards/00036-3-nrml-0029-00.png"
+  },
+  {
+    "assetId": "00028-3-nrml-0023-00",
+    "member": "Luna",
+    "rarity": 3,
+    "image": "../cards/00028-3-nrml-0023-00.png"
+  },
+  {
+    "assetId": "00023-3-nrml-0019-00",
+    "member": "Marine",
+    "rarity": 3,
+    "image": "../cards/00023-3-nrml-0019-00.png"
+  },
+  {
+    "assetId": "00007-3-nrml-0008-00",
+    "member": "Matsuri",
+    "rarity": 3,
+    "image": "../cards/00007-3-nrml-0008-00.png"
+  },
+  {
+    "assetId": "00015-3-nrml-0003-00",
+    "member": "Miko",
+    "rarity": 3,
+    "image": "../cards/00015-3-nrml-0003-00.png"
+  },
+  {
+    "assetId": "00014-3-nrml-0013-00",
+    "member": "Mio",
+    "rarity": 3,
+    "image": "../cards/00014-3-nrml-0013-00.png"
+  },
+  {
+    "assetId": "04017-3-nrml-0056-00",
+    "member": "Mococo",
+    "rarity": 3,
+    "image": "../cards/04017-3-nrml-0056-00.png"
+  },
+  {
+    "assetId": "03002-3-nrml-0034-00",
+    "member": "Moona",
+    "rarity": 3,
+    "image": "../cards/03002-3-nrml-0034-00.png"
+  },
+  {
+    "assetId": "00031-3-nrml-0025-00",
+    "member": "Nene",
+    "rarity": 3,
+    "image": "../cards/00031-3-nrml-0025-00.png"
+  },
+  {
+    "assetId": "04015-3-nrml-0054-00",
+    "member": "Nerissa",
+    "rarity": 3,
+    "image": "../cards/04015-3-nrml-0054-00.png"
+  },
+  {
+    "assetId": "00022-3-nrml-0018-00",
+    "member": "Noel",
+    "rarity": 3,
+    "image": "../cards/00022-3-nrml-0018-00.png"
+  },
+  {
+    "assetId": "00016-3-nrml-0014-00",
+    "member": "Okayu",
+    "rarity": 3,
+    "image": "../cards/00016-3-nrml-0014-00.png"
+  },
+  {
+    "assetId": "03004-3-nrml-0036-00",
+    "member": "Ollie",
+    "rarity": 3,
+    "image": "../cards/03004-3-nrml-0036-00.png"
+  },
+  {
+    "assetId": "00019-3-nrml-0016-00",
+    "member": "Pekora",
+    "rarity": 3,
+    "image": "../cards/00019-3-nrml-0016-00.png"
+  },
+  {
+    "assetId": "00034-3-nrml-0027-00",
+    "member": "Polka",
+    "rarity": 3,
+    "image": "../cards/00034-3-nrml-0027-00.png"
+  },
+  {
+    "assetId": "06004-3-nrml-0060-00",
+    "member": "Raden",
+    "rarity": 3,
+    "image": "../cards/06004-3-nrml-0060-00.png"
+  },
+  {
+    "assetId": "03006-3-nrml-0038-00",
+    "member": "Reine",
+    "rarity": 3,
+    "image": "../cards/03006-3-nrml-0038-00.png"
+  },
+  {
+    "assetId": "06003-3-nrml-0059-00",
+    "member": "Ririka",
+    "rarity": 3,
+    "image": "../cards/06003-3-nrml-0059-00.png"
+  },
+  {
+    "assetId": "03001-3-nrml-0033-00",
+    "member": "Risu",
+    "rarity": 3,
+    "image": "../cards/03001-3-nrml-0033-00.png"
+  },
+  {
+    "assetId": "00002-3-nrml-0001-00",
+    "member": "Robocosan",
+    "rarity": 3,
+    "image": "../cards/00002-3-nrml-0001-00.png"
+  },
+  {
+    "assetId": "04013-3-nrml-0052-00",
+    "member": "Shiori",
+    "rarity": 3,
+    "image": "../cards/04013-3-nrml-0052-00.png"
+  },
+  {
+    "assetId": "00001-3-nrml-0000-00",
+    "member": "Sora",
+    "rarity": 3,
+    "image": "../cards/00001-3-nrml-0000-00.png"
+  },
+  {
+    "assetId": "00012-3-nrml-0012-00",
+    "member": "Subaru",
+    "rarity": 3,
+    "image": "../cards/00012-3-nrml-0012-00.png"
+  },
+  {
+    "assetId": "00018-3-nrml-0004-00",
+    "member": "Suisei",
+    "rarity": 3,
+    "image": "../cards/00018-3-nrml-0004-00.png"
+  },
+  {
+    "assetId": "00027-3-nrml-0022-00",
+    "member": "Towa",
+    "rarity": 3,
+    "image": "../cards/00027-3-nrml-0022-00.png"
+  },
+  {
+    "assetId": "00026-3-nrml-0021-00",
+    "member": "Watame",
+    "rarity": 3,
+    "image": "../cards/00026-3-nrml-0021-00.png"
+  },
+  {
+    "assetId": "03007-3-nrml-0039-00",
+    "member": "Zeta",
+    "rarity": 3,
+    "image": "../cards/03007-3-nrml-0039-00.png"
+  },
+  {
+    "assetId": "00004-4-cmmn-0000-00",
+    "member": "Aki",
+    "rarity": 4,
+    "image": "../cards/00004-4-cmmn-0000-00.png"
+  },
+  {
+    "assetId": "03005-4-cmmn-0000-00",
+    "member": "Anya",
+    "rarity": 4,
+    "image": "../cards/03005-4-cmmn-0000-00.png"
+  },
+  {
+    "assetId": "00010-4-cmmn-0000-00",
+    "member": "Ayame",
+    "rarity": 4,
+    "image": "../cards/00010-4-cmmn-0000-00.png"
+  },
+  {
+    "assetId": "00013-4-cmmn-0000-00",
+    "member": "AZKi",
+    "rarity": 4,
+    "image": "../cards/00013-4-cmmn-0000-00.png"
+  },
+  {
+    "assetId": "04012-4-cmmn-0000-00",
+    "member": "Baelz",
+    "rarity": 4,
+    "image": "../cards/04012-4-cmmn-0000-00.png"
+  },
+  {
+    "assetId": "04014-4-cmmn-0000-00",
+    "member": "Bijou",
+    "rarity": 4,
+    "image": "../cards/04014-4-cmmn-0000-00.png"
+  },
+  {
+    "assetId": "00032-4-cmmn-0000-00",
+    "member": "Botan",
+    "rarity": 4,
+    "image": "../cards/00032-4-cmmn-0000-00.png"
+  },
+  {
+    "assetId": "04001-4-cmmn-0000-00",
+    "member": "Calliope",
+    "rarity": 4,
+    "image": "../cards/04001-4-cmmn-0000-00.png"
+  },
+  {
+    "assetId": "00011-4-cmmn-0000-00",
+    "member": "Choco",
+    "rarity": 4,
+    "image": "../cards/00011-4-cmmn-0000-00.png"
+  },
+  {
+    "assetId": "00021-4-cmmn-0000-00",
+    "member": "Flare",
+    "rarity": 4,
+    "image": "../cards/00021-4-cmmn-0000-00.png"
+  },
+  {
+    "assetId": "00006-4-cmmn-0000-00",
+    "member": "Fubuki",
+    "rarity": 4,
+    "image": "../cards/00006-4-cmmn-0000-00.png"
+  },
+  {
+    "assetId": "04016-4-cmmn-0000-00",
+    "member": "Fuwawa",
+    "rarity": 4,
+    "image": "../cards/04016-4-cmmn-0000-00.png"
+  },
+  {
+    "assetId": "00005-4-cmmn-0000-00",
+    "member": "Haato",
+    "rarity": 4,
+    "image": "../cards/00005-4-cmmn-0000-00.png"
+  },
+  {
+    "assetId": "06005-4-cmmn-0000-00",
+    "member": "Hajime",
+    "rarity": 4,
+    "image": "../cards/06005-4-cmmn-0000-00.png"
+  },
+  {
+    "assetId": "04003-4-cmmn-0000-00",
+    "member": "Ina'nis",
+    "rarity": 4,
+    "image": "../cards/04003-4-cmmn-0000-00.png"
+  },
+  {
+    "assetId": "03003-4-cmmn-0000-00",
+    "member": "Iofi",
+    "rarity": 4,
+    "image": "../cards/03003-4-cmmn-0000-00.png"
+  },
+  {
+    "assetId": "00039-4-cmmn-0000-00",
+    "member": "Iroha",
+    "rarity": 4,
+    "image": "../cards/00039-4-cmmn-0000-00.png"
+  },
+  {
+    "assetId": "04007-4-cmmn-0000-00",
+    "member": "IRyS",
+    "rarity": 4,
+    "image": "../cards/04007-4-cmmn-0000-00.png"
+  },
+  {
+    "assetId": "03008-4-cmmn-0000-00",
+    "member": "Kaela",
+    "rarity": 4,
+    "image": "../cards/03008-4-cmmn-0000-00.png"
+  },
+  {
+    "assetId": "06002-4-cmmn-0000-00",
+    "member": "Kanade",
+    "rarity": 4,
+    "image": "../cards/06002-4-cmmn-0000-00.png"
+  },
+  {
+    "assetId": "04002-4-cmmn-0000-00",
+    "member": "Kiara",
+    "rarity": 4,
+    "image": "../cards/04002-4-cmmn-0000-00.png"
+  },
+  {
+    "assetId": "03009-4-cmmn-0000-00",
+    "member": "Kobo",
+    "rarity": 4,
+    "image": "../cards/03009-4-cmmn-0000-00.png"
+  },
+  {
+    "assetId": "00017-4-cmmn-0000-00",
+    "member": "Korone",
+    "rarity": 4,
+    "image": "../cards/00017-4-cmmn-0000-00.png"
+  },
+  {
+    "assetId": "00037-4-cmmn-0000-00",
+    "member": "Koyori",
+    "rarity": 4,
+    "image": "../cards/00037-4-cmmn-0000-00.png"
+  },
+  {
+    "assetId": "04010-4-cmmn-0000-00",
+    "member": "Kronii",
+    "rarity": 4,
+    "image": "../cards/04010-4-cmmn-0000-00.png"
+  },
+  {
+    "assetId": "00035-4-cmmn-0000-00",
+    "member": "La+",
+    "rarity": 4,
+    "image": "../cards/00035-4-cmmn-0000-00.png"
+  },
+  {
+    "assetId": "00030-4-cmmn-0000-00",
+    "member": "Lamy",
+    "rarity": 4,
+    "image": "../cards/00030-4-cmmn-0000-00.png"
+  },
+  {
+    "assetId": "00036-4-cmmn-0000-00",
+    "member": "Lui",
+    "rarity": 4,
+    "image": "../cards/00036-4-cmmn-0000-00.png"
+  },
+  {
+    "assetId": "00028-4-cmmn-0000-00",
+    "member": "Luna",
+    "rarity": 4,
+    "image": "../cards/00028-4-cmmn-0000-00.png"
+  },
+  {
+    "assetId": "00023-4-cmmn-0000-00",
+    "member": "Marine",
+    "rarity": 4,
+    "image": "../cards/00023-4-cmmn-0000-00.png"
+  },
+  {
+    "assetId": "00007-4-cmmn-0000-00",
+    "member": "Matsuri",
+    "rarity": 4,
+    "image": "../cards/00007-4-cmmn-0000-00.png"
+  },
+  {
+    "assetId": "00015-4-cmmn-0000-00",
+    "member": "Miko",
+    "rarity": 4,
+    "image": "../cards/00015-4-cmmn-0000-00.png"
+  },
+  {
+    "assetId": "00014-4-cmmn-0000-00",
+    "member": "Mio",
+    "rarity": 4,
+    "image": "../cards/00014-4-cmmn-0000-00.png"
+  },
+  {
+    "assetId": "04017-4-cmmn-0000-00",
+    "member": "Mococo",
+    "rarity": 4,
+    "image": "../cards/04017-4-cmmn-0000-00.png"
+  },
+  {
+    "assetId": "03002-4-cmmn-0000-00",
+    "member": "Moona",
+    "rarity": 4,
+    "image": "../cards/03002-4-cmmn-0000-00.png"
+  },
+  {
+    "assetId": "00031-4-cmmn-0000-00",
+    "member": "Nene",
+    "rarity": 4,
+    "image": "../cards/00031-4-cmmn-0000-00.png"
+  },
+  {
+    "assetId": "04015-4-cmmn-0000-00",
+    "member": "Nerissa",
+    "rarity": 4,
+    "image": "../cards/04015-4-cmmn-0000-00.png"
+  },
+  {
+    "assetId": "00022-4-cmmn-0000-00",
+    "member": "Noel",
+    "rarity": 4,
+    "image": "../cards/00022-4-cmmn-0000-00.png"
+  },
+  {
+    "assetId": "00016-4-cmmn-0000-00",
+    "member": "Okayu",
+    "rarity": 4,
+    "image": "../cards/00016-4-cmmn-0000-00.png"
+  },
+  {
+    "assetId": "03004-4-cmmn-0000-00",
+    "member": "Ollie",
+    "rarity": 4,
+    "image": "../cards/03004-4-cmmn-0000-00.png"
+  },
+  {
+    "assetId": "00019-4-cmmn-0000-00",
+    "member": "Pekora",
+    "rarity": 4,
+    "image": "../cards/00019-4-cmmn-0000-00.png"
+  },
+  {
+    "assetId": "00034-4-cmmn-0000-00",
+    "member": "Polka",
+    "rarity": 4,
+    "image": "../cards/00034-4-cmmn-0000-00.png"
+  },
+  {
+    "assetId": "06004-4-cmmn-0000-00",
+    "member": "Raden",
+    "rarity": 4,
+    "image": "../cards/06004-4-cmmn-0000-00.png"
+  },
+  {
+    "assetId": "03006-4-cmmn-0000-00",
+    "member": "Reine",
+    "rarity": 4,
+    "image": "../cards/03006-4-cmmn-0000-00.png"
+  },
+  {
+    "assetId": "06003-4-cmmn-0000-00",
+    "member": "Ririka",
+    "rarity": 4,
+    "image": "../cards/06003-4-cmmn-0000-00.png"
+  },
+  {
+    "assetId": "03001-4-cmmn-0000-00",
+    "member": "Risu",
+    "rarity": 4,
+    "image": "../cards/03001-4-cmmn-0000-00.png"
+  },
+  {
+    "assetId": "00002-4-cmmn-0000-00",
+    "member": "Robocosan",
+    "rarity": 4,
+    "image": "../cards/00002-4-cmmn-0000-00.png"
+  },
+  {
+    "assetId": "04013-4-cmmn-0000-00",
+    "member": "Shiori",
+    "rarity": 4,
+    "image": "../cards/04013-4-cmmn-0000-00.png"
+  },
+  {
+    "assetId": "00001-4-cmmn-0000-00",
+    "member": "Sora",
+    "rarity": 4,
+    "image": "../cards/00001-4-cmmn-0000-00.png"
+  },
+  {
+    "assetId": "00012-4-cmmn-0000-00",
+    "member": "Subaru",
+    "rarity": 4,
+    "image": "../cards/00012-4-cmmn-0000-00.png"
+  },
+  {
+    "assetId": "00018-4-cmmn-0000-00",
+    "member": "Suisei",
+    "rarity": 4,
+    "image": "../cards/00018-4-cmmn-0000-00.png"
+  },
+  {
+    "assetId": "00027-4-cmmn-0000-00",
+    "member": "Towa",
+    "rarity": 4,
+    "image": "../cards/00027-4-cmmn-0000-00.png"
+  },
+  {
+    "assetId": "00026-4-cmmn-0000-00",
+    "member": "Watame",
+    "rarity": 4,
+    "image": "../cards/00026-4-cmmn-0000-00.png"
+  },
+  {
+    "assetId": "03007-4-cmmn-0000-00",
+    "member": "Zeta",
+    "rarity": 4,
+    "image": "../cards/03007-4-cmmn-0000-00.png"
+  },
+  {
+    "assetId": "00004-5-uniq-0005-00",
+    "member": "Aki",
+    "rarity": 5,
+    "image": "../cards/00004-5-uniq-0005-00.png"
+  },
+  {
+    "assetId": "03005-5-uniq-0037-00",
+    "member": "Anya",
+    "rarity": 5,
+    "image": "../cards/03005-5-uniq-0037-00.png"
+  },
+  {
+    "assetId": "00010-5-uniq-0010-00",
+    "member": "Ayame",
+    "rarity": 5,
+    "image": "../cards/00010-5-uniq-0010-00.png"
+  },
+  {
+    "assetId": "00013-5-uniq-0002-00",
+    "member": "AZKi",
+    "rarity": 5,
+    "image": "../cards/00013-5-uniq-0002-00.png"
+  },
+  {
+    "assetId": "04012-5-uniq-0051-00",
+    "member": "Baelz",
+    "rarity": 5,
+    "image": "../cards/04012-5-uniq-0051-00.png"
+  },
+  {
+    "assetId": "04014-5-uniq-0053-00",
+    "member": "Bijou",
+    "rarity": 5,
+    "image": "../cards/04014-5-uniq-0053-00.png"
+  },
+  {
+    "assetId": "00032-5-uniq-0026-00",
+    "member": "Botan",
+    "rarity": 5,
+    "image": "../cards/00032-5-uniq-0026-00.png"
+  },
+  {
+    "assetId": "04001-5-uniq-0042-00",
+    "member": "Calliope",
+    "rarity": 5,
+    "image": "../cards/04001-5-uniq-0042-00.png"
+  },
+  {
+    "assetId": "00011-5-uniq-0011-00",
+    "member": "Choco",
+    "rarity": 5,
+    "image": "../cards/00011-5-uniq-0011-00.png"
+  },
+  {
+    "assetId": "00021-5-uniq-0017-00",
+    "member": "Flare",
+    "rarity": 5,
+    "image": "../cards/00021-5-uniq-0017-00.png"
+  },
+  {
+    "assetId": "00021-5-uniq-0064-00",
+    "member": "Flare",
+    "rarity": 5,
+    "image": "../cards/00021-5-uniq-0064-00.png"
+  },
+  {
+    "assetId": "00006-5-uniq-0007-00",
+    "member": "Fubuki",
+    "rarity": 5,
+    "image": "../cards/00006-5-uniq-0007-00.png"
+  },
+  {
+    "assetId": "04016-5-uniq-0055-00",
+    "member": "Fuwawa",
+    "rarity": 5,
+    "image": "../cards/04016-5-uniq-0055-00.png"
+  },
+  {
+    "assetId": "00005-5-uniq-0006-00",
+    "member": "Haato",
+    "rarity": 5,
+    "image": "../cards/00005-5-uniq-0006-00.png"
+  },
+  {
+    "assetId": "06005-5-uniq-0061-00",
+    "member": "Hajime",
+    "rarity": 5,
+    "image": "../cards/06005-5-uniq-0061-00.png"
+  },
+  {
+    "assetId": "04003-5-uniq-0044-00",
+    "member": "Ina'nis",
+    "rarity": 5,
+    "image": "../cards/04003-5-uniq-0044-00.png"
+  },
+  {
+    "assetId": "03003-5-uniq-0035-00",
+    "member": "Iofi",
+    "rarity": 5,
+    "image": "../cards/03003-5-uniq-0035-00.png"
+  },
+  {
+    "assetId": "00039-5-uniq-0032-00",
+    "member": "Iroha",
+    "rarity": 5,
+    "image": "../cards/00039-5-uniq-0032-00.png"
+  },
+  {
+    "assetId": "04007-5-uniq-0047-00",
+    "member": "IRyS",
+    "rarity": 5,
+    "image": "../cards/04007-5-uniq-0047-00.png"
+  },
+  {
+    "assetId": "03008-5-uniq-0040-00",
+    "member": "Kaela",
+    "rarity": 5,
+    "image": "../cards/03008-5-uniq-0040-00.png"
+  },
+  {
+    "assetId": "06002-5-uniq-0058-00",
+    "member": "Kanade",
+    "rarity": 5,
+    "image": "../cards/06002-5-uniq-0058-00.png"
+  },
+  {
+    "assetId": "06002-5-uniq-0066-00",
+    "member": "Kanade",
+    "rarity": 5,
+    "image": "../cards/06002-5-uniq-0066-00.png"
+  },
+  {
+    "assetId": "04002-5-uniq-0043-00",
+    "member": "Kiara",
+    "rarity": 5,
+    "image": "../cards/04002-5-uniq-0043-00.png"
+  },
+  {
+    "assetId": "03009-5-uniq-0041-00",
+    "member": "Kobo",
+    "rarity": 5,
+    "image": "../cards/03009-5-uniq-0041-00.png"
+  },
+  {
+    "assetId": "00017-5-uniq-0015-00",
+    "member": "Korone",
+    "rarity": 5,
+    "image": "../cards/00017-5-uniq-0015-00.png"
+  },
+  {
+    "assetId": "00037-5-uniq-0030-00",
+    "member": "Koyori",
+    "rarity": 5,
+    "image": "../cards/00037-5-uniq-0030-00.png"
+  },
+  {
+    "assetId": "04010-5-uniq-0049-00",
+    "member": "Kronii",
+    "rarity": 5,
+    "image": "../cards/04010-5-uniq-0049-00.png"
+  },
+  {
+    "assetId": "00035-5-uniq-0028-00",
+    "member": "La+",
+    "rarity": 5,
+    "image": "../cards/00035-5-uniq-0028-00.png"
+  },
+  {
+    "assetId": "00030-5-uniq-0024-00",
+    "member": "Lamy",
+    "rarity": 5,
+    "image": "../cards/00030-5-uniq-0024-00.png"
+  },
+  {
+    "assetId": "00036-5-uniq-0029-00",
+    "member": "Lui",
+    "rarity": 5,
+    "image": "../cards/00036-5-uniq-0029-00.png"
+  },
+  {
+    "assetId": "00028-5-uniq-0023-00",
+    "member": "Luna",
+    "rarity": 5,
+    "image": "../cards/00028-5-uniq-0023-00.png"
+  },
+  {
+    "assetId": "00023-5-uniq-0019-00",
+    "member": "Marine",
+    "rarity": 5,
+    "image": "../cards/00023-5-uniq-0019-00.png"
+  },
+  {
+    "assetId": "00007-5-uniq-0008-00",
+    "member": "Matsuri",
+    "rarity": 5,
+    "image": "../cards/00007-5-uniq-0008-00.png"
+  },
+  {
+    "assetId": "00015-5-uniq-0003-00",
+    "member": "Miko",
+    "rarity": 5,
+    "image": "../cards/00015-5-uniq-0003-00.png"
+  },
+  {
+    "assetId": "00015-5-uniq-0067-00",
+    "member": "Miko",
+    "rarity": 5,
+    "image": "../cards/00015-5-uniq-0067-00.png"
+  },
+  {
+    "assetId": "00014-5-uniq-0013-00",
+    "member": "Mio",
+    "rarity": 5,
+    "image": "../cards/00014-5-uniq-0013-00.png"
+  },
+  {
+    "assetId": "04017-5-uniq-0056-00",
+    "member": "Mococo",
+    "rarity": 5,
+    "image": "../cards/04017-5-uniq-0056-00.png"
+  },
+  {
+    "assetId": "03002-5-uniq-0034-00",
+    "member": "Moona",
+    "rarity": 5,
+    "image": "../cards/03002-5-uniq-0034-00.png"
+  },
+  {
+    "assetId": "00031-5-uniq-0025-00",
+    "member": "Nene",
+    "rarity": 5,
+    "image": "../cards/00031-5-uniq-0025-00.png"
+  },
+  {
+    "assetId": "04015-5-uniq-0054-00",
+    "member": "Nerissa",
+    "rarity": 5,
+    "image": "../cards/04015-5-uniq-0054-00.png"
+  },
+  {
+    "assetId": "00022-5-uniq-0018-00",
+    "member": "Noel",
+    "rarity": 5,
+    "image": "../cards/00022-5-uniq-0018-00.png"
+  },
+  {
+    "assetId": "00022-5-uniq-0063-00",
+    "member": "Noel",
+    "rarity": 5,
+    "image": "../cards/00022-5-uniq-0063-00.png"
+  },
+  {
+    "assetId": "00016-5-uniq-0014-00",
+    "member": "Okayu",
+    "rarity": 5,
+    "image": "../cards/00016-5-uniq-0014-00.png"
+  },
+  {
+    "assetId": "03004-5-uniq-0036-00",
+    "member": "Ollie",
+    "rarity": 5,
+    "image": "../cards/03004-5-uniq-0036-00.png"
+  },
+  {
+    "assetId": "00019-5-uniq-0016-00",
+    "member": "Pekora",
+    "rarity": 5,
+    "image": "../cards/00019-5-uniq-0016-00.png"
+  },
+  {
+    "assetId": "00034-5-uniq-0027-00",
+    "member": "Polka",
+    "rarity": 5,
+    "image": "../cards/00034-5-uniq-0027-00.png"
+  },
+  {
+    "assetId": "06004-5-uniq-0060-00",
+    "member": "Raden",
+    "rarity": 5,
+    "image": "../cards/06004-5-uniq-0060-00.png"
+  },
+  {
+    "assetId": "03006-5-uniq-0038-00",
+    "member": "Reine",
+    "rarity": 5,
+    "image": "../cards/03006-5-uniq-0038-00.png"
+  },
+  {
+    "assetId": "06003-5-uniq-0059-00",
+    "member": "Ririka",
+    "rarity": 5,
+    "image": "../cards/06003-5-uniq-0059-00.png"
+  },
+  {
+    "assetId": "03001-5-uniq-0033-00",
+    "member": "Risu",
+    "rarity": 5,
+    "image": "../cards/03001-5-uniq-0033-00.png"
+  },
+  {
+    "assetId": "00002-5-uniq-0001-00",
+    "member": "Robocosan",
+    "rarity": 5,
+    "image": "../cards/00002-5-uniq-0001-00.png"
+  },
+  {
+    "assetId": "04013-5-uniq-0052-00",
+    "member": "Shiori",
+    "rarity": 5,
+    "image": "../cards/04013-5-uniq-0052-00.png"
+  },
+  {
+    "assetId": "00001-5-uniq-0000-00",
+    "member": "Sora",
+    "rarity": 5,
+    "image": "../cards/00001-5-uniq-0000-00.png"
+  },
+  {
+    "assetId": "00012-5-uniq-0012-00",
+    "member": "Subaru",
+    "rarity": 5,
+    "image": "../cards/00012-5-uniq-0012-00.png"
+  },
+  {
+    "assetId": "00012-5-uniq-0062-00",
+    "member": "Subaru",
+    "rarity": 5,
+    "image": "../cards/00012-5-uniq-0062-00.png"
+  },
+  {
+    "assetId": "00018-5-uniq-0004-00",
+    "member": "Suisei",
+    "rarity": 5,
+    "image": "../cards/00018-5-uniq-0004-00.png"
+  },
+  {
+    "assetId": "00018-5-uniq-0068-00",
+    "member": "Suisei",
+    "rarity": 5,
+    "image": "../cards/00018-5-uniq-0068-00.png"
+  },
+  {
+    "assetId": "00027-5-uniq-0022-00",
+    "member": "Towa",
+    "rarity": 5,
+    "image": "../cards/00027-5-uniq-0022-00.png"
+  },
+  {
+    "assetId": "00026-5-uniq-0021-00",
+    "member": "Watame",
+    "rarity": 5,
+    "image": "../cards/00026-5-uniq-0021-00.png"
+  },
+  {
+    "assetId": "00026-5-uniq-0065-00",
+    "member": "Watame",
+    "rarity": 5,
+    "image": "../cards/00026-5-uniq-0065-00.png"
+  },
+  {
+    "assetId": "03007-5-uniq-0039-00",
+    "member": "Zeta",
+    "rarity": 5,
+    "image": "../cards/03007-5-uniq-0039-00.png"
+  }
+]

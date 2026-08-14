@@ -1,7 +1,5 @@
 const { Events } = require('discord.js');
-
-// debug-friendly require
-const bossManager = require('../jobs/bossManager');
+const streamManager = require('../jobs/streamManager');
 
 module.exports = {
   name: Events.ClientReady,
@@ -9,13 +7,10 @@ module.exports = {
   execute(client) {
     console.log(`Ready! Logged in as ${client.user.tag}`);
 
-    // debug output
-    console.log('jobs/bossManager exports:', Object.keys(bossManager || {}), typeof bossManager.startBossManager);
-
-    if (bossManager && typeof bossManager.startBossManager === 'function') {
-      bossManager.startBossManager(client, { weeklySeed: 12345 });
+    if (streamManager && typeof streamManager.startStreamManager === 'function') {
+      streamManager.startStreamManager(client);
     } else {
-      console.error('startBossManager is not available on jobs/bossManager. Did the file export it?');
+      console.error('startStreamManager is not available on jobs/streamManager.');
     }
   },
 };

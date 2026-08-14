@@ -1,0 +1,1866 @@
+[
+  {
+    "id": "m0001",
+    "title": "Shiny Smily Story (2022 ver.)",
+    "playingSeconds": 100,
+    "characterIds": [],
+    "jacket": "../jackets/m0001.png",
+    "audio": "../audio/m0001.mp3"
+  },
+  {
+    "id": "m0002",
+    "title": "Seishun Archive",
+    "playingSeconds": 110,
+    "characterIds": [],
+    "jacket": "../jackets/m0002.png",
+    "audio": "../audio/m0002.mp3"
+  },
+  {
+    "id": "m0003",
+    "title": "Yumemiru Sora He",
+    "playingSeconds": 102,
+    "characterIds": [],
+    "jacket": "../jackets/m0003.png",
+    "audio": "../audio/m0003.mp3"
+  },
+  {
+    "id": "m0004",
+    "title": "Kirameki Rider",
+    "playingSeconds": 109,
+    "characterIds": [],
+    "jacket": "../jackets/m0004.png",
+    "audio": "../audio/m0004.mp3"
+  },
+  {
+    "id": "m0005",
+    "title": "Dreaming Days",
+    "playingSeconds": 103,
+    "characterIds": [],
+    "jacket": "../jackets/m0005.png",
+    "audio": "../audio/m0005.mp3"
+  },
+  {
+    "id": "m0006",
+    "title": "AsuiroClearSky",
+    "playingSeconds": 108,
+    "characterIds": [],
+    "jacket": "../jackets/m0006.png",
+    "audio": "../audio/m0006.mp3"
+  },
+  {
+    "id": "m0007",
+    "title": "Prism Melody",
+    "playingSeconds": 110,
+    "characterIds": [],
+    "jacket": "../jackets/m0007.png",
+    "audio": "../audio/m0007.mp3"
+  },
+  {
+    "id": "m0008",
+    "title": "Our Bright Parade",
+    "playingSeconds": 137,
+    "characterIds": [],
+    "jacket": "../jackets/m0008.png",
+    "audio": "../audio/m0008.mp3"
+  },
+  {
+    "id": "m0009",
+    "title": "Stellar Stellar",
+    "playingSeconds": 138,
+    "characterIds": [
+      "chr-00018"
+    ],
+    "jacket": "../jackets/m0009.png",
+    "audio": "../audio/m0009.mp3"
+  },
+  {
+    "id": "m0010",
+    "title": "Ahoy!! We are Houshou Pirates",
+    "playingSeconds": 108,
+    "characterIds": [
+      "chr-00023"
+    ],
+    "jacket": "../jackets/m0010.png",
+    "audio": "../audio/m0010.mp3"
+  },
+  {
+    "id": "m0012",
+    "title": "Excuse My Rudeness, But Could You Please RIP?",
+    "playingSeconds": 91,
+    "characterIds": [
+      "chr-04001"
+    ],
+    "jacket": "../jackets/m0012.png",
+    "audio": "../audio/m0012.mp3"
+  },
+  {
+    "id": "m0014",
+    "title": "High Tide",
+    "playingSeconds": 130,
+    "characterIds": [
+      "chr-03002"
+    ],
+    "jacket": "../jackets/m0014.png",
+    "audio": "../audio/m0014.mp3"
+  },
+  {
+    "id": "m0017",
+    "title": "Mogu Mogu YUMMY！",
+    "playingSeconds": 122,
+    "characterIds": [
+      "chr-00016"
+    ],
+    "jacket": "../jackets/m0017.png",
+    "audio": "../audio/m0017.mp3"
+  },
+  {
+    "id": "m0018",
+    "title": "Howling",
+    "playingSeconds": 100,
+    "characterIds": [
+      "chr-00014"
+    ],
+    "jacket": "../jackets/m0018.png",
+    "audio": "../audio/m0018.mp3"
+  },
+  {
+    "id": "m0020",
+    "title": "NENENENENENENENE!DAIBAKUSOU",
+    "playingSeconds": 122,
+    "characterIds": [
+      "chr-00031"
+    ],
+    "jacket": "../jackets/m0020.png",
+    "audio": "../audio/m0020.mp3"
+  },
+  {
+    "id": "m0021",
+    "title": "Overd",
+    "playingSeconds": 112,
+    "characterIds": [
+      "chr-00036"
+    ],
+    "jacket": "../jackets/m0021.png",
+    "audio": "../audio/m0021.mp3"
+  },
+  {
+    "id": "m0022",
+    "title": "Dream☆Story",
+    "playingSeconds": 120,
+    "characterIds": [
+      "chr-00001"
+    ],
+    "jacket": "../jackets/m0022.png",
+    "audio": "../audio/m0022.mp3"
+  },
+  {
+    "id": "m0023",
+    "title": "rirubi",
+    "playingSeconds": 142,
+    "characterIds": [
+      "chr-00002"
+    ],
+    "jacket": "../jackets/m0023.png",
+    "audio": "../audio/m0023.mp3"
+  },
+  {
+    "id": "m0026",
+    "title": "SHALLYS",
+    "playingSeconds": 146,
+    "characterIds": [
+      "chr-00004"
+    ],
+    "jacket": "../jackets/m0026.png",
+    "audio": "../audio/m0026.mp3"
+  },
+  {
+    "id": "m0028",
+    "title": "Virtualove",
+    "playingSeconds": 155,
+    "characterIds": [
+      "chr-00007"
+    ],
+    "jacket": "../jackets/m0028.png",
+    "audio": "../audio/m0028.mp3"
+  },
+  {
+    "id": "m0031",
+    "title": "NoDistance",
+    "playingSeconds": 152,
+    "characterIds": [
+      "chr-00011"
+    ],
+    "jacket": "../jackets/m0031.png",
+    "audio": "../audio/m0031.mp3"
+  },
+  {
+    "id": "m0032",
+    "title": "Pleiades!",
+    "playingSeconds": 96,
+    "characterIds": [
+      "chr-00012"
+    ],
+    "jacket": "../jackets/m0032.png",
+    "audio": "../audio/m0032.mp3"
+  },
+  {
+    "id": "m0033",
+    "title": "Doggy god's street",
+    "playingSeconds": 127,
+    "characterIds": [
+      "chr-00017"
+    ],
+    "jacket": "../jackets/m0033.png",
+    "audio": "../audio/m0033.mp3"
+  },
+  {
+    "id": "m0034",
+    "title": "PEKORANDOMBRAIN",
+    "playingSeconds": 113,
+    "characterIds": [
+      "chr-00019"
+    ],
+    "jacket": "../jackets/m0034.png",
+    "audio": "../audio/m0034.mp3"
+  },
+  {
+    "id": "m0035",
+    "title": "Zenryoku-Jumping!",
+    "playingSeconds": 97,
+    "characterIds": [
+      "chr-00021"
+    ],
+    "jacket": "../jackets/m0035.png",
+    "audio": "../audio/m0035.mp3"
+  },
+  {
+    "id": "m0037",
+    "title": "My song",
+    "playingSeconds": 127,
+    "characterIds": [
+      "chr-00026"
+    ],
+    "jacket": "../jackets/m0037.png",
+    "audio": "../audio/m0037.mp3"
+  },
+  {
+    "id": "m0038",
+    "title": "Palette",
+    "playingSeconds": 153,
+    "characterIds": [
+      "chr-00027"
+    ],
+    "jacket": "../jackets/m0038.png",
+    "audio": "../audio/m0038.mp3"
+  },
+  {
+    "id": "m0040",
+    "title": "Asuenokyokaisen",
+    "playingSeconds": 133,
+    "characterIds": [
+      "chr-00030"
+    ],
+    "jacket": "../jackets/m0040.png",
+    "audio": "../audio/m0040.mp3"
+  },
+  {
+    "id": "m0041",
+    "title": "Lioness’ Pride",
+    "playingSeconds": 120,
+    "characterIds": [
+      "chr-00032"
+    ],
+    "jacket": "../jackets/m0041.png",
+    "audio": "../audio/m0041.mp3"
+  },
+  {
+    "id": "m0042",
+    "title": "Po",
+    "playingSeconds": 141,
+    "characterIds": [
+      "chr-00034"
+    ],
+    "jacket": "../jackets/m0042.png",
+    "audio": "../audio/m0042.mp3"
+  },
+  {
+    "id": "m0044",
+    "title": "WAO!!(2025 ver.)",
+    "playingSeconds": 159,
+    "characterIds": [
+      "chr-00037"
+    ],
+    "jacket": "../jackets/m0044.png",
+    "audio": "../audio/m0044.mp3"
+  },
+  {
+    "id": "m0046",
+    "title": "IrohaStep!",
+    "playingSeconds": 130,
+    "characterIds": [
+      "chr-00039"
+    ],
+    "jacket": "../jackets/m0046.png",
+    "audio": "../audio/m0046.mp3"
+  },
+  {
+    "id": "m0047",
+    "title": "ALiCE&u",
+    "playingSeconds": 130,
+    "characterIds": [
+      "chr-03001"
+    ],
+    "jacket": "../jackets/m0047.png",
+    "audio": "../audio/m0047.mp3"
+  },
+  {
+    "id": "m0048",
+    "title": "Q&A=E",
+    "playingSeconds": 144,
+    "characterIds": [
+      "chr-03003"
+    ],
+    "jacket": "../jackets/m0048.png",
+    "audio": "../audio/m0048.mp3"
+  },
+  {
+    "id": "m0049",
+    "title": "SPARKS",
+    "playingSeconds": 104,
+    "characterIds": [
+      "chr-04002"
+    ],
+    "jacket": "../jackets/m0049.png",
+    "audio": "../audio/m0049.mp3"
+  },
+  {
+    "id": "m0050",
+    "title": "VIOLET",
+    "playingSeconds": 136,
+    "characterIds": [
+      "chr-04003"
+    ],
+    "jacket": "../jackets/m0050.png",
+    "audio": "../audio/m0050.mp3"
+  },
+  {
+    "id": "m0052",
+    "title": "JOLLIE JOLLIE",
+    "playingSeconds": 119,
+    "characterIds": [
+      "chr-03004"
+    ],
+    "jacket": "../jackets/m0052.png",
+    "audio": "../audio/m0052.mp3"
+  },
+  {
+    "id": "m0053",
+    "title": "Unreal Veil",
+    "playingSeconds": 123,
+    "characterIds": [
+      "chr-03005"
+    ],
+    "jacket": "../jackets/m0053.png",
+    "audio": "../audio/m0053.mp3"
+  },
+  {
+    "id": "m0054",
+    "title": "Gate Open: START!",
+    "playingSeconds": 145,
+    "characterIds": [
+      "chr-03006"
+    ],
+    "jacket": "../jackets/m0054.png",
+    "audio": "../audio/m0054.mp3"
+  },
+  {
+    "id": "m0058",
+    "title": "Daydream",
+    "playingSeconds": 97,
+    "characterIds": [
+      "chr-04010"
+    ],
+    "jacket": "../jackets/m0058.png",
+    "audio": "../audio/m0058.mp3"
+  },
+  {
+    "id": "m0060",
+    "title": "You're Mine",
+    "playingSeconds": 150,
+    "characterIds": [
+      "chr-03007"
+    ],
+    "jacket": "../jackets/m0060.png",
+    "audio": "../audio/m0060.mp3"
+  },
+  {
+    "id": "m0062",
+    "title": "Mantra Hujan",
+    "playingSeconds": 110,
+    "characterIds": [
+      "chr-03009"
+    ],
+    "jacket": "../jackets/m0062.png",
+    "audio": "../audio/m0062.mp3"
+  },
+  {
+    "id": "m0063",
+    "title": "Lifetime Showtime",
+    "playingSeconds": 128,
+    "characterIds": [
+      "chr-04016",
+      "chr-04017"
+    ],
+    "jacket": "../jackets/m0063.png",
+    "audio": "../audio/m0063.mp3"
+  },
+  {
+    "id": "m0064",
+    "title": "Monsters and Men",
+    "playingSeconds": 141,
+    "characterIds": [
+      "chr-04013"
+    ],
+    "jacket": "../jackets/m0064.png",
+    "audio": "../audio/m0064.mp3"
+  },
+  {
+    "id": "m0065",
+    "title": "Prism no Mahou",
+    "playingSeconds": 139,
+    "characterIds": [
+      "chr-04014"
+    ],
+    "jacket": "../jackets/m0065.png",
+    "audio": "../audio/m0065.mp3"
+  },
+  {
+    "id": "m0066",
+    "title": "Say My Name",
+    "playingSeconds": 137,
+    "characterIds": [
+      "chr-04015"
+    ],
+    "jacket": "../jackets/m0066.png",
+    "audio": "../audio/m0066.mp3"
+  },
+  {
+    "id": "m0068",
+    "title": "GREATEST",
+    "playingSeconds": 125,
+    "characterIds": [
+      "chr-06002"
+    ],
+    "jacket": "../jackets/m0068.png",
+    "audio": "../audio/m0068.mp3"
+  },
+  {
+    "id": "m0069",
+    "title": "Kyoumodaitensai!",
+    "playingSeconds": 112,
+    "characterIds": [
+      "chr-06003"
+    ],
+    "jacket": "../jackets/m0069.png",
+    "audio": "../audio/m0069.mp3"
+  },
+  {
+    "id": "m0070",
+    "title": "Japan no bijutsushi oboemasho",
+    "playingSeconds": 134,
+    "characterIds": [
+      "chr-06004"
+    ],
+    "jacket": "../jackets/m0070.png",
+    "audio": "../audio/m0070.mp3"
+  },
+  {
+    "id": "m0071",
+    "title": "Countach",
+    "playingSeconds": 144,
+    "characterIds": [
+      "chr-06005"
+    ],
+    "jacket": "../jackets/m0071.png",
+    "audio": "../audio/m0071.mp3"
+  },
+  {
+    "id": "m0072",
+    "title": "Star,star,start",
+    "playingSeconds": 129,
+    "characterIds": [
+      "chr-00001"
+    ],
+    "jacket": "../jackets/m0072.png",
+    "audio": "../audio/m0072.mp3"
+  },
+  {
+    "id": "m0073",
+    "title": "ONINO UTAGE",
+    "playingSeconds": 132,
+    "characterIds": [
+      "chr-00002"
+    ],
+    "jacket": "../jackets/m0073.png",
+    "audio": "../audio/m0073.mp3"
+  },
+  {
+    "id": "m0074",
+    "title": "ω cat",
+    "playingSeconds": 137,
+    "characterIds": [
+      "chr-00013"
+    ],
+    "jacket": "../jackets/m0074.png",
+    "audio": "../audio/m0074.mp3"
+  },
+  {
+    "id": "m0075",
+    "title": "BIBBIDIBA",
+    "playingSeconds": 122,
+    "characterIds": [
+      "chr-00018"
+    ],
+    "jacket": "../jackets/m0075.png",
+    "audio": "../audio/m0075.mp3"
+  },
+  {
+    "id": "m0076",
+    "title": "flower rhapsody",
+    "playingSeconds": 117,
+    "characterIds": [
+      "chr-00015"
+    ],
+    "jacket": "../jackets/m0076.png",
+    "audio": "../audio/m0076.mp3"
+  },
+  {
+    "id": "m0077",
+    "title": "Sʼil vous President",
+    "playingSeconds": 117,
+    "characterIds": [
+      "chr-00006"
+    ],
+    "jacket": "../jackets/m0077.png",
+    "audio": "../audio/m0077.mp3"
+  },
+  {
+    "id": "m0078",
+    "title": "Kimagure Mercy",
+    "playingSeconds": 149,
+    "characterIds": [
+      "chr-00004"
+    ],
+    "jacket": "../jackets/m0078.png",
+    "audio": "../audio/m0078.mp3"
+  },
+  {
+    "id": "m0079",
+    "title": "BUTASANDER",
+    "playingSeconds": 136,
+    "characterIds": [
+      "chr-00005"
+    ],
+    "jacket": "../jackets/m0079.png",
+    "audio": "../audio/m0079.mp3"
+  },
+  {
+    "id": "m0080",
+    "title": "DOUTAN KYOHI",
+    "playingSeconds": 144,
+    "characterIds": [
+      "chr-00007"
+    ],
+    "jacket": "../jackets/m0080.png",
+    "audio": "../audio/m0080.mp3"
+  },
+  {
+    "id": "m0083",
+    "title": "Yoi no Yo, Yoi!",
+    "playingSeconds": 100,
+    "characterIds": [
+      "chr-00010"
+    ],
+    "jacket": "../jackets/m0083.png",
+    "audio": "../audio/m0083.mp3"
+  },
+  {
+    "id": "m0084",
+    "title": "Delusion Tax",
+    "playingSeconds": 118,
+    "characterIds": [
+      "chr-00011"
+    ],
+    "jacket": "../jackets/m0084.png",
+    "audio": "../audio/m0084.mp3"
+  },
+  {
+    "id": "m0085",
+    "title": "Do my best!",
+    "playingSeconds": 103,
+    "characterIds": [
+      "chr-00012"
+    ],
+    "jacket": "../jackets/m0085.png",
+    "audio": "../audio/m0085.mp3"
+  },
+  {
+    "id": "m0086",
+    "title": "Show",
+    "playingSeconds": 101,
+    "characterIds": [
+      "chr-00017"
+    ],
+    "jacket": "../jackets/m0086.png",
+    "audio": "../audio/m0086.mp3"
+  },
+  {
+    "id": "m0087",
+    "title": "Neko Kaburi-Na",
+    "playingSeconds": 133,
+    "characterIds": [
+      "chr-00016"
+    ],
+    "jacket": "../jackets/m0087.png",
+    "audio": "../audio/m0087.mp3"
+  },
+  {
+    "id": "m0089",
+    "title": "ZenjinruiUsagikakeikaku!",
+    "playingSeconds": 141,
+    "characterIds": [
+      "chr-00019"
+    ],
+    "jacket": "../jackets/m0089.png",
+    "audio": "../audio/m0089.mp3"
+  },
+  {
+    "id": "m0090",
+    "title": "Bishoujyo Muzai♡Pirates",
+    "playingSeconds": 100,
+    "characterIds": [
+      "chr-00023"
+    ],
+    "jacket": "../jackets/m0090.png",
+    "audio": "../audio/m0090.mp3"
+  },
+  {
+    "id": "m0091",
+    "title": "Kaibutsu",
+    "playingSeconds": 135,
+    "characterIds": [
+      "chr-00021"
+    ],
+    "jacket": "../jackets/m0091.png",
+    "audio": "../audio/m0091.mp3"
+  },
+  {
+    "id": "m0092",
+    "title": "Gyu-Don Carnival!",
+    "playingSeconds": 116,
+    "characterIds": [
+      "chr-00022"
+    ],
+    "jacket": "../jackets/m0092.png",
+    "audio": "../audio/m0092.mp3"
+  },
+  {
+    "id": "m0094",
+    "title": "What an amazing swing",
+    "playingSeconds": 128,
+    "characterIds": [
+      "chr-00026"
+    ],
+    "jacket": "../jackets/m0094.png",
+    "audio": "../audio/m0094.mp3"
+  },
+  {
+    "id": "m0095",
+    "title": "-ERROR",
+    "playingSeconds": 146,
+    "characterIds": [
+      "chr-00027"
+    ],
+    "jacket": "../jackets/m0095.png",
+    "audio": "../audio/m0095.mp3"
+  },
+  {
+    "id": "m0097",
+    "title": "The Brave",
+    "playingSeconds": 108,
+    "characterIds": [
+      "chr-00030"
+    ],
+    "jacket": "../jackets/m0097.png",
+    "audio": "../audio/m0097.mp3"
+  },
+  {
+    "id": "m0098",
+    "title": "Non-breath oblige",
+    "playingSeconds": 130,
+    "characterIds": [
+      "chr-00032"
+    ],
+    "jacket": "../jackets/m0098.png",
+    "audio": "../audio/m0098.mp3"
+  },
+  {
+    "id": "m0099",
+    "title": "Chu,Tayousei.",
+    "playingSeconds": 123,
+    "characterIds": [
+      "chr-00031"
+    ],
+    "jacket": "../jackets/m0099.png",
+    "audio": "../audio/m0099.mp3"
+  },
+  {
+    "id": "m0100",
+    "title": "ENVY BABY",
+    "playingSeconds": 135,
+    "characterIds": [
+      "chr-00034"
+    ],
+    "jacket": "../jackets/m0100.png",
+    "audio": "../audio/m0100.mp3"
+  },
+  {
+    "id": "m0101",
+    "title": "God-ish",
+    "playingSeconds": 107,
+    "characterIds": [
+      "chr-00035"
+    ],
+    "jacket": "../jackets/m0101.png",
+    "audio": "../audio/m0101.mp3"
+  },
+  {
+    "id": "m0102",
+    "title": "God knows...",
+    "playingSeconds": 160,
+    "characterIds": [
+      "chr-00037"
+    ],
+    "jacket": "../jackets/m0102.png",
+    "audio": "../audio/m0102.mp3"
+  },
+  {
+    "id": "m0104",
+    "title": "Owl",
+    "playingSeconds": 126,
+    "characterIds": [
+      "chr-00036"
+    ],
+    "jacket": "../jackets/m0104.png",
+    "audio": "../audio/m0104.mp3"
+  },
+  {
+    "id": "m0105",
+    "title": "Kyu-kurarin",
+    "playingSeconds": 126,
+    "characterIds": [
+      "chr-00039"
+    ],
+    "jacket": "../jackets/m0105.png",
+    "audio": "../audio/m0105.mp3"
+  },
+  {
+    "id": "m0106",
+    "title": "FIRE BIRD",
+    "playingSeconds": 136,
+    "characterIds": [
+      "chr-03002"
+    ],
+    "jacket": "../jackets/m0106.png",
+    "audio": "../audio/m0106.mp3"
+  },
+  {
+    "id": "m0107",
+    "title": "Snow halation",
+    "playingSeconds": 116,
+    "characterIds": [
+      "chr-03001"
+    ],
+    "jacket": "../jackets/m0107.png",
+    "audio": "../audio/m0107.mp3"
+  },
+  {
+    "id": "m0108",
+    "title": "Alien Alien",
+    "playingSeconds": 139,
+    "characterIds": [
+      "chr-03003"
+    ],
+    "jacket": "../jackets/m0108.png",
+    "audio": "../audio/m0108.mp3"
+  },
+  {
+    "id": "m0109",
+    "title": "DEAD BEATS",
+    "playingSeconds": 120,
+    "characterIds": [
+      "chr-04001"
+    ],
+    "jacket": "../jackets/m0109.png",
+    "audio": "../audio/m0109.mp3"
+  },
+  {
+    "id": "m0111",
+    "title": "The Vampire",
+    "playingSeconds": 121,
+    "characterIds": [
+      "chr-04002"
+    ],
+    "jacket": "../jackets/m0111.png",
+    "audio": "../audio/m0111.mp3"
+  },
+  {
+    "id": "m0112",
+    "title": "NAI NAI",
+    "playingSeconds": 132,
+    "characterIds": [
+      "chr-04003"
+    ],
+    "jacket": "../jackets/m0112.png",
+    "audio": "../audio/m0112.mp3"
+  },
+  {
+    "id": "m0114",
+    "title": "Kyouran Hey Kids!!",
+    "playingSeconds": 131,
+    "characterIds": [
+      "chr-03004"
+    ],
+    "jacket": "../jackets/m0114.png",
+    "audio": "../audio/m0114.mp3"
+  },
+  {
+    "id": "m0115",
+    "title": "Marshall Maximizer",
+    "playingSeconds": 121,
+    "characterIds": [
+      "chr-03005"
+    ],
+    "jacket": "../jackets/m0115.png",
+    "audio": "../audio/m0115.mp3"
+  },
+  {
+    "id": "m0116",
+    "title": "Usseewa",
+    "playingSeconds": 134,
+    "characterIds": [
+      "chr-03006"
+    ],
+    "jacket": "../jackets/m0116.png",
+    "audio": "../audio/m0116.mp3"
+  },
+  {
+    "id": "m0117",
+    "title": "IDOL",
+    "playingSeconds": 126,
+    "characterIds": [
+      "chr-04007"
+    ],
+    "jacket": "../jackets/m0117.png",
+    "audio": "../audio/m0117.mp3"
+  },
+  {
+    "id": "m0120",
+    "title": "Mafia",
+    "playingSeconds": 134,
+    "characterIds": [
+      "chr-04010"
+    ],
+    "jacket": "../jackets/m0120.png",
+    "audio": "../audio/m0120.mp3"
+  },
+  {
+    "id": "m0121",
+    "title": "PSYCHO",
+    "playingSeconds": 95,
+    "characterIds": [
+      "chr-04012"
+    ],
+    "jacket": "../jackets/m0121.png",
+    "audio": "../audio/m0121.mp3"
+  },
+  {
+    "id": "m0122",
+    "title": "KAWAIKUTE GOMEN",
+    "playingSeconds": 124,
+    "characterIds": [
+      "chr-03007"
+    ],
+    "jacket": "../jackets/m0122.png",
+    "audio": "../audio/m0122.mp3"
+  },
+  {
+    "id": "m0123",
+    "title": "Brave Heart",
+    "playingSeconds": 109,
+    "characterIds": [
+      "chr-03008"
+    ],
+    "jacket": "../jackets/m0123.png",
+    "audio": "../audio/m0123.mp3"
+  },
+  {
+    "id": "m0124",
+    "title": "Overdose",
+    "playingSeconds": 128,
+    "characterIds": [
+      "chr-03009"
+    ],
+    "jacket": "../jackets/m0124.png",
+    "audio": "../audio/m0124.mp3"
+  },
+  {
+    "id": "m0127",
+    "title": "Kyoufuu All Back",
+    "playingSeconds": 135,
+    "characterIds": [
+      "chr-04013"
+    ],
+    "jacket": "../jackets/m0127.png",
+    "audio": "../audio/m0127.mp3"
+  },
+  {
+    "id": "m0128",
+    "title": "The Mirror’s Ripples",
+    "playingSeconds": 109,
+    "characterIds": [
+      "chr-04014"
+    ],
+    "jacket": "../jackets/m0128.png",
+    "audio": "../audio/m0128.mp3"
+  },
+  {
+    "id": "m0129",
+    "title": "YUKINO HANA",
+    "playingSeconds": 128,
+    "characterIds": [
+      "chr-04015"
+    ],
+    "jacket": "../jackets/m0129.png",
+    "audio": "../audio/m0129.mp3"
+  },
+  {
+    "id": "m0131",
+    "title": "KANADE",
+    "playingSeconds": 166,
+    "characterIds": [
+      "chr-06002"
+    ],
+    "jacket": "../jackets/m0131.png",
+    "audio": "../audio/m0131.mp3"
+  },
+  {
+    "id": "m0133",
+    "title": "PI PIKASO",
+    "playingSeconds": 144,
+    "characterIds": [
+      "chr-06004"
+    ],
+    "jacket": "../jackets/m0133.png",
+    "audio": "../audio/m0133.mp3"
+  },
+  {
+    "id": "m0134",
+    "title": "Tsuppari High School Rock'n Roll (Toukou-hen)",
+    "playingSeconds": 132,
+    "characterIds": [
+      "chr-06005"
+    ],
+    "jacket": "../jackets/m0134.png",
+    "audio": "../audio/m0134.mp3"
+  },
+  {
+    "id": "m0135",
+    "title": "Capture the Moment",
+    "playingSeconds": 117,
+    "characterIds": [],
+    "jacket": "../jackets/m0135.png",
+    "audio": "../audio/m0135.mp3"
+  },
+  {
+    "id": "m0136",
+    "title": "Color Rise Harmony",
+    "playingSeconds": 159,
+    "characterIds": [],
+    "jacket": "../jackets/m0136.png",
+    "audio": "../audio/m0136.mp3"
+  },
+  {
+    "id": "m0137",
+    "title": "Ridin' on Dreams",
+    "playingSeconds": 159,
+    "characterIds": [],
+    "jacket": "../jackets/m0137.png",
+    "audio": "../audio/m0137.mp3"
+  },
+  {
+    "id": "m0138",
+    "title": "DAI DAI DAI Fantasista",
+    "playingSeconds": 120,
+    "characterIds": [
+      "chr-00015"
+    ],
+    "jacket": "../jackets/m0138.png",
+    "audio": "../audio/m0138.mp3"
+  },
+  {
+    "id": "m0139",
+    "title": "Myth or Treat",
+    "playingSeconds": 124,
+    "characterIds": [
+      "chr-04001",
+      "chr-04002",
+      "chr-04003"
+    ],
+    "jacket": "../jackets/m0139.png",
+    "audio": "../audio/m0139.mp3"
+  },
+  {
+    "id": "m0140",
+    "title": "Escort me! Luknight",
+    "playingSeconds": 111,
+    "characterIds": [
+      "chr-00028"
+    ],
+    "jacket": "../jackets/m0140.png",
+    "audio": "../audio/m0140.mp3"
+  },
+  {
+    "id": "m0141",
+    "title": "Setsunatick Code",
+    "playingSeconds": 105,
+    "characterIds": [
+      "chr-00001",
+      "chr-00013"
+    ],
+    "jacket": "../jackets/m0141.png",
+    "audio": "../audio/m0141.mp3"
+  },
+  {
+    "id": "m0142",
+    "title": "Suspect",
+    "playingSeconds": 117,
+    "characterIds": [
+      "chr-00002",
+      "chr-00004",
+      "chr-00010"
+    ],
+    "jacket": "../jackets/m0142.png",
+    "audio": "../audio/m0142.mp3"
+  },
+  {
+    "id": "m0144",
+    "title": "NAKAMAKA",
+    "playingSeconds": 131,
+    "characterIds": [
+      "chr-00015",
+      "chr-00018",
+      "chr-00021",
+      "chr-00022",
+      "chr-00034"
+    ],
+    "jacket": "../jackets/m0144.png",
+    "audio": "../audio/m0144.mp3"
+  },
+  {
+    "id": "m0145",
+    "title": "Wicked feat. Mori Calliope",
+    "playingSeconds": 124,
+    "characterIds": [
+      "chr-00018",
+      "chr-04001"
+    ],
+    "jacket": "../jackets/m0145.png",
+    "audio": "../audio/m0145.mp3"
+  },
+  {
+    "id": "m0146",
+    "title": "ONIKEMODANCE",
+    "playingSeconds": 146,
+    "characterIds": [
+      "chr-00006",
+      "chr-00010",
+      "chr-00014"
+    ],
+    "jacket": "../jackets/m0146.png",
+    "audio": "../audio/m0146.mp3"
+  },
+  {
+    "id": "m0147",
+    "title": "zigokudeaouze!subachocolunatan",
+    "playingSeconds": 144,
+    "characterIds": [
+      "chr-00011",
+      "chr-00012",
+      "chr-00028",
+      "chr-00032"
+    ],
+    "jacket": "../jackets/m0147.png",
+    "audio": "../audio/m0147.mp3"
+  },
+  {
+    "id": "m0148",
+    "title": "ORANGE PARADE feat. Inugami Korone",
+    "playingSeconds": 123,
+    "characterIds": [
+      "chr-00016",
+      "chr-00017"
+    ],
+    "jacket": "../jackets/m0148.png",
+    "audio": "../audio/m0148.mp3"
+  },
+  {
+    "id": "m0149",
+    "title": "I I I",
+    "playingSeconds": 146,
+    "characterIds": [
+      "chr-00023",
+      "chr-03009"
+    ],
+    "jacket": "../jackets/m0149.png",
+    "audio": "../audio/m0149.mp3"
+  },
+  {
+    "id": "m0150",
+    "title": "Shishi Wata Cooking feat. Shishiro Botan",
+    "playingSeconds": 119,
+    "characterIds": [
+      "chr-00026",
+      "chr-00032"
+    ],
+    "jacket": "../jackets/m0150.png",
+    "audio": "../audio/m0150.mp3"
+  },
+  {
+    "id": "m0153",
+    "title": "Secret Garden",
+    "playingSeconds": 137,
+    "characterIds": [
+      "chr-00004",
+      "chr-00005",
+      "chr-00006",
+      "chr-00007"
+    ],
+    "jacket": "../jackets/m0153.png",
+    "audio": "../audio/m0153.mp3"
+  },
+  {
+    "id": "m0154",
+    "title": "BLUE CLAPPER",
+    "playingSeconds": 128,
+    "characterIds": [
+      "chr-00030",
+      "chr-00031",
+      "chr-00032",
+      "chr-00034"
+    ],
+    "jacket": "../jackets/m0154.png",
+    "audio": "../audio/m0154.mp3"
+  },
+  {
+    "id": "m0155",
+    "title": "Jouya Repaint",
+    "playingSeconds": 116,
+    "characterIds": [
+      "chr-00035",
+      "chr-00036",
+      "chr-00037",
+      "chr-00039"
+    ],
+    "jacket": "../jackets/m0155.png",
+    "audio": "../audio/m0155.mp3"
+  },
+  {
+    "id": "m0156",
+    "title": "Bridal Dream",
+    "playingSeconds": 126,
+    "characterIds": [
+      "chr-00019",
+      "chr-00023"
+    ],
+    "jacket": "../jackets/m0156.png",
+    "audio": "../audio/m0156.mp3"
+  },
+  {
+    "id": "m0157",
+    "title": "Our Promise",
+    "playingSeconds": 132,
+    "characterIds": [
+      "chr-04007",
+      "chr-04010",
+      "chr-04012"
+    ],
+    "jacket": "../jackets/m0157.png",
+    "audio": "../audio/m0157.mp3"
+  },
+  {
+    "id": "m0158",
+    "title": "Rebellion",
+    "playingSeconds": 113,
+    "characterIds": [
+      "chr-04013",
+      "chr-04014",
+      "chr-04015",
+      "chr-04016",
+      "chr-04017"
+    ],
+    "jacket": "../jackets/m0158.png",
+    "audio": "../audio/m0158.mp3"
+  },
+  {
+    "id": "m0159",
+    "title": "HI-15",
+    "playingSeconds": 113,
+    "characterIds": [
+      "chr-03001",
+      "chr-03002",
+      "chr-03003"
+    ],
+    "jacket": "../jackets/m0159.png",
+    "audio": "../audio/m0159.mp3"
+  },
+  {
+    "id": "m0160",
+    "title": "Slap by Step",
+    "playingSeconds": 129,
+    "characterIds": [
+      "chr-03004",
+      "chr-03005",
+      "chr-03006"
+    ],
+    "jacket": "../jackets/m0160.png",
+    "audio": "../audio/m0160.mp3"
+  },
+  {
+    "id": "m0161",
+    "title": "save our hearts",
+    "playingSeconds": 136,
+    "characterIds": [
+      "chr-03007",
+      "chr-03008",
+      "chr-03009"
+    ],
+    "jacket": "../jackets/m0161.png",
+    "audio": "../audio/m0161.mp3"
+  },
+  {
+    "id": "m0162",
+    "title": "Shunkan Heartbeat",
+    "playingSeconds": 131,
+    "characterIds": [
+      "chr-06002",
+      "chr-06003",
+      "chr-06004",
+      "chr-06005"
+    ],
+    "jacket": "../jackets/m0162.png",
+    "audio": "../audio/m0162.mp3"
+  },
+  {
+    "id": "m0163",
+    "title": "Maware! Setsugetsuka",
+    "playingSeconds": 141,
+    "characterIds": [
+      "chr-00006",
+      "chr-00013",
+      "chr-00023"
+    ],
+    "jacket": "../jackets/m0163.png",
+    "audio": "../audio/m0163.mp3"
+  },
+  {
+    "id": "m0164",
+    "title": "(Not) A Devil",
+    "playingSeconds": 132,
+    "characterIds": [
+      "chr-00013",
+      "chr-00039"
+    ],
+    "jacket": "../jackets/m0164.png",
+    "audio": "../audio/m0164.mp3"
+  },
+  {
+    "id": "m0165",
+    "title": "HAO",
+    "playingSeconds": 126,
+    "characterIds": [
+      "chr-00026",
+      "chr-03006"
+    ],
+    "jacket": "../jackets/m0165.png",
+    "audio": "../audio/m0165.mp3"
+  },
+  {
+    "id": "m0166",
+    "title": "Watashi no Ichiban Kawaiitokoro",
+    "playingSeconds": 146,
+    "characterIds": [
+      "chr-00015",
+      "chr-00028",
+      "chr-03003",
+      "chr-04016",
+      "chr-04017"
+    ],
+    "jacket": "../jackets/m0166.png",
+    "audio": "../audio/m0166.mp3"
+  },
+  {
+    "id": "m0167",
+    "title": "Megitsune",
+    "playingSeconds": 135,
+    "characterIds": [
+      "chr-04013",
+      "chr-04014",
+      "chr-04015",
+      "chr-04016",
+      "chr-04017"
+    ],
+    "jacket": "../jackets/m0167.png",
+    "audio": "../audio/m0167.mp3"
+  },
+  {
+    "id": "m0168",
+    "title": "Hyadain no Jojo Yujo",
+    "playingSeconds": 133,
+    "characterIds": [
+      "chr-00016",
+      "chr-00017"
+    ],
+    "jacket": "../jackets/m0168.png",
+    "audio": "../audio/m0168.mp3"
+  },
+  {
+    "id": "m0171",
+    "title": "Touch the hurt again",
+    "playingSeconds": 114,
+    "characterIds": [
+      "chr-00021",
+      "chr-00027",
+      "chr-00034"
+    ],
+    "jacket": "../jackets/m0171.png",
+    "audio": "../audio/m0171.mp3"
+  },
+  {
+    "id": "m0176",
+    "title": "Stay Blue",
+    "playingSeconds": 125,
+    "characterIds": [
+      "chr-00021",
+      "chr-04007"
+    ],
+    "jacket": "../jackets/m0176.png",
+    "audio": "../audio/m0176.mp3"
+  },
+  {
+    "id": "m0177",
+    "title": "Mikkorone×Showtime!!",
+    "playingSeconds": 126,
+    "characterIds": [
+      "chr-00015",
+      "chr-00017"
+    ],
+    "jacket": "../jackets/m0177.png",
+    "audio": "../audio/m0177.mp3"
+  },
+  {
+    "id": "m0179",
+    "title": "dahlah.",
+    "playingSeconds": 135,
+    "characterIds": [
+      "chr-03008"
+    ],
+    "jacket": "../jackets/m0179.png",
+    "audio": "../audio/m0179.mp3"
+  },
+  {
+    "id": "m0180",
+    "title": "Goodbye Declaration",
+    "playingSeconds": 127,
+    "characterIds": [
+      "chr-00010"
+    ],
+    "jacket": "../jackets/m0180.png",
+    "audio": "../audio/m0180.mp3"
+  },
+  {
+    "id": "m0181",
+    "title": "FUWAFUWA TIME",
+    "playingSeconds": 130,
+    "characterIds": [
+      "chr-00028"
+    ],
+    "jacket": "../jackets/m0181.png",
+    "audio": "../audio/m0181.mp3"
+  },
+  {
+    "id": "m0182",
+    "title": "Los! Los! Los!",
+    "playingSeconds": 134,
+    "characterIds": [
+      "chr-04012"
+    ],
+    "jacket": "../jackets/m0182.png",
+    "audio": "../audio/m0182.mp3"
+  },
+  {
+    "id": "m0183",
+    "title": "Carbonated Love",
+    "playingSeconds": 118,
+    "characterIds": [
+      "chr-04007"
+    ],
+    "jacket": "../jackets/m0183.png",
+    "audio": "../audio/m0183.mp3"
+  },
+  {
+    "id": "m0184",
+    "title": "SUPERNOVA",
+    "playingSeconds": 118,
+    "characterIds": [
+      "chr-00006"
+    ],
+    "jacket": "../jackets/m0184.png",
+    "audio": "../audio/m0184.mp3"
+  },
+  {
+    "id": "m0185",
+    "title": "Not Interested",
+    "playingSeconds": 129,
+    "characterIds": [
+      "chr-00035"
+    ],
+    "jacket": "../jackets/m0185.png",
+    "audio": "../audio/m0185.mp3"
+  },
+  {
+    "id": "m0186",
+    "title": "Waking Yashinoki",
+    "playingSeconds": 116,
+    "characterIds": [
+      "chr-00022"
+    ],
+    "jacket": "../jackets/m0186.png",
+    "audio": "../audio/m0186.mp3"
+  },
+  {
+    "id": "m0187",
+    "title": "Cherry Pop",
+    "playingSeconds": 142,
+    "characterIds": [
+      "chr-06003"
+    ],
+    "jacket": "../jackets/m0187.png",
+    "audio": "../audio/m0187.mp3"
+  },
+  {
+    "id": "m0188",
+    "title": "Colorful Universe",
+    "playingSeconds": 120,
+    "characterIds": [
+      "chr-00014"
+    ],
+    "jacket": "../jackets/m0188.png",
+    "audio": "../audio/m0188.mp3"
+  },
+  {
+    "id": "m0189",
+    "title": "Inochi(2024 ver.)",
+    "playingSeconds": 109,
+    "characterIds": [
+      "chr-00013"
+    ],
+    "jacket": "../jackets/m0189.png",
+    "audio": "../audio/m0189.mp3"
+  },
+  {
+    "id": "m0190",
+    "title": "sensation -KANSHOKU-",
+    "playingSeconds": 144,
+    "characterIds": [
+      "chr-00005"
+    ],
+    "jacket": "../jackets/m0190.png",
+    "audio": "../audio/m0190.mp3"
+  },
+  {
+    "id": "m0191",
+    "title": "Cute Na Kanojo",
+    "playingSeconds": 131,
+    "characterIds": [
+      "chr-04016",
+      "chr-04017"
+    ],
+    "jacket": "../jackets/m0191.png",
+    "audio": "../audio/m0191.mp3"
+  },
+  {
+    "id": "m0192",
+    "title": "Born to be \"BAU\"DOL☆★",
+    "playingSeconds": 152,
+    "characterIds": [
+      "chr-04016",
+      "chr-04017"
+    ],
+    "jacket": "../jackets/m0192.png",
+    "audio": "../audio/m0192.mp3"
+  },
+  {
+    "id": "m0193",
+    "title": "Let Me Be With You",
+    "playingSeconds": 108,
+    "characterIds": [
+      "chr-04016",
+      "chr-04017"
+    ],
+    "jacket": "../jackets/m0193.png",
+    "audio": "../audio/m0193.mp3"
+  },
+  {
+    "id": "m0196",
+    "title": "SAIKAI",
+    "playingSeconds": 130,
+    "characterIds": [
+      "chr-00018",
+      "chr-03002"
+    ],
+    "jacket": "../jackets/m0196.png",
+    "audio": "../audio/m0196.mp3"
+  },
+  {
+    "id": "m0197",
+    "title": "KAMINO MANIMANI",
+    "playingSeconds": 130,
+    "characterIds": [
+      "chr-00011",
+      "chr-00012",
+      "chr-00028"
+    ],
+    "jacket": "../jackets/m0197.png",
+    "audio": "../audio/m0197.mp3"
+  },
+  {
+    "id": "m0198",
+    "title": "I~ya I~ya I~ya",
+    "playingSeconds": 143,
+    "characterIds": [
+      "chr-04002",
+      "chr-04003"
+    ],
+    "jacket": "../jackets/m0198.png",
+    "audio": "../audio/m0198.mp3"
+  },
+  {
+    "id": "m0201",
+    "title": "Erandekurete Arigatou",
+    "playingSeconds": 110,
+    "characterIds": [
+      "chr-04007",
+      "chr-04012"
+    ],
+    "jacket": "../jackets/m0201.png",
+    "audio": "../audio/m0201.mp3"
+  },
+  {
+    "id": "m0206",
+    "title": "Renai Circulation",
+    "playingSeconds": 90,
+    "characterIds": [
+      "chr-00026"
+    ],
+    "jacket": "../jackets/m0206.png",
+    "audio": "../audio/m0206.mp3"
+  },
+  {
+    "id": "m0300",
+    "title": "yumeiro wonder",
+    "playingSeconds": 157,
+    "characterIds": [],
+    "jacket": "../jackets/m0300.png",
+    "audio": "../audio/m0300.mp3"
+  },
+  {
+    "id": "m0301",
+    "title": "Gimmick Gimmick Entertainment",
+    "playingSeconds": 152,
+    "characterIds": [],
+    "jacket": "../jackets/m0301.png",
+    "audio": "../audio/m0301.mp3"
+  },
+  {
+    "id": "m0302",
+    "title": "Dead Ma’am’s Chest",
+    "playingSeconds": 132,
+    "characterIds": [
+      "chr-00023"
+    ],
+    "jacket": "../jackets/m0302.png",
+    "audio": "../audio/m0302.mp3"
+  },
+  {
+    "id": "m0303",
+    "title": "A Tale of Six Trillion Years and a Night",
+    "playingSeconds": 155,
+    "characterIds": [
+      "chr-00001",
+      "chr-00013"
+    ],
+    "jacket": "../jackets/m0303.png",
+    "audio": "../audio/m0303.mp3"
+  },
+  {
+    "id": "m0304",
+    "title": "LET'S JUST CRASH",
+    "playingSeconds": 112,
+    "characterIds": [
+      "chr-04001"
+    ],
+    "jacket": "../jackets/m0304.png",
+    "audio": "../audio/m0304.mp3"
+  },
+  {
+    "id": "m0306",
+    "title": "1:15 AM",
+    "playingSeconds": 147,
+    "characterIds": [
+      "chr-03001"
+    ],
+    "jacket": "../jackets/m0306.png",
+    "audio": "../audio/m0306.mp3"
+  },
+  {
+    "id": "m0307",
+    "title": "Orange",
+    "playingSeconds": 133,
+    "characterIds": [
+      "chr-00031",
+      "chr-04002"
+    ],
+    "jacket": "../jackets/m0307.png",
+    "audio": "../audio/m0307.mp3"
+  },
+  {
+    "id": "m0308",
+    "title": "UFO",
+    "playingSeconds": 104,
+    "characterIds": [
+      "chr-06004",
+      "chr-06005"
+    ],
+    "jacket": "../jackets/m0308.png",
+    "audio": "../audio/m0308.mp3"
+  },
+  {
+    "id": "m0309",
+    "title": "Boom! Boom! Tropica Vacation",
+    "playingSeconds": 136,
+    "characterIds": [
+      "chr-00012",
+      "chr-00021",
+      "chr-00022",
+      "chr-00026",
+      "chr-06002"
+    ],
+    "jacket": "../jackets/m0309.png",
+    "audio": "../audio/m0309.mp3"
+  },
+  {
+    "id": "m0310",
+    "title": "HOT DUCK!",
+    "playingSeconds": 136,
+    "characterIds": [
+      "chr-00012"
+    ],
+    "jacket": "../jackets/m0310.png",
+    "audio": "../audio/m0310.mp3"
+  },
+  {
+    "id": "m0311",
+    "title": "Homenobi",
+    "playingSeconds": 146,
+    "characterIds": [
+      "chr-00022"
+    ],
+    "jacket": "../jackets/m0311.png",
+    "audio": "../audio/m0311.mp3"
+  },
+  {
+    "id": "m0312",
+    "title": "UNDEAD",
+    "playingSeconds": 104,
+    "characterIds": [
+      "chr-00021"
+    ],
+    "jacket": "../jackets/m0312.png",
+    "audio": "../audio/m0312.mp3"
+  },
+  {
+    "id": "m0317",
+    "title": "Kibun Joujou↑↑",
+    "playingSeconds": 138,
+    "characterIds": [
+      "chr-03004",
+      "chr-03005",
+      "chr-03006"
+    ],
+    "jacket": "../jackets/m0317.png",
+    "audio": "../audio/m0317.mp3"
+  },
+  {
+    "id": "m0318",
+    "title": "Natsuyadori",
+    "playingSeconds": 114,
+    "characterIds": [
+      "chr-00014"
+    ],
+    "jacket": "../jackets/m0318.png",
+    "audio": "../audio/m0318.mp3"
+  },
+  {
+    "id": "m0319",
+    "title": "Bling-Bang-Bang-Born",
+    "playingSeconds": 120,
+    "characterIds": [
+      "chr-04003",
+      "chr-04012"
+    ],
+    "jacket": "../jackets/m0319.png",
+    "audio": "../audio/m0319.mp3"
+  },
+  {
+    "id": "m0321",
+    "title": "KINGWORLD",
+    "playingSeconds": 128,
+    "characterIds": [
+      "chr-00006"
+    ],
+    "jacket": "../jackets/m0321.png",
+    "audio": "../audio/m0321.mp3"
+  },
+  {
+    "id": "m0323",
+    "title": "Kyun Kyun MIKO Kyun kyun♡",
+    "playingSeconds": 144,
+    "characterIds": [
+      "chr-00015"
+    ],
+    "jacket": "../jackets/m0323.png",
+    "audio": "../audio/m0323.mp3"
+  },
+  {
+    "id": "m0324",
+    "title": "GHOST",
+    "playingSeconds": 118,
+    "characterIds": [
+      "chr-00018"
+    ],
+    "jacket": "../jackets/m0324.png",
+    "audio": "../audio/m0324.mp3"
+  },
+  {
+    "id": "m0325",
+    "title": "Sugar Rush",
+    "playingSeconds": 134,
+    "characterIds": [
+      "chr-00015",
+      "chr-00018"
+    ],
+    "jacket": "../jackets/m0325.png",
+    "audio": "../audio/m0325.mp3"
+  },
+  {
+    "id": "m0326",
+    "title": "TwiLight",
+    "playingSeconds": 120,
+    "characterIds": [
+      "chr-04007"
+    ],
+    "jacket": "../jackets/m0326.png",
+    "audio": "../audio/m0326.mp3"
+  },
+  {
+    "id": "m0327",
+    "title": "QUEEN",
+    "playingSeconds": 141,
+    "characterIds": [
+      "chr-00035"
+    ],
+    "jacket": "../jackets/m0327.png",
+    "audio": "../audio/m0327.mp3"
+  },
+  {
+    "id": "m0329",
+    "title": "Doku no Oujisama",
+    "playingSeconds": 146,
+    "characterIds": [
+      "chr-00016"
+    ],
+    "jacket": "../jackets/m0329.png",
+    "audio": "../audio/m0329.mp3"
+  },
+  {
+    "id": "m0330",
+    "title": "HELP!!",
+    "playingSeconds": 131,
+    "characterIds": [
+      "chr-03009"
+    ],
+    "jacket": "../jackets/m0330.png",
+    "audio": "../audio/m0330.mp3"
+  },
+  {
+    "id": "m0331",
+    "title": "Here I am",
+    "playingSeconds": 148,
+    "characterIds": [
+      "chr-03003"
+    ],
+    "jacket": "../jackets/m0331.png",
+    "audio": "../audio/m0331.mp3"
+  },
+  {
+    "id": "m0337",
+    "title": "Pretty Guardian Matsulimit Zero",
+    "playingSeconds": 117,
+    "characterIds": [
+      "chr-00007"
+    ],
+    "jacket": "../jackets/m0337.png",
+    "audio": "../audio/m0337.mp3"
+  },
+  {
+    "id": "m0346",
+    "title": "FACT",
+    "playingSeconds": 140,
+    "characterIds": [
+      "chr-00027"
+    ],
+    "jacket": "../jackets/m0346.png",
+    "audio": "../audio/m0346.mp3"
+  },
+  {
+    "id": "m0347",
+    "title": "Infinity (Remastered)",
+    "playingSeconds": 122,
+    "characterIds": [
+      "chr-00005"
+    ],
+    "jacket": "../jackets/m0347.png",
+    "audio": "../audio/m0347.mp3"
+  },
+  {
+    "id": "m0524",
+    "title": "You & aIzu",
+    "playingSeconds": 157,
+    "characterIds": [
+      "chr-06002"
+    ],
+    "jacket": "../jackets/m0524.png",
+    "audio": "../audio/m0524.mp3"
+  }
+]
