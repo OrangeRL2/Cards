@@ -66,11 +66,11 @@ const PARTICIPATION_WEIGHTS = {
 };
 const THIRDPLACE_WEIGHTS = {
   C: 0, U: 0, R: 0, S: 0, RR: 0, OC: 0,
-  SR: 35, OSR: 25, SY: 15, UR: 10, OUR: 5, HR: 5, BDAY: 4, SEC: 1,
+  SR: 0, OSR: 0, SY: 15, UR: 10, OUR: 5, HR: 5, BDAY: 4, SEC: 1,
 };
 const SECONDPLACE_WEIGHTS = {
   C: 0, U: 0, R: 0, S: 0, RR: 0, OC: 0,
-  SR: 20, OSR: 15, SY: 15, UR: 15, OUR: 11, HR: 11, BDAY: 8, SEC: 5,
+  SR: 0, OSR: 0, SY: 15, UR: 15, OUR: 11, HR: 11, BDAY: 8, SEC: 5,
 };
 
 const MANUAL_STREAM_GROUPS = Object.freeze({
@@ -1272,16 +1272,18 @@ function normalizeFilenameForMatch(filename) {
   return String(filename).replace(/\.(png|jpg|jpeg)$/i, '').replace(/[_\-]+/g, ' ').replace(/\s+/g, ' ').replace(/[^\w\s]/g, '').replace(/\b0*(\d{1,3})\b/g, '').trim().toLowerCase();
 }
 const lastPickedByRarity = new Map();
-function getNextLowerWeightRarity(currentRarity, visitedSet = null) {
+function getNextLowerWeightRarity(currentRarity, visitedSet = null, minRarity = null) {
   const idx = RARITY_ORDER.indexOf(String(currentRarity || '').trim());
+  const minIdx = minRarity ? RARITY_ORDER.indexOf(String(minRarity).trim()) : -1;
   for (let i = (idx === -1 ? RARITY_ORDER.length : idx) - 1; i >= 0; i--) {
+    if (minIdx >= 0 && i < minIdx) break;
     const c = RARITY_ORDER[i];
     if (RARITY_EXCLUDE.has(c) || visitedSet?.has(c)) continue;
     return c;
   }
   return null;
 }
-async function pickCardFromRarityFolder(rarity, oshiLabel, { avoidImmediateRepeat = true, _visited = null } = {}) {
+async function pickCardFromRarityFolder(rarity, oshiLabel, { avoidImmediateRepeat = true, minRarity = null, _visited = null } = {}) {
   try {
     const visited = _visited instanceof Set ? _visited : new Set();
     if (visited.has(rarity)) return null;
@@ -1289,8 +1291,8 @@ async function pickCardFromRarityFolder(rarity, oshiLabel, { avoidImmediateRepea
     const folder = path.join(getAssetsBaseForRarity(rarity), String(rarity).toUpperCase());
     const files = await fs.readdir(folder).catch(() => []);
     if (!files.length) {
-      const fallback = getNextLowerWeightRarity(rarity, visited);
-      return fallback ? pickCardFromRarityFolder(fallback, oshiLabel, { avoidImmediateRepeat, _visited: visited }) : null;
+      const fallback = getNextLowerWeightRarity(rarity, visited, minRarity);
+      return fallback ? pickCardFromRarityFolder(fallback, oshiLabel, { avoidImmediateRepeat, minRarity, _visited: visited }) : null;
     }
     const target = normalizeFilenameForMatch(oshiLabel || '');
     const candidates = files.map(f => ({ raw: f, norm: normalizeFilenameForMatch(f) }));
@@ -1312,8 +1314,8 @@ async function pickCardFromRarityFolder(rarity, oshiLabel, { avoidImmediateRepea
     }
     if (!pool && partial.length) pool = partial;
     if (!pool) {
-      const fallback = getNextLowerWeightRarity(rarity, visited);
-      if (fallback) return pickCardFromRarityFolder(fallback, oshiLabel, { avoidImmediateRepeat, _visited: visited });
+      const fallback = getNextLowerWeightRarity(rarity, visited, minRarity);
+      if (fallback) return pickCardFromRarityFolder(fallback, oshiLabel, { avoidImmediateRepeat, minRarity, _visited: visited });
       pool = candidates;
     }
     if (!pool.length) return null;
@@ -1387,26 +1389,28 @@ async function settleEndedEvents(client = null) {
 
       if (winners[2]) {
         try {
-          const picked = await pickCardByWeightedRarity(THIRDPLACE_WEIGHTS, label, { avoidImmediateRepeat: true }) || await pickCardByWeightedRarity(PARTICIPATION_WEIGHTS, label, { avoidImmediateRepeat: true });
+          const picked = await pickCardByWeightedRarity(THIRDPLACE_WEIGHTS, label, { avoidImmediateRepeat: true, minRarity: 'SY' });
           if (picked?.name) {
             await addCardToUser(winners[2].userId, picked.name, picked.rarity, 1);
             await StreamActionLog.create({ eventId: ev.eventId, userId: winners[2].userId, oshiId: ev.oshiId, action: 'reward', happiness: 0, meta: { tier: 3, reward: picked.rarity, card: picked.name } });
           } else {
-            await addOshiOsrToUser(winners[2].userId, label);
-            await StreamActionLog.create({ eventId: ev.eventId, userId: winners[2].userId, oshiId: ev.oshiId, action: 'reward', happiness: 0, meta: { tier: 3, reward: 'OSR' } });
+            const fallback = `${label} 001`;
+            await addCardToUser(winners[2].userId, fallback, 'SY', 1);
+            await StreamActionLog.create({ eventId: ev.eventId, userId: winners[2].userId, oshiId: ev.oshiId, action: 'reward', happiness: 0, meta: { tier: 3, reward: 'SY', card: fallback, note: 'SY floor fallback' } });
           }
         } catch (err) { console.error('[stream settle] third', err); }
       }
 
       if (winners[1]) {
         try {
-          const picked = await pickCardByWeightedRarity(SECONDPLACE_WEIGHTS, label, { avoidImmediateRepeat: true }) || await pickCardByWeightedRarity(PARTICIPATION_WEIGHTS, label, { avoidImmediateRepeat: true });
+          const picked = await pickCardByWeightedRarity(SECONDPLACE_WEIGHTS, label, { avoidImmediateRepeat: true, minRarity: 'SY' });
           if (picked?.name) {
             await addCardToUser(winners[1].userId, picked.name, picked.rarity, 1);
             await StreamActionLog.create({ eventId: ev.eventId, userId: winners[1].userId, oshiId: ev.oshiId, action: 'reward', happiness: 0, meta: { tier: 2, reward: picked.rarity, card: picked.name } });
           } else {
-            await addOshiOsrToUser(winners[1].userId, label);
-            await StreamActionLog.create({ eventId: ev.eventId, userId: winners[1].userId, oshiId: ev.oshiId, action: 'reward', happiness: 0, meta: { tier: 2, reward: 'OSR' } });
+            const fallback = `${label} 001`;
+            await addCardToUser(winners[1].userId, fallback, 'SY', 1);
+            await StreamActionLog.create({ eventId: ev.eventId, userId: winners[1].userId, oshiId: ev.oshiId, action: 'reward', happiness: 0, meta: { tier: 2, reward: 'SY', card: fallback, note: 'SY floor fallback' } });
           }
         } catch (err) { console.error('[stream settle] second', err); }
       }
@@ -1418,13 +1422,14 @@ async function settleEndedEvents(client = null) {
           await addCardToUser(winners[0].userId, cardName, 'ORI', 1);
           await StreamActionLog.create({ eventId: ev.eventId, userId: winners[0].userId, oshiId: ev.oshiId, action: 'reward', happiness: 0, meta: { tier: 1, reward: 'ORI', card: cardName } });
 
-          const picked2 = await pickCardByWeightedRarity(SECONDPLACE_WEIGHTS, label, { avoidImmediateRepeat: true }) || await pickCardByWeightedRarity(PARTICIPATION_WEIGHTS, label, { avoidImmediateRepeat: true });
+          const picked2 = await pickCardByWeightedRarity(SECONDPLACE_WEIGHTS, label, { avoidImmediateRepeat: true, minRarity: 'SY' });
           if (picked2?.name) {
             await addCardToUser(winners[0].userId, picked2.name, picked2.rarity, 1);
             await StreamActionLog.create({ eventId: ev.eventId, userId: winners[0].userId, oshiId: ev.oshiId, action: 'reward', happiness: 0, meta: { tier: 2, reward: picked2.rarity, card: picked2.name, note: '1st place also receives 2nd-place reward' } });
           } else {
-            await addOshiOsrToUser(winners[0].userId, label);
-            await StreamActionLog.create({ eventId: ev.eventId, userId: winners[0].userId, oshiId: ev.oshiId, action: 'reward', happiness: 0, meta: { tier: 2, reward: 'OSR', note: 'fallback' } });
+            const fallback = `${label} 001`;
+            await addCardToUser(winners[0].userId, fallback, 'SY', 1);
+            await StreamActionLog.create({ eventId: ev.eventId, userId: winners[0].userId, oshiId: ev.oshiId, action: 'reward', happiness: 0, meta: { tier: 2, reward: 'SY', card: fallback, note: '1st place SY floor fallback' } });
           }
         } catch (err) { console.error('[stream settle] first', err); }
       }

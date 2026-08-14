@@ -126,7 +126,12 @@ async function buildRound(mode, kind, starterId = null) {
         const audioFull = await holo.fetchSongAudio(song.id);
         const maxStart = Math.max(5, length - 20);
         const window = 5 + Math.random() * Math.max(0, maxStart - 5);
-        const audioClip = await clipMp3(audioFull, window, STAGE_SECONDS[1]);
+
+        // Rewarded/random Song challenges cannot use hints or give up, so give
+        // them a slightly more generous opening clip. Manual practice rounds
+        // keep the original 1-second start and can reveal 3/5/8s with hints.
+        const initialClipSeconds = kind === 'auto' ? 2 : STAGE_SECONDS[1];
+        const audioClip = await clipMp3(audioFull, window, initialClipSeconds);
         return {
           ...base,
           answerId: String(song.id),
@@ -266,7 +271,7 @@ async function announceAutomatic(client, channel, challengeMessage, mode) {
   }).catch(err => console.warn('[guess] announcement failed:', err.message));
 }
 
-async function spawnAutomatic(client, { mode = null, channelId = null, forced = false, announce = true } = {}) {
+async function spawnAutomatic(client, { mode = null, channelId = null, forced = false } = {}) {
   if (hasActiveAutomatic()) {
     return { success: false, reason: 'ACTIVE_AUTO' };
   }
@@ -300,7 +305,7 @@ async function spawnAutomatic(client, { mode = null, channelId = null, forced = 
     if (autoTimer) clearTimeout(autoTimer);
     autoTimer = null;
     nextAutoAt = null;
-    if (announce) await announceAutomatic(client, channel, msg, selectedMode);
+    await announceAutomatic(client, channel, msg, selectedMode);
     console.log(`[guess] ${forced ? 'forced' : 'automatic'} ${selectedMode} challenge started in ${channel.id}`);
     return { success: true, round, channel, message: msg };
   } catch (err) {

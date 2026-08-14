@@ -1139,9 +1139,7 @@
     "assetId": "00015-5-uniq-0067-00",
     "member": "Miko",
     "rarity": 5,
-    "image": "../cards/00015-5-uniq-0067-00.png",
-    "attribute": "Pure",
-    "group": "hololive 0th Generation"
+    "image": "../cards/00015-5-uniq-0067-00.png"
   },
   {
     "assetId": "00014-5-uniq-0013-00",
@@ -1315,9 +1313,7 @@
     "assetId": "00018-5-uniq-0068-00",
     "member": "Suisei",
     "rarity": 5,
-    "image": "../cards/00018-5-uniq-0068-00.png",
-    "attribute": "Cute",
-    "group": "hololive 0th Generation"
+    "image": "../cards/00018-5-uniq-0068-00.png"
   },
   {
     "assetId": "00027-5-uniq-0022-00",
