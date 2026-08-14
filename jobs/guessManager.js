@@ -266,7 +266,7 @@ async function announceAutomatic(client, channel, challengeMessage, mode) {
   }).catch(err => console.warn('[guess] announcement failed:', err.message));
 }
 
-async function spawnAutomatic(client, { mode = null, channelId = null, forced = false } = {}) {
+async function spawnAutomatic(client, { mode = null, channelId = null, forced = false, announce = true } = {}) {
   if (hasActiveAutomatic()) {
     return { success: false, reason: 'ACTIVE_AUTO' };
   }
@@ -300,7 +300,7 @@ async function spawnAutomatic(client, { mode = null, channelId = null, forced = 
     if (autoTimer) clearTimeout(autoTimer);
     autoTimer = null;
     nextAutoAt = null;
-    await announceAutomatic(client, channel, msg, selectedMode);
+    if (announce) await announceAutomatic(client, channel, msg, selectedMode);
     console.log(`[guess] ${forced ? 'forced' : 'automatic'} ${selectedMode} challenge started in ${channel.id}`);
     return { success: true, round, channel, message: msg };
   } catch (err) {
