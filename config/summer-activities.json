@@ -17659,6 +17659,1130 @@
           ]
         }
       }
+    },
+    {
+      "day": 16,
+      "date": "2026-08-16",
+      "chapter": "Chapter 3 - Wrong Floor",
+      "storyBeat": "ROUTE Z still ends at a sealed door marked CALIBRATION 3, so Management orders everyone to leave it alone. The resort responds by moving ordinary rooms, signs, and amenities around instead, forcing staff to manage geography like a guest complaint.",
+      "windows": {
+        "morning": {
+          "sceneId": "AUG16_MORNING",
+          "title": "Day 16 - Wrong Floor",
+          "openingDialogue": "ROUTE Z is closed for now, and the CALIBRATION 3 door still says no. This should have made today quieter. Instead, the hotel elevators have gained a new button labeled MAYBE. Facilities wants it removed. Miko wants it gold-plated.",
+          "coreActivities": [
+            {
+              "id": "AUG16_MORNING_ELEVATOR",
+              "fullArtRoute": "High-Spec Elite Grind",
+              "buttonText": "The MAYBE Button",
+              "previewDialogue": "Roboco, Miko, and Kaela inspect an elevator with questionable confidence.",
+              "selectedDialogue": "Roboco is scanning the panel. Miko is guarding the MAYBE button. Kaela has brought a pickaxe.",
+              "steps": [
+                {
+                  "id": "STEP_1",
+                  "prompt": "Who presses MAYBE?",
+                  "options": [
+                    {
+                      "id": "A",
+                      "text": "Let Miko do it",
+                      "resultDialogue": "The doors open to Floor ELITE. Miko: \"Finally.\" Roboco: \"That floor does not exist.\"",
+                      "eligibleSunMembers": [
+                        "Miko",
+                        "Roboco"
+                      ],
+                      "nextStepId": "STEP_2",
+                      "setFlag": "d16_elite_floor"
+                    },
+                    {
+                      "id": "B",
+                      "text": "Let Roboco scan it",
+                      "resultDialogue": "Roboco: \"Unknown destination.\" Miko presses it anyway. \"Known now.\"",
+                      "eligibleSunMembers": [
+                        "Roboco",
+                        "Miko"
+                      ],
+                      "nextStepId": "STEP_2",
+                      "setFlag": "d16_maybe_scan"
+                    },
+                    {
+                      "id": "C",
+                      "text": "Let Kaela press it",
+                      "resultDialogue": "Kaela presses MAYBE. The button cracks. \"Weak button.\" The elevator starts anyway.",
+                      "eligibleSunMembers": [
+                        "Kaela"
+                      ],
+                      "nextStepId": "STEP_2",
+                      "setFlag": "d16_kaela_button"
+                    }
+                  ]
+                },
+                {
+                  "id": "STEP_2",
+                  "prompt": "The elevator opens into a supply closet.",
+                  "options": [
+                    {
+                      "id": "A",
+                      "text": "Accept the new floor",
+                      "resultDialogue": "Miko hangs a sign: ELITE STORAGE. Roboco: \"You cannot annex a closet.\" \"Too late.\"",
+                      "eligibleSunMembers": [
+                        "Miko",
+                        "Roboco"
+                      ],
+                      "nextStepId": "STEP_3",
+                      "setFlag": "d16_annex_closet"
+                    },
+                    {
+                      "id": "B",
+                      "text": "Move the closet",
+                      "resultDialogue": "Kaela lifts the shelving unit. The elevator closes behind her. \"Wrong closet.\"",
+                      "eligibleSunMembers": [
+                        "Kaela"
+                      ],
+                      "nextStepId": "STEP_3",
+                      "setFlag": "d16_move_closet"
+                    },
+                    {
+                      "id": "C",
+                      "text": "Reboot the elevator",
+                      "resultDialogue": "Roboco reboots it. The panel now says MAYBE 2. Miko applauds.",
+                      "eligibleSunMembers": [
+                        "Roboco",
+                        "Miko"
+                      ],
+                      "nextStepId": "STEP_3",
+                      "setFlag": "d16_maybe_two"
+                    }
+                  ]
+                },
+                {
+                  "id": "STEP_3",
+                  "prompt": "A guest presses BEACH.",
+                  "options": [
+                    {
+                      "id": "A",
+                      "text": "Trust the elevator",
+                      "resultDialogue": "The doors open onto sand. Roboco: \"Impossible.\" Miko: \"Convenient.\"",
+                      "eligibleSunMembers": [
+                        "Roboco",
+                        "Miko"
+                      ],
+                      "nextStepId": "",
+                      "setFlag": "d16_elevator_beach"
+                    },
+                    {
+                      "id": "B",
+                      "text": "Stop the guest",
+                      "resultDialogue": "You block the doors. The elevator announces BEACH WITHOUT YOU and leaves.",
+                      "eligibleSunMembers": [],
+                      "nextStepId": "",
+                      "setFlag": "d16_elevator_offended"
+                    },
+                    {
+                      "id": "C",
+                      "text": "Let Kaela test it",
+                      "resultDialogue": "Kaela steps out, returns with a coconut. \"Beach confirmed.\"",
+                      "eligibleSunMembers": [
+                        "Kaela"
+                      ],
+                      "nextStepId": "",
+                      "setFlag": "d16_kaela_beach"
+                    }
+                  ]
+                }
+              ],
+              "completionDialogue": "Facilities removed the MAYBE button. It came back after lunch.",
+              "rewardTableId": "summer_activity_default"
+            },
+            {
+              "id": "AUG16_MORNING_BREAKFAST",
+              "fullArtRoute": "Phoenix Peacock Squirrel Delivery",
+              "buttonText": "Breakfast Migration",
+              "previewDialogue": "Kiara, Reine, and Risu deliver breakfast to rooms that refuse to stay numbered.",
+              "selectedDialogue": "Kiara has twelve trays. Reine has the guest list. Risu has invented a rerouting fee.",
+              "steps": [
+                {
+                  "id": "STEP_1",
+                  "prompt": "Room 302 is now beside Room 118.",
+                  "options": [
+                    {
+                      "id": "A",
+                      "text": "Follow the numbers",
+                      "resultDialogue": "Kiara walks ten meters and arrives at 302 twice. \"We have duplicate breakfast targets.\"",
+                      "eligibleSunMembers": [
+                        "Kiara"
+                      ],
+                      "nextStepId": "STEP_2",
+                      "setFlag": "d16_duplicate_302"
+                    },
+                    {
+                      "id": "B",
+                      "text": "Follow Reine",
+                      "resultDialogue": "Reine ignores the signs and finds the guest immediately. Risu: \"Royal GPS. Premium service.\"",
+                      "eligibleSunMembers": [
+                        "Reine",
+                        "Risu"
+                      ],
+                      "nextStepId": "STEP_2",
+                      "setFlag": "d16_reine_gps"
+                    },
+                    {
+                      "id": "C",
+                      "text": "Use Risu's system",
+                      "resultDialogue": "Risu charges the tray 50 shells for changing floors. Kiara: \"The tray has no money!\"",
+                      "eligibleSunMembers": [
+                        "Risu",
+                        "Kiara"
+                      ],
+                      "nextStepId": "STEP_2",
+                      "setFlag": "d16_tray_fee"
+                    }
+                  ]
+                },
+                {
+                  "id": "STEP_2",
+                  "prompt": "A door marked 405 opens into the kitchen.",
+                  "options": [
+                    {
+                      "id": "A",
+                      "text": "Serve breakfast there",
+                      "resultDialogue": "Kiara hands the chef his own breakfast. He accepts it without comment.",
+                      "eligibleSunMembers": [
+                        "Kiara"
+                      ],
+                      "nextStepId": "STEP_3",
+                      "setFlag": "d16_chef_breakfast"
+                    },
+                    {
+                      "id": "B",
+                      "text": "Ask Reine to complain",
+                      "resultDialogue": "Reine: \"This room is incorrectly located.\" The sign changes to KITCHEN. \"Acceptable.\"",
+                      "eligibleSunMembers": [
+                        "Reine"
+                      ],
+                      "nextStepId": "STEP_3",
+                      "setFlag": "d16_room_corrected"
+                    },
+                    {
+                      "id": "C",
+                      "text": "Let Risu monetize it",
+                      "resultDialogue": "Risu adds EXPRESS KITCHEN ACCESS. Reine removes the sign. Risu adds another.",
+                      "eligibleSunMembers": [
+                        "Risu",
+                        "Reine"
+                      ],
+                      "nextStepId": "STEP_3",
+                      "setFlag": "d16_kitchen_access"
+                    }
+                  ]
+                },
+                {
+                  "id": "STEP_3",
+                  "prompt": "One tray still has no destination.",
+                  "options": [
+                    {
+                      "id": "A",
+                      "text": "Eat it",
+                      "resultDialogue": "Kiara sits down. \"Finally, a route I understand.\"",
+                      "eligibleSunMembers": [
+                        "Kiara"
+                      ],
+                      "nextStepId": "",
+                      "setFlag": "d16_eat_tray"
+                    },
+                    {
+                      "id": "B",
+                      "text": "Ask the tray",
+                      "resultDialogue": "Risu: \"Where do you live?\" The elevator dings. Reine: \"Apparently it answered.\"",
+                      "eligibleSunMembers": [
+                        "Risu",
+                        "Reine"
+                      ],
+                      "nextStepId": "",
+                      "setFlag": "d16_tray_answered"
+                    },
+                    {
+                      "id": "C",
+                      "text": "Return it",
+                      "resultDialogue": "The kitchen is now Room 405. Kiara: \"I quit architecture.\"",
+                      "eligibleSunMembers": [
+                        "Kiara"
+                      ],
+                      "nextStepId": "",
+                      "setFlag": "d16_quit_architecture"
+                    }
+                  ]
+                }
+              ],
+              "completionDialogue": "Breakfast reached every guest except one tray, which appears to have checked into the hotel.",
+              "rewardTableId": "summer_activity_default"
+            },
+            {
+              "id": "AUG16_MORNING_SPA",
+              "fullArtRoute": "Idol Vampire Haachama Spa",
+              "buttonText": "Bakery Spa",
+              "previewDialogue": "Sora, Mel, and Haachama discover the spa has moved into the bakery.",
+              "selectedDialogue": "Sora is holding towels. Mel is holding aroma oil. Haachama is kneading something that should not be kneaded.",
+              "steps": [
+                {
+                  "id": "STEP_1",
+                  "prompt": "Guests want massages. The ovens want bread.",
+                  "options": [
+                    {
+                      "id": "A",
+                      "text": "Run both",
+                      "resultDialogue": "Sora: \"Please relax.\" An oven dings. Haachama: \"YOUR FACE MASK IS READY!\"",
+                      "eligibleSunMembers": [
+                        "Sora",
+                        "Haachama"
+                      ],
+                      "nextStepId": "STEP_2",
+                      "setFlag": "d16_spa_bakery"
+                    },
+                    {
+                      "id": "B",
+                      "text": "Prioritize spa",
+                      "resultDialogue": "Mel lights lavender oil. The bread smells incredible and tastes like soap.",
+                      "eligibleSunMembers": [
+                        "Mel"
+                      ],
+                      "nextStepId": "STEP_2",
+                      "setFlag": "d16_lavender_bread"
+                    },
+                    {
+                      "id": "C",
+                      "text": "Prioritize bakery",
+                      "resultDialogue": "Haachama rolls cucumber slices into dough. Sora quietly removes them.",
+                      "eligibleSunMembers": [
+                        "Haachama",
+                        "Sora"
+                      ],
+                      "nextStepId": "STEP_2",
+                      "setFlag": "d16_cucumber_dough"
+                    }
+                  ]
+                },
+                {
+                  "id": "STEP_2",
+                  "prompt": "A guest asks for an edible face mask.",
+                  "options": [
+                    {
+                      "id": "A",
+                      "text": "Say no",
+                      "resultDialogue": "Haachama: \"Coward.\" Sora: \"Correct answer.\"",
+                      "eligibleSunMembers": [
+                        "Haachama",
+                        "Sora"
+                      ],
+                      "nextStepId": "STEP_3",
+                      "setFlag": "d16_mask_no"
+                    },
+                    {
+                      "id": "B",
+                      "text": "Let Mel improvise",
+                      "resultDialogue": "Mel offers honey. The guest eats it. \"This is just honey.\" Mel smiles. \"Yes.\"",
+                      "eligibleSunMembers": [
+                        "Mel"
+                      ],
+                      "nextStepId": "STEP_3",
+                      "setFlag": "d16_honey_mask"
+                    },
+                    {
+                      "id": "C",
+                      "text": "Let Haachama cook",
+                      "resultDialogue": "Haachama presents a plate. The guest signs a waiver without being asked.",
+                      "eligibleSunMembers": [
+                        "Haachama"
+                      ],
+                      "nextStepId": "STEP_3",
+                      "setFlag": "d16_waiver_food"
+                    }
+                  ]
+                },
+                {
+                  "id": "STEP_3",
+                  "prompt": "The spa sign suddenly reads BAKERY.",
+                  "options": [
+                    {
+                      "id": "A",
+                      "text": "Accept defeat",
+                      "resultDialogue": "Sora folds the towels. \"Bread therapy it is.\"",
+                      "eligibleSunMembers": [
+                        "Sora"
+                      ],
+                      "nextStepId": "",
+                      "setFlag": "d16_bread_therapy"
+                    },
+                    {
+                      "id": "B",
+                      "text": "Flip the sign",
+                      "resultDialogue": "Mel flips it to SPA. The ovens turn off. Haachama: \"The building has chosen.\"",
+                      "eligibleSunMembers": [
+                        "Mel",
+                        "Haachama"
+                      ],
+                      "nextStepId": "",
+                      "setFlag": "d16_sign_choice"
+                    },
+                    {
+                      "id": "C",
+                      "text": "Write both",
+                      "resultDialogue": "The sign reads BAKERY SPA. Three guests immediately line up.",
+                      "eligibleSunMembers": [],
+                      "nextStepId": "",
+                      "setFlag": "d16_bakery_spa"
+                    }
+                  ]
+                }
+              ],
+              "completionDialogue": "The bakery spa received five-star reviews and one confused health inspection.",
+              "rewardTableId": "summer_activity_default"
+            }
+          ]
+        },
+        "noon": {
+          "sceneId": "AUG16_NOON",
+          "title": "Day 16 - Mobile Amenities",
+          "openingDialogue": "By noon, nobody has touched CALIBRATION 3. Unfortunately, the rest of the resort has started freelancing.",
+          "coreActivities": [
+            {
+              "id": "AUG16_NOON_WALL",
+              "fullArtRoute": "Rabbit Circus Gremlin",
+              "buttonText": "The Moving Wall",
+              "previewDialogue": "Pekora, Polka, and Gigi turn a wandering corridor wall into an attraction.",
+              "selectedDialogue": "A hallway wall has moved six meters. Pekora has built a toll gate. Polka is selling tickets. Gigi is tracking it.",
+              "steps": [
+                {
+                  "id": "STEP_1",
+                  "prompt": "The wall starts moving again.",
+                  "options": [
+                    {
+                      "id": "A",
+                      "text": "Follow it",
+                      "resultDialogue": "Gigi sprints after it. \"STOP RESISTING ARREST!\" The wall continues being a wall.",
+                      "eligibleSunMembers": [
+                        "Gigi"
+                      ],
+                      "nextStepId": "STEP_2",
+                      "setFlag": "d16_wall_arrest"
+                    },
+                    {
+                      "id": "B",
+                      "text": "Charge admission",
+                      "resultDialogue": "Pekora: \"Premium wall chase-peko!\" The wall immediately speeds up.",
+                      "eligibleSunMembers": [
+                        "Pekora"
+                      ],
+                      "nextStepId": "STEP_2",
+                      "setFlag": "d16_wall_toll"
+                    },
+                    {
+                      "id": "C",
+                      "text": "Make it a show",
+                      "resultDialogue": "Polka announces THE GREAT MIGRATING WALL. A guest asks when it performs. \"Now!\"",
+                      "eligibleSunMembers": [
+                        "Polka"
+                      ],
+                      "nextStepId": "STEP_2",
+                      "setFlag": "d16_wall_show"
+                    }
+                  ]
+                },
+                {
+                  "id": "STEP_2",
+                  "prompt": "The wall blocks Pekora's toll booth.",
+                  "options": [
+                    {
+                      "id": "A",
+                      "text": "Move the booth",
+                      "resultDialogue": "Pekora drags it around the wall. The wall moves again. \"IT'S COMPETING-PEKO!\"",
+                      "eligibleSunMembers": [
+                        "Pekora"
+                      ],
+                      "nextStepId": "STEP_3",
+                      "setFlag": "d16_wall_competes"
+                    },
+                    {
+                      "id": "B",
+                      "text": "Let Gigi negotiate",
+                      "resultDialogue": "Gigi presses her ear to the wall. \"It wants immunity.\" Polka: \"From what?\" \"ME.\"",
+                      "eligibleSunMembers": [
+                        "Gigi",
+                        "Polka"
+                      ],
+                      "nextStepId": "STEP_3",
+                      "setFlag": "d16_wall_immunity"
+                    },
+                    {
+                      "id": "C",
+                      "text": "Let Polka add wheels",
+                      "resultDialogue": "Polka installs wheels. The wall stops moving. \"It hates convenience.\"",
+                      "eligibleSunMembers": [
+                        "Polka"
+                      ],
+                      "nextStepId": "STEP_3",
+                      "setFlag": "d16_wall_wheels"
+                    }
+                  ]
+                },
+                {
+                  "id": "STEP_3",
+                  "prompt": "Guests demand an encore.",
+                  "options": [
+                    {
+                      "id": "A",
+                      "text": "Ask the wall",
+                      "resultDialogue": "The wall slides away. Gigi: \"RUDE.\"",
+                      "eligibleSunMembers": [
+                        "Gigi"
+                      ],
+                      "nextStepId": "",
+                      "setFlag": "d16_wall_rude"
+                    },
+                    {
+                      "id": "B",
+                      "text": "Fake it",
+                      "resultDialogue": "Pekora pushes a cardboard wall. It falls on her. \"Calculated-peko.\"",
+                      "eligibleSunMembers": [
+                        "Pekora"
+                      ],
+                      "nextStepId": "",
+                      "setFlag": "d16_cardboard_wall"
+                    },
+                    {
+                      "id": "C",
+                      "text": "End the show",
+                      "resultDialogue": "Polka bows. The real wall moves behind her. \"ENCORE CONFIRMED!\"",
+                      "eligibleSunMembers": [
+                        "Polka"
+                      ],
+                      "nextStepId": "",
+                      "setFlag": "d16_wall_encore"
+                    }
+                  ]
+                }
+              ],
+              "completionDialogue": "The Moving Wall sold out three shows despite refusing to follow the schedule.",
+              "rewardTableId": "summer_activity_default"
+            },
+            {
+              "id": "AUG16_NOON_FURNITURE",
+              "fullArtRoute": "Senchou Knight Duck Movers",
+              "buttonText": "Room Overboard",
+              "previewDialogue": "Marine, Noel, and Subaru retrieve a hotel room that has somehow reached the pier.",
+              "selectedDialogue": "A bed, wardrobe, and lamp are sitting on Pier Two. Marine has already named the room.",
+              "steps": [
+                {
+                  "id": "STEP_1",
+                  "prompt": "Marine declares the room a vessel.",
+                  "options": [
+                    {
+                      "id": "A",
+                      "text": "Recognize the ship",
+                      "resultDialogue": "Marine: \"Senchou finally has a cabin!\" Subaru: \"IT HAS CARPET.\"",
+                      "eligibleSunMembers": [
+                        "Marine",
+                        "Subaru"
+                      ],
+                      "nextStepId": "STEP_2",
+                      "setFlag": "d16_room_ship"
+                    },
+                    {
+                      "id": "B",
+                      "text": "Call it furniture",
+                      "resultDialogue": "Marine covers the lamp's ears. \"Don't insult the crew.\"",
+                      "eligibleSunMembers": [
+                        "Marine"
+                      ],
+                      "nextStepId": "STEP_2",
+                      "setFlag": "d16_furniture_insult"
+                    },
+                    {
+                      "id": "C",
+                      "text": "Ask Noel to move it",
+                      "resultDialogue": "Noel lifts the bed. The carpet comes too. Subaru: \"The room is attached!\"",
+                      "eligibleSunMembers": [
+                        "Noel",
+                        "Subaru"
+                      ],
+                      "nextStepId": "STEP_2",
+                      "setFlag": "d16_room_attached"
+                    }
+                  ]
+                },
+                {
+                  "id": "STEP_2",
+                  "prompt": "The wardrobe opens onto a hotel hallway.",
+                  "options": [
+                    {
+                      "id": "A",
+                      "text": "Walk through",
+                      "resultDialogue": "Subaru enters and returns from the lobby. \"I hate convenient nonsense!\"",
+                      "eligibleSunMembers": [
+                        "Subaru"
+                      ],
+                      "nextStepId": "STEP_3",
+                      "setFlag": "d16_wardrobe_hall"
+                    },
+                    {
+                      "id": "B",
+                      "text": "Let Marine claim it",
+                      "resultDialogue": "Marine hangs a PIRATE ENTRANCE sign. The wardrobe closes itself.",
+                      "eligibleSunMembers": [
+                        "Marine"
+                      ],
+                      "nextStepId": "STEP_3",
+                      "setFlag": "d16_wardrobe_reject"
+                    },
+                    {
+                      "id": "C",
+                      "text": "Let Noel carry it",
+                      "resultDialogue": "Noel carries the wardrobe into the hotel. The hallway inside comes with it.",
+                      "eligibleSunMembers": [
+                        "Noel"
+                      ],
+                      "nextStepId": "STEP_3",
+                      "setFlag": "d16_carry_hallway"
+                    }
+                  ]
+                },
+                {
+                  "id": "STEP_3",
+                  "prompt": "Where does the room belong?",
+                  "options": [
+                    {
+                      "id": "A",
+                      "text": "Hotel",
+                      "resultDialogue": "The bed vanishes from the pier. Subaru: \"Good.\" Marine: \"My ship!\"",
+                      "eligibleSunMembers": [
+                        "Subaru",
+                        "Marine"
+                      ],
+                      "nextStepId": "",
+                      "setFlag": "d16_room_hotel"
+                    },
+                    {
+                      "id": "B",
+                      "text": "Pier",
+                      "resultDialogue": "Marine salutes. Noel installs curtains. Subaru files a complaint against geography.",
+                      "eligibleSunMembers": [
+                        "Marine",
+                        "Noel",
+                        "Subaru"
+                      ],
+                      "nextStepId": "",
+                      "setFlag": "d16_room_pier"
+                    },
+                    {
+                      "id": "C",
+                      "text": "Ask the room",
+                      "resultDialogue": "The lamp flickers twice. Noel: \"I think that's hotel.\" Marine: \"Coward.\"",
+                      "eligibleSunMembers": [
+                        "Noel",
+                        "Marine"
+                      ],
+                      "nextStepId": "",
+                      "setFlag": "d16_room_votes"
+                    }
+                  ]
+                }
+              ],
+              "completionDialogue": "The room returned to the hotel. Marine has now filed a fresh claim that Pier Two counts as international waters.",
+              "rewardTableId": "summer_activity_default"
+            },
+            {
+              "id": "AUG16_NOON_MAP",
+              "fullArtRoute": "Justice Cat Spy Cartography",
+              "buttonText": "Map Court",
+              "previewDialogue": "Elizabeth, Cecilia, and Zeta hold a hearing because today's map, yesterday's map, and the old ROUTE Z sketch all disagree.",
+              "selectedDialogue": "Elizabeth has today's map. Cecilia has yesterday's. Zeta has the ROUTE Z sketch from the tram case and is pretending this is normal.",
+              "steps": [
+                {
+                  "id": "STEP_1",
+                  "prompt": "Which map is official?",
+                  "options": [
+                    {
+                      "id": "A",
+                      "text": "Map A",
+                      "resultDialogue": "Elizabeth stamps A. Map B immediately gains an OFFICIAL sticker.",
+                      "eligibleSunMembers": [
+                        "Elizabeth"
+                      ],
+                      "nextStepId": "STEP_2",
+                      "setFlag": "d16_map_a"
+                    },
+                    {
+                      "id": "B",
+                      "text": "Map B",
+                      "resultDialogue": "Cecilia: \"Excellent. Map A is now more accurate.\" Elizabeth: \"Explain.\" \"No.\"",
+                      "eligibleSunMembers": [
+                        "Cecilia",
+                        "Elizabeth"
+                      ],
+                      "nextStepId": "STEP_2",
+                      "setFlag": "d16_map_b"
+                    },
+                    {
+                      "id": "C",
+                      "text": "Zeta's map",
+                      "resultDialogue": "Zeta's map has a snack route. Elizabeth: \"This is crayon.\" Zeta: \"Classified crayon.\"",
+                      "eligibleSunMembers": [
+                        "Zeta",
+                        "Elizabeth"
+                      ],
+                      "nextStepId": "STEP_2",
+                      "setFlag": "d16_zeta_map"
+                    }
+                  ]
+                },
+                {
+                  "id": "STEP_2",
+                  "prompt": "A corridor exists on only one map.",
+                  "options": [
+                    {
+                      "id": "A",
+                      "text": "Inspect it",
+                      "resultDialogue": "Cecilia walks ten meters and returns behind you. \"Efficient corridor.\"",
+                      "eligibleSunMembers": [
+                        "Cecilia"
+                      ],
+                      "nextStepId": "STEP_3",
+                      "setFlag": "d16_efficient_corridor"
+                    },
+                    {
+                      "id": "B",
+                      "text": "Close it",
+                      "resultDialogue": "Elizabeth hangs CLOSED. The sign appears on the other map instead.",
+                      "eligibleSunMembers": [
+                        "Elizabeth"
+                      ],
+                      "nextStepId": "STEP_3",
+                      "setFlag": "d16_closed_map"
+                    },
+                    {
+                      "id": "C",
+                      "text": "Send Zeta",
+                      "resultDialogue": "Zeta enters dramatically and exits through the snack bar. \"Mission successful. Also chips.\"",
+                      "eligibleSunMembers": [
+                        "Zeta"
+                      ],
+                      "nextStepId": "STEP_3",
+                      "setFlag": "d16_zeta_chips"
+                    }
+                  ]
+                },
+                {
+                  "id": "STEP_3",
+                  "prompt": "Zeta overlays the ROUTE Z sketch. Several misplaced corridors line up with the old transit route.",
+                  "options": [
+                    {
+                      "id": "A",
+                      "text": "Call it coincidence",
+                      "resultDialogue": "Cecilia: \"Statistically rude coincidence.\" Elizabeth circles it anyway.",
+                      "eligibleSunMembers": [
+                        "Cecilia",
+                        "Elizabeth"
+                      ],
+                      "nextStepId": "",
+                      "setFlag": "d16_route_z_coincidence"
+                    },
+                    {
+                      "id": "B",
+                      "text": "Mark it for later",
+                      "resultDialogue": "Elizabeth writes LATER. The printer adds AGREED. Nobody likes that.",
+                      "eligibleSunMembers": [
+                        "Elizabeth"
+                      ],
+                      "nextStepId": "",
+                      "setFlag": "d16_route_z_later"
+                    },
+                    {
+                      "id": "C",
+                      "text": "Ask Zeta's opinion",
+                      "resultDialogue": "Zeta folds the maps together. \"Professional opinion: the building is cheating.\"",
+                      "eligibleSunMembers": [
+                        "Zeta"
+                      ],
+                      "nextStepId": "",
+                      "setFlag": "d16_building_cheating"
+                    }
+                  ]
+                }
+              ],
+              "completionDialogue": "Map Court adjourned. The maps still disagree, but ROUTE Z joins the pile of things everyone is politely not opening today.",
+              "rewardTableId": "summer_activity_default"
+            }
+          ]
+        },
+        "evening": {
+          "sceneId": "AUG16_EVENING",
+          "title": "Day 16 - Keep Moving",
+          "openingDialogue": "At sunset, the resort begins putting itself back together. The ROUTE Z station remains sealed, which everyone agrees is the first polite thing the island has done all day.",
+          "coreActivities": [
+            {
+              "id": "AUG16_EVENING_STAGE",
+              "fullArtRoute": "Comet Diva Loudspeaker",
+              "buttonText": "Runaway Stage",
+              "previewDialogue": "Suisei, AZKi, and Kanade chase an outdoor stage that keeps relocating.",
+              "selectedDialogue": "The stage is rolling across the plaza. Kanade is still singing on it. Suisei is gaining.",
+              "steps": [
+                {
+                  "id": "STEP_1",
+                  "prompt": "How do we stop the stage?",
+                  "options": [
+                    {
+                      "id": "A",
+                      "text": "Let Suisei catch it",
+                      "resultDialogue": "Suisei grabs the rail. The stage stops. Kanade: \"Can you do that to traffic?\"",
+                      "eligibleSunMembers": [
+                        "Suisei",
+                        "Kanade"
+                      ],
+                      "nextStepId": "STEP_2",
+                      "setFlag": "d16_suisei_stage"
+                    },
+                    {
+                      "id": "B",
+                      "text": "Let AZKi sync it",
+                      "resultDialogue": "AZKi matches the music tempo. The stage slows politely. \"It likes BPM.\"",
+                      "eligibleSunMembers": [
+                        "AZKi"
+                      ],
+                      "nextStepId": "STEP_2",
+                      "setFlag": "d16_azki_bpm"
+                    },
+                    {
+                      "id": "C",
+                      "text": "Let Kanade keep singing",
+                      "resultDialogue": "Kanade hits a high note. The stage accelerates. \"ENCORE SPEED!\"",
+                      "eligibleSunMembers": [
+                        "Kanade"
+                      ],
+                      "nextStepId": "STEP_2",
+                      "setFlag": "d16_kanade_speed"
+                    }
+                  ]
+                },
+                {
+                  "id": "STEP_2",
+                  "prompt": "The stage parks outside the restaurant.",
+                  "options": [
+                    {
+                      "id": "A",
+                      "text": "Perform there",
+                      "resultDialogue": "Suisei: \"Fine.\" Dinner becomes a concert before anyone can object.",
+                      "eligibleSunMembers": [
+                        "Suisei"
+                      ],
+                      "nextStepId": "STEP_3",
+                      "setFlag": "d16_dinner_concert"
+                    },
+                    {
+                      "id": "B",
+                      "text": "Move it back",
+                      "resultDialogue": "AZKi presses BACKSTAGE. The stage reverses through three flowerbeds.",
+                      "eligibleSunMembers": [
+                        "AZKi"
+                      ],
+                      "nextStepId": "STEP_3",
+                      "setFlag": "d16_stage_reverse"
+                    },
+                    {
+                      "id": "C",
+                      "text": "Ask Kanade",
+                      "resultDialogue": "Kanade: \"Restaurant arc!\" A waiter hands her a menu mid-song.",
+                      "eligibleSunMembers": [
+                        "Kanade"
+                      ],
+                      "nextStepId": "STEP_3",
+                      "setFlag": "d16_restaurant_arc"
+                    }
+                  ]
+                },
+                {
+                  "id": "STEP_3",
+                  "prompt": "The stage finally stops.",
+                  "options": [
+                    {
+                      "id": "A",
+                      "text": "End the show",
+                      "resultDialogue": "The audience boos. The stage moves again. Suisei: \"It disagrees.\"",
+                      "eligibleSunMembers": [
+                        "Suisei"
+                      ],
+                      "nextStepId": "",
+                      "setFlag": "d16_stage_disagrees"
+                    },
+                    {
+                      "id": "B",
+                      "text": "One encore",
+                      "resultDialogue": "AZKi sings one chorus. The stage parks perfectly. \"Bribed with music.\"",
+                      "eligibleSunMembers": [
+                        "AZKi"
+                      ],
+                      "nextStepId": "",
+                      "setFlag": "d16_music_bribe"
+                    },
+                    {
+                      "id": "C",
+                      "text": "Let Kanade announce",
+                      "resultDialogue": "Kanade: \"THANK YOU, MOBILE VENUE!\" The stage honks.",
+                      "eligibleSunMembers": [
+                        "Kanade"
+                      ],
+                      "nextStepId": "",
+                      "setFlag": "d16_stage_honk"
+                    }
+                  ]
+                }
+              ],
+              "completionDialogue": "The stage returned to storage after completing an unscheduled three-venue tour.",
+              "rewardTableId": "summer_activity_default"
+            },
+            {
+              "id": "AUG16_EVENING_GARDEN",
+              "fullArtRoute": "Nature Hope Raincloud",
+              "buttonText": "Lobby Rainforest",
+              "previewDialogue": "Fauna, IRyS, and Kobo discover the garden has moved into the hotel lobby.",
+              "selectedDialogue": "A tree is growing through reception. Fauna looks delighted. The receptionist does not.",
+              "steps": [
+                {
+                  "id": "STEP_1",
+                  "prompt": "The lobby is now humid enough to rain.",
+                  "options": [
+                    {
+                      "id": "A",
+                      "text": "Ask Fauna to calm it",
+                      "resultDialogue": "Fauna whispers to the tree. It grows a hammock. \"It compromised.\"",
+                      "eligibleSunMembers": [
+                        "Fauna"
+                      ],
+                      "nextStepId": "STEP_2",
+                      "setFlag": "d16_tree_hammock"
+                    },
+                    {
+                      "id": "B",
+                      "text": "Ask Kobo to help",
+                      "resultDialogue": "Kobo: \"Rain management!\" It rains harder. IRyS opens an umbrella indoors.",
+                      "eligibleSunMembers": [
+                        "Kobo",
+                        "IRyS"
+                      ],
+                      "nextStepId": "STEP_2",
+                      "setFlag": "d16_indoor_rain"
+                    },
+                    {
+                      "id": "C",
+                      "text": "Let IRyS sing",
+                      "resultDialogue": "IRyS sings softly. The flowers bloom toward her. Fauna: \"Show-off.\"",
+                      "eligibleSunMembers": [
+                        "IRyS",
+                        "Fauna"
+                      ],
+                      "nextStepId": "STEP_2",
+                      "setFlag": "d16_flower_song"
+                    }
+                  ]
+                },
+                {
+                  "id": "STEP_2",
+                  "prompt": "A guest checks in beneath a waterfall.",
+                  "options": [
+                    {
+                      "id": "A",
+                      "text": "Offer a towel",
+                      "resultDialogue": "Kobo hands them one. The waterfall moves over the next guest.",
+                      "eligibleSunMembers": [
+                        "Kobo"
+                      ],
+                      "nextStepId": "STEP_3",
+                      "setFlag": "d16_waterfall_queue"
+                    },
+                    {
+                      "id": "B",
+                      "text": "Move reception",
+                      "resultDialogue": "Fauna moves the desk. A vine moves it back. \"Nature prefers this spot.\"",
+                      "eligibleSunMembers": [
+                        "Fauna"
+                      ],
+                      "nextStepId": "STEP_3",
+                      "setFlag": "d16_vine_reception"
+                    },
+                    {
+                      "id": "C",
+                      "text": "Call it premium",
+                      "resultDialogue": "IRyS: \"Rainforest check-in experience?\" The guest asks for an upgrade.",
+                      "eligibleSunMembers": [
+                        "IRyS"
+                      ],
+                      "nextStepId": "STEP_3",
+                      "setFlag": "d16_premium_checkin"
+                    }
+                  ]
+                },
+                {
+                  "id": "STEP_3",
+                  "prompt": "The garden starts retreating outside.",
+                  "options": [
+                    {
+                      "id": "A",
+                      "text": "Let it go",
+                      "resultDialogue": "Fauna waves. The tree takes the hammock with it. \"Rude.\"",
+                      "eligibleSunMembers": [
+                        "Fauna"
+                      ],
+                      "nextStepId": "",
+                      "setFlag": "d16_garden_leaves"
+                    },
+                    {
+                      "id": "B",
+                      "text": "Keep one plant",
+                      "resultDialogue": "Kobo grabs a fern. The fern drags her outside.",
+                      "eligibleSunMembers": [
+                        "Kobo"
+                      ],
+                      "nextStepId": "",
+                      "setFlag": "d16_fern_wins"
+                    },
+                    {
+                      "id": "C",
+                      "text": "Thank it",
+                      "resultDialogue": "IRyS bows. A flower drops a room key. Nobody claims it.",
+                      "eligibleSunMembers": [
+                        "IRyS"
+                      ],
+                      "nextStepId": "",
+                      "setFlag": "d16_flower_key"
+                    }
+                  ]
+                }
+              ],
+              "completionDialogue": "The lobby dried out. Reception has banned indoor weather until further notice.",
+              "rewardTableId": "summer_activity_default"
+            },
+            {
+              "id": "AUG16_EVENING_BOOKING",
+              "fullArtRoute": "Rose CEO Panther",
+              "buttonText": "Triple-Booked Room",
+              "previewDialogue": "Aki, Ririka, and Niko solve a room booked as three different businesses.",
+              "selectedDialogue": "Room 610 is simultaneously reserved as a café, dance studio, and souvenir shop.",
+              "steps": [
+                {
+                  "id": "STEP_1",
+                  "prompt": "Which booking wins?",
+                  "options": [
+                    {
+                      "id": "A",
+                      "text": "Café",
+                      "resultDialogue": "Aki sets one table. The room sign changes to DANCE CAFÉ. Ririka: \"Upsell.\"",
+                      "eligibleSunMembers": [
+                        "Aki",
+                        "Ririka"
+                      ],
+                      "nextStepId": "STEP_2",
+                      "setFlag": "d16_dance_cafe"
+                    },
+                    {
+                      "id": "B",
+                      "text": "Dance studio",
+                      "resultDialogue": "Niko starts rehearsing. Shelves appear along the wall. \"Backup merch.\"",
+                      "eligibleSunMembers": [
+                        "Niko"
+                      ],
+                      "nextStepId": "STEP_2",
+                      "setFlag": "d16_merch_dance"
+                    },
+                    {
+                      "id": "C",
+                      "text": "Souvenir shop",
+                      "resultDialogue": "Ririka opens the register. A coffee machine appears. \"Cross-selling.\"",
+                      "eligibleSunMembers": [
+                        "Ririka"
+                      ],
+                      "nextStepId": "STEP_2",
+                      "setFlag": "d16_cross_sell"
+                    }
+                  ]
+                },
+                {
+                  "id": "STEP_2",
+                  "prompt": "Three groups arrive at once.",
+                  "options": [
+                    {
+                      "id": "A",
+                      "text": "Time-share it",
+                      "resultDialogue": "Ririka sells fifteen-minute slots. Aki: \"You monetized the clock.\" \"Obviously.\"",
+                      "eligibleSunMembers": [
+                        "Ririka",
+                        "Aki"
+                      ],
+                      "nextStepId": "STEP_3",
+                      "setFlag": "d16_room_timeshare"
+                    },
+                    {
+                      "id": "B",
+                      "text": "Combine everything",
+                      "resultDialogue": "Niko dances while Aki serves drinks. Ririka sells both cups and choreography.",
+                      "eligibleSunMembers": [
+                        "Niko",
+                        "Aki",
+                        "Ririka"
+                      ],
+                      "nextStepId": "STEP_3",
+                      "setFlag": "d16_room_combo"
+                    },
+                    {
+                      "id": "C",
+                      "text": "Cancel all bookings",
+                      "resultDialogue": "The room displays VACANCY and immediately books itself as a dentist.",
+                      "eligibleSunMembers": [],
+                      "nextStepId": "STEP_3",
+                      "setFlag": "d16_room_dentist"
+                    }
+                  ]
+                },
+                {
+                  "id": "STEP_3",
+                  "prompt": "Room 610 finally becomes a normal guest room.",
+                  "options": [
+                    {
+                      "id": "A",
+                      "text": "Lock it",
+                      "resultDialogue": "Ririka locks the door. A SOLD OUT sign appears inside.",
+                      "eligibleSunMembers": [
+                        "Ririka"
+                      ],
+                      "nextStepId": "",
+                      "setFlag": "d16_room_soldout"
+                    },
+                    {
+                      "id": "B",
+                      "text": "Open it",
+                      "resultDialogue": "Aki opens the door. It's the café again. \"Coffee?\"",
+                      "eligibleSunMembers": [
+                        "Aki"
+                      ],
+                      "nextStepId": "",
+                      "setFlag": "d16_cafe_returns"
+                    },
+                    {
+                      "id": "C",
+                      "text": "Walk away",
+                      "resultDialogue": "Niko: \"Best management decision today.\" The room applauds once.",
+                      "eligibleSunMembers": [
+                        "Niko"
+                      ],
+                      "nextStepId": "",
+                      "setFlag": "d16_room_applause"
+                    }
+                  ]
+                }
+              ],
+              "completionDialogue": "Room 610 ended the day as a hotel room, pending further negotiations with itself.",
+              "rewardTableId": "summer_activity_default"
+            }
+          ]
+        }
+      }
     }
   ]
 }
