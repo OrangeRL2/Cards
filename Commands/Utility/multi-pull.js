@@ -886,120 +886,182 @@ const frozen = isFrozen(discordUserId, member);
       const now = new Date();
 
       try {
-        await User.updateOne({ id: discordUserId }, { $setOnInsert: { id: discordUserId, pulls: 0, cards: [] } }, { upsert: true });
+        // Load the inventory once. The per-user pull lock means another /pull or
+        // /multi-pull for this user cannot race this block.
+        const inventoryDoc = await User.findOne(
+          { id: discordUserId },
+          { cards: 1 }
+        ).lean();
+
+        if (!inventoryDoc) {
+          throw new Error(`User inventory document missing for ${discordUserId}`);
+        }
+
+        // Match the command's existing card identity behavior:
+        // rarity + normalized, case-insensitive display name.
+        const normalizeInventoryName = value =>
+          String(value ?? '')
+            .replace(/[_\s\-]+/g, ' ')
+            .replace(/\s+/g, ' ')
+            .trim()
+            .toLowerCase();
+
+        const makeInventoryKey = (rarity, name) =>
+          `${String(rarity ?? '')}\u0000${normalizeInventoryName(name)}`;
+
+        // Keep the first matching stack, which mirrors Mongo's positional "$"
+        // behavior used by the old per-card update path.
+        const existingByKey = new Map();
+        for (const card of Array.isArray(inventoryDoc.cards) ? inventoryDoc.cards : []) {
+          const key = makeInventoryKey(card.rarity, card.name);
+          if (!existingByKey.has(key)) {
+            existingByKey.set(key, {
+              _id: card._id,
+              count: Number(card.count || 0),
+              name: card.name,
+              rarity: card.rarity,
+            });
+          }
+        }
+
+        // Group all drawn copies first. This turns hundreds of sequential
+        // updateOne/findOne calls into one inventory read + one bulkWrite.
+        const grouped = new Map();
 
         for (let packIndex = 0; packIndex < packs.length; packIndex += 1) {
-        for (let cardIndex = 0; cardIndex < packs[packIndex].length; cardIndex += 1) {
-          const item = packs[packIndex][cardIndex];
-          const { rarity, file } = item;
+          for (let cardIndex = 0; cardIndex < packs[packIndex].length; cardIndex += 1) {
+            const item = packs[packIndex][cardIndex];
+            const { rarity, file } = item;
 
-          const base = path.basename(file);
-          const ext = path.extname(base);
-          const raw = base.slice(0, base.length - ext.length);
+            const base = path.basename(file);
+            const ext = path.extname(base);
+            const raw = base.slice(0, base.length - ext.length);
+            const displayName = raw.replace(/[_-\s]+/g, ' ').trim();
+            const inventoryKey = makeInventoryKey(rarity, displayName);
 
-          const displayName = raw.replace(/[_-\s]+/g, ' ').trim();
-          const key = displayName.replace(/[_\s\-]+/g, ' ').replace(/\s+/g, ' ').trim();
-          const nameRegex = new RegExp(`^${escapeRegex(key)}$`, 'i');
-
-if (!SY_ANNOUNCE_EXEMPT_IDS.has(discordUserId) && String(rarity).toUpperCase() === 'SY') {
-  syToAnnounce.push({ rarity: 'SY', name: displayName });
-}
-
-          const incResult = await User.updateOne(
-            {
-              id: discordUserId,
-              cards: {
-                $elemMatch: {
-                  name: { $regex: nameRegex },
-                  rarity: rarity
-                }
-              }
-            },
-            {
-              $inc: { "cards.$.count": 1 },
-              $set: { "cards.$.lastAcquiredAt": now }
+            if (!SY_ANNOUNCE_EXEMPT_IDS.has(discordUserId) && String(rarity).toUpperCase() === 'SY') {
+              syToAnnounce.push({ rarity: 'SY', name: displayName });
             }
-          );
 
-          let currentCount = 1;
-
-          if (incResult && incResult.matchedCount > 0) {
-            const readDoc = await User.findOne(
-              {
-                id: discordUserId,
-                cards: { $elemMatch: { name: { $regex: nameRegex }, rarity: rarity } }
-              },
-              { "cards.$": 1 }
-            ).lean();
-
-            if (readDoc && Array.isArray(readDoc.cards) && readDoc.cards[0]) {
-              currentCount = readDoc.cards[0].count || 1;
-            } else {
-              const agg = await User.aggregate([
-                { $match: { id: discordUserId } },
-                { $unwind: "$cards" },
-                { $match: { "cards.rarity": rarity, "cards.name": { $regex: nameRegex } } },
-                { $group: { _id: null, totalCount: { $sum: "$cards.count" }, lastAcquiredAt: { $max: "$cards.lastAcquiredAt" } } }
-              ]);
-              currentCount = (agg && agg.length > 0 && agg[0].totalCount) ? agg[0].totalCount : 1;
+            let group = grouped.get(inventoryKey);
+            if (!group) {
+              const existing = existingByKey.get(inventoryKey) || null;
+              group = {
+                rarity,
+                displayName,
+                existing,
+                quantity: 0,
+              };
+              grouped.set(inventoryKey, group);
             }
-          } else {
-            await User.updateOne(
-              {
-                id: discordUserId,
-                $nor: [{
+
+            group.quantity += 1;
+
+            // Because pulls are displayed in draw order, compute the count this
+            // particular copy would have had after the old sequential write.
+            const startingCount = Number(group.existing?.count || 0);
+            const currentCount = startingCount + group.quantity;
+
+            const encodedUrl = item.relativeImagePath
+              ? `${IMAGE_BASE.replace(/\/$/, '')}/${item.relativeImagePath
+                  .split('/')
+                  .map(encodeURIComponent)
+                  .join('/')}`
+              : `${IMAGE_BASE.replace(/\/$/, '')}/${encodeURIComponent(rarity)}/${encodeURIComponent(raw)}.png`;
+
+            const visiblePrefix = `[${rarity}] - `;
+            const titleBody = `${displayName}`;
+            const titleCount = ` - #${currentCount}`;
+            const titleLine = `${visiblePrefix}${titleBody}`;
+
+            const cc = resolveCardColor(displayName, rarity);
+            const emoji = cc ? getAttributeEmoji(cc) : '';
+            const tag = emoji ? ` ${emoji}` : '';
+
+            const listLine = `${visiblePrefix}[${escapeLinkText(titleBody)}](${encodedUrl})${tag}${titleCount}`;
+
+            pageItems.push({
+              rarity,
+              rawName: raw,
+              displayName,
+              titleLine,
+              imageUrl: encodedUrl,
+              packIndex,
+              cardIndex,
+              listLine
+            });
+            allNames.push(listLine);
+          }
+        }
+
+        const bulkOps = [];
+        const newCards = [];
+
+        for (const group of grouped.values()) {
+          if (group.existing) {
+            const filter = group.existing._id
+              ? { id: discordUserId, 'cards._id': group.existing._id }
+              : {
+                  id: discordUserId,
                   cards: {
                     $elemMatch: {
-                      name: { $regex: nameRegex },
-                      rarity: rarity
+                      name: {
+                        $regex: new RegExp(
+                          `^${escapeRegex(
+                            group.displayName
+                              .replace(/[_\s\-]+/g, ' ')
+                              .replace(/\s+/g, ' ')
+                              .trim()
+                          )}$`,
+                          'i'
+                        )
+                      },
+                      rarity: group.rarity
                     }
                   }
-                }]
-              },
-              {
-                $push: {
-                  cards: { name: displayName, rarity, count: 1, firstAcquiredAt: now, lastAcquiredAt: now }
+                };
+
+            bulkOps.push({
+              updateOne: {
+                filter,
+                update: {
+                  $inc: { 'cards.$.count': group.quantity },
+                  $set: { 'cards.$.lastAcquiredAt': now }
                 }
               }
-            );
-
-            const readDoc = await User.findOne(
-              { id: discordUserId, cards: { $elemMatch: { name: { $regex: nameRegex }, rarity: rarity } } },
-              { "cards.$": 1 }
-            ).lean();
-
-            if (readDoc && Array.isArray(readDoc.cards) && readDoc.cards[0]) {
-              currentCount = readDoc.cards[0].count || 1;
-            } else {
-              const agg = await User.aggregate([
-                { $match: { id: discordUserId } },
-                { $unwind: "$cards" },
-                { $match: { "cards.name": { $regex: nameRegex }, "cards.rarity": rarity } },
-                { $group: { _id: null, totalCount: { $sum: "$cards.count" }, lastAcquiredAt: { $max: "$cards.lastAcquiredAt" } } }
-              ]);
-              currentCount = (agg && agg.length > 0 && agg[0].totalCount) ? agg[0].totalCount : 1;
-            }
+            });
+          } else {
+            newCards.push({
+              name: group.displayName,
+              rarity: group.rarity,
+              count: group.quantity,
+              firstAcquiredAt: now,
+              lastAcquiredAt: now
+            });
           }
-
-          const encodedUrl = item.relativeImagePath
-            ? `${IMAGE_BASE.replace(/\/$/, '')}/${item.relativeImagePath
-                .split('/')
-                .map(encodeURIComponent)
-                .join('/')}`
-            : `${IMAGE_BASE.replace(/\/$/, '')}/${encodeURIComponent(rarity)}/${encodeURIComponent(raw)}.png`;
-          const visiblePrefix = `[${rarity}] - `;
-          const titleBody = `${displayName}`;
-          const titleCount = ` - #${currentCount}`;
-          const titleLine = `${visiblePrefix}${titleBody}`;
-          
-          const cc = resolveCardColor(displayName, rarity);
-          const emoji = cc ? getAttributeEmoji(cc) : '';
-          const tag = emoji ? ` ${emoji}` : '';
-
-          const listLine = `${visiblePrefix}[${escapeLinkText(titleBody)}](${encodedUrl})${tag}${titleCount}`;
-          pageItems.push({ rarity, rawName: raw, displayName, titleLine, imageUrl: encodedUrl, packIndex, cardIndex, listLine });
-          allNames.push(listLine);
         }
+
+        if (newCards.length) {
+          bulkOps.push({
+            updateOne: {
+              filter: { id: discordUserId },
+              update: { $push: { cards: { $each: newCards } } }
+            }
+          });
+        }
+
+        if (bulkOps.length) {
+          const bulkResult = await User.bulkWrite(bulkOps, { ordered: true });
+
+          // Existing stack updates should all match. A mismatch would mean the
+          // inventory changed unexpectedly after our single read; fail rather
+          // than silently lose cards.
+          const expectedExistingUpdates = bulkOps.length - (newCards.length ? 1 : 0);
+          if (Number(bulkResult.matchedCount || 0) < expectedExistingUpdates) {
+            throw new Error(
+              `Inventory changed during multi-pull save: expected ${expectedExistingUpdates} existing stack matches, got ${bulkResult.matchedCount || 0}`
+            );
+          }
         }
       } catch (err) {
         console.error('atomic update error after consume:', err);

@@ -7,6 +7,7 @@ const config = require('./config.json');
 const { token, mongoUri } = config;
 const { startScheduler, grantBirthdayPulls } = require('./jobs/birthdayHandout');
 const TradeListing = require('./models/TradeListing');
+const { startAcquisitionWatcher, stopAcquisitionWatcher } = require('./jobs/acquisitionWatcher');
 // create client with required intents
 const client = new Client({
   intents: [
@@ -343,6 +344,9 @@ if (fs.existsSync(eventsPath)) {
     await mongoose.connect(mongoUri, { useNewUrlParser: true, useUnifiedTopology: true });
     console.log('✅ Connected to MongoDB via Mongoose');
 
+    // Start the universal card acquisition watcher after Mongo is ready.
+    await startAcquisitionWatcher();
+
     // login
     await client.login(token);
     console.log(`✅ Logged in as ${client.user.tag} (${client.user.id})`);
@@ -417,6 +421,7 @@ cleanupExpiredListings();
 async function shutdown() {
   try {
     console.log('Shutting down...');
+    await stopAcquisitionWatcher();
     await mongoose.disconnect();
     if (client && client.isReady()) await client.destroy();
     process.exit(0);

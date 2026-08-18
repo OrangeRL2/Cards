@@ -29,6 +29,10 @@ const SUMMER_MEMBER_ALIASES = Object.freeze({
   Mococo: ['Mococo', 'Fuwamoco'],
 });
 
+// Pool/image data is loaded once at startup, so Summer eligibility for a given
+// island + rarity + pool mode is stable for the life of the process.
+const islandEligiblePoolCache = new Map();
+
 function getBasePool(rarity, userId, useSpecialRates) {
   const idStr = String(userId);
 
@@ -101,10 +105,24 @@ function getEligibleIslandFiles(rarity, userId, useSpecialRates, island) {
     return [];
   }
 
+  const idStr = String(userId);
+  const poolMode =
+    useSpecialRates && specialUserIds.has(idStr)
+      ? 'special'
+      : otherUserIds.has(idStr)
+        ? 'other'
+        : 'normal';
+
+  const cacheKey = `${normalizedIsland}\u0000${rarity}\u0000${poolMode}`;
+  const cached = islandEligiblePoolCache.get(cacheKey);
+  if (cached) return cached;
+
   const allowedNames = getAllowedNamesForIsland(normalizedIsland);
   const pool = getBasePool(rarity, userId, useSpecialRates);
+  const eligible = pool.filter(file => isMemberCardAllowed(file, allowedNames));
 
-  return pool.filter(file => isMemberCardAllowed(file, allowedNames));
+  islandEligiblePoolCache.set(cacheKey, eligible);
+  return eligible;
 }
 
 function chooseRarityAndFile(options, userId, useSpecialRates, summerIsland) {
@@ -153,7 +171,10 @@ async function drawPack(userId, useSpecialRatesOverride = null, opts = {}) {
 
   if (useSpecialRatesOverride !== null) {
     useSpecialRates = Boolean(useSpecialRatesOverride);
-  } else {
+  } else if (specialUserIds.has(idStr)) {
+    // Only users that are actually configured for the legacy special-rate
+    // pool need a quota lookup. Ordinary users can skip this Mongo round trip
+    // entirely.
     try {
       const quota = await PullQuota
         .findOne({ userId: idStr })
@@ -163,8 +184,7 @@ async function drawPack(userId, useSpecialRatesOverride = null, opts = {}) {
       if (
         quota &&
         typeof quota.pulls === 'number' &&
-        quota.pulls >= 0 &&
-        specialUserIds.has(idStr)
+        quota.pulls >= 0
       ) {
         useSpecialRates = true;
       }

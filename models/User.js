@@ -10,6 +10,18 @@ const cardInfoSchema = new Schema({
   locked: { type: Boolean, default: false },
 });
 
+const recentAcquisitionCardSchema = new Schema({
+  name: { type: String, required: true },
+  rarity: { type: String, required: true },
+  variant: { type: String, default: null },
+  count: { type: Number, default: 1, min: 1 },
+}, { _id: false, timestamps: false });
+
+const recentAcquisitionSchema = new Schema({
+  acquiredAt: { type: Date, required: true },
+  cards: { type: [recentAcquisitionCardSchema], default: [] },
+}, { _id: false, timestamps: false });
+
 const pendingAttemptSchema = new Schema({
   // allow mongoose to create a stable _id for each attempt subdocument
   id: { type: String, required: true, index: true }, // unique attempt id supplied by code (nanoid)
@@ -30,6 +42,7 @@ const userSchema = new Schema({
   pullsSinceLastSEC: { type: Number, default: 0 },
   points: { type: Number, default: 0 },
   cards: { type: [cardInfoSchema], default: [] },
+  recentAcquisitions: { type: [recentAcquisitionSchema], default: [] },
   liveCooldowns: {
     stage_1: { type: Date, default: null },
     stage_2: { type: Date, default: null },

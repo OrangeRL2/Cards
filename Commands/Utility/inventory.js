@@ -25,6 +25,7 @@ const IMAGE_BASE = 'http://152.69.195.48/images';
 const ITEMS_PER_PAGE = 10;
 const IDLE_LIMIT = 120_000; // 2 minutes
 
+
 // Cards to always hide from output (any rarity)
 const EXCEPTION_LIST = [
   'Test 001',
@@ -491,13 +492,13 @@ module.exports = {
 
         if (parts.startsWith('list_prev_')) {
           listPage = (listPage - 1 + totalPages) % totalPages;
-          await btn.update({ embeds: [listEmbeds[listPage]], components: [listRows[listPage]] });
+          await btn.update({ embeds: [listEmbeds[listPage]] });
           return;
         }
 
         if (parts.startsWith('list_next_')) {
           listPage = (listPage + 1) % totalPages;
-          await btn.update({ embeds: [listEmbeds[listPage]], components: [listRows[listPage]] });
+          await btn.update({ embeds: [listEmbeds[listPage]] });
           return;
         }
 
@@ -545,13 +546,13 @@ module.exports = {
 
         if (parts.startsWith('img_prev_')) {
           imageIdx = (imageIdx - 1 + imageEmbeds.length) % imageEmbeds.length;
-          await btn.update({ embeds: [imageEmbeds[imageIdx]], components: [imageRows[imageIdx]] });
+          await btn.update({ embeds: [imageEmbeds[imageIdx]] });
           return;
         }
 
         if (parts.startsWith('img_next_')) {
           imageIdx = (imageIdx + 1) % imageEmbeds.length;
-          await btn.update({ embeds: [imageEmbeds[imageIdx]], components: [imageRows[imageIdx]] });
+          await btn.update({ embeds: [imageEmbeds[imageIdx]] });
           return;
         }
 
