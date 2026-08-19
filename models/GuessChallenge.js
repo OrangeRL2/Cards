@@ -21,5 +21,6 @@ const guessChallengeSchema = new Schema({
 }, { timestamps: true });
 
 guessChallengeSchema.index({ active: 1, channelId: 1 });
+guessChallengeSchema.index({ winnerId: 1, resolvedAt: -1 });
 
 module.exports = model('GuessChallenge', guessChallengeSchema);

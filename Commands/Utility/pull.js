@@ -487,6 +487,21 @@ async function getInteractionRoleIds(interaction) {
   return [];
 }
 
+
+function getPullChannelContext(interaction) {
+  const channel = interaction?.channel || null;
+  const inThread = Boolean(channel?.isThread?.());
+  const validationChannelId = inThread && channel?.parentId
+    ? String(channel.parentId)
+    : String(interaction?.channelId || '');
+
+  return {
+    inThread,
+    validationChannelId,
+    rateMultiplier: inThread ? 0.20 : 1.0,
+  };
+}
+
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('pull')
@@ -575,6 +590,7 @@ const frozen = isFrozen(discordUserId, member);
       const amount = 1;
       const allowEvent = Boolean(interaction.options.getBoolean('event'));
       const useSpecial = Boolean(interaction.options.getBoolean('special'));
+      const pullChannelContext = getPullChannelContext(interaction);
 
       // --- Hello! A Brand New Summer! island validation ---
       // This runs before any pull is consumed. During the active event, every
@@ -587,7 +603,7 @@ const frozen = isFrozen(discordUserId, member);
 
           userId: discordUserId,
 
-          channelId: interaction.channelId,
+          channelId: pullChannelContext.validationChannelId,
 
           roleIds: summerRoleIds,
 
@@ -804,13 +820,18 @@ const frozen = isFrozen(discordUserId, member);
         if (!useSpecial && bossChannelBias && bossChannelBias.biased && bossChannelBias.drawToken) {
           pack = await drawPackBoss(discordUserId, bossChannelBias.drawToken, {
             forceSEC,
+            rateMultiplier: pullChannelContext.rateMultiplier,
             summerIsland: summerContext?.summerActive ? summerContext.island : null,
           });
         } else if (useSpecial && drawPackSpecial && specialDrawToken) {
-          pack = await drawPackSpecial(discordUserId, specialDrawToken, { forceSEC });
+          pack = await drawPackSpecial(discordUserId, specialDrawToken, {
+            forceSEC,
+            rateMultiplier: pullChannelContext.rateMultiplier,
+          });
         } else {
           pack = await drawPack(discordUserId, null, {
             forceSEC,
+            rateMultiplier: pullChannelContext.rateMultiplier,
             summerIsland: summerContext?.summerActive
               ? summerContext.island
               : null,

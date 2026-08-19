@@ -21,6 +21,11 @@ const STAGE_SECONDS = Object.freeze({ 1: 1, 2: 3, 3: 5, 4: 8 });
 const MAX_MUSIC_STAGE = 4;
 const MAX_TEXT_HINTS = 3;
 const HINT_COOLDOWN_MS = 2000;
+const RECENT_WIN_LOCK_MS = 60 * 60 * 1000;
+const RECENT_WIN_LOCK_THRESHOLD = 2;
+const GUESS_AUTO_MIN_MINUTES = 30;
+const GUESS_AUTO_MAX_MINUTES = 6 * 60;
+const TOKYO_TZ = 'Asia/Tokyo';
 const IMAGE_BASE = process.env.IMAGE_BASE || config.imageBase || 'http://152.69.195.48/images';
 const MODE_LABEL = Object.freeze({ jacket: 'Guess the Jacket', song: 'Guess the Song', holomem: 'Guess the Holomem' });
 
@@ -42,6 +47,26 @@ function shuffle(arr) {
     [out[i], out[j]] = [out[j], out[i]];
   }
   return out;
+}
+
+function getJstDayStart(date = new Date()) {
+  const parts = new Intl.DateTimeFormat('en-CA', {
+    timeZone: TOKYO_TZ,
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  }).formatToParts(date);
+
+  const map = {};
+  for (const part of parts) map[part.type] = part.value;
+
+  // 00:00 JST is 15:00 UTC on the previous calendar date.
+  return new Date(Date.UTC(
+    Number(map.year),
+    Number(map.month) - 1,
+    Number(map.day) - 1,
+    15, 0, 0, 0
+  ));
 }
 
 function releasedSongs(data) {
@@ -315,11 +340,10 @@ async function spawnAutomatic(client, { mode = null, channelId = null, forced = 
 }
 
 function randomDelayMs() {
-  const minMinutes = Math.max(1, Number(config.guessAutoMinMinutes || 10));
-  const maxMinutes = Math.max(minMinutes, Number(config.guessAutoMaxMinutes || 600));
-  const min = minMinutes * 60 * 1000;
-  const max = maxMinutes * 60 * 1000;
-  // Log-uniform: short waits are common, but very long waits remain genuinely possible.
+  const min = GUESS_AUTO_MIN_MINUTES * 60 * 1000;
+  const max = GUESS_AUTO_MAX_MINUTES * 60 * 1000;
+  // Log-uniform keeps shorter waits more common while enforcing a strict
+  // 30-minute minimum and 6-hour maximum between resolved challenges.
   return Math.round(Math.exp(Math.log(min) + Math.random() * (Math.log(max) - Math.log(min))));
 }
 
@@ -471,7 +495,7 @@ async function correctAnswer(message, round) {
     let reward = null;
     let rewardError = null;
     try {
-      reward = pickHolodoriLoginReward();
+      reward = pickHolodoriLoginReward(message.author.id);
       await addHolodoriReward(message.author.id, reward);
       await GuessChallenge.updateOne(
         { challengeId: round.roundId },
@@ -647,6 +671,31 @@ async function handleControlMessage(message, round, command) {
   return null;
 }
 
+async function getAutomaticGuessLock(round, userId) {
+  if (!round || round.kind !== 'auto') return null;
+
+  const spawnedAt = Number(round.startedAt || 0);
+  if (!spawnedAt) return null;
+
+  const now = new Date();
+  const lockEndsAt = spawnedAt + RECENT_WIN_LOCK_MS;
+  if (now.getTime() >= lockEndsAt) return null;
+
+  // Use the same JST calendar-day reset as /login. At 00:00 JST the win
+  // counter resets immediately, even if this challenge spawned before midnight.
+  const dayStart = getJstDayStart(now);
+  const wins = await GuessChallenge.countDocuments({
+    winnerId: String(userId),
+    resolvedAt: {
+      $gte: dayStart,
+      $lte: now,
+    },
+  }).exec();
+
+  if (wins < RECENT_WIN_LOCK_THRESHOLD) return null;
+  return { wins, lockEndsAt };
+}
+
 async function handleMessage(message) {
   if (!message || message.author?.bot || !message.content?.startsWith(GUESS_PREFIX)) return false;
   if (message.content.startsWith('-#')) return false;
@@ -659,6 +708,28 @@ async function handleMessage(message) {
     await handleControlMessage(message, round, command);
     return true;
   }
+
+  if (round.kind === 'auto') {
+    try {
+      const lock = await getAutomaticGuessLock(round, message.author.id);
+      if (lock) {
+        const unlockTimestamp = Math.ceil(lock.lockEndsAt / 1000);
+        await message.reply({
+          content: `⏳ You've already won **${lock.wins}** Guess Challenges today (JST), so you can't guess during this challenge's first hour. You can join <t:${unlockTimestamp}:R>, or immediately after the daily reset if that comes first.`,
+          allowedMentions: { parse: [] },
+        }).catch(() => {});
+        return true;
+      }
+    } catch (err) {
+      console.error('[guess] recent-win lock check failed:', err);
+      await message.reply({
+        content: 'Could not verify Guess Challenge eligibility right now. Please try again in a moment.',
+        allowedMentions: { parse: [] },
+      }).catch(() => {});
+      return true;
+    }
+  }
+
   round.guessers.add(String(message.author.id));
   try {
     await processGuess(message, round, content);

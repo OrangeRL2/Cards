@@ -7,6 +7,8 @@ const pools = require('../utils/loadImages');
 const {
   pickWeighted,
   buildSlotOptions,
+  applyFinalRateMultiplier,
+  applyAbsoluteOverrides,
   getUserProfile,
   getOverrides,
 } = require('../utils/rates');
@@ -194,6 +196,7 @@ async function drawPack(userId, useSpecialRatesOverride = null, opts = {}) {
   }
 
   const profile = getUserProfile(userId);
+  const rateMultiplier = Number.isFinite(Number(opts?.rateMultiplier)) ? Math.max(0, Number(opts.rateMultiplier)) : 1;
   const summerIsland = normalizeIsland(opts?.summerIsland);
 
   const commonSlot1Base = [
@@ -204,11 +207,12 @@ async function drawPack(userId, useSpecialRatesOverride = null, opts = {}) {
   ];
 
   {
-    const options = buildSlotOptions(
+    let options = buildSlotOptions(
       commonSlot1Base,
       profile.pullRate,
       getOverrides(profile, 'normal', 'common1')
     );
+    options = applyFinalRateMultiplier(options, rateMultiplier);
 
     results.push(
       chooseRarityAndFile(
@@ -227,11 +231,12 @@ async function drawPack(userId, useSpecialRatesOverride = null, opts = {}) {
   ];
 
   {
-    const options = buildSlotOptions(
+    let options = buildSlotOptions(
       commonSlot2Base,
       profile.pullRate,
       getOverrides(profile, 'normal', 'common2')
     );
+    options = applyFinalRateMultiplier(options, rateMultiplier);
 
     results.push(
       chooseRarityAndFile(
@@ -250,11 +255,12 @@ async function drawPack(userId, useSpecialRatesOverride = null, opts = {}) {
   ];
 
   {
-    const options = buildSlotOptions(
+    let options = buildSlotOptions(
       commonSlot3Base,
       profile.pullRate,
       getOverrides(profile, 'normal', 'common3')
     );
+    options = applyFinalRateMultiplier(options, rateMultiplier);
 
     results.push(
       chooseRarityAndFile(
@@ -273,11 +279,12 @@ async function drawPack(userId, useSpecialRatesOverride = null, opts = {}) {
   ];
 
   {
-    const options = buildSlotOptions(
+    let options = buildSlotOptions(
       commonSlot4Base,
       profile.pullRate,
       getOverrides(profile, 'normal', 'common4')
     );
+    options = applyFinalRateMultiplier(options, rateMultiplier);
 
     results.push(
       chooseRarityAndFile(
@@ -310,11 +317,12 @@ async function drawPack(userId, useSpecialRatesOverride = null, opts = {}) {
   for (let i = 0; i < uncommonSlotBases.length; i += 1) {
     const slotName = `uncommon${i + 1}`;
 
-    const options = buildSlotOptions(
+    let options = buildSlotOptions(
       uncommonSlotBases[i],
       profile.pullRate,
       getOverrides(profile, 'normal', slotName)
     );
+    options = applyFinalRateMultiplier(options, rateMultiplier);
 
     results.push(
       chooseRarityAndFile(
@@ -339,15 +347,15 @@ async function drawPack(userId, useSpecialRatesOverride = null, opts = {}) {
       ? { SEC: 100 }
       : null;
 
-    const mergedOverrides = pityOverrides
-      ? { ...(baseOverrides || {}), ...pityOverrides }
-      : baseOverrides;
-
-    const options = buildSlotOptions(
+    let options = buildSlotOptions(
       rareBase,
       profile.pullRate,
-      mergedOverrides
+      baseOverrides
     );
+    options = applyFinalRateMultiplier(options, rateMultiplier);
+    if (pityOverrides) {
+      options = applyAbsoluteOverrides(options, pityOverrides);
+    }
 
     results.push(
       chooseRarityAndFile(

@@ -194,7 +194,7 @@ async function purchaseHolodoriTen(userId, item, token) {
 
   let cards;
   try {
-    cards = buildHolodoriTenPull({ islandMembers, guaranteeIslandFiveStar: firstPurchase });
+    cards = buildHolodoriTenPull({ islandMembers, guaranteeIslandFiveStar: firstPurchase, userId });
     await addCardsToUser(userId, cards);
   } catch (err) {
     const refundUpdate = {

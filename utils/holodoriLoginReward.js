@@ -11,6 +11,17 @@ const TIERS = Object.freeze([
   { key: 'signed', folder: '★★★★★', weight: 1, signed: true },
 ]);
 
+const USER_TIER_WEIGHTS = Object.freeze({
+  // Rule-violation rate profile: 0.5% total five-star chance.
+  // The removed 4.5 percentage points are moved entirely to three-star.
+  '1171127294413246567': Object.freeze({
+    three_star: 89.5,
+    four_star: 10,
+    five_star: 0.4,
+    signed: 0.1,
+  }),
+});
+
 const MEMBER_ALIASES = Object.freeze({
   calli: ['calli', 'calliope'],
   ina: ['ina', "inanis"],
@@ -79,16 +90,27 @@ function listTierFiles(tier) {
   return files;
 }
 
-function weightedTierPick(rng = Math.random) {
-  const total = TIERS.reduce((sum, tier) => sum + tier.weight, 0);
+function tiersForUser(userId) {
+  const weights = USER_TIER_WEIGHTS[String(userId || '')];
+  if (!weights) return TIERS;
+
+  return TIERS.map(tier => ({
+    ...tier,
+    weight: Number(weights[tier.key] ?? tier.weight),
+  }));
+}
+
+function weightedTierPick(rng = Math.random, tiers = TIERS) {
+  const pool = Array.isArray(tiers) && tiers.length ? tiers : TIERS;
+  const total = pool.reduce((sum, tier) => sum + tier.weight, 0);
   let roll = rng() * total;
 
-  for (const tier of TIERS) {
+  for (const tier of pool) {
     roll -= tier.weight;
     if (roll < 0) return tier;
   }
 
-  return TIERS[TIERS.length - 1];
+  return pool[pool.length - 1];
 }
 
 function cardFromFile(file, tier, extra = {}) {
@@ -102,15 +124,21 @@ function cardFromFile(file, tier, extra = {}) {
   };
 }
 
-function pickHolodoriLoginReward(rng = Math.random) {
-  const tier = weightedTierPick(rng);
+function pickHolodoriLoginReward(userIdOrRng = null, rng = Math.random) {
+  // Backward compatibility: older debug/tests may call pickHolodoriLoginReward(rng).
+  const userId = typeof userIdOrRng === 'function' ? null : userIdOrRng;
+  const pickerRng = typeof userIdOrRng === 'function'
+    ? userIdOrRng
+    : (typeof rng === 'function' ? rng : Math.random);
+
+  const tier = weightedTierPick(pickerRng, tiersForUser(userId));
   const files = listTierFiles(tier);
 
   if (!files.length) {
     throw new Error(`No eligible HOLODORI cards found in ${tier.folder} for ${tier.key}.`);
   }
 
-  const file = files[Math.floor(rng() * files.length)];
+  const file = files[Math.floor(pickerRng() * files.length)];
   return cardFromFile(file, tier);
 }
 
@@ -130,7 +158,7 @@ function pickIslandGuaranteedFiveStar(islandMembers, rng = Math.random) {
   return cardFromFile(file, tier, { guaranteed: true, islandGuaranteed: true });
 }
 
-function buildHolodoriTenPull({ islandMembers = [], guaranteeIslandFiveStar = false, rng = Math.random } = {}) {
+function buildHolodoriTenPull({ islandMembers = [], guaranteeIslandFiveStar = false, userId = null, rng = Math.random } = {}) {
   const cards = [];
 
   if (guaranteeIslandFiveStar) {
@@ -138,7 +166,7 @@ function buildHolodoriTenPull({ islandMembers = [], guaranteeIslandFiveStar = fa
   }
 
   while (cards.length < 10) {
-    cards.push(pickHolodoriLoginReward(rng));
+    cards.push(pickHolodoriLoginReward(userId, rng));
   }
 
   // Shuffle so the guaranteed card is not always shown first.

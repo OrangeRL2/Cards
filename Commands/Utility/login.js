@@ -904,7 +904,7 @@ module.exports = {
       }
 
       // One HOLODORI card is awarded on every successful daily login.
-      holodoriCard = pickHolodoriLoginReward();
+      holodoriCard = pickHolodoriLoginReward(userId);
 
       // Store HOLODORI cards using their star tier as the actual rarity.
       if (holodoriCard) {

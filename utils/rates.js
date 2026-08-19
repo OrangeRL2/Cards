@@ -142,6 +142,45 @@ function buildSlotOptions(baseOptions, rate, overridesForSlot) {
   return applyAbsoluteOverrides(scaled, overridesForSlot);
 }
 
+/**
+ * Apply a final multiplier to an already-resolved slot table.
+ * - The FIRST entry remains the base rarity.
+ * - Every non-base rarity is multiplied by `multiplier`.
+ * - The removed probability is returned to the base rarity.
+ *
+ * This is intentionally applied AFTER user profile scaling + absolute overrides,
+ * so thread/forum penalties also affect custom user buffs/nerfs.
+ */
+function applyFinalRateMultiplier(slotOptions, multiplier = 1) {
+  if (!Array.isArray(slotOptions) || slotOptions.length === 0) return slotOptions;
+
+  const m = Number(multiplier);
+  if (!Number.isFinite(m) || m >= 1) {
+    return slotOptions.map(o => ({ ...o }));
+  }
+
+  const safeMultiplier = Math.max(0, m);
+  const baseKey = String(slotOptions[0].key);
+  const out = [];
+  let nonBaseSum = 0;
+
+  for (const opt of slotOptions) {
+    if (!opt || typeof opt.weight !== 'number') continue;
+    const key = String(opt.key);
+
+    if (key === baseKey) continue;
+
+    const weight = Math.max(0, Number(opt.weight) || 0) * safeMultiplier;
+    nonBaseSum += weight;
+    out.push({ key: opt.key, weight });
+  }
+
+  return [
+    { key: slotOptions[0].key, weight: Math.max(0, 100 - nonBaseSum) },
+    ...out,
+  ];
+}
+
 // (profiles unchanged)
 const rateProfiles = (() => {
   const m = new Map();
@@ -286,6 +325,7 @@ module.exports = {
   scaleSlotOdds,
   applyAbsoluteOverrides,
   buildSlotOptions,
+  applyFinalRateMultiplier,
   rateProfiles,
   getUserProfile,
   getOverrides,

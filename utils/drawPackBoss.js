@@ -3,7 +3,7 @@
 const path = require('path');
 const pools = require('./loadImages');
 const { pickCardFromRarityFolder } = require('./cardPicker');
-const { pickWeighted, buildSlotOptions, getUserProfile, getOverrides } = require('./rates');
+const { pickWeighted, buildSlotOptions, applyFinalRateMultiplier, applyAbsoluteOverrides, getUserProfile, getOverrides } = require('./rates');
 const { rollExtraSlot } = require('./extraSlot');
 const { normalizeIsland, getIslandCards } = require('../config/summer-cards');
 // --- Boss alias exceptions map (kept from your file)
@@ -123,6 +123,7 @@ async function pickForSlot(rarity, bossLabel, summerIsland = null) {
 async function drawPackBoss(userId, bossLabel, opts = {}) {
   const results = [];
   const profile = getUserProfile(userId);
+  const rateMultiplier = Number.isFinite(Number(opts?.rateMultiplier)) ? Math.max(0, Number(opts.rateMultiplier)) : 1;
   const summerIsland = normalizeIsland(opts?.summerIsland);
 
   // Common slots (4)
@@ -133,7 +134,8 @@ async function drawPackBoss(userId, bossLabel, opts = {}) {
     { key: 'BDAY', weight: 0.1 },
   ];
   {
-    const options = buildSlotOptions(commonSlot1Base, profile.pullRate, getOverrides(profile, 'boss', 'common1'));
+    let options = buildSlotOptions(commonSlot1Base, profile.pullRate, getOverrides(profile, 'boss', 'common1'));
+    options = applyFinalRateMultiplier(options, rateMultiplier);
     const rarity = pickWeighted(options);
     const file = await pickForSlot(rarity, bossLabel, summerIsland);
     results.push({ rarity, file });
@@ -145,7 +147,8 @@ async function drawPackBoss(userId, bossLabel, opts = {}) {
     { key: 'OC', weight: 2.0 },
   ];
   {
-    const options = buildSlotOptions(commonSlot2Base, profile.pullRate, getOverrides(profile, 'boss', 'common2'));
+    let options = buildSlotOptions(commonSlot2Base, profile.pullRate, getOverrides(profile, 'boss', 'common2'));
+    options = applyFinalRateMultiplier(options, rateMultiplier);
     const rarity = pickWeighted(options);
     const file = await pickForSlot(rarity, bossLabel, summerIsland);
     results.push({ rarity, file });
@@ -157,7 +160,8 @@ async function drawPackBoss(userId, bossLabel, opts = {}) {
     { key: 'BDAY', weight: 0.1 },
   ];
   {
-    const options = buildSlotOptions(commonSlot3Base, profile.pullRate, getOverrides(profile, 'boss', 'common3'));
+    let options = buildSlotOptions(commonSlot3Base, profile.pullRate, getOverrides(profile, 'boss', 'common3'));
+    options = applyFinalRateMultiplier(options, rateMultiplier);
     const rarity = pickWeighted(options);
     const file = await pickForSlot(rarity, bossLabel, summerIsland);
     results.push({ rarity, file });
@@ -169,7 +173,8 @@ async function drawPackBoss(userId, bossLabel, opts = {}) {
     { key: 'HR', weight: 0.1 },
   ];
   {
-    const options = buildSlotOptions(commonSlot4Base, profile.pullRate, getOverrides(profile, 'boss', 'common4'));
+    let options = buildSlotOptions(commonSlot4Base, profile.pullRate, getOverrides(profile, 'boss', 'common4'));
+    options = applyFinalRateMultiplier(options, rateMultiplier);
     const rarity = pickWeighted(options);
     const file = await pickForSlot(rarity, bossLabel, summerIsland);
     results.push({ rarity, file });
@@ -196,7 +201,8 @@ async function drawPackBoss(userId, bossLabel, opts = {}) {
 
   for (let i = 0; i < uncommonSlotBases.length; i++) {
     const slotName = `uncommon${i + 1}`;
-    const options = buildSlotOptions(uncommonSlotBases[i], profile.pullRate, getOverrides(profile, 'boss', slotName));
+    let options = buildSlotOptions(uncommonSlotBases[i], profile.pullRate, getOverrides(profile, 'boss', slotName));
+    options = applyFinalRateMultiplier(options, rateMultiplier);
     const rarity = pickWeighted(options);
     const file = await pickForSlot(rarity, bossLabel, summerIsland);
     results.push({ rarity, file });
@@ -211,11 +217,12 @@ async function drawPackBoss(userId, bossLabel, opts = {}) {
   {
       const baseOverrides = getOverrides(profile, 'boss', 'rare');
     const pityOverrides = (opts && opts.forceSEC) ? { SEC: 100 } : null;
-    const mergedOverrides = pityOverrides
-      ? { ...(baseOverrides || {}), ...pityOverrides }
-      : baseOverrides;
 
-    const options = buildSlotOptions(rareBase, profile.pullRate, mergedOverrides);
+    let options = buildSlotOptions(rareBase, profile.pullRate, baseOverrides);
+    options = applyFinalRateMultiplier(options, rateMultiplier);
+    if (pityOverrides) {
+      options = applyAbsoluteOverrides(options, pityOverrides);
+    }
     const rareRarity = pickWeighted(options);
     const rareFile = await pickForSlot(rareRarity, bossLabel, summerIsland);
     results.push({ rarity: rareRarity, file: rareFile });

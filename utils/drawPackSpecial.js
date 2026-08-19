@@ -2,7 +2,7 @@
 const path = require('path');
 const pools = require('./loadImages');
 const { pickCardFromRarityFolder } = require('./cardPicker');
-const { pickWeighted, buildSlotOptions, getUserProfile, getOverrides } = require('./rates');
+const { pickWeighted, buildSlotOptions, applyFinalRateMultiplier, applyAbsoluteOverrides, getUserProfile, getOverrides } = require('./rates');
 const { rollExtraSlot } = require('./extraSlot');
 
 /**
@@ -148,6 +148,7 @@ async function drawPackSpecial(userId, specialLabel, opts = {}) {
 
   const profile = getUserProfile(userId);
   const rate = profile.specialPullRate;
+  const rateMultiplier = Number.isFinite(Number(opts?.rateMultiplier)) ? Math.max(0, Number(opts.rateMultiplier)) : 1;
 
   // --- Common slots (4) ---
   const commonSlot1Base = [
@@ -157,7 +158,8 @@ async function drawPackSpecial(userId, specialLabel, opts = {}) {
     { key: 'BDAY', weight: 1.1 },
   ];
   {
-    const options = buildSlotOptions(commonSlot1Base, rate, getOverrides(profile, 'special', 'common1'));
+    let options = buildSlotOptions(commonSlot1Base, rate, getOverrides(profile, 'special', 'common1'));
+    options = applyFinalRateMultiplier(options, rateMultiplier);
     const rarity = pickWeighted(options);
     const file = await pickForSlot(rarity, variantLabel); // ✅ use variantLabel
     results.push({ rarity, file });
@@ -169,7 +171,8 @@ async function drawPackSpecial(userId, specialLabel, opts = {}) {
     { key: 'OC', weight: 2.0 },
   ];
   {
-    const options = buildSlotOptions(commonSlot2Base, rate, getOverrides(profile, 'special', 'common2'));
+    let options = buildSlotOptions(commonSlot2Base, rate, getOverrides(profile, 'special', 'common2'));
+    options = applyFinalRateMultiplier(options, rateMultiplier);
     const rarity = pickWeighted(options);
     const file = await pickForSlot(rarity, variantLabel);
     results.push({ rarity, file });
@@ -181,7 +184,8 @@ async function drawPackSpecial(userId, specialLabel, opts = {}) {
     { key: 'BDAY', weight: 1.1 },
   ];
   {
-    const options = buildSlotOptions(commonSlot3Base, rate, getOverrides(profile, 'special', 'common3'));
+    let options = buildSlotOptions(commonSlot3Base, rate, getOverrides(profile, 'special', 'common3'));
+    options = applyFinalRateMultiplier(options, rateMultiplier);
     const rarity = pickWeighted(options);
     const file = await pickForSlot(rarity, variantLabel);
     results.push({ rarity, file });
@@ -193,7 +197,8 @@ async function drawPackSpecial(userId, specialLabel, opts = {}) {
     { key: 'HR', weight: 1.1 },
   ];
   {
-    const options = buildSlotOptions(commonSlot4Base, rate, getOverrides(profile, 'special', 'common4'));
+    let options = buildSlotOptions(commonSlot4Base, rate, getOverrides(profile, 'special', 'common4'));
+    options = applyFinalRateMultiplier(options, rateMultiplier);
     const rarity = pickWeighted(options);
     const file = await pickForSlot(rarity, variantLabel);
     results.push({ rarity, file });
@@ -220,7 +225,8 @@ async function drawPackSpecial(userId, specialLabel, opts = {}) {
 
   for (let i = 0; i < uncommonSlotBases.length; i++) {
     const slotName = `uncommon${i + 1}`;
-    const options = buildSlotOptions(uncommonSlotBases[i], rate, getOverrides(profile, 'special', slotName));
+    let options = buildSlotOptions(uncommonSlotBases[i], rate, getOverrides(profile, 'special', slotName));
+    options = applyFinalRateMultiplier(options, rateMultiplier);
     const rarity = pickWeighted(options);
     const file = await pickForSlot(rarity, variantLabel);
     results.push({ rarity, file });
@@ -235,11 +241,12 @@ async function drawPackSpecial(userId, specialLabel, opts = {}) {
   {
     const baseOverrides = getOverrides(profile, 'special', 'rare');
     const pityOverrides = (opts && opts.forceSEC) ? { SEC: 100, OUR: 0, R: 0 } : null;
-    const mergedOverrides = pityOverrides
-      ? { ...(baseOverrides || {}), ...pityOverrides }
-      : baseOverrides;
 
-    const options = buildSlotOptions(rareBase, rate, mergedOverrides);
+    let options = buildSlotOptions(rareBase, rate, baseOverrides);
+    options = applyFinalRateMultiplier(options, rateMultiplier);
+    if (pityOverrides) {
+      options = applyAbsoluteOverrides(options, pityOverrides);
+    }
     const rarity = pickWeighted(options);
     const file = await pickForSlot(rarity, variantLabel);
     results.push({ rarity, file });
