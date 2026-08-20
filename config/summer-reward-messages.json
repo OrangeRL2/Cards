@@ -51,6 +51,16 @@
       "Your work during {activity} left a lasting impression on {member}. She joined your agency!"
     ]
   },
+  "bingo_shells": {
+    "title": "GLITCH BINGO PAYOUT!",
+    "emoji": "🎱",
+    "color": 16041282,
+    "messages": [
+      "You recovered {hits}/{total} corrupted squares. Base compensation: {base} Summer Shells. Bingo bonus: +{bonus} Summer Shells.",
+      "The glitched card stabilized {hits}/{total} squares. {base} base shells + {bonus} Bingo bonus shells were awarded.",
+      "Bingo round finished: {hits}/{total} recovered. Your payout is {base} base shells plus {bonus} bonus shells."
+    ]
+  },
   "fallback": {
     "title": "SUCCESS!",
     "emoji": "🎁",

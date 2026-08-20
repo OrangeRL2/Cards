@@ -23796,6 +23796,1190 @@
           ]
         }
       }
+    },
+    {
+      "day": 21,
+      "date": "2026-08-21",
+      "chapter": "Chapter 4 - The World Is Down",
+      "storyBeat": "After the strange Precedent Archive activity of Day 20, the resort wakes to a harsher version of the old Great Reboot: everything outside the hotel lounge is frozen in place. Since nobody can safely cross the doorway until reality resumes, Management revives the old bingo equipment and drafts Suisei and Lamy to keep the trapped guests entertained.",
+      "windows": {
+        "morning": {
+          "sceneId": "AUG21_MORNING",
+          "title": "Day 21 — The World Is Down",
+          "openingDialogue": "The hotel lounge is running. Everything beyond its doors is not. Management's emergency plan is written on a whiteboard: 1) nobody goes outside, 2) keep the tourists calm, 3) somehow this became Bingo.",
+          "coreActivities": [
+            {
+              "id": "AUG21_MORNING_GLITCH_BINGO",
+              "fullArtRoute": "Suisei & Lamy",
+              "buttonText": "Glitched Bingo — Morning Row",
+              "previewDialogue": "Suisei and Lamy host five corrupted Bingo calls while everyone waits for the frozen world outside to restart.",
+              "selectedDialogue": "The lounge doors stay shut. Outside, a wave is frozen halfway through breaking and one seagull has been stuck mid-flap for several minutes.\n\nManagement rolls out the old Day 4 bingo cage.\n\nSuisei checks the microphone. Lamy checks the minibar.\n\nSuisei: \"One of those is event equipment.\"\nLamy: \"Both are supporting morale.\"\n\nThe electronic bingo card boots with fifteen unreadable squares.",
+              "bingo": {
+                "enabled": true,
+                "row": 0,
+                "totalCalls": 5,
+                "bonusPerCorrect": 50
+              },
+              "steps": [
+                {
+                  "id": "STEP_1",
+                  "bingoSlot": 0,
+                  "prompt": "CALL 1 — CORRUPTED INCIDENT LOG**\n`07:18 — refrigerator checked; three bottles relocated; note added: THIS COUNTS AS EMERGENCY SUPPLY.`\n\nSuisei: \"Responsible.\"\nLamy: \"Very.\"\nSuisei: \"That answer was fast.\"\nLamy: \"The ball, Suisei.\"\n\n**Which member belongs in the first corrupted square?",
+                  "options": [
+                    {
+                      "id": "A",
+                      "text": "Choco",
+                      "bingoMemberId": "choco",
+                      "bingoCorrect": false,
+                      "resultDialogue": "The checker tests **Choco**. The square flashes red, then collapses back into static.\n\nSuisei: \"No match.\"\nLamy: \"The square is still corrupted.\"",
+                      "eligibleSunMembers": [
+                        "Suisei",
+                        "Lamy"
+                      ],
+                      "nextStepId": "STEP_2"
+                    },
+                    {
+                      "id": "B",
+                      "text": "Okayu",
+                      "bingoMemberId": "okayu",
+                      "bingoCorrect": false,
+                      "resultDialogue": "The checker tests **Okayu**. The square flashes red, then collapses back into static.\n\nSuisei: \"No match.\"\nLamy: \"The square is still corrupted.\"",
+                      "eligibleSunMembers": [
+                        "Suisei",
+                        "Lamy"
+                      ],
+                      "nextStepId": "STEP_2"
+                    },
+                    {
+                      "id": "C",
+                      "text": "Anya",
+                      "bingoMemberId": "anya",
+                      "bingoCorrect": false,
+                      "resultDialogue": "The checker tests **Anya**. The square flashes red, then collapses back into static.\n\nSuisei: \"No match.\"\nLamy: \"The square is still corrupted.\"",
+                      "eligibleSunMembers": [
+                        "Suisei",
+                        "Lamy"
+                      ],
+                      "nextStepId": "STEP_2"
+                    },
+                    {
+                      "id": "D",
+                      "text": "Lamy",
+                      "bingoMemberId": "lamy",
+                      "bingoCorrect": true,
+                      "resultDialogue": "The checker chirps. Static peels away from the square: **Lamy**.\n\nSuisei slowly turns toward her.\nLamy: \"The refrigerator was an infrastructure check.\"\nSuisei: \"I didn't accuse you.\"\nLamy: \"Good.\" ",
+                      "eligibleSunMembers": [
+                        "Suisei",
+                        "Lamy"
+                      ],
+                      "nextStepId": "STEP_2",
+                      "bingoRevealLabel": "Lamy",
+                      "setFlag": "d21_bingo_recovered_lamy"
+                    },
+                    {
+                      "id": "E",
+                      "text": "Risu",
+                      "bingoMemberId": "risu",
+                      "bingoCorrect": false,
+                      "resultDialogue": "The checker tests **Risu**. The square flashes red, then collapses back into static.\n\nSuisei: \"No match.\"\nLamy: \"The square is still corrupted.\"",
+                      "eligibleSunMembers": [
+                        "Suisei",
+                        "Lamy"
+                      ],
+                      "nextStepId": "STEP_2"
+                    },
+                    {
+                      "id": "F",
+                      "text": "Aqua",
+                      "bingoMemberId": "aqua",
+                      "bingoCorrect": false,
+                      "resultDialogue": "The checker tests **Aqua**. The square flashes red, then collapses back into static.\n\nSuisei: \"No match.\"\nLamy: \"The square is still corrupted.\"",
+                      "eligibleSunMembers": [
+                        "Suisei",
+                        "Lamy"
+                      ],
+                      "nextStepId": "STEP_2"
+                    }
+                  ]
+                },
+                {
+                  "id": "STEP_2",
+                  "bingoSlot": 1,
+                  "prompt": "CALL 2 — RECREATION REPORT**\n`08:02 — table-tapping became a rhythm contest. Subject requested an immediate rematch after losing to a child by one point.`\n\nLamy: \"Competitive.\"\nSuisei: \"Healthy competitive spirit.\"\nLamy: \"The report says they checked the score three times.\"\nSuisei: \"Accuracy matters.\"\n\n**Who is the second square?",
+                  "options": [
+                    {
+                      "id": "A",
+                      "text": "AZKi",
+                      "bingoMemberId": "azki",
+                      "bingoCorrect": false,
+                      "resultDialogue": "The checker tests **AZKi**. The square flashes red, then collapses back into static.\n\nLamy: \"Nope.\"\nSuisei: \"The rematch remains unsolved.\"",
+                      "eligibleSunMembers": [
+                        "Suisei",
+                        "Lamy"
+                      ],
+                      "nextStepId": "STEP_3"
+                    },
+                    {
+                      "id": "B",
+                      "text": "Suisei",
+                      "bingoMemberId": "suisei",
+                      "bingoCorrect": true,
+                      "resultDialogue": "The square resolves: **Suisei**.\n\nLamy: \"So you *did* ask for a rematch.\"\nSuisei: \"The child had suspicious timing.\"\nLamy: \"Of course.\" ",
+                      "eligibleSunMembers": [
+                        "Suisei",
+                        "Lamy"
+                      ],
+                      "nextStepId": "STEP_3",
+                      "bingoRevealLabel": "Suisei",
+                      "setFlag": "d21_bingo_recovered_suisei"
+                    },
+                    {
+                      "id": "C",
+                      "text": "Calli",
+                      "bingoMemberId": "calli",
+                      "bingoCorrect": false,
+                      "resultDialogue": "The checker tests **Calli**. The square flashes red, then collapses back into static.\n\nLamy: \"Nope.\"\nSuisei: \"The rematch remains unsolved.\"",
+                      "eligibleSunMembers": [
+                        "Suisei",
+                        "Lamy"
+                      ],
+                      "nextStepId": "STEP_3"
+                    },
+                    {
+                      "id": "D",
+                      "text": "Riona",
+                      "bingoMemberId": "riona",
+                      "bingoCorrect": false,
+                      "resultDialogue": "The checker tests **Riona**. The square flashes red, then collapses back into static.\n\nLamy: \"Nope.\"\nSuisei: \"The rematch remains unsolved.\"",
+                      "eligibleSunMembers": [
+                        "Suisei",
+                        "Lamy"
+                      ],
+                      "nextStepId": "STEP_3"
+                    },
+                    {
+                      "id": "E",
+                      "text": "Kanade",
+                      "bingoMemberId": "kanade",
+                      "bingoCorrect": false,
+                      "resultDialogue": "The checker tests **Kanade**. The square flashes red, then collapses back into static.\n\nLamy: \"Nope.\"\nSuisei: \"The rematch remains unsolved.\"",
+                      "eligibleSunMembers": [
+                        "Suisei",
+                        "Lamy"
+                      ],
+                      "nextStepId": "STEP_3"
+                    },
+                    {
+                      "id": "F",
+                      "text": "Matsuri",
+                      "bingoMemberId": "matsuri",
+                      "bingoCorrect": false,
+                      "resultDialogue": "The checker tests **Matsuri**. The square flashes red, then collapses back into static.\n\nLamy: \"Nope.\"\nSuisei: \"The rematch remains unsolved.\"",
+                      "eligibleSunMembers": [
+                        "Suisei",
+                        "Lamy"
+                      ],
+                      "nextStepId": "STEP_3"
+                    }
+                  ]
+                },
+                {
+                  "id": "STEP_3",
+                  "bingoSlot": 2,
+                  "prompt": "CALL 3 — PARTIAL EMERGENCY NOTES** \nThe surviving page starts as a careful timeline, becomes an extremely detailed sketch of the frozen seagull outside, then ends with:\n`I think this was important.`\n\nSuisei: \"Strong documentation.\"\nLamy: \"It changed genres halfway through.\"\nSuisei: \"So does this event.\"\n\n**Who was holding the pen?",
+                  "options": [
+                    {
+                      "id": "A",
+                      "text": "Shiori",
+                      "bingoMemberId": "shiori",
+                      "bingoCorrect": false,
+                      "resultDialogue": "The checker tests **Shiori**. The square flashes red, then collapses back into static.\n\nSuisei: \"Rejected.\"\nLamy: \"The notebook keeps its secrets.\"",
+                      "eligibleSunMembers": [
+                        "Suisei",
+                        "Lamy"
+                      ],
+                      "nextStepId": "STEP_4"
+                    },
+                    {
+                      "id": "B",
+                      "text": "Raden",
+                      "bingoMemberId": "raden",
+                      "bingoCorrect": false,
+                      "resultDialogue": "The checker tests **Raden**. The square flashes red, then collapses back into static.\n\nSuisei: \"Rejected.\"\nLamy: \"The notebook keeps its secrets.\"",
+                      "eligibleSunMembers": [
+                        "Suisei",
+                        "Lamy"
+                      ],
+                      "nextStepId": "STEP_4"
+                    },
+                    {
+                      "id": "C",
+                      "text": "Ina",
+                      "bingoMemberId": "ina",
+                      "bingoCorrect": false,
+                      "resultDialogue": "The checker tests **Ina**. The square flashes red, then collapses back into static.\n\nSuisei: \"Rejected.\"\nLamy: \"The notebook keeps its secrets.\"",
+                      "eligibleSunMembers": [
+                        "Suisei",
+                        "Lamy"
+                      ],
+                      "nextStepId": "STEP_4"
+                    },
+                    {
+                      "id": "D",
+                      "text": "Iofi",
+                      "bingoMemberId": "iofi",
+                      "bingoCorrect": false,
+                      "resultDialogue": "The checker tests **Iofi**. The square flashes red, then collapses back into static.\n\nSuisei: \"Rejected.\"\nLamy: \"The notebook keeps its secrets.\"",
+                      "eligibleSunMembers": [
+                        "Suisei",
+                        "Lamy"
+                      ],
+                      "nextStepId": "STEP_4"
+                    },
+                    {
+                      "id": "E",
+                      "text": "Amelia",
+                      "bingoMemberId": "amelia",
+                      "bingoCorrect": false,
+                      "resultDialogue": "The checker tests **Amelia**. The square flashes red, then collapses back into static.\n\nSuisei: \"Rejected.\"\nLamy: \"The notebook keeps its secrets.\"",
+                      "eligibleSunMembers": [
+                        "Suisei",
+                        "Lamy"
+                      ],
+                      "nextStepId": "STEP_4"
+                    },
+                    {
+                      "id": "F",
+                      "text": "Mumei",
+                      "bingoMemberId": "mumei",
+                      "bingoCorrect": true,
+                      "resultDialogue": "The card repairs itself: **Mumei**.\n\nSuisei: \"The bird sketch was excellent.\"\nLamy: \"The sentence ending in 'I think this was important' helped.\"\nSuisei: \"Documentation has character.\" ",
+                      "eligibleSunMembers": [
+                        "Suisei",
+                        "Lamy"
+                      ],
+                      "nextStepId": "STEP_4",
+                      "bingoRevealLabel": "Mumei",
+                      "setFlag": "d21_bingo_recovered_mumei"
+                    }
+                  ]
+                },
+                {
+                  "id": "STEP_4",
+                  "bingoSlot": 3,
+                  "prompt": "CALL 4 — SECURITY GAP**\nOne lounge camera lost exactly forty-seven seconds. When it returned, every chair had been moved into a perfect circle. Nobody admitted doing it.\n\nLamy: \"The report calls it efficient.\"\nSuisei: \"The report has no signature.\"\nLamy: \"Convenient.\"\n\n**Who belongs in square four?",
+                  "options": [
+                    {
+                      "id": "A",
+                      "text": "Iroha",
+                      "bingoMemberId": "iroha",
+                      "bingoCorrect": false,
+                      "resultDialogue": "The checker tests **Iroha**. The square flashes red, then collapses back into static.\n\nLamy: \"No clearance.\"\nSuisei: \"Forty-seven seconds remain suspicious.\"",
+                      "eligibleSunMembers": [
+                        "Suisei",
+                        "Lamy"
+                      ],
+                      "nextStepId": "STEP_5"
+                    },
+                    {
+                      "id": "B",
+                      "text": "Fubuki",
+                      "bingoMemberId": "fubuki",
+                      "bingoCorrect": false,
+                      "resultDialogue": "The checker tests **Fubuki**. The square flashes red, then collapses back into static.\n\nLamy: \"No clearance.\"\nSuisei: \"Forty-seven seconds remain suspicious.\"",
+                      "eligibleSunMembers": [
+                        "Suisei",
+                        "Lamy"
+                      ],
+                      "nextStepId": "STEP_5"
+                    },
+                    {
+                      "id": "C",
+                      "text": "Zeta",
+                      "bingoMemberId": "zeta",
+                      "bingoCorrect": true,
+                      "resultDialogue": "A fourth name clears through the static: **Zeta**.\n\nLamy: \"Forty-seven missing seconds.\"\nSuisei: \"Very efficient.\"\nLamy: \"You sound impressed.\"\nSuisei: \"I respect clean work.\" ",
+                      "eligibleSunMembers": [
+                        "Suisei",
+                        "Lamy"
+                      ],
+                      "nextStepId": "STEP_5",
+                      "bingoRevealLabel": "Zeta",
+                      "setFlag": "d21_bingo_recovered_zeta"
+                    },
+                    {
+                      "id": "D",
+                      "text": "Gigi",
+                      "bingoMemberId": "gigi",
+                      "bingoCorrect": false,
+                      "resultDialogue": "The checker tests **Gigi**. The square flashes red, then collapses back into static.\n\nLamy: \"No clearance.\"\nSuisei: \"Forty-seven seconds remain suspicious.\"",
+                      "eligibleSunMembers": [
+                        "Suisei",
+                        "Lamy"
+                      ],
+                      "nextStepId": "STEP_5"
+                    },
+                    {
+                      "id": "E",
+                      "text": "Cecilia",
+                      "bingoMemberId": "cecilia",
+                      "bingoCorrect": false,
+                      "resultDialogue": "The checker tests **Cecilia**. The square flashes red, then collapses back into static.\n\nLamy: \"No clearance.\"\nSuisei: \"Forty-seven seconds remain suspicious.\"",
+                      "eligibleSunMembers": [
+                        "Suisei",
+                        "Lamy"
+                      ],
+                      "nextStepId": "STEP_5"
+                    },
+                    {
+                      "id": "F",
+                      "text": "Hajime",
+                      "bingoMemberId": "hajime",
+                      "bingoCorrect": false,
+                      "resultDialogue": "The checker tests **Hajime**. The square flashes red, then collapses back into static.\n\nLamy: \"No clearance.\"\nSuisei: \"Forty-seven seconds remain suspicious.\"",
+                      "eligibleSunMembers": [
+                        "Suisei",
+                        "Lamy"
+                      ],
+                      "nextStepId": "STEP_5"
+                    }
+                  ]
+                },
+                {
+                  "id": "STEP_5",
+                  "bingoSlot": 4,
+                  "prompt": "CALL 5 — BLANKET INVENTORY**\nA staff member was assigned to count emergency blankets. Ten minutes later the count was complete, the staff member was missing, and one blanket-shaped lump had appeared behind the sofa.\n\nSuisei: \"The lump answered 'working.'\"\nLamy: \"Then technically they were still on shift.\"\n\n**Who completes the first row?",
+                  "options": [
+                    {
+                      "id": "A",
+                      "text": "Chloe",
+                      "bingoMemberId": "chloe",
+                      "bingoCorrect": true,
+                      "resultDialogue": "The final Morning square unlocks: **Chloe**.\n\nSuisei: \"The blanket was working?\"\nLamy: \"Apparently on inventory.\"\nSuisei: \"Remote work has gone too far.\" ",
+                      "eligibleSunMembers": [
+                        "Suisei",
+                        "Lamy"
+                      ],
+                      "nextStepId": "",
+                      "bingoRevealLabel": "Chloe",
+                      "setFlags": [
+                        "d21_bingo_recovered_chloe",
+                        "d21_bingo_row_1_finished"
+                      ]
+                    },
+                    {
+                      "id": "B",
+                      "text": "Aloe",
+                      "bingoMemberId": "aloe",
+                      "bingoCorrect": false,
+                      "resultDialogue": "The checker tests **Aloe**. The square flashes red, then collapses back into static.\n\nSuisei: \"Not our blanket criminal.\"\nLamy: \"Alleged blanket criminal.\"",
+                      "eligibleSunMembers": [
+                        "Suisei",
+                        "Lamy"
+                      ],
+                      "nextStepId": "",
+                      "setFlag": "d21_bingo_row_1_finished"
+                    },
+                    {
+                      "id": "C",
+                      "text": "Luna",
+                      "bingoMemberId": "luna",
+                      "bingoCorrect": false,
+                      "resultDialogue": "The checker tests **Luna**. The square flashes red, then collapses back into static.\n\nSuisei: \"Not our blanket criminal.\"\nLamy: \"Alleged blanket criminal.\"",
+                      "eligibleSunMembers": [
+                        "Suisei",
+                        "Lamy"
+                      ],
+                      "nextStepId": "",
+                      "setFlag": "d21_bingo_row_1_finished"
+                    },
+                    {
+                      "id": "D",
+                      "text": "Rushia",
+                      "bingoMemberId": "rushia",
+                      "bingoCorrect": false,
+                      "resultDialogue": "The checker tests **Rushia**. The square flashes red, then collapses back into static.\n\nSuisei: \"Not our blanket criminal.\"\nLamy: \"Alleged blanket criminal.\"",
+                      "eligibleSunMembers": [
+                        "Suisei",
+                        "Lamy"
+                      ],
+                      "nextStepId": "",
+                      "setFlag": "d21_bingo_row_1_finished"
+                    },
+                    {
+                      "id": "E",
+                      "text": "Niko",
+                      "bingoMemberId": "niko",
+                      "bingoCorrect": false,
+                      "resultDialogue": "The checker tests **Niko**. The square flashes red, then collapses back into static.\n\nSuisei: \"Not our blanket criminal.\"\nLamy: \"Alleged blanket criminal.\"",
+                      "eligibleSunMembers": [
+                        "Suisei",
+                        "Lamy"
+                      ],
+                      "nextStepId": "",
+                      "setFlag": "d21_bingo_row_1_finished"
+                    }
+                  ]
+                }
+              ],
+              "completionDialogue": "Morning Bingo ends after five calls.\n\nSuisei: \"First row locked.\"\nLamy: \"And the world is still frozen.\"\nSuisei: \"Then we have time for lunch.\"\nLamy: \"Finally, a good system.\"\n\nBase compensation: 100 shells. Each recovered square adds 50.",
+              "rewardTableId": "summer_activity_bingo"
+            }
+          ]
+        },
+        "noon": {
+          "sceneId": "AUG21_NOON",
+          "title": "Day 21 — Still Down",
+          "openingDialogue": "Six hours into the freeze, nobody has moved outside and nobody inside wants another safety briefing. The Bingo crowd, however, wants Round Two.",
+          "coreActivities": [
+            {
+              "id": "AUG21_NOON_GLITCH_BINGO",
+              "fullArtRoute": "Suisei & Lamy",
+              "buttonText": "Glitched Bingo — Noon Row",
+              "previewDialogue": "Suisei and Lamy host five corrupted Bingo calls while everyone waits for the frozen world outside to restart.",
+              "selectedDialogue": "The lounge clocks say noon. Outside, the same wave still has not landed.\n\nThe tourists have become alarmingly invested in the corrupted card.\n\nLamy shakes the bingo cage.\nSuisei: \"You are enjoying this now.\"\nLamy: \"People contain multitudes.\"\nSuisei: \"You found the snack table.\"\nLamy: \"Two multitudes.\"\n\nFive more unreadable squares wait on the second row.",
+              "bingo": {
+                "enabled": true,
+                "row": 1,
+                "totalCalls": 5,
+                "bonusPerCorrect": 50
+              },
+              "steps": [
+                {
+                  "id": "STEP_1",
+                  "bingoSlot": 0,
+                  "prompt": "CALL 6 — CROWD CONTROL**\nAt 12:11, a frozen seagull outside was stuck in such a ridiculous pose that one person started laughing. Within a minute, half the lounge was laughing instead of panicking.\n\nSuisei: \"No speech. No announcement.\"\nLamy: \"Just contagious morale.\"\n\n**Who started it?",
+                  "options": [
+                    {
+                      "id": "A",
+                      "text": "Miko",
+                      "bingoMemberId": "miko",
+                      "bingoCorrect": false,
+                      "resultDialogue": "The checker tests **Miko**. The square flashes red, then collapses back into static.\n\nLamy: \"No Bingo.\"\nSuisei: \"The seagull remains hilarious, though.\"",
+                      "eligibleSunMembers": [
+                        "Suisei",
+                        "Lamy"
+                      ],
+                      "nextStepId": "STEP_2"
+                    },
+                    {
+                      "id": "B",
+                      "text": "Aki",
+                      "bingoMemberId": "aki",
+                      "bingoCorrect": false,
+                      "resultDialogue": "The checker tests **Aki**. The square flashes red, then collapses back into static.\n\nLamy: \"No Bingo.\"\nSuisei: \"The seagull remains hilarious, though.\"",
+                      "eligibleSunMembers": [
+                        "Suisei",
+                        "Lamy"
+                      ],
+                      "nextStepId": "STEP_2"
+                    },
+                    {
+                      "id": "C",
+                      "text": "Marine",
+                      "bingoMemberId": "marine",
+                      "bingoCorrect": false,
+                      "resultDialogue": "The checker tests **Marine**. The square flashes red, then collapses back into static.\n\nLamy: \"No Bingo.\"\nSuisei: \"The seagull remains hilarious, though.\"",
+                      "eligibleSunMembers": [
+                        "Suisei",
+                        "Lamy"
+                      ],
+                      "nextStepId": "STEP_2"
+                    },
+                    {
+                      "id": "D",
+                      "text": "Ayame",
+                      "bingoMemberId": "ayame",
+                      "bingoCorrect": true,
+                      "resultDialogue": "The card reveals **Ayame**.\n\nLamy: \"So laughter was the emergency procedure.\"\nSuisei: \"It worked.\"\nLamy: \"Annoyingly strong procedure.\" ",
+                      "eligibleSunMembers": [
+                        "Suisei",
+                        "Lamy"
+                      ],
+                      "nextStepId": "STEP_2",
+                      "bingoRevealLabel": "Ayame",
+                      "setFlag": "d21_bingo_recovered_ayame"
+                    },
+                    {
+                      "id": "E",
+                      "text": "Polka",
+                      "bingoMemberId": "polka",
+                      "bingoCorrect": false,
+                      "resultDialogue": "The checker tests **Polka**. The square flashes red, then collapses back into static.\n\nLamy: \"No Bingo.\"\nSuisei: \"The seagull remains hilarious, though.\"",
+                      "eligibleSunMembers": [
+                        "Suisei",
+                        "Lamy"
+                      ],
+                      "nextStepId": "STEP_2"
+                    }
+                  ]
+                },
+                {
+                  "id": "STEP_2",
+                  "bingoSlot": 1,
+                  "prompt": "CALL 7 — CONTROLLER DESK**\nSomeone organized a game tournament to kill time, insisted it was only a hardware test, then quietly gave a nervous kid their seat and snack after the kid lost.\n\nLamy: \"That's nice.\"\nSuisei: \"Allegedly.\"\nLamy: \"Why allegedly?\"\nSuisei: \"The subject wrote that themselves.\"\n\n**Who was running the station?",
+                  "options": [
+                    {
+                      "id": "A",
+                      "text": "Botan",
+                      "bingoMemberId": "botan",
+                      "bingoCorrect": false,
+                      "resultDialogue": "The checker tests **Botan**. The square flashes red, then collapses back into static.\n\nSuisei: \"Wrong station.\"\nLamy: \"At least the controller still works.\"",
+                      "eligibleSunMembers": [
+                        "Suisei",
+                        "Lamy"
+                      ],
+                      "nextStepId": "STEP_3"
+                    },
+                    {
+                      "id": "B",
+                      "text": "La+",
+                      "bingoMemberId": "laplus",
+                      "bingoCorrect": false,
+                      "resultDialogue": "The checker tests **La+**. The square flashes red, then collapses back into static.\n\nSuisei: \"Wrong station.\"\nLamy: \"At least the controller still works.\"",
+                      "eligibleSunMembers": [
+                        "Suisei",
+                        "Lamy"
+                      ],
+                      "nextStepId": "STEP_3"
+                    },
+                    {
+                      "id": "C",
+                      "text": "Towa",
+                      "bingoMemberId": "towa",
+                      "bingoCorrect": true,
+                      "resultDialogue": "The square stabilizes: **Towa**.\n\nSuisei: \"Hardware testing.\"\nLamy: \"With free snacks.\"\nSuisei: \"Thorough hardware testing.\" ",
+                      "eligibleSunMembers": [
+                        "Suisei",
+                        "Lamy"
+                      ],
+                      "nextStepId": "STEP_3",
+                      "bingoRevealLabel": "Towa",
+                      "setFlag": "d21_bingo_recovered_towa"
+                    },
+                    {
+                      "id": "D",
+                      "text": "Coco",
+                      "bingoMemberId": "coco",
+                      "bingoCorrect": false,
+                      "resultDialogue": "The checker tests **Coco**. The square flashes red, then collapses back into static.\n\nSuisei: \"Wrong station.\"\nLamy: \"At least the controller still works.\"",
+                      "eligibleSunMembers": [
+                        "Suisei",
+                        "Lamy"
+                      ],
+                      "nextStepId": "STEP_3"
+                    },
+                    {
+                      "id": "E",
+                      "text": "Subaru",
+                      "bingoMemberId": "subaru",
+                      "bingoCorrect": false,
+                      "resultDialogue": "The checker tests **Subaru**. The square flashes red, then collapses back into static.\n\nSuisei: \"Wrong station.\"\nLamy: \"At least the controller still works.\"",
+                      "eligibleSunMembers": [
+                        "Suisei",
+                        "Lamy"
+                      ],
+                      "nextStepId": "STEP_3"
+                    }
+                  ]
+                },
+                {
+                  "id": "STEP_3",
+                  "bingoSlot": 2,
+                  "prompt": "CALL 8 — REPAIR REPORT**\n`Furniture damage: one table leg bent. Cause: attempted careful repair. Current status: table functional, approximately six centimeters shorter.`\n\nSuisei: \"The word 'careful' is carrying this report.\"\nLamy: \"The table is still standing.\"\nSuisei: \"Lower, but standing.\"\n\n**Who repaired it?",
+                  "options": [
+                    {
+                      "id": "A",
+                      "text": "Kanata",
+                      "bingoMemberId": "kanata",
+                      "bingoCorrect": true,
+                      "resultDialogue": "The corrupted cell snaps into focus: **Kanata**.\n\nLamy looks at the shortened table.\nSuisei: \"Careful repair.\"\nLamy: \"Extremely careful.\" ",
+                      "eligibleSunMembers": [
+                        "Suisei",
+                        "Lamy"
+                      ],
+                      "nextStepId": "STEP_4",
+                      "bingoRevealLabel": "Kanata",
+                      "setFlag": "d21_bingo_recovered_kanata"
+                    },
+                    {
+                      "id": "B",
+                      "text": "Noel",
+                      "bingoMemberId": "noel",
+                      "bingoCorrect": false,
+                      "resultDialogue": "The checker tests **Noel**. The square flashes red, then collapses back into static.\n\nLamy: \"No match.\"\nSuisei: \"The table remains six centimeters shorter.\"",
+                      "eligibleSunMembers": [
+                        "Suisei",
+                        "Lamy"
+                      ],
+                      "nextStepId": "STEP_4"
+                    },
+                    {
+                      "id": "C",
+                      "text": "Kaela",
+                      "bingoMemberId": "kaela",
+                      "bingoCorrect": false,
+                      "resultDialogue": "The checker tests **Kaela**. The square flashes red, then collapses back into static.\n\nLamy: \"No match.\"\nSuisei: \"The table remains six centimeters shorter.\"",
+                      "eligibleSunMembers": [
+                        "Suisei",
+                        "Lamy"
+                      ],
+                      "nextStepId": "STEP_4"
+                    },
+                    {
+                      "id": "D",
+                      "text": "Flare",
+                      "bingoMemberId": "flare",
+                      "bingoCorrect": false,
+                      "resultDialogue": "The checker tests **Flare**. The square flashes red, then collapses back into static.\n\nLamy: \"No match.\"\nSuisei: \"The table remains six centimeters shorter.\"",
+                      "eligibleSunMembers": [
+                        "Suisei",
+                        "Lamy"
+                      ],
+                      "nextStepId": "STEP_4"
+                    },
+                    {
+                      "id": "E",
+                      "text": "Fuwawa",
+                      "bingoMemberId": "fuwawa",
+                      "bingoCorrect": false,
+                      "resultDialogue": "The checker tests **Fuwawa**. The square flashes red, then collapses back into static.\n\nLamy: \"No match.\"\nSuisei: \"The table remains six centimeters shorter.\"",
+                      "eligibleSunMembers": [
+                        "Suisei",
+                        "Lamy"
+                      ],
+                      "nextStepId": "STEP_4"
+                    }
+                  ]
+                },
+                {
+                  "id": "STEP_4",
+                  "bingoSlot": 3,
+                  "prompt": "CALL 9 — ELEVEN QUIET MINUTES**\nThe lounge became completely silent without anyone using the microphone. The only surviving note says:\n`Subject stood at the front, looked around once. Five separate arguments stopped.`\n\nLamy: \"No shouting?\"\nSuisei: \"Apparently none was necessary.\"\n\n**Who caused the silence?",
+                  "options": [
+                    {
+                      "id": "A",
+                      "text": "Achan",
+                      "bingoMemberId": "achan",
+                      "bingoCorrect": false,
+                      "resultDialogue": "The checker tests **Achan**. The square flashes red, then collapses back into static.\n\nSuisei: \"Not them.\"\nLamy: \"The room is getting noisy again.\"",
+                      "eligibleSunMembers": [
+                        "Suisei",
+                        "Lamy"
+                      ],
+                      "nextStepId": "STEP_5"
+                    },
+                    {
+                      "id": "B",
+                      "text": "Reine",
+                      "bingoMemberId": "reine",
+                      "bingoCorrect": false,
+                      "resultDialogue": "The checker tests **Reine**. The square flashes red, then collapses back into static.\n\nSuisei: \"Not them.\"\nLamy: \"The room is getting noisy again.\"",
+                      "eligibleSunMembers": [
+                        "Suisei",
+                        "Lamy"
+                      ],
+                      "nextStepId": "STEP_5"
+                    },
+                    {
+                      "id": "C",
+                      "text": "Mio",
+                      "bingoMemberId": "mio",
+                      "bingoCorrect": true,
+                      "resultDialogue": "The ninth square clears: **Mio**.\n\nSuisei: \"No whistle. No announcement.\"\nLamy: \"Just one look.\"\nSuisei: \"Efficient.\" ",
+                      "eligibleSunMembers": [
+                        "Suisei",
+                        "Lamy"
+                      ],
+                      "nextStepId": "STEP_5",
+                      "bingoRevealLabel": "Mio",
+                      "setFlag": "d21_bingo_recovered_mio"
+                    },
+                    {
+                      "id": "D",
+                      "text": "Elizabeth",
+                      "bingoMemberId": "elizabeth",
+                      "bingoCorrect": false,
+                      "resultDialogue": "The checker tests **Elizabeth**. The square flashes red, then collapses back into static.\n\nSuisei: \"Not them.\"\nLamy: \"The room is getting noisy again.\"",
+                      "eligibleSunMembers": [
+                        "Suisei",
+                        "Lamy"
+                      ],
+                      "nextStepId": "STEP_5"
+                    },
+                    {
+                      "id": "E",
+                      "text": "Fauna",
+                      "bingoMemberId": "fauna",
+                      "bingoCorrect": false,
+                      "resultDialogue": "The checker tests **Fauna**. The square flashes red, then collapses back into static.\n\nSuisei: \"Not them.\"\nLamy: \"The room is getting noisy again.\"",
+                      "eligibleSunMembers": [
+                        "Suisei",
+                        "Lamy"
+                      ],
+                      "nextStepId": "STEP_5"
+                    }
+                  ]
+                },
+                {
+                  "id": "STEP_5",
+                  "bingoSlot": 4,
+                  "prompt": "CALL 10 — EMERGENCY KITCHEN**\nSomeone volunteered to make lunch from vending-machine ingredients and whatever was left behind the bar. The result looked like a policy violation.\n\nSuisei: \"Guests asked for seconds.\"\nLamy: \"That is the most suspicious part.\"\n\n**Who was cooking?",
+                  "options": [
+                    {
+                      "id": "A",
+                      "text": "Haato",
+                      "bingoMemberId": "haato",
+                      "bingoCorrect": true,
+                      "resultDialogue": "The card reveals **Haato**.\n\nLamy: \"They asked for seconds.\"\nSuisei: \"The freeze changed people.\"\nLamy: \"That's the explanation we're using?\" ",
+                      "eligibleSunMembers": [
+                        "Suisei",
+                        "Lamy"
+                      ],
+                      "nextStepId": "",
+                      "bingoRevealLabel": "Haato",
+                      "setFlags": [
+                        "d21_bingo_recovered_haato",
+                        "d21_bingo_row_2_finished"
+                      ]
+                    },
+                    {
+                      "id": "B",
+                      "text": "Pekora",
+                      "bingoMemberId": "pekora",
+                      "bingoCorrect": false,
+                      "resultDialogue": "The checker tests **Pekora**. The square flashes red, then collapses back into static.\n\nLamy: \"Rejected.\"\nSuisei: \"Do not ask for a sample.\"",
+                      "eligibleSunMembers": [
+                        "Suisei",
+                        "Lamy"
+                      ],
+                      "nextStepId": "",
+                      "setFlag": "d21_bingo_row_2_finished"
+                    },
+                    {
+                      "id": "C",
+                      "text": "Ollie",
+                      "bingoMemberId": "ollie",
+                      "bingoCorrect": false,
+                      "resultDialogue": "The checker tests **Ollie**. The square flashes red, then collapses back into static.\n\nLamy: \"Rejected.\"\nSuisei: \"Do not ask for a sample.\"",
+                      "eligibleSunMembers": [
+                        "Suisei",
+                        "Lamy"
+                      ],
+                      "nextStepId": "",
+                      "setFlag": "d21_bingo_row_2_finished"
+                    },
+                    {
+                      "id": "D",
+                      "text": "Kobo",
+                      "bingoMemberId": "kobo",
+                      "bingoCorrect": false,
+                      "resultDialogue": "The checker tests **Kobo**. The square flashes red, then collapses back into static.\n\nLamy: \"Rejected.\"\nSuisei: \"Do not ask for a sample.\"",
+                      "eligibleSunMembers": [
+                        "Suisei",
+                        "Lamy"
+                      ],
+                      "nextStepId": "",
+                      "setFlag": "d21_bingo_row_2_finished"
+                    },
+                    {
+                      "id": "E",
+                      "text": "Bijou",
+                      "bingoMemberId": "bijou",
+                      "bingoCorrect": false,
+                      "resultDialogue": "The checker tests **Bijou**. The square flashes red, then collapses back into static.\n\nLamy: \"Rejected.\"\nSuisei: \"Do not ask for a sample.\"",
+                      "eligibleSunMembers": [
+                        "Suisei",
+                        "Lamy"
+                      ],
+                      "nextStepId": "",
+                      "setFlag": "d21_bingo_row_2_finished"
+                    }
+                  ]
+                }
+              ],
+              "completionDialogue": "The second row closes.\n\nLamy: \"Still frozen.\"\nSuisei looks through the glass at the same airborne seagull.\nSuisei: \"At this point, he's part of the audience.\"\n\nAnother 100-shell compensation payment is guaranteed, plus 50 per recovered square.",
+              "rewardTableId": "summer_activity_bingo"
+            }
+          ]
+        },
+        "evening": {
+          "sceneId": "AUG21_EVENING",
+          "title": "Day 21 — Final Row",
+          "openingDialogue": "The lounge clocks reach evening. Reality outside still appears paused, leaving five corrupted Bingo squares and several hundred people with nothing better to do.",
+          "coreActivities": [
+            {
+              "id": "AUG21_EVENING_GLITCH_BINGO",
+              "fullArtRoute": "Suisei & Lamy",
+              "buttonText": "Glitched Bingo — Final Row",
+              "previewDialogue": "Suisei and Lamy host five corrupted Bingo calls while everyone waits for the frozen world outside to restart.",
+              "selectedDialogue": "The lounge clocks insist it is evening, although the light outside has barely changed.\n\nOnly five corrupted squares remain.\n\nSuisei lifts the last stack of call slips.\nLamy: \"If the world restarts before we finish?\"\nSuisei: \"We finish faster.\"\nLamy: \"That sounded threatening.\"\nSuisei: \"Hosting voice.\"\n\nThe final row begins.",
+              "bingo": {
+                "enabled": true,
+                "row": 2,
+                "totalCalls": 5,
+                "bonusPerCorrect": 50
+              },
+              "steps": [
+                {
+                  "id": "STEP_1",
+                  "bingoSlot": 0,
+                  "prompt": "CALL 11 — POWER FLICKER**\nDuring a short lounge blackout, one person started singing without a microphone. Other people joined one by one until the emergency lights returned.\n\nLamy: \"Nobody wrote down who started it.\"\nSuisei: \"They did write 'surprisingly calming.'\"\n\n**Who belongs in the first square of the final row?",
+                  "options": [
+                    {
+                      "id": "A",
+                      "text": "IRyS",
+                      "bingoMemberId": "irys",
+                      "bingoCorrect": false,
+                      "resultDialogue": "The checker tests **IRyS**. The square flashes red, then collapses back into static.\n\nSuisei: \"No match.\"\nLamy: \"Good voice, wrong square.\"",
+                      "eligibleSunMembers": [
+                        "Suisei",
+                        "Lamy"
+                      ],
+                      "nextStepId": "STEP_2"
+                    },
+                    {
+                      "id": "B",
+                      "text": "Kiara",
+                      "bingoMemberId": "kiara",
+                      "bingoCorrect": false,
+                      "resultDialogue": "The checker tests **Kiara**. The square flashes red, then collapses back into static.\n\nSuisei: \"No match.\"\nLamy: \"Good voice, wrong square.\"",
+                      "eligibleSunMembers": [
+                        "Suisei",
+                        "Lamy"
+                      ],
+                      "nextStepId": "STEP_2"
+                    },
+                    {
+                      "id": "C",
+                      "text": "Nerissa",
+                      "bingoMemberId": "nerissa",
+                      "bingoCorrect": false,
+                      "resultDialogue": "The checker tests **Nerissa**. The square flashes red, then collapses back into static.\n\nSuisei: \"No match.\"\nLamy: \"Good voice, wrong square.\"",
+                      "eligibleSunMembers": [
+                        "Suisei",
+                        "Lamy"
+                      ],
+                      "nextStepId": "STEP_2"
+                    },
+                    {
+                      "id": "D",
+                      "text": "Watame",
+                      "bingoMemberId": "watame",
+                      "bingoCorrect": false,
+                      "resultDialogue": "The checker tests **Watame**. The square flashes red, then collapses back into static.\n\nSuisei: \"No match.\"\nLamy: \"Good voice, wrong square.\"",
+                      "eligibleSunMembers": [
+                        "Suisei",
+                        "Lamy"
+                      ],
+                      "nextStepId": "STEP_2"
+                    },
+                    {
+                      "id": "E",
+                      "text": "Sora",
+                      "bingoMemberId": "sora",
+                      "bingoCorrect": true,
+                      "resultDialogue": "The first Evening square resolves: **Sora**.\n\nLamy: \"No microphone needed.\"\nSuisei: \"Dangerously professional.\"\nLamy: \"That's a compliment, right?\"\nSuisei: \"Probably.\" ",
+                      "eligibleSunMembers": [
+                        "Suisei",
+                        "Lamy"
+                      ],
+                      "nextStepId": "STEP_2",
+                      "bingoRevealLabel": "Sora",
+                      "setFlag": "d21_bingo_recovered_sora"
+                    }
+                  ]
+                },
+                {
+                  "id": "STEP_2",
+                  "bingoSlot": 1,
+                  "prompt": "CALL 12 — ORGANIZATION INCIDENT**\nWithin twenty minutes, forty trapped tourists had handwritten numbered badges, assigned snack duties, cleaning teams, and a chant nobody remembers approving.\n\nSuisei: \"That's either leadership or a small country.\"\nLamy: \"The report says everyone seemed happy.\"\nSuisei: \"Small happy country.\"\n\n**Who organized them?",
+                  "options": [
+                    {
+                      "id": "A",
+                      "text": "Korone",
+                      "bingoMemberId": "korone",
+                      "bingoCorrect": false,
+                      "resultDialogue": "The checker tests **Korone**. The square flashes red, then collapses back into static.\n\nLamy: \"Not our organizer.\"\nSuisei: \"The tiny country survives.\"",
+                      "eligibleSunMembers": [
+                        "Suisei",
+                        "Lamy"
+                      ],
+                      "nextStepId": "STEP_3"
+                    },
+                    {
+                      "id": "B",
+                      "text": "Nene",
+                      "bingoMemberId": "nene",
+                      "bingoCorrect": true,
+                      "resultDialogue": "Another square clears: **Nene**.\n\nSuisei: \"Forty badges.\"\nLamy: \"And somehow everyone had chores.\"\nSuisei: \"Management is taking notes.\" ",
+                      "eligibleSunMembers": [
+                        "Suisei",
+                        "Lamy"
+                      ],
+                      "nextStepId": "STEP_3",
+                      "bingoRevealLabel": "Nene",
+                      "setFlag": "d21_bingo_recovered_nene"
+                    },
+                    {
+                      "id": "C",
+                      "text": "Mococo",
+                      "bingoMemberId": "mococo",
+                      "bingoCorrect": false,
+                      "resultDialogue": "The checker tests **Mococo**. The square flashes red, then collapses back into static.\n\nLamy: \"Not our organizer.\"\nSuisei: \"The tiny country survives.\"",
+                      "eligibleSunMembers": [
+                        "Suisei",
+                        "Lamy"
+                      ],
+                      "nextStepId": "STEP_3"
+                    },
+                    {
+                      "id": "D",
+                      "text": "Gura",
+                      "bingoMemberId": "gura",
+                      "bingoCorrect": false,
+                      "resultDialogue": "The checker tests **Gura**. The square flashes red, then collapses back into static.\n\nLamy: \"Not our organizer.\"\nSuisei: \"The tiny country survives.\"",
+                      "eligibleSunMembers": [
+                        "Suisei",
+                        "Lamy"
+                      ],
+                      "nextStepId": "STEP_3"
+                    },
+                    {
+                      "id": "E",
+                      "text": "Sana",
+                      "bingoMemberId": "sana",
+                      "bingoCorrect": false,
+                      "resultDialogue": "The checker tests **Sana**. The square flashes red, then collapses back into static.\n\nLamy: \"Not our organizer.\"\nSuisei: \"The tiny country survives.\"",
+                      "eligibleSunMembers": [
+                        "Suisei",
+                        "Lamy"
+                      ],
+                      "nextStepId": "STEP_3"
+                    }
+                  ]
+                },
+                {
+                  "id": "STEP_3",
+                  "bingoSlot": 2,
+                  "prompt": "CALL 13 — SEATING RECONSTRUCTION**\nSomeone reconstructed the entire lounge seating layout using only guest descriptions. The map was accurate down to the missing chair.\n\nLamy: \"There are also little faces in the margins.\"\nSuisei: \"Those are disturbingly accurate too.\"\n\n**Who drew it?",
+                  "options": [
+                    {
+                      "id": "A",
+                      "text": "Ao",
+                      "bingoMemberId": "ao",
+                      "bingoCorrect": false,
+                      "resultDialogue": "The checker tests **Ao**. The square flashes red, then collapses back into static.\n\nSuisei: \"No.\"\nLamy: \"The little Manager drawing is judging you.\"",
+                      "eligibleSunMembers": [
+                        "Suisei",
+                        "Lamy"
+                      ],
+                      "nextStepId": "STEP_4"
+                    },
+                    {
+                      "id": "B",
+                      "text": "Su",
+                      "bingoMemberId": "su",
+                      "bingoCorrect": false,
+                      "resultDialogue": "The checker tests **Su**. The square flashes red, then collapses back into static.\n\nSuisei: \"No.\"\nLamy: \"The little Manager drawing is judging you.\"",
+                      "eligibleSunMembers": [
+                        "Suisei",
+                        "Lamy"
+                      ],
+                      "nextStepId": "STEP_4"
+                    },
+                    {
+                      "id": "C",
+                      "text": "Raora",
+                      "bingoMemberId": "raora",
+                      "bingoCorrect": true,
+                      "resultDialogue": "The card reveals **Raora**.\n\nLamy: \"Those little faces were very accurate.\"\nSuisei: \"A little too accurate.\"\nLamy: \"Don't look at the one labeled Manager.\" ",
+                      "eligibleSunMembers": [
+                        "Suisei",
+                        "Lamy"
+                      ],
+                      "nextStepId": "STEP_4",
+                      "bingoRevealLabel": "Raora",
+                      "setFlag": "d21_bingo_recovered_raora"
+                    },
+                    {
+                      "id": "D",
+                      "text": "Chihaya",
+                      "bingoMemberId": "chihaya",
+                      "bingoCorrect": false,
+                      "resultDialogue": "The checker tests **Chihaya**. The square flashes red, then collapses back into static.\n\nSuisei: \"No.\"\nLamy: \"The little Manager drawing is judging you.\"",
+                      "eligibleSunMembers": [
+                        "Suisei",
+                        "Lamy"
+                      ],
+                      "nextStepId": "STEP_4"
+                    },
+                    {
+                      "id": "E",
+                      "text": "Vivi",
+                      "bingoMemberId": "vivi",
+                      "bingoCorrect": false,
+                      "resultDialogue": "The checker tests **Vivi**. The square flashes red, then collapses back into static.\n\nSuisei: \"No.\"\nLamy: \"The little Manager drawing is judging you.\"",
+                      "eligibleSunMembers": [
+                        "Suisei",
+                        "Lamy"
+                      ],
+                      "nextStepId": "STEP_4"
+                    }
+                  ]
+                },
+                {
+                  "id": "STEP_4",
+                  "bingoSlot": 3,
+                  "prompt": "CALL 14 — EMERGENCY ANNOUNCEMENTS**\nOne person took over the microphone, reorganized supplies, calmed the guest queue, and announced:\n`Everything is under control.`\n\nThree seconds later they tripped over an extension cable.\n\nSuisei: \"Strong first half.\"\nLamy: \"The second half improves the clue.\"\n\n**Who was on the microphone?",
+                  "options": [
+                    {
+                      "id": "A",
+                      "text": "Roboco",
+                      "bingoMemberId": "roboco",
+                      "bingoCorrect": false,
+                      "resultDialogue": "The checker tests **Roboco**. The square flashes red, then collapses back into static.\n\nLamy: \"Wrong announcement desk.\"\nSuisei: \"Watch the cable.\"",
+                      "eligibleSunMembers": [
+                        "Suisei",
+                        "Lamy"
+                      ],
+                      "nextStepId": "STEP_5"
+                    },
+                    {
+                      "id": "B",
+                      "text": "Nodoka",
+                      "bingoMemberId": "nodoka",
+                      "bingoCorrect": false,
+                      "resultDialogue": "The checker tests **Nodoka**. The square flashes red, then collapses back into static.\n\nLamy: \"Wrong announcement desk.\"\nSuisei: \"Watch the cable.\"",
+                      "eligibleSunMembers": [
+                        "Suisei",
+                        "Lamy"
+                      ],
+                      "nextStepId": "STEP_5"
+                    },
+                    {
+                      "id": "C",
+                      "text": "Lui",
+                      "bingoMemberId": "lui",
+                      "bingoCorrect": true,
+                      "resultDialogue": "The fourteenth square resolves: **Lui**.\n\nSuisei: \"Everything was under control.\"\nLamy: \"Until the cable.\"\nSuisei: \"Still an excellent ratio.\" ",
+                      "eligibleSunMembers": [
+                        "Suisei",
+                        "Lamy"
+                      ],
+                      "nextStepId": "STEP_5",
+                      "bingoRevealLabel": "Lui",
+                      "setFlag": "d21_bingo_recovered_lui"
+                    },
+                    {
+                      "id": "D",
+                      "text": "Ririka",
+                      "bingoMemberId": "ririka",
+                      "bingoCorrect": false,
+                      "resultDialogue": "The checker tests **Ririka**. The square flashes red, then collapses back into static.\n\nLamy: \"Wrong announcement desk.\"\nSuisei: \"Watch the cable.\"",
+                      "eligibleSunMembers": [
+                        "Suisei",
+                        "Lamy"
+                      ],
+                      "nextStepId": "STEP_5"
+                    },
+                    {
+                      "id": "E",
+                      "text": "Moona",
+                      "bingoMemberId": "moona",
+                      "bingoCorrect": false,
+                      "resultDialogue": "The checker tests **Moona**. The square flashes red, then collapses back into static.\n\nLamy: \"Wrong announcement desk.\"\nSuisei: \"Watch the cable.\"",
+                      "eligibleSunMembers": [
+                        "Suisei",
+                        "Lamy"
+                      ],
+                      "nextStepId": "STEP_5"
+                    }
+                  ]
+                },
+                {
+                  "id": "STEP_5",
+                  "bingoSlot": 4,
+                  "prompt": "CALL 15 — BEHAVIORAL STUDY**\nFor the last hour, someone has been offering guests two identical snack bowls with swapped labels and writing down who notices.\n\nLamy: \"During an emergency.\"\nSuisei: \"The sheet says 'emergency research.'\"\nLamy: \"Ah. Legally different.\"\n\nWho is hiding in the final corrupted square?",
+                  "options": [
+                    {
+                      "id": "A",
+                      "text": "Koyori",
+                      "bingoMemberId": "koyori",
+                      "bingoCorrect": true,
+                      "resultDialogue": "The final corrupted square flashes and clears: **Koyori**.\n\nLamy: \"Emergency research?\"\nSuisei: \"She put 'emergency' in front of it.\"\nLamy: \"Right. Completely different department.\" ",
+                      "eligibleSunMembers": [
+                        "Suisei",
+                        "Lamy"
+                      ],
+                      "nextStepId": "",
+                      "bingoRevealLabel": "Koyori",
+                      "setFlags": [
+                        "d21_bingo_recovered_koyori",
+                        "d21_bingo_row_3_finished"
+                      ]
+                    },
+                    {
+                      "id": "B",
+                      "text": "Mel",
+                      "bingoMemberId": "mel",
+                      "bingoCorrect": false,
+                      "resultDialogue": "The checker tests **Mel**. The square flashes red, then collapses back into static.\n\nSuisei: \"No match.\"\nLamy: \"The research ethics remain questionable.\"",
+                      "eligibleSunMembers": [
+                        "Suisei",
+                        "Lamy"
+                      ],
+                      "nextStepId": "",
+                      "setFlag": "d21_bingo_row_3_finished"
+                    },
+                    {
+                      "id": "C",
+                      "text": "Shion",
+                      "bingoMemberId": "shion",
+                      "bingoCorrect": false,
+                      "resultDialogue": "The checker tests **Shion**. The square flashes red, then collapses back into static.\n\nSuisei: \"No match.\"\nLamy: \"The research ethics remain questionable.\"",
+                      "eligibleSunMembers": [
+                        "Suisei",
+                        "Lamy"
+                      ],
+                      "nextStepId": "",
+                      "setFlag": "d21_bingo_row_3_finished"
+                    },
+                    {
+                      "id": "D",
+                      "text": "Baelz",
+                      "bingoMemberId": "baelz",
+                      "bingoCorrect": false,
+                      "resultDialogue": "The checker tests **Baelz**. The square flashes red, then collapses back into static.\n\nSuisei: \"No match.\"\nLamy: \"The research ethics remain questionable.\"",
+                      "eligibleSunMembers": [
+                        "Suisei",
+                        "Lamy"
+                      ],
+                      "nextStepId": "",
+                      "setFlag": "d21_bingo_row_3_finished"
+                    },
+                    {
+                      "id": "E",
+                      "text": "Kronii",
+                      "bingoMemberId": "kronii",
+                      "bingoCorrect": false,
+                      "resultDialogue": "The checker tests **Kronii**. The square flashes red, then collapses back into static.\n\nSuisei: \"No match.\"\nLamy: \"The research ethics remain questionable.\"",
+                      "eligibleSunMembers": [
+                        "Suisei",
+                        "Lamy"
+                      ],
+                      "nextStepId": "",
+                      "setFlag": "d21_bingo_row_3_finished"
+                    }
+                  ]
+                }
+              ],
+              "completionDialogue": "The fifteenth bingo ball clicks into the tray.\n\nFor one second, nothing happens.\n\nOutside, the frozen seagull finishes its wingbeat.\nThe suspended wave crashes.\nA tourist who had been frozen mid-step completes the step and immediately starts screaming.\n\nThe entire lounge erupts.\n\nLamy: \"Oh. It's fixed.\"\nSuisei looks down at the bingo cage.\nSuisei: \"Best of three?\"\nThe lounge answers with one enormous \"NO.\"\n\nThe world is moving again. Day 21 ends with the remaining glitches unexplained.",
+              "rewardTableId": "summer_activity_bingo"
+            }
+          ]
+        }
+      }
     }
   ]
 }

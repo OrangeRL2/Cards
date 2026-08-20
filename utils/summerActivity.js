@@ -303,6 +303,99 @@ function resolveNextStep(core, requestedStepId, flags) {
   return conditionsPass(step, flags) ? step : null;
 }
 
+
+function getBingoHits(core, choices) {
+  if (!core?.bingo?.enabled) return 0;
+
+  return (choices || []).reduce((hits, choice) => {
+    const step = core.steps?.find(entry => entry.id === choice.stepId);
+    const option = step?.options?.find(entry => entry.id === choice.optionId);
+    return hits + (option?.bingoCorrect === true ? 1 : 0);
+  }, 0);
+}
+
+function getBingoProgress(summerUser, day, overrideWindowName = null, overrideState = null) {
+  const dayData = getDayData(day);
+  if (!dayData) return null;
+
+  const board = Array(15).fill('?');
+  let enabled = false;
+  let hits = 0;
+  let callsCompleted = 0;
+
+  for (let windowIndex = 0; windowIndex < WINDOWS.length; windowIndex += 1) {
+    const windowName = WINDOWS[windowIndex];
+    const win = dayData.windows?.[windowName];
+    if (!win) continue;
+
+    const state = windowName === overrideWindowName && overrideState
+      ? overrideState
+      : getWindowState(summerUser, day, windowName);
+
+    const core = win.coreActivities?.find(entry => entry.id === state?.coreId);
+    if (!core?.bingo?.enabled) continue;
+
+    enabled = true;
+    const rowIndex = Number.isInteger(Number(core.bingo.row))
+      ? Number(core.bingo.row)
+      : windowIndex;
+
+    for (const choice of state?.choices || []) {
+      const stepIndex = core.steps?.findIndex(entry => entry.id === choice.stepId) ?? -1;
+      if (stepIndex < 0) continue;
+
+      const step = core.steps[stepIndex];
+      const option = step.options?.find(entry => entry.id === choice.optionId);
+      if (!option) continue;
+
+      const localSlot = Number.isInteger(Number(step.bingoSlot))
+        ? Number(step.bingoSlot)
+        : stepIndex;
+      const boardSlot = rowIndex * 5 + localSlot;
+
+      callsCompleted += 1;
+      if (option.bingoCorrect === true && boardSlot >= 0 && boardSlot < board.length) {
+        board[boardSlot] = String(option.bingoRevealLabel || option.text || '?');
+        hits += 1;
+      }
+    }
+  }
+
+  if (!enabled) return null;
+
+  return {
+    enabled: true,
+    board,
+    hits,
+    callsCompleted,
+    total: board.length,
+  };
+}
+
+function formatBingoBoard(progress) {
+  if (!progress?.enabled) return '';
+
+  const rows = [];
+  for (let rowIndex = 0; rowIndex < 3; rowIndex += 1) {
+    const cells = progress.board
+      .slice(rowIndex * 5, rowIndex * 5 + 5)
+      .map(value => `[ ${value || '?'} ]`);
+    rows.push(cells.join(' '));
+  }
+
+  return [
+    '🎱 **GLITCHED BINGO CARD**',
+    ...rows,
+    `Recovered: **${progress.hits}/${progress.total}** • Calls completed: **${progress.callsCompleted}/${progress.total}**`,
+  ].join('\n');
+}
+
+function bingoResultDialogue(summerUser, day, windowName, state, option) {
+  const progress = getBingoProgress(summerUser, day, windowName, state);
+  const boardText = formatBingoBoard(progress);
+  return [option?.resultDialogue, boardText].filter(Boolean).join('\n\n');
+}
+
 async function selectCore(userId, day, windowName, coreId) {
   const doc = await SummerUser.findOne({ userId }).lean().exec();
   const core = getCore(day, windowName, coreId);
@@ -331,6 +424,13 @@ async function selectCore(userId, day, windowName, coreId) {
     flags: old.flags || [],
     startedAt: old.startedAt || new Date(),
   };
+
+  if (core?.bingo?.enabled) {
+    const progress = getBingoProgress(doc, day, windowName, state);
+    state.lastResultDialogue = [core.selectedDialogue, formatBingoBoard(progress)]
+      .filter(Boolean)
+      .join('\n\n');
+  }
 
   await saveState(userId, key, state, flags);
   return { success: true, core, state };
@@ -373,6 +473,15 @@ async function chooseOption(userId, day, windowName, coreId, stepId, optionId) {
     const choices = [...(old.choices || []), { stepId, optionId }];
     const localFlags = applyFlagChanges(old.flags || [], option);
     const storyFlags = applyFlagChanges(currentFlags, option);
+    const bingoStatePreview = core?.bingo?.enabled
+      ? { ...old, coreId, choices, flags: localFlags }
+      : null;
+    const resultDialogue = core?.bingo?.enabled
+      ? bingoResultDialogue(doc, day, windowName, bingoStatePreview, option)
+      : option.resultDialogue;
+    const resolvedOption = core?.bingo?.enabled
+      ? { ...option, resultDialogue }
+      : option;
 
     if (option.nextStepId) {
       const nextStep = resolveNextStep(core, option.nextStepId, storyFlags);
@@ -390,15 +499,36 @@ async function chooseOption(userId, day, windowName, coreId, stepId, optionId) {
         eligibleSunMembers: eligible,
         choices,
         flags: localFlags,
-        lastResultDialogue: option.resultDialogue,
+        lastResultDialogue: resultDialogue,
       };
 
       await saveState(key, pkey, state, storyFlags);
-      return { success: true, completed: false, core, step, option, state };
+      return { success: true, completed: false, core, step, option: resolvedOption, state };
     }
 
     const table = rewardTables[core.rewardTableId] || rewardTables.summer_activity_default;
     let reward = prepareReward(chooseWeighted(table), eligible);
+
+    if (core?.bingo?.enabled && reward?.type === 'shells') {
+      const base = Number(reward.amount || 0);
+      const hits = getBingoHits(core, choices);
+      const total = Number(core.bingo.totalCalls || core.steps?.length || 0);
+      const bonusPerCorrect = Number(core.bingo.bonusPerCorrect || 50);
+      const bonus = hits * bonusPerCorrect;
+
+      reward = {
+        ...reward,
+        amount: base + bonus,
+        bingo: {
+          hits,
+          total,
+          base,
+          bonus,
+          bonusPerCorrect,
+          row: Number(core.bingo.row || 0),
+        },
+      };
+    }
 
     const state = {
       ...old,
@@ -406,7 +536,7 @@ async function chooseOption(userId, day, windowName, coreId, stepId, optionId) {
       eligibleSunMembers: eligible,
       choices,
       flags: localFlags,
-      lastResultDialogue: option.resultDialogue,
+      lastResultDialogue: resultDialogue,
       completed: true,
       completedAt: new Date(),
       reward,
@@ -441,7 +571,7 @@ async function chooseOption(userId, day, windowName, coreId, stepId, optionId) {
       completed: true,
       core,
       step,
-      option,
+      option: resolvedOption,
       state: { ...state, reward },
       reward,
     };
@@ -466,6 +596,8 @@ module.exports = {
   conditionsPass,
   getAvailableCoreActivities,
   getAvailableOptions,
+  getBingoProgress,
+  formatBingoBoard,
   selectCore,
   chooseOption,
 };

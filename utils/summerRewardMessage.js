@@ -6,6 +6,7 @@ function pickRandom(items, rng = Math.random) {
 }
 
 function getMessageKey(reward = {}) {
+  if (reward?.bingo && reward.type === 'shells') return 'bingo_shells';
   if (reward.type === 'bundle') return 'bundle';
   if (reward.type === 'shells') return `shells_${Number(reward.amount || 0)}`;
   if (reward.type === 'sunPulls') return 'sun_pull';
@@ -14,7 +15,7 @@ function getMessageKey(reward = {}) {
 }
 
 function replaceTokens(text, values) {
-  return String(text || '').replace(/\{(member|amount|reward|activity|route)\}/g, (_, key) => {
+  return String(text || '').replace(/\{(member|amount|reward|activity|route|hits|total|base|bonus)\}/g, (_, key) => {
     const value = values[key];
     return value === undefined || value === null || value === '' ? `{${key}}` : String(value);
   });
@@ -53,11 +54,18 @@ function buildRewardPresentation(reward = {}, context = {}, rng = Math.random) {
     reward: rewardLabel,
     activity: context.activity || '',
     route: context.route || '',
+    hits: Number(reward?.bingo?.hits || 0),
+    total: Number(reward?.bingo?.total || 0),
+    base: Number(reward?.bingo?.base || 0),
+    bonus: Number(reward?.bingo?.bonus || 0),
   };
+
+  const perfectBingo = Boolean(reward?.bingo)
+    && Number(reward.bingo.hits || 0) === Number(reward.bingo.total || -1);
 
   return {
     key,
-    title: replaceTokens(entry.title || 'SUCCESS!', values),
+    title: perfectBingo ? 'BINGO! ROW COMPLETE!' : replaceTokens(entry.title || 'SUCCESS!', values),
     emoji: entry.emoji || '🎁',
     color: Number(entry.color || 0xf4c542),
     message: replaceTokens(pickRandom(entry.messages, rng), values),

@@ -13,6 +13,12 @@ module.exports = Object.freeze({
     summer_activity_exception2: [
     { type: 'shells', amount: 100, weight: 100 },
   ],
+
+  // Day 21 Glitched Bingo: 100 guaranteed shells per row.
+  // utils/summerActivity.js adds +50 for each correct Bingo call.
+  summer_activity_bingo: [
+    { type: 'shells', amount: 100, weight: 100 },
+  ],
   summer_activity_sunPull_exception: [
     {
       type: 'bundle',
