@@ -284,7 +284,7 @@ async function chooseAutomaticChannel(client, requestedChannelId = null) {
 }
 
 async function announceAutomatic(client, channel, challengeMessage, mode) {
-  const id = String(config.birthdayChannelId || '').trim();
+  const id = String(config.HolodoriChannelID || '').trim();
   if (!id) return;
   const announcement = await resolveTextChannel(client, id);
   if (!announcement) return;
