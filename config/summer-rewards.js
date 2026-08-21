@@ -29,4 +29,8 @@ module.exports = Object.freeze({
       ],
     },
   ],
+  summer_activity_finale_1000: [
+    { type: 'shells', amount: 1000, weight: 100 },
+  ],
+
 });

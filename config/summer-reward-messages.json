@@ -68,5 +68,15 @@
     "messages": [
       "The activity was a success and earned you a reward!"
     ]
+  },
+  "shells_1000": {
+    "title": "SUMMER FINALE!",
+    "emoji": "🌅",
+    "color": 16041282,
+    "messages": [
+      "Thank you for seeing the summer through to the end. Management grants you {amount} Summer Shells!",
+      "Final checkout complete! You received the event finale grant of {amount} Summer Shells!",
+      "The resort's final reward arrives with your completed checkout: {amount} Summer Shells!"
+    ]
   }
 }
