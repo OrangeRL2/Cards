@@ -75,9 +75,9 @@ function updateSelectedSubCardMeta(meta) {
   return meta;
 }
 
-async function findCurrentActiveEvent() {
+async function getActiveEvents() {
   const now = new Date();
-  return StreamEvent.findOne({
+  return StreamEvent.find({
     status: 'active',
     spawnAt: { $lte: now },
     endsAt: { $gt: now },
@@ -87,9 +87,56 @@ async function findCurrentActiveEvent() {
     .exec();
 }
 
+function parseTargetArgs(args = []) {
+  const raw = args.map(x => String(x));
+  const dryRun = raw.some(x => x.toLowerCase() === '--dry-run');
+  const previous = raw.some(x => x.toLowerCase() === '--previous');
+  const list = raw.some(x => x.toLowerCase() === '--list');
+
+  let eventId = null;
+  let streamName = null;
+
+  const eventIndex = raw.findIndex(x => x.toLowerCase() === '--event');
+  if (eventIndex >= 0 && raw[eventIndex + 1]) eventId = raw[eventIndex + 1];
+
+  const streamIndex = raw.findIndex(x => x.toLowerCase() === '--stream');
+  if (streamIndex >= 0) {
+    const parts = [];
+    for (let i = streamIndex + 1; i < raw.length; i += 1) {
+      if (raw[i].startsWith('--')) break;
+      parts.push(raw[i]);
+    }
+    if (parts.length) streamName = parts.join(' ');
+  }
+
+  // Convenience form: !repaircurrentstream Council --dry-run
+  if (!eventId && !streamName && !previous && !list) {
+    const positional = raw.filter(x => !x.startsWith('--'));
+    if (positional.length) streamName = positional.join(' ');
+  }
+
+  return { dryRun, previous, list, eventId, streamName };
+}
+
+function selectActiveEvent(activeEvents, target) {
+  if (!activeEvents.length) return null;
+
+  if (target.eventId) {
+    return activeEvents.find(ev => String(ev.eventId) === String(target.eventId)) || null;
+  }
+
+  if (target.streamName) {
+    const wanted = String(target.streamName).trim().toLowerCase();
+    return activeEvents.find(ev => String(ev.oshiId || '').trim().toLowerCase() === wanted) || null;
+  }
+
+  if (target.previous) return activeEvents[1] || null;
+  return activeEvents[0];
+}
+
 module.exports = {
   name: 'repaircurrentstream',
-  description: 'Repair missed automatic stream membership bonuses for the current stream (admin only)',
+  description: 'Repair missed automatic stream membership bonuses for an active stream (admin only)',
 
   async execute(message, args = []) {
     try {
@@ -100,11 +147,38 @@ module.exports = {
         return message.reply({ content: 'You are not allowed to use this command.' }).catch(() => {});
       }
 
-      const dryRun = args.some(arg => String(arg).toLowerCase() === '--dry-run');
-      const current = await findCurrentActiveEvent();
+      const target = parseTargetArgs(args);
+      const dryRun = target.dryRun;
+      const activeEvents = await getActiveEvents();
+
+      if (target.list) {
+        if (!activeEvents.length) {
+          return message.reply({ content: 'There are no active streams.' }).catch(() => {});
+        }
+        const lines = ['**Active Streams**'];
+        activeEvents.forEach((ev, index) => {
+          lines.push(`${index + 1}. **${ev.oshiId}** — eventId: \`${ev.eventId}\`${index === 0 ? ' (newest)' : ''}`);
+        });
+        lines.push('', 'Target one with `!repaircurrentstream <stream name> --dry-run`, `--previous`, or `--event <eventId>`.');
+        return message.reply({ content: lines.join('\n').slice(0, 1900) }).catch(() => {});
+      }
+
+      if (!activeEvents.length) {
+        return message.reply({ content: 'There is no active stream to repair.' }).catch(() => {});
+      }
+
+      const current = selectActiveEvent(activeEvents, target);
 
       if (!current) {
-        return message.reply({ content: 'There is no active stream to repair.' }).catch(() => {});
+        const available = activeEvents.map(ev => `**${ev.oshiId}** (\`${ev.eventId}\`)`).join(', ');
+        const requested = target.previous
+          ? 'the previous active stream'
+          : target.eventId
+            ? `eventId \`${target.eventId}\``
+            : `stream **${target.streamName || 'unknown'}**`;
+        return message.reply({
+          content: `Could not find ${requested}. Active streams: ${available}`.slice(0, 1900),
+        }).catch(() => {});
       }
 
       const memberIds = new Set(getStreamMemberIds(current.oshiId).map(normalizeId).filter(Boolean));
@@ -345,7 +419,11 @@ module.exports = {
       ];
 
       if (report.dryRun) {
-        lines.push('', 'Nothing was written. Run `!repaircurrentstream` to apply it.');
+        let applyCommand = '!repaircurrentstream';
+        if (target.eventId) applyCommand += ` --event ${target.eventId}`;
+        else if (target.streamName) applyCommand += ` ${target.streamName}`;
+        else if (target.previous) applyCommand += ' --previous';
+        lines.push('', `Nothing was written. Run \`${applyCommand}\` to apply it.`);
       } else if (report.totalDelta === 0) {
         lines.push('', 'No missing automatic-membership Happiness was found. Running this command again is safe.');
       } else {
