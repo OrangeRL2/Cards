@@ -7,7 +7,8 @@
 // /pull, streams, login, shop, Guess, events, admin rewards, trades, or a future
 // feature. If User.cards gains copies, this watcher sees them.
 //
-// Requires MongoDB change streams (Atlas / replica set).
+// This version avoids fullDocument:updateLookup on every User update, coalesces
+// rapid card writes into one projected inventory read, and prevents restart loops.
 
 const User = require('../models/User');
 const {
@@ -18,11 +19,17 @@ const {
 } = require('../utils/recentAcquisitions');
 
 const snapshots = new Map();
+const pendingRefreshes = new Map();
 
 let changeStream = null;
 let started = false;
 let stopping = false;
 let restartTimer = null;
+let restartAttempt = 0;
+let generation = 0;
+
+const REFRESH_DEBOUNCE_MS = 750;
+const MAX_RESTART_DELAY_MS = 60_000;
 
 function cardKey(card) {
   const rarity = normalizeRarity(card?.rarity);
@@ -42,7 +49,6 @@ function snapshotCards(cards) {
     const count = Math.max(0, Number(card?.count || 0));
     const key = cardKey(card);
 
-    // Defensive sum in case an old user document contains duplicate stacks.
     const existing = map.get(key);
     if (existing) {
       existing.count += count;
@@ -83,6 +89,7 @@ function positiveDifferences(before, after) {
 async function hydrateSnapshots() {
   snapshots.clear();
 
+  // Only read the two fields the watcher actually needs.
   const cursor = User.find({}, { id: 1, cards: 1 }).lean().cursor();
   let count = 0;
 
@@ -100,8 +107,7 @@ async function saveAcquisition(userId, cards, acquiredAt = new Date()) {
 
   const cutoff = getRetentionCutoff(acquiredAt);
 
-  // Prune stale history first. This write also appears in the change stream,
-  // but it does not change cards, so it cannot create a fake acquisition.
+  // Keep the existing storage format so !recents continues to work unchanged.
   await User.updateOne(
     { id: userId },
     { $pull: { recentAcquisitions: { acquiredAt: { $lt: cutoff } } } }
@@ -125,16 +131,45 @@ async function saveAcquisition(userId, cards, acquiredAt = new Date()) {
   console.log(`[acquisitionWatcher] ${userId}: ${summary}`);
 }
 
-async function handleChange(change) {
-  if (!change?.fullDocument?.id) return;
+function pathTouchesCards(path) {
+  const value = String(path ?? '');
+  return value === 'cards' || value.startsWith('cards.');
+}
 
-  const userId = String(change.fullDocument.id);
+function changeTouchesCards(change) {
+  if (!change) return false;
+
+  if (change.operationType === 'insert' || change.operationType === 'replace') {
+    return true;
+  }
+
+  if (change.operationType !== 'update') return false;
+
+  const desc = change.updateDescription || {};
+
+  const updatedKeys = Object.keys(desc.updatedFields || {});
+  if (updatedKeys.some(pathTouchesCards)) return true;
+
+  const removedFields = Array.isArray(desc.removedFields) ? desc.removedFields : [];
+  if (removedFields.some(pathTouchesCards)) return true;
+
+  const truncatedArrays = Array.isArray(desc.truncatedArrays) ? desc.truncatedArrays : [];
+  if (truncatedArrays.some(item => pathTouchesCards(item?.field))) return true;
+
+  return false;
+}
+
+async function refreshDocument(documentId) {
+  const doc = await User.findById(documentId, { id: 1, cards: 1 }).lean();
+  if (!doc?.id) return;
+
+  const userId = String(doc.id);
   const before = snapshots.get(userId) || new Map();
-  const after = snapshotCards(change.fullDocument.cards);
+  const after = snapshotCards(doc.cards);
   const gained = positiveDifferences(before, after);
 
-  // Update the snapshot before writing history so the watcher's own write cannot
-  // re-detect the same inventory increase.
+  // Update before writing recentAcquisitions. Those writes do not touch cards and
+  // are ignored by changeTouchesCards(), so they cannot recursively re-read inventory.
   snapshots.set(userId, after);
 
   if (gained.length) {
@@ -142,8 +177,45 @@ async function handleChange(change) {
   }
 }
 
+function scheduleDocumentRefresh(documentId) {
+  const key = String(documentId ?? '');
+  if (!key || stopping) return;
+
+  const existing = pendingRefreshes.get(key);
+  if (existing) clearTimeout(existing);
+
+  const timer = setTimeout(() => {
+    pendingRefreshes.delete(key);
+    refreshDocument(documentId).catch(err => {
+      console.error('[acquisitionWatcher] failed to refresh changed inventory:', err);
+    });
+  }, REFRESH_DEBOUNCE_MS);
+
+  timer.unref?.();
+  pendingRefreshes.set(key, timer);
+}
+
+function handleChange(change) {
+  if (!changeTouchesCards(change)) return;
+
+  const documentId = change?.documentKey?._id;
+  if (!documentId) return;
+
+  scheduleDocumentRefresh(documentId);
+}
+
+function restartDelayMs() {
+  // 5s, 10s, 20s, 40s, then 60s maximum.
+  return Math.min(5_000 * (2 ** Math.min(restartAttempt, 4)), MAX_RESTART_DELAY_MS);
+}
+
 function scheduleRestart() {
   if (stopping || restartTimer) return;
+
+  const delay = restartDelayMs();
+  restartAttempt += 1;
+
+  console.warn(`[acquisitionWatcher] restarting change stream in ${Math.round(delay / 1000)}s.`);
 
   restartTimer = setTimeout(async () => {
     restartTimer = null;
@@ -153,47 +225,64 @@ function scheduleRestart() {
       console.error('[acquisitionWatcher] restart failed:', err);
       scheduleRestart();
     }
-  }, 5000);
+  }, delay);
 
   restartTimer.unref?.();
+}
+
+async function closeStreamSilently(stream) {
+  if (!stream) return;
+
+  // Important: remove listeners before intentionally closing. Otherwise our own
+  // close() can fire the close handler and schedule another restart forever.
+  stream.removeAllListeners('change');
+  stream.removeAllListeners('error');
+  stream.removeAllListeners('close');
+
+  try { await stream.close(); } catch {}
 }
 
 async function openChangeStream() {
   if (stopping) return;
 
-  if (changeStream) {
-    try { await changeStream.close(); } catch {}
-    changeStream = null;
-  }
+  const oldStream = changeStream;
+  changeStream = null;
+  if (oldStream) await closeStreamSilently(oldStream);
 
-  // Only inserts/updates/replaces can affect a user's inventory.
-  changeStream = User.watch(
-    [
-      {
-        $match: {
-          operationType: { $in: ['insert', 'update', 'replace'] },
-        },
+  const myGeneration = ++generation;
+
+  // Do NOT use fullDocument:'updateLookup'. That option forces MongoDB to fetch
+  // the entire User document for every matching update, including points, pity,
+  // recentAcquisitions, stream state, etc. Instead, only card-changing events
+  // cause one projected {id,cards} read, and rapid writes are debounced together.
+  const stream = User.watch([
+    {
+      $match: {
+        operationType: { $in: ['insert', 'update', 'replace'] },
       },
-    ],
-    { fullDocument: 'updateLookup' }
-  );
+    },
+  ]);
 
-  changeStream.on('change', change => {
-    handleChange(change).catch(err => {
-      console.error('[acquisitionWatcher] failed to process change:', err);
-    });
+  changeStream = stream;
+
+  stream.on('change', change => {
+    if (stopping || changeStream !== stream || generation !== myGeneration) return;
+    restartAttempt = 0;
+    handleChange(change);
   });
 
-  changeStream.on('error', err => {
+  stream.on('error', err => {
+    if (stopping || changeStream !== stream || generation !== myGeneration) return;
     console.error('[acquisitionWatcher] change stream error:', err);
+    changeStream = null;
     scheduleRestart();
   });
 
-  changeStream.on('close', () => {
-    if (!stopping) {
-      console.warn('[acquisitionWatcher] change stream closed; scheduling restart.');
-      scheduleRestart();
-    }
+  stream.on('close', () => {
+    if (stopping || changeStream !== stream || generation !== myGeneration) return;
+    changeStream = null;
+    console.warn('[acquisitionWatcher] change stream closed unexpectedly.');
+    scheduleRestart();
   });
 
   console.log('[acquisitionWatcher] watching User.cards for notable acquisitions.');
@@ -203,9 +292,10 @@ async function startAcquisitionWatcher() {
   if (started) return;
   started = true;
   stopping = false;
+  restartAttempt = 0;
 
-  // Starting from the live inventory means bot restarts do not create fake
-  // "new" acquisitions for cards users already owned.
+  // Starting from live inventory means bot restarts do not create fake
+  // acquisitions for cards users already owned.
   await hydrateSnapshots();
   await openChangeStream();
 }
@@ -213,14 +303,17 @@ async function startAcquisitionWatcher() {
 async function stopAcquisitionWatcher() {
   stopping = true;
   started = false;
+  generation += 1;
 
   if (restartTimer) clearTimeout(restartTimer);
   restartTimer = null;
 
-  if (changeStream) {
-    try { await changeStream.close(); } catch {}
-    changeStream = null;
-  }
+  for (const timer of pendingRefreshes.values()) clearTimeout(timer);
+  pendingRefreshes.clear();
+
+  const stream = changeStream;
+  changeStream = null;
+  await closeStreamSilently(stream);
 
   snapshots.clear();
 }
