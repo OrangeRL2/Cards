@@ -400,12 +400,19 @@ async function handleLike({ userId, eventId, client = null }) {
       if (!oshiDoc?.oshiId) throw new Error('You need to choose an Oshi before liking a stream.');
 
       const level = Math.max(0, Math.floor(Number(oshiDoc.level) || 0));
+      const cappedLevel = Math.min(level, 100);
       const matchingOshi = isAutoMember(oshiDoc, ev);
-      const happiness = level * (matchingOshi ? 2 : 1);
+      const happiness = cappedLevel * (matchingOshi ? 2 : 1);
 
       await StreamActionLog.create([{
         eventId, userId, oshiId: ev.oshiId, action: 'like', happiness,
-        meta: { oshiId: oshiDoc.oshiId, oshiLevel: level, matchingOshi, multiplier: matchingOshi ? 2 : 1 },
+        meta: {
+          oshiId: oshiDoc.oshiId,
+          oshiLevel: level,
+          effectiveLikeLevel: cappedLevel,
+          matchingOshi,
+          multiplier: matchingOshi ? 2 : 1,
+        },
       }], { session });
 
       const state = getUserState(ev, userId, true);
