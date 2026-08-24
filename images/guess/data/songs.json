@@ -1824,9 +1824,49 @@
     "audio": "../audio/m0331.mp3"
   },
   {
+    "id": "m0332",
+    "title": "BANZAI☆MANKAI",
+    "playingSeconds": 136,
+    "characterIds": [
+      "chr-00010"
+    ],
+    "jacket": "../jackets/m0332.png",
+    "audio": "../audio/m0332.mp3"
+  },
+  {
+    "id": "m0333",
+    "title": "Takoyaki Gazing",
+    "playingSeconds": 131,
+    "characterIds": [
+      "chr-00028"
+    ],
+    "jacket": "../jackets/m0333.png",
+    "audio": "../audio/m0333.mp3"
+  },
+  {
+    "id": "m0334",
+    "title": "NIGHTBREAK",
+    "playingSeconds": 126,
+    "characterIds": [
+      "chr-04001"
+    ],
+    "jacket": "../jackets/m0334.png",
+    "audio": "../audio/m0334.mp3"
+  },
+  {
+    "id": "m0335",
+    "title": "Oshi Mode ON",
+    "playingSeconds": 129,
+    "characterIds": [
+      "chr-03004"
+    ],
+    "jacket": "../jackets/m0335.png",
+    "audio": "../audio/m0335.mp3"
+  },
+  {
     "id": "m0337",
     "title": "Pretty Guardian Matsulimit Zero",
-    "playingSeconds": 117,
+    "playingSeconds": 116,
     "characterIds": [
       "chr-00007"
     ],
@@ -1852,6 +1892,16 @@
     ],
     "jacket": "../jackets/m0347.png",
     "audio": "../audio/m0347.mp3"
+  },
+  {
+    "id": "m0353",
+    "title": "Night Loop",
+    "playingSeconds": 134,
+    "characterIds": [
+      "chr-00014"
+    ],
+    "jacket": "../jackets/m0353.png",
+    "audio": "../audio/m0353.mp3"
   },
   {
     "id": "m0524",
