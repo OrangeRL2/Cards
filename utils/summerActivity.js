@@ -542,17 +542,24 @@ async function chooseOption(userId, day, windowName, coreId, stepId, optionId) {
       reward,
     };
 
+    const completionSet = {
+      [`activityProgress.${pkey}`]: state,
+      storyFlags,
+      'stats.lastActivityAt': new Date(),
+    };
+
+    const unlockedDay31Travel = Number(day) === 31 && windowName === 'morning';
+    if (unlockedDay31Travel) {
+      completionSet.day31TravelUnlocked = true;
+    }
+
     const guard = await SummerUser.updateOne(
       {
         userId: key,
         [`activityProgress.${pkey}.completed`]: { $ne: true },
       },
       {
-        $set: {
-          [`activityProgress.${pkey}`]: state,
-          storyFlags,
-          'stats.lastActivityAt': new Date(),
-        },
+        $set: completionSet,
         $inc: { 'stats.activitiesCompleted': 1 },
       }
     ).exec();
@@ -574,6 +581,7 @@ async function chooseOption(userId, day, windowName, coreId, stepId, optionId) {
       option: resolvedOption,
       state: { ...state, reward },
       reward,
+      day31TravelUnlocked: unlockedDay31Travel,
     };
   } catch (error) {
     console.error('[summerActivity]', error);

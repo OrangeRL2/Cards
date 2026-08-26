@@ -1368,8 +1368,18 @@ async function addCardToUser(userId, cardName, rarity, count = 1) {
 }
 
 async function settleEndedEvents(client = null) {
-  const toSettle = await StreamEvent.find({ status: 'ended' });
-  for (const ev of toSettle) {
+  // Atomically claim ended streams one at a time before granting any rewards.
+  // This prevents overlapping 15-second settlement ticks (or two bot processes)
+  // from settling the same stream twice.
+  while (true) {
+    const ev = await StreamEvent.findOneAndUpdate(
+      { status: 'ended' },
+      { $set: { status: 'settling' } },
+      { new: true, sort: { endsAt: 1 } }
+    );
+
+    if (!ev) break;
+
     try {
       const sorted = (ev.users || []).slice().filter(x => (x.happiness || 0) > 0).sort((a, b) => {
         if ((b.happiness || 0) !== (a.happiness || 0)) return (b.happiness || 0) - (a.happiness || 0);
@@ -1459,7 +1469,11 @@ async function settleEndedEvents(client = null) {
           await ch.send({ embeds: [summary] });
         }
       }
-    } catch (err) { console.error('[stream settle]', ev.eventId, err); }
+    } catch (err) {
+      // Leave the event as "settling" on failure instead of automatically retrying
+      // and risking duplicate rewards after a partial settlement.
+      console.error('[stream settle]', ev.eventId, err);
+    }
   }
 }
 

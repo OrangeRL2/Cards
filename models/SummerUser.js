@@ -6,6 +6,7 @@ const SummerUserSchema = new Schema({
   sunPulls: { type: Number, default: 0, min: 0 },
   summerShells: { type: Number, default: 0, min: 0 },
   welcomeShellsClaimed: { type: Boolean, default: false },
+  day31TravelUnlocked: { type: Boolean, default: false },
   holodoriFirstPurchaseClaimed: { type: Boolean, default: false },
   holodoriFirstPurchaseToken: { type: String, default: null },
   activityProgress: { type: Schema.Types.Mixed, default: {} },

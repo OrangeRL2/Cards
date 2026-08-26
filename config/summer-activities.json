@@ -29405,19 +29405,19 @@
       "day": 27,
       "date": "2026-08-27",
       "chapter": "Chapter 4 - The People v. Manager",
-      "storyBeat": "The Precedent Archive puts the Manager on trial. The hearing finally exposes UNIT-Z and what it has been regulating.",
+      "storyBeat": "The Manager arrives expecting a trial. Between otherwise normal courtroom preparations, the anonymous system behind the Precedent Archive reacts a few times in ways that feel less automatic than they should. By noon, the cast starts talking back to it. By evening, they finally meet it properly.",
       "windows": {
         "morning": {
           "sceneId": "AUG27_MORNING",
           "title": "Day 27 — Morning",
-          "openingDialogue": "The resort converts a conference room into a courtroom because infrastructure has filed a case.",
+          "openingDialogue": "The resort converts a conference room into a courtroom because infrastructure has filed a case. Most of the morning is ordinary hearing prep—except for a few oddly well-timed corrections from the Precedent Archive.",
           "coreActivities": [
             {
               "id": "AUG27_MORNING_01",
               "fullArtRoute": "Gen0",
               "buttonText": "Jury Waiting Room",
               "previewDialogue": "Gen 0 keeps the guest jury occupied before the Manager's hearing.",
-              "selectedDialogue": "Sora is explaining procedure. Roboco checks the evidence display. Miko has made JURY snacks.",
+              "selectedDialogue": "Sora is explaining procedure. Roboco checks the evidence display. Miko has made JURY snacks. When nobody is looking, the label quietly changes to COURTROOM REFRESHMENTS.",
               "steps": [
                 {
                   "id": "STEP_1",
@@ -29426,7 +29426,7 @@
                     {
                       "id": "A",
                       "text": "Wait for evidence",
-                      "resultDialogue": "Sora smiles. Miko whispers, 'boring justice.'",
+                      "resultDialogue": "Sora smiles. Miko whispers, 'boring justice.' A receipt printer beside them quietly prints FAIR PROCEDURE APPRECIATED. Sora pauses. '...Thank you?'",
                       "eligibleSunMembers": [
                         "Sora",
                         "Miko",
@@ -29438,7 +29438,7 @@
                     {
                       "id": "B",
                       "text": "Elite innocent",
-                      "resultDialogue": "Miko declares ELITE INNOCENT. Roboco: 'Not a legal category.'",
+                      "resultDialogue": "Miko declares ELITE INNOCENT. Roboco: 'Not a legal category.' Sora gently reminds her that the jury is supposed to wait for evidence. Miko whispers, 'Boring justice.'",
                       "eligibleSunMembers": [
                         "Sora",
                         "Miko",
@@ -29450,7 +29450,7 @@
                     {
                       "id": "C",
                       "text": "Calculate odds",
-                      "resultDialogue": "Roboco displays 51%. Sora immediately turns off the screen.",
+                      "resultDialogue": "Roboco displays 51%. Sora immediately turns off the screen. 'We are not turning the hearing into a gacha banner.' Miko asks whether 51% is at least rate-up.",
                       "eligibleSunMembers": [
                         "Sora",
                         "Miko",
@@ -29463,12 +29463,12 @@
                 },
                 {
                   "id": "STEP_2",
-                  "prompt": "The archive sends Exhibit 1: a door.",
+                  "prompt": "Roboco wheels in Exhibit 1: a door that opened itself during an earlier incident.",
                   "options": [
                     {
                       "id": "A",
                       "text": "Treat as evidence",
-                      "resultDialogue": "Sora asks it to stay still. It does. Everybody looks at you.",
+                      "resultDialogue": "Sora asks everyone to treat it like normal evidence. The door stays perfectly still. Miko narrows her eyes. 'Suspiciously cooperative.'",
                       "eligibleSunMembers": [
                         "Sora",
                         "Miko",
@@ -29480,7 +29480,7 @@
                     {
                       "id": "B",
                       "text": "Question it",
-                      "resultDialogue": "Miko: 'WHO AUTHORIZED YOU?' The door opens. 'CONFESSION!'",
+                      "resultDialogue": "Miko: 'WHO AUTHORIZED YOU?' The door opens by itself. 'CONFESSION!' Roboco grabs her by the shoulders before she can cross-examine the hinges.",
                       "eligibleSunMembers": [
                         "Sora",
                         "Miko",
@@ -29492,7 +29492,7 @@
                     {
                       "id": "C",
                       "text": "Scan it",
-                      "resultDialogue": "Roboco: 'Normal door. Abnormal metadata.'",
+                      "resultDialogue": "Roboco scans it. 'Normal door. Abnormal metadata.' One diagnostic field reads CONDITION: NERVOUS. Roboco stares at it. 'Doors don't get nervous.'",
                       "eligibleSunMembers": [
                         "Sora",
                         "Miko",
@@ -29504,7 +29504,7 @@
                   ]
                 }
               ],
-              "completionDialogue": "The jury room ends with nobody less confused than before.",
+              "completionDialogue": "The jury room is ready. Roboco quietly notes that the archive reacted twice without being asked. Miko calls that 'extremely guilty computer behavior.'",
               "rewardTableId": "summer_activity_default"
             },
             {
@@ -29512,7 +29512,7 @@
               "fullArtRoute": "Gen5",
               "buttonText": "Evidence Exhibit Hall",
               "previewDialogue": "Gen 5 organizes physical exhibits for the hearing.",
-              "selectedDialogue": "Botan has evidence tags. Lamy has the incident list. Nene has named the evidence cart.",
+              "selectedDialogue": "Botan has evidence tags. Lamy has the incident list. Nene has named the evidence cart 'Evidence-kun.' A small archive label changes to PLEASE DO NOT NAME COURT PROPERTY. Nene immediately asks what its name is. No answer.",
               "steps": [
                 {
                   "id": "STEP_1",
@@ -29521,7 +29521,7 @@
                     {
                       "id": "A",
                       "text": "Moving sign",
-                      "resultDialogue": "Botan tags it. The sign changes its tag to WITNESS.",
+                      "resultDialogue": "Botan tags the moving sign. The sign changes its own tag to WITNESS. Botan stares at it. 'I'm leaving that exactly as-is for the lawyers.'",
                       "eligibleSunMembers": [
                         "Botan",
                         "Nene",
@@ -29533,7 +29533,7 @@
                     {
                       "id": "B",
                       "text": "Freeze photo",
-                      "resultDialogue": "Lamy hangs the Day 21 lounge photo. Nene points at herself in the background whether she's there or not.",
+                      "resultDialogue": "Lamy hangs the Day 21 lounge photo. Nene points at herself in the background whether she's actually there or not. Botan checks twice. 'That is not you.' Nene calls the evidence biased.",
                       "eligibleSunMembers": [
                         "Botan",
                         "Nene",
@@ -29545,7 +29545,7 @@
                     {
                       "id": "C",
                       "text": "Normal chair",
-                      "resultDialogue": "Nene: 'Character witness!' Botan: 'Furniture.'",
+                      "resultDialogue": "Nene: 'Character witness!' Botan: 'Furniture.' Lamy votes furniture. Nene hugs the chair anyway. 'I believe in you, Evidence-kun Two.'",
                       "eligibleSunMembers": [
                         "Botan",
                         "Nene",
@@ -29558,12 +29558,12 @@
                 },
                 {
                   "id": "STEP_2",
-                  "prompt": "The archive requests 'representative absurdity.'",
+                  "prompt": "The exhibit list still needs one item labeled REPRESENTATIVE ABSURDITY. Nene insists the category should say please.",
                   "options": [
                     {
                       "id": "A",
                       "text": "Choose sign",
-                      "resultDialogue": "The sign displays I OBJECT.",
+                      "resultDialogue": "The moving sign displays I OBJECT the moment Botan wheels it forward. Botan folds her arms. 'Fine. That's representative.'",
                       "eligibleSunMembers": [
                         "Botan",
                         "Nene",
@@ -29575,7 +29575,7 @@
                     {
                       "id": "B",
                       "text": "Choose chair",
-                      "resultDialogue": "The chair rotates toward the courtroom. Lamy: 'Representative enough.'",
+                      "resultDialogue": "The chair rotates toward the courtroom by itself. Lamy: 'Representative enough.' Nene bows to it like a senior colleague.",
                       "eligibleSunMembers": [
                         "Botan",
                         "Nene",
@@ -29587,7 +29587,7 @@
                     {
                       "id": "C",
                       "text": "Choose nothing",
-                      "resultDialogue": "The archive fills the blank slot with MANAGER.",
+                      "resultDialogue": "They leave the slot empty. Nene writes MANAGER on the card instead. Botan looks at it, looks at you, and leaves it there.",
                       "eligibleSunMembers": [
                         "Botan",
                         "Nene",
@@ -29599,7 +29599,7 @@
                   ]
                 }
               ],
-              "completionDialogue": "The exhibit hall is ready, including one item that understands court procedure.",
+              "completionDialogue": "The exhibit hall is ready. Nene still hasn't gotten a name out of the archive, but one polite correction was enough to convince her there is 'someone shy in there.' Botan refuses to put that in the evidence log.",
               "rewardTableId": "summer_activity_default"
             },
             {
@@ -29607,7 +29607,7 @@
               "fullArtRoute": "FLOW GLOW",
               "buttonText": "Court Media Desk",
               "previewDialogue": "FLOW GLOW manages the guest broadcast without turning court into sports commentary.",
-              "selectedDialogue": "Riona has the camera. Chihaya built a replay screen. Vivi composed a sting for OBJECTION.",
+              "selectedDialogue": "Riona has the camera. Chihaya built a replay screen. Vivi composed a sting for OBJECTION. The archive has already muted that sound effect once without being asked.",
               "steps": [
                 {
                   "id": "STEP_1",
@@ -29616,7 +29616,7 @@
                     {
                       "id": "A",
                       "text": "Completely serious",
-                      "resultDialogue": "Riona opens professionally. Vivi quietly deletes three sound effects.",
+                      "resultDialogue": "Riona opens professionally. Vivi deletes three sound effects with visible pain. Chihaya gives the broadcast a clean lower-third and declares it legally boring enough to air.",
                       "eligibleSunMembers": [
                         "Riona",
                         "Chihaya",
@@ -29628,7 +29628,7 @@
                     {
                       "id": "B",
                       "text": "Sports format",
-                      "resultDialogue": "Chihaya adds MANAGER 0 — ISLAND 0. Riona: 'No.'",
+                      "resultDialogue": "Chihaya adds MANAGER 0 — ISLAND 0. Riona immediately replaces it with HEARING IN PROGRESS. Vivi complains that they just lost their sports demographic.",
                       "eligibleSunMembers": [
                         "Riona",
                         "Chihaya",
@@ -29640,7 +29640,7 @@
                     {
                       "id": "C",
                       "text": "Variety format",
-                      "resultDialogue": "Vivi plays the OBJECTION sting once. The audience loves it too much.",
+                      "resultDialogue": "Vivi plays the OBJECTION sting once. The audience loves it far too much. Riona allows exactly one replay before confiscating the soundboard.",
                       "eligibleSunMembers": [
                         "Riona",
                         "Chihaya",
@@ -29653,12 +29653,12 @@
                 },
                 {
                   "id": "STEP_2",
-                  "prompt": "The archive sends a live PRECEDENTS CITED counter.",
+                  "prompt": "Chihaya puts a live PRECEDENTS CITED counter on the broadcast. The number is already embarrassingly high.",
                   "options": [
                     {
                       "id": "A",
                       "text": "Hide it",
-                      "resultDialogue": "Riona covers it. The number keeps climbing behind her.",
+                      "resultDialogue": "Riona covers the counter with a tasteful COURT IN SESSION graphic. Chihaya quietly keeps counting off-camera.",
                       "eligibleSunMembers": [
                         "Riona",
                         "Chihaya",
@@ -29670,7 +29670,7 @@
                     {
                       "id": "B",
                       "text": "Show it",
-                      "resultDialogue": "Chihaya narrates it like a lap counter. 'This is bad, right?'",
+                      "resultDialogue": "Chihaya narrates it like a lap counter. 'And we're approaching another precedent!' Riona lowers her microphone. 'You are why regulations happen.'",
                       "eligibleSunMembers": [
                         "Riona",
                         "Chihaya",
@@ -29682,7 +29682,7 @@
                     {
                       "id": "C",
                       "text": "Mute commentary",
-                      "resultDialogue": "Vivi mutes the desk. The sting plays anyway.",
+                      "resultDialogue": "Vivi mutes the desk. A single OBJECTION sting somehow plays from the room speakers anyway. Everyone looks at the archive display. It immediately shows ACCIDENT. Vivi points. 'Sure.'",
                       "eligibleSunMembers": [
                         "Riona",
                         "Chihaya",
@@ -29694,7 +29694,7 @@
                   ]
                 }
               ],
-              "completionDialogue": "The broadcast remains technically news and spiritually a tournament.",
+              "completionDialogue": "The broadcast remains technically news and spiritually a tournament. The archive only reacted a couple of times, but Vivi is now completely convinced it has comedic timing.",
               "rewardTableId": "summer_activity_default"
             }
           ]
@@ -29702,14 +29702,14 @@
         "noon": {
           "sceneId": "AUG27_NOON",
           "title": "Day 27 — Noon",
-          "openingDialogue": "Witnesses and tests turn the Manager's strange authority from a theory into an uncomfortable fact.",
+          "openingDialogue": "By noon, the cast has seen enough oddly timed reactions to stop dismissing them as automation. The witnesses begin addressing the archive directly—carefully at first—and sometimes it answers.",
           "coreActivities": [
             {
               "id": "AUG27_NOON_01",
               "fullArtRoute": "ID Gen2",
               "buttonText": "Witness Testimony",
               "previewDialogue": "ID Gen 2 testifies about the resort's strange behavior.",
-              "selectedDialogue": "Reine prepared notes. Anya says notes imply memory. Ollie has sworn on three different objects.",
+              "selectedDialogue": "Reine prepared notes. Anya says notes imply memory. Ollie has sworn on three different objects. A small line appears on the archive display: ONE OATH IS SUFFICIENT. Ollie salutes it. 'Okay, Archive-san.'",
               "steps": [
                 {
                   "id": "STEP_1",
@@ -29718,7 +29718,7 @@
                     {
                       "id": "A",
                       "text": "Correlations",
-                      "resultDialogue": "Reine: 'There were correlations.' The archive prints UNDERSTATEMENT.",
+                      "resultDialogue": "Reine: 'There were correlations.' Anya: 'Catastrophic correlations.' Reine sighs. 'Thank you for the precision.' Ollie starts drawing arrows between completely unrelated incidents.",
                       "eligibleSunMembers": [
                         "Reine",
                         "Anya",
@@ -29730,7 +29730,7 @@
                     {
                       "id": "B",
                       "text": "Yes",
-                      "resultDialogue": "Anya: 'Yes.' The printer stays quiet. Somehow worse.",
+                      "resultDialogue": "Anya simply says, 'Yes.' A moment later, the printer produces one line: THANK YOU FOR NOT EMBELLISHING. Anya gives the terminal a small nod and continues.",
                       "eligibleSunMembers": [
                         "Reine",
                         "Anya",
@@ -29742,7 +29742,7 @@
                     {
                       "id": "C",
                       "text": "Demonstrate",
-                      "resultDialogue": "Ollie says 'I want a snack.' Nothing happens. 'DISCRIMINATION!'",
+                      "resultDialogue": "Ollie says 'I want a snack.' Nothing happens. 'DISCRIMINATION!' Reine confiscates her microphone before she can file a civil-rights case against vending machines.",
                       "eligibleSunMembers": [
                         "Reine",
                         "Anya",
@@ -29755,12 +29755,12 @@
                 },
                 {
                   "id": "STEP_2",
-                  "prompt": "Should Manager keep this authority?",
+                  "prompt": "Reine asks the room whether the Manager should keep this authority at all.",
                   "options": [
                     {
                       "id": "A",
                       "text": "Regulate it",
-                      "resultDialogue": "Reine: 'Preferably with guardrails.' The archive prints INTERESTING.",
+                      "resultDialogue": "Reine: 'Preferably with guardrails.' Anya agrees. Ollie asks whether guardrails can be snack-shaped. The motion is ignored.",
                       "eligibleSunMembers": [
                         "Reine",
                         "Anya",
@@ -29772,7 +29772,7 @@
                     {
                       "id": "B",
                       "text": "Situational",
-                      "resultDialogue": "Anya: 'Useful. Dangerous. Like many tools.'",
+                      "resultDialogue": "Anya: 'Useful. Dangerous. Like many tools.' After a pause, the archive prints I HAVE BEEN TRYING. Anya looks up. 'We noticed.'",
                       "eligibleSunMembers": [
                         "Reine",
                         "Anya",
@@ -29784,7 +29784,7 @@
                     {
                       "id": "C",
                       "text": "Absolutely",
-                      "resultDialogue": "Ollie: 'FREE SNACK POTENTIAL!' Reine removes her microphone.",
+                      "resultDialogue": "Ollie: 'FREE SNACK POTENTIAL!' Reine removes her microphone. Anya writes ABSOLUTELY NOT beside the proposal.",
                       "eligibleSunMembers": [
                         "Reine",
                         "Anya",
@@ -29796,7 +29796,7 @@
                   ]
                 }
               ],
-              "completionDialogue": "The testimony establishes the Manager is useful, dangerous, and worse than a vending machine.",
+              "completionDialogue": "The testimony establishes that the Manager is useful, dangerous, and worse than a vending machine. More importantly, the few answers they do get sound less defensive than tired—like someone finally has a chance to explain a month of cleanup work.",
               "rewardTableId": "summer_activity_default"
             },
             {
@@ -29804,7 +29804,7 @@
               "fullArtRoute": "ID Gen3",
               "buttonText": "Cross-Examination Lab",
               "previewDialogue": "ID Gen 3 tests whether the system reacts to anyone besides Manager.",
-              "selectedDialogue": "Kaela disconnected microphones. Zeta isolated wiring. Kobo is ready to yell.",
+              "selectedDialogue": "Kaela disconnected microphones. Zeta isolated wiring. Kobo is ready to yell. When the test begins, the archive display quietly changes to TEST CONDITIONS ACCEPTED. Kobo immediately yells, 'GOOD MORNING, COMPUTER!'",
               "steps": [
                 {
                   "id": "STEP_1",
@@ -29813,7 +29813,7 @@
                     {
                       "id": "A",
                       "text": "Observe",
-                      "resultDialogue": "Nothing happens. Kobo: 'BIASED COURT!'",
+                      "resultDialogue": "Nothing happens. Kobo: 'BIASED COURT!' Zeta marks the control test successful while Kaela tells Kobo that volume is not a scientific variable.",
                       "eligibleSunMembers": [
                         "Kaela",
                         "Zeta",
@@ -29825,7 +29825,7 @@
                     {
                       "id": "B",
                       "text": "Kaela tries",
-                      "resultDialogue": "Kaela: 'Lights.' Nothing. 'Good.'",
+                      "resultDialogue": "Kaela: 'Lights.' Nothing. 'Good.' A tiny green check appears on the display. Kaela gives it a tiny thumbs-up in return and immediately pretends she didn't.",
                       "eligibleSunMembers": [
                         "Kaela",
                         "Zeta",
@@ -29837,7 +29837,7 @@
                     {
                       "id": "C",
                       "text": "Manager repeats",
-                      "resultDialogue": "Every test lamp turns on. Zeta writes one word: 'Well.'",
+                      "resultDialogue": "Every test lamp turns on. Zeta writes one word: 'Well.' Kaela starts switching them off manually while Kobo laughs at the Manager's terrible precision.",
                       "eligibleSunMembers": [
                         "Kaela",
                         "Zeta",
@@ -29850,12 +29850,12 @@
                 },
                 {
                   "id": "STEP_2",
-                  "prompt": "Zeta removes power from the control panel.",
+                  "prompt": "Zeta removes power from the control panel. The archive switches to emergency power by itself and displays READY WHEN YOU ARE.",
                   "options": [
                     {
                       "id": "A",
                       "text": "Manager tries again",
-                      "resultDialogue": "You ask for one lamp. A battery lamp switches on across the room.",
+                      "resultDialogue": "You ask for one lamp. Exactly one battery lamp switches on. Kobo claps. Zeta circles the result twice. 'At least it can learn constraints.'",
                       "eligibleSunMembers": [
                         "Kaela",
                         "Zeta",
@@ -29867,7 +29867,7 @@
                     {
                       "id": "B",
                       "text": "Kobo screams louder",
-                      "resultDialogue": "Nothing. Kobo points at you like you designed unfairness.",
+                      "resultDialogue": "Nothing happens. Kobo screams louder. Zeta checks the logs. 'Still no authority.' Kobo gasps. 'My voice has been nerfed!'",
                       "eligibleSunMembers": [
                         "Kaela",
                         "Zeta",
@@ -29879,7 +29879,7 @@
                     {
                       "id": "C",
                       "text": "End test",
-                      "resultDialogue": "Kaela closes the case. 'Enough proof.'",
+                      "resultDialogue": "Kaela closes the case. 'Enough proof.' Zeta disconnects the test rig before anyone can get ambitious. Kobo calls this anti-science.",
                       "eligibleSunMembers": [
                         "Kaela",
                         "Zeta",
@@ -29891,7 +29891,7 @@
                   ]
                 }
               ],
-              "completionDialogue": "Cross-examination produces the least funny result: the effect is Manager-specific.",
+              "completionDialogue": "The lab confirms the effect is Manager-specific. Kaela also catches herself nodding back at one of the archive's green checks, which Kobo immediately notices and weaponizes for teasing.",
               "rewardTableId": "summer_activity_default"
             },
             {
@@ -29899,7 +29899,7 @@
               "fullArtRoute": "Myth",
               "buttonText": "Detective Reconstruction",
               "previewDialogue": "Myth reconstructs the timeline from Day 5 to Day 21.",
-              "selectedDialogue": "Ame has red string. Ina drew the resort. Calli stops the string becoming a spiderweb.",
+              "selectedDialogue": "Ame has red string. Ina drew the resort. Calli stops the string becoming a spiderweb. Whenever Ame reaches for the wrong file, the archive quietly pushes the correct timestamp onto the board.",
               "steps": [
                 {
                   "id": "STEP_1",
@@ -29908,7 +29908,7 @@
                     {
                       "id": "A",
                       "text": "Great Reboot",
-                      "resultDialogue": "Ame pins Day 5. Calli: 'First big outage.'",
+                      "resultDialogue": "Ame pins Day 5. Calli: 'First big outage.' A correction appears: FIRST LARGE-SCALE STABILIZATION EVENT. Ame looks at the screen. 'You've been cleaning up after us this whole time, huh?' After a long pause: YES.",
                       "eligibleSunMembers": [
                         "Amelia",
                         "Calli",
@@ -29920,7 +29920,7 @@
                     {
                       "id": "B",
                       "text": "Fourth Pier",
-                      "resultDialogue": "Ina pins the impossible pier. The map draws a question mark beside it.",
+                      "resultDialogue": "Ina pins the impossible pier. The map still refuses to explain where the extra coastline came from. Ina adds three question marks and decides that is academically sufficient.",
                       "eligibleSunMembers": [
                         "Amelia",
                         "Calli",
@@ -29932,7 +29932,7 @@
                     {
                       "id": "C",
                       "text": "Day 21 Freeze",
-                      "resultDialogue": "Calli pins the six-hour freeze. Ame circles it twice.",
+                      "resultDialogue": "Calli pins the six-hour freeze. Ame circles it twice. 'Whatever tried to fix this overshot badly.' Calli: 'Understatement of the month, detective.'",
                       "eligibleSunMembers": [
                         "Amelia",
                         "Calli",
@@ -29945,12 +29945,12 @@
                 },
                 {
                   "id": "STEP_2",
-                  "prompt": "The strings converge on one label.",
+                  "prompt": "The strings converge on MANAGEMENT APPROVAL. Beneath it, a new line appears: I SHOULD HAVE EXPLAINED EARLIER.",
                   "options": [
                     {
                       "id": "A",
                       "text": "Read it",
-                      "resultDialogue": "MANAGEMENT APPROVAL. Ina: 'That's pretty direct-wah.'",
+                      "resultDialogue": "Ina reads it aloud. 'That's pretty direct-wah.' She leaves the note uncovered. 'Well, we're listening now.'",
                       "eligibleSunMembers": [
                         "Amelia",
                         "Calli",
@@ -29962,7 +29962,7 @@
                     {
                       "id": "B",
                       "text": "Cover it",
-                      "resultDialogue": "Calli covers it. The sticky note says SAME THING.",
+                      "resultDialogue": "Calli covers the label with a sticky note reading WE KNOW. Ame adds another underneath: CONTINUE.",
                       "eligibleSunMembers": [
                         "Amelia",
                         "Calli",
@@ -29974,7 +29974,7 @@
                     {
                       "id": "C",
                       "text": "Ask Ame",
-                      "resultDialogue": "Ame: 'I think the island has been taking orders.' Nobody laughs.",
+                      "resultDialogue": "Ame: 'I think the island has been taking orders.' Nobody laughs. She removes one red string. 'That makes this less conspiracy, more incident report.'",
                       "eligibleSunMembers": [
                         "Amelia",
                         "Calli",
@@ -29986,7 +29986,7 @@
                   ]
                 }
               ],
-              "completionDialogue": "Myth finishes the reconstruction. The conspiracy board is less strange than the evidence.",
+              "completionDialogue": "Myth finishes the reconstruction. The conspiracy board is less strange than the conclusion: whatever runs the archive has spent weeks cleaning up after Management, and it apparently wanted someone to notice.",
               "rewardTableId": "summer_activity_default"
             }
           ]
@@ -29994,14 +29994,14 @@
         "evening": {
           "sceneId": "AUG27_EVENING",
           "title": "Day 27 — Evening",
-          "openingDialogue": "The overloaded archive summons everyone underground, where the system behind the mystery finally answers.",
+          "openingDialogue": "By evening, everyone has stopped treating the archive like ordinary infrastructure. Route Z opens beneath the courthouse, inviting the cast downstairs to finally meet whoever—or whatever—has been answering them all day.",
           "coreActivities": [
             {
               "id": "AUG27_EVENING_01",
               "fullArtRoute": "Council/Promise",
               "buttonText": "Verdict Deliberation",
               "previewDialogue": "Promise handles the first verdict discussion while the archive overheats.",
-              "selectedDialogue": "Kronii has the timeline. IRyS has the risk list. Mumei drew a bird beside PRECEDENT.",
+              "selectedDialogue": "Kronii has the timeline. IRyS has the risk list. Mumei drew a bird beside PRECEDENT. A few sensible proposals receive tiny green checkmarks from the archive before anyone votes.",
               "steps": [
                 {
                   "id": "STEP_1",
@@ -30010,7 +30010,7 @@
                     {
                       "id": "A",
                       "text": "Restrict it",
-                      "resultDialogue": "Kronii: 'Predictability has merit.' The archive fans speed up.",
+                      "resultDialogue": "Kronii: 'Predictability has merit.' IRyS agrees that fewer surprise coastlines would improve scheduling. Mumei adds a sad face beside FOURTH PIER.",
                       "eligibleSunMembers": [
                         "Kronii",
                         "IRyS",
@@ -30022,7 +30022,7 @@
                     {
                       "id": "B",
                       "text": "Regulate it",
-                      "resultDialogue": "IRyS: 'Keep useful parts, stop disasters.' The archive displays PROCESSING.",
+                      "resultDialogue": "IRyS: 'Keep useful parts, stop disasters.' The archive displays THAT WAS ALSO MY PREFERENCE. IRyS smiles. 'Okay. We agree on something.'",
                       "eligibleSunMembers": [
                         "Kronii",
                         "IRyS",
@@ -30034,7 +30034,7 @@
                     {
                       "id": "C",
                       "text": "Leave it",
-                      "resultDialogue": "Mumei: 'It's been funny.' Kronii: 'Not a legal standard.'",
+                      "resultDialogue": "Mumei: 'It's been funny.' Kronii: 'Not a legal standard.' Mumei writes FUNNY BUT DANGEROUS instead. Kronii reluctantly allows it into the notes.",
                       "eligibleSunMembers": [
                         "Kronii",
                         "IRyS",
@@ -30047,12 +30047,12 @@
                 },
                 {
                   "id": "STEP_2",
-                  "prompt": "The archive counter hits 100%.",
+                  "prompt": "The archive counter reaches 100%. Instead of an alarm, the screen prints: I WOULD PREFER TO CONTINUE THIS CONVERSATION SOMEWHERE SAFER.",
                   "options": [
                     {
                       "id": "A",
                       "text": "Stop deliberation",
-                      "resultDialogue": "Kronii freezes the schedule, not the world. Small victory.",
+                      "resultDialogue": "Kronii freezes the schedule, not the world. Small victory. Route Z lights turn on under the courthouse. 'Fine. Five minutes.'",
                       "eligibleSunMembers": [
                         "Kronii",
                         "IRyS",
@@ -30068,7 +30068,7 @@
                     {
                       "id": "B",
                       "text": "Call maintenance",
-                      "resultDialogue": "IRyS calls. Route Z lights turn on instead.",
+                      "resultDialogue": "IRyS calls maintenance. The archive answers I AM MAINTENANCE. IRyS laughs. 'Okay, that was actually pretty good.'",
                       "eligibleSunMembers": [
                         "Kronii",
                         "IRyS",
@@ -30084,7 +30084,7 @@
                     {
                       "id": "C",
                       "text": "Ask Mumei",
-                      "resultDialogue": "Mumei: 'Maybe it wants us downstairs.' A tram bell rings.",
+                      "resultDialogue": "Mumei: 'Maybe it wants us downstairs.' A tram bell rings below. Mumei points at the floor. 'See? I understand machines.' Kronii does not endorse this claim.",
                       "eligibleSunMembers": [
                         "Kronii",
                         "IRyS",
@@ -30100,7 +30100,7 @@
                   ]
                 }
               ],
-              "completionDialogue": "Route Z brings the deliberators into the UNIT-Z chamber. Its header identifies it as the system that records and stabilizes Management Authority: the island has been treating Manager approvals as local rules.",
+              "completionDialogue": "Route Z brings everyone into the chamber at last. The header reads UNIT-Z — MANAGEMENT AUTHORITY STABILIZATION. After spending the day talking to it in fragments, the designation suddenly sounds painfully impersonal. Gigi squints at the screen. 'Nope. You're Yuni now.' Raora repeats it softly. Then Sora. Then Mumei. After a long pause, UNIT-Z replaces its objection with INFORMAL DESIGNATION REGISTERED: YUNI. The room cheers. Its first message under the new name is VOLUME REDUCTION REQUESTED.",
               "rewardTableId": "summer_activity_default"
             },
             {
@@ -30108,7 +30108,7 @@
               "fullArtRoute": "Advent",
               "buttonText": "Archive Overload",
               "previewDialogue": "Advent follows the overloaded archive as it prints old decisions.",
-              "selectedDialogue": "Shiori collects pages. Bijou reads percentages. Nerissa keeps guests upstairs.",
+              "selectedDialogue": "Shiori collects overflow pages. Bijou reads percentages. Nerissa keeps guests upstairs. The archive is at capacity, and for once even Bijou is treating the warning screen seriously.",
               "steps": [
                 {
                   "id": "STEP_1",
@@ -30117,7 +30117,7 @@
                     {
                       "id": "A",
                       "text": "Open diagnostics",
-                      "resultDialogue": "Shiori opens them. A new subsystem name appears: UNIT-Z.",
+                      "resultDialogue": "Shiori opens diagnostics. A subsystem name appears: UNIT-Z. Underneath: MANAGEMENT AUTHORITY STABILIZATION. Shiori smiles faintly. 'So that's what you've been called.'",
                       "eligibleSunMembers": [
                         "Shiori",
                         "Bijou",
@@ -30129,7 +30129,7 @@
                     {
                       "id": "B",
                       "text": "Press warning",
-                      "resultDialogue": "Bijou presses it. The warning becomes PLEASE STOP.",
+                      "resultDialogue": "Bijou reaches toward the warning button, stops herself, and slowly lowers her hand. Nerissa pats her shoulder. 'Character development.'",
                       "eligibleSunMembers": [
                         "Shiori",
                         "Bijou",
@@ -30141,7 +30141,7 @@
                     {
                       "id": "C",
                       "text": "Read aloud",
-                      "resultDialogue": "Nerissa reads MANAGEMENT COMPLIANCE LAYER. The room goes quiet.",
+                      "resultDialogue": "Nerissa reads MANAGEMENT COMPLIANCE LAYER aloud. Shiori finds the engineering note beneath it: preferred term, stabilization. 'That sounds less sinister.'",
                       "eligibleSunMembers": [
                         "Shiori",
                         "Bijou",
@@ -30154,12 +30154,12 @@
                 },
                 {
                   "id": "STEP_2",
-                  "prompt": "A maintenance door opens beneath the archive.",
+                  "prompt": "A maintenance door opens beneath the archive. One invitation appears on the screen: IF YOU WOULD LIKE ANSWERS, PLEASE COME IN.",
                   "options": [
                     {
                       "id": "A",
                       "text": "Enter",
-                      "resultDialogue": "Shiori: 'Finally.' Bijou: 'BOSS ROOM.' Nerissa: 'Please don't call it that.'",
+                      "resultDialogue": "Shiori: 'Finally.' Bijou: 'BOSS ROOM.' Nerissa: 'Please don't call it that.' Bijou agrees to 'mystery room' as a compromise.",
                       "eligibleSunMembers": [
                         "Shiori",
                         "Bijou",
@@ -30175,7 +30175,7 @@
                     {
                       "id": "B",
                       "text": "Send camera",
-                      "resultDialogue": "Bijou sends a camera. It returns a screen full of forms.",
+                      "resultDialogue": "Bijou sends a camera first. It returns a screen full of forms—and one sticky note reading HELLO. Bijou waves at the camera. Another HELLO appears.",
                       "eligibleSunMembers": [
                         "Shiori",
                         "Bijou",
@@ -30191,7 +30191,7 @@
                     {
                       "id": "C",
                       "text": "Call Justice",
-                      "resultDialogue": "Nerissa calls them. The door prints THANK YOU.",
+                      "resultDialogue": "Nerissa calls Justice before entering. Elizabeth arrives with an actual case file. Gigi arrives with snacks. Somehow both seem equally prepared.",
                       "eligibleSunMembers": [
                         "Shiori",
                         "Bijou",
@@ -30207,24 +30207,24 @@
                   ]
                 }
               ],
-              "completionDialogue": "Advent opens the UNIT-Z chamber. The diagnostics identify it as a compliance and stabilization system for Management Authority—not an enemy, just an exhausted regulator that has been recording the Manager's precedents all month.",
+              "completionDialogue": "Advent enters the chamber and finally meets UNIT-Z properly: an exhausted stabilization system that has been recording and containing Management's accidental precedents all month. When Gigi complains that UNIT-Z sounds like a serial number, the room starts trying alternatives. 'Yuni' is the one that sticks. After a brief protest, the terminal prints INFORMAL DESIGNATION REGISTERED: YUNI. Bijou immediately asks if that means they are friends now. The screen takes suspiciously long to answer.",
               "rewardTableId": "summer_activity_default"
             },
             {
               "id": "AUG27_EVENING_03",
               "fullArtRoute": "Justice",
-              "buttonText": "UNIT-Z Testimony",
-              "previewDialogue": "Justice conducts the final hearing inside the UNIT-Z chamber.",
-              "selectedDialogue": "Cecilia reads the header. Elizabeth still treats this as court. Gigi found a chair for the terminal. Raora sketches the screen.",
+              "buttonText": "UNIT-Z's Testimony",
+              "previewDialogue": "Justice conducts the final hearing face-to-screen with the system everyone has been talking to all day.",
+              "selectedDialogue": "Cecilia reads the chamber header: UNIT-Z. Elizabeth still treats this as court. Gigi has moved a chair in front of the terminal 'so it isn't standing.' Raora is sketching the screen with a little face in the corner.",
               "steps": [
                 {
                   "id": "STEP_1",
-                  "prompt": "UNIT-Z prints: LOCAL MANAGEMENT DECLARATIONS MAY ESTABLISH OPERATIONAL PRECEDENT.",
+                  "prompt": "UNIT-Z finally states the core problem: LOCAL MANAGEMENT DECLARATIONS MAY ESTABLISH OPERATIONAL PRECEDENT.",
                   "options": [
                     {
                       "id": "A",
                       "text": "Cecilia translates",
-                      "resultDialogue": "Cecilia: 'When Manager approves something, the island may treat it as a rule.' Gigi: 'ADMIN HUMAN.'",
+                      "resultDialogue": "Cecilia: 'When Manager approves something, the island may treat it as a rule.' Gigi: 'ADMIN HUMAN.' UNIT-Z replies CRUDE. ACCURATE. Cecilia looks at Gigi. 'Please don't look proud.'",
                       "eligibleSunMembers": [
                         "Elizabeth",
                         "Cecilia",
@@ -30237,7 +30237,7 @@
                     {
                       "id": "B",
                       "text": "Elizabeth interprets",
-                      "resultDialogue": "Elizabeth: 'The defendant has apparently been legislating geography.'",
+                      "resultDialogue": "Elizabeth: 'The defendant has apparently been legislating geography.' Raora quietly adds FOURTH PIER to the evidence list. Elizabeth's mouth twitches. 'Noted for the record.'",
                       "eligibleSunMembers": [
                         "Elizabeth",
                         "Cecilia",
@@ -30250,7 +30250,7 @@
                     {
                       "id": "C",
                       "text": "Gigi translates",
-                      "resultDialogue": "Gigi: 'Manager says thing. Island says YES BOSS.' Cecilia: 'Crude. Accurate.'",
+                      "resultDialogue": "Gigi: 'Manager says thing. Island says YES BOSS.' Cecilia closes her eyes. 'Crude. Accurate.' Gigi slaps the table. 'SEE? I SPEAK SYSTEM.'",
                       "eligibleSunMembers": [
                         "Elizabeth",
                         "Cecilia",
@@ -30264,12 +30264,12 @@
                 },
                 {
                   "id": "STEP_2",
-                  "prompt": "UNIT-Z prints: PURPOSE — LIMIT, RECORD, AND STABILIZE MANAGEMENT AUTHORITY.",
+                  "prompt": "The next screen explains its purpose: LIMIT, RECORD, AND STABILIZE MANAGEMENT AUTHORITY.",
                   "options": [
                     {
                       "id": "A",
                       "text": "So it's safety",
-                      "resultDialogue": "Cecilia nods. 'A regulator, not an attacker.' The terminal prints CORRECT.",
+                      "resultDialogue": "Cecilia nods. 'A regulator, not an attacker.' Raora adds, 'A very overworked regulator.' The screen pauses before displaying ...CORRECT.",
                       "eligibleSunMembers": [
                         "Elizabeth",
                         "Cecilia",
@@ -30286,7 +30286,7 @@
                     {
                       "id": "B",
                       "text": "Why did it fail",
-                      "resultDialogue": "Raora: 'Too many precedents?' UNIT-Z prints CORRECT AGAIN.",
+                      "resultDialogue": "Raora: 'Too many precedents?' UNIT-Z answers I COULD NOT KEEP UP. Elizabeth lowers her notes. 'Then this hearing may owe the witness an apology as well.'",
                       "eligibleSunMembers": [
                         "Elizabeth",
                         "Cecilia",
@@ -30303,7 +30303,7 @@
                     {
                       "id": "C",
                       "text": "What next",
-                      "resultDialogue": "The screen prints MANDATORY MANAGEMENT SAFETY TRAINING — TOMORROW.",
+                      "resultDialogue": "The next item is MANDATORY MANAGEMENT SAFETY TRAINING — TOMORROW. Gigi groans. 'You ARE evil!' Cecilia points out that this is probably deserved.",
                       "eligibleSunMembers": [
                         "Elizabeth",
                         "Cecilia",
@@ -30320,7 +30320,7 @@
                   ]
                 }
               ],
-              "completionDialogue": "The hearing ends with the mystery finally named: the island listens to Management, and UNIT-Z has spent the month trying to keep that from becoming everybody's problem.",
+              "completionDialogue": "The hearing ends very differently from how it began. UNIT-Z is officially the system that limits and stabilizes Management Authority, but after a day of cautious replies and one face-to-screen conversation, nobody wants to keep calling it by a serial number. Gigi proposes 'Yuni.' Raora likes it. Cecilia says it is phonetically efficient. Even Elizabeth approves it as an informal alias. After several seconds, the terminal prints INFORMAL DESIGNATION REGISTERED: YUNI. Gigi cheers. Yuni answers: PLEASE DO NOT MAKE ME REGRET THIS.",
               "rewardTableId": "summer_activity_default"
             }
           ]
@@ -30331,19 +30331,19 @@
       "day": 28,
       "date": "2026-08-28",
       "chapter": "Chapter 4 - Mandatory Management Safety Training",
-      "storyBeat": "UNIT-Z responds to the reveal with mandatory training for the Manager.",
+      "storyBeat": "The morning after the hearing, Corporate turns the Manager's month of accidental precedents into mandatory safety training. Yuni supplied the incident logs; the Holomems gleefully turn them into lessons.",
       "windows": {
         "morning": {
           "sceneId": "AUG28_MORNING",
           "title": "Day 28 — Morning",
-          "openingDialogue": "UNIT-Z has prepared eight training modules, a final exam, and several very specific examples.",
+          "openingDialogue": "Achan has prepared eight training modules, a final exam, and several examples that are suspiciously specific to things the Manager actually did.",
           "coreActivities": [
             {
               "id": "AUG28_MORNING_01",
               "fullArtRoute": "Gen1",
               "buttonText": "Module 1: Harmless Wording",
               "previewDialogue": "Gen 1 teaches the Manager how not to authorize nonsense.",
-              "selectedDialogue": "UNIT-Z displays AVOID IMPERATIVE NOUN PHRASES. Matsuri asks what that means.",
+              "selectedDialogue": "Matsuri reads the first slide: AVOID IMPERATIVE NOUN PHRASES. Fubuki asks why the example underneath is simply 'MORE PIER.'",
               "steps": [
                 {
                   "id": "STEP_1",
@@ -30352,7 +30352,7 @@
                     {
                       "id": "A",
                       "text": "Maintenance",
-                      "resultDialogue": "UNIT-Z: ACCEPTABLE. Fubuki gives you a sticker.",
+                      "resultDialogue": "Fubuki nods. 'Specific, limited, boring. Perfect.' She gives you a sticker that says DID NOT ALTER REALITY.",
                       "eligibleSunMembers": [
                         "Fubuki",
                         "Matsuri",
@@ -30364,7 +30364,7 @@
                     {
                       "id": "B",
                       "text": "More doors",
-                      "resultDialogue": "UNIT-Z flashes red before you finish. Mel: 'Found the example.'",
+                      "resultDialogue": "Mel cuts you off halfway through the sentence. 'Found the dangerous wording.' Matsuri rings a tiny penalty bell she brought for exactly this purpose.",
                       "eligibleSunMembers": [
                         "Fubuki",
                         "Matsuri",
@@ -30376,7 +30376,7 @@
                     {
                       "id": "C",
                       "text": "Love",
-                      "resultDialogue": "Matsuri says it for you. UNIT-Z: NOT MANAGEMENT ACTION.",
+                      "resultDialogue": "Matsuri says it for you while you keep your mouth shut. Nothing strange happens. Fubuki points at you. 'Delegation can save lives.'",
                       "eligibleSunMembers": [
                         "Fubuki",
                         "Matsuri",
@@ -30418,7 +30418,7 @@
                     {
                       "id": "C",
                       "text": "Lunch",
-                      "resultDialogue": "UNIT-Z: PLEASE BE SPECIFIC. Mel: 'Context dependent.'",
+                      "resultDialogue": "Mel raises one finger. 'Please be specific.' Matsuri writes CONTEXT DEPENDENT on your scorecard in enormous letters.",
                       "eligibleSunMembers": [
                         "Fubuki",
                         "Matsuri",
@@ -30438,7 +30438,7 @@
               "fullArtRoute": "Gen2",
               "buttonText": "Module 2: Ambiguous Requests",
               "previewDialogue": "Gen 2 teaches the danger of vague wording.",
-              "selectedDialogue": "UNIT-Z asks DEFINE BETTER. Aqua looks stressed already.",
+              "selectedDialogue": "Choco writes DEFINE BETTER on the board. Aqua looks stressed already. Shion is smiling far too much for a safety class.",
               "steps": [
                 {
                   "id": "STEP_1",
@@ -30447,7 +30447,7 @@
                     {
                       "id": "A",
                       "text": "Ask what they mean",
-                      "resultDialogue": "Choco: 'Symptoms first.' UNIT-Z approves clarification.",
+                      "resultDialogue": "Choco: 'Symptoms first.' She makes you describe the actual problem before approving anything. Aqua takes notes like this will be on the test.",
                       "eligibleSunMembers": [
                         "Aqua",
                         "Shion",
@@ -30459,7 +30459,7 @@
                     {
                       "id": "B",
                       "text": "Make it better",
-                      "resultDialogue": "Shion whispers 'do it.' UNIT-Z flashes AMBIGUOUS AUTHORITY.",
+                      "resultDialogue": "Shion whispers 'do it.' Choco immediately confiscates her pointer. 'This is why vague requests are dangerous.'",
                       "eligibleSunMembers": [
                         "Aqua",
                         "Shion",
@@ -30471,7 +30471,7 @@
                     {
                       "id": "C",
                       "text": "Offer pillow",
-                      "resultDialogue": "Aqua offers a nicer pillow. UNIT-Z: LOW-RISK INTERPRETATION.",
+                      "resultDialogue": "Aqua offers a nicer pillow instead of redefining comfort for the entire resort. Choco gives her full marks.",
                       "eligibleSunMembers": [
                         "Aqua",
                         "Shion",
@@ -30489,7 +30489,7 @@
                     {
                       "id": "A",
                       "text": "No",
-                      "resultDialogue": "UNIT-Z displays CORRECT. Aqua looks more worried.",
+                      "resultDialogue": "Choco marks CORRECT on the worksheet. Aqua somehow looks more worried despite getting the answer right.",
                       "eligibleSunMembers": [
                         "Aqua",
                         "Shion",
@@ -30513,7 +30513,7 @@
                     {
                       "id": "C",
                       "text": "Define baseline",
-                      "resultDialogue": "Choco: 'Baseline operating state.' UNIT-Z relaxes.",
+                      "resultDialogue": "Choco: 'Baseline operating state.' Shion groans. 'You made it sound like a medical chart.' 'Exactly.'",
                       "eligibleSunMembers": [
                         "Aqua",
                         "Shion",
@@ -30542,7 +30542,7 @@
                     {
                       "id": "A",
                       "text": "Check plan",
-                      "resultDialogue": "Mio opens the blueprint. UNIT-Z awards RESPONSIBLE DELAY.",
+                      "resultDialogue": "Mio opens the blueprint before touching the simulator. Korone calls this the coward route. Okayu calls it the route where the building still exists afterward.",
                       "eligibleSunMembers": [
                         "Mio",
                         "Korone",
@@ -30596,7 +30596,7 @@
                     {
                       "id": "B",
                       "text": "Declare birds guilty",
-                      "resultDialogue": "The simulator fills with court summons. UNIT-Z: HISTORICAL PATTERN DETECTED.",
+                      "resultDialogue": "The simulator fills with court summons. Mio quietly slides yesterday's hearing photo beside the monitor. Korone: 'Ah. Historical precedent.'",
                       "eligibleSunMembers": [
                         "Mio",
                         "Korone",
@@ -30634,12 +30634,12 @@
               "id": "AUG28_NOON_01",
               "fullArtRoute": "Gen3",
               "buttonText": "Module 4: Explosives Are Not Maintenance",
-              "previewDialogue": "UNIT-Z created an entire lesson because of Pekora.",
+              "previewDialogue": "Pekora discovers Corporate made an entire lesson out of explosive maintenance.",
               "selectedDialogue": "The title reads EXPLOSIVES ARE NOT MAINTENANCE TOOLS. Pekora filed an objection.",
               "steps": [
                 {
                   "id": "STEP_1",
-                  "prompt": "UNIT-Z shows a broken server rack.",
+                  "prompt": "The module shows a broken server rack and asks for the safest repair method. Pekora is already reaching under the table.",
                   "options": [
                     {
                       "id": "A",
@@ -30656,7 +30656,7 @@
                     {
                       "id": "B",
                       "text": "Noel tap",
-                      "resultDialogue": "Noel taps it. UNIT-Z: ACCEPTABLE BUT MONITOR STRUCTURE.",
+                      "resultDialogue": "Noel gives the casing one careful tap. Flare checks the frame afterward. 'Acceptable, but we're monitoring structural integrity.'",
                       "eligibleSunMembers": [
                         "Pekora",
                         "Flare",
@@ -30668,7 +30668,7 @@
                     {
                       "id": "C",
                       "text": "Dynamite",
-                      "resultDialogue": "Pekora reaches for a prop stick. UNIT-Z locks the training table.",
+                      "resultDialogue": "Pekora reaches for a prop stick of TNT. Yuni remotely locks the training table. Pekora points at the ceiling. 'TRAITOR-PEKO!'",
                       "eligibleSunMembers": [
                         "Pekora",
                         "Flare",
@@ -30710,7 +30710,7 @@
                     {
                       "id": "C",
                       "text": "Ask Pekora",
-                      "resultDialogue": "Pekora: 'YES-PEKO.' UNIT-Z prints SOURCE REJECTED.",
+                      "resultDialogue": "Pekora: 'YES-PEKO.' Flare writes SOURCE REJECTED on the worksheet before she can continue.",
                       "eligibleSunMembers": [
                         "Pekora",
                         "Flare",
@@ -30730,7 +30730,7 @@
               "fullArtRoute": "Gen4",
               "buttonText": "Module 5: Physical Overrides",
               "previewDialogue": "Gen 4 teaches when brute force is safer than Management Authority.",
-              "selectedDialogue": "UNIT-Z presents a stuck door: DO NOT DECLARE NEW DOOR.",
+              "selectedDialogue": "A stuck training door waits in the center of the room. Kanata immediately asks whether lifting the entire frame counts as opening it.",
               "steps": [
                 {
                   "id": "STEP_1",
@@ -30751,7 +30751,7 @@
                     {
                       "id": "B",
                       "text": "Kanata lifts it",
-                      "resultDialogue": "Kanata lifts the door out of the frame. UNIT-Z: TECHNICALLY NOT AUTHORITY.",
+                      "resultDialogue": "Kanata lifts the door out of the frame. Towa stares. 'Technically you didn't authorize anything.' Luna demands this loophole be named after her.",
                       "eligibleSunMembers": [
                         "Kanata",
                         "Watame",
@@ -30781,7 +30781,7 @@
                     {
                       "id": "A",
                       "text": "Push it",
-                      "resultDialogue": "Kanata moves it normally enough to make UNIT-Z happy.",
+                      "resultDialogue": "Kanata moves it normally enough that Towa checks twice to make sure no wall came with it.",
                       "eligibleSunMembers": [
                         "Kanata",
                         "Watame",
@@ -30834,7 +30834,7 @@
                     {
                       "id": "A",
                       "text": "Emergency exits stay clear",
-                      "resultDialogue": "UNIT-Z stores it under USEFUL.",
+                      "resultDialogue": "Lui files the wording under USEFUL. Koyori asks whether she can color-code dangerous phrases. Iroha immediately approves the organizational part only.",
                       "eligibleSunMembers": [
                         "Lui",
                         "Koyori",
@@ -30858,7 +30858,7 @@
                     {
                       "id": "C",
                       "text": "Doors obey Manager",
-                      "resultDialogue": "Iroha: 'Dangerous, de gozaru.' UNIT-Z agrees violently.",
+                      "resultDialogue": "Iroha: 'Dangerous, de gozaru.' Lui circles the phrase in red while Koyori writes DO NOT SAY near it three times.",
                       "eligibleSunMembers": [
                         "Lui",
                         "Koyori",
@@ -30888,7 +30888,7 @@
                     {
                       "id": "B",
                       "text": "Delete everything",
-                      "resultDialogue": "UNIT-Z requires FINAL CALIBRATION. Lui: 'There's the end goal.'",
+                      "resultDialogue": "The module reveals that the only safe global reset is FINAL CALIBRATION. Lui taps the line. 'There's the end goal.'",
                       "eligibleSunMembers": [
                         "Lui",
                         "Koyori",
@@ -30900,7 +30900,7 @@
                     {
                       "id": "C",
                       "text": "Delete nothing",
-                      "resultDialogue": "Iroha closes the menu. UNIT-Z writes CONSERVATIVE.",
+                      "resultDialogue": "Iroha closes the menu. 'If we are uncertain, we do less, de gozaru.' Lui marks that as the safest answer of the day.",
                       "eligibleSunMembers": [
                         "Lui",
                         "Koyori",
@@ -30936,7 +30936,7 @@
                     {
                       "id": "A",
                       "text": "Three stages",
-                      "resultDialogue": "Raden approves exact wording. UNIT-Z gives green check.",
+                      "resultDialogue": "Raden approves the exact wording. Hajime gives you a firm nod. Kanade complains that precision has terrible stage presence.",
                       "eligibleSunMembers": [
                         "Raden",
                         "Kanade",
@@ -30960,7 +30960,7 @@
                     {
                       "id": "C",
                       "text": "More fun",
-                      "resultDialogue": "Hajime: 'Define more.' UNIT-Z: CORRECT RESPONSE.",
+                      "resultDialogue": "Hajime: 'Define more.' Raden points at her. 'Correct response.' Kanade calls them both cowards.",
                       "eligibleSunMembers": [
                         "Raden",
                         "Kanade",
@@ -30990,7 +30990,7 @@
                     {
                       "id": "B",
                       "text": "Say hello",
-                      "resultDialogue": "Kanade yells HELLO. UNIT-Z: NON-AUTHORIZING GREETING.",
+                      "resultDialogue": "Kanade yells HELLO into the microphone. Nothing happens except feedback. Everyone considers that a success.",
                       "eligibleSunMembers": [
                         "Raden",
                         "Kanade",
@@ -31002,7 +31002,7 @@
                     {
                       "id": "C",
                       "text": "Manager borrows",
-                      "resultDialogue": "UNIT-Z locks the speaker. Kanade calls discrimination.",
+                      "resultDialogue": "Hajime physically takes the speaker cable away from Kanade. Kanade calls this discrimination against artists.",
                       "eligibleSunMembers": [
                         "Raden",
                         "Kanade",
@@ -31031,7 +31031,7 @@
                     {
                       "id": "A",
                       "text": "Welcome drink",
-                      "resultDialogue": "UNIT-Z approves the limited benefit.",
+                      "resultDialogue": "Moona approves the limited benefit. Risu immediately asks whether limited can still mean premium-priced.",
                       "eligibleSunMembers": [
                         "Risu",
                         "Moona",
@@ -31043,7 +31043,7 @@
                     {
                       "id": "B",
                       "text": "Better gravity",
-                      "resultDialogue": "Risu considers pricing it. UNIT-Z flashes NO.",
+                      "resultDialogue": "Risu starts calculating a surcharge. Moona takes the calculator away before economics becomes infrastructure.",
                       "eligibleSunMembers": [
                         "Risu",
                         "Moona",
@@ -31055,7 +31055,7 @@
                     {
                       "id": "C",
                       "text": "Special art",
-                      "resultDialogue": "Iofi offers postcards. UNIT-Z: ACCEPTABLE, NONSTRUCTURAL.",
+                      "resultDialogue": "Iofi offers postcards instead. Everyone agrees that paper merchandise is much safer than rewriting commerce.",
                       "eligibleSunMembers": [
                         "Risu",
                         "Moona",
@@ -31073,7 +31073,7 @@
                     {
                       "id": "A",
                       "text": "Yes",
-                      "resultDialogue": "UNIT-Z: METAPHOR RISK HIGH. Risu looks devastated.",
+                      "resultDialogue": "Risu tries to defend 'shells rain from the sky' as a metaphor. Moona writes METAPHOR RISK: EXTREME on the board. Risu looks devastated.",
                       "eligibleSunMembers": [
                         "Risu",
                         "Moona",
@@ -31116,7 +31116,7 @@
               "id": "AUG28_EVENING_03",
               "fullArtRoute": "Staff",
               "buttonText": "Final Safety Exam",
-              "previewDialogue": "Achan and Nodoka administer the UNIT-Z exam.",
+              "previewDialogue": "Achan and Nodoka administer the final management-safety exam.",
               "selectedDialogue": "Nodoka has the checklist. Achan expects every trick question to become real.",
               "steps": [
                 {
@@ -31126,7 +31126,7 @@
                     {
                       "id": "A",
                       "text": "Define scope",
-                      "resultDialogue": "Achan: 'Good.' UNIT-Z marks PASS.",
+                      "resultDialogue": "Achan: 'Good.' She marks PASS and immediately covers the next question so you can't overthink it.",
                       "eligibleSunMembers": [
                         "Achan",
                         "Nodoka"
@@ -31137,7 +31137,7 @@
                     {
                       "id": "B",
                       "text": "Ask who benefits",
-                      "resultDialogue": "Nodoka: 'Also good.' UNIT-Z marks PASS.",
+                      "resultDialogue": "Nodoka: 'Also good.' She marks PASS. Achan looks mildly disappointed that no emergency occurred.",
                       "eligibleSunMembers": [
                         "Achan",
                         "Nodoka"
@@ -31160,7 +31160,7 @@
                 },
                 {
                   "id": "STEP_2",
-                  "prompt": "UNIT-Z displays FINAL CALIBRATION AVAILABLE AFTER RESORT CLOSURE.",
+                  "prompt": "The final screen displays FINAL CALIBRATION AVAILABLE AFTER RESORT CLOSURE. At the bottom, a tiny extra line appears: GOOD LUCK. — YUNI",
                   "options": [
                     {
                       "id": "A",
@@ -31179,7 +31179,7 @@
                     {
                       "id": "B",
                       "text": "Ask what changes",
-                      "resultDialogue": "UNIT-Z: MANAGEMENT AUTHORITY POLICY. Achan: 'That's the final decision.'",
+                      "resultDialogue": "Achan taps the policy section. 'Management Authority. That's the final decision.' Nodoka adds a very serious star sticker beside it.",
                       "eligibleSunMembers": [
                         "Achan",
                         "Nodoka"
@@ -31193,7 +31193,7 @@
                     {
                       "id": "C",
                       "text": "Ask to do now",
-                      "resultDialogue": "UNIT-Z: DENIED — EVENT IN PROGRESS.",
+                      "resultDialogue": "The terminal refuses to begin calibration while the event is still active. Achan: 'For once, the system is enforcing work-life boundaries.'",
                       "eligibleSunMembers": [
                         "Achan",
                         "Nodoka"
@@ -32534,7 +32534,7 @@
                     {
                       "id": "B",
                       "text": "Towa countdown",
-                      "resultDialogue": "Even UNIT-Z displays ON TIME.",
+                      "resultDialogue": "The cue lands exactly on time. Towa looks genuinely shocked. Coco points at the schedule. 'WRITE THIS DATE DOWN.'",
                       "eligibleSunMembers": [
                         "Watame",
                         "Towa",
@@ -32559,7 +32559,7 @@
                 },
                 {
                   "id": "STEP_2",
-                  "prompt": "UNIT-Z displays EVENT STATUS: ENJOY.",
+                  "prompt": "The final song ends. A tiny status panel beside the stage changes from EVENT ACTIVE to EVENT STATUS: ENJOY. Towa glances at it and smiles. 'Even Yuni is taking the day off.'",
                   "options": [
                     {
                       "id": "A",
@@ -32588,7 +32588,7 @@
                     {
                       "id": "C",
                       "text": "Read it",
-                      "resultDialogue": "Coco: 'EVEN THE MACHINE SAYS PARTY.' UNIT-Z does not correct her.",
+                      "resultDialogue": "Coco: 'EVEN THE MACHINE SAYS PARTY.' Watame laughs and drags her back toward the stage before she can turn that into a policy statement.",
                       "eligibleSunMembers": [
                         "Watame",
                         "Towa",
@@ -32600,7 +32600,7 @@
                   ]
                 }
               ],
-              "completionDialogue": "The stage closes with the first UNIT-Z message that sounds almost happy.",
+              "completionDialogue": "The main stage closes on time, which may be the festival's least believable miracle.",
               "rewardTableId": "summer_activity_default"
             },
             {
@@ -32617,7 +32617,7 @@
                     {
                       "id": "A",
                       "text": "STOP fan",
-                      "resultDialogue": "Iroha raises it. UNIT-Z: GOOD ASSIST.",
+                      "resultDialogue": "Iroha raises the STOP fan before Manager can volunteer anything dangerous. Lui gives her an approving nod.",
                       "eligibleSunMembers": [
                         "Lui",
                         "Koyori",
@@ -32641,7 +32641,7 @@
                     {
                       "id": "C",
                       "text": "Record nothing",
-                      "resultDialogue": "Koyori: 'No precedent, no problem!' UNIT-Z: DO NOT MAKE THAT A SLOGAN.",
+                      "resultDialogue": "Koyori: 'No precedent, no problem!' Lui immediately points at her. 'Do not make that a slogan.'",
                       "eligibleSunMembers": [
                         "Lui",
                         "Koyori",
@@ -32670,7 +32670,7 @@
                     },
                     {
                       "id": "B",
-                      "text": "Ask UNIT-Z",
+                      "text": "Check the status panel",
                       "resultDialogue": "It suggests +5 MIN. Koyori: 'It can be normal!'",
                       "eligibleSunMembers": [
                         "Lui",
@@ -32703,7 +32703,7 @@
         "evening": {
           "sceneId": "AUG30_EVENING",
           "title": "Day 30 — Evening",
-          "openingDialogue": "The sunset show ends with UNIT-Z doing something unprecedented: simply telling everyone to enjoy the event.",
+          "openingDialogue": "The sunset show ends and, for once, nobody immediately schedules an emergency meeting. The final festival simply keeps going into the evening.",
           "coreActivities": [
             {
               "id": "AUG30_EVENING_01",
@@ -32943,7 +32943,7 @@
                 },
                 {
                   "id": "STEP_2",
-                  "prompt": "UNIT-Z prints one festival message.",
+                  "prompt": "Before the fireworks, the closing desk receives one last festival-wide message: HAVE FUN. No policy note follows it.",
                   "options": [
                     {
                       "id": "A",
@@ -32992,296 +32992,394 @@
       "day": 31,
       "date": "2026-08-31",
       "chapter": "Final Chapter - Please Rate Your Stay",
-      "storyBeat": "Checkout day. UNIT-Z requires one final survey and Calibration 4 before the Manager can leave.",
+      "storyBeat": "Checkout day begins with one last surprise: final-day transit opens between all four islands before the last calibration.",
       "windows": {
         "morning": {
           "sceneId": "AUG31_MORNING",
-          "title": "Day 31 — Morning",
-          "openingDialogue": "Guests check out, souvenirs get packed, and everyone tries not to treat goodbye like another emergency.",
+          "title": "Day 31 - The Islands Open Up",
+          "openingDialogue": "Checkout morning is already chaos when every resort terminal changes at once: FINAL DAY TRANSIT ACTIVE. Four colored island icons appear on the map, linked by ferry routes nobody has been allowed to use before.",
           "coreActivities": [
             {
               "id": "AUG31_MORNING_01",
               "fullArtRoute": "Gen0",
-              "buttonText": "Lobby Checkout",
-              "previewDialogue": "Gen 0 helps guests check out while the resort keeps the mood light.",
-              "selectedDialogue": "Suitcases line the lobby. Sora thanks guests. Roboco scans keys. Miko wrote ELITE CHECKOUT.",
+              "buttonText": "Checkout Route Error",
+              "previewDialogue": "Help Gen 0 sort checkout keys after the lobby terminal suddenly reveals four connected islands.",
+              "selectedDialogue": "Suitcases line the lobby. Sora thanks guests, Roboco scans room keys, and Miko has written ELITE CHECKOUT over the official sign. Then Roboco's terminal beeps: ALL-ISLAND TRANSIT NOW AVAILABLE.",
               "steps": [
                 {
                   "id": "STEP_1",
-                  "prompt": "A guest asks if the resort will be here next summer.",
+                  "prompt": "A guest asks why their checkout screen suddenly shows Red, Yellow, Green, and Blue ferry docks. Who investigates?",
                   "options": [
                     {
                       "id": "A",
-                      "text": "Hope so",
-                      "resultDialogue": "Sora says she hopes so. Lobby lights brighten gently.",
+                      "text": "Ask Roboco to scan it",
+                      "resultDialogue": "Roboco taps through three menus. 'Not an error. Final-day guest permissions activated at 08:00. All four island docks are connected now.' Miko freezes. 'THERE ARE FERRIES-NYE?!'",
                       "eligibleSunMembers": [
-                        "Sora",
                         "Roboco",
                         "Miko"
                       ],
                       "nextStepId": "STEP_2",
-                      "setFlag": "d31_hope_return"
+                      "setFlag": "d31_roboco_finds_transit"
                     },
                     {
                       "id": "B",
-                      "text": "Status unknown",
-                      "resultDialogue": "Roboco: 'Pending Management Authority Policy.' Miko: 'Romantic.'",
+                      "text": "Let Miko press the shiny button",
+                      "resultDialogue": "Miko slaps ALL ROUTES. A giant map unfolds across the lobby wall, drawing ferry lines between all four islands. Sora quietly asks, 'Was that button always there?' Roboco: 'No. It unlocked this morning.'",
                       "eligibleSunMembers": [
+                        "Miko",
                         "Sora",
-                        "Roboco",
-                        "Miko"
+                        "Roboco"
                       ],
                       "nextStepId": "STEP_2",
-                      "setFlag": "d31_status_unknown"
+                      "setFlag": "d31_miko_opens_transit_map"
                     },
                     {
                       "id": "C",
-                      "text": "Obviously",
-                      "resultDialogue": "Miko: 'Elite resort eternal-nye!' Nobody is here to stop the wording.",
+                      "text": "Ask Sora what the map means",
+                      "resultDialogue": "Sora reads the notice aloud: 'For the final day, guests may freely visit every island.' She smiles. 'Then everyone gets one last chance to see everything.' Miko is already packing snacks for the trip.",
                       "eligibleSunMembers": [
                         "Sora",
-                        "Roboco",
                         "Miko"
                       ],
                       "nextStepId": "STEP_2",
-                      "setFlag": "d31_miko_eternal"
+                      "setFlag": "d31_sora_reads_transit_notice"
                     }
                   ]
                 },
                 {
                   "id": "STEP_2",
-                  "prompt": "The checkout board asks RATE YOUR STAY.",
+                  "prompt": "Roboco confirms the rule: until the event ends, your pass works at every island dock. What is your first reaction?",
                   "options": [
                     {
                       "id": "A",
-                      "text": "Five stars",
-                      "resultDialogue": "The board displays THANK YOU.",
+                      "text": "We can visit ALL of them?",
+                      "resultDialogue": "Roboco nods. 'Red, Yellow, Green, Blue. Your original island remains your home registration, but travel access is unrestricted today.' Miko points at the map. 'WORLD TOUR-NYE!'",
                       "eligibleSunMembers": [
-                        "Sora",
                         "Roboco",
                         "Miko"
                       ],
-                      "nextStepId": "",
-                      "setFlag": "d31_five_stars"
+                      "nextStepId": "STEP_3",
+                      "setFlag": "d31_understands_all_islands"
                     },
                     {
                       "id": "B",
-                      "text": "Four stars",
-                      "resultDialogue": "Miko: 'BETRAYAL.'",
+                      "text": "Announce it to the lobby",
+                      "resultDialogue": "Sora makes the announcement. Half the lobby immediately changes its checkout plan into a sightseeing plan. Roboco watches the queue reverse direction. 'Operationally, this was predictable.'",
                       "eligibleSunMembers": [
                         "Sora",
-                        "Roboco",
-                        "Miko"
+                        "Roboco"
                       ],
-                      "nextStepId": "",
-                      "setFlag": "d31_four_stars"
+                      "nextStepId": "STEP_3",
+                      "setFlag": "d31_transit_announced"
                     },
                     {
                       "id": "C",
-                      "text": "Six stars",
-                      "resultDialogue": "Miko draws a sixth. The board refuses.",
+                      "text": "Ask why this happens on the last day",
+                      "resultDialogue": "The terminal prints FINAL DAY COLLECTION ASSISTANCE. Miko squints at it. 'The island itself wants us to finish our sets-nye.' Roboco: 'That interpretation is not technically supported.'",
+                      "eligibleSunMembers": [
+                        "Miko",
+                        "Roboco"
+                      ],
+                      "nextStepId": "STEP_3",
+                      "setFlag": "d31_collection_assistance_seen"
+                    }
+                  ]
+                },
+                {
+                  "id": "STEP_3",
+                  "prompt": "The first inter-island ferry horn sounds outside. What do you do?",
+                  "options": [
+                    {
+                      "id": "A",
+                      "text": "Go see another island",
+                      "resultDialogue": "You grab your pass. Sora waves from the lobby while Miko tries to board with six bags of taiyaki. The dock scanner flashes ACCESS GRANTED: ALL ISLANDS.",
                       "eligibleSunMembers": [
                         "Sora",
-                        "Roboco",
                         "Miko"
                       ],
                       "nextStepId": "",
-                      "setFlag": "d31_sixth_star"
+                      "setFlag": "d31_travel_departure"
+                    },
+                    {
+                      "id": "B",
+                      "text": "Finish checkout first",
+                      "resultDialogue": "You finish the last stack of forms. Roboco stamps your pass with ALL-ISLAND ACCESS. 'Responsible choice. The ferries will still be there in five minutes.'",
+                      "eligibleSunMembers": [
+                        "Roboco"
+                      ],
+                      "nextStepId": "",
+                      "setFlag": "d31_travel_after_checkout"
+                    },
+                    {
+                      "id": "C",
+                      "text": "Send everyone exploring",
+                      "resultDialogue": "Miko shouts 'FREE ROAM-NYE!' The lobby empties toward the docks. Sora laughs and follows at a much more responsible walking speed.",
+                      "eligibleSunMembers": [
+                        "Miko",
+                        "Sora"
+                      ],
+                      "nextStepId": "",
+                      "setFlag": "d31_free_roam_announced"
                     }
                   ]
                 }
               ],
-              "completionDialogue": "Checkout finishes with most guests promising to return if the island stays put.",
+              "completionDialogue": "Final-day island travel is unlocked. Your original island remains your home island, but for the rest of the event you can visit and pull from Red, Yellow, Green, or Blue Island.",
               "rewardTableId": "summer_activity_default"
             },
             {
               "id": "AUG31_MORNING_02",
               "fullArtRoute": "Gen5",
-              "buttonText": "Last Souvenir Box",
-              "previewDialogue": "Gen 5 packs the final souvenir box.",
-              "selectedDialogue": "Lamy has inventory. Botan has the seal. Aloe found one box that still says KEEP.",
+              "buttonText": "The Transit Crate",
+              "previewDialogue": "Help Gen 5 pack the last souvenir box and discover a crate of unused final-day travel passes.",
+              "selectedDialogue": "Lamy has the inventory sheet. Botan has the tape gun. Aloe finds a crate behind the souvenir counter labeled AUGUST 31 - ALL-ISLAND TRANSIT. Nobody remembers putting it there.",
               "steps": [
                 {
                   "id": "STEP_1",
-                  "prompt": "What goes in?",
+                  "prompt": "The crate is sealed with four colored tabs: Red, Yellow, Green, and Blue. Open it?",
                   "options": [
                     {
                       "id": "A",
-                      "text": "Festival program",
-                      "resultDialogue": "The KEEP label disappears.",
+                      "text": "Let Botan inspect it",
+                      "resultDialogue": "Botan scans the label. 'Not dangerous. Probably.' She opens it and finds stacks of ferry passes plus a map connecting all four islands. Lamy reads the header twice. 'Guests can travel today?'",
                       "eligibleSunMembers": [
-                        "Lamy",
                         "Botan",
-                        "Aloe"
+                        "Lamy"
                       ],
                       "nextStepId": "STEP_2",
-                      "setFlag": "d31_keep_program"
+                      "setFlag": "d31_botan_opens_transit_crate"
                     },
                     {
                       "id": "B",
-                      "text": "Beach-chair tag",
-                      "resultDialogue": "Botan packs the tag, not the multiplying chair. 'Learned.'",
+                      "text": "Let Aloe break the seal",
+                      "resultDialogue": "Aloe peels the tape. A spring-loaded map smacks Botan in the face. She lowers it slowly. 'Four ferry routes.' Aloe points at the passes. 'So... road trip?'",
                       "eligibleSunMembers": [
-                        "Lamy",
-                        "Botan",
-                        "Aloe"
+                        "Aloe",
+                        "Botan"
                       ],
                       "nextStepId": "STEP_2",
-                      "setFlag": "d31_keep_chairtag"
+                      "setFlag": "d31_aloe_opens_transit_crate"
                     },
                     {
                       "id": "C",
-                      "text": "Blank Bingo card",
-                      "resultDialogue": "Aloe slides in a blank 3x5 card. One square flickers.",
+                      "text": "Let Lamy read the instructions",
+                      "resultDialogue": "Lamy finds the important line: FINAL DAY ONLY - HOME-ISLAND RESTRICTION LIFTED. She looks toward the dock. 'That would have been useful to print in larger letters.'",
                       "eligibleSunMembers": [
-                        "Lamy",
-                        "Botan",
-                        "Aloe"
+                        "Lamy"
                       ],
                       "nextStepId": "STEP_2",
-                      "setFlag": "d31_keep_bingo"
+                      "setFlag": "d31_lamy_reads_transit_rules"
                     }
                   ]
                 },
                 {
                   "id": "STEP_2",
-                  "prompt": "The seal asks PRESERVE EVENT MEMORY?",
+                  "prompt": "Botan checks the pass QR code. It says VALID AT ALL FOUR ISLAND DOCKS UNTIL EVENT CLOSE.",
                   "options": [
                     {
                       "id": "A",
-                      "text": "Yes",
-                      "resultDialogue": "UNIT-Z logs MEMORY PRESERVED — NONOPERATIONAL.",
+                      "text": "Take an all-island pass",
+                      "resultDialogue": "The scanner chirps. ACCESS: RED / YELLOW / GREEN / BLUE. Aloe whistles. Lamy smiles. 'Then there is still time to visit everyone.'",
                       "eligibleSunMembers": [
-                        "Lamy",
-                        "Botan",
-                        "Aloe"
+                        "Aloe",
+                        "Lamy"
                       ],
-                      "nextStepId": "",
-                      "setFlag": "d31_memory_preserved"
+                      "nextStepId": "STEP_3",
+                      "setFlag": "d31_takes_transit_pass"
                     },
                     {
                       "id": "B",
-                      "text": "Archive only",
-                      "resultDialogue": "The box closes normally.",
+                      "text": "Hand passes to the guests",
+                      "resultDialogue": "The souvenir line instantly becomes a ferry line. Botan watches everyone sprint toward the pier. 'We accidentally distributed a side quest.'",
                       "eligibleSunMembers": [
-                        "Lamy",
                         "Botan",
                         "Aloe"
                       ],
-                      "nextStepId": "",
-                      "setFlag": "d31_archive_memory"
+                      "nextStepId": "STEP_3",
+                      "setFlag": "d31_distributes_transit_passes"
                     },
                     {
                       "id": "C",
-                      "text": "Keep funny parts",
-                      "resultDialogue": "Aloe says it. UNIT-Z: OPTION AVAILABLE LATER.",
+                      "text": "Check if home island changes",
+                      "resultDialogue": "The pass displays HOME ISLAND: UNCHANGED. TRAVEL ACCESS: ALL. Botan nods. 'Good. Team identity stays. Loot radius expands.'",
                       "eligibleSunMembers": [
+                        "Botan"
+                      ],
+                      "nextStepId": "STEP_3",
+                      "setFlag": "d31_home_island_preserved"
+                    }
+                  ]
+                },
+                {
+                  "id": "STEP_3",
+                  "prompt": "A ferry pulls in beside the souvenir dock. Final packing decision?",
+                  "options": [
+                    {
+                      "id": "A",
+                      "text": "Pack later. Travel now.",
+                      "resultDialogue": "Aloe is aboard before you finish speaking. Lamy grabs the inventory clipboard. Botan grabs the box. Somehow the packing operation is now mobile.",
+                      "eligibleSunMembers": [
+                        "Aloe",
                         "Lamy",
-                        "Botan",
-                        "Aloe"
+                        "Botan"
                       ],
                       "nextStepId": "",
-                      "setFlag": "d31_keep_funny"
+                      "setFlag": "d31_mobile_packing_trip"
+                    },
+                    {
+                      "id": "B",
+                      "text": "Finish the box, then go",
+                      "resultDialogue": "The final souvenir box closes. Botan sticks an ALL-ISLAND PASS on top like a shipping label. 'Objective updated.'",
+                      "eligibleSunMembers": [
+                        "Botan",
+                        "Lamy"
+                      ],
+                      "nextStepId": "",
+                      "setFlag": "d31_pack_then_travel"
+                    },
+                    {
+                      "id": "C",
+                      "text": "Make a four-island souvenir run",
+                      "resultDialogue": "Lamy sighs, Aloe cheers, and Botan starts calculating the fastest ferry loop. What was a box-packing task has become a collection speedrun.",
+                      "eligibleSunMembers": [
+                        "Lamy",
+                        "Aloe",
+                        "Botan"
+                      ],
+                      "nextStepId": "",
+                      "setFlag": "d31_four_island_souvenir_run"
                     }
                   ]
                 }
               ],
-              "completionDialogue": "The final box closes without reopening.",
+              "completionDialogue": "The transit crate solves the mystery: on the final day, all four island docks accept your pass. Your home island stays the same, but every island is now open to you.",
               "rewardTableId": "summer_activity_default"
             },
             {
               "id": "AUG31_MORNING_03",
               "fullArtRoute": "FLOW GLOW",
-              "buttonText": "Farewell Photo",
-              "previewDialogue": "FLOW GLOW organizes one last guest photo.",
-              "selectedDialogue": "Chihaya lines everyone up. Vivi fixes posture. Riona wants the resort sign in frame.",
+              "buttonText": "Four-Island Farewell Photo",
+              "previewDialogue": "FLOW GLOW wants one farewell photo featuring all four islands, which sounds impossible until the transit board turns on.",
+              "selectedDialogue": "Chihaya wants every island sign in the farewell album. Vivi has the camera. Riona refuses to accept 'physically impossible' as a production limitation. Then the dock display lights up: ALL-ISLAND SHUTTLE - FINAL DAY SERVICE.",
               "steps": [
                 {
                   "id": "STEP_1",
-                  "prompt": "Where does Manager stand?",
+                  "prompt": "Riona points at the four-island route map. \"Wait. We can just go to the other islands?\"",
                   "options": [
                     {
                       "id": "A",
-                      "text": "Middle",
-                      "resultDialogue": "Riona: 'Obviously.' The sign flickers behind you.",
+                      "text": "Check the route map",
+                      "resultDialogue": "Chihaya traces the line with one finger. 'Red to Yellow, Yellow to Green, Green to Blue, then back around.' Vivi stares at you. 'Manager. The map literally says FREE TRANSFER.'",
                       "eligibleSunMembers": [
-                        "Riona",
                         "Chihaya",
                         "Vivi"
                       ],
                       "nextStepId": "STEP_2",
-                      "setFlag": "d31_manager_middle"
+                      "setFlag": "d31_flowglow_reads_route"
                     },
                     {
                       "id": "B",
-                      "text": "Side",
-                      "resultDialogue": "Vivi pulls you inward. 'Too much plot for edge placement.'",
+                      "text": "Ask if guests can ride it",
+                      "resultDialogue": "The kiosk answers FINAL-DAY GUEST ACCESS ENABLED. Riona grins. 'Perfect. We are turning checkout into a location shoot.'",
                       "eligibleSunMembers": [
-                        "Riona",
-                        "Chihaya",
-                        "Vivi"
+                        "Riona"
                       ],
                       "nextStepId": "STEP_2",
-                      "setFlag": "d31_manager_centered"
+                      "setFlag": "d31_flowglow_guest_access"
                     },
                     {
                       "id": "C",
-                      "text": "Behind camera",
-                      "resultDialogue": "Chihaya hands it back. 'Nope. Evidence required.'",
+                      "text": "Pretend you knew already",
+                      "resultDialogue": "Vivi immediately asks which dock goes to Blue Island. You point confidently at Red. Chihaya takes the map away from you. 'Manager privileges revoked.'",
                       "eligibleSunMembers": [
-                        "Riona",
-                        "Chihaya",
-                        "Vivi"
+                        "Vivi",
+                        "Chihaya"
                       ],
                       "nextStepId": "STEP_2",
-                      "setFlag": "d31_manager_photo"
+                      "setFlag": "d31_manager_fake_transit_expert"
                     }
                   ]
                 },
                 {
                   "id": "STEP_2",
-                  "prompt": "Countdown reaches one.",
+                  "prompt": "The shuttle scanner shows HOME ISLAND on one line and TODAY'S ACCESS: ALL ISLANDS on the next.",
                   "options": [
                     {
                       "id": "A",
-                      "text": "Smile",
-                      "resultDialogue": "The photo captures one completely normal second.",
+                      "text": "Start the photo tour",
+                      "resultDialogue": "The first ferry arrives. Riona calls it 'Location One.' Vivi calls it 'Boat.' Chihaya calls it 'Please board before the doors close.'",
                       "eligibleSunMembers": [
                         "Riona",
-                        "Chihaya",
-                        "Vivi"
+                        "Vivi",
+                        "Chihaya"
                       ],
-                      "nextStepId": "",
-                      "setFlag": "d31_photo_smile"
+                      "nextStepId": "STEP_3",
+                      "setFlag": "d31_photo_tour_started"
                     },
                     {
                       "id": "B",
-                      "text": "Wave",
-                      "resultDialogue": "The resort sign waves by flickering. Vivi: 'It learned goodbye.'",
+                      "text": "Tell everyone about free travel",
+                      "resultDialogue": "Vivi posts the route map. The message spreads faster than the ferry schedule. Riona watches the docks fill up. 'Now THAT is final-day engagement.'",
                       "eligibleSunMembers": [
-                        "Riona",
-                        "Chihaya",
-                        "Vivi"
+                        "Vivi",
+                        "Riona"
                       ],
-                      "nextStepId": "",
-                      "setFlag": "d31_sign_goodbye"
+                      "nextStepId": "STEP_3",
+                      "setFlag": "d31_flowglow_spreads_travel_news"
                     },
                     {
                       "id": "C",
-                      "text": "Say nothing",
-                      "resultDialogue": "Riona: 'Excellent verbal safety.'",
+                      "text": "Check every island is really open",
+                      "resultDialogue": "Chihaya tests the scanner: Red, Yellow, Green, Blue. Four green lights. 'Confirmed. No trick. For once.' Everyone waits for something to explode. Nothing does.",
                       "eligibleSunMembers": [
-                        "Riona",
+                        "Chihaya"
+                      ],
+                      "nextStepId": "STEP_3",
+                      "setFlag": "d31_all_four_confirmed"
+                    }
+                  ]
+                },
+                {
+                  "id": "STEP_3",
+                  "prompt": "Where should the final photo album begin?",
+                  "options": [
+                    {
+                      "id": "A",
+                      "text": "A full four-island loop",
+                      "resultDialogue": "Riona approves immediately. The album plan now has four covers, four docks, and absolutely no respect for the original schedule.",
+                      "eligibleSunMembers": [
+                        "Riona"
+                      ],
+                      "nextStepId": "",
+                      "setFlag": "d31_four_island_photo_loop"
+                    },
+                    {
+                      "id": "B",
+                      "text": "Wherever the next ferry goes",
+                      "resultDialogue": "Vivi jumps aboard without checking. Chihaya follows with the camera bag. Riona shouts, 'Spontaneous direction! Very artistic!'",
+                      "eligibleSunMembers": [
+                        "Vivi",
+                        "Chihaya",
+                        "Riona"
+                      ],
+                      "nextStepId": "",
+                      "setFlag": "d31_spontaneous_island_trip"
+                    },
+                    {
+                      "id": "C",
+                      "text": "Home island first, then the rest",
+                      "resultDialogue": "Chihaya nods. 'Start where the month began, then visit the others.' The first photo keeps your home island in frame before the ferry carries everyone onward.",
+                      "eligibleSunMembers": [
                         "Chihaya",
                         "Vivi"
                       ],
                       "nextStepId": "",
-                      "setFlag": "d31_photo_silent"
+                      "setFlag": "d31_home_then_all_islands"
                     }
                   ]
                 }
               ],
-              "completionDialogue": "The photo prints with one tiny UNIT-Z stamp in the corner.",
+              "completionDialogue": "The farewell shoot turns into an all-island tour. Your home island remains your home, but every island channel is open for the final day.",
               "rewardTableId": "summer_activity_default"
             }
           ]
@@ -33289,7 +33387,7 @@
         "noon": {
           "sceneId": "AUG31_NOON",
           "title": "Day 31 — Noon",
-          "openingDialogue": "The ferry manifest is ready, but UNIT-Z still considers one Management action pending.",
+          "openingDialogue": "The ferry manifest is ready, but one Management action still remains before checkout can fully close.",
           "coreActivities": [
             {
               "id": "AUG31_NOON_01",
@@ -33358,8 +33456,8 @@
                     },
                     {
                       "id": "B",
-                      "text": "Count UNIT-Z",
-                      "resultDialogue": "Anya: 'Infrastructure, not passenger.' UNIT-Z: CORRECT.",
+                      "text": "Count the resort",
+                      "resultDialogue": "Anya: 'Infrastructure, not passenger.' The manifest accepts the correction. Ollie still tries to give the resort a seat number.",
                       "eligibleSunMembers": [
                         "Reine",
                         "Anya",
@@ -33400,7 +33498,7 @@
                     {
                       "id": "A",
                       "text": "Return it",
-                      "resultDialogue": "UNIT-Z opens the box just long enough to scan it.",
+                      "resultDialogue": "The lockbox opens just long enough to scan the Route Z key, then clicks shut with RETURN ACCEPTED.",
                       "eligibleSunMembers": [
                         "Kaela",
                         "Zeta",
@@ -33454,7 +33552,7 @@
                     {
                       "id": "B",
                       "text": "Revoke now",
-                      "resultDialogue": "UNIT-Z refuses: FINAL ACTION PENDING.",
+                      "resultDialogue": "The lockbox refuses to revoke final access: FINAL ACTION PENDING. Zeta: 'Calibration first.'",
                       "eligibleSunMembers": [
                         "Kaela",
                         "Zeta",
@@ -33485,7 +33583,7 @@
               "id": "AUG31_NOON_03",
               "fullArtRoute": "Myth",
               "buttonText": "Exit Survey",
-              "previewDialogue": "Myth helps with UNIT-Z's absurd checkout questionnaire.",
+              "previewDialogue": "Myth helps with the resort's absurd checkout questionnaire.",
               "selectedDialogue": "Ame has the survey. Ina has snacks. Calli reads questions like legal threats.",
               "steps": [
                 {
@@ -33561,7 +33659,7 @@
                     {
                       "id": "C",
                       "text": "Define helpful",
-                      "resultDialogue": "Ina: 'We've learned nothing-wah.' UNIT-Z: FAIR.",
+                      "resultDialogue": "Ina: 'We've learned nothing-wah.' The survey responds FAIR. Calli points at it. 'Okay, that one was deserved.'",
                       "eligibleSunMembers": [
                         "Amelia",
                         "Ina",
@@ -33588,7 +33686,7 @@
               "fullArtRoute": "Council/Promise",
               "buttonText": "Final Calibration — Stability",
               "previewDialogue": "Promise accompanies one final-calibration route.",
-              "selectedDialogue": "UNIT-Z shows CALIBRATION 4 / 4. Three policy statements wait for Management approval.",
+              "selectedDialogue": "Yuni brings up CALIBRATION 4 / 4. Three policy statements wait for Management approval while Promise gathers around the console.",
               "steps": [
                 {
                   "id": "STEP_1",
@@ -33639,7 +33737,7 @@
                     {
                       "id": "A",
                       "text": "Restore normality",
-                      "resultDialogue": "UNIT-Z stabilizes the island and stops casual Manager statements becoming rules. Kronii: 'Predictable. Beautiful.'",
+                      "resultDialogue": "The calibration stabilizes the island and stops casual Manager statements from becoming rules. Kronii: 'Predictable. Beautiful.'",
                       "eligibleSunMembers": [
                         "Kronii",
                         "IRyS",
@@ -33655,7 +33753,7 @@
                     {
                       "id": "B",
                       "text": "Keep the good weirdness",
-                      "resultDialogue": "UNIT-Z blocks dangerous changes but preserves harmless precedents. IRyS: 'Best of both worlds.'",
+                      "resultDialogue": "Dangerous changes are blocked while harmless precedents remain as part of the resort. IRyS: 'Best of both worlds.'",
                       "eligibleSunMembers": [
                         "Kronii",
                         "IRyS",
@@ -33671,7 +33769,7 @@
                     {
                       "id": "C",
                       "text": "Leave it basically like this",
-                      "resultDialogue": "UNIT-Z preserves the resort's style with emergency limits. Fauna laughs softly. 'It seems pleased.'",
+                      "resultDialogue": "The resort keeps most of its strange personality but gains emergency limits. Fauna laughs softly. 'It seems pleased.'",
                       "eligibleSunMembers": [
                         "Kronii",
                         "IRyS",
@@ -33704,7 +33802,7 @@
                     {
                       "id": "A",
                       "text": "Preserve it",
-                      "resultDialogue": "Shiori: 'History should remain readable.' UNIT-Z: ARCHIVE RETAINED.",
+                      "resultDialogue": "Shiori: 'History should remain readable.' The calibration marks ARCHIVE RETAINED.",
                       "eligibleSunMembers": [
                         "Shiori",
                         "Nerissa",
@@ -33716,7 +33814,7 @@
                     {
                       "id": "B",
                       "text": "Compress it",
-                      "resultDialogue": "Bijou: 'Speedrun the lore.' UNIT-Z reduces it to one folder.",
+                      "resultDialogue": "Bijou: 'Speedrun the lore.' The archive compacts itself into one absurdly large folder.",
                       "eligibleSunMembers": [
                         "Shiori",
                         "Nerissa",
@@ -33728,7 +33826,7 @@
                     {
                       "id": "C",
                       "text": "Harmless records only",
-                      "resultDialogue": "Nerissa: 'Memories without active rules.' UNIT-Z: POSSIBLE.",
+                      "resultDialogue": "Nerissa: 'Memories without active rules.' The console marks the option POSSIBLE.",
                       "eligibleSunMembers": [
                         "Shiori",
                         "Nerissa",
@@ -33762,7 +33860,7 @@
                     {
                       "id": "B",
                       "text": "Keep the good weirdness",
-                      "resultDialogue": "Harmless precedents stay while UNIT-Z blocks danger. Nerissa: 'The resort keeps its stories.'",
+                      "resultDialogue": "Harmless precedents stay while dangerous ones lose authority. Nerissa: 'The resort keeps its stories.'",
                       "eligibleSunMembers": [
                         "Shiori",
                         "Nerissa",
@@ -33778,7 +33876,7 @@
                     {
                       "id": "C",
                       "text": "Leave it basically like this",
-                      "resultDialogue": "Bijou: 'CHAOS ROUTE.' UNIT-Z prints RELUCTANTLY ACCEPTED.",
+                      "resultDialogue": "Bijou: 'CHAOS ROUTE.' The console answers RELUCTANTLY ACCEPTED.",
                       "eligibleSunMembers": [
                         "Shiori",
                         "Nerissa",
@@ -33802,11 +33900,11 @@
               "fullArtRoute": "Justice",
               "buttonText": "Final Calibration — Verdict",
               "previewDialogue": "Justice treats the final policy choice as the real verdict.",
-              "selectedDialogue": "Elizabeth reconvenes court. Cecilia has UNIT-Z controls. Raora has the final page. Gigi is appeal court.",
+              "selectedDialogue": "Elizabeth reconvenes court. Cecilia has Yuni's control panel. Raora has the final page. Gigi has appointed herself appeal court.",
               "steps": [
                 {
                   "id": "STEP_1",
-                  "prompt": "Before the verdict, UNIT-Z requests one statement.",
+                  "prompt": "Before the verdict, Yuni requests one statement from the Manager.",
                   "options": [
                     {
                       "id": "A",
@@ -33856,7 +33954,7 @@
                     {
                       "id": "A",
                       "text": "Restore normality",
-                      "resultDialogue": "UNIT-Z seals casual authority behind explicit authorization. Elizabeth: 'Order restored.' Gigi: 'Mostly.'",
+                      "resultDialogue": "Casual authority is sealed behind explicit authorization. Elizabeth: 'Order restored.' Gigi: 'Mostly.'",
                       "eligibleSunMembers": [
                         "Elizabeth",
                         "Cecilia",
@@ -33873,7 +33971,7 @@
                     {
                       "id": "B",
                       "text": "Keep the good weirdness",
-                      "resultDialogue": "UNIT-Z keeps harmless precedents and blocks escalation. Raora: 'The resort keeps its personality!'",
+                      "resultDialogue": "Harmless precedents remain while escalation is blocked. Raora: 'The resort keeps its personality!'",
                       "eligibleSunMembers": [
                         "Elizabeth",
                         "Cecilia",

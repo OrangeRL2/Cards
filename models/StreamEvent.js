@@ -38,7 +38,7 @@ const StreamEventSchema = new Schema({
   endsAt: { type: Date, required: true, index: true },
   status: {
     type: String,
-    enum: ['scheduled', 'active', 'ended', 'settled'],
+    enum: ['scheduled', 'active', 'ended', 'settling', 'settled'],
     default: 'scheduled',
     index: true,
   },

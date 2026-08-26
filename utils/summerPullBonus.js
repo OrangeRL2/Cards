@@ -12,6 +12,7 @@ const {
 const {
   EVENT_RARITY,
   getIslandChannelId,
+  getIslandFromChannelId,
   isSummerEventActive,
 } = require('./summerEvent');
 
@@ -54,6 +55,10 @@ function hasStaffChannelBypass(userId, roleIds) {
 
 /**
  * During Summer, ordinary users must pull in their selected island channel.
+ * After completing Day 31 Morning, island travel is unlocked: pulling in any
+ * configured Summer island channel uses that channel's island for both the
+ * normal draw pool and the optional SUN bonus pool. The permanently selected
+ * home island is never overwritten.
  * Exceptions:
  * - bossChannelPullId keeps its normal boss-biased behavior;
  * - configured staff user IDs and role IDs may pull in any channel.
@@ -90,9 +95,10 @@ async function validateSummerPullChannel({
   }
 
   const summerUser = await SummerUser.findOne({ userId: discordId }).lean().exec();
-  const island = normalizeIsland(summerUser?.island);
+  const selectedIsland = normalizeIsland(summerUser?.island);
+  const day31TravelUnlocked = summerUser?.day31TravelUnlocked === true;
 
-  if (!island) {
+  if (!selectedIsland) {
     return {
       allowed: false,
       summerActive: true,
@@ -106,28 +112,69 @@ async function validateSummerPullChannel({
   const bossChannelId = String(config.bossChannelPullId ?? '').trim();
   const isBossChannel = Boolean(bossChannelId) && currentChannelId === bossChannelId;
   const isStaffChannelBypass = hasStaffChannelBypass(discordId, roleIds);
+  const channelIsland = normalizeIsland(getIslandFromChannelId(currentChannelId));
 
+  // Preserve the old bypass behavior: boss/staff pulls remain tied to the
+  // player's permanent home island because those channels are not travel destinations.
   if (isBossChannel || isStaffChannelBypass) {
     return {
       allowed: true,
       summerActive: true,
-      island,
-      expectedChannelId: getIslandChannelId(island) || null,
+      island: selectedIsland,
+      selectedIsland,
+      expectedChannelId: getIslandChannelId(selectedIsland) || null,
       summerUser,
+      day31TravelUnlocked,
+      isTravelPull: false,
       isBossChannel,
       isStaffChannelBypass,
     };
   }
 
-  const expectedChannelId = getIslandChannelId(island);
+  // Day 31 travel: the channel becomes the effective island for this pull.
+  if (day31TravelUnlocked) {
+    if (!channelIsland) {
+      return {
+        allowed: false,
+        summerActive: true,
+        reason: 'WRONG_CHANNEL',
+        message: 'Island travel is unlocked! Use your regular pull in any of the four Summer island channels.',
+        island: selectedIsland,
+        selectedIsland,
+        expectedChannelId: null,
+        summerUser,
+        day31TravelUnlocked: true,
+        isTravelPull: false,
+        isBossChannel: false,
+        isStaffChannelBypass: false,
+      };
+    }
+
+    return {
+      allowed: true,
+      summerActive: true,
+      island: channelIsland,
+      selectedIsland,
+      expectedChannelId: getIslandChannelId(channelIsland) || null,
+      summerUser,
+      day31TravelUnlocked: true,
+      isTravelPull: channelIsland !== selectedIsland,
+      isBossChannel: false,
+      isStaffChannelBypass: false,
+    };
+  }
+
+  const expectedChannelId = getIslandChannelId(selectedIsland);
   if (!expectedChannelId) {
     return {
       allowed: false,
       summerActive: true,
       reason: 'CHANNEL_NOT_CONFIGURED',
-      message: `The ${island} island channel has not been configured yet. Please contact an administrator.`,
-      island,
+      message: `The ${selectedIsland} island channel has not been configured yet. Please contact an administrator.`,
+      island: selectedIsland,
+      selectedIsland,
       summerUser,
+      day31TravelUnlocked: false,
     };
   }
 
@@ -136,10 +183,13 @@ async function validateSummerPullChannel({
       allowed: false,
       summerActive: true,
       reason: 'WRONG_CHANNEL',
-      message: `You joined **${capitalize(island)} Island** for this event. Use your regular pull in <#${expectedChannelId}>.`,
-      island,
+      message: `You joined **${capitalize(selectedIsland)} Island** for this event. Use your regular pull in <#${expectedChannelId}>.`,
+      island: selectedIsland,
+      selectedIsland,
       expectedChannelId,
       summerUser,
+      day31TravelUnlocked: false,
+      isTravelPull: false,
       isBossChannel: false,
       isStaffChannelBypass: false,
     };
@@ -148,9 +198,12 @@ async function validateSummerPullChannel({
   return {
     allowed: true,
     summerActive: true,
-    island,
+    island: selectedIsland,
+    selectedIsland,
     expectedChannelId,
     summerUser,
+    day31TravelUnlocked: false,
+    isTravelPull: false,
     isBossChannel: false,
     isStaffChannelBypass: false,
   };

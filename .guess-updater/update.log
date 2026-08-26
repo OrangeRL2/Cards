@@ -415,3 +415,67 @@ cards.json: /usr/share/nginx/html/images/guess/data/cards.json
 [guess-controller] Local Guess manifests:
 -rw-r--r-- 1 nana0411 nana0411 24K Aug 24 12:42 /home/nana0411/4newCards/Cards/images/guess/data/cards.json
 -rw-r--r-- 1 nana0411 nana0411 39K Aug 24 12:42 /home/nana0411/4newCards/Cards/images/guess/data/songs.json
+
+============================================================
+[guess-controller] 2026-08-25T15:20:18+09:00
+============================================================
+[guess-controller] Checking English DB...
+[guess-controller] Checking Japanese card DB...
+[guess-controller] Refreshing Holodori catalog...
+[httpx] HTTP Request: GET https://raw.githubusercontent.com/HolodoriDB/holodori-app-protos/refs/heads/main/global/appver.json "HTTP/1.1 200 OK"
+[catalog] app version 1.0.101
+[httpx] HTTP Request: GET https://us.game-hololive-dreams.com/asset/v2/pub/a/5/v/200001/list/0 "HTTP/2 200 OK"
+[download] revision 63: 20551 bundles, 18083 resources
+[download] downloading 0 files to /tmp/holodori-catalog-refresh
+0file [00:00, ?file/s]0file [00:00, ?file/s]
+[guess-controller] Changes: EN_DB=0 JP_DB=0 CATALOG=1
+[guess-controller] Updating/organizing local Holodori cards...
+Holodori card update check started
+$ git pull --ff-only
+Already up to date.
+$ git pull --ff-only
+Already up to date.
+Asset tools changed: False
+Database repository changed: False
+No card differences available. No card assets were downloaded.
+[guess-controller] Syncing ★★★ / ★★★★ / ★★★★★ into local bot...
+[guess-controller] Ensuring remote HOLODORI directories exist...
+[guess-controller] Syncing HOLODORI card folders to OPC...
+[guess-controller] Sending fresh catalog to OPC...
+[guess-controller] Running OPC Guess updater...
+[guess-update] Forced check; DB commit unchanged.
+=== GUESS FULL UPDATE ===
+$ /home/opc/guess-updater/.venv/bin/holodori download /home/opc/guess-updater/work/_raw/jackets --filter ^img_music_jacket_ --no-overwrite --catalog /home/opc/guess-updater/octo_list.json
+[download] revision 63: 20551 bundles, 18083 resources
+[download] downloading 0 files to /home/opc/guess-updater/work/_raw/jackets
+0file [00:00, ?file/s]0file [00:00, ?file/s]
+$ /home/opc/guess-updater/.venv/bin/holodori download /home/opc/guess-updater/work/_raw/audio --filter ^music_short_ --no-overwrite --catalog /home/opc/guess-updater/octo_list.json
+[download] revision 63: 20551 bundles, 18083 resources
+[download] downloading 0 files to /home/opc/guess-updater/work/_raw/audio
+0file [00:00, ?file/s]0file [00:00, ?file/s]
+Cards in DB: 174
+Cards hosted: 174
+Missing hosted cards: 0
+$ /home/opc/guess-updater/.venv/bin/holodori download /home/opc/guess-updater/work/_raw/cards --filter ^img_card_full_ --no-overwrite --catalog /home/opc/guess-updater/octo_list.json
+[download] revision 63: 20551 bundles, 18083 resources
+[download] downloading 0 files to /home/opc/guess-updater/work/_raw/cards
+0file [00:00, ?file/s]0file [00:00, ?file/s]
+cards.json rows: 174
+
+=== COMPLETE ===
+Songs manifest: 186
+New jackets: 0; failures: 0
+New audio:   0; failures: 0
+New cards:   0; failures: 0
+Hosted cards: 174
+songs.json: /usr/share/nginx/html/images/guess/data/songs.json
+cards.json: /usr/share/nginx/html/images/guess/data/cards.json
+[guess-controller] Copying fresh Guess JSON manifests back to bot...
+[guess-controller] Finished successfully.
+[guess-controller] Local HOLODORI counts:
+  ★★★: 54
+  ★★★★: 54
+  ★★★★★: 132
+[guess-controller] Local Guess manifests:
+-rw-r--r-- 1 nana0411 nana0411 24K Aug 25 15:20 /home/nana0411/4newCards/Cards/images/guess/data/cards.json
+-rw-r--r-- 1 nana0411 nana0411 39K Aug 25 15:20 /home/nana0411/4newCards/Cards/images/guess/data/songs.json
