@@ -1,7 +1,7 @@
 {
-  "revisionId": 62,
+  "revisionId": 63,
   "urlFormat": "https://asset.game-hololive-dreams.com/{o}",
-  "serverTime": 1787542815456,
+  "serverTime": 1787638820859,
   "assetBundles": [
     {
       "name": "adv_area_01_01_01-01",
@@ -256761,6 +256761,60 @@
       "size": 5128,
       "dependencies": [],
       "id": 18608
+    },
+    {
+      "name": "img_banner_full_minigame-chase-260828",
+      "objectName": "hWb0KT",
+      "url": "https://asset.game-hololive-dreams.com/hWb0KT",
+      "md5": "dcbbadd0b264eeff02d15987904f301a",
+      "size": 1074175,
+      "dependencies": [],
+      "id": 38629
+    },
+    {
+      "name": "img_banner_full_minigame-chase-260828_lang-chs",
+      "objectName": "vVHLzg",
+      "url": "https://asset.game-hololive-dreams.com/vVHLzg",
+      "md5": "b6d14c4df83e859553e32f47cf1d11a1",
+      "size": 1071323,
+      "dependencies": [],
+      "id": 38630
+    },
+    {
+      "name": "img_banner_full_minigame-chase-260828_lang-cht",
+      "objectName": "ow5oQF",
+      "url": "https://asset.game-hololive-dreams.com/ow5oQF",
+      "md5": "3a55066ccd22c6f2ffa030b3949f55d2",
+      "size": 1072112,
+      "dependencies": [],
+      "id": 38631
+    },
+    {
+      "name": "img_banner_full_minigame-chase-260828_lang-eng",
+      "objectName": "KggjmV",
+      "url": "https://asset.game-hololive-dreams.com/KggjmV",
+      "md5": "e5b4c9eda9601eeb87165de5c4fec8d6",
+      "size": 1077130,
+      "dependencies": [],
+      "id": 38632
+    },
+    {
+      "name": "img_banner_full_minigame-chase-260828_lang-ind",
+      "objectName": "nxkPGp",
+      "url": "https://asset.game-hololive-dreams.com/nxkPGp",
+      "md5": "df03d9e00ed66066cbaa00225390305e",
+      "size": 1080843,
+      "dependencies": [],
+      "id": 38633
+    },
+    {
+      "name": "img_banner_full_minigame-chase-260828_lang-kor",
+      "objectName": "quIWUM",
+      "url": "https://asset.game-hololive-dreams.com/quIWUM",
+      "md5": "e4a06dcc91a99f5524d41bc275431d4d",
+      "size": 1071508,
+      "dependencies": [],
+      "id": 38634
     }
   ],
   "resources": [

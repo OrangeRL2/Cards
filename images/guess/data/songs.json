@@ -1864,6 +1864,16 @@
     "audio": "../audio/m0335.mp3"
   },
   {
+    "id": "m0336",
+    "title": "Stardust Capsule",
+    "playingSeconds": 117,
+    "characterIds": [
+      "chr-04003"
+    ],
+    "jacket": "../jackets/m0336.png",
+    "audio": "../audio/m0336.mp3"
+  },
+  {
     "id": "m0337",
     "title": "Pretty Guardian Matsulimit Zero",
     "playingSeconds": 116,

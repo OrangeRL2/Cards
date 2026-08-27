@@ -32,7 +32,7 @@ const ALLOWED_IDS = [
 ];
 
 const ALLOWED_ROLE_IDS = [
-  '844054364033384470',
+  // 'ROLE_ID_HERE',
 ];
 
 function isAllowed(message) {
@@ -257,6 +257,9 @@ module.exports = {
         }).catch(() => {});
       }
 
+      const startingShells = Number(initialDoc.summerShells || 0);
+      const startingSunPulls = Number(initialDoc.sunPulls || 0);
+
       const days = historicalDays();
       const before = await countMissing(targetId, days);
 
@@ -319,12 +322,20 @@ module.exports = {
       }
 
       const after = await countMissing(targetId, days);
+      const finalDoc = await getSummerUser(targetId);
+
+      const endingShells = Number(finalDoc?.summerShells || 0);
+      const endingSunPulls = Number(finalDoc?.sunPulls || 0);
+      const shellsEarned = endingShells - startingShells;
+      const sunPullsEarned = endingSunPulls - startingSunPulls;
 
       const lines = [
         `✅ **Timeline clear finished — ${target.username}**`,
         `Completed now: **${newlyCompleted}**`,
         `Missing before: **${before.missing}**`,
         `Missing after: **${after.missing}**`,
+        `🐚 Shells earned: **${shellsEarned >= 0 ? '+' : ''}${shellsEarned}**`,
+        `☀️ SUN Pulls earned: **${sunPullsEarned >= 0 ? '+' : ''}${sunPullsEarned}**`,
       ];
 
       if (travelUnlocked) {
