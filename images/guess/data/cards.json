@@ -732,6 +732,12 @@
     "image": "../cards/00006-5-uniq-0007-00.png"
   },
   {
+    "assetId": "00006-5-uniq-0074-00",
+    "member": "Fubuki",
+    "rarity": 5,
+    "image": "../cards/00006-5-uniq-0074-00.png"
+  },
+  {
     "assetId": "04016-5-uniq-0055-00",
     "member": "Fuwawa",
     "rarity": 5,
@@ -816,6 +822,12 @@
     "image": "../cards/00017-5-uniq-0015-00.png"
   },
   {
+    "assetId": "00017-5-uniq-0077-00",
+    "member": "Korone",
+    "rarity": 5,
+    "image": "../cards/00017-5-uniq-0077-00.png"
+  },
+  {
     "assetId": "00037-5-uniq-0030-00",
     "member": "Koyori",
     "rarity": 5,
@@ -888,6 +900,12 @@
     "image": "../cards/00014-5-uniq-0013-00.png"
   },
   {
+    "assetId": "00014-5-uniq-0075-00",
+    "member": "Mio",
+    "rarity": 5,
+    "image": "../cards/00014-5-uniq-0075-00.png"
+  },
+  {
     "assetId": "04017-5-uniq-0056-00",
     "member": "Mococo",
     "rarity": 5,
@@ -928,6 +946,12 @@
     "member": "Okayu",
     "rarity": 5,
     "image": "../cards/00016-5-uniq-0014-00.png"
+  },
+  {
+    "assetId": "00016-5-uniq-0076-00",
+    "member": "Okayu",
+    "rarity": 5,
+    "image": "../cards/00016-5-uniq-0076-00.png"
   },
   {
     "assetId": "03004-5-uniq-0036-00",

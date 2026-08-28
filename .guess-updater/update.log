@@ -543,3 +543,463 @@ cards.json: /usr/share/nginx/html/images/guess/data/cards.json
 [guess-controller] Local Guess manifests:
 -rw-r--r-- 1 nana0411 nana0411 24K Aug 27 17:08 /home/nana0411/4newCards/Cards/images/guess/data/cards.json
 -rw-r--r-- 1 nana0411 nana0411 39K Aug 27 17:08 /home/nana0411/4newCards/Cards/images/guess/data/songs.json
+
+============================================================
+[guess-controller] 2026-08-28T10:26:29+09:00
+============================================================
+[guess-controller] Checking English DB...
+From https://github.com/HolodoriDB/holodori-db-eng-diff
+   a15150a..bfe6726  main       -> origin/main
+[guess-controller] Checking Japanese card DB...
+[guess-controller] Refreshing Holodori catalog...
+[httpx] HTTP Request: GET https://raw.githubusercontent.com/HolodoriDB/holodori-app-protos/refs/heads/main/global/appver.json "HTTP/1.1 200 OK"
+[catalog] app version 1.0.101
+[httpx] HTTP Request: GET https://us.game-hololive-dreams.com/asset/v2/pub/a/5/v/200001/list/0 "HTTP/2 200 OK"
+[download] revision 66: 21367 bundles, 18421 resources
+[download] downloading 0 files to /tmp/holodori-catalog-refresh
+0file [00:00, ?file/s]0file [00:00, ?file/s]
+[guess-controller] Changes: EN_DB=1 JP_DB=0 CATALOG=1
+[guess-controller] Updating English DB...
+Updating a15150a..bfe6726
+Fast-forward
+ AchievementGroup.json                        |    11 +
+ AreaStory.json                               |    12 +
+ Card.json                                    |   180 +
+ CharacterLiveDialogueVoice.json              |   432 +
+ CharacterVoice.json                          |  8332 ++++++++++++++--
+ Chase.json                                   |    29 +-
+ ChasePatrolSkill.json                        |    48 +-
+ ChaseScoreReward.json                        |   322 +
+ ChaseSetting.json                            |    35 +-
+ Cheat.json                                   |   123 +-
+ CircuitSetting.json                          |     2 +-
+ Condition.json                               |  1764 +++-
+ Costume.json                                 |    56 +
+ Emblem.json                                  |   400 +
+ EventStory.json                              |    66 +
+ EventStoryChapter.json                       |    10 +
+ ExchangeBooth.json                           |    18 +
+ ExchangeBoothFixedItem.json                  |  1312 +++
+ ExchangeBoothGroup.json                      |    12 +
+ FacilityAppearance.json                      |   164 +-
+ FeatureLock.json                             |     8 +
+ Gacha.json                                   |    12 +
+ GachaButton.json                             |    36 +
+ GachaPoint.json                              |    10 +
+ HelpContent.json                             |    40 +-
+ InstantTips.json                             |    10 +
+ Item.json                                    |    33 +
+ ItemTypeDetail.json                          |     9 +
+ LangAchievementGroup_Eng.json                |     7 +
+ LangAreaStory_Eng.json                       |     7 +
+ LangCard_Eng.json                            |    28 +
+ LangCharacterVoice_Eng.json                  |  7330 +++++++++++++-
+ LangChasePatrolSkill_Eng.json                |    31 +-
+ LangClientCommon_Eng.json                    |   782 +-
+ LangCondition_Eng.json                       |    35 +
+ LangCostume_Eng.json                         |    28 +
+ LangEmblem_Eng.json                          |   280 +
+ LangEventStoryChapter_Eng.json               |     7 +
+ LangEventStory_Eng.json                      |    42 +
+ LangFacilityAppearance_Eng.json              |     7 +
+ LangFeatureLock_Eng.json                     |     7 +
+ LangGachaPoint_Eng.json                      |     7 +
+ LangGeneratedLiveActiveSkillLevel_Eng.json   |    56 +
+ LangGeneratedLiveLeaderSkill_Eng.json        |    28 +
+ LangGeneratedLivePassiveSkillEffect_Eng.json |    28 +
+ LangGeneratedLivePassiveSkillLevel_Eng.json  |    56 +
+ LangGeneratedLiveSpecialSkillLevel_Eng.json  |    56 +
+ LangGeneratedSkillTreeEffect_Eng.json        |     7 +
+ LangHelpContent_Eng.json                     |    44 +-
+ LangInstantTips_Eng.json                     |     7 +
+ LangItemTypeDetail_Eng.json                  |     7 +
+ LangItem_Eng.json                            |    28 +
+ LangLiveDialogueVoice_Eng.json               |   196 +
+ LangLoadingDisplay_Eng.json                  |    28 +
+ LangMiniGame_Eng.json                        |    28 +
+ LangMissionGroup_Eng.json                    |    28 +
+ LangMission_Eng.json                         |   294 +
+ LangMusicMv_Eng.json                         |    24 +
+ LangMusic_Eng.json                           |   420 +
+ LangParkQuestStep_Eng.json                   |    14 +
+ LangParkQuest_Eng.json                       |    14 +
+ LangParkTalk_Eng.json                        |    98 +
+ LangParkTargetMapping_Eng.json               |    14 +
+ LangPoster_Eng.json                          |     7 +
+ LangResourceObtainmentRoute_Eng.json         |    14 +
+ LangRule_Eng.json                            |    14 +
+ LangSdCostumeHairAccessory_Eng.json          |   378 +
+ LangSdCostume_Eng.json                       |    28 +
+ LangStamp_Eng.json                           |   371 +
+ LangTipsDetail_Eng.json                      |    71 +-
+ LangTips_Eng.json                            |    21 +
+ LiveActiveSkill.json                         |    24 +
+ LiveActiveSkillLevel.json                    |   108 +
+ LiveDialogueVoice.json                       |   332 +
+ LiveDialogueVoiceCharacter.json              | 12722 +++++++++++++------------
+ LiveLeaderSkill.json                         |    38 +
+ LivePassiveSkill.json                        |    24 +
+ LivePassiveSkillEffect.json                  |    48 +
+ LivePassiveSkillLevel.json                   |    82 +
+ LiveSpecialCardDialogue.json                 |   144 +
+ LiveSpecialCostumeDialogue.json              |   144 +
+ LiveSpecialSkill.json                        |    24 +
+ LiveSpecialSkillLevel.json                   |    94 +
+ LoadingDisplay.json                          |    24 +
+ MarathonMiniGameRewardUpStaminaEffect.json   |    27 +
+ MiniGame.json                                |    19 +
+ MiniGameMultiGame.json                       |    22 +
+ MiniGameNpcLotteryPeriod.json                |    72 +
+ MiniGameRewardUpStaminaEffect.json           |    27 +
+ Mission.json                                 |   581 ++
+ MissionGroup.json                            |    35 +
+ MissionPass.json                             |   186 +
+ MissionPassLevel.json                        |  1390 +++
+ MissionPassPoint.json                        |     7 +
+ MissionProgress.json                         |  6958 +++++++++-----
+ MissionTypeDefaultNavigation.json            |    23 +-
+ Music.json                                   |   217 +
+ MusicDifficulty.json                         |   240 +
+ MusicDifficultyChart.json                    |   312 +-
+ MusicMv.json                                 |   116 +
+ ParkFixedSymbol.json                         |    14 +-
+ ParkNotice.json                              |    18 +-
+ ParkNpc.json                                 |   128 +
+ ParkNpcGroup.json                            |   160 +
+ ParkPermanence.json                          |     8 +
+ ParkPermanenceAction.json                    |    10 +
+ ParkPosition.json                            |     9 +
+ ParkQuest.json                               |    17 +
+ ParkQuestChase.json                          |    10 +-
+ ParkQuestStep.json                           |    41 +
+ ParkQuestStepAction.json                     |    34 +
+ ParkTalk.json                                |   416 +-
+ ParkTargetMapping.json                       |    29 +
+ Poster.json                                  |     9 +
+ ResourceObtainmentRoute.json                 |    20 +
+ Rule.json                                    |     9 +-
+ SdCostume.json                               |    56 +
+ SdCostumeHairAccessory.json                  |   594 ++
+ Setting.json                                 |     9 -
+ ShopChargeItemProduct.json                   |    36 +
+ SkillTreeEffect.json                         |    15 +
+ SkillTreeNode.json                           |    21 +
+ SkillTreeNodePosition.json                   |    40 +
+ Stamp.json                                   |   530 +
+ Story.json                                   |    64 +
+ SystemSound.json                             |   194 +
+ SystemVoice.json                             |  4752 +++++++++
+ Tips.json                                    |    27 +
+ TipsDetail.json                              |   308 +-
+ Tutorial.json                                |    21 +
+ version.txt                                  |     2 +-
+ 131 files changed, 46039 insertions(+), 10065 deletions(-)
+ create mode 100644 ChaseScoreReward.json
+[guess-controller] Updating/organizing local Holodori cards...
+Holodori card update check started
+$ git pull --ff-only
+Already up to date.
+$ git pull --ff-only
+Already up to date.
+Asset tools changed: False
+Database repository changed: False
+No card differences available. No card assets were downloaded.
+[guess-controller] Syncing ★★★ / ★★★★ / ★★★★★ into local bot...
+[guess-controller] Ensuring remote HOLODORI directories exist...
+[guess-controller] Syncing HOLODORI card folders to OPC...
+[guess-controller] Sending fresh catalog to OPC...
+[guess-controller] Running OPC Guess updater...
+From https://github.com/HolodoriDB/holodori-db-eng-diff
+   a15150a..bfe6726  main       -> origin/main
+[guess-update] DB changed: a15150a8b7413f035f28f8f85d63ab9df122c380 -> bfe67260ee7b64201e058f56d83ac7bfb60f9f71
+Updating a15150a..bfe6726
+Fast-forward
+ AchievementGroup.json                        |    11 +
+ AreaStory.json                               |    12 +
+ Card.json                                    |   180 +
+ CharacterLiveDialogueVoice.json              |   432 +
+ CharacterVoice.json                          |  8332 ++++++++++++++--
+ Chase.json                                   |    29 +-
+ ChasePatrolSkill.json                        |    48 +-
+ ChaseScoreReward.json                        |   322 +
+ ChaseSetting.json                            |    35 +-
+ Cheat.json                                   |   123 +-
+ CircuitSetting.json                          |     2 +-
+ Condition.json                               |  1764 +++-
+ Costume.json                                 |    56 +
+ Emblem.json                                  |   400 +
+ EventStory.json                              |    66 +
+ EventStoryChapter.json                       |    10 +
+ ExchangeBooth.json                           |    18 +
+ ExchangeBoothFixedItem.json                  |  1312 +++
+ ExchangeBoothGroup.json                      |    12 +
+ FacilityAppearance.json                      |   164 +-
+ FeatureLock.json                             |     8 +
+ Gacha.json                                   |    12 +
+ GachaButton.json                             |    36 +
+ GachaPoint.json                              |    10 +
+ HelpContent.json                             |    40 +-
+ InstantTips.json                             |    10 +
+ Item.json                                    |    33 +
+ ItemTypeDetail.json                          |     9 +
+ LangAchievementGroup_Eng.json                |     7 +
+ LangAreaStory_Eng.json                       |     7 +
+ LangCard_Eng.json                            |    28 +
+ LangCharacterVoice_Eng.json                  |  7330 +++++++++++++-
+ LangChasePatrolSkill_Eng.json                |    31 +-
+ LangClientCommon_Eng.json                    |   782 +-
+ LangCondition_Eng.json                       |    35 +
+ LangCostume_Eng.json                         |    28 +
+ LangEmblem_Eng.json                          |   280 +
+ LangEventStoryChapter_Eng.json               |     7 +
+ LangEventStory_Eng.json                      |    42 +
+ LangFacilityAppearance_Eng.json              |     7 +
+ LangFeatureLock_Eng.json                     |     7 +
+ LangGachaPoint_Eng.json                      |     7 +
+ LangGeneratedLiveActiveSkillLevel_Eng.json   |    56 +
+ LangGeneratedLiveLeaderSkill_Eng.json        |    28 +
+ LangGeneratedLivePassiveSkillEffect_Eng.json |    28 +
+ LangGeneratedLivePassiveSkillLevel_Eng.json  |    56 +
+ LangGeneratedLiveSpecialSkillLevel_Eng.json  |    56 +
+ LangGeneratedSkillTreeEffect_Eng.json        |     7 +
+ LangHelpContent_Eng.json                     |    44 +-
+ LangInstantTips_Eng.json                     |     7 +
+ LangItemTypeDetail_Eng.json                  |     7 +
+ LangItem_Eng.json                            |    28 +
+ LangLiveDialogueVoice_Eng.json               |   196 +
+ LangLoadingDisplay_Eng.json                  |    28 +
+ LangMiniGame_Eng.json                        |    28 +
+ LangMissionGroup_Eng.json                    |    28 +
+ LangMission_Eng.json                         |   294 +
+ LangMusicMv_Eng.json                         |    24 +
+ LangMusic_Eng.json                           |   420 +
+ LangParkQuestStep_Eng.json                   |    14 +
+ LangParkQuest_Eng.json                       |    14 +
+ LangParkTalk_Eng.json                        |    98 +
+ LangParkTargetMapping_Eng.json               |    14 +
+ LangPoster_Eng.json                          |     7 +
+ LangResourceObtainmentRoute_Eng.json         |    14 +
+ LangRule_Eng.json                            |    14 +
+ LangSdCostumeHairAccessory_Eng.json          |   378 +
+ LangSdCostume_Eng.json                       |    28 +
+ LangStamp_Eng.json                           |   371 +
+ LangTipsDetail_Eng.json                      |    71 +-
+ LangTips_Eng.json                            |    21 +
+ LiveActiveSkill.json                         |    24 +
+ LiveActiveSkillLevel.json                    |   108 +
+ LiveDialogueVoice.json                       |   332 +
+ LiveDialogueVoiceCharacter.json              | 12722 +++++++++++++------------
+ LiveLeaderSkill.json                         |    38 +
+ LivePassiveSkill.json                        |    24 +
+ LivePassiveSkillEffect.json                  |    48 +
+ LivePassiveSkillLevel.json                   |    82 +
+ LiveSpecialCardDialogue.json                 |   144 +
+ LiveSpecialCostumeDialogue.json              |   144 +
+ LiveSpecialSkill.json                        |    24 +
+ LiveSpecialSkillLevel.json                   |    94 +
+ LoadingDisplay.json                          |    24 +
+ MarathonMiniGameRewardUpStaminaEffect.json   |    27 +
+ MiniGame.json                                |    19 +
+ MiniGameMultiGame.json                       |    22 +
+ MiniGameNpcLotteryPeriod.json                |    72 +
+ MiniGameRewardUpStaminaEffect.json           |    27 +
+ Mission.json                                 |   581 ++
+ MissionGroup.json                            |    35 +
+ MissionPass.json                             |   186 +
+ MissionPassLevel.json                        |  1390 +++
+ MissionPassPoint.json                        |     7 +
+ MissionProgress.json                         |  6958 +++++++++-----
+ MissionTypeDefaultNavigation.json            |    23 +-
+ Music.json                                   |   217 +
+ MusicDifficulty.json                         |   240 +
+ MusicDifficultyChart.json                    |   312 +-
+ MusicMv.json                                 |   116 +
+ ParkFixedSymbol.json                         |    14 +-
+ ParkNotice.json                              |    18 +-
+ ParkNpc.json                                 |   128 +
+ ParkNpcGroup.json                            |   160 +
+ ParkPermanence.json                          |     8 +
+ ParkPermanenceAction.json                    |    10 +
+ ParkPosition.json                            |     9 +
+ ParkQuest.json                               |    17 +
+ ParkQuestChase.json                          |    10 +-
+ ParkQuestStep.json                           |    41 +
+ ParkQuestStepAction.json                     |    34 +
+ ParkTalk.json                                |   416 +-
+ ParkTargetMapping.json                       |    29 +
+ Poster.json                                  |     9 +
+ ResourceObtainmentRoute.json                 |    20 +
+ Rule.json                                    |     9 +-
+ SdCostume.json                               |    56 +
+ SdCostumeHairAccessory.json                  |   594 ++
+ Setting.json                                 |     9 -
+ ShopChargeItemProduct.json                   |    36 +
+ SkillTreeEffect.json                         |    15 +
+ SkillTreeNode.json                           |    21 +
+ SkillTreeNodePosition.json                   |    40 +
+ Stamp.json                                   |   530 +
+ Story.json                                   |    64 +
+ SystemSound.json                             |   194 +
+ SystemVoice.json                             |  4752 +++++++++
+ Tips.json                                    |    27 +
+ TipsDetail.json                              |   308 +-
+ Tutorial.json                                |    21 +
+ version.txt                                  |     2 +-
+ 131 files changed, 46039 insertions(+), 10065 deletions(-)
+ create mode 100644 ChaseScoreReward.json
+=== GUESS FULL UPDATE ===
+$ /home/opc/guess-updater/.venv/bin/holodori download /home/opc/guess-updater/work/_raw/jackets --filter ^img_music_jacket_ --no-overwrite --catalog /home/opc/guess-updater/octo_list.json
+[download] revision 66: 21367 bundles, 18421 resources
+[download] downloading 6 files to /home/opc/guess-updater/work/_raw/jackets
+  0%|          | 0/6 [00:00<?, ?file/s][httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/3tR78e "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/AweDAq "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/Ng4fGd "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/JnqZvN "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/gWwQkT "HTTP/2 200 OK"
+ 17%|█▋        | 1/6 [00:00<00:02,  1.82file/s][httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/BgUATu "HTTP/2 200 OK"
+ 33%|███▎      | 2/6 [00:00<00:01,  3.47file/s] 50%|█████     | 3/6 [00:01<00:01,  1.84file/s]100%|██████████| 6/6 [00:01<00:00,  3.86file/s]
+/home/opc/guess-updater/.venv/lib64/python3.12/site-packages/UnityPy/files/BundleFile.py:533: UnityVersionFallbackWarning: No valid Unity version found, defaulting to UnityPy.config.FALLBACK_UNITY_VERSION (6000.3.15f1)
+  version_str = config.get_fallback_version()
+/home/opc/guess-updater/.venv/lib64/python3.12/site-packages/UnityPy/files/SerializedFile.py:360: UnityVersionFallbackWarning: No valid Unity version found, defaulting to UnityPy.config.FALLBACK_UNITY_VERSION (6000.3.15f1)
+  string_version = config.get_fallback_version()
+/home/opc/guess-updater/.venv/lib64/python3.12/site-packages/UnityPy/files/BundleFile.py:533: UnityVersionFallbackWarning: No valid Unity version found, defaulting to UnityPy.config.FALLBACK_UNITY_VERSION (6000.3.15f1)
+  version_str = config.get_fallback_version()
+/home/opc/guess-updater/.venv/lib64/python3.12/site-packages/UnityPy/files/SerializedFile.py:360: UnityVersionFallbackWarning: No valid Unity version found, defaulting to UnityPy.config.FALLBACK_UNITY_VERSION (6000.3.15f1)
+  string_version = config.get_fallback_version()
+jacket NEW m0338.png
+jacket NEW m0339.png
+jacket NEW m0340.png
+jacket NEW m0341.png
+jacket NEW m0342.png
+jacket NEW m0359.png
+$ /home/opc/guess-updater/.venv/bin/holodori download /home/opc/guess-updater/work/_raw/audio --filter ^music_short_ --no-overwrite --catalog /home/opc/guess-updater/octo_list.json
+[download] revision 66: 21367 bundles, 18421 resources
+[download] downloading 6 files to /home/opc/guess-updater/work/_raw/audio
+  0%|          | 0/6 [00:00<?, ?file/s][httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/ZOxCYS "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/AjkwHV "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/vdLwKn "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/TgwpkY "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/B6zLqI "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/jYBcoJ "HTTP/2 200 OK"
+ 17%|█▋        | 1/6 [00:03<00:15,  3.13s/file] 33%|███▎      | 2/6 [00:03<00:05,  1.41s/file] 50%|█████     | 3/6 [00:03<00:02,  1.11file/s] 83%|████████▎ | 5/6 [00:03<00:00,  2.26file/s]100%|██████████| 6/6 [00:04<00:00,  2.57file/s]100%|██████████| 6/6 [00:04<00:00,  1.47file/s]
+decoding /home/opc/guess-updater/work/_raw/audio/resources/music_short_m0338.acb
+sample rate: 48000 Hz
+channels: 2
+channel mask: 0x3 / FL FR
+stream total samples: 5166935 (1:47.644 seconds)
+encoding: CRI HCA
+layout: flat
+metadata from: CRI HCA header
+bitrate: 255 kbps
+stream name: music_short_m0338
+sample type: float
+play duration: 5166935 samples (1:47.644 seconds)
+$ /usr/bin/ffmpeg -y -loglevel error -i /home/opc/guess-updater/work/wav/m0338.wav -vn -c:a libmp3lame -b:a 96k /usr/share/nginx/html/images/guess/audio/m0338.mp3
+decoding /home/opc/guess-updater/work/_raw/audio/resources/music_short_m0339.acb
+sample rate: 48000 Hz
+channels: 2
+channel mask: 0x3 / FL FR
+stream total samples: 6912001 (2:24.000 seconds)
+encoding: CRI HCA
+layout: flat
+metadata from: CRI HCA header
+bitrate: 255 kbps
+stream name: music_short_m0339
+sample type: float
+play duration: 6912001 samples (2:24.000 seconds)
+audio NEW m0338.mp3
+$ /usr/bin/ffmpeg -y -loglevel error -i /home/opc/guess-updater/work/wav/m0339.wav -vn -c:a libmp3lame -b:a 96k /usr/share/nginx/html/images/guess/audio/m0339.mp3
+decoding /home/opc/guess-updater/work/_raw/audio/resources/music_short_m0340.acb
+sample rate: 48000 Hz
+channels: 2
+channel mask: 0x3 / FL FR
+stream total samples: 6694053 (2:19.459 seconds)
+encoding: CRI HCA
+layout: flat
+metadata from: CRI HCA header
+bitrate: 255 kbps
+stream name: music_short_m0340
+sample type: float
+play duration: 6694053 samples (2:19.459 seconds)
+audio NEW m0339.mp3
+$ /usr/bin/ffmpeg -y -loglevel error -i /home/opc/guess-updater/work/wav/m0340.wav -vn -c:a libmp3lame -b:a 96k /usr/share/nginx/html/images/guess/audio/m0340.mp3
+decoding /home/opc/guess-updater/work/_raw/audio/resources/music_short_m0341.acb
+sample rate: 48000 Hz
+channels: 2
+channel mask: 0x3 / FL FR
+stream total samples: 5012915 (1:44.436 seconds)
+encoding: CRI HCA
+layout: flat
+metadata from: CRI HCA header
+bitrate: 255 kbps
+stream name: music_short_m0341
+sample type: float
+play duration: 5012915 samples (1:44.436 seconds)
+audio NEW m0340.mp3
+$ /usr/bin/ffmpeg -y -loglevel error -i /home/opc/guess-updater/work/wav/m0341.wav -vn -c:a libmp3lame -b:a 96k /usr/share/nginx/html/images/guess/audio/m0341.mp3
+decoding /home/opc/guess-updater/work/_raw/audio/resources/music_short_m0342.acb
+sample rate: 48000 Hz
+channels: 2
+channel mask: 0x3 / FL FR
+stream total samples: 7985455 (2:46.364 seconds)
+encoding: CRI HCA
+layout: flat
+metadata from: CRI HCA header
+bitrate: 255 kbps
+stream name: music_short_m0342
+sample type: float
+play duration: 7985455 samples (2:46.364 seconds)
+audio NEW m0341.mp3
+$ /usr/bin/ffmpeg -y -loglevel error -i /home/opc/guess-updater/work/wav/m0342.wav -vn -c:a libmp3lame -b:a 96k /usr/share/nginx/html/images/guess/audio/m0342.mp3
+decoding /home/opc/guess-updater/work/_raw/audio/resources/music_short_m0359.acb
+sample rate: 48000 Hz
+channels: 2
+channel mask: 0x3 / FL FR
+stream total samples: 7177847 (2:29.538 seconds)
+encoding: CRI HCA
+layout: flat
+metadata from: CRI HCA header
+bitrate: 255 kbps
+stream name: music_short_m0359
+sample type: float
+play duration: 7177847 samples (2:29.538 seconds)
+audio NEW m0342.mp3
+$ /usr/bin/ffmpeg -y -loglevel error -i /home/opc/guess-updater/work/wav/m0359.wav -vn -c:a libmp3lame -b:a 96k /usr/share/nginx/html/images/guess/audio/m0359.mp3
+audio NEW m0359.mp3
+Cards in DB: 178
+Cards hosted: 174
+Missing hosted cards: 4
+$ /home/opc/guess-updater/.venv/bin/holodori download /home/opc/guess-updater/work/_raw/cards --filter ^img_card_full_ --no-overwrite --catalog /home/opc/guess-updater/octo_list.json
+[download] revision 66: 21367 bundles, 18421 resources
+[download] downloading 4 files to /home/opc/guess-updater/work/_raw/cards
+  0%|          | 0/4 [00:00<?, ?file/s][httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/j6py5H "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/cItWTO "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/XuzVsl "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/cItWTO "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/YjLAgA "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/XuzVsl "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/j6py5H "HTTP/2 200 OK"
+ 25%|██▌       | 1/4 [00:00<00:01,  1.77file/s] 75%|███████▌  | 3/4 [00:00<00:00,  5.41file/s]100%|██████████| 4/4 [00:00<00:00,  5.94file/s]
+card NEW 00006-5-uniq-0074-00.png
+card NEW 00014-5-uniq-0075-00.png
+card NEW 00016-5-uniq-0076-00.png
+card NEW 00017-5-uniq-0077-00.png
+cards.json rows: 178
+
+=== COMPLETE ===
+Songs manifest: 187
+New jackets: 6; failures: 0
+New audio:   6; failures: 0
+New cards:   4; failures: 0
+Hosted cards: 178
+songs.json: /usr/share/nginx/html/images/guess/data/songs.json
+cards.json: /usr/share/nginx/html/images/guess/data/cards.json
+[guess-controller] Copying fresh Guess JSON manifests back to bot...
+[guess-controller] Finished successfully.
+[guess-controller] Local HOLODORI counts:
+  ★★★: 54
+  ★★★★: 54
+  ★★★★★: 132
+[guess-controller] Local Guess manifests:
+-rw-r--r-- 1 nana0411 nana0411 24K Aug 28 10:28 /home/nana0411/4newCards/Cards/images/guess/data/cards.json
+-rw-r--r-- 1 nana0411 nana0411 39K Aug 28 10:28 /home/nana0411/4newCards/Cards/images/guess/data/songs.json

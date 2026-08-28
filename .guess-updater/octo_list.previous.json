@@ -1,7 +1,7 @@
 {
-  "revisionId": 63,
+  "revisionId": 64,
   "urlFormat": "https://asset.game-hololive-dreams.com/{o}",
-  "serverTime": 1787638820859,
+  "serverTime": 1787818096685,
   "assetBundles": [
     {
       "name": "adv_area_01_01_01-01",
@@ -256815,6 +256815,60 @@
       "size": 1071508,
       "dependencies": [],
       "id": 38634
+    },
+    {
+      "name": "img_banner_full_sub-birthday-live-vivi-2026",
+      "objectName": "c0dbvn",
+      "url": "https://asset.game-hololive-dreams.com/c0dbvn",
+      "md5": "cb8c7375bc00f6339a7352cfad6aa192",
+      "size": 1165284,
+      "dependencies": [],
+      "id": 38635
+    },
+    {
+      "name": "img_banner_full_sub-birthday-live-vivi-2026_lang-chs",
+      "objectName": "XHXgFN",
+      "url": "https://asset.game-hololive-dreams.com/XHXgFN",
+      "md5": "2e3b364d67f6bd53515dc4a16253c868",
+      "size": 1165302,
+      "dependencies": [],
+      "id": 38636
+    },
+    {
+      "name": "img_banner_full_sub-birthday-live-vivi-2026_lang-cht",
+      "objectName": "ufYBMx",
+      "url": "https://asset.game-hololive-dreams.com/ufYBMx",
+      "md5": "e75c485221ad6882e938ecfdfba2a0fd",
+      "size": 1165303,
+      "dependencies": [],
+      "id": 38637
+    },
+    {
+      "name": "img_banner_full_sub-birthday-live-vivi-2026_lang-eng",
+      "objectName": "nJHlYD",
+      "url": "https://asset.game-hololive-dreams.com/nJHlYD",
+      "md5": "a349c5c720b9a762ed053e2173c73084",
+      "size": 1165303,
+      "dependencies": [],
+      "id": 38638
+    },
+    {
+      "name": "img_banner_full_sub-birthday-live-vivi-2026_lang-ind",
+      "objectName": "sJREq2",
+      "url": "https://asset.game-hololive-dreams.com/sJREq2",
+      "md5": "48d365172b72bb11fb3ddc9aed86f710",
+      "size": 1165295,
+      "dependencies": [],
+      "id": 38639
+    },
+    {
+      "name": "img_banner_full_sub-birthday-live-vivi-2026_lang-kor",
+      "objectName": "sjpzs6",
+      "url": "https://asset.game-hololive-dreams.com/sjpzs6",
+      "md5": "0153408643157227fca4a9671f84b1da",
+      "size": 1165302,
+      "dependencies": [],
+      "id": 38640
     }
   ],
   "resources": [
