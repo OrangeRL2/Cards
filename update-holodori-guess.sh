@@ -1,6 +1,14 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+FORCE=0
+if [[ "${1:-}" == "--force" ]]; then
+  FORCE=1
+elif [[ $# -gt 0 ]]; then
+  echo "Usage: $0 [--force]" >&2
+  exit 2
+fi
+
 PATH="/usr/local/bin:/usr/bin:/bin"
 
 HOME_DIR="$HOME"
@@ -133,9 +141,9 @@ if [[ -f "$OLD_CATALOG" ]]; then
   [[ "$OLD_SUM" == "$NEW_SUM" ]] && CATALOG_CHANGED=0
 fi
 
-echo "[guess-controller] Changes: EN_DB=$EN_CHANGED JP_DB=$JP_CHANGED CATALOG=$CATALOG_CHANGED"
+echo "[guess-controller] Changes: EN_DB=$EN_CHANGED JP_DB=$JP_CHANGED CATALOG=$CATALOG_CHANGED FORCE=$FORCE"
 
-if [[ "$EN_CHANGED" -eq 0 && "$JP_CHANGED" -eq 0 && "$CATALOG_CHANGED" -eq 0 ]]; then
+if [[ "$EN_CHANGED" -eq 0 && "$JP_CHANGED" -eq 0 && "$CATALOG_CHANGED" -eq 0 && "$FORCE" -eq 0 ]]; then
   echo "[guess-controller] Nothing changed. Done."
   exit 0
 fi
@@ -179,6 +187,13 @@ ssh -i "$SSH_KEY" \
   -o ConnectTimeout=20 \
   "$REMOTE_USER@$REMOTE_HOST" \
   "cd '$REMOTE_BASE' && ./run_guess_update.sh --force"
+
+echo "[guess-controller] Fixing Guess web permissions..."
+ssh -i "$SSH_KEY" \
+  -o BatchMode=yes \
+  -o ConnectTimeout=20 \
+  "$REMOTE_USER@$REMOTE_HOST" \
+  "find '/usr/share/nginx/html/images/guess' -type d -exec chmod 755 {} + && find '/usr/share/nginx/html/images/guess' -type f -exec chmod 644 {} +"
 
 echo "[guess-controller] Copying fresh Guess JSON manifests back to bot..."
 scp -q -i "$SSH_KEY" \

@@ -26,12 +26,17 @@ TOOLS = next(
     BASE / "holodori-asset-tools",
 )
 
+# Prefer the English DB for card metadata because it may publish new
+# Card.json rows before the Japanese diff repository. Fall back to JP.
 DB = next(
     (p for p in (
+        BASE / "holodori-db-eng-diff",
+        HOME / "holodori" / "holodori-db-eng-diff",
+        HOME / "holodori-db-eng-diff",
         BASE / "holodori-db-jpn-diff",
         HOME / "holodori-db-jpn-diff",
     ) if p.exists()),
-    BASE / "holodori-db-jpn-diff",
+    BASE / "holodori-db-eng-diff",
 )
 
 BOT = HOME / "4newCards" / "Cards"
@@ -48,7 +53,7 @@ STATE_FILE = BASE / "holodori-update-state.json"
 LOG_FILE = BASE / "holodori-update.log"
 
 UNITY_VERSION = "6000.3.15f1"
-SCRIPT_VERSION = 5
+SCRIPT_VERSION = 6
 TARGET_SIZE = (1820, 1024)
 RARITY_DIRS = {3: "★★★", 4: "★★★★", 5: "★★★★★"}
 
@@ -450,6 +455,7 @@ def main() -> None:
 
     previous_state = load_state()
 
+    log(f"Card metadata DB: {DB}")
     tool_before, tool_after = git_update(TOOLS)
     db_before, db_after = git_update(DB)
 
