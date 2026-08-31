@@ -1391,8 +1391,28 @@ async function settleEndedEvents(client = null) {
       const label = streamLabel(ev);
 
       for (const p of sorted) {
-        try {
-          const picked = await pickCardByWeightedRarity(PARTICIPATION_WEIGHTS, label, { avoidImmediateRepeat: true });
+  try {
+    const alreadyRewarded = await StreamActionLog.exists({
+      eventId: ev.eventId,
+      userId: p.userId,
+      action: 'reward',
+      'meta.tier': 'participation',
+    });
+
+    if (alreadyRewarded) {
+      console.log(
+        '[stream settle] participation already rewarded, skipping',
+        ev.eventId,
+        p.userId
+      );
+      continue;
+    }
+
+    const picked = await pickCardByWeightedRarity(
+      PARTICIPATION_WEIGHTS,
+      label,
+      { avoidImmediateRepeat: true }
+    );
           if (picked?.name) {
             await addCardToUser(p.userId, picked.name, picked.rarity, 1);
             await StreamActionLog.create({ eventId: ev.eventId, userId: p.userId, oshiId: ev.oshiId, action: 'reward', happiness: 0, meta: { tier: 'participation', reward: picked.rarity, card: picked.name } });
