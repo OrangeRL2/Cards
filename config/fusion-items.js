@@ -1,6 +1,16 @@
 // data/fusion-items.js
 const FUSION_ITEMS = {
   // --- Seven Fantasy variants (same card, different requirements) ---
+      AdventJustice: {
+    name: 'Advent & Justice',
+    rarity: 'COL',
+    image: 'Advent & Justice 001',
+    stock: -1,
+    requires: [
+      { rarity: 'ORI', image: 'Advent 001', count: 1 },
+      { rarity: 'ORI', image: 'Justice 001', count: 1 },
+    ],
+  },
     FubuMio1: {
     name: 'FubuMio',
     rarity: 'COL',

@@ -81,8 +81,8 @@ function listTierFiles(tier) {
 
   if (tier.folder === '★★★★★') {
     files = files.filter(file => {
-      const number = cardNumber(file);
-      const signed = number === '002' || number === '004';
+      const number = Number(cardNumber(file));
+      const signed = Number.isInteger(number) && number > 0 && number % 2 === 0;
       return tier.signed ? signed : !signed;
     });
   }
@@ -158,10 +158,35 @@ function pickIslandGuaranteedFiveStar(islandMembers, rng = Math.random) {
   return cardFromFile(file, tier, { guaranteed: true, islandGuaranteed: true });
 }
 
-function buildHolodoriTenPull({ islandMembers = [], guaranteeIslandFiveStar = false, userId = null, rng = Math.random } = {}) {
+function pickIslandGuaranteedSignedFiveStar(islandMembers, rng = Math.random) {
+  const tier = TIERS.find(item => item.key === 'signed');
+  const members = Array.isArray(islandMembers) ? islandMembers : [];
+  const files = listTierFiles(tier).filter(file => {
+    const fileMember = fileMemberName(file);
+    return members.some(member => memberMatches(fileMember, member));
+  });
+
+  if (!files.length) {
+    throw new Error('No signed five-star HOLODORI cards matched the selected island members.');
+  }
+
+  const file = files[Math.floor(rng() * files.length)];
+  // This card is mechanically forced, but intentionally looks like a normal signed pull.
+  return cardFromFile(file, tier);
+}
+
+function buildHolodoriTenPull({
+  islandMembers = [],
+  guaranteeIslandFiveStar = false,
+  guaranteeIslandSignedFiveStar = false,
+  userId = null,
+  rng = Math.random,
+} = {}) {
   const cards = [];
 
-  if (guaranteeIslandFiveStar) {
+  if (guaranteeIslandSignedFiveStar) {
+    cards.push(pickIslandGuaranteedSignedFiveStar(islandMembers, rng));
+  } else if (guaranteeIslandFiveStar) {
     cards.push(pickIslandGuaranteedFiveStar(islandMembers, rng));
   }
 
@@ -194,6 +219,7 @@ module.exports = {
   memberMatches,
   pickHolodoriLoginReward,
   pickIslandGuaranteedFiveStar,
+  pickIslandGuaranteedSignedFiveStar,
   buildHolodoriTenPull,
   buildHolodoriImageUrl,
 };
