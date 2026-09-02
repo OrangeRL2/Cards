@@ -1,314 +1,289 @@
 // message-commands/scores.js
+// Leaderboard for the current StreamEvent-based stream system.
+
 const { EmbedBuilder } = require('discord.js');
-const mongoose = require('mongoose');
 const config = require('../config.json');
+const StreamEvent = require('../models/StreamEvent');
+const User = require('../models/User');
+const oshis = require('../config/oshis');
 
 const PREFIX = '!';
 const TOP_N = 10;
 const ADMIN_CHANNEL_ID = String(config.adminChannelId || '');
 
-// -------------------- HARD-CODED AUTHORIZATION --------------------
-// Owners: always allowed (DMs and guilds)
 const OWNER_IDS = new Set([
   '153551890976735232',
   '409717160995192832',
   '272129129841688577',
   '399012422805094410',
 ]);
-// Users allowed to run !scores (owners are auto-allowed)
+
 const ALLOWED_USER_IDS = new Set([
   ...OWNER_IDS,
-  // add other user IDs here:
-  // '91098889796481024',
 ]);
 
-// Roles allowed to run !scores (guild-only; role checks do not work in DMs)
 const ALLOWED_ROLE_IDS = new Set([
-  '844054364033384470', // e.g., @Moderators
-  // '234567890123456789', // e.g., @Staff
+  '844054364033384470',
 ]);
 
-/**
- * Policy:
- * - OWNER_IDS are always allowed.
- * - If both ALLOWED_USER_IDS and ALLOWED_ROLE_IDS are empty => DENY by default.
- * - Otherwise, caller must be in ALLOWED_USER_IDS OR have any role in ALLOWED_ROLE_IDS.
- * - Role checks require guild/member context (not available in DMs).
- */
-function isAuthorized(message) {
-  try {
-    const callerId = String(message.author.id);
-
-    // 1) Owner override
-    if (OWNER_IDS.has(callerId)) return true;
-
-    // 2) Default deny if both allowlists are empty
-    if (ALLOWED_USER_IDS.size === 0 && ALLOWED_ROLE_IDS.size === 0) return false;
-
-    // 3) User allowlist
-    if (ALLOWED_USER_IDS.has(callerId)) return true;
-
-    // 4) Role allowlist (guild only)
-    const member = message.member;
-    if (!member || !message.guild || ALLOWED_ROLE_IDS.size === 0) return false;
-
-    const roleCache = member.roles?.cache;
-    if (!roleCache || roleCache.size === 0) return false;
-
-    for (const rid of ALLOWED_ROLE_IDS) {
-      if (roleCache.has(rid)) return true;
-    }
-    return false;
-  } catch {
-    return false;
-  }
-}
-
-// eventId -> current leader userId (in-memory)
 const leaderCache = new Map();
 
-/**
- * Get Mongoose models. Uses existing models if already registered,
- * otherwise registers minimal schemas that match your topscores.js script.
- */
-function getModels() {
-  const { Schema } = mongoose;
-
-  // Matches your topscores.js structure and collection name "bosspointlogs"
-  const BossPointLogSchema = new Schema(
-    {
-      eventId: { type: String, required: true, index: true },
-      userId: { type: String, required: true, index: true },
-      oshiId: { type: String, default: null },
-      action: {
-        type: String,
-        required: true,
-        enum: ['like', 'sub', 'superchat', 'member', 'reward'],
-        index: true
-      },
-      points: { type: Number, default: 0 },
-      meta: { type: Schema.Types.Mixed, default: {} },
-      createdAt: { type: Date, default: () => new Date() }
-    },
-    { collection: 'bosspointlogs' }
-  );
-
-  let BossPointLog;
+function isAuthorized(message) {
   try {
-    BossPointLog = mongoose.model('BossPointLog');
+    const id = String(message.author.id);
+    if (OWNER_IDS.has(id) || ALLOWED_USER_IDS.has(id)) return true;
+    const roles = message.member?.roles?.cache;
+    if (!message.guild || !roles) return false;
+    for (const roleId of ALLOWED_ROLE_IDS) if (roles.has(roleId)) return true;
+    return false;
   } catch {
-    BossPointLog = mongoose.model('BossPointLog', BossPointLogSchema);
+    return false;
   }
-
-  // Minimal users collection mapping (mirrors topscores.js expectations)
-  const UserSchema = new Schema(
-    {
-      id: { type: String, required: true, unique: true },
-      username: { type: String, default: null },
-      discriminator: { type: String, default: null },
-      displayName: { type: String, default: null }
-    },
-    { collection: 'users' }
-  );
-
-  let User;
-  try {
-    User = mongoose.model('User');
-  } catch {
-    User = mongoose.model('User', UserSchema);
-  }
-
-  return { BossPointLog, User };
 }
 
-/**
- * If no eventId is provided, grab the most recent eventId
- * from the latest BossPointLog entry (by createdAt).
- */
-async function getMostRecentEventId(BossPointLog) {
-  const last = await BossPointLog.findOne({}, { eventId: 1, createdAt: 1 })
-    .sort({ createdAt: -1 })
-    .lean()
-    .exec();
-
-  return last?.eventId || null;
+function norm(value) {
+  return String(value || '')
+    .normalize('NFKD')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '');
 }
 
-/**
- * Aggregate leaderboard:
- * - totalPoints: sum(points)
- * - subCount: number of logs with action == "sub"
- * - superchatCount: number of logs with action == "superchat"
- */
-async function aggregateTopScores(BossPointLog, eventId, topN = TOP_N) {
-  const pipeline = [
-    { $match: { eventId: String(eventId) } },
-    {
-      $group: {
-        _id: '$userId',
-        totalPoints: { $sum: '$points' },
-
-        subCount: {
-          $sum: { $cond: [{ $eq: ['$action', 'sub'] }, 1, 0] }
-        },
-
-        // Count times superchat happened (NOT amount)
-        superchatCount: {
-          $sum: { $cond: [{ $eq: ['$action', 'superchat'] }, 1, 0] }
-        }
-      }
-    },
-    { $sort: { totalPoints: -1 } },
-    { $limit: Math.max(1, Number(topN) || TOP_N) }
-  ];
-
-  return BossPointLog.aggregate(pipeline).allowDiskUse(true).exec();
+function streamLabel(ev) {
+  const key = norm(ev?.oshiId);
+  const cfg = (oshis || []).find(o => norm(o?.id) === key || norm(o?.label) === key);
+  return cfg?.label || String(ev?.oshiId || 'Unknown');
 }
 
-/**
- * Resolve label in a human-friendly way:
- * 1) Guild member displayName (nickname) / username
- * 2) DB 'users' displayName / username#discriminator / username
- * 3) fallback userId
- */
-async function resolveUserLabels(message, User, rows) {
-  const ids = rows.map(r => String(r._id));
+function statusEmoji(status) {
+  return ({ active: '🟢', scheduled: '🕒', ended: '🟠', settling: '🟡', settled: '⚫' })[String(status)] || '⚪';
+}
 
-  // Prefer server display names (easy to understand)
-  const guild = message.guild;
-  const discordMap = new Map();
+function unix(date) {
+  const ms = new Date(date).getTime();
+  return Number.isFinite(ms) ? Math.floor(ms / 1000) : null;
+}
 
-  if (guild) {
-    for (const id of ids) {
-      const member =
-        guild.members.cache.get(id) ||
-        (await guild.members.fetch(id).catch(() => null));
+// Match settlement ordering exactly: Happiness first, then earliest first contribution.
+function sortedUsers(ev) {
+  return (ev?.users || [])
+    .slice()
+    .filter(u => Number(u?.happiness || 0) > 0)
+    .sort((a, b) => {
+      const score = Number(b.happiness || 0) - Number(a.happiness || 0);
+      if (score !== 0) return score;
+      const ta = a.firstHappinessAt ? new Date(a.firstHappinessAt).getTime() : Number.MAX_SAFE_INTEGER;
+      const tb = b.firstHappinessAt ? new Date(b.firstHappinessAt).getTime() : Number.MAX_SAFE_INTEGER;
+      return ta - tb;
+    });
+}
 
-      if (member) {
-        discordMap.set(id, member.displayName || member.user.username);
-      }
+async function resolveLabels(message, ids) {
+  const unique = [...new Set(ids.map(String))];
+  const labels = new Map();
+
+  if (message.guild) {
+    for (const id of unique) {
+      const member = message.guild.members.cache.get(id) || await message.guild.members.fetch(id).catch(() => null);
+      if (member) labels.set(id, member.displayName || member.user?.username || id);
     }
   }
 
-  // Fallback to DB user data if available
-  const users = await User.find({ id: { $in: ids } }).lean().exec().catch(() => []);
-  const dbMap = new Map((users || []).map(u => [String(u.id), u]));
+  const unresolved = unique.filter(id => !labels.has(id));
+  if (unresolved.length) {
+    const users = await User.find(
+      { id: { $in: unresolved } },
+      { id: 1, username: 1, discriminator: 1, displayName: 1 }
+    ).lean().exec().catch(() => []);
 
-  return rows.map(r => {
-    const uid = String(r._id);
-
-    if (discordMap.has(uid)) {
-      return { ...r, userId: uid, label: discordMap.get(uid) };
+    for (const u of users || []) {
+      const id = String(u.id);
+      labels.set(id,
+        u.displayName ||
+        (u.username && u.discriminator ? `${u.username}#${u.discriminator}` : u.username) ||
+        id
+      );
     }
+  }
 
-    const u = dbMap.get(uid);
-    if (u) {
-      if (u.displayName) return { ...r, userId: uid, label: u.displayName };
-      if (u.username && u.discriminator) return { ...r, userId: uid, label: `${u.username}#${u.discriminator}` };
-      if (u.username) return { ...r, userId: uid, label: u.username };
+  for (const id of unique) if (!labels.has(id)) labels.set(id, id);
+  return labels;
+}
+
+function makeEmbed(ev, labels) {
+  const users = sortedUsers(ev);
+  const top = users.slice(0, TOP_N);
+  const label = streamLabel(ev);
+  const endTs = unix(ev.endsAt);
+
+  const lines = top.length ? top.map((u, i) => {
+    const name = labels.get(String(u.userId)) || String(u.userId);
+    const total = Number(u.happiness || 0);
+    const like = Number(u.likeHappiness || 0);
+    const sub = Number(u.subHappiness || 0);
+    const cards = Number(u.subCardsGifted || 0);
+    const sc = Number(u.superchatHappiness || 0);
+    const scCount = Number(u.superchatCount || 0);
+    return `**#${i + 1}** ${name}: **${total.toLocaleString()} ❤️**\n` +
+      `↳ Like ${like.toLocaleString()} • Sub ${sub.toLocaleString()} (${cards.toLocaleString()} cards) • SC ${sc.toLocaleString()} (${scCount.toLocaleString()})`;
+  }) : ['_Nobody has contributed Happiness yet._'];
+
+  const embed = new EmbedBuilder()
+    .setTitle(`${label} Stream — Top ${Math.min(TOP_N, users.length || TOP_N)}`)
+    .setDescription(lines.join('\n'))
+    .setColor(0x5AB3F4)
+    .addFields(
+      { name: 'Stream Happiness', value: `**${Number(ev.happiness || 0).toLocaleString()} ❤️**`, inline: true },
+      { name: 'Participants', value: `**${users.length.toLocaleString()}**`, inline: true },
+      { name: 'Status', value: `${statusEmoji(ev.status)} **${String(ev.status || 'unknown')}**`, inline: true },
+    )
+    .setFooter({ text: `Event: ${ev.eventId}` });
+
+  if (endTs) {
+    embed.addFields({
+      name: String(ev.status) === 'active' ? 'Ends' : 'Ended',
+      value: `<t:${endTs}:R>`,
+      inline: true,
+    });
+  }
+
+  return embed;
+}
+
+async function announceLeaderChange(client, ev, top, label) {
+  if (!ADMIN_CHANNEL_ID || !top?.userId) return;
+  const eventId = String(ev.eventId);
+  const next = String(top.userId);
+  const previous = leaderCache.get(eventId);
+
+  if (previous && previous !== next) {
+    const ch = client.channels.cache.get(ADMIN_CHANNEL_ID) || await client.channels.fetch(ADMIN_CHANNEL_ID).catch(() => null);
+    if (ch?.isTextBased?.()) {
+      await ch.send(`**${label || `<@${next}>`}** has taken the lead in **${streamLabel(ev)}**'s stream.`).catch(() => {});
     }
+  }
 
-    return { ...r, userId: uid, label: uid };
+  leaderCache.set(eventId, next);
+}
+
+async function activeEvents() {
+  const now = new Date();
+  return StreamEvent.find({
+    status: 'active',
+    spawnAt: { $lte: now },
+    endsAt: { $gt: now },
+  }).sort({ spawnAt: -1 }).lean().exec();
+}
+
+async function newestEvent() {
+  return StreamEvent.findOne({}).sort({ spawnAt: -1, createdAt: -1 }).lean().exec();
+}
+
+async function findEvent(selector) {
+  const raw = String(selector || '').trim();
+  if (!raw) return null;
+
+  const exact = await StreamEvent.findOne({ eventId: raw }).lean().exec();
+  if (exact) return exact;
+
+  const wanted = norm(raw);
+  const ids = new Set([raw]);
+  for (const o of oshis || []) {
+    if (norm(o?.id) === wanted || norm(o?.label) === wanted) ids.add(String(o.id));
+  }
+
+  const direct = await StreamEvent.find({ oshiId: { $in: [...ids] } })
+    .sort({ spawnAt: -1, createdAt: -1 }).lean().exec();
+  if (direct.length) {
+    return direct.find(ev => ev.status === 'active' && new Date(ev.endsAt).getTime() > Date.now()) || direct[0];
+  }
+
+  const recent = await StreamEvent.find({}).sort({ spawnAt: -1 }).limit(100).lean().exec();
+  return recent.find(ev => norm(ev.oshiId) === wanted || norm(streamLabel(ev)) === wanted) || null;
+}
+
+async function showList(message) {
+  const events = await StreamEvent.find({}).sort({ spawnAt: -1, createdAt: -1 }).limit(10).lean().exec();
+  if (!events.length) return message.reply('No stream events found.').catch(() => {});
+
+  const lines = events.map(ev => {
+    const ts = unix(ev.spawnAt);
+    return `${statusEmoji(ev.status)} **${streamLabel(ev)}** — \`${ev.eventId}\`\n` +
+      `↳ ${ev.status}${ts ? ` • <t:${ts}:R>` : ''} • ${Number(ev.happiness || 0).toLocaleString()} ❤️`;
   });
+
+  return message.reply({ embeds: [new EmbedBuilder()
+    .setTitle('Recent Streams')
+    .setDescription(lines.join('\n'))
+    .setColor(0x5AB3F4)
+    .setFooter({ text: 'Use !scores <eventId> for one specific stream.' })
+  ]}).catch(() => {});
 }
 
-/**
- * Announce when leader changes:
- * "<User> has taken the lead" into config.adminChannelId
- */
-async function maybeAnnounceLeadChange(client, eventId, topRowWithLabel) {
-  if (!ADMIN_CHANNEL_ID) return;
-  if (!topRowWithLabel?.userId) return;
+async function sendScores(message, events) {
+  if (!events.length) return message.reply('No stream events found.').catch(() => {});
 
-  const prevLeader = leaderCache.get(String(eventId));
-  const newLeader = String(topRowWithLabel.userId);
+  const ids = events.flatMap(ev => sortedUsers(ev).slice(0, TOP_N).map(u => String(u.userId)));
+  const labels = await resolveLabels(message, ids);
+  const embeds = [];
 
-  // Only announce if we have a previous leader AND it changed
-  if (prevLeader && prevLeader !== newLeader) {
-    const channel =
-      client.channels.cache.get(ADMIN_CHANNEL_ID) ||
-      (await client.channels.fetch(ADMIN_CHANNEL_ID).catch(() => null));
-
-    if (channel) {
-      await channel.send(`**${topRowWithLabel.label}** has taken the lead`).catch(() => {});
-    }
+  for (const ev of events) {
+    const top = sortedUsers(ev)[0];
+    if (top) await announceLeaderChange(message.client, ev, top, labels.get(String(top.userId)));
+    embeds.push(makeEmbed(ev, labels));
   }
 
-  leaderCache.set(String(eventId), newLeader);
+  for (let i = 0; i < embeds.length; i += 10) {
+    const chunk = embeds.slice(i, i + 10);
+    if (i === 0) await message.reply({ embeds: chunk }).catch(() => {});
+    else await message.channel.send({ embeds: chunk }).catch(() => {});
+  }
 }
 
 module.exports = {
   name: 'scores',
-  description: 'Show top 10 scores for an event. Usage: !scores <id>',
+  description: 'Show top scores for the new live stream system.',
 
   async execute(message, args = []) {
     try {
-      // Prefix guard (your dispatcher also checks this; safe to keep)
-      if (!message.content?.startsWith(PREFIX)) return;
-      if (message.author.bot) return;
+      if (!message.content?.startsWith(PREFIX) || message.author.bot) return;
+      if (!isAuthorized(message)) return message.reply('You are not permitted to use this command.').catch(() => {});
 
-      // -------------------- AUTHZ CHECK --------------------
-      if (!isAuthorized(message)) {
-        return message.reply({ content: 'You are not permitted to use this command.' }).catch(() => {});
+      const selector = (args || []).join(' ').trim();
+      if (selector === '--list' || selector === 'list') return showList(message);
+
+      if (selector && selector !== 'all' && selector !== '--all') {
+        const ev = await findEvent(selector);
+        if (!ev) return message.reply(`No stream found for \`${selector}\`. Use \`!scores --list\` to see recent IDs.`).catch(() => {});
+        return sendScores(message, [ev]);
       }
 
-      const { BossPointLog, User } = getModels();
-
-      // eventId = args[0] OR most recent
-      let eventId = args[0]?.trim();
-      if (!eventId) {
-        eventId = await getMostRecentEventId(BossPointLog);
-        if (!eventId) {
-          return message.reply({ content: 'No boss/event logs found yet.' }).catch(() => {});
-        }
+      let events = await activeEvents();
+      if (!events.length) {
+        const latest = await newestEvent();
+        if (latest) events = [latest];
       }
-
-      const raw = await aggregateTopScores(BossPointLog, eventId, TOP_N);
-      if (!raw || raw.length === 0) {
-        return message.reply({ content: `No scores found for event: \`${eventId}\`` }).catch(() => {});
-      }
-
-      const rows = await resolveUserLabels(message, User, raw);
-
-      // Leader change notification
-      await maybeAnnounceLeadChange(message.client, eventId, rows[0]);
-
-      // Format: "#1 Orange: 100, Sub:10, Superchat:10"
-      const lines = rows.slice(0, TOP_N).map((r, i) => {
-        const points = Number(r.totalPoints || 0);
-        const subs = Number(r.subCount || 0);
-        const superchats = Number(r.superchatCount || 0);
-        return `**#${i + 1}** ${r.label}: **${points}**, Sub:**${subs}**, Superchat:**${superchats}**`;
-      });
-
-      const embed = new EmbedBuilder()
-        .setTitle(`Top ${Math.min(TOP_N, rows.length)} Scores`)
-        .setDescription(lines.join('\n'))
-        .setFooter({ text: `Event: ${eventId}` })
-        .setColor('#3498db');
-
-      return message.reply({ embeds: [embed] }).catch(() => {});
+      return sendScores(message, events);
     } catch (err) {
       console.error('[scores] error', err);
-      return message.reply({ content: 'Error running !scores.' }).catch(() => {});
+      return message.reply('Error running !scores.').catch(() => {});
     }
   },
 
-  /**
-   * Optional helper for REAL-TIME leader alerts:
-   * call this after you insert a BossPointLog / award points.
-   */
   async checkLeadAndAnnounce(client, eventId) {
-    const { BossPointLog, User } = getModels();
-    const raw = await aggregateTopScores(BossPointLog, eventId, 1);
-    if (!raw || raw.length === 0) return;
+    const ev = await StreamEvent.findOne({ eventId: String(eventId) }).lean().exec();
+    if (!ev) return;
+    const top = sortedUsers(ev)[0];
+    if (!top) return;
 
-    // No message object here; we can't fetch guild displayNames.
-    // We'll use DB labels (still better than IDs).
-    const users = await User.find({ id: { $in: [String(raw[0]._id)] } }).lean().exec().catch(() => []);
-    const u = users?.[0];
-    const label = u?.displayName || (u?.username && u?.discriminator ? `${u.username}#${u.discriminator}` : u?.username) || String(raw[0]._id);
+    const u = await User.findOne(
+      { id: String(top.userId) },
+      { username: 1, discriminator: 1, displayName: 1 }
+    ).lean().exec().catch(() => null);
 
-    await maybeAnnounceLeadChange(client, eventId, { userId: String(raw[0]._id), label });
-  }
+    const label = u?.displayName ||
+      (u?.username && u?.discriminator ? `${u.username}#${u.discriminator}` : u?.username) ||
+      `<@${top.userId}>`;
+
+    await announceLeaderChange(client, ev, top, label);
+  },
 };
