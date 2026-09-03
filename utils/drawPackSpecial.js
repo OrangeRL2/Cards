@@ -2,7 +2,7 @@
 const path = require('path');
 const pools = require('./loadImages');
 const { pickCardFromRarityFolder } = require('./cardPicker');
-const { pickWeighted, buildSlotOptions, applyFinalRateMultiplier, applyAbsoluteOverrides, getUserProfile, getOverrides } = require('./rates');
+const { pickWeighted, buildSlotOptions, getUserProfile, getOverrides } = require('./rates');
 const { rollExtraSlot } = require('./extraSlot');
 
 /**
@@ -21,8 +21,10 @@ const gachaMap = {
 function pickOne(arr) {
   return arr[Math.floor(Math.random() * arr.length)];
 }
+
 const MONTHLY_BDAYS_BASE = process.env.MONTHLY_BDAYS_BASE || 'assets/montlybdays';
 const OSR_BASE = process.env.OSR_BASE || 'assets/special/OSR';
+
 /**
  * Resolve the incoming specialLabel into the actual folder label used for pulls.
  * - If specialLabel matches a gachaMap key, pick one variant ONCE per pack.
@@ -57,7 +59,6 @@ function fallbackPickFromPools(rarity) {
 async function pickForSlot(rarity, specialLabel) {
   const R = String(rarity || '').toUpperCase();
 
-  // ✅ Special-pull BDAY: try monthly base first (with label, then without)
   if (R === 'BDAY') {
     try {
       const pickedMonthly = await pickCardFromRarityFolder(
@@ -68,7 +69,6 @@ async function pickForSlot(rarity, specialLabel) {
       if (pickedMonthly) return pickedMonthly;
     } catch {}
 
-    // If label search found nothing, try neutral monthly pick
     try {
       const pickedMonthlyNeutral = await pickCardFromRarityFolder(
         'BDAY',
@@ -77,10 +77,7 @@ async function pickForSlot(rarity, specialLabel) {
       );
       if (pickedMonthlyNeutral) return pickedMonthlyNeutral;
     } catch {}
-    // If monthly folder is missing/empty, fall through to normal BDAY behavior below.
-  }
-
-    else if (R === 'OSR') {
+  } else if (R === 'OSR') {
     try {
       const pickedOSR = await pickCardFromRarityFolder(
         'OSR',
@@ -90,7 +87,6 @@ async function pickForSlot(rarity, specialLabel) {
       if (pickedOSR) return pickedOSR;
     } catch {}
 
-    // If label search found nothing, try neutral monthly pick
     try {
       const pickedOSRNeutral = await pickCardFromRarityFolder(
         'OSR',
@@ -99,38 +95,39 @@ async function pickForSlot(rarity, specialLabel) {
       );
       if (pickedOSRNeutral) return pickedOSRNeutral;
     } catch {}
-    // If osr folder is missing/empty, fall through to normal OSR behavior below.
   }
 
-  // Existing behavior: label-biased pick from default ASSETS_BASE/<RARITY>
   if (specialLabel) {
     try {
-      const picked = await pickCardFromRarityFolder(rarity, specialLabel, { avoidImmediateRepeat: true });
+      const picked = await pickCardFromRarityFolder(
+        rarity,
+        specialLabel,
+        { avoidImmediateRepeat: true }
+      );
       if (picked) return picked;
     } catch {}
   }
 
-  // Fallback: neutral pick from default
   try {
-    const fallback = await pickCardFromRarityFolder(rarity, null, { avoidImmediateRepeat: true });
+    const fallback = await pickCardFromRarityFolder(
+      rarity,
+      null,
+      { avoidImmediateRepeat: true }
+    );
     if (fallback) return fallback;
   } catch {}
 
-  // Last fallback: pool fallback
   const raw = fallbackPickFromPools(rarity);
   return path.basename(raw, path.extname(raw));
 }
 
-
 async function drawPackSpecial(userId, specialLabel, opts = {}) {
   const results = [];
 
-  // ✅ Resolve gacha variant ONCE per pack
   const { baseLabel, variantLabel } = resolveSpecialVariantLabel(specialLabel);
 
-  // ✅ Hololive bypasses rates.js completely for slot rarity selection.
-  // No profile rates, overrides, specialPullRate, pity overrides, or weighted rolls are used here.
-  // The only randomness left is which Hololive variant folder was selected above, and which card is picked inside that rarity folder.
+  // Hololive's special pack is intentionally a fixed guaranteed-rarity pack,
+  // so it continues to bypass normal/special rate multipliers.
   if (String(baseLabel || '').trim().toLowerCase() === 'hololive') {
     const guaranteedRarities = ['BDAY', 'OC', 'S', 'HR', 'SY', 'SY', 'UR', 'OUR'];
 
@@ -147,8 +144,16 @@ async function drawPackSpecial(userId, specialLabel, opts = {}) {
   }
 
   const profile = getUserProfile(userId);
-  const rate = profile.specialPullRate;
-  const rateMultiplier = Number.isFinite(Number(opts?.rateMultiplier)) ? Math.max(0, Number(opts.rateMultiplier)) : 1;
+
+  // Stack forum/thread context on the user's existing specialPullRate.
+  const requestedRateMultiplier = Number(opts?.rateMultiplier);
+  const contextRateMultiplier =
+    Number.isFinite(requestedRateMultiplier) && requestedRateMultiplier >= 0
+      ? requestedRateMultiplier
+      : 1.0;
+
+  const rate =
+    Number(profile?.specialPullRate ?? 1.0) * contextRateMultiplier;
 
   // --- Common slots (4) ---
   const commonSlot1Base = [
@@ -158,10 +163,9 @@ async function drawPackSpecial(userId, specialLabel, opts = {}) {
     { key: 'BDAY', weight: 1.1 },
   ];
   {
-    let options = buildSlotOptions(commonSlot1Base, rate, getOverrides(profile, 'special', 'common1'));
-    options = applyFinalRateMultiplier(options, rateMultiplier);
+    const options = buildSlotOptions(commonSlot1Base, rate, getOverrides(profile, 'special', 'common1'));
     const rarity = pickWeighted(options);
-    const file = await pickForSlot(rarity, variantLabel); // ✅ use variantLabel
+    const file = await pickForSlot(rarity, variantLabel);
     results.push({ rarity, file });
   }
 
@@ -171,8 +175,7 @@ async function drawPackSpecial(userId, specialLabel, opts = {}) {
     { key: 'OC', weight: 2.0 },
   ];
   {
-    let options = buildSlotOptions(commonSlot2Base, rate, getOverrides(profile, 'special', 'common2'));
-    options = applyFinalRateMultiplier(options, rateMultiplier);
+    const options = buildSlotOptions(commonSlot2Base, rate, getOverrides(profile, 'special', 'common2'));
     const rarity = pickWeighted(options);
     const file = await pickForSlot(rarity, variantLabel);
     results.push({ rarity, file });
@@ -184,8 +187,7 @@ async function drawPackSpecial(userId, specialLabel, opts = {}) {
     { key: 'BDAY', weight: 1.1 },
   ];
   {
-    let options = buildSlotOptions(commonSlot3Base, rate, getOverrides(profile, 'special', 'common3'));
-    options = applyFinalRateMultiplier(options, rateMultiplier);
+    const options = buildSlotOptions(commonSlot3Base, rate, getOverrides(profile, 'special', 'common3'));
     const rarity = pickWeighted(options);
     const file = await pickForSlot(rarity, variantLabel);
     results.push({ rarity, file });
@@ -197,8 +199,7 @@ async function drawPackSpecial(userId, specialLabel, opts = {}) {
     { key: 'HR', weight: 1.1 },
   ];
   {
-    let options = buildSlotOptions(commonSlot4Base, rate, getOverrides(profile, 'special', 'common4'));
-    options = applyFinalRateMultiplier(options, rateMultiplier);
+    const options = buildSlotOptions(commonSlot4Base, rate, getOverrides(profile, 'special', 'common4'));
     const rarity = pickWeighted(options);
     const file = await pickForSlot(rarity, variantLabel);
     results.push({ rarity, file });
@@ -225,8 +226,11 @@ async function drawPackSpecial(userId, specialLabel, opts = {}) {
 
   for (let i = 0; i < uncommonSlotBases.length; i++) {
     const slotName = `uncommon${i + 1}`;
-    let options = buildSlotOptions(uncommonSlotBases[i], rate, getOverrides(profile, 'special', slotName));
-    options = applyFinalRateMultiplier(options, rateMultiplier);
+    const options = buildSlotOptions(
+      uncommonSlotBases[i],
+      rate,
+      getOverrides(profile, 'special', slotName)
+    );
     const rarity = pickWeighted(options);
     const file = await pickForSlot(rarity, variantLabel);
     results.push({ rarity, file });
@@ -240,40 +244,34 @@ async function drawPackSpecial(userId, specialLabel, opts = {}) {
   ];
   {
     const baseOverrides = getOverrides(profile, 'special', 'rare');
-    const pityOverrides = (opts && opts.forceSEC) ? { SEC: 100, OUR: 0, R: 0 } : null;
+    const pityOverrides = (opts && opts.forceSEC)
+      ? { SEC: 100, OUR: 0, R: 0 }
+      : null;
 
-    let options = buildSlotOptions(rareBase, rate, baseOverrides);
-    options = applyFinalRateMultiplier(options, rateMultiplier);
-    if (pityOverrides) {
-      options = applyAbsoluteOverrides(options, pityOverrides);
-    }
+    const mergedOverrides = pityOverrides
+      ? { ...(baseOverrides || {}), ...pityOverrides }
+      : baseOverrides;
+
+    const options = buildSlotOptions(rareBase, rate, mergedOverrides);
     const rarity = pickWeighted(options);
     const file = await pickForSlot(rarity, variantLabel);
     results.push({ rarity, file });
   }
 
-  // ✅ Optional meta return without breaking old callers
   if (opts && opts.withMeta) {
     return { results, baseLabel, variantLabel };
   }
-  // --- Extra slot (mirrors normal pack behavior) ---
-  const baseExtraChance = 0.00; // 40% base chance for the extra slot to appear
+
+  const baseExtraChance = 0.00;
   const extraChance = baseExtraChance * (profile.extraSlotRate ?? 1.0);
 
   if (Math.random() < extraChance) {
-    // Keep rarity odds unchanged (same approach as newWeightedDraw)
     const extraBase = [{ key: 'EAS', weight: 100 }];
     const extraRarity = pickWeighted(extraBase);
-
-    // For special packs, it's usually nicer if the extra slot follows the same "variant label"
-    // so it feels themed with the pack. If you want it neutral, pass null instead.
     const extraFile = await pickForSlot(extraRarity, variantLabel);
-
     results.push({ rarity: extraRarity, file: extraFile, slot: 'extra' });
   }
 
-  // Extra slot (same settings as newWeightedDraw.js: chance + weighted card selection)
-  // Special pack doesn't currently calculate "useSpecialRates", so we pass false.
   const extra = rollExtraSlot(userId, profile, false, opts);
   if (extra) results.push(extra);
 
