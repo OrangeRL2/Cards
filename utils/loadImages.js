@@ -1,6 +1,7 @@
 // utils/loadImages.js
 const fs = require('fs');
 const path = require('path');
+const { getCurrentBirthdayFiles } = require('./birthdayPool');
 
 function readRarityFolders(baseDir) {
   // returns { rarityName: [absoluteFilePaths...] }
@@ -37,6 +38,20 @@ function loadPools() {
   const pools = Object.assign({}, defaultPools);
   pools.special = specialPools;
   pools.other = otherPools;
+
+  // BDAY is filtered from the full collection every time it is accessed.
+  // This means a JST month rollover takes effect without moving files.
+  const attachBirthdayGetter = target => {
+    Object.defineProperty(target, 'BDAY', {
+      enumerable: true,
+      configurable: true,
+      get: () => getCurrentBirthdayFiles(),
+    });
+  };
+
+  attachBirthdayGetter(pools);
+  attachBirthdayGetter(pools.special);
+  attachBirthdayGetter(pools.other);
 
   return pools;
 }

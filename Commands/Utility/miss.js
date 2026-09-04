@@ -18,6 +18,7 @@ const User = require('../../models/User');
 const { resolveCardColor, getAttributeEmoji } = require('../../config/holomemColor');
 const pools = require('../../utils/loadImages');
 const { rarityChoices } = require('../../utils/rarities');
+const { getAllBirthdayFiles, getCurrentBirthdayFiles } = require('../../utils/birthdayPool');
 
 const IMAGE_BASE = process.env.IMAGE_BASE || 'http://152.69.195.48/images';
 const PAGE_SIZE = 10;
@@ -138,6 +139,10 @@ module.exports = {
         { name: 'Mixed', value: 'mixed' },
         { name: 'None', value: 'none' },
       )
+  )
+  .addBooleanOption(opt =>
+    opt.setName('showallbday')
+      .setDescription('Show every BDAY card, including cards outside the current month')
   ),
 requireOshi: true,
 
@@ -155,6 +160,7 @@ requireOshi: true,
       const filterQ = interaction.options.getString('search')?.toLowerCase();
   const filterColor = interaction.options.getString('color');
   const sortBy = interaction.options.getString('sort') || 'rarity';
+  const showAllBday = interaction.options.getBoolean('showallbday') || false;
 
       // load user doc and owned map
       const userDoc = await User.findOne({ id: interaction.user.id });
@@ -189,6 +195,21 @@ requireOshi: true,
             }
           }
 
+          continue;
+        }
+
+        if (rarity === 'BDAY') {
+          const birthdayFiles = showAllBday
+            ? getAllBirthdayFiles()
+            : getCurrentBirthdayFiles();
+
+          for (const file of birthdayFiles) {
+            universe.push({
+              rarity: 'BDAY',
+              name: path.basename(file, path.extname(file)),
+              file,
+            });
+          }
           continue;
         }
 

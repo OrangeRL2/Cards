@@ -24,6 +24,7 @@ const {
 } = require('discord.js');
 const { addOshiOsrToUser } = require('../utils/oshiRewards');
 const { postStreamResults } = require('../utils/postStreamResults');
+const { BIRTHDAY_FOLDER, filterBirthdayFilesForCurrentMonth } = require('../utils/birthdayPool');
 
 const ASSETS_BASE = path.join(__dirname, '..', 'assets', 'images');
 const IMAGE_BASE = process.env.STREAM_IMAGE_BASE || process.env.BOSS_IMAGE_BASE || 'http://152.69.195.48/images';
@@ -56,7 +57,7 @@ const RARITY_ORDER = [
 ];
 const RARITY_EXCLUDE = new Set(['P', 'SP', 'UP']);
 const ASSETS_BASE_BY_RARITY = {
-  BDAY: process.env.BDAY_ASSETS_BASE || path.join(__dirname, '..', 'assets', 'montlybdays'),
+  BDAY: path.dirname(BIRTHDAY_FOLDER),
   OSR: process.env.OSR_ASSETS_BASE || path.join(__dirname, '..', 'assets', 'montlybdays'),
 };
 
@@ -1295,8 +1296,16 @@ async function pickCardFromRarityFolder(rarity, oshiLabel, { avoidImmediateRepea
     const visited = _visited instanceof Set ? _visited : new Set();
     if (visited.has(rarity)) return null;
     visited.add(rarity);
-    const folder = path.join(getAssetsBaseForRarity(rarity), String(rarity).toUpperCase());
-    const files = await fs.readdir(folder).catch(() => []);
+    const rarityKey = String(rarity).toUpperCase();
+    const folder = rarityKey === 'BDAY'
+      ? BIRTHDAY_FOLDER
+      : path.join(getAssetsBaseForRarity(rarity), rarityKey);
+    let files = await fs.readdir(folder).catch(() => []);
+
+    if (rarityKey === 'BDAY') {
+      files = filterBirthdayFilesForCurrentMonth(files);
+    }
+
     if (!files.length) {
       const fallback = getNextLowerWeightRarity(rarity, visited, minRarity);
       return fallback ? pickCardFromRarityFolder(fallback, oshiLabel, { avoidImmediateRepeat, minRarity, _visited: visited }) : null;

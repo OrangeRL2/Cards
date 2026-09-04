@@ -2,6 +2,7 @@
 const fs = require('fs').promises;
 const path = require('path');
 const crypto = require('crypto');
+const { BIRTHDAY_FOLDER, filterBirthdayFilesForCurrentMonth } = require('./birthdayPool');
 
 const ASSETS_BASE = process.env.ASSETS_BASE || process.env.IMAGE_BASE || 'assets/images'; // set to your assets root
 const lastPickedByRarity = new Map(); // in-memory anti-repeat
@@ -80,11 +81,18 @@ async function pickCardFromRarityFolder(
   { avoidImmediateRepeat = true, baseDir = null } = {}
 ) {
   try {
-    const root = baseDir || ASSETS_BASE;
-    const folder = path.join(root, String(rarity).toUpperCase());
-    const files = await fs.readdir(folder).catch(() => []);
+    const rarityKey = String(rarity).toUpperCase();
+    const folder = rarityKey === 'BDAY'
+      ? BIRTHDAY_FOLDER
+      : path.join(baseDir || ASSETS_BASE, rarityKey);
+
+    let files = await fs.readdir(folder).catch(() => []);
+    if (rarityKey === 'BDAY') {
+      files = filterBirthdayFilesForCurrentMonth(files);
+    }
+
     if (!files || files.length === 0) {
-      console.debug(`[pickCard] no files in folder ${folder}`);
+      console.debug(`[pickCard] no eligible files in folder ${folder}`);
       return null;
     }
 
