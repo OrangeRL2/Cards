@@ -498,7 +498,7 @@ function getPullChannelContext(interaction) {
   return {
     inThread,
     validationChannelId,
-    rateMultiplier: inThread ? 0.20 : 1.0,
+    rateMultiplier: inThread ? 0.00 : 1.0,
   };
 }
 
