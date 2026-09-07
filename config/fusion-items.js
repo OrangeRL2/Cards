@@ -1,6 +1,16 @@
 // data/fusion-items.js
 const FUSION_ITEMS = {
   // --- Seven Fantasy variants (same card, different requirements) ---
+        CouncilRys: {
+    name: 'CouncilRys',
+    rarity: 'COL',
+    image: 'CouncilRys 001',
+    stock: -1,
+    requires: [
+      { rarity: 'ORI', image: 'Promise 003', count: 1 },
+      { rarity: 'ORI', image: 'Council 003', count: 1 },
+    ],
+  },
       AdventJustice: {
     name: 'Advent & Justice',
     rarity: 'COL',

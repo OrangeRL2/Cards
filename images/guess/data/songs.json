@@ -1884,6 +1884,59 @@
     "audio": "../audio/m0337.mp3"
   },
   {
+    "id": "m0338",
+    "title": "Say!Fanfare!",
+    "playingSeconds": 107,
+    "characterIds": [
+      "chr-00006"
+    ],
+    "jacket": "../jackets/m0338.png",
+    "audio": "../audio/m0338.mp3"
+  },
+  {
+    "id": "m0339",
+    "title": "Yakou Tsuushinn",
+    "playingSeconds": 144,
+    "characterIds": [
+      "chr-00014"
+    ],
+    "jacket": "../jackets/m0339.png",
+    "audio": "../audio/m0339.mp3"
+  },
+  {
+    "id": "m0340",
+    "title": "KAMISAMA・NEKOSAMA",
+    "playingSeconds": 139,
+    "characterIds": [
+      "chr-00016"
+    ],
+    "jacket": "../jackets/m0340.png",
+    "audio": "../audio/m0340.mp3"
+  },
+  {
+    "id": "m0341",
+    "title": "SAIKYO TENSAI WANDERFUL WORLD of KORONE",
+    "playingSeconds": 104,
+    "characterIds": [
+      "chr-00017"
+    ],
+    "jacket": "../jackets/m0341.png",
+    "audio": "../audio/m0341.mp3"
+  },
+  {
+    "id": "m0342",
+    "title": "We are GAMERS !!!!",
+    "playingSeconds": 166,
+    "characterIds": [
+      "chr-00006",
+      "chr-00014",
+      "chr-00016",
+      "chr-00017"
+    ],
+    "jacket": "../jackets/m0342.png",
+    "audio": "../audio/m0342.mp3"
+  },
+  {
     "id": "m0346",
     "title": "FACT",
     "playingSeconds": 140,
@@ -1912,6 +1965,16 @@
     ],
     "jacket": "../jackets/m0353.png",
     "audio": "../audio/m0353.mp3"
+  },
+  {
+    "id": "m0359",
+    "title": "Backseat",
+    "playingSeconds": 149,
+    "characterIds": [
+      "chr-03008"
+    ],
+    "jacket": "../jackets/m0359.png",
+    "audio": "../audio/m0359.mp3"
   },
   {
     "id": "m0524",

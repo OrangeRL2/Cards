@@ -1195,3 +1195,116 @@ cards.json: /usr/share/nginx/html/images/guess/data/cards.json
 [guess-controller] Local Guess manifests:
 -rw-r--r-- 1 nana0411 nana0411 24K Aug 28 10:40 /home/nana0411/4newCards/Cards/images/guess/data/cards.json
 -rw-r--r-- 1 nana0411 nana0411 39K Aug 28 10:40 /home/nana0411/4newCards/Cards/images/guess/data/songs.json
+
+============================================================
+[guess-controller] 2026-09-07T15:28:41+09:00
+============================================================
+[guess-controller] Checking English DB...
+From https://github.com/HolodoriDB/holodori-db-eng-diff
+   bfe6726..78e00d1  main       -> origin/main
+[guess-controller] Checking Japanese card DB...
+From https://github.com/HolodoriDB/holodori-db-jpn-diff
+   84cb500..12badbe  main       -> origin/main
+[guess-controller] Refreshing Holodori catalog...
+[httpx] HTTP Request: GET https://raw.githubusercontent.com/HolodoriDB/holodori-app-protos/refs/heads/main/global/appver.json "HTTP/1.1 200 OK"
+[catalog] app version 1.1.0
+[httpx] HTTP Request: GET https://us.game-hololive-dreams.com/asset/v2/pub/a/5/v/200001/list/0 "HTTP/2 200 OK"
+[download] revision 70: 21379 bundles, 18421 resources
+[download] downloading 0 files to /tmp/holodori-catalog-refresh
+0file [00:00, ?file/s]0file [00:00, ?file/s]
+[guess-controller] Changes: EN_DB=1 JP_DB=1 CATALOG=1 FORCE=0
+[guess-controller] Updating English DB...
+Updating bfe6726..78e00d1
+Fast-forward
+ Chase.json                        |  10 +-
+ ChaseScoreReward.json             | 256 +++++++++++++++++++-------------------
+ ChaseSetting.json                 |  23 +++-
+ Cheat.json                        | 163 ++++++++++++++++++------
+ CircuitSetting.json               |   3 +-
+ ComboCardGameSetting.json         |   3 +-
+ Condition.json                    |  23 +++-
+ ExchangeBoothFixedItem.json       |  15 +--
+ HelpContent.json                  |   5 +-
+ Mission.json                      |   8 +-
+ MissionTypeDefaultNavigation.json |   4 +-
+ Setting.json                      |   3 +
+ SystemSound.json                  |  17 ++-
+ version.txt                       |   2 +-
+ 14 files changed, 339 insertions(+), 196 deletions(-)
+[guess-controller] Updating/organizing local Holodori cards...
+Holodori card update check started
+Card metadata DB: /home/nana0411/testholo/holodori-db-eng-diff
+$ git pull --ff-only
+From https://github.com/HolodoriDB/holodori-asset-tools
+   85b70c9..13f150f  main       -> origin/main
+Updating 85b70c9..13f150f
+Fast-forward
+ holodori_asset_tools/catalog.py | 48 ++++++++++++++++++++++++++++++++---------
+ pyproject.toml                  |  2 +-
+ 2 files changed, 39 insertions(+), 11 deletions(-)
+$ git pull --ff-only
+Already up to date.
+Asset tools changed: True
+Database repository changed: False
+No card differences available. No card assets were downloaded.
+[guess-controller] Syncing ★★★ / ★★★★ / ★★★★★ into local bot...
+[guess-controller] Ensuring remote HOLODORI directories exist...
+[guess-controller] Syncing HOLODORI card folders to OPC...
+[guess-controller] Sending fresh catalog to OPC...
+[guess-controller] Running OPC Guess updater...
+From https://github.com/HolodoriDB/holodori-db-eng-diff
+   bfe6726..78e00d1  main       -> origin/main
+[guess-update] DB changed: bfe67260ee7b64201e058f56d83ac7bfb60f9f71 -> 78e00d1c7c754e6df9833f6fc66f8137930d313f
+Updating bfe6726..78e00d1
+Fast-forward
+ Chase.json                        |  10 +-
+ ChaseScoreReward.json             | 256 +++++++++++++++++++-------------------
+ ChaseSetting.json                 |  23 +++-
+ Cheat.json                        | 163 ++++++++++++++++++------
+ CircuitSetting.json               |   3 +-
+ ComboCardGameSetting.json         |   3 +-
+ Condition.json                    |  23 +++-
+ ExchangeBoothFixedItem.json       |  15 +--
+ HelpContent.json                  |   5 +-
+ Mission.json                      |   8 +-
+ MissionTypeDefaultNavigation.json |   4 +-
+ Setting.json                      |   3 +
+ SystemSound.json                  |  17 ++-
+ version.txt                       |   2 +-
+ 14 files changed, 339 insertions(+), 196 deletions(-)
+=== GUESS FULL UPDATE ===
+$ /home/opc/guess-updater/.venv/bin/holodori download /home/opc/guess-updater/work/_raw/jackets --filter ^img_music_jacket_ --no-overwrite --catalog /home/opc/guess-updater/octo_list.json
+[download] revision 70: 21379 bundles, 18421 resources
+[download] downloading 0 files to /home/opc/guess-updater/work/_raw/jackets
+0file [00:00, ?file/s]0file [00:00, ?file/s]
+$ /home/opc/guess-updater/.venv/bin/holodori download /home/opc/guess-updater/work/_raw/audio --filter ^music_short_ --no-overwrite --catalog /home/opc/guess-updater/octo_list.json
+[download] revision 70: 21379 bundles, 18421 resources
+[download] downloading 0 files to /home/opc/guess-updater/work/_raw/audio
+0file [00:00, ?file/s]0file [00:00, ?file/s]
+Cards in DB: 178
+Cards hosted: 178
+Missing hosted cards: 0
+$ /home/opc/guess-updater/.venv/bin/holodori download /home/opc/guess-updater/work/_raw/cards --filter ^img_card_full_ --no-overwrite --catalog /home/opc/guess-updater/octo_list.json
+[download] revision 70: 21379 bundles, 18421 resources
+[download] downloading 0 files to /home/opc/guess-updater/work/_raw/cards
+0file [00:00, ?file/s]0file [00:00, ?file/s]
+cards.json rows: 178
+
+=== COMPLETE ===
+Songs manifest: 193
+New jackets: 0; failures: 0
+New audio:   0; failures: 0
+New cards:   0; failures: 0
+Hosted cards: 178
+songs.json: /usr/share/nginx/html/images/guess/data/songs.json
+cards.json: /usr/share/nginx/html/images/guess/data/cards.json
+[guess-controller] Fixing Guess web permissions...
+[guess-controller] Copying fresh Guess JSON manifests back to bot...
+[guess-controller] Finished successfully.
+[guess-controller] Local HOLODORI counts:
+  ★★★: 54
+  ★★★★: 54
+  ★★★★★: 140
+[guess-controller] Local Guess manifests:
+-rw-r--r-- 1 nana0411 nana0411 24K Sep  7 15:29 /home/nana0411/4newCards/Cards/images/guess/data/cards.json
+-rw-r--r-- 1 nana0411 nana0411 40K Sep  7 15:29 /home/nana0411/4newCards/Cards/images/guess/data/songs.json
