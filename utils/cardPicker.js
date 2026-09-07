@@ -156,7 +156,7 @@ async function pickCardFromRarityFolder(
     if (groups.length === 0) return neutralPick(candidatesList, rarity, oshiLabel, avoidImmediateRepeat);
 
     // Avoid immediate repeat for this rarity+oshi (use the original oshiLabel as key so exceptions still share the same lastPicked)
-    const lastKey = `${String(rarity)}::${oshiLabel || ''}::${root}`; // include baseDir in key to avoid cross-folder interference
+    const lastKey = `${String(rarity)}::${oshiLabel || ''}::${folder}`; // include actual folder in key to avoid cross-folder interference
     const lastPicked = lastPickedByRarity.get(lastKey);
 
     // Choose a group index randomly
