@@ -20,7 +20,18 @@ const USER_TIER_WEIGHTS = Object.freeze({
     five_star: 0.4,
     signed: 0.1,
   }),
+
+  '408400038767624195': Object.freeze({
+    three_star: 95,
+    four_star: 5,
+    five_star: 0,
+    signed: 0,
+  }),
 });
+
+const NO_HOLODORI_FIVE_STAR_USER_IDS = new Set([
+  '408400038767624195',
+]);
 
 const MEMBER_ALIASES = Object.freeze({
   calli: ['calli', 'calliope'],
@@ -183,10 +194,11 @@ function buildHolodoriTenPull({
   rng = Math.random,
 } = {}) {
   const cards = [];
+  const noFiveStar = NO_HOLODORI_FIVE_STAR_USER_IDS.has(String(userId || ''));
 
-  if (guaranteeIslandSignedFiveStar) {
+  if (!noFiveStar && guaranteeIslandSignedFiveStar) {
     cards.push(pickIslandGuaranteedSignedFiveStar(islandMembers, rng));
-  } else if (guaranteeIslandFiveStar) {
+  } else if (!noFiveStar && guaranteeIslandFiveStar) {
     cards.push(pickIslandGuaranteedFiveStar(islandMembers, rng));
   }
 

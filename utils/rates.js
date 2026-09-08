@@ -233,7 +233,6 @@ const rateProfiles = (() => {
   [
     '578146378501324812',
     '975246037914624030',
-    '408400038767624195'
   ].forEach((id) => {
     m.set(String(id), {
       pullRate: 0.66,
@@ -241,6 +240,13 @@ const rateProfiles = (() => {
       specialPullRate: 0.50,
       overrides: { normal: {}, special: {}, boss: {} },
     });
+  });
+
+  m.set('408400038767624195', {
+    pullRate: 0.33,
+    extraSlotRate: 1.0,
+    specialPullRate: 0.33,
+    overrides: { normal: {}, special: {}, boss: {} },
   });
 
   m.set('443061305721618432', {
