@@ -1,7 +1,7 @@
 {
-  "revisionId": 66,
+  "revisionId": 70,
   "urlFormat": "https://asset.game-hololive-dreams.com/{o}",
-  "serverTime": 1787881191775,
+  "serverTime": 1788762524868,
   "assetBundles": [
     {
       "name": "adv_area_01_01_01-01",
@@ -197248,18 +197248,6 @@
       "id": 35719
     },
     {
-      "name": "vis_script_gimmick_area-a01_fountain-01-npc-randomwalk-00",
-      "objectName": "o4PSVZ",
-      "url": "https://asset.game-hololive-dreams.com/o4PSVZ",
-      "md5": "c0f12f02bd2373f966286279e9d1f6d8",
-      "size": 25505,
-      "dependencies": [
-        35855,
-        35856
-      ],
-      "id": 35734
-    },
-    {
       "name": "vis_script_gimmick_area-a01_houseinside-01-npc-kotatsu-00",
       "objectName": "ikSfac",
       "url": "https://asset.game-hololive-dreams.com/ikSfac",
@@ -251544,15 +251532,6 @@
       "id": 20568
     },
     {
-      "name": "adv_area_01_01_29-01",
-      "objectName": "eNdW2c",
-      "url": "https://asset.game-hololive-dreams.com/eNdW2c",
-      "md5": "ad45558c0d7ae591c2cc972490e7a04c",
-      "size": 54984,
-      "dependencies": [],
-      "id": 38979
-    },
-    {
       "name": "adv_area_01_01_29-02",
       "objectName": "TO14Ue",
       "url": "https://asset.game-hololive-dreams.com/TO14Ue",
@@ -263222,17 +263201,6 @@
       "id": 34140
     },
     {
-      "name": "remote-shader",
-      "objectName": "iG7HZD",
-      "url": "https://asset.game-hololive-dreams.com/iG7HZD",
-      "md5": "e67d8edd7e694b4c4f80d3200f18fc22",
-      "size": 19560079,
-      "dependencies": [
-        35684
-      ],
-      "id": 35425
-    },
-    {
       "name": "env_3d_park_area-a01-area-02-night",
       "objectName": "2mdtWY",
       "url": "https://asset.game-hololive-dreams.com/2mdtWY",
@@ -265443,11 +265411,140 @@
       "id": 35970
     },
     {
+      "name": "img_banner_full_gacha-pickup-260829",
+      "objectName": "7mwuea",
+      "url": "https://asset.game-hololive-dreams.com/7mwuea",
+      "md5": "0405cf877f14fe7d331fcd1048956897",
+      "size": 1145936,
+      "dependencies": [],
+      "id": 39789
+    },
+    {
+      "name": "img_banner_full_marathon_event-normal-003",
+      "objectName": "FUWaDy",
+      "url": "https://asset.game-hololive-dreams.com/FUWaDy",
+      "md5": "dfb637b7670e11406c410d46f81b11ff",
+      "size": 1128565,
+      "dependencies": [],
+      "id": 39795
+    },
+    {
+      "name": "img_banner_full_marathon_event-normal-003_lang-chs",
+      "objectName": "tXB1lF",
+      "url": "https://asset.game-hololive-dreams.com/tXB1lF",
+      "md5": "5aa97a2ecf45220c215ecaec391cb274",
+      "size": 1131700,
+      "dependencies": [],
+      "id": 39796
+    },
+    {
+      "name": "img_banner_full_marathon_event-normal-003_lang-cht",
+      "objectName": "EkVT9R",
+      "url": "https://asset.game-hololive-dreams.com/EkVT9R",
+      "md5": "78b1b38bd72da94c39c118df29c16d2d",
+      "size": 1129536,
+      "dependencies": [],
+      "id": 39797
+    },
+    {
+      "name": "img_banner_full_marathon_event-normal-003_lang-eng",
+      "objectName": "xnLNyL",
+      "url": "https://asset.game-hololive-dreams.com/xnLNyL",
+      "md5": "d9adab9dfa7cd0ec316cc3634ee37e35",
+      "size": 1130198,
+      "dependencies": [],
+      "id": 39798
+    },
+    {
+      "name": "img_banner_full_marathon_event-normal-003_lang-ind",
+      "objectName": "bXH3CD",
+      "url": "https://asset.game-hololive-dreams.com/bXH3CD",
+      "md5": "78c8add3c32bd358028a6fff75e3c53a",
+      "size": 1129608,
+      "dependencies": [],
+      "id": 39799
+    },
+    {
+      "name": "img_banner_full_marathon_event-normal-003_lang-kor",
+      "objectName": "9ociRR",
+      "url": "https://asset.game-hololive-dreams.com/9ociRR",
+      "md5": "c7d5394b3cad0df47edc8ed720e9d235",
+      "size": 1129310,
+      "dependencies": [],
+      "id": 39800
+    },
+    {
+      "name": "img_banner_full_gacha-pickup-260829_lang-chs",
+      "objectName": "dMgAs8",
+      "url": "https://asset.game-hololive-dreams.com/dMgAs8",
+      "md5": "c1b463c579f0de6e97eac774b9a6f181",
+      "size": 1146088,
+      "dependencies": [],
+      "id": 39790
+    },
+    {
+      "name": "img_banner_full_gacha-pickup-260829_lang-cht",
+      "objectName": "nawzYP",
+      "url": "https://asset.game-hololive-dreams.com/nawzYP",
+      "md5": "06cf122d04ef77e6d4a94625b8c63527",
+      "size": 1148307,
+      "dependencies": [],
+      "id": 39791
+    },
+    {
+      "name": "img_banner_full_gacha-pickup-260829_lang-eng",
+      "objectName": "9Cnx4m",
+      "url": "https://asset.game-hololive-dreams.com/9Cnx4m",
+      "md5": "f15773b10ca9dcceb2668a22f2ca9680",
+      "size": 1138635,
+      "dependencies": [],
+      "id": 39792
+    },
+    {
+      "name": "img_banner_full_gacha-pickup-260829_lang-ind",
+      "objectName": "I8IE1J",
+      "url": "https://asset.game-hololive-dreams.com/I8IE1J",
+      "md5": "821de2400912bc7198167eb4c4f5f06f",
+      "size": 1128940,
+      "dependencies": [],
+      "id": 39793
+    },
+    {
+      "name": "img_banner_full_gacha-pickup-260829_lang-kor",
+      "objectName": "PgmcfJ",
+      "url": "https://asset.game-hololive-dreams.com/PgmcfJ",
+      "md5": "c9551b79b78c1d067559028979c10e97",
+      "size": 1146382,
+      "dependencies": [],
+      "id": 39794
+    },
+    {
+      "name": "adv_area_01_01_29-01",
+      "objectName": "VnNGR5",
+      "url": "https://asset.game-hololive-dreams.com/VnNGR5",
+      "md5": "e2b09f43dc0424f56b71ee4b08e57e24",
+      "size": 54835,
+      "dependencies": [],
+      "id": 38979
+    },
+    {
+      "name": "vis_script_gimmick_area-a01_fountain-01-npc-randomwalk-00",
+      "objectName": "IJmDwQ",
+      "url": "https://asset.game-hololive-dreams.com/IJmDwQ",
+      "md5": "b9cb35e86b39816b9792361b15c96f57",
+      "size": 25339,
+      "dependencies": [
+        35855,
+        35856
+      ],
+      "id": 35734
+    },
+    {
       "name": "env_3d_minigame_chase-01-night",
-      "objectName": "5zRNtb",
-      "url": "https://asset.game-hololive-dreams.com/5zRNtb",
-      "md5": "6e7ee50525ffd5f649226d454ec2a2d9",
-      "size": 11712037,
+      "objectName": "7niMoc",
+      "url": "https://asset.game-hololive-dreams.com/7niMoc",
+      "md5": "901f5fbeb6108d54658b369b8abda3cc",
+      "size": 11712231,
       "dependencies": [
         19845,
         20129,
@@ -265751,6 +265848,17 @@
         35879
       ],
       "id": 36004
+    },
+    {
+      "name": "remote-shader",
+      "objectName": "T12rw7",
+      "url": "https://asset.game-hololive-dreams.com/T12rw7",
+      "md5": "095f3dd0ba547b9fe838e0a4d1f14df2",
+      "size": 18596254,
+      "dependencies": [
+        35684
+      ],
+      "id": 35425
     }
   ],
   "resources": [

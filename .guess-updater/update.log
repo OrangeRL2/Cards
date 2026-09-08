@@ -1308,3 +1308,422 @@ cards.json: /usr/share/nginx/html/images/guess/data/cards.json
 [guess-controller] Local Guess manifests:
 -rw-r--r-- 1 nana0411 nana0411 24K Sep  7 15:29 /home/nana0411/4newCards/Cards/images/guess/data/cards.json
 -rw-r--r-- 1 nana0411 nana0411 40K Sep  7 15:29 /home/nana0411/4newCards/Cards/images/guess/data/songs.json
+
+============================================================
+[guess-controller] 2026-09-08T11:52:51+09:00
+============================================================
+[guess-controller] Checking English DB...
+From https://github.com/HolodoriDB/holodori-db-eng-diff
+   78e00d1..16d5b81  main       -> origin/main
+[guess-controller] Checking Japanese card DB...
+From https://github.com/HolodoriDB/holodori-db-jpn-diff
+   12badbe..fbbb04b  main       -> origin/main
+[guess-controller] Refreshing Holodori catalog...
+[httpx] HTTP Request: GET https://raw.githubusercontent.com/HolodoriDB/holodori-app-protos/refs/heads/main/global/appver.json "HTTP/1.1 200 OK"
+[catalog] app version 1.1.0
+[httpx] HTTP Request: GET https://us.game-hololive-dreams.com/asset/v2/pub/a/5/v/200001/list/0 "HTTP/2 200 OK"
+[download] revision 72: 21683 bundles, 18514 resources
+[download] downloading 0 files to /tmp/holodori-catalog-refresh
+0file [00:00, ?file/s]0file [00:00, ?file/s]
+[guess-controller] Changes: EN_DB=1 JP_DB=1 CATALOG=1 FORCE=0
+[guess-controller] Updating English DB...
+Updating 78e00d1..16d5b81
+Fast-forward
+ Card.json                                    |   135 +
+ CharacterLiveDialogueVoice.json              |   216 +
+ CharacterVoice.json                          |   753 ++
+ Cheat.json                                   |   243 +-
+ Condition.json                               |   486 +-
+ Costume.json                                 |    42 +
+ Emblem.json                                  |   260 +
+ ExchangeBooth.json                           |    18 +
+ ExchangeBoothFixedItem.json                  |   307 +
+ ExchangeBoothGroup.json                      |    12 +
+ Gacha.json                                   |    12 +
+ GachaButton.json                             |    36 +
+ GachaPoint.json                              |    10 +
+ Item.json                                    |    20 +
+ LangAssetEmbeddingText_Eng.json              |     2 +-
+ LangCard_Eng.json                            |    21 +
+ LangCharacterVoice_Eng.json                  |   753 ++
+ LangClientCommon_Eng.json                    |     2 +-
+ LangCostume_Eng.json                         |    21 +
+ LangEmblem_Eng.json                          |   182 +
+ LangGachaPoint_Eng.json                      |     7 +
+ LangGeneratedLiveActiveSkillLevel_Eng.json   |    42 +
+ LangGeneratedLiveLeaderSkill_Eng.json        |    21 +
+ LangGeneratedLivePassiveSkillEffect_Eng.json |    14 +
+ LangGeneratedLivePassiveSkillLevel_Eng.json  |    42 +
+ LangGeneratedLiveSpecialSkillLevel_Eng.json  |    42 +
+ LangItem_Eng.json                            |    14 +
+ LangLiveDialogueVoice_Eng.json               |   105 +
+ LangMission_Eng.json                         |     2 +-
+ LangMusicMv_Eng.json                         |    24 +
+ LangMusic_Eng.json                           |   350 +
+ LangParkQuestStep_Eng.json                   |     2 +-
+ LangParkTalk_Eng.json                        |     2 +-
+ LangPoster_Eng.json                          |    21 +-
+ LangResourceObtainmentRoute_Eng.json         |     7 +
+ LangSdCostume_Eng.json                       |    21 +
+ LiveActiveSkill.json                         |    18 +
+ LiveActiveSkillLevel.json                    |    86 +
+ LiveDialogueVoice.json                       |   177 +
+ LiveDialogueVoiceCharacter.json              | 12445 +++++++++++++------------
+ LiveLeaderSkill.json                         |    31 +
+ LivePassiveSkill.json                        |    18 +
+ LivePassiveSkillEffect.json                  |    24 +
+ LivePassiveSkillLevel.json                   |    64 +
+ LiveSpecialCardDialogue.json                 |    81 +
+ LiveSpecialCostumeDialogue.json              |    81 +
+ LiveSpecialSkill.json                        |    18 +
+ LiveSpecialSkillLevel.json                   |    74 +
+ Mission.json                                 |    79 +
+ MissionGroup.json                            |     7 +
+ MissionProgress.json                         |   971 ++
+ Music.json                                   |   473 +-
+ MusicDifficulty.json                         |   200 +
+ MusicDifficultyChart.json                    |   240 +
+ MusicMv.json                                 |   116 +
+ Poster.json                                  |     9 +
+ ResourceObtainmentRoute.json                 |     9 +
+ SdCostume.json                               |    42 +
+ TipsDetail.json                              |   132 +-
+ version.txt                                  |     2 +-
+ 60 files changed, 13194 insertions(+), 6450 deletions(-)
+[guess-controller] Updating/organizing local Holodori cards...
+Holodori card update check started
+Card metadata DB: /home/nana0411/testholo/holodori-db-eng-diff
+$ git pull --ff-only
+Already up to date.
+$ git pull --ff-only
+Already up to date.
+Asset tools changed: False
+Database repository changed: False
+New or missing card records detected: 3
+  00036-5-uniq-0078-00
+  04016-5-uniq-0079-00
+  04017-5-uniq-0080-00
+$ holodori download /home/nana0411/testholo/all-cards-raw --filter ^img_card_full_ --no-overwrite --catalog /home/nana0411/4newCards/Cards/.guess-updater/octo_list.json
+[download] revision 72: 21683 bundles, 18514 resources
+[download] downloading 3 files to /home/nana0411/testholo/all-cards-raw
+  0%|          | 0/3 [00:00<?, ?file/s][httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/RRiwWp "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/KVmG03 "HTTP/2 200 OK"
+ 33%|███▎      | 1/3 [00:00<00:00,  3.31file/s][httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/KCcQyM "HTTP/2 200 OK"
+100%|██████████| 3/3 [00:00<00:00,  8.87file/s]
+$ holodori download /home/nana0411/testholo/card-signatures-raw --filter ^mov_card_sign_ --workers 1 --no-overwrite --catalog /home/nana0411/4newCards/Cards/.guess-updater/octo_list.json
+[download] revision 72: 21683 bundles, 18514 resources
+[download] downloading 3 files to /home/nana0411/testholo/card-signatures-raw
+  0%|          | 0/3 [00:00<?, ?file/s][httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/USc6iX "HTTP/2 200 OK"
+ 33%|███▎      | 1/3 [00:00<00:00,  2.63file/s][httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/JdwHrb "HTTP/2 200 OK"
+ 67%|██████▋   | 2/3 [00:00<00:00,  2.32file/s][httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/aHbOeC "HTTP/2 200 OK"
+100%|██████████| 3/3 [00:01<00:00,  2.07file/s]100%|██████████| 3/3 [00:01<00:00,  2.15file/s]
+$ holodori extract /home/nana0411/testholo/card-signatures-raw/resources /home/nana0411/testholo/card-signatures-extracted
+[extract] mov_card_sign_00001-5-uniq-0000-00.usm -> 2 files
+[extract] mov_card_sign_00002-5-uniq-0001-00.usm -> 2 files
+[extract] mov_card_sign_00004-5-uniq-0005-00.usm -> 2 files
+[extract] mov_card_sign_00005-5-uniq-0006-00.usm -> 2 files
+[extract] mov_card_sign_00006-5-uniq-0007-00.usm -> 2 files
+[extract] mov_card_sign_00006-5-uniq-0074-00.usm -> 2 files
+[extract] mov_card_sign_00007-5-uniq-0008-00.usm -> 2 files
+[extract] mov_card_sign_00010-5-uniq-0010-00.usm -> 2 files
+[extract] mov_card_sign_00010-5-uniq-0069-00.usm -> 2 files
+[extract] mov_card_sign_00011-5-uniq-0011-00.usm -> 2 files
+[extract] mov_card_sign_00012-5-uniq-0012-00.usm -> 2 files
+[extract] mov_card_sign_00012-5-uniq-0062-00.usm -> 2 files
+[extract] mov_card_sign_00013-5-uniq-0002-00.usm -> 2 files
+[extract] mov_card_sign_00014-5-uniq-0013-00.usm -> 2 files
+[extract] mov_card_sign_00014-5-uniq-0075-00.usm -> 2 files
+[extract] mov_card_sign_00015-5-uniq-0003-00.usm -> 2 files
+[extract] mov_card_sign_00015-5-uniq-0067-00.usm -> 2 files
+[extract] mov_card_sign_00016-5-uniq-0014-00.usm -> 2 files
+[extract] mov_card_sign_00016-5-uniq-0076-00.usm -> 2 files
+[extract] mov_card_sign_00017-5-uniq-0015-00.usm -> 2 files
+[extract] mov_card_sign_00017-5-uniq-0077-00.usm -> 2 files
+[extract] mov_card_sign_00018-5-uniq-0004-00.usm -> 2 files
+[extract] mov_card_sign_00018-5-uniq-0068-00.usm -> 2 files
+[extract] mov_card_sign_00019-5-uniq-0016-00.usm -> 2 files
+[extract] mov_card_sign_00021-5-uniq-0017-00.usm -> 2 files
+[extract] mov_card_sign_00021-5-uniq-0064-00.usm -> 2 files
+[extract] mov_card_sign_00022-5-uniq-0018-00.usm -> 2 files
+[extract] mov_card_sign_00022-5-uniq-0063-00.usm -> 2 files
+[extract] mov_card_sign_00023-5-uniq-0019-00.usm -> 2 files
+[extract] mov_card_sign_00026-5-uniq-0021-00.usm -> 2 files
+[extract] mov_card_sign_00026-5-uniq-0065-00.usm -> 2 files
+[extract] mov_card_sign_00027-5-uniq-0022-00.usm -> 2 files
+[extract] mov_card_sign_00028-5-uniq-0023-00.usm -> 2 files
+[extract] mov_card_sign_00028-5-uniq-0070-00.usm -> 2 files
+[extract] mov_card_sign_00030-5-uniq-0024-00.usm -> 2 files
+[extract] mov_card_sign_00031-5-uniq-0025-00.usm -> 2 files
+[extract] mov_card_sign_00032-5-uniq-0026-00.usm -> 2 files
+[extract] mov_card_sign_00034-5-uniq-0027-00.usm -> 2 files
+[extract] mov_card_sign_00035-5-uniq-0028-00.usm -> 2 files
+[extract] mov_card_sign_00036-5-uniq-0029-00.usm -> 2 files
+[extract] mov_card_sign_00036-5-uniq-0078-00.usm -> 2 files
+[extract] mov_card_sign_00037-5-uniq-0030-00.usm -> 2 files
+[extract] mov_card_sign_00039-5-uniq-0032-00.usm -> 2 files
+[extract] mov_card_sign_03001-5-uniq-0033-00.usm -> 2 files
+[extract] mov_card_sign_03002-5-uniq-0034-00.usm -> 2 files
+[extract] mov_card_sign_03003-5-uniq-0035-00.usm -> 2 files
+[extract] mov_card_sign_03004-5-uniq-0036-00.usm -> 2 files
+[extract] mov_card_sign_03004-5-uniq-0073-00.usm -> 2 files
+[extract] mov_card_sign_03005-5-uniq-0037-00.usm -> 2 files
+[extract] mov_card_sign_03006-5-uniq-0038-00.usm -> 2 files
+[extract] mov_card_sign_03007-5-uniq-0039-00.usm -> 2 files
+[extract] mov_card_sign_03008-5-uniq-0040-00.usm -> 2 files
+[extract] mov_card_sign_03009-5-uniq-0041-00.usm -> 2 files
+[extract] mov_card_sign_04001-5-uniq-0042-00.usm -> 2 files
+[extract] mov_card_sign_04001-5-uniq-0071-00.usm -> 2 files
+[extract] mov_card_sign_04002-5-uniq-0043-00.usm -> 2 files
+[extract] mov_card_sign_04003-5-uniq-0044-00.usm -> 2 files
+[extract] mov_card_sign_04003-5-uniq-0072-00.usm -> 2 files
+[extract] mov_card_sign_04007-5-uniq-0047-00.usm -> 2 files
+[extract] mov_card_sign_04010-5-uniq-0049-00.usm -> 2 files
+[extract] mov_card_sign_04012-5-uniq-0051-00.usm -> 2 files
+[extract] mov_card_sign_04013-5-uniq-0052-00.usm -> 2 files
+[extract] mov_card_sign_04014-5-uniq-0053-00.usm -> 2 files
+[extract] mov_card_sign_04015-5-uniq-0054-00.usm -> 2 files
+[extract] mov_card_sign_04016-5-uniq-0055-00.usm -> 2 files
+[extract] mov_card_sign_04016-5-uniq-0079-00.usm -> 2 files
+[extract] mov_card_sign_04017-5-uniq-0056-00.usm -> 2 files
+[extract] mov_card_sign_04017-5-uniq-0080-00.usm -> 2 files
+[extract] mov_card_sign_06002-5-uniq-0058-00.usm -> 2 files
+[extract] mov_card_sign_06002-5-uniq-0066-00.usm -> 2 files
+[extract] mov_card_sign_06003-5-uniq-0059-00.usm -> 2 files
+[extract] mov_card_sign_06004-5-uniq-0060-00.usm -> 2 files
+[extract] mov_card_sign_06005-5-uniq-0061-00.usm -> 2 files
+Card bundles found: 181
+/home/nana0411/testholo/holodori-asset-tools/.venv/lib/python3.12/site-packages/UnityPy/files/BundleFile.py:533: UnityVersionFallbackWarning: No valid Unity version found, defaulting to UnityPy.config.FALLBACK_UNITY_VERSION (6000.3.15f1)
+  version_str = config.get_fallback_version()
+/home/nana0411/testholo/holodori-asset-tools/.venv/lib/python3.12/site-packages/UnityPy/files/SerializedFile.py:359: UnityVersionFallbackWarning: No valid Unity version found, defaulting to UnityPy.config.FALLBACK_UNITY_VERSION (6000.3.15f1)
+  string_version = config.get_fallback_version()
+Card [97/181]: img_card_full_00036-5-uniq-0078-00_-3354863874384638286.png
+/home/nana0411/testholo/holodori-asset-tools/.venv/lib/python3.12/site-packages/UnityPy/files/BundleFile.py:533: UnityVersionFallbackWarning: No valid Unity version found, defaulting to UnityPy.config.FALLBACK_UNITY_VERSION (6000.3.15f1)
+  version_str = config.get_fallback_version()
+/home/nana0411/testholo/holodori-asset-tools/.venv/lib/python3.12/site-packages/UnityPy/files/SerializedFile.py:359: UnityVersionFallbackWarning: No valid Unity version found, defaulting to UnityPy.config.FALLBACK_UNITY_VERSION (6000.3.15f1)
+  string_version = config.get_fallback_version()
+Card [164/181]: img_card_full_04016-5-uniq-0079-00_-748843272733423018.png
+Card [168/181]: img_card_full_04017-5-uniq-0080-00_-4092713102286616179.png
+New corrected cards: 3; card failures: 0
+$ ffmpeg -loglevel error -f h264 -i /home/nana0411/testholo/card-signatures-extracted/mov_card_sign_00036-5-uniq-0078-00/sfv_ch0 /tmp/tmp6bzjqs4i/color/%06d.png
+$ ffmpeg -loglevel error -f mpegvideo -i /home/nana0411/testholo/card-signatures-extracted/mov_card_sign_00036-5-uniq-0078-00/alp_ch0 /tmp/tmp6bzjqs4i/alpha/%06d.png
+Signature layer: mov_card_sign_00036-5-uniq-0078-00.png
+$ ffmpeg -loglevel error -f h264 -i /home/nana0411/testholo/card-signatures-extracted/mov_card_sign_04016-5-uniq-0079-00/sfv_ch0 /tmp/tmpfsn3hd9t/color/%06d.png
+$ ffmpeg -loglevel error -f mpegvideo -i /home/nana0411/testholo/card-signatures-extracted/mov_card_sign_04016-5-uniq-0079-00/alp_ch0 /tmp/tmpfsn3hd9t/alpha/%06d.png
+Signature layer: mov_card_sign_04016-5-uniq-0079-00.png
+$ ffmpeg -loglevel error -f h264 -i /home/nana0411/testholo/card-signatures-extracted/mov_card_sign_04017-5-uniq-0080-00/sfv_ch0 /tmp/tmpz1imfvlv/color/%06d.png
+$ ffmpeg -loglevel error -f mpegvideo -i /home/nana0411/testholo/card-signatures-extracted/mov_card_sign_04017-5-uniq-0080-00/alp_ch0 /tmp/tmpz1imfvlv/alpha/%06d.png
+Signature layer: mov_card_sign_04017-5-uniq-0080-00.png
+New signature layers: 3
+Signed card: img_card_full_00036-5-uniq-0078-00_signed.png
+Signed card: img_card_full_04016-5-uniq-0079-00_signed.png
+Signed card: img_card_full_04017-5-uniq-0080-00_signed.png
+New or refreshed signed cards: 3
+Organized images copied: 254; missing unsigned: 0
+Card update complete
+Open: /home/nana0411/testholo/organized-card-images
+[guess-controller] Syncing ★★★ / ★★★★ / ★★★★★ into local bot...
+[guess-controller] Ensuring remote HOLODORI directories exist...
+[guess-controller] Syncing HOLODORI card folders to OPC...
+[guess-controller] Sending fresh catalog to OPC...
+[guess-controller] Running OPC Guess updater...
+From https://github.com/HolodoriDB/holodori-db-eng-diff
+   78e00d1..16d5b81  main       -> origin/main
+[guess-update] DB changed: 78e00d1c7c754e6df9833f6fc66f8137930d313f -> 16d5b81b35cb90cf254a50bdde2a0bcbc328e521
+Updating 78e00d1..16d5b81
+Fast-forward
+ Card.json                                    |   135 +
+ CharacterLiveDialogueVoice.json              |   216 +
+ CharacterVoice.json                          |   753 ++
+ Cheat.json                                   |   243 +-
+ Condition.json                               |   486 +-
+ Costume.json                                 |    42 +
+ Emblem.json                                  |   260 +
+ ExchangeBooth.json                           |    18 +
+ ExchangeBoothFixedItem.json                  |   307 +
+ ExchangeBoothGroup.json                      |    12 +
+ Gacha.json                                   |    12 +
+ GachaButton.json                             |    36 +
+ GachaPoint.json                              |    10 +
+ Item.json                                    |    20 +
+ LangAssetEmbeddingText_Eng.json              |     2 +-
+ LangCard_Eng.json                            |    21 +
+ LangCharacterVoice_Eng.json                  |   753 ++
+ LangClientCommon_Eng.json                    |     2 +-
+ LangCostume_Eng.json                         |    21 +
+ LangEmblem_Eng.json                          |   182 +
+ LangGachaPoint_Eng.json                      |     7 +
+ LangGeneratedLiveActiveSkillLevel_Eng.json   |    42 +
+ LangGeneratedLiveLeaderSkill_Eng.json        |    21 +
+ LangGeneratedLivePassiveSkillEffect_Eng.json |    14 +
+ LangGeneratedLivePassiveSkillLevel_Eng.json  |    42 +
+ LangGeneratedLiveSpecialSkillLevel_Eng.json  |    42 +
+ LangItem_Eng.json                            |    14 +
+ LangLiveDialogueVoice_Eng.json               |   105 +
+ LangMission_Eng.json                         |     2 +-
+ LangMusicMv_Eng.json                         |    24 +
+ LangMusic_Eng.json                           |   350 +
+ LangParkQuestStep_Eng.json                   |     2 +-
+ LangParkTalk_Eng.json                        |     2 +-
+ LangPoster_Eng.json                          |    21 +-
+ LangResourceObtainmentRoute_Eng.json         |     7 +
+ LangSdCostume_Eng.json                       |    21 +
+ LiveActiveSkill.json                         |    18 +
+ LiveActiveSkillLevel.json                    |    86 +
+ LiveDialogueVoice.json                       |   177 +
+ LiveDialogueVoiceCharacter.json              | 12445 +++++++++++++------------
+ LiveLeaderSkill.json                         |    31 +
+ LivePassiveSkill.json                        |    18 +
+ LivePassiveSkillEffect.json                  |    24 +
+ LivePassiveSkillLevel.json                   |    64 +
+ LiveSpecialCardDialogue.json                 |    81 +
+ LiveSpecialCostumeDialogue.json              |    81 +
+ LiveSpecialSkill.json                        |    18 +
+ LiveSpecialSkillLevel.json                   |    74 +
+ Mission.json                                 |    79 +
+ MissionGroup.json                            |     7 +
+ MissionProgress.json                         |   971 ++
+ Music.json                                   |   473 +-
+ MusicDifficulty.json                         |   200 +
+ MusicDifficultyChart.json                    |   240 +
+ MusicMv.json                                 |   116 +
+ Poster.json                                  |     9 +
+ ResourceObtainmentRoute.json                 |     9 +
+ SdCostume.json                               |    42 +
+ TipsDetail.json                              |   132 +-
+ version.txt                                  |     2 +-
+ 60 files changed, 13194 insertions(+), 6450 deletions(-)
+=== GUESS FULL UPDATE ===
+$ /home/opc/guess-updater/.venv/bin/holodori download /home/opc/guess-updater/work/_raw/jackets --filter ^img_music_jacket_ --no-overwrite --catalog /home/opc/guess-updater/octo_list.json
+[download] revision 72: 21683 bundles, 18514 resources
+[download] downloading 5 files to /home/opc/guess-updater/work/_raw/jackets
+  0%|          | 0/5 [00:00<?, ?file/s][httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/K8ZFFc "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/mX63uw "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/cpFA9e "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/ktScUS "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/LKBwCw "HTTP/2 200 OK"
+ 20%|██        | 1/5 [00:00<00:01,  2.00file/s] 60%|██████    | 3/5 [00:00<00:00,  5.09file/s]100%|██████████| 5/5 [00:00<00:00,  7.03file/s]
+/home/opc/guess-updater/.venv/lib64/python3.12/site-packages/UnityPy/files/BundleFile.py:533: UnityVersionFallbackWarning: No valid Unity version found, defaulting to UnityPy.config.FALLBACK_UNITY_VERSION (6000.3.15f1)
+  version_str = config.get_fallback_version()
+/home/opc/guess-updater/.venv/lib64/python3.12/site-packages/UnityPy/files/SerializedFile.py:360: UnityVersionFallbackWarning: No valid Unity version found, defaulting to UnityPy.config.FALLBACK_UNITY_VERSION (6000.3.15f1)
+  string_version = config.get_fallback_version()
+/home/opc/guess-updater/.venv/lib64/python3.12/site-packages/UnityPy/files/BundleFile.py:533: UnityVersionFallbackWarning: No valid Unity version found, defaulting to UnityPy.config.FALLBACK_UNITY_VERSION (6000.3.15f1)
+  version_str = config.get_fallback_version()
+/home/opc/guess-updater/.venv/lib64/python3.12/site-packages/UnityPy/files/SerializedFile.py:360: UnityVersionFallbackWarning: No valid Unity version found, defaulting to UnityPy.config.FALLBACK_UNITY_VERSION (6000.3.15f1)
+  string_version = config.get_fallback_version()
+jacket NEW m0344.png
+jacket NEW m0348.png
+jacket NEW m0363.png
+jacket NEW m0459.png
+jacket NEW m0527.png
+$ /home/opc/guess-updater/.venv/bin/holodori download /home/opc/guess-updater/work/_raw/audio --filter ^music_short_ --no-overwrite --catalog /home/opc/guess-updater/octo_list.json
+[download] revision 72: 21683 bundles, 18514 resources
+[download] downloading 5 files to /home/opc/guess-updater/work/_raw/audio
+  0%|          | 0/5 [00:00<?, ?file/s][httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/9yCsOT "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/d3lgWE "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/vcxVwd "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/dXOM3A "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/9f6Dw5 "HTTP/2 200 OK"
+ 20%|██        | 1/5 [00:02<00:10,  2.59s/file] 40%|████      | 2/5 [00:02<00:03,  1.28s/file] 80%|████████  | 4/5 [00:03<00:00,  1.80file/s]100%|██████████| 5/5 [00:03<00:00,  2.27file/s]100%|██████████| 5/5 [00:03<00:00,  1.48file/s]
+decoding /home/opc/guess-updater/work/_raw/audio/resources/music_short_m0344.acb
+sample rate: 48000 Hz
+channels: 2
+channel mask: 0x3 / FL FR
+stream total samples: 7334401 (2:32.800 seconds)
+encoding: CRI HCA
+layout: flat
+metadata from: CRI HCA header
+bitrate: 255 kbps
+stream name: music_short_m0344
+sample type: float
+play duration: 7334401 samples (2:32.800 seconds)
+$ /usr/bin/ffmpeg -y -loglevel error -i /home/opc/guess-updater/work/wav/m0344.wav -vn -c:a libmp3lame -b:a 96k /usr/share/nginx/html/images/guess/audio/m0344.mp3
+decoding /home/opc/guess-updater/work/_raw/audio/resources/music_short_m0348.acb
+sample rate: 48000 Hz
+channels: 2
+channel mask: 0x3 / FL FR
+stream total samples: 6294858 (2:11.143 seconds)
+encoding: CRI HCA
+layout: flat
+metadata from: CRI HCA header
+bitrate: 255 kbps
+stream name: music_short_m0348
+sample type: float
+play duration: 6294858 samples (2:11.143 seconds)
+audio NEW m0344.mp3
+$ /usr/bin/ffmpeg -y -loglevel error -i /home/opc/guess-updater/work/wav/m0348.wav -vn -c:a libmp3lame -b:a 96k /usr/share/nginx/html/images/guess/audio/m0348.mp3
+decoding /home/opc/guess-updater/work/_raw/audio/resources/music_short_m0363.acb
+sample rate: 48000 Hz
+channels: 2
+channel mask: 0x3 / FL FR
+stream total samples: 6726194 (2:20.129 seconds)
+encoding: CRI HCA
+layout: flat
+metadata from: CRI HCA header
+bitrate: 255 kbps
+stream name: music_short_m0363
+sample type: float
+play duration: 6726194 samples (2:20.129 seconds)
+audio NEW m0348.mp3
+$ /usr/bin/ffmpeg -y -loglevel error -i /home/opc/guess-updater/work/wav/m0363.wav -vn -c:a libmp3lame -b:a 96k /usr/share/nginx/html/images/guess/audio/m0363.mp3
+decoding /home/opc/guess-updater/work/_raw/audio/resources/music_short_m0459.acb
+sample rate: 48000 Hz
+channels: 2
+channel mask: 0x3 / FL FR
+stream total samples: 6065455 (2:06.364 seconds)
+encoding: CRI HCA
+layout: flat
+metadata from: CRI HCA header
+bitrate: 255 kbps
+stream name: music_short_m0459
+sample type: float
+play duration: 6065455 samples (2:06.364 seconds)
+audio NEW m0363.mp3
+$ /usr/bin/ffmpeg -y -loglevel error -i /home/opc/guess-updater/work/wav/m0459.wav -vn -c:a libmp3lame -b:a 96k /usr/share/nginx/html/images/guess/audio/m0459.mp3
+decoding /home/opc/guess-updater/work/_raw/audio/resources/music_short_m0527.acb
+sample rate: 48000 Hz
+channels: 2
+channel mask: 0x3 / FL FR
+stream total samples: 5287451 (1:50.155 seconds)
+encoding: CRI HCA
+layout: flat
+metadata from: CRI HCA header
+bitrate: 255 kbps
+stream name: music_short_m0527
+sample type: float
+play duration: 5287451 samples (1:50.155 seconds)
+audio NEW m0459.mp3
+$ /usr/bin/ffmpeg -y -loglevel error -i /home/opc/guess-updater/work/wav/m0527.wav -vn -c:a libmp3lame -b:a 96k /usr/share/nginx/html/images/guess/audio/m0527.mp3
+audio NEW m0527.mp3
+Cards in DB: 181
+Cards hosted: 178
+Missing hosted cards: 3
+$ /home/opc/guess-updater/.venv/bin/holodori download /home/opc/guess-updater/work/_raw/cards --filter ^img_card_full_ --no-overwrite --catalog /home/opc/guess-updater/octo_list.json
+[download] revision 72: 21683 bundles, 18514 resources
+[download] downloading 3 files to /home/opc/guess-updater/work/_raw/cards
+  0%|          | 0/3 [00:00<?, ?file/s][httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/KVmG03 "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/RRiwWp "HTTP/2 200 OK"
+ 33%|███▎      | 1/3 [00:00<00:00,  3.66file/s][httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/KCcQyM "HTTP/2 200 OK"
+ 67%|██████▋   | 2/3 [00:00<00:00,  5.76file/s]100%|██████████| 3/3 [00:00<00:00,  6.59file/s]
+card NEW 00036-5-uniq-0078-00.png
+card NEW 04016-5-uniq-0079-00.png
+card NEW 04017-5-uniq-0080-00.png
+cards.json rows: 181
+
+=== COMPLETE ===
+Songs manifest: 194
+New jackets: 5; failures: 0
+New audio:   5; failures: 0
+New cards:   3; failures: 0
+Hosted cards: 181
+songs.json: /usr/share/nginx/html/images/guess/data/songs.json
+cards.json: /usr/share/nginx/html/images/guess/data/cards.json
+[guess-controller] Fixing Guess web permissions...
+[guess-controller] Copying fresh Guess JSON manifests back to bot...
+[guess-controller] Finished successfully.
+[guess-controller] Local HOLODORI counts:
+  ★★★: 54
+  ★★★★: 54
+  ★★★★★: 146
+[guess-controller] Local Guess manifests:
+-rw-r--r-- 1 nana0411 nana0411 25K Sep  8 11:55 /home/nana0411/4newCards/Cards/images/guess/data/cards.json
+-rw-r--r-- 1 nana0411 nana0411 41K Sep  8 11:55 /home/nana0411/4newCards/Cards/images/guess/data/songs.json

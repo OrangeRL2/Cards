@@ -1977,6 +1977,16 @@
     "audio": "../audio/m0359.mp3"
   },
   {
+    "id": "m0363",
+    "title": "Simulacre",
+    "playingSeconds": 143,
+    "characterIds": [
+      "chr-00032"
+    ],
+    "jacket": "../jackets/m0363.png",
+    "audio": "../audio/m0363.mp3"
+  },
+  {
     "id": "m0524",
     "title": "You & aIzu",
     "playingSeconds": 157,
