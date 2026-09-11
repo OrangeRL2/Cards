@@ -26,7 +26,7 @@ module.exports = {
   "fubuki": ["AyaFubuMi", "BAKATARE CIRCUS", "Dorobo Construction", "FubuMio", "GAMERS", "Gen 1", "FubuMiComet"],
   "fuwawa": ["Advent", "FUWAMOCO"],
   "gigi": ["Justice"],
-  "gura": ["Saba"],
+  "gura": ["Saba", "Myth"],
   "haato": ["Gen 1", "Padoru X"],
   "hajime": ["ReGLOSS"],
   "iofi": ["AREA 15", "HoloIndonesia"],
@@ -78,5 +78,8 @@ module.exports = {
   "watame": ["BAKATARE CIRCUS", "holoForce", "LambDuck"],
   "zeta": ["holoh3ro", "Padoru Zeta", "BoZet", "HoloIndonesia"],
   "Gen 1": ["Fubuki", "Matsuri", "Mel", "Haato", "Aki"],
-  "kiara": ["HOLOTORI"],
+  "kiara": ["HOLOTORI", "Myth"],
+  "amelia": ["Myth"],
+  "calli":["Myth"],
+  "ina":["Myth"]
 };
