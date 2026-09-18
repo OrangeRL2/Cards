@@ -1,7 +1,7 @@
 {
-  "revisionId": 72,
+  "revisionId": 78,
   "urlFormat": "https://asset.game-hololive-dreams.com/{o}",
-  "serverTime": 1788835975458,
+  "serverTime": 1789713375019,
   "assetBundles": [
     {
       "name": "adv_area_01_01_01-01",
@@ -49715,15 +49715,6 @@
       "size": 267886,
       "dependencies": [],
       "id": 24427
-    },
-    {
-      "name": "img_emb_m_chr-membership-06004-01",
-      "objectName": "BaWKBO",
-      "url": "https://asset.game-hololive-dreams.com/BaWKBO",
-      "md5": "0c7dfb531099d20c28e4e535158f61fa",
-      "size": 275453,
-      "dependencies": [],
-      "id": 24428
     },
     {
       "name": "img_emb_m_chr-membership-06005-01",
@@ -268355,11 +268346,29 @@
       "id": 35318
     },
     {
+      "name": "img_banner_full_sub-birthday-live-botan-2026",
+      "objectName": "MKwATD",
+      "url": "https://asset.game-hololive-dreams.com/MKwATD",
+      "md5": "a73b8830f5773e94ddb480f7f5c3203f",
+      "size": 1042515,
+      "dependencies": [],
+      "id": 40198
+    },
+    {
+      "name": "img_banner_full_sub-botan-geme-tournament",
+      "objectName": "l7EuMG",
+      "url": "https://asset.game-hololive-dreams.com/l7EuMG",
+      "md5": "d30f08cf15af93bb46e1426af74e113e",
+      "size": 1131941,
+      "dependencies": [],
+      "id": 40199
+    },
+    {
       "name": "env_3d_minigame_chase-01-night",
-      "objectName": "2UDMbQ",
-      "url": "https://asset.game-hololive-dreams.com/2UDMbQ",
-      "md5": "3d1f82294aa00f8e299be645193e4aa9",
-      "size": 11719311,
+      "objectName": "NsDwks",
+      "url": "https://asset.game-hololive-dreams.com/NsDwks",
+      "md5": "35742d3f89e07d9e5fb7e83dac05a53f",
+      "size": 11581350,
       "dependencies": [
         19845,
         20129,
@@ -268663,6 +268672,15 @@
         35879
       ],
       "id": 36004
+    },
+    {
+      "name": "img_emb_m_chr-membership-06004-01",
+      "objectName": "kRezT7",
+      "url": "https://asset.game-hololive-dreams.com/kRezT7",
+      "md5": "b81d908d12639fc1e0fa6584d3ebb01f",
+      "size": 275586,
+      "dependencies": [],
+      "id": 24428
     }
   ],
   "resources": [
@@ -282120,15 +282138,6 @@
       "size": 7209,
       "dependencies": [],
       "id": 1388
-    },
-    {
-      "name": "music_short_m0021.acb",
-      "objectName": "U4gLBI",
-      "url": "https://asset.game-hololive-dreams.com/U4gLBI",
-      "md5": "719c89672848aad46f0a4da9309ca4c8",
-      "size": 7209,
-      "dependencies": [],
-      "id": 1390
     },
     {
       "name": "music_short_m0022.acb",
@@ -351888,33 +351897,6 @@
       "size": 492233,
       "dependencies": [],
       "id": 36203
-    },
-    {
-      "name": "mov_adv_teaser_area-a01-01.usm",
-      "objectName": "goe3Jj",
-      "url": "https://asset.game-hololive-dreams.com/goe3Jj",
-      "md5": "65dc373c6d801f6d210be80d6f06f113",
-      "size": 31135369,
-      "dependencies": [],
-      "id": 36199
-    },
-    {
-      "name": "mov_adv_teaser_area-a01-02.usm",
-      "objectName": "9oF0Fi",
-      "url": "https://asset.game-hololive-dreams.com/9oF0Fi",
-      "md5": "26de9ed49e6ee4e515c64d6b5fe77c9a",
-      "size": 4046441,
-      "dependencies": [],
-      "id": 36200
-    },
-    {
-      "name": "mov_adv_teaser_area-a02.usm",
-      "objectName": "vYQnyT",
-      "url": "https://asset.game-hololive-dreams.com/vYQnyT",
-      "md5": "4cfc017951c6eb5be4803da84cbd2a4c",
-      "size": 23514281,
-      "dependencies": [],
-      "id": 36201
     },
     {
       "name": "vo_live_dial_chr_03008_03008-to-00013.acb",
@@ -435291,6 +435273,42 @@
       "size": 426889,
       "dependencies": [],
       "id": 39837
+    },
+    {
+      "name": "mov_adv_teaser_area-a01-01.usm",
+      "objectName": "9lYxvf",
+      "url": "https://asset.game-hololive-dreams.com/9lYxvf",
+      "md5": "67373571756b33ecdeb159a5964dfe09",
+      "size": 30770153,
+      "dependencies": [],
+      "id": 36199
+    },
+    {
+      "name": "mov_adv_teaser_area-a01-02.usm",
+      "objectName": "6V0Fz0",
+      "url": "https://asset.game-hololive-dreams.com/6V0Fz0",
+      "md5": "53e0e0c28598949d3d412b621b4dab6a",
+      "size": 4066633,
+      "dependencies": [],
+      "id": 36200
+    },
+    {
+      "name": "mov_adv_teaser_area-a02.usm",
+      "objectName": "Inb1pk",
+      "url": "https://asset.game-hololive-dreams.com/Inb1pk",
+      "md5": "4cad4a64b19577be8df61460112963d3",
+      "size": 23417961,
+      "dependencies": [],
+      "id": 36201
+    },
+    {
+      "name": "music_short_m0021.acb",
+      "objectName": "oPtU6a",
+      "url": "https://asset.game-hololive-dreams.com/oPtU6a",
+      "md5": "2b913d92eb92300afc7b3cbae9bc0058",
+      "size": 3605257,
+      "dependencies": [],
+      "id": 1390
     }
   ]
 }

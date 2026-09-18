@@ -1937,6 +1937,16 @@
     "audio": "../audio/m0342.mp3"
   },
   {
+    "id": "m0344",
+    "title": "HoloHawk",
+    "playingSeconds": 152,
+    "characterIds": [
+      "chr-00036"
+    ],
+    "jacket": "../jackets/m0344.png",
+    "audio": "../audio/m0344.mp3"
+  },
+  {
     "id": "m0346",
     "title": "FACT",
     "playingSeconds": 140,
@@ -1955,6 +1965,18 @@
     ],
     "jacket": "../jackets/m0347.png",
     "audio": "../audio/m0347.mp3"
+  },
+  {
+    "id": "m0348",
+    "title": "Tri-Unity♡LoveSystem",
+    "playingSeconds": 131,
+    "characterIds": [
+      "chr-00036",
+      "chr-04016",
+      "chr-04017"
+    ],
+    "jacket": "../jackets/m0348.png",
+    "audio": "../audio/m0348.mp3"
   },
   {
     "id": "m0353",
@@ -1987,6 +2009,16 @@
     "audio": "../audio/m0363.mp3"
   },
   {
+    "id": "m0459",
+    "title": "Illusion Night",
+    "playingSeconds": 126,
+    "characterIds": [
+      "chr-03006"
+    ],
+    "jacket": "../jackets/m0459.png",
+    "audio": "../audio/m0459.mp3"
+  },
+  {
     "id": "m0524",
     "title": "You & aIzu",
     "playingSeconds": 157,
@@ -1995,5 +2027,16 @@
     ],
     "jacket": "../jackets/m0524.png",
     "audio": "../audio/m0524.mp3"
+  },
+  {
+    "id": "m0527",
+    "title": "Mekurumeku Rendezvous",
+    "playingSeconds": 110,
+    "characterIds": [
+      "chr-04016",
+      "chr-04017"
+    ],
+    "jacket": "../jackets/m0527.png",
+    "audio": "../audio/m0527.mp3"
   }
 ]
