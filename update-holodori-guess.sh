@@ -12,6 +12,7 @@ fi
 PATH="/usr/local/bin:/usr/bin:/bin"
 
 HOME_DIR="$HOME"
+OWN="$HOME_DIR/holodori-own"
 BOT="$HOME_DIR/4newCards/Cards"
 SSH_KEY="$HOME_DIR/ssh-key-2025-10-19.key"
 
@@ -23,6 +24,8 @@ REMOTE_HOLODORI="/usr/share/nginx/html/images/HOLODORI"
 
 LOCAL_DATA="$BOT/images/guess/data"
 LOCAL_HOLODORI="$BOT/assets/images/HOLODORI"
+
+# Keep the existing image workspace so we do not have to rebuild every old card.
 ORGANIZED="$HOME_DIR/testholo/organized-card-images"
 
 STATE_DIR="$BOT/.guess-updater"
@@ -32,46 +35,28 @@ LOG="$STATE_DIR/update.log"
 
 CARD_UPDATER="$BOT/update_holodori_cards_auto.py"
 
-# Guess DB used for songs/cards.json.
-if [[ -d "$HOME_DIR/testholo/holodori-db-eng-diff/.git" ]]; then
-  EN_DB="$HOME_DIR/testholo/holodori-db-eng-diff"
-elif [[ -d "$HOME_DIR/holodori/holodori-db-eng-diff/.git" ]]; then
-  EN_DB="$HOME_DIR/holodori/holodori-db-eng-diff"
-elif [[ -d "$HOME_DIR/holodori-db-eng-diff/.git" ]]; then
-  EN_DB="$HOME_DIR/holodori-db-eng-diff"
+MASTER_LATEST="$OWN/master-client/latest.json"
+
+if [[ -x "$OWN/run_holodori_monitor.sh" ]]; then
+  MONITOR="$OWN/run_holodori_monitor.sh"
+elif [[ -x "$OWN/holodori-monitor/run_holodori_monitor.sh" ]]; then
+  MONITOR="$OWN/holodori-monitor/run_holodori_monitor.sh"
 else
-  echo "[guess-controller] Could not find holodori-db-eng-diff." >&2
+  echo "[guess-controller] Could not find Holodori monitor runner." >&2
   exit 1
 fi
 
-# Card organizer DB.
-if [[ -d "$HOME_DIR/testholo/holodori-db-jpn-diff/.git" ]]; then
-  JP_DB="$HOME_DIR/testholo/holodori-db-jpn-diff"
-elif [[ -d "$HOME_DIR/holodori-db-jpn-diff/.git" ]]; then
-  JP_DB="$HOME_DIR/holodori-db-jpn-diff"
-else
-  echo "[guess-controller] Could not find holodori-db-jpn-diff." >&2
+CARD_PY="$OWN/holodori-asset-tools/.venv/bin/python"
+CARD_TOOL_BIN="$OWN/holodori-asset-tools/.venv/bin"
+CATALOG_HOLODORI="$OWN/holodori-asset-tools/.venv/bin/holodori"
+
+if [[ ! -x "$CARD_PY" ]]; then
+  echo "[guess-controller] Missing Holodori Python venv: $CARD_PY" >&2
   exit 1
 fi
 
-# Prefer the venv belonging to the card updater's tool checkout.
-if [[ -x "$HOME_DIR/testholo/holodori-asset-tools/.venv/bin/python" ]]; then
-  CARD_PY="$HOME_DIR/testholo/holodori-asset-tools/.venv/bin/python"
-  CARD_TOOL_BIN="$HOME_DIR/testholo/holodori-asset-tools/.venv/bin"
-elif [[ -x "$HOME_DIR/holodori-asset-tools/.venv/bin/python" ]]; then
-  CARD_PY="$HOME_DIR/holodori-asset-tools/.venv/bin/python"
-  CARD_TOOL_BIN="$HOME_DIR/holodori-asset-tools/.venv/bin"
-else
-  echo "[guess-controller] Could not find Holodori Python venv." >&2
-  exit 1
-fi
-
-if [[ -x "$HOME_DIR/holodori-asset-tools/.venv/bin/holodori" ]]; then
-  CATALOG_HOLODORI="$HOME_DIR/holodori-asset-tools/.venv/bin/holodori"
-elif [[ -x "$HOME_DIR/testholo/holodori-asset-tools/.venv/bin/holodori" ]]; then
-  CATALOG_HOLODORI="$HOME_DIR/testholo/holodori-asset-tools/.venv/bin/holodori"
-else
-  echo "[guess-controller] Could not find holodori CLI." >&2
+if [[ ! -x "$CATALOG_HOLODORI" ]]; then
+  echo "[guess-controller] Missing holodori CLI: $CATALOG_HOLODORI" >&2
   exit 1
 fi
 
@@ -102,22 +87,47 @@ fi
 
 chmod 600 "$SSH_KEY" 2>/dev/null || true
 
-echo "[guess-controller] Checking English DB..."
-git -C "$EN_DB" fetch origin
-EN_LOCAL="$(git -C "$EN_DB" rev-parse HEAD)"
-EN_REMOTE="$(git -C "$EN_DB" rev-parse '@{u}')"
-EN_CHANGED=0
-[[ "$EN_LOCAL" != "$EN_REMOTE" ]] && EN_CHANGED=1
+read_master_version() {
+  if [[ ! -f "$MASTER_LATEST" ]]; then
+    printf ''
+    return
+  fi
 
-echo "[guess-controller] Checking Japanese card DB..."
-git -C "$JP_DB" fetch origin
-JP_LOCAL="$(git -C "$JP_DB" rev-parse HEAD)"
-JP_REMOTE="$(git -C "$JP_DB" rev-parse '@{u}')"
-JP_CHANGED=0
-[[ "$JP_LOCAL" != "$JP_REMOTE" ]] && JP_CHANGED=1
+  "$CARD_PY" - "$MASTER_LATEST" <<'PY'
+import json
+import sys
+from pathlib import Path
 
-echo "[guess-controller] Refreshing Holodori catalog..."
+path = Path(sys.argv[1])
+try:
+    data = json.loads(path.read_text(encoding="utf-8"))
+    print(data.get("master_version", ""))
+except Exception:
+    print("")
+PY
+}
+
+MASTER_BEFORE="$(read_master_version)"
+
+echo "[guess-controller] Refreshing own Holodori master..."
+"$MONITOR"
+
+MASTER_AFTER="$(read_master_version)"
+
+if [[ -z "$MASTER_AFTER" ]]; then
+  echo "[guess-controller] Monitor did not produce a valid latest.json." >&2
+  exit 1
+fi
+
+MASTER_CHANGED=0
+[[ "$MASTER_BEFORE" != "$MASTER_AFTER" ]] && MASTER_CHANGED=1
+
+echo "[guess-controller] Master before: ${MASTER_BEFORE:-<none>}"
+echo "[guess-controller] Master after : $MASTER_AFTER"
+
+echo "[guess-controller] Refreshing Holodori asset catalog..."
 rm -f "$OLD_CATALOG"
+
 if [[ -f "$CATALOG" ]]; then
   mv "$CATALOG" "$OLD_CATALOG"
 fi
@@ -128,36 +138,35 @@ fi
 
 if [[ ! -s "$CATALOG" ]]; then
   echo "[guess-controller] Fresh catalog was not created." >&2
+
   if [[ -f "$OLD_CATALOG" ]]; then
     mv "$OLD_CATALOG" "$CATALOG"
   fi
+
   exit 1
 fi
 
 CATALOG_CHANGED=1
+
 if [[ -f "$OLD_CATALOG" ]]; then
   OLD_SUM="$(sha256sum "$OLD_CATALOG" | awk '{print $1}')"
   NEW_SUM="$(sha256sum "$CATALOG" | awk '{print $1}')"
   [[ "$OLD_SUM" == "$NEW_SUM" ]] && CATALOG_CHANGED=0
 fi
 
-echo "[guess-controller] Changes: EN_DB=$EN_CHANGED JP_DB=$JP_CHANGED CATALOG=$CATALOG_CHANGED FORCE=$FORCE"
+echo "[guess-controller] Changes: MASTER=$MASTER_CHANGED CATALOG=$CATALOG_CHANGED FORCE=$FORCE"
 
-if [[ "$EN_CHANGED" -eq 0 && "$JP_CHANGED" -eq 0 && "$CATALOG_CHANGED" -eq 0 && "$FORCE" -eq 0 ]]; then
+if [[ "$MASTER_CHANGED" -eq 0 && "$CATALOG_CHANGED" -eq 0 && "$FORCE" -eq 0 ]]; then
   echo "[guess-controller] Nothing changed. Done."
   exit 0
 fi
 
-if [[ "$EN_CHANGED" -eq 1 ]]; then
-  echo "[guess-controller] Updating English DB..."
-  git -C "$EN_DB" pull --ff-only
-fi
-
-echo "[guess-controller] Updating/organizing local Holodori cards..."
+echo "[guess-controller] Updating/organizing local Holodori cards from own master..."
 export PATH="$CARD_TOOL_BIN:/usr/local/bin:/usr/bin:/bin"
 "$CARD_PY" "$CARD_UPDATER"
 
 echo "[guess-controller] Syncing ★★★ / ★★★★ / ★★★★★ into local bot..."
+
 for rarity in "★★★" "★★★★" "★★★★★"; do
   mkdir -p "$LOCAL_HOLODORI/$rarity"
   rsync -a --delete "$ORGANIZED/$rarity/" "$LOCAL_HOLODORI/$rarity/"
@@ -180,6 +189,9 @@ scp -q -i "$SSH_KEY" \
   -o ConnectTimeout=20 \
   "$CATALOG" \
   "$REMOTE_USER@$REMOTE_HOST:$REMOTE_BASE/octo_list.json"
+
+echo "[guess-controller] Sending fresh master data to OPC..."
+scp -q -i "$SSH_KEY"   -o BatchMode=yes   -o ConnectTimeout=20   "$MASTER_LATEST"   "$REMOTE_USER@$REMOTE_HOST:$REMOTE_BASE/latest.json"
 
 echo "[guess-controller] Running OPC Guess updater..."
 ssh -i "$SSH_KEY" \
@@ -205,9 +217,11 @@ scp -q -i "$SSH_KEY" \
 
 echo "[guess-controller] Finished successfully."
 echo "[guess-controller] Local HOLODORI counts:"
+
 for rarity in "★★★" "★★★★" "★★★★★"; do
   printf "  %s: " "$rarity"
   find "$LOCAL_HOLODORI/$rarity" -maxdepth 1 -type f -name '*.png' | wc -l
 done
+
 echo "[guess-controller] Local Guess manifests:"
 ls -lh "$LOCAL_DATA/songs.json" "$LOCAL_DATA/cards.json"

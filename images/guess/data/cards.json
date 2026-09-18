@@ -654,10 +654,22 @@
     "image": "../cards/00004-5-uniq-0005-00.png"
   },
   {
+    "assetId": "00004-5-uniq-0081-00",
+    "member": "Aki",
+    "rarity": 5,
+    "image": "../cards/00004-5-uniq-0081-00.png"
+  },
+  {
     "assetId": "03005-5-uniq-0037-00",
     "member": "Anya",
     "rarity": 5,
     "image": "../cards/03005-5-uniq-0037-00.png"
+  },
+  {
+    "assetId": "03005-5-uniq-0084-00",
+    "member": "Anya",
+    "rarity": 5,
+    "image": "../cards/03005-5-uniq-0084-00.png"
   },
   {
     "assetId": "00010-5-uniq-0010-00",
@@ -852,6 +864,12 @@
     "image": "../cards/00035-5-uniq-0028-00.png"
   },
   {
+    "assetId": "00035-5-uniq-0082-00",
+    "member": "La+",
+    "rarity": 5,
+    "image": "../cards/00035-5-uniq-0082-00.png"
+  },
+  {
     "assetId": "00030-5-uniq-0024-00",
     "member": "Lamy",
     "rarity": 5,
@@ -1030,6 +1048,12 @@
     "member": "Shiori",
     "rarity": 5,
     "image": "../cards/04013-5-uniq-0052-00.png"
+  },
+  {
+    "assetId": "04013-5-uniq-0083-00",
+    "member": "Shiori",
+    "rarity": 5,
+    "image": "../cards/04013-5-uniq-0083-00.png"
   },
   {
     "assetId": "00001-5-uniq-0000-00",

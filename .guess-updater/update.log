@@ -1813,4 +1813,1661 @@ cards.json: /usr/share/nginx/html/images/guess/data/cards.json
 -rw-r--r-- 1 nana0411 nana0411 25K Sep 18 15:37 /home/nana0411/4newCards/Cards/images/guess/data/cards.json
 -rw-r--r-- 1 nana0411 nana0411 41K Sep 18 15:37 /home/nana0411/4newCards/Cards/images/guess/data/songs.json
 [?2004h]0;nana0411@DP075: ~/4newCards/Cards[01;32mnana0411@DP075[00m:[01;34m~/4newCards/Cards[00m$ git add .
-[?2004l
+[?2004l[?2004h]0;nana0411@DP075: ~/4newCards/Cards[01;32mnana0411@DP075[00m:[01;34m~/4newCards/Cards[00m$ git commit m  [K==[K[K- ""[C[K[K[K[K[K[K-m "" [Ka"d"d"e"d" "v"o"r"t"e"x" "a"n"d" "s"u"m"m"e"r"
+[?2004l[main f3ea774] added vortex and summer
+ 536 files changed, 4483 insertions(+), 694 deletions(-)
+ create mode 100644 assets/images/C/Ayame 510.png
+ create mode 100644 assets/images/C/Baelz 006.png
+ create mode 100644 assets/images/C/Baelz 007.png
+ create mode 100644 assets/images/C/Hajime 006.png
+ create mode 100644 assets/images/C/Hajime 007.png
+ create mode 100644 assets/images/C/Hajime 008.png
+ create mode 100644 assets/images/C/Hajime 009.png
+ create mode 100644 assets/images/C/Hajime 010.png
+ create mode 100644 assets/images/C/Iofi 006.png
+ create mode 100644 assets/images/C/Iroha 514.png
+ create mode 100644 assets/images/C/Kaela 003.png
+ create mode 100644 assets/images/C/Kaela 004.png
+ create mode 100644 assets/images/C/Kaela 005.png
+ create mode 100644 assets/images/C/Kaela 006.png
+ create mode 100644 assets/images/C/Kaela 007.png
+ create mode 100644 assets/images/C/Kaela 008.png
+ create mode 100644 assets/images/C/Koyori 505.png
+ create mode 100644 assets/images/C/Koyori 506.png
+ create mode 100644 assets/images/C/Koyori 507.png
+ create mode 100644 assets/images/C/Lamy 007.png
+ create mode 100644 assets/images/C/Lamy 008.png
+ create mode 100644 assets/images/C/Lamy 009.png
+ create mode 100644 assets/images/C/Lamy 010.png
+ create mode 100644 assets/images/C/Lamy 011.png
+ create mode 100644 assets/images/C/Lamy 012.png
+ create mode 100644 assets/images/C/Marine 504.png
+ create mode 100644 assets/images/C/Marine 505.png
+ create mode 100644 assets/images/C/Marine 506.png
+ create mode 100644 assets/images/C/Marine 507.png
+ create mode 100644 assets/images/C/Matsuri 008.png
+ create mode 100644 assets/images/C/Matsuri 009.png
+ create mode 100644 assets/images/C/Mio 008.png
+ create mode 100644 assets/images/C/Mio 009.png
+ create mode 100644 assets/images/C/Moona 007.png
+ create mode 100644 assets/images/C/Moona 008.png
+ create mode 100644 assets/images/C/Nerissa 006.png
+ create mode 100644 assets/images/C/Nerissa 007.png
+ create mode 100644 assets/images/C/NoeSuba 501.png
+ create mode 100644 assets/images/C/Noel 009.png
+ create mode 100644 assets/images/C/Noel 010.png
+ create mode 100644 assets/images/C/Noel 011.png
+ create mode 100644 assets/images/C/Noel 012.png
+ create mode 100644 assets/images/C/Noel 013.png
+ create mode 100644 assets/images/C/Okayu 509.png
+ create mode 100644 assets/images/C/PekoMari 501.png
+ create mode 100644 assets/images/C/Pekora 008.png
+ create mode 100644 assets/images/C/Reine 506.png
+ create mode 100644 assets/images/C/Sora 506.png
+ create mode 100644 assets/images/C/Sora 507.png
+ create mode 100644 assets/images/C/Sora 508.png
+ create mode 100644 assets/images/C/SoraRio 501.png
+ create mode 100644 assets/images/C/Subaru 014.png
+ create mode 100644 assets/images/C/Subaru 015.png
+ create mode 100644 assets/images/C/Subaru 016.png
+ create mode 100644 assets/images/C/Subaru 017.png
+ create mode 100644 assets/images/C/Subaru 018.png
+ create mode 100644 assets/images/C/Support 010.png
+ create mode 100644 assets/images/C/Takamori 501.png
+ create mode 100644 assets/images/C/Towa 005.png
+ create mode 100644 assets/images/C/Towa 006.png
+ create mode 100644 assets/images/C/Towa 007.png
+ create mode 100644 assets/images/C/Towa 008.png
+ create mode 100644 assets/images/C/Towa 009.png
+ create mode 100644 assets/images/C/Vivi 003.png
+ create mode 100644 assets/images/C/Vivi 004.png
+ create mode 100644 assets/images/C/Vivi 005.png
+ create mode 100644 assets/images/C/Vivi 006.png
+ create mode 100644 assets/images/C/Vivi 007.png
+ create mode 100644 assets/images/C/Watame 508.png
+ delete mode 100644 assets/images/COL/CouncilRyS 001.png:Zone.Identifier
+ create mode 100644 assets/images/HR/Baelz 001.png
+ create mode 100644 assets/images/HR/Hajime 001.png
+ create mode 100644 assets/images/HR/Koyori 501.png
+ create mode 100644 assets/images/HR/Marine 501.png
+ create mode 100644 assets/images/HR/Matsuri 001.png
+ create mode 100644 assets/images/HR/Mio 001.png
+ create mode 100644 assets/images/HR/Moona 001.png
+ create mode 100644 assets/images/HR/Sora 501.png
+ create mode 100644 assets/images/HR/Towa 001.png
+ delete mode 100644 assets/images/ORI/Council 003.png:Zone.Identifier
+ delete mode 100644 assets/images/ORI/KronFauMei 003.png:Zone.Identifier
+ delete mode 100644 assets/images/ORI/KronMei 001.png:Zone.Identifier
+ delete mode 100644 assets/images/ORI/Lamy 003.png:Zone.Identifier
+ delete mode 100644 assets/images/ORI/Lui 003.png:Zone.Identifier
+ delete mode 100644 assets/images/ORI/Luna 003.png:Zone.Identifier
+ delete mode 100644 assets/images/ORI/Myth 001.png:Zone.Identifier
+ delete mode 100644 assets/images/ORI/Nene 003.png:Zone.Identifier
+ delete mode 100644 assets/images/ORI/Promise 003.png:Zone.Identifier
+ delete mode 100644 assets/images/ORI/ReGLOSS 001.png:Zone.Identifier
+ delete mode 100644 assets/images/ORI/Suisei 003.png:Zone.Identifier
+ delete mode 100644 assets/images/ORI/Towa 003.png:Zone.Identifier
+ create mode 100644 assets/images/OSR/Hajime 001.png
+ create mode 100644 assets/images/OSR/Kaela 001.png
+ create mode 100644 assets/images/OSR/Koyori 502.png
+ create mode 100644 assets/images/OSR/Lamy 002.png
+ create mode 100644 assets/images/OSR/Marine 502.png
+ create mode 100644 assets/images/OSR/Noel 002.png
+ create mode 100644 assets/images/OSR/Sora 502.png
+ create mode 100644 assets/images/OSR/Subaru 002.png
+ create mode 100644 assets/images/OSR/Towa 002.png
+ create mode 100644 assets/images/OSR/Vivi 001.png
+ create mode 100644 assets/images/OUR/Hajime 001.png
+ create mode 100644 assets/images/OUR/Kaela 001.png
+ create mode 100644 assets/images/OUR/Koyori 502.png
+ create mode 100644 assets/images/OUR/Lamy 002.png
+ create mode 100644 assets/images/OUR/Marine 502.png
+ create mode 100644 assets/images/OUR/Noel 002.png
+ create mode 100644 assets/images/OUR/Sora 501.png
+ create mode 100644 assets/images/OUR/Subaru 002.png
+ create mode 100644 assets/images/OUR/Towa 002.png
+ create mode 100644 assets/images/OUR/Vivi 001.png
+ create mode 100644 assets/images/P/AREA 15 501.png
+ create mode 100644 assets/images/P/AZKi 009.png
+ create mode 100644 assets/images/P/Advent 501.png
+ create mode 100644 assets/images/P/Anya 003.png
+ create mode 100644 assets/images/P/Ayame 006.png
+ create mode 100644 assets/images/P/Ayame 702.png
+ create mode 100644 assets/images/P/Bijou 501.png
+ create mode 100644 assets/images/P/Cecilia 002.png
+ create mode 100644 assets/images/P/Choco 004.png
+ create mode 100644 assets/images/P/Elizabeth 501.png
+ create mode 100644 assets/images/P/Flare 004.png
+ create mode 100644 assets/images/P/Fubuki 007.png
+ create mode 100644 assets/images/P/Fubuki 008.png
+ create mode 100644 assets/images/P/Fuwawa 002.png
+ create mode 100644 assets/images/P/Gigi 501.png
+ create mode 100644 assets/images/P/Haato 003.png
+ create mode 100644 assets/images/P/IRyS 005.png
+ create mode 100644 assets/images/P/Ina 003.png
+ create mode 100644 assets/images/P/Kaela 002.png
+ create mode 100644 assets/images/P/Kanade 003.png
+ create mode 100644 assets/images/P/Korone 501.png
+ create mode 100644 assets/images/P/Koyori 005.png
+ create mode 100644 assets/images/P/Lamy 004.png
+ create mode 100644 assets/images/P/Lui 005.png
+ create mode 100644 assets/images/P/Marine 008.png
+ create mode 100644 assets/images/P/Matsuri 502.png
+ create mode 100644 assets/images/P/Miko 015.png
+ create mode 100644 assets/images/P/Mio 006.png
+ create mode 100644 assets/images/P/Mococo 003.png
+ create mode 100644 assets/images/P/Moona 004.png
+ create mode 100644 assets/images/P/Nene 005.png
+ create mode 100644 assets/images/P/Oozora Police 001.png
+ create mode 100644 assets/images/P/Oozora Police 002.png
+ create mode 100644 assets/images/P/Raden 003.png
+ create mode 100644 assets/images/P/Raora 502.png
+ create mode 100644 assets/images/P/Riona 502.png
+ create mode 100644 assets/images/P/Roboco 004.png
+ create mode 100644 assets/images/P/Roboco 502.png
+ create mode 100644 assets/images/P/Su 003.png
+ create mode 100644 assets/images/P/Su 501.png
+ create mode 100644 assets/images/P/Subaru 006.png
+ create mode 100644 assets/images/P/Support 003.png
+ create mode 100644 assets/images/P/Vivi 003.png
+ create mode 100644 assets/images/P/Watame 008.png
+ create mode 100644 assets/images/P/Zeta 003.png
+ create mode 100644 assets/images/P/holoX 501.png
+ create mode 100644 assets/images/R/AZKi 004.png
+ create mode 100644 assets/images/R/Baelz 005.png
+ create mode 100644 assets/images/R/Calli 505.png
+ create mode 100644 assets/images/R/Chihaya 002.png
+ create mode 100644 assets/images/R/FUWAMOCO 504.png
+ create mode 100644 assets/images/R/Haato 002.png
+ create mode 100644 assets/images/R/Hajime 002.png
+ create mode 100644 assets/images/R/IRyS 504.png
+ create mode 100644 assets/images/R/Iofi 504.png
+ create mode 100644 assets/images/R/Iroha 004.png
+ create mode 100644 assets/images/R/Kaela 001.png
+ create mode 100644 assets/images/R/Kiara 504.png
+ create mode 100644 assets/images/R/Korone 504.png
+ create mode 100644 assets/images/R/Koyori 503.png
+ create mode 100644 assets/images/R/Koyori 504.png
+ create mode 100644 assets/images/R/Koyori 505.png
+ create mode 100644 assets/images/R/Kronii 003.png
+ create mode 100644 assets/images/R/Lamy 005.png
+ create mode 100644 assets/images/R/Lamy 504.png
+ create mode 100644 assets/images/R/Lui 505.png
+ create mode 100644 assets/images/R/Marine 506.png
+ create mode 100644 assets/images/R/Marine 507.png
+ create mode 100644 assets/images/R/Matsuri 004.png
+ create mode 100644 assets/images/R/Miko 506.png
+ create mode 100644 assets/images/R/Mio 003.png
+ create mode 100644 assets/images/R/Moona 004.png
+ create mode 100644 assets/images/R/Nene 002.png
+ create mode 100644 assets/images/R/Nerissa 005.png
+ create mode 100644 assets/images/R/Nerissa 504.png
+ create mode 100644 assets/images/R/Noel 004.png
+ create mode 100644 assets/images/R/Okayu 004.png
+ create mode 100644 assets/images/R/Ollie 003.png
+ create mode 100644 assets/images/R/Pekora 504.png
+ create mode 100644 assets/images/R/Reine 504.png
+ create mode 100644 assets/images/R/Riona 003.png
+ create mode 100644 assets/images/R/Risu 003.png
+ create mode 100644 assets/images/R/Roboco 504.png
+ create mode 100644 assets/images/R/Sora 504.png
+ create mode 100644 assets/images/R/Sora 505.png
+ create mode 100644 assets/images/R/Subaru 005.png
+ create mode 100644 assets/images/R/Subaru 504.png
+ create mode 100644 assets/images/R/Suisei 504.png
+ create mode 100644 assets/images/R/Towa 003.png
+ create mode 100644 assets/images/R/Vivi 001.png
+ create mode 100644 assets/images/R/Watame 004.png
+ create mode 100644 assets/images/R/Zeta 003.png
+ create mode 100644 assets/images/RR/Baelz 002.png
+ create mode 100644 assets/images/RR/Calli 504.png
+ create mode 100644 assets/images/RR/Haato 503.png
+ create mode 100644 assets/images/RR/Hajime 003.png
+ create mode 100644 assets/images/RR/Iroha 505.png
+ create mode 100644 assets/images/RR/Kaela 002.png
+ create mode 100644 assets/images/RR/Kiara 503.png
+ create mode 100644 assets/images/RR/Koyori 502.png
+ create mode 100644 assets/images/RR/Lamy 002.png
+ create mode 100644 assets/images/RR/Marine 503.png
+ create mode 100644 assets/images/RR/Marine 504.png
+ create mode 100644 assets/images/RR/Matsuri 003.png
+ create mode 100644 assets/images/RR/Mio 004.png
+ create mode 100644 assets/images/RR/Mio 503.png
+ create mode 100644 assets/images/RR/Moona 003.png
+ create mode 100644 assets/images/RR/Nerissa 002.png
+ create mode 100644 assets/images/RR/Noel 004.png
+ create mode 100644 assets/images/RR/Noel 503.png
+ create mode 100644 assets/images/RR/Okayu 504.png
+ create mode 100644 assets/images/RR/Pekora 503.png
+ create mode 100644 assets/images/RR/Reine 503.png
+ create mode 100644 assets/images/RR/Sora 504.png
+ create mode 100644 assets/images/RR/Subaru 005.png
+ create mode 100644 assets/images/RR/Subaru 504.png
+ create mode 100644 assets/images/RR/Suisei 504.png
+ create mode 100644 assets/images/RR/Towa 002.png
+ create mode 100644 assets/images/RR/Vivi 002.png
+ create mode 100644 assets/images/S/Ayame 005.png
+ create mode 100644 assets/images/S/AzuIro 001.png
+ create mode 100644 assets/images/S/Baelz 004.png
+ create mode 100644 assets/images/S/Baelz 005.png
+ create mode 100644 assets/images/S/Cheer Blue 501.png
+ create mode 100644 assets/images/S/Cheer Green 501.png
+ create mode 100644 assets/images/S/Cheer Purple 501.png
+ create mode 100644 assets/images/S/Cheer Red 501.png
+ create mode 100644 assets/images/S/Cheer White 501.png
+ create mode 100644 assets/images/S/Cheer Yellow 501.png
+ create mode 100644 assets/images/S/Hajime 001.png
+ create mode 100644 assets/images/S/Hajime 002.png
+ create mode 100644 assets/images/S/Hajime 003.png
+ create mode 100644 assets/images/S/Hajime 004.png
+ create mode 100644 assets/images/S/Hajime 005.png
+ create mode 100644 assets/images/S/Hajime 006.png
+ create mode 100644 assets/images/S/Iofi 004.png
+ create mode 100644 assets/images/S/Kaela 004.png
+ create mode 100644 assets/images/S/Kaela 005.png
+ create mode 100644 assets/images/S/Kaela 006.png
+ create mode 100644 assets/images/S/Kaela 007.png
+ create mode 100644 assets/images/S/Kaela 008.png
+ create mode 100644 assets/images/S/Kaela 009.png
+ create mode 100644 assets/images/S/Kaela 010.png
+ create mode 100644 assets/images/S/Lamy 009.png
+ create mode 100644 assets/images/S/Lamy 010.png
+ create mode 100644 assets/images/S/Lamy 011.png
+ create mode 100644 assets/images/S/Lamy 012.png
+ create mode 100644 assets/images/S/Lamy 013.png
+ create mode 100644 assets/images/S/Lamy 014.png
+ create mode 100644 assets/images/S/Matsuri 008.png
+ create mode 100644 assets/images/S/Matsuri 009.png
+ create mode 100644 assets/images/S/Mio 010.png
+ create mode 100644 assets/images/S/Mio 011.png
+ create mode 100644 assets/images/S/Moona 005.png
+ create mode 100644 assets/images/S/Moona 006.png
+ create mode 100644 assets/images/S/Nerissa 008.png
+ create mode 100644 assets/images/S/Nerissa 009.png
+ create mode 100644 assets/images/S/NoeFure 001.png
+ create mode 100644 assets/images/S/Noel 010.png
+ create mode 100644 assets/images/S/Noel 011.png
+ create mode 100644 assets/images/S/Noel 012.png
+ create mode 100644 assets/images/S/Noel 013.png
+ create mode 100644 assets/images/S/Noel 014.png
+ create mode 100644 assets/images/S/Noel 015.png
+ create mode 100644 assets/images/S/Pekora 005.png
+ create mode 100644 assets/images/S/Subaru 009.png
+ create mode 100644 assets/images/S/Subaru 010.png
+ create mode 100644 assets/images/S/Subaru 011.png
+ create mode 100644 assets/images/S/Subaru 012.png
+ create mode 100644 assets/images/S/Subaru 013.png
+ create mode 100644 assets/images/S/Support 008.png
+ create mode 100644 assets/images/S/Towa 006.png
+ create mode 100644 assets/images/S/Towa 007.png
+ create mode 100644 assets/images/S/Towa 008.png
+ create mode 100644 assets/images/S/Towa 009.png
+ create mode 100644 assets/images/S/Towa 010.png
+ create mode 100644 assets/images/S/Towa 011.png
+ create mode 100644 assets/images/S/Vivi 001.png
+ create mode 100644 assets/images/S/Vivi 002.png
+ create mode 100644 assets/images/S/Vivi 003.png
+ create mode 100644 assets/images/S/Vivi 004.png
+ create mode 100644 assets/images/S/Vivi 005.png
+ create mode 100644 assets/images/S/Vivi 006.png
+ create mode 100644 assets/images/SEC/Hajime 001.png
+ create mode 100644 assets/images/SEC/Kaela 001.png
+ create mode 100644 assets/images/SEC/Koyori 502.png
+ create mode 100644 assets/images/SEC/Marine 502.png
+ create mode 100644 assets/images/SEC/Noel 001.png
+ create mode 100644 assets/images/SEC/Sora 501.png
+ create mode 100644 assets/images/SEC/Vivi 001.png
+ create mode 100644 assets/images/SP/Baelz 002.png
+ create mode 100644 assets/images/SP/Calli 501.png
+ create mode 100644 assets/images/SP/Gigi 701.png
+ create mode 100644 assets/images/SP/Korone 501.png
+ create mode 100644 assets/images/SP/Lamy 002.png
+ create mode 100644 assets/images/SP/Lamy 003.png
+ create mode 100644 assets/images/SP/Lamy 004.png
+ create mode 100644 assets/images/SP/Noel 003.png
+ create mode 100644 assets/images/SP/Noel 004.png
+ create mode 100644 assets/images/SP/Subaru 002.png
+ create mode 100644 assets/images/SP/Subaru 003.png
+ create mode 100644 assets/images/SP/Watame 501.png
+ create mode 100644 assets/images/SR/AZKi 005.png
+ create mode 100644 assets/images/SR/Ayame 506.png
+ create mode 100644 assets/images/SR/Ayame 507.png
+ create mode 100644 assets/images/SR/BIG3 001.png
+ create mode 100644 assets/images/SR/Baelz 006.png
+ create mode 100644 assets/images/SR/Baelz 007.png
+ create mode 100644 assets/images/SR/Baelz 505.png
+ create mode 100644 assets/images/SR/Calli 507.png
+ create mode 100644 assets/images/SR/Calli 508.png
+ create mode 100644 assets/images/SR/Chihaya 003.png
+ create mode 100644 assets/images/SR/Choco 507.png
+ create mode 100644 assets/images/SR/FUWAMOCO 503.png
+ create mode 100644 assets/images/SR/Fubuki 507.png
+ create mode 100644 assets/images/SR/Haato 005.png
+ create mode 100644 assets/images/SR/Haato 504.png
+ create mode 100644 assets/images/SR/Hajime 004.png
+ create mode 100644 assets/images/SR/Hajime 005.png
+ create mode 100644 assets/images/SR/Hajime 503.png
+ create mode 100644 assets/images/SR/IRyS 504.png
+ create mode 100644 assets/images/SR/Iofi 504.png
+ create mode 100644 assets/images/SR/Iofi 505.png
+ create mode 100644 assets/images/SR/Iroha 009.png
+ create mode 100644 assets/images/SR/Iroha 506.png
+ create mode 100644 assets/images/SR/Iroha 507.png
+ create mode 100644 assets/images/SR/Iroha 508.png
+ create mode 100644 assets/images/SR/Kaela 002.png
+ create mode 100644 assets/images/SR/Kaela 003.png
+ create mode 100644 assets/images/SR/Kiara 504.png
+ create mode 100644 assets/images/SR/Kiara 505.png
+ create mode 100644 assets/images/SR/Kiara 506.png
+ create mode 100644 assets/images/SR/Korone 506.png
+ create mode 100644 assets/images/SR/Koyori 506.png
+ create mode 100644 assets/images/SR/Koyori 507.png
+ create mode 100644 assets/images/SR/Koyori 508.png
+ create mode 100644 assets/images/SR/Koyori 509.png
+ create mode 100644 assets/images/SR/Koyori 510.png
+ create mode 100644 assets/images/SR/Koyori 511.png
+ create mode 100644 assets/images/SR/Koyori 512.png
+ create mode 100644 assets/images/SR/Koyori 513.png
+ create mode 100644 assets/images/SR/Kronii 004.png
+ create mode 100644 assets/images/SR/Kronii 503.png
+ create mode 100644 assets/images/SR/Lamy 006.png
+ create mode 100644 assets/images/SR/Lamy 007.png
+ create mode 100644 assets/images/SR/Lamy 505.png
+ create mode 100644 assets/images/SR/Lui 505.png
+ create mode 100644 assets/images/SR/Lui 506.png
+ create mode 100644 assets/images/SR/Marine 505.png
+ create mode 100644 assets/images/SR/Marine 506.png
+ create mode 100644 assets/images/SR/Marine 507.png
+ create mode 100644 assets/images/SR/Marine 508.png
+ create mode 100644 assets/images/SR/Marine 509.png
+ create mode 100644 assets/images/SR/Marine 510.png
+ create mode 100644 assets/images/SR/Marine 511.png
+ create mode 100644 assets/images/SR/Marine 512.png
+ create mode 100644 assets/images/SR/Marine 513.png
+ create mode 100644 assets/images/SR/Matsuri 006.png
+ create mode 100644 assets/images/SR/Matsuri 007.png
+ create mode 100644 assets/images/SR/Miko 507.png
+ create mode 100644 assets/images/SR/Mio 008.png
+ create mode 100644 assets/images/SR/Mio 009.png
+ create mode 100644 assets/images/SR/Mio 506.png
+ create mode 100644 assets/images/SR/Mio 507.png
+ create mode 100644 assets/images/SR/Moona 006.png
+ create mode 100644 assets/images/SR/Moona 007.png
+ create mode 100644 assets/images/SR/Moona 505.png
+ create mode 100644 assets/images/SR/Nene 005.png
+ create mode 100644 assets/images/SR/Nene 504.png
+ create mode 100644 assets/images/SR/Nerissa 007.png
+ create mode 100644 assets/images/SR/Nerissa 008.png
+ create mode 100644 assets/images/SR/Nerissa 505.png
+ create mode 100644 assets/images/SR/Nerissa 506.png
+ create mode 100644 assets/images/SR/Noel 007.png
+ create mode 100644 assets/images/SR/Noel 008.png
+ create mode 100644 assets/images/SR/Noel 505.png
+ create mode 100644 assets/images/SR/Noel 506.png
+ create mode 100644 assets/images/SR/Okayu 009.png
+ create mode 100644 assets/images/SR/Okayu 507.png
+ create mode 100644 assets/images/SR/Okayu 508.png
+ create mode 100644 assets/images/SR/Ollie 004.png
+ create mode 100644 assets/images/SR/Pekora 503.png
+ create mode 100644 assets/images/SR/Pekora 504.png
+ create mode 100644 assets/images/SR/Pekora 505.png
+ create mode 100644 assets/images/SR/Pekora 506.png
+ create mode 100644 assets/images/SR/Polka 504.png
+ create mode 100644 assets/images/SR/Reine 506.png
+ create mode 100644 assets/images/SR/Reine 507.png
+ create mode 100644 assets/images/SR/Riona 004.png
+ create mode 100644 assets/images/SR/Risu 004.png
+ create mode 100644 assets/images/SR/Roboco 505.png
+ create mode 100644 assets/images/SR/Roboco 506.png
+ create mode 100644 assets/images/SR/SorAZ 502.png
+ create mode 100644 assets/images/SR/Sora 505.png
+ create mode 100644 assets/images/SR/Sora 506.png
+ create mode 100644 assets/images/SR/Sora 507.png
+ create mode 100644 assets/images/SR/Sora 508.png
+ create mode 100644 assets/images/SR/Sora 509.png
+ create mode 100644 assets/images/SR/Sora 510.png
+ create mode 100644 assets/images/SR/Sora 511.png
+ create mode 100644 assets/images/SR/Subaru 008.png
+ create mode 100644 assets/images/SR/Subaru 009.png
+ create mode 100644 assets/images/SR/Subaru 506.png
+ create mode 100644 assets/images/SR/Subaru 507.png
+ create mode 100644 assets/images/SR/Suisei 505.png
+ create mode 100644 assets/images/SR/Suisei 506.png
+ create mode 100644 assets/images/SR/Towa 005.png
+ create mode 100644 assets/images/SR/Towa 006.png
+ create mode 100644 assets/images/SR/Vivi 001.png
+ create mode 100644 assets/images/SR/Vivi 002.png
+ create mode 100644 assets/images/SR/Watame 008.png
+ create mode 100644 assets/images/SR/Watame 506.png
+ create mode 100644 assets/images/SR/Watame 507.png
+ create mode 100644 assets/images/SR/Zeta 005.png
+ create mode 100644 assets/images/SR/Zeta 504.png
+ create mode 100644 assets/images/SY/IRyS 501.png
+ create mode 100644 assets/images/SY/Kaela 001.png
+ create mode 100644 assets/images/SY/Kiara 501.png
+ create mode 100644 assets/images/SY/Korone 501.png
+ create mode 100644 assets/images/SY/Kronii 001.png
+ create mode 100644 assets/images/SY/Lamy 002.png
+ create mode 100644 assets/images/SY/Mio 002.png
+ create mode 100644 assets/images/SY/Nerissa 001.png
+ create mode 100644 assets/images/SY/Reine 501.png
+ create mode 100644 assets/images/SY/Su 501.png
+ create mode 100644 assets/images/SY/Vivi 501.png
+ create mode 100644 assets/images/SY/Zeta 001.png
+ create mode 100644 assets/images/U/Ayame 007.png
+ create mode 100644 assets/images/U/Ayame 506.png
+ create mode 100644 assets/images/U/AzuIro 001.png
+ create mode 100644 assets/images/U/BIG3 001.png
+ create mode 100644 assets/images/U/Baelz 005.png
+ create mode 100644 assets/images/U/Baelz 504.png
+ create mode 100644 assets/images/U/Choco 506.png
+ create mode 100644 assets/images/U/Fubuki 508.png
+ create mode 100644 assets/images/U/Hajime 004.png
+ create mode 100644 assets/images/U/Hajime 005.png
+ create mode 100644 assets/images/U/Hajime 006.png
+ create mode 100644 assets/images/U/Hajime 503.png
+ create mode 100644 assets/images/U/Iofi 504.png
+ create mode 100644 assets/images/U/Iroha 507.png
+ create mode 100644 assets/images/U/Kaela 003.png
+ create mode 100644 assets/images/U/Kaela 004.png
+ create mode 100644 assets/images/U/Kaela 005.png
+ create mode 100644 assets/images/U/Kiara 505.png
+ create mode 100644 assets/images/U/Koyori 508.png
+ create mode 100644 assets/images/U/Koyori 509.png
+ create mode 100644 assets/images/U/Koyori 510.png
+ create mode 100644 assets/images/U/Kronii 506.png
+ create mode 100644 assets/images/U/Lamy 005.png
+ create mode 100644 assets/images/U/Lamy 006.png
+ create mode 100644 assets/images/U/Lamy 007.png
+ create mode 100644 assets/images/U/Lui 506.png
+ create mode 100644 assets/images/U/Marine 505.png
+ create mode 100644 assets/images/U/Marine 506.png
+ create mode 100644 assets/images/U/Marine 507.png
+ create mode 100644 assets/images/U/Marine 508.png
+ create mode 100644 assets/images/U/Marine, Sora, Koyori 501.png
+ create mode 100644 assets/images/U/Matsuri 004.png
+ create mode 100644 assets/images/U/Mio 008.png
+ create mode 100644 assets/images/U/Mio 507.png
+ create mode 100644 assets/images/U/Moona 005.png
+ create mode 100644 assets/images/U/Moona 504.png
+ create mode 100644 assets/images/U/Nene 505.png
+ create mode 100644 assets/images/U/Nerissa 007.png
+ create mode 100644 assets/images/U/Nerissa 506.png
+ create mode 100644 assets/images/U/NoeFure 001.png
+ create mode 100644 assets/images/U/Noel 007.png
+ create mode 100644 assets/images/U/Noel 008.png
+ create mode 100644 assets/images/U/Noel 009.png
+ create mode 100644 assets/images/U/Noel 506.png
+ create mode 100644 assets/images/U/Okayu 505.png
+ create mode 100644 assets/images/U/Oozora Police 001.png
+ create mode 100644 assets/images/U/Pekora 505.png
+ create mode 100644 assets/images/U/Pekora 506.png
+ create mode 100644 assets/images/U/Polka 506.png
+ create mode 100644 assets/images/U/Roboco 505.png
+ create mode 100644 assets/images/U/SorAZ 502.png
+ create mode 100644 assets/images/U/Sora 504.png
+ create mode 100644 assets/images/U/Sora 505.png
+ create mode 100644 assets/images/U/Sora 506.png
+ create mode 100644 assets/images/U/Subaru 007.png
+ create mode 100644 assets/images/U/Subaru 008.png
+ create mode 100644 assets/images/U/Towa 005.png
+ create mode 100644 assets/images/U/Towa 006.png
+ create mode 100644 assets/images/U/Towa 007.png
+ create mode 100644 assets/images/U/Vivi 001.png
+ create mode 100644 assets/images/U/Vivi 002.png
+ create mode 100644 assets/images/U/Vivi 003.png
+ create mode 100644 assets/images/U/Watame 510.png
+ create mode 100644 assets/images/U/Zeta 504.png
+ create mode 100644 assets/images/UP/BIG3 001.png
+ create mode 100644 assets/images/UP/FUWAMOCO 501.png
+ create mode 100644 assets/images/UP/Riona 501.png
+ create mode 100644 assets/images/UR/Baelz 002.png
+ create mode 100644 assets/images/UR/Calli 503.png
+ create mode 100644 assets/images/UR/Haato 503.png
+ create mode 100644 assets/images/UR/Hajime 002.png
+ create mode 100644 assets/images/UR/Iroha 504.png
+ create mode 100644 assets/images/UR/Kaela 002.png
+ create mode 100644 assets/images/UR/Kiara 503.png
+ create mode 100644 assets/images/UR/Koyori 502.png
+ create mode 100644 assets/images/UR/Lamy 002.png
+ create mode 100644 assets/images/UR/Marine 502.png
+ create mode 100644 assets/images/UR/Marine 503.png
+ create mode 100644 assets/images/UR/Matsuri 003.png
+ create mode 100644 assets/images/UR/Mio 004.png
+ create mode 100644 assets/images/UR/Mio 503.png
+ create mode 100644 assets/images/UR/Moona 003.png
+ create mode 100644 assets/images/UR/Nerissa 002.png
+ create mode 100644 assets/images/UR/Noel 004.png
+ create mode 100644 assets/images/UR/Noel 503.png
+ create mode 100644 assets/images/UR/Okayu 503.png
+ create mode 100644 assets/images/UR/Pekora 503.png
+ create mode 100644 assets/images/UR/Reine 503.png
+ create mode 100644 assets/images/UR/Sora 503.png
+ create mode 100644 assets/images/UR/Subaru 004.png
+ create mode 100644 assets/images/UR/Subaru 503.png
+ create mode 100644 assets/images/UR/Suisei 503.png
+ create mode 100644 assets/images/UR/Towa 002.png
+ create mode 100644 assets/images/UR/Vivi 001.png
+[?2004h]0;nana0411@DP075: ~/4newCards/Cards[01;32mnana0411@DP075[00m:[01;34m~/4newCards/Cards[00m$ git push
+[?2004lTo https://github.com/OrangeRL2/Cards.git
+   589fc58..f3ea774  main -> main
+[?2004h]0;nana0411@DP075: ~/4newCards/Cards[01;32mnana0411@DP075[00m:[01;34m~/4newCards/Cards[00m$ 
+[?2004l[?2004h]0;nana0411@DP075: ~/4newCards/Cards[01;32mnana0411@DP075[00m:[01;34m~/4newCards/Cards[00m$ git pushcommit -m "added vortex and summer"add .[K. update-holodori-guess.sh[12Pexplorer.exe .. update-holodori-guess.sh
+[?2004l
+============================================================
+
+============================================================
+[guess-controller] 2026-09-18T18:01:47+09:00
+[guess-controller] 2026-09-18T18:01:47+09:00
+============================================================
+============================================================
+[guess-controller] Checking English DB...
+[guess-controller] Checking English DB...
+[guess-controller] Checking Japanese card DB...
+[guess-controller] Checking Japanese card DB...
+[guess-controller] Refreshing Holodori catalog...
+[guess-controller] Refreshing Holodori catalog...
+[httpx] HTTP Request: GET https://raw.githubusercontent.com/HolodoriDB/holodori-app-protos/refs/heads/main/global/appver.json "HTTP/1.1 200 OK"
+[httpx] HTTP Request: GET https://raw.githubusercontent.com/HolodoriDB/holodori-app-protos/refs/heads/main/global/appver.json "HTTP/1.1 200 OK"
+[catalog] app version 1.1.1
+[catalog] app version 1.1.1
+[httpx] HTTP Request: GET https://us.game-hololive-dreams.com/asset/v2/pub/a/5/v/200001/list/0 "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://us.game-hololive-dreams.com/asset/v2/pub/a/5/v/200001/list/0 "HTTP/2 200 OK"
+[download] revision 78: 21685 bundles, 18514 resources
+[download] revision 78: 21685 bundles, 18514 resources
+[download] downloading 0 files to /tmp/holodori-catalog-refresh
+[download] downloading 0 files to /tmp/holodori-catalog-refresh
+0file [00:00, ?file/s]0file [00:00, ?file/s]0file [00:00, ?file/s]
+0file [00:00, ?file/s]
+[guess-controller] Changes: EN_DB=0 JP_DB=1 CATALOG=1 FORCE=0
+[guess-controller] Updating/organizing local Holodori cards...
+[guess-controller] Changes: EN_DB=0 JP_DB=1 CATALOG=1 FORCE=0
+[guess-controller] Updating/organizing local Holodori cards...
+Holodori card update check started
+Holodori card update check started
+Card metadata DB: /home/nana0411/testholo/holodori-db-eng-diff
+Card metadata DB: /home/nana0411/testholo/holodori-db-eng-diff
+$ git pull --ff-only
+$ git pull --ff-only
+Already up to date.
+Already up to date.
+$ git pull --ff-only
+$ git pull --ff-only
+Already up to date.
+Already up to date.
+Asset tools changed: False
+Database repository changed: False
+Asset tools changed: False
+Database repository changed: False
+No card differences available. No card assets were downloaded.
+No card differences available. No card assets were downloaded.
+[guess-controller] Syncing ★★★ / ★★★★ / ★★★★★ into local bot...
+[guess-controller] Syncing ★★★ / ★★★★ / ★★★★★ into local bot...
+[guess-controller] Ensuring remote HOLODORI directories exist...
+[guess-controller] Ensuring remote HOLODORI directories exist...
+[guess-controller] Syncing HOLODORI card folders to OPC...
+[guess-controller] Syncing HOLODORI card folders to OPC...
+[guess-controller] Sending fresh catalog to OPC...
+[guess-controller] Sending fresh catalog to OPC...
+[guess-controller] Running OPC Guess updater...
+[guess-controller] Running OPC Guess updater...
+[guess-update] Forced check; DB commit unchanged.
+[guess-update] Forced check; DB commit unchanged.
+=== GUESS FULL UPDATE ===
+$ /home/opc/guess-updater/.venv/bin/holodori download /home/opc/guess-updater/work/_raw/jackets --filter ^img_music_jacket_ --no-overwrite --catalog /home/opc/guess-updater/octo_list.json
+=== GUESS FULL UPDATE ===
+$ /home/opc/guess-updater/.venv/bin/holodori download /home/opc/guess-updater/work/_raw/jackets --filter ^img_music_jacket_ --no-overwrite --catalog /home/opc/guess-updater/octo_list.json
+[download] revision 78: 21685 bundles, 18514 resources
+[download] revision 78: 21685 bundles, 18514 resources
+[download] downloading 0 files to /home/opc/guess-updater/work/_raw/jackets
+[download] downloading 0 files to /home/opc/guess-updater/work/_raw/jackets
+0file [00:00, ?file/s]0file [00:00, ?file/s]
+0file [00:00, ?file/s]0file [00:00, ?file/s]
+$ /home/opc/guess-updater/.venv/bin/holodori download /home/opc/guess-updater/work/_raw/audio --filter ^music_short_ --no-overwrite --catalog /home/opc/guess-updater/octo_list.json
+$ /home/opc/guess-updater/.venv/bin/holodori download /home/opc/guess-updater/work/_raw/audio --filter ^music_short_ --no-overwrite --catalog /home/opc/guess-updater/octo_list.json
+[download] revision 78: 21685 bundles, 18514 resources
+[download] revision 78: 21685 bundles, 18514 resources
+[download] downloading 0 files to /home/opc/guess-updater/work/_raw/audio
+[download] downloading 0 files to /home/opc/guess-updater/work/_raw/audio
+0file [00:00, ?file/s]0file [00:00, ?file/s]
+0file [00:00, ?file/s]0file [00:00, ?file/s]
+Cards in DB: 181
+Cards hosted: 181
+Missing hosted cards: 0
+$ /home/opc/guess-updater/.venv/bin/holodori download /home/opc/guess-updater/work/_raw/cards --filter ^img_card_full_ --no-overwrite --catalog /home/opc/guess-updater/octo_list.json
+Cards in DB: 181
+Cards hosted: 181
+Missing hosted cards: 0
+$ /home/opc/guess-updater/.venv/bin/holodori download /home/opc/guess-updater/work/_raw/cards --filter ^img_card_full_ --no-overwrite --catalog /home/opc/guess-updater/octo_list.json
+[download] revision 78: 21685 bundles, 18514 resources
+[download] revision 78: 21685 bundles, 18514 resources
+[download] downloading 0 files to /home/opc/guess-updater/work/_raw/cards
+[download] downloading 0 files to /home/opc/guess-updater/work/_raw/cards
+0file [00:00, ?file/s]0file [00:00, ?file/s]
+0file [00:00, ?file/s]0file [00:00, ?file/s]
+cards.json rows: 181
+
+=== COMPLETE ===
+Songs manifest: 198
+New jackets: 0; failures: 0
+New audio:   0; failures: 0
+New cards:   0; failures: 0
+Hosted cards: 181
+songs.json: /usr/share/nginx/html/images/guess/data/songs.json
+cards.json: /usr/share/nginx/html/images/guess/data/cards.json
+cards.json rows: 181
+
+=== COMPLETE ===
+Songs manifest: 198
+New jackets: 0; failures: 0
+New audio:   0; failures: 0
+New cards:   0; failures: 0
+Hosted cards: 181
+songs.json: /usr/share/nginx/html/images/guess/data/songs.json
+cards.json: /usr/share/nginx/html/images/guess/data/cards.json
+[guess-controller] Fixing Guess web permissions...
+[guess-controller] Fixing Guess web permissions...
+[guess-controller] Copying fresh Guess JSON manifests back to bot...
+[guess-controller] Copying fresh Guess JSON manifests back to bot...
+[guess-controller] Finished successfully.
+[guess-controller] Local HOLODORI counts:
+  ★★★: [guess-controller] Finished successfully.
+[guess-controller] Local HOLODORI counts:
+  ★★★: 54
+54
+  ★★★★:   ★★★★: 54
+54
+  ★★★★★:   ★★★★★: 146
+146
+[guess-controller] Local Guess manifests:
+[guess-controller] Local Guess manifests:
+-rw-r--r-- 1 nana0411 nana0411 25K Sep 18 18:02 /home/nana0411/4newCards/Cards/images/guess/data/cards.json
+-rw-r--r-- 1 nana0411 nana0411 41K Sep 18 18:02 /home/nana0411/4newCards/Cards/images/guess/data/songs.json
+-rw-r--r-- 1 nana0411 nana0411 25K Sep 18 18:02 /home/nana0411/4newCards/Cards/images/guess/data/cards.json
+-rw-r--r-- 1 nana0411 nana0411 41K Sep 18 18:02 /home/nana0411/4newCards/Cards/images/guess/data/songs.json
+[?2004h]0;nana0411@DP075: ~/4newCards/Cards[01;32mnana0411@DP075[00m:[01;34m~/4newCards/Cards[00m$ [?2004h]0;nana0411@DP075: ~/4newCards/Cards[01;32mnana0411@DP075[00m:[01;34m~/4newCards/Cards[00m$ . update-holodori-guess.sh. update-holodori-guess.sh
+[?2004l
+[?2004l
+============================================================
+
+============================================================
+
+============================================================
+[guess-controller] 2026-09-18T19:07:56+09:00
+============================================================
+[guess-controller] 2026-09-18T19:07:56+09:00
+============================================================
+[guess-controller] 2026-09-18T19:07:56+09:00
+============================================================
+[guess-controller] Checking English DB...
+[guess-controller] Checking English DB...
+[guess-controller] Checking English DB...
+[guess-controller] Checking Japanese card DB...
+[guess-controller] Checking Japanese card DB...
+[guess-controller] Checking Japanese card DB...
+[guess-controller] Refreshing Holodori catalog...
+[guess-controller] Refreshing Holodori catalog...
+[guess-controller] Refreshing Holodori catalog...
+[httpx] HTTP Request: GET https://raw.githubusercontent.com/HolodoriDB/holodori-app-protos/refs/heads/main/global/appver.json "HTTP/1.1 200 OK"
+[httpx] HTTP Request: GET https://raw.githubusercontent.com/HolodoriDB/holodori-app-protos/refs/heads/main/global/appver.json "HTTP/1.1 200 OK"
+[httpx] HTTP Request: GET https://raw.githubusercontent.com/HolodoriDB/holodori-app-protos/refs/heads/main/global/appver.json "HTTP/1.1 200 OK"
+[catalog] app version 1.1.1
+[catalog] app version 1.1.1
+[catalog] app version 1.1.1
+[httpx] HTTP Request: GET https://us.game-hololive-dreams.com/asset/v2/pub/a/5/v/200001/list/0 "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://us.game-hololive-dreams.com/asset/v2/pub/a/5/v/200001/list/0 "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://us.game-hololive-dreams.com/asset/v2/pub/a/5/v/200001/list/0 "HTTP/2 200 OK"
+[download] revision 80: 22141 bundles, 18697 resources
+[download] revision 80: 22141 bundles, 18697 resources
+[download] revision 80: 22141 bundles, 18697 resources
+[download] downloading 0 files to /tmp/holodori-catalog-refresh
+[download] downloading 0 files to /tmp/holodori-catalog-refresh
+[download] downloading 0 files to /tmp/holodori-catalog-refresh
+0file [00:00, ?file/s]0file [00:00, ?file/s]
+0file [00:00, ?file/s]0file [00:00, ?file/s]
+0file [00:00, ?file/s]0file [00:00, ?file/s]
+[guess-controller] Changes: EN_DB=0 JP_DB=1 CATALOG=1 FORCE=0
+[guess-controller] Updating/organizing local Holodori cards...
+[guess-controller] Changes: EN_DB=0 JP_DB=1 CATALOG=1 FORCE=0
+[guess-controller] Updating/organizing local Holodori cards...
+[guess-controller] Changes: EN_DB=0 JP_DB=1 CATALOG=1 FORCE=0
+[guess-controller] Updating/organizing local Holodori cards...
+Holodori card update check started
+Card metadata DB: /home/nana0411/testholo/holodori-db-eng-diff
+Holodori card update check started
+Card metadata DB: /home/nana0411/testholo/holodori-db-eng-diff
+Holodori card update check started
+Card metadata DB: /home/nana0411/testholo/holodori-db-eng-diff
+$ git pull --ff-only
+$ git pull --ff-only
+$ git pull --ff-only
+Already up to date.
+Already up to date.
+Already up to date.
+$ git pull --ff-only
+$ git pull --ff-only
+$ git pull --ff-only
+Already up to date.
+Already up to date.
+Already up to date.
+Asset tools changed: False
+Database repository changed: False
+Asset tools changed: False
+Database repository changed: False
+Asset tools changed: False
+Database repository changed: False
+No card differences available. No card assets were downloaded.
+No card differences available. No card assets were downloaded.
+No card differences available. No card assets were downloaded.
+[guess-controller] Syncing ★★★ / ★★★★ / ★★★★★ into local bot...
+[guess-controller] Syncing ★★★ / ★★★★ / ★★★★★ into local bot...
+[guess-controller] Syncing ★★★ / ★★★★ / ★★★★★ into local bot...
+[guess-controller] Ensuring remote HOLODORI directories exist...
+[guess-controller] Ensuring remote HOLODORI directories exist...
+[guess-controller] Ensuring remote HOLODORI directories exist...
+[guess-controller] Syncing HOLODORI card folders to OPC...
+[guess-controller] Syncing HOLODORI card folders to OPC...
+[guess-controller] Syncing HOLODORI card folders to OPC...
+[guess-controller] Sending fresh catalog to OPC...
+[guess-controller] Sending fresh catalog to OPC...
+[guess-controller] Sending fresh catalog to OPC...
+[guess-controller] Running OPC Guess updater...
+[guess-controller] Running OPC Guess updater...
+[guess-controller] Running OPC Guess updater...
+[guess-update] Forced check; DB commit unchanged.
+[guess-update] Forced check; DB commit unchanged.
+[guess-update] Forced check; DB commit unchanged.
+=== GUESS FULL UPDATE ===
+$ /home/opc/guess-updater/.venv/bin/holodori download /home/opc/guess-updater/work/_raw/jackets --filter ^img_music_jacket_ --no-overwrite --catalog /home/opc/guess-updater/octo_list.json
+=== GUESS FULL UPDATE ===
+$ /home/opc/guess-updater/.venv/bin/holodori download /home/opc/guess-updater/work/_raw/jackets --filter ^img_music_jacket_ --no-overwrite --catalog /home/opc/guess-updater/octo_list.json
+=== GUESS FULL UPDATE ===
+$ /home/opc/guess-updater/.venv/bin/holodori download /home/opc/guess-updater/work/_raw/jackets --filter ^img_music_jacket_ --no-overwrite --catalog /home/opc/guess-updater/octo_list.json
+[download] revision 80: 22141 bundles, 18697 resources
+[download] revision 80: 22141 bundles, 18697 resources
+[download] revision 80: 22141 bundles, 18697 resources
+[download] downloading 4 files to /home/opc/guess-updater/work/_raw/jackets
+[download] downloading 4 files to /home/opc/guess-updater/work/_raw/jackets
+[download] downloading 4 files to /home/opc/guess-updater/work/_raw/jackets
+  0%|          | 0/4 [00:00<?, ?file/s]  0%|          | 0/4 [00:00<?, ?file/s]  0%|          | 0/4 [00:00<?, ?file/s][httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/pBQTEp "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/pBQTEp "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/pBQTEp "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/3ghf7C "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/3ghf7C "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/3ghf7C "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/AJH5u8 "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/BVn7Fw "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/AJH5u8 "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/BVn7Fw "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/AJH5u8 "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/BVn7Fw "HTTP/2 200 OK"
+ 25%|██▌       | 1/4 [00:00<00:02,  1.11file/s] 25%|██▌       | 1/4 [00:00<00:02,  1.11file/s] 25%|██▌       | 1/4 [00:00<00:02,  1.11file/s][httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/3ghf7C "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/AJH5u8 "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/3ghf7C "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/AJH5u8 "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/3ghf7C "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/AJH5u8 "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/BVn7Fw "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/BVn7Fw "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/BVn7Fw "HTTP/2 200 OK"
+ 50%|█████     | 2/4 [00:02<00:02,  1.17s/file] 50%|█████     | 2/4 [00:02<00:02,  1.17s/file] 50%|█████     | 2/4 [00:02<00:02,  1.17s/file]100%|██████████| 4/4 [00:02<00:00,  1.73file/s]
+100%|██████████| 4/4 [00:02<00:00,  1.73file/s]
+100%|██████████| 4/4 [00:02<00:00,  1.73file/s]
+/home/opc/guess-updater/.venv/lib64/python3.12/site-packages/UnityPy/files/BundleFile.py:533: UnityVersionFallbackWarning: No valid Unity version found, defaulting to UnityPy.config.FALLBACK_UNITY_VERSION (6000.3.15f1)
+  version_str = config.get_fallback_version()
+/home/opc/guess-updater/.venv/lib64/python3.12/site-packages/UnityPy/files/BundleFile.py:533: UnityVersionFallbackWarning: No valid Unity version found, defaulting to UnityPy.config.FALLBACK_UNITY_VERSION (6000.3.15f1)
+  version_str = config.get_fallback_version()
+/home/opc/guess-updater/.venv/lib64/python3.12/site-packages/UnityPy/files/BundleFile.py:533: UnityVersionFallbackWarning: No valid Unity version found, defaulting to UnityPy.config.FALLBACK_UNITY_VERSION (6000.3.15f1)
+  version_str = config.get_fallback_version()
+/home/opc/guess-updater/.venv/lib64/python3.12/site-packages/UnityPy/files/SerializedFile.py:360: UnityVersionFallbackWarning: No valid Unity version found, defaulting to UnityPy.config.FALLBACK_UNITY_VERSION (6000.3.15f1)
+  string_version = config.get_fallback_version()
+/home/opc/guess-updater/.venv/lib64/python3.12/site-packages/UnityPy/files/SerializedFile.py:360: UnityVersionFallbackWarning: No valid Unity version found, defaulting to UnityPy.config.FALLBACK_UNITY_VERSION (6000.3.15f1)
+  string_version = config.get_fallback_version()
+/home/opc/guess-updater/.venv/lib64/python3.12/site-packages/UnityPy/files/SerializedFile.py:360: UnityVersionFallbackWarning: No valid Unity version found, defaulting to UnityPy.config.FALLBACK_UNITY_VERSION (6000.3.15f1)
+  string_version = config.get_fallback_version()
+/home/opc/guess-updater/.venv/lib64/python3.12/site-packages/UnityPy/files/BundleFile.py:533: UnityVersionFallbackWarning: No valid Unity version found, defaulting to UnityPy.config.FALLBACK_UNITY_VERSION (6000.3.15f1)
+  version_str = config.get_fallback_version()
+/home/opc/guess-updater/.venv/lib64/python3.12/site-packages/UnityPy/files/BundleFile.py:533: UnityVersionFallbackWarning: No valid Unity version found, defaulting to UnityPy.config.FALLBACK_UNITY_VERSION (6000.3.15f1)
+  version_str = config.get_fallback_version()
+/home/opc/guess-updater/.venv/lib64/python3.12/site-packages/UnityPy/files/BundleFile.py:533: UnityVersionFallbackWarning: No valid Unity version found, defaulting to UnityPy.config.FALLBACK_UNITY_VERSION (6000.3.15f1)
+  version_str = config.get_fallback_version()
+/home/opc/guess-updater/.venv/lib64/python3.12/site-packages/UnityPy/files/SerializedFile.py:360: UnityVersionFallbackWarning: No valid Unity version found, defaulting to UnityPy.config.FALLBACK_UNITY_VERSION (6000.3.15f1)
+  string_version = config.get_fallback_version()
+/home/opc/guess-updater/.venv/lib64/python3.12/site-packages/UnityPy/files/SerializedFile.py:360: UnityVersionFallbackWarning: No valid Unity version found, defaulting to UnityPy.config.FALLBACK_UNITY_VERSION (6000.3.15f1)
+  string_version = config.get_fallback_version()
+/home/opc/guess-updater/.venv/lib64/python3.12/site-packages/UnityPy/files/SerializedFile.py:360: UnityVersionFallbackWarning: No valid Unity version found, defaulting to UnityPy.config.FALLBACK_UNITY_VERSION (6000.3.15f1)
+  string_version = config.get_fallback_version()
+jacket NEW m0349.png
+jacket NEW m0350.png
+jacket NEW m0351.png
+jacket NEW m0352.png
+$ /home/opc/guess-updater/.venv/bin/holodori download /home/opc/guess-updater/work/_raw/audio --filter ^music_short_ --no-overwrite --catalog /home/opc/guess-updater/octo_list.json
+jacket NEW m0349.png
+jacket NEW m0350.png
+jacket NEW m0351.png
+jacket NEW m0352.png
+$ /home/opc/guess-updater/.venv/bin/holodori download /home/opc/guess-updater/work/_raw/audio --filter ^music_short_ --no-overwrite --catalog /home/opc/guess-updater/octo_list.json
+jacket NEW m0349.png
+jacket NEW m0350.png
+jacket NEW m0351.png
+jacket NEW m0352.png
+$ /home/opc/guess-updater/.venv/bin/holodori download /home/opc/guess-updater/work/_raw/audio --filter ^music_short_ --no-overwrite --catalog /home/opc/guess-updater/octo_list.json
+[download] revision 80: 22141 bundles, 18697 resources
+[download] revision 80: 22141 bundles, 18697 resources
+[download] revision 80: 22141 bundles, 18697 resources
+[download] downloading 4 files to /home/opc/guess-updater/work/_raw/audio
+[download] downloading 4 files to /home/opc/guess-updater/work/_raw/audio
+[download] downloading 4 files to /home/opc/guess-updater/work/_raw/audio
+  0%|          | 0/4 [00:00<?, ?file/s]  0%|          | 0/4 [00:00<?, ?file/s]  0%|          | 0/4 [00:00<?, ?file/s][httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/tRo5As "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/tRo5As "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/tRo5As "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/obGLKs "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/obGLKs "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/obGLKs "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/iAgqDZ "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/iAgqDZ "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/iAgqDZ "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/5IP4qa "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/5IP4qa "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/5IP4qa "HTTP/2 200 OK"
+ 25%|██▌       | 1/4 [00:01<00:04,  1.65s/file] 25%|██▌       | 1/4 [00:01<00:04,  1.65s/file] 25%|██▌       | 1/4 [00:01<00:04,  1.65s/file] 50%|█████     | 2/4 [00:02<00:02,  1.06s/file] 50%|█████     | 2/4 [00:02<00:02,  1.06s/file] 50%|█████     | 2/4 [00:02<00:02,  1.06s/file] 75%|███████▌  | 3/4 [00:02<00:00,  1.52file/s] 75%|███████▌  | 3/4 [00:02<00:00,  1.52file/s] 75%|███████▌  | 3/4 [00:02<00:00,  1.52file/s]100%|██████████| 4/4 [00:02<00:00,  1.61file/s]
+100%|██████████| 4/4 [00:02<00:00,  1.61file/s]
+100%|██████████| 4/4 [00:02<00:00,  1.61file/s]
+decoding /home/opc/guess-updater/work/_raw/audio/resources/music_short_m0349.acb
+sample rate: 48000 Hz
+channels: 2
+channel mask: 0x3 / FL FR
+stream total samples: 5932801 (2:03.600 seconds)
+encoding: CRI HCA
+layout: flat
+metadata from: CRI HCA header
+bitrate: 255 kbps
+stream name: music_short_m0349
+sample type: float
+play duration: 5932801 samples (2:03.600 seconds)
+$ /usr/bin/ffmpeg -y -loglevel error -i /home/opc/guess-updater/work/wav/m0349.wav -vn -c:a libmp3lame -b:a 96k /usr/share/nginx/html/images/guess/audio/m0349.mp3
+decoding /home/opc/guess-updater/work/_raw/audio/resources/music_short_m0349.acb
+sample rate: 48000 Hz
+channels: 2
+channel mask: 0x3 / FL FR
+stream total samples: 5932801 (2:03.600 seconds)
+encoding: CRI HCA
+layout: flat
+metadata from: CRI HCA header
+bitrate: 255 kbps
+stream name: music_short_m0349
+sample type: float
+play duration: 5932801 samples (2:03.600 seconds)
+$ /usr/bin/ffmpeg -y -loglevel error -i /home/opc/guess-updater/work/wav/m0349.wav -vn -c:a libmp3lame -b:a 96k /usr/share/nginx/html/images/guess/audio/m0349.mp3
+decoding /home/opc/guess-updater/work/_raw/audio/resources/music_short_m0349.acb
+sample rate: 48000 Hz
+channels: 2
+channel mask: 0x3 / FL FR
+stream total samples: 5932801 (2:03.600 seconds)
+encoding: CRI HCA
+layout: flat
+metadata from: CRI HCA header
+bitrate: 255 kbps
+stream name: music_short_m0349
+sample type: float
+play duration: 5932801 samples (2:03.600 seconds)
+$ /usr/bin/ffmpeg -y -loglevel error -i /home/opc/guess-updater/work/wav/m0349.wav -vn -c:a libmp3lame -b:a 96k /usr/share/nginx/html/images/guess/audio/m0349.mp3
+decoding /home/opc/guess-updater/work/_raw/audio/resources/music_short_m0350.acb
+sample rate: 48000 Hz
+channels: 2
+channel mask: 0x3 / FL FR
+stream total samples: 6408001 (2:13.500 seconds)
+encoding: CRI HCA
+layout: flat
+metadata from: CRI HCA header
+bitrate: 255 kbps
+stream name: music_short_m0350
+sample type: float
+play duration: 6408001 samples (2:13.500 seconds)
+audio NEW m0349.mp3
+$ /usr/bin/ffmpeg -y -loglevel error -i /home/opc/guess-updater/work/wav/m0350.wav -vn -c:a libmp3lame -b:a 96k /usr/share/nginx/html/images/guess/audio/m0350.mp3
+decoding /home/opc/guess-updater/work/_raw/audio/resources/music_short_m0350.acb
+sample rate: 48000 Hz
+channels: 2
+channel mask: 0x3 / FL FR
+stream total samples: 6408001 (2:13.500 seconds)
+encoding: CRI HCA
+layout: flat
+metadata from: CRI HCA header
+bitrate: 255 kbps
+stream name: music_short_m0350
+sample type: float
+play duration: 6408001 samples (2:13.500 seconds)
+audio NEW m0349.mp3
+$ /usr/bin/ffmpeg -y -loglevel error -i /home/opc/guess-updater/work/wav/m0350.wav -vn -c:a libmp3lame -b:a 96k /usr/share/nginx/html/images/guess/audio/m0350.mp3
+decoding /home/opc/guess-updater/work/_raw/audio/resources/music_short_m0350.acb
+sample rate: 48000 Hz
+channels: 2
+channel mask: 0x3 / FL FR
+stream total samples: 6408001 (2:13.500 seconds)
+encoding: CRI HCA
+layout: flat
+metadata from: CRI HCA header
+bitrate: 255 kbps
+stream name: music_short_m0350
+sample type: float
+play duration: 6408001 samples (2:13.500 seconds)
+audio NEW m0349.mp3
+$ /usr/bin/ffmpeg -y -loglevel error -i /home/opc/guess-updater/work/wav/m0350.wav -vn -c:a libmp3lame -b:a 96k /usr/share/nginx/html/images/guess/audio/m0350.mp3
+decoding /home/opc/guess-updater/work/_raw/audio/resources/music_short_m0351.acb
+sample rate: 48000 Hz
+channels: 2
+channel mask: 0x3 / FL FR
+stream total samples: 5990400 (2:04.800 seconds)
+encoding: CRI HCA
+layout: flat
+metadata from: CRI HCA header
+bitrate: 255 kbps
+stream name: music_short_m0351
+sample type: float
+play duration: 5990400 samples (2:04.800 seconds)
+audio NEW m0350.mp3
+$ /usr/bin/ffmpeg -y -loglevel error -i /home/opc/guess-updater/work/wav/m0351.wav -vn -c:a libmp3lame -b:a 96k /usr/share/nginx/html/images/guess/audio/m0351.mp3
+decoding /home/opc/guess-updater/work/_raw/audio/resources/music_short_m0351.acb
+sample rate: 48000 Hz
+channels: 2
+channel mask: 0x3 / FL FR
+stream total samples: 5990400 (2:04.800 seconds)
+encoding: CRI HCA
+layout: flat
+metadata from: CRI HCA header
+bitrate: 255 kbps
+stream name: music_short_m0351
+sample type: float
+play duration: 5990400 samples (2:04.800 seconds)
+audio NEW m0350.mp3
+$ /usr/bin/ffmpeg -y -loglevel error -i /home/opc/guess-updater/work/wav/m0351.wav -vn -c:a libmp3lame -b:a 96k /usr/share/nginx/html/images/guess/audio/m0351.mp3
+decoding /home/opc/guess-updater/work/_raw/audio/resources/music_short_m0351.acb
+sample rate: 48000 Hz
+channels: 2
+channel mask: 0x3 / FL FR
+stream total samples: 5990400 (2:04.800 seconds)
+encoding: CRI HCA
+layout: flat
+metadata from: CRI HCA header
+bitrate: 255 kbps
+stream name: music_short_m0351
+sample type: float
+play duration: 5990400 samples (2:04.800 seconds)
+audio NEW m0350.mp3
+$ /usr/bin/ffmpeg -y -loglevel error -i /home/opc/guess-updater/work/wav/m0351.wav -vn -c:a libmp3lame -b:a 96k /usr/share/nginx/html/images/guess/audio/m0351.mp3
+decoding /home/opc/guess-updater/work/_raw/audio/resources/music_short_m0352.acb
+sample rate: 48000 Hz
+channels: 2
+channel mask: 0x3 / FL FR
+stream total samples: 6533731 (2:16.119 seconds)
+encoding: CRI HCA
+layout: flat
+metadata from: CRI HCA header
+bitrate: 255 kbps
+stream name: music_short_m0352
+sample type: float
+play duration: 6533731 samples (2:16.119 seconds)
+audio NEW m0351.mp3
+$ /usr/bin/ffmpeg -y -loglevel error -i /home/opc/guess-updater/work/wav/m0352.wav -vn -c:a libmp3lame -b:a 96k /usr/share/nginx/html/images/guess/audio/m0352.mp3
+decoding /home/opc/guess-updater/work/_raw/audio/resources/music_short_m0352.acb
+sample rate: 48000 Hz
+channels: 2
+channel mask: 0x3 / FL FR
+stream total samples: 6533731 (2:16.119 seconds)
+encoding: CRI HCA
+layout: flat
+metadata from: CRI HCA header
+bitrate: 255 kbps
+stream name: music_short_m0352
+sample type: float
+play duration: 6533731 samples (2:16.119 seconds)
+audio NEW m0351.mp3
+$ /usr/bin/ffmpeg -y -loglevel error -i /home/opc/guess-updater/work/wav/m0352.wav -vn -c:a libmp3lame -b:a 96k /usr/share/nginx/html/images/guess/audio/m0352.mp3
+decoding /home/opc/guess-updater/work/_raw/audio/resources/music_short_m0352.acb
+sample rate: 48000 Hz
+channels: 2
+channel mask: 0x3 / FL FR
+stream total samples: 6533731 (2:16.119 seconds)
+encoding: CRI HCA
+layout: flat
+metadata from: CRI HCA header
+bitrate: 255 kbps
+stream name: music_short_m0352
+sample type: float
+play duration: 6533731 samples (2:16.119 seconds)
+audio NEW m0351.mp3
+$ /usr/bin/ffmpeg -y -loglevel error -i /home/opc/guess-updater/work/wav/m0352.wav -vn -c:a libmp3lame -b:a 96k /usr/share/nginx/html/images/guess/audio/m0352.mp3
+audio NEW m0352.mp3
+Cards in DB: 181
+Cards hosted: 181
+Missing hosted cards: 0
+$ /home/opc/guess-updater/.venv/bin/holodori download /home/opc/guess-updater/work/_raw/cards --filter ^img_card_full_ --no-overwrite --catalog /home/opc/guess-updater/octo_list.json
+audio NEW m0352.mp3
+Cards in DB: 181
+Cards hosted: 181
+Missing hosted cards: 0
+$ /home/opc/guess-updater/.venv/bin/holodori download /home/opc/guess-updater/work/_raw/cards --filter ^img_card_full_ --no-overwrite --catalog /home/opc/guess-updater/octo_list.json
+audio NEW m0352.mp3
+Cards in DB: 181
+Cards hosted: 181
+Missing hosted cards: 0
+$ /home/opc/guess-updater/.venv/bin/holodori download /home/opc/guess-updater/work/_raw/cards --filter ^img_card_full_ --no-overwrite --catalog /home/opc/guess-updater/octo_list.json
+[download] revision 80: 22141 bundles, 18697 resources
+[download] revision 80: 22141 bundles, 18697 resources
+[download] revision 80: 22141 bundles, 18697 resources
+[download] downloading 4 files to /home/opc/guess-updater/work/_raw/cards
+[download] downloading 4 files to /home/opc/guess-updater/work/_raw/cards
+[download] downloading 4 files to /home/opc/guess-updater/work/_raw/cards
+  0%|          | 0/4 [00:00<?, ?file/s]  0%|          | 0/4 [00:00<?, ?file/s]  0%|          | 0/4 [00:00<?, ?file/s][httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/XftC0T "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/XftC0T "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/XftC0T "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/gJIJGR "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/gJIJGR "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/gJIJGR "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/EAIe7O "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/EAIe7O "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/EAIe7O "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/ikicxc "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/ikicxc "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/ikicxc "HTTP/2 200 OK"
+ 25%|██▌       | 1/4 [00:00<00:01,  1.96file/s] 25%|██▌       | 1/4 [00:00<00:01,  1.96file/s] 25%|██▌       | 1/4 [00:00<00:01,  1.96file/s] 50%|█████     | 2/4 [00:00<00:00,  3.72file/s] 50%|█████     | 2/4 [00:00<00:00,  3.72file/s] 50%|█████     | 2/4 [00:00<00:00,  3.72file/s]100%|██████████| 4/4 [00:00<00:00,  6.55file/s]
+100%|██████████| 4/4 [00:00<00:00,  6.55file/s]
+100%|██████████| 4/4 [00:00<00:00,  6.55file/s]
+cards.json rows: 181
+
+=== COMPLETE ===
+Songs manifest: 198
+New jackets: 4; failures: 0
+New audio:   4; failures: 0
+New cards:   0; failures: 0
+Hosted cards: 181
+songs.json: /usr/share/nginx/html/images/guess/data/songs.json
+cards.json: /usr/share/nginx/html/images/guess/data/cards.json
+cards.json rows: 181
+
+=== COMPLETE ===
+Songs manifest: 198
+New jackets: 4; failures: 0
+New audio:   4; failures: 0
+New cards:   0; failures: 0
+Hosted cards: 181
+songs.json: /usr/share/nginx/html/images/guess/data/songs.json
+cards.json: /usr/share/nginx/html/images/guess/data/cards.json
+cards.json rows: 181
+
+=== COMPLETE ===
+Songs manifest: 198
+New jackets: 4; failures: 0
+New audio:   4; failures: 0
+New cards:   0; failures: 0
+Hosted cards: 181
+songs.json: /usr/share/nginx/html/images/guess/data/songs.json
+cards.json: /usr/share/nginx/html/images/guess/data/cards.json
+[guess-controller] Fixing Guess web permissions...
+[guess-controller] Fixing Guess web permissions...
+[guess-controller] Fixing Guess web permissions...
+[guess-controller] Copying fresh Guess JSON manifests back to bot...
+[guess-controller] Copying fresh Guess JSON manifests back to bot...
+[guess-controller] Copying fresh Guess JSON manifests back to bot...
+[guess-controller] Finished successfully.
+[guess-controller] Local HOLODORI counts:
+[guess-controller] Finished successfully.
+[guess-controller] Local HOLODORI counts:
+[guess-controller] Finished successfully.
+[guess-controller] Local HOLODORI counts:
+  ★★★:   ★★★:   ★★★: 54
+54
+54
+  ★★★★:   ★★★★:   ★★★★: 54
+54
+54
+  ★★★★★:   ★★★★★:   ★★★★★: 146
+146
+146
+[guess-controller] Local Guess manifests:
+[guess-controller] Local Guess manifests:
+[guess-controller] Local Guess manifests:
+-rw-r--r-- 1 nana0411 nana0411 25K Sep 18 19:09 /home/nana0411/4newCards/Cards/images/guess/data/cards.json
+-rw-r--r-- 1 nana0411 nana0411 41K Sep 18 19:09 /home/nana0411/4newCards/Cards/images/guess/data/songs.json
+-rw-r--r-- 1 nana0411 nana0411 25K Sep 18 19:09 /home/nana0411/4newCards/Cards/images/guess/data/cards.json
+-rw-r--r-- 1 nana0411 nana0411 41K Sep 18 19:09 /home/nana0411/4newCards/Cards/images/guess/data/songs.json
+-rw-r--r-- 1 nana0411 nana0411 25K Sep 18 19:09 /home/nana0411/4newCards/Cards/images/guess/data/cards.json
+-rw-r--r-- 1 nana0411 nana0411 41K Sep 18 19:09 /home/nana0411/4newCards/Cards/images/guess/data/songs.json
+[?2004h]0;nana0411@DP075: ~/4newCards/Cards[01;32mnana0411@DP075[00m:[01;34m~/4newCards/Cards[00m$ [?2004h]0;nana0411@DP075: ~/4newCards/Cards[01;32mnana0411@DP075[00m:[01;34m~/4newCards/Cards[00m$ [?2004h]0;nana0411@DP075: ~/4newCards/Cards[01;32mnana0411@DP075[00m:[01;34m~/4newCards/Cards[00m$ eeexxxppplllooorrreeerrr...xxxeee[K[K[K[K[K[Keeexxxeee   ...
+
+
+[?2004l[?2004l[?2004lexplorer.exe: command not found
+explorer.exe: command not found
+explorer.exe: command not found
+
+============================================================
+[guess-controller] 2026-09-18T19:37:52+09:00
+============================================================
+[guess-controller] Refreshing own Holodori master...
+============================================================
+1. CHECKING LIVE MASTER
+============================================================
+Fetching Master/Get...
+Master version: 927a8489062cfb8aaee197689930a4c4e9c622e9ebbf8b80577bdbe5f065dcf9
+Master packs: 373
+
+========================================================================
+UPDATE COMPLETE
+========================================================================
+Cards: 185
+Lang rows: 185
+Missing names: 0
+Snapshot: snapshots/927a8489062cfb8aaee197689930a4c4e9c622e9ebbf8b80577bdbe5f065dcf9.json
+Latest: latest.json
+
+=== DIFF ===
+Added: 0
+Removed: 0
+Changed: 0
+
+============================================================
+2. SYNCING NEW CARDS TO ASSET WATCHER
+============================================================
+
+New pending cards: 0
+Total tracked cards: 4
+Updated: /home/nana0411/holodori-own/pending_cards.json
+
+============================================================
+3. CHECKING PENDING ASSETS
+============================================================
+Pending cards: 4
+ - 00004-5-uniq-0081-00 | Mystic Sun Swing
+ - 00035-5-uniq-0082-00 | Leader’s Secret Pool
+ - 03005-5-uniq-0084-00 | Chill Sunny Holiday
+ - 04013-5-uniq-0083-00 | Archived Night Pool
+
+Filter: 00004.*0081|00035.*0082|03005.*0084|04013.*0083
+
+[download] revision 78: 21685 bundles, 18514 resources
+[download] downloading 0 files to /home/nana0411/holodori-own/pending-card-assets
+
+0file [00:00, ?file/s]
+0file [00:00, ?file/s]
+
+=== STATUS ===
+
+WAITING: 00004-5-uniq-0081-00 | Mystic Sun Swing
+
+WAITING: 00035-5-uniq-0082-00 | Leader’s Secret Pool
+
+WAITING: 03005-5-uniq-0084-00 | Chill Sunny Holiday
+
+WAITING: 04013-5-uniq-0083-00 | Archived Night Pool
+
+============================================================
+Catalog revision: 78
+Newly available: 0
+Still waiting: 4
+Updated: /home/nana0411/holodori-own/pending_cards.json
+[guess-controller] Master before: 927a8489062cfb8aaee197689930a4c4e9c622e9ebbf8b80577bdbe5f065dcf9
+[guess-controller] Master after : 927a8489062cfb8aaee197689930a4c4e9c622e9ebbf8b80577bdbe5f065dcf9
+[guess-controller] Refreshing Holodori asset catalog...
+[httpx] HTTP Request: GET https://raw.githubusercontent.com/HolodoriDB/holodori-app-protos/refs/heads/main/global/appver.json "HTTP/1.1 200 OK"
+[httpx] HTTP Request: GET https://raw.githubusercontent.com/HolodoriDB/holodori-app-protos/refs/heads/main/jp/appver.json "HTTP/1.1 200 OK"
+[catalog] appver: using 1.1.1
+[catalog] app version 1.1.1
+[httpx] HTTP Request: GET https://us.game-hololive-dreams.com/asset/v2/pub/a/5/v/200001/list/0 "HTTP/2 200 OK"
+[download] revision 80: 22141 bundles, 18697 resources
+[download] downloading 0 files to /tmp/holodori-catalog-refresh
+0file [00:00, ?file/s]0file [00:00, ?file/s]
+[guess-controller] Changes: MASTER=0 CATALOG=1 FORCE=1
+[guess-controller] Updating/organizing local Holodori cards from own master...
+Holodori card update check started
+Live master source: /home/nana0411/holodori-own/master-client/latest.json
+$ git pull --ff-only
+Already up to date.
+Master version: 927a8489062cfb8aaee197689930a4c4e9c622e9ebbf8b80577bdbe5f065dcf9
+Asset tools changed: False
+New or missing card records detected: 4
+  00004-5-uniq-0081-00
+  00035-5-uniq-0082-00
+  03005-5-uniq-0084-00
+  04013-5-uniq-0083-00
+$ holodori download /home/nana0411/testholo/all-cards-raw --filter ^img_card_full_ --no-overwrite --catalog /home/nana0411/4newCards/Cards/.guess-updater/octo_list.json
+[download] revision 80: 22141 bundles, 18697 resources
+[download] downloading 4 files to /home/nana0411/testholo/all-cards-raw
+  0%|          | 0/4 [00:00<?, ?file/s][httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/ikicxc "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/gJIJGR "HTTP/2 200 OK"
+ 25%|██▌       | 1/4 [00:00<00:00,  4.44file/s][httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/XftC0T "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/EAIe7O "HTTP/2 200 OK"
+100%|██████████| 4/4 [00:00<00:00, 15.41file/s]
+$ holodori download /home/nana0411/testholo/card-signatures-raw --filter ^mov_card_sign_ --workers 1 --no-overwrite --catalog /home/nana0411/4newCards/Cards/.guess-updater/octo_list.json
+[download] revision 80: 22141 bundles, 18697 resources
+[download] downloading 4 files to /home/nana0411/testholo/card-signatures-raw
+  0%|          | 0/4 [00:00<?, ?file/s][httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/xB2o4R "HTTP/2 200 OK"
+ 25%|██▌       | 1/4 [00:00<00:00,  3.11file/s][httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/a5rd2J "HTTP/2 200 OK"
+ 50%|█████     | 2/4 [00:00<00:00,  4.26file/s][httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/y8GWke "HTTP/2 200 OK"
+ 75%|███████▌  | 3/4 [00:00<00:00,  4.79file/s][httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/35RBxq "HTTP/2 200 OK"
+100%|██████████| 4/4 [00:00<00:00,  5.53file/s]100%|██████████| 4/4 [00:00<00:00,  4.93file/s]
+$ holodori extract /home/nana0411/testholo/card-signatures-raw/resources /home/nana0411/testholo/card-signatures-extracted
+[extract] mov_card_sign_00001-5-uniq-0000-00.usm -> 2 files
+[extract] mov_card_sign_00002-5-uniq-0001-00.usm -> 2 files
+[extract] mov_card_sign_00004-5-uniq-0005-00.usm -> 2 files
+[extract] mov_card_sign_00004-5-uniq-0081-00.usm -> 2 files
+[extract] mov_card_sign_00005-5-uniq-0006-00.usm -> 2 files
+[extract] mov_card_sign_00006-5-uniq-0007-00.usm -> 2 files
+[extract] mov_card_sign_00006-5-uniq-0074-00.usm -> 2 files
+[extract] mov_card_sign_00007-5-uniq-0008-00.usm -> 2 files
+[extract] mov_card_sign_00010-5-uniq-0010-00.usm -> 2 files
+[extract] mov_card_sign_00010-5-uniq-0069-00.usm -> 2 files
+[extract] mov_card_sign_00011-5-uniq-0011-00.usm -> 2 files
+[extract] mov_card_sign_00012-5-uniq-0012-00.usm -> 2 files
+[extract] mov_card_sign_00012-5-uniq-0062-00.usm -> 2 files
+[extract] mov_card_sign_00013-5-uniq-0002-00.usm -> 2 files
+[extract] mov_card_sign_00014-5-uniq-0013-00.usm -> 2 files
+[extract] mov_card_sign_00014-5-uniq-0075-00.usm -> 2 files
+[extract] mov_card_sign_00015-5-uniq-0003-00.usm -> 2 files
+[extract] mov_card_sign_00015-5-uniq-0067-00.usm -> 2 files
+[extract] mov_card_sign_00016-5-uniq-0014-00.usm -> 2 files
+[extract] mov_card_sign_00016-5-uniq-0076-00.usm -> 2 files
+[extract] mov_card_sign_00017-5-uniq-0015-00.usm -> 2 files
+[extract] mov_card_sign_00017-5-uniq-0077-00.usm -> 2 files
+[extract] mov_card_sign_00018-5-uniq-0004-00.usm -> 2 files
+[extract] mov_card_sign_00018-5-uniq-0068-00.usm -> 2 files
+[extract] mov_card_sign_00019-5-uniq-0016-00.usm -> 2 files
+[extract] mov_card_sign_00021-5-uniq-0017-00.usm -> 2 files
+[extract] mov_card_sign_00021-5-uniq-0064-00.usm -> 2 files
+[extract] mov_card_sign_00022-5-uniq-0018-00.usm -> 2 files
+[extract] mov_card_sign_00022-5-uniq-0063-00.usm -> 2 files
+[extract] mov_card_sign_00023-5-uniq-0019-00.usm -> 2 files
+[extract] mov_card_sign_00026-5-uniq-0021-00.usm -> 2 files
+[extract] mov_card_sign_00026-5-uniq-0065-00.usm -> 2 files
+[extract] mov_card_sign_00027-5-uniq-0022-00.usm -> 2 files
+[extract] mov_card_sign_00028-5-uniq-0023-00.usm -> 2 files
+[extract] mov_card_sign_00028-5-uniq-0070-00.usm -> 2 files
+[extract] mov_card_sign_00030-5-uniq-0024-00.usm -> 2 files
+[extract] mov_card_sign_00031-5-uniq-0025-00.usm -> 2 files
+[extract] mov_card_sign_00032-5-uniq-0026-00.usm -> 2 files
+[extract] mov_card_sign_00034-5-uniq-0027-00.usm -> 2 files
+[extract] mov_card_sign_00035-5-uniq-0028-00.usm -> 2 files
+[extract] mov_card_sign_00035-5-uniq-0082-00.usm -> 2 files
+[extract] mov_card_sign_00036-5-uniq-0029-00.usm -> 2 files
+[extract] mov_card_sign_00036-5-uniq-0078-00.usm -> 2 files
+[extract] mov_card_sign_00037-5-uniq-0030-00.usm -> 2 files
+[extract] mov_card_sign_00039-5-uniq-0032-00.usm -> 2 files
+[extract] mov_card_sign_03001-5-uniq-0033-00.usm -> 2 files
+[extract] mov_card_sign_03002-5-uniq-0034-00.usm -> 2 files
+[extract] mov_card_sign_03003-5-uniq-0035-00.usm -> 2 files
+[extract] mov_card_sign_03004-5-uniq-0036-00.usm -> 2 files
+[extract] mov_card_sign_03004-5-uniq-0073-00.usm -> 2 files
+[extract] mov_card_sign_03005-5-uniq-0037-00.usm -> 2 files
+[extract] mov_card_sign_03005-5-uniq-0084-00.usm -> 2 files
+[extract] mov_card_sign_03006-5-uniq-0038-00.usm -> 2 files
+[extract] mov_card_sign_03007-5-uniq-0039-00.usm -> 2 files
+[extract] mov_card_sign_03008-5-uniq-0040-00.usm -> 2 files
+[extract] mov_card_sign_03009-5-uniq-0041-00.usm -> 2 files
+[extract] mov_card_sign_04001-5-uniq-0042-00.usm -> 2 files
+[extract] mov_card_sign_04001-5-uniq-0071-00.usm -> 2 files
+[extract] mov_card_sign_04002-5-uniq-0043-00.usm -> 2 files
+[extract] mov_card_sign_04003-5-uniq-0044-00.usm -> 2 files
+[extract] mov_card_sign_04003-5-uniq-0072-00.usm -> 2 files
+[extract] mov_card_sign_04007-5-uniq-0047-00.usm -> 2 files
+[extract] mov_card_sign_04010-5-uniq-0049-00.usm -> 2 files
+[extract] mov_card_sign_04012-5-uniq-0051-00.usm -> 2 files
+[extract] mov_card_sign_04013-5-uniq-0052-00.usm -> 2 files
+[extract] mov_card_sign_04013-5-uniq-0083-00.usm -> 2 files
+[extract] mov_card_sign_04014-5-uniq-0053-00.usm -> 2 files
+[extract] mov_card_sign_04015-5-uniq-0054-00.usm -> 2 files
+[extract] mov_card_sign_04016-5-uniq-0055-00.usm -> 2 files
+[extract] mov_card_sign_04016-5-uniq-0079-00.usm -> 2 files
+[extract] mov_card_sign_04017-5-uniq-0056-00.usm -> 2 files
+[extract] mov_card_sign_04017-5-uniq-0080-00.usm -> 2 files
+[extract] mov_card_sign_06002-5-uniq-0058-00.usm -> 2 files
+[extract] mov_card_sign_06002-5-uniq-0066-00.usm -> 2 files
+[extract] mov_card_sign_06003-5-uniq-0059-00.usm -> 2 files
+[extract] mov_card_sign_06004-5-uniq-0060-00.usm -> 2 files
+[extract] mov_card_sign_06005-5-uniq-0061-00.usm -> 2 files
+Card bundles found: 185
+/home/nana0411/holodori-own/holodori-asset-tools/.venv/lib/python3.12/site-packages/UnityPy/files/BundleFile.py:533: UnityVersionFallbackWarning: No valid Unity version found, defaulting to UnityPy.config.FALLBACK_UNITY_VERSION (6000.3.15f1)
+  version_str = config.get_fallback_version()
+/home/nana0411/holodori-own/holodori-asset-tools/.venv/lib/python3.12/site-packages/UnityPy/files/SerializedFile.py:360: UnityVersionFallbackWarning: No valid Unity version found, defaulting to UnityPy.config.FALLBACK_UNITY_VERSION (6000.3.15f1)
+  string_version = config.get_fallback_version()
+Card [10/185]: img_card_full_00004-5-uniq-0081-00_5137956239807726626.png
+/home/nana0411/holodori-own/holodori-asset-tools/.venv/lib/python3.12/site-packages/UnityPy/files/BundleFile.py:533: UnityVersionFallbackWarning: No valid Unity version found, defaulting to UnityPy.config.FALLBACK_UNITY_VERSION (6000.3.15f1)
+  version_str = config.get_fallback_version()
+/home/nana0411/holodori-own/holodori-asset-tools/.venv/lib/python3.12/site-packages/UnityPy/files/SerializedFile.py:360: UnityVersionFallbackWarning: No valid Unity version found, defaulting to UnityPy.config.FALLBACK_UNITY_VERSION (6000.3.15f1)
+  string_version = config.get_fallback_version()
+Card [95/185]: img_card_full_00035-5-uniq-0082-00_-7188506746289492193.png
+Card [122/185]: img_card_full_03005-5-uniq-0084-00_-7527737331714772988.png
+Card [158/185]: img_card_full_04013-5-uniq-0083-00_6267806565490383974.png
+New corrected cards: 4; card failures: 0
+$ ffmpeg -loglevel error -f h264 -i /home/nana0411/testholo/card-signatures-extracted/mov_card_sign_00004-5-uniq-0081-00/sfv_ch0 /tmp/tmpsbbowszu/color/%06d.png
+$ ffmpeg -loglevel error -f mpegvideo -i /home/nana0411/testholo/card-signatures-extracted/mov_card_sign_00004-5-uniq-0081-00/alp_ch0 /tmp/tmpsbbowszu/alpha/%06d.png
+Signature layer: mov_card_sign_00004-5-uniq-0081-00.png
+$ ffmpeg -loglevel error -f h264 -i /home/nana0411/testholo/card-signatures-extracted/mov_card_sign_00035-5-uniq-0082-00/sfv_ch0 /tmp/tmpy5juva2o/color/%06d.png
+$ ffmpeg -loglevel error -f mpegvideo -i /home/nana0411/testholo/card-signatures-extracted/mov_card_sign_00035-5-uniq-0082-00/alp_ch0 /tmp/tmpy5juva2o/alpha/%06d.png
+Signature layer: mov_card_sign_00035-5-uniq-0082-00.png
+$ ffmpeg -loglevel error -f h264 -i /home/nana0411/testholo/card-signatures-extracted/mov_card_sign_03005-5-uniq-0084-00/sfv_ch0 /tmp/tmpx3w5phvg/color/%06d.png
+$ ffmpeg -loglevel error -f mpegvideo -i /home/nana0411/testholo/card-signatures-extracted/mov_card_sign_03005-5-uniq-0084-00/alp_ch0 /tmp/tmpx3w5phvg/alpha/%06d.png
+Signature layer: mov_card_sign_03005-5-uniq-0084-00.png
+$ ffmpeg -loglevel error -f h264 -i /home/nana0411/testholo/card-signatures-extracted/mov_card_sign_04013-5-uniq-0083-00/sfv_ch0 /tmp/tmpgiai4oeq/color/%06d.png
+$ ffmpeg -loglevel error -f mpegvideo -i /home/nana0411/testholo/card-signatures-extracted/mov_card_sign_04013-5-uniq-0083-00/alp_ch0 /tmp/tmpgiai4oeq/alpha/%06d.png
+Signature layer: mov_card_sign_04013-5-uniq-0083-00.png
+New signature layers: 4
+Signed card: img_card_full_00004-5-uniq-0081-00_signed.png
+Signed card: img_card_full_00035-5-uniq-0082-00_signed.png
+Signed card: img_card_full_03005-5-uniq-0084-00_signed.png
+Signed card: img_card_full_04013-5-uniq-0083-00_signed.png
+New or refreshed signed cards: 4
+Organized images copied: 262; missing unsigned: 0
+Card update complete
+Open: /home/nana0411/testholo/organized-card-images
+[guess-controller] Syncing ★★★ / ★★★★ / ★★★★★ into local bot...
+[guess-controller] Ensuring remote HOLODORI directories exist...
+[guess-controller] Syncing HOLODORI card folders to OPC...
+[guess-controller] Sending fresh catalog to OPC...
+[guess-controller] Running OPC Guess updater...
+[guess-update] Forced check; DB commit unchanged.
+=== GUESS FULL UPDATE ===
+$ /home/opc/guess-updater/.venv/bin/holodori download /home/opc/guess-updater/work/_raw/jackets --filter ^img_music_jacket_ --no-overwrite --catalog /home/opc/guess-updater/octo_list.json
+[download] revision 80: 22141 bundles, 18697 resources
+[download] downloading 0 files to /home/opc/guess-updater/work/_raw/jackets
+0file [00:00, ?file/s]0file [00:00, ?file/s]
+$ /home/opc/guess-updater/.venv/bin/holodori download /home/opc/guess-updater/work/_raw/audio --filter ^music_short_ --no-overwrite --catalog /home/opc/guess-updater/octo_list.json
+[download] revision 80: 22141 bundles, 18697 resources
+[download] downloading 0 files to /home/opc/guess-updater/work/_raw/audio
+0file [00:00, ?file/s]0file [00:00, ?file/s]
+Cards in DB: 181
+Cards hosted: 181
+Missing hosted cards: 0
+$ /home/opc/guess-updater/.venv/bin/holodori download /home/opc/guess-updater/work/_raw/cards --filter ^img_card_full_ --no-overwrite --catalog /home/opc/guess-updater/octo_list.json
+[download] revision 80: 22141 bundles, 18697 resources
+[download] downloading 0 files to /home/opc/guess-updater/work/_raw/cards
+0file [00:00, ?file/s]0file [00:00, ?file/s]
+cards.json rows: 181
+
+=== COMPLETE ===
+Songs manifest: 198
+New jackets: 0; failures: 0
+New audio:   0; failures: 0
+New cards:   0; failures: 0
+Hosted cards: 181
+songs.json: /usr/share/nginx/html/images/guess/data/songs.json
+cards.json: /usr/share/nginx/html/images/guess/data/cards.json
+[guess-controller] Fixing Guess web permissions...
+[guess-controller] Copying fresh Guess JSON manifests back to bot...
+[guess-controller] Finished successfully.
+[guess-controller] Local HOLODORI counts:
+  ★★★: 54
+  ★★★★: 54
+  ★★★★★: 154
+[guess-controller] Local Guess manifests:
+-rw-r--r-- 1 nana0411 nana0411 25K Sep 18 19:38 /home/nana0411/4newCards/Cards/images/guess/data/cards.json
+-rw-r--r-- 1 nana0411 nana0411 41K Sep 18 19:38 /home/nana0411/4newCards/Cards/images/guess/data/songs.json
+
+============================================================
+[guess-controller] 2026-09-18T19:46:42+09:00
+============================================================
+[guess-controller] Refreshing own Holodori master...
+============================================================
+1. CHECKING LIVE MASTER
+============================================================
+Fetching Master/Get...
+Master version: 927a8489062cfb8aaee197689930a4c4e9c622e9ebbf8b80577bdbe5f065dcf9
+Master packs: 373
+
+========================================================================
+UPDATE COMPLETE
+========================================================================
+Cards: 185
+Lang rows: 185
+Missing names: 0
+Snapshot: snapshots/927a8489062cfb8aaee197689930a4c4e9c622e9ebbf8b80577bdbe5f065dcf9.json
+Latest: latest.json
+
+=== DIFF ===
+Added: 0
+Removed: 0
+Changed: 0
+
+============================================================
+2. SYNCING NEW CARDS TO ASSET WATCHER
+============================================================
+
+New pending cards: 0
+Total tracked cards: 4
+Updated: /home/nana0411/holodori-own/pending_cards.json
+
+============================================================
+3. CHECKING PENDING ASSETS
+============================================================
+Pending cards: 4
+ - 00004-5-uniq-0081-00 | Mystic Sun Swing
+ - 00035-5-uniq-0082-00 | Leader’s Secret Pool
+ - 03005-5-uniq-0084-00 | Chill Sunny Holiday
+ - 04013-5-uniq-0083-00 | Archived Night Pool
+
+Filter: 00004.*0081|00035.*0082|03005.*0084|04013.*0083
+
+[download] revision 78: 21685 bundles, 18514 resources
+[download] downloading 0 files to /home/nana0411/holodori-own/pending-card-assets
+
+0file [00:00, ?file/s]
+0file [00:00, ?file/s]
+
+=== STATUS ===
+
+WAITING: 00004-5-uniq-0081-00 | Mystic Sun Swing
+
+WAITING: 00035-5-uniq-0082-00 | Leader’s Secret Pool
+
+WAITING: 03005-5-uniq-0084-00 | Chill Sunny Holiday
+
+WAITING: 04013-5-uniq-0083-00 | Archived Night Pool
+
+============================================================
+Catalog revision: 78
+Newly available: 0
+Still waiting: 4
+Updated: /home/nana0411/holodori-own/pending_cards.json
+[guess-controller] Master before: 927a8489062cfb8aaee197689930a4c4e9c622e9ebbf8b80577bdbe5f065dcf9
+[guess-controller] Master after : 927a8489062cfb8aaee197689930a4c4e9c622e9ebbf8b80577bdbe5f065dcf9
+[guess-controller] Refreshing Holodori asset catalog...
+[httpx] HTTP Request: GET https://raw.githubusercontent.com/HolodoriDB/holodori-app-protos/refs/heads/main/global/appver.json "HTTP/1.1 200 OK"
+[httpx] HTTP Request: GET https://raw.githubusercontent.com/HolodoriDB/holodori-app-protos/refs/heads/main/jp/appver.json "HTTP/1.1 200 OK"
+[catalog] appver: using 1.1.1
+[catalog] app version 1.1.1
+[httpx] HTTP Request: GET https://us.game-hololive-dreams.com/asset/v2/pub/a/5/v/200001/list/0 "HTTP/2 200 OK"
+[download] revision 80: 22141 bundles, 18697 resources
+[download] downloading 0 files to /tmp/holodori-catalog-refresh
+0file [00:00, ?file/s]0file [00:00, ?file/s]
+[guess-controller] Changes: MASTER=0 CATALOG=1 FORCE=1
+[guess-controller] Updating/organizing local Holodori cards from own master...
+Holodori card update check started
+Live master source: /home/nana0411/holodori-own/master-client/latest.json
+$ git pull --ff-only
+Already up to date.
+Master version: 927a8489062cfb8aaee197689930a4c4e9c622e9ebbf8b80577bdbe5f065dcf9
+Asset tools changed: False
+No card differences available. No card assets were downloaded.
+[guess-controller] Syncing ★★★ / ★★★★ / ★★★★★ into local bot...
+[guess-controller] Ensuring remote HOLODORI directories exist...
+[guess-controller] Syncing HOLODORI card folders to OPC...
+[guess-controller] Sending fresh catalog to OPC...
+[guess-controller] Sending fresh master data to OPC...
+[guess-controller] Running OPC Guess updater...
+[guess-update] Forced check; DB commit unchanged.
+=== GUESS FULL UPDATE ===
+$ /home/opc/guess-updater/.venv/bin/holodori download /home/opc/guess-updater/work/_raw/jackets --filter ^img_music_jacket_ --no-overwrite --catalog /home/opc/guess-updater/octo_list.json
+[download] revision 80: 22141 bundles, 18697 resources
+[download] downloading 0 files to /home/opc/guess-updater/work/_raw/jackets
+0file [00:00, ?file/s]0file [00:00, ?file/s]
+$ /home/opc/guess-updater/.venv/bin/holodori download /home/opc/guess-updater/work/_raw/audio --filter ^music_short_ --no-overwrite --catalog /home/opc/guess-updater/octo_list.json
+[download] revision 80: 22141 bundles, 18697 resources
+[download] downloading 0 files to /home/opc/guess-updater/work/_raw/audio
+0file [00:00, ?file/s]0file [00:00, ?file/s]
+Cards in DB: 181
+Cards hosted: 181
+Missing hosted cards: 0
+$ /home/opc/guess-updater/.venv/bin/holodori download /home/opc/guess-updater/work/_raw/cards --filter ^img_card_full_ --no-overwrite --catalog /home/opc/guess-updater/octo_list.json
+[download] revision 80: 22141 bundles, 18697 resources
+[download] downloading 0 files to /home/opc/guess-updater/work/_raw/cards
+0file [00:00, ?file/s]0file [00:00, ?file/s]
+cards.json rows: 181
+
+=== COMPLETE ===
+Songs manifest: 198
+New jackets: 0; failures: 0
+New audio:   0; failures: 0
+New cards:   0; failures: 0
+Hosted cards: 181
+songs.json: /usr/share/nginx/html/images/guess/data/songs.json
+cards.json: /usr/share/nginx/html/images/guess/data/cards.json
+[guess-controller] Fixing Guess web permissions...
+[guess-controller] Copying fresh Guess JSON manifests back to bot...
+[guess-controller] Finished successfully.
+[guess-controller] Local HOLODORI counts:
+  ★★★: 54
+  ★★★★: 54
+  ★★★★★: 154
+[guess-controller] Local Guess manifests:
+-rw-r--r-- 1 nana0411 nana0411 25K Sep 18 19:47 /home/nana0411/4newCards/Cards/images/guess/data/cards.json
+-rw-r--r-- 1 nana0411 nana0411 41K Sep 18 19:47 /home/nana0411/4newCards/Cards/images/guess/data/songs.json
+
+============================================================
+[guess-controller] 2026-09-18T19:48:08+09:00
+============================================================
+[guess-controller] Refreshing own Holodori master...
+============================================================
+1. CHECKING LIVE MASTER
+============================================================
+Fetching Master/Get...
+Master version: 927a8489062cfb8aaee197689930a4c4e9c622e9ebbf8b80577bdbe5f065dcf9
+Master packs: 373
+
+========================================================================
+UPDATE COMPLETE
+========================================================================
+Cards: 185
+Lang rows: 185
+Missing names: 0
+Snapshot: snapshots/927a8489062cfb8aaee197689930a4c4e9c622e9ebbf8b80577bdbe5f065dcf9.json
+Latest: latest.json
+
+=== DIFF ===
+Added: 0
+Removed: 0
+Changed: 0
+
+============================================================
+2. SYNCING NEW CARDS TO ASSET WATCHER
+============================================================
+
+New pending cards: 0
+Total tracked cards: 4
+Updated: /home/nana0411/holodori-own/pending_cards.json
+
+============================================================
+3. CHECKING PENDING ASSETS
+============================================================
+Pending cards: 4
+ - 00004-5-uniq-0081-00 | Mystic Sun Swing
+ - 00035-5-uniq-0082-00 | Leader’s Secret Pool
+ - 03005-5-uniq-0084-00 | Chill Sunny Holiday
+ - 04013-5-uniq-0083-00 | Archived Night Pool
+
+Filter: 00004.*0081|00035.*0082|03005.*0084|04013.*0083
+
+[download] revision 78: 21685 bundles, 18514 resources
+[download] downloading 0 files to /home/nana0411/holodori-own/pending-card-assets
+
+0file [00:00, ?file/s]
+0file [00:00, ?file/s]
+
+=== STATUS ===
+
+WAITING: 00004-5-uniq-0081-00 | Mystic Sun Swing
+
+WAITING: 00035-5-uniq-0082-00 | Leader’s Secret Pool
+
+WAITING: 03005-5-uniq-0084-00 | Chill Sunny Holiday
+
+WAITING: 04013-5-uniq-0083-00 | Archived Night Pool
+
+============================================================
+Catalog revision: 78
+Newly available: 0
+Still waiting: 4
+Updated: /home/nana0411/holodori-own/pending_cards.json
+[guess-controller] Master before: 927a8489062cfb8aaee197689930a4c4e9c622e9ebbf8b80577bdbe5f065dcf9
+[guess-controller] Master after : 927a8489062cfb8aaee197689930a4c4e9c622e9ebbf8b80577bdbe5f065dcf9
+[guess-controller] Refreshing Holodori asset catalog...
+[httpx] HTTP Request: GET https://raw.githubusercontent.com/HolodoriDB/holodori-app-protos/refs/heads/main/global/appver.json "HTTP/1.1 200 OK"
+[httpx] HTTP Request: GET https://raw.githubusercontent.com/HolodoriDB/holodori-app-protos/refs/heads/main/jp/appver.json "HTTP/1.1 200 OK"
+[catalog] appver: using 1.1.1
+[catalog] app version 1.1.1
+[httpx] HTTP Request: GET https://us.game-hololive-dreams.com/asset/v2/pub/a/5/v/200001/list/0 "HTTP/2 200 OK"
+[download] revision 80: 22141 bundles, 18697 resources
+[download] downloading 0 files to /tmp/holodori-catalog-refresh
+0file [00:00, ?file/s]0file [00:00, ?file/s]
+[guess-controller] Changes: MASTER=0 CATALOG=1 FORCE=1
+[guess-controller] Updating/organizing local Holodori cards from own master...
+Holodori card update check started
+Live master source: /home/nana0411/holodori-own/master-client/latest.json
+$ git pull --ff-only
+Already up to date.
+Master version: 927a8489062cfb8aaee197689930a4c4e9c622e9ebbf8b80577bdbe5f065dcf9
+Asset tools changed: False
+No card differences available. No card assets were downloaded.
+[guess-controller] Syncing ★★★ / ★★★★ / ★★★★★ into local bot...
+[guess-controller] Ensuring remote HOLODORI directories exist...
+[guess-controller] Syncing HOLODORI card folders to OPC...
+[guess-controller] Sending fresh catalog to OPC...
+[guess-controller] Sending fresh master data to OPC...
+[guess-controller] Running OPC Guess updater...
+[guess-update] Forced check; DB commit unchanged.
+=== GUESS FULL UPDATE ===
+$ /home/opc/guess-updater/.venv/bin/holodori download /home/opc/guess-updater/work/_raw/jackets --filter ^img_music_jacket_ --no-overwrite --catalog /home/opc/guess-updater/octo_list.json
+[download] revision 80: 22141 bundles, 18697 resources
+[download] downloading 0 files to /home/opc/guess-updater/work/_raw/jackets
+0file [00:00, ?file/s]0file [00:00, ?file/s]
+$ /home/opc/guess-updater/.venv/bin/holodori download /home/opc/guess-updater/work/_raw/audio --filter ^music_short_ --no-overwrite --catalog /home/opc/guess-updater/octo_list.json
+[download] revision 80: 22141 bundles, 18697 resources
+[download] downloading 0 files to /home/opc/guess-updater/work/_raw/audio
+0file [00:00, ?file/s]0file [00:00, ?file/s]
+Cards in DB: 185
+Cards hosted: 181
+Missing hosted cards: 4
+$ /home/opc/guess-updater/.venv/bin/holodori download /home/opc/guess-updater/work/_raw/cards --filter ^img_card_full_ --no-overwrite --catalog /home/opc/guess-updater/octo_list.json
+[download] revision 80: 22141 bundles, 18697 resources
+[download] downloading 0 files to /home/opc/guess-updater/work/_raw/cards
+0file [00:00, ?file/s]0file [00:00, ?file/s]
+/home/opc/guess-updater/.venv/lib64/python3.12/site-packages/UnityPy/files/BundleFile.py:533: UnityVersionFallbackWarning: No valid Unity version found, defaulting to UnityPy.config.FALLBACK_UNITY_VERSION (6000.3.15f1)
+  version_str = config.get_fallback_version()
+/home/opc/guess-updater/.venv/lib64/python3.12/site-packages/UnityPy/files/SerializedFile.py:360: UnityVersionFallbackWarning: No valid Unity version found, defaulting to UnityPy.config.FALLBACK_UNITY_VERSION (6000.3.15f1)
+  string_version = config.get_fallback_version()
+/home/opc/guess-updater/.venv/lib64/python3.12/site-packages/UnityPy/files/BundleFile.py:533: UnityVersionFallbackWarning: No valid Unity version found, defaulting to UnityPy.config.FALLBACK_UNITY_VERSION (6000.3.15f1)
+  version_str = config.get_fallback_version()
+/home/opc/guess-updater/.venv/lib64/python3.12/site-packages/UnityPy/files/SerializedFile.py:360: UnityVersionFallbackWarning: No valid Unity version found, defaulting to UnityPy.config.FALLBACK_UNITY_VERSION (6000.3.15f1)
+  string_version = config.get_fallback_version()
+card NEW 00004-5-uniq-0081-00.png
+card NEW 00035-5-uniq-0082-00.png
+card NEW 03005-5-uniq-0084-00.png
+card NEW 04013-5-uniq-0083-00.png
+cards.json rows: 185
+
+=== COMPLETE ===
+Songs manifest: 198
+New jackets: 0; failures: 0
+New audio:   0; failures: 0
+New cards:   4; failures: 0
+Hosted cards: 185
+songs.json: /usr/share/nginx/html/images/guess/data/songs.json
+cards.json: /usr/share/nginx/html/images/guess/data/cards.json
+[guess-controller] Fixing Guess web permissions...
+[guess-controller] Copying fresh Guess JSON manifests back to bot...
+[guess-controller] Finished successfully.
+[guess-controller] Local HOLODORI counts:
+  ★★★: 54
+  ★★★★: 54
+  ★★★★★: 154
+[guess-controller] Local Guess manifests:
+-rw-r--r-- 1 nana0411 nana0411 25K Sep 18 19:48 /home/nana0411/4newCards/Cards/images/guess/data/cards.json
+-rw-r--r-- 1 nana0411 nana0411 41K Sep 18 19:48 /home/nana0411/4newCards/Cards/images/guess/data/songs.json
