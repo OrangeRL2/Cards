@@ -21,11 +21,11 @@ const STAGE_SECONDS = Object.freeze({ 1: 1, 2: 3, 3: 5, 4: 8 });
 const MAX_MUSIC_STAGE = 4;
 const MAX_TEXT_HINTS = 3;
 const HINT_COOLDOWN_MS = 2000;
-const RECENT_WIN_LOCK_MS = 60 * 60 * 1000;
-const RECENT_WIN_LOCK_THRESHOLD = 2;
-const GUESS_AUTO_MIN_MINUTES = 30;
-const GUESS_AUTO_MAX_MINUTES = 6 * 60;
-const TOKYO_TZ = 'Asia/Tokyo';
+const DAILY_REWARD_LIMIT = 2;
+const MAX_AUTO_ATTEMPTS_PER_ROUND = 3;
+const JST_OFFSET_MS = 9 * 60 * 60 * 1000;
+const AUTO_MIN_MINUTES = 60;
+const AUTO_MAX_MINUTES = 300;
 const IMAGE_BASE = process.env.IMAGE_BASE || config.imageBase || 'http://152.69.195.48/images';
 const MODE_LABEL = Object.freeze({ jacket: 'Guess the Jacket', song: 'Guess the Song', holomem: 'Guess the Holomem' });
 
@@ -47,26 +47,6 @@ function shuffle(arr) {
     [out[i], out[j]] = [out[j], out[i]];
   }
   return out;
-}
-
-function getJstDayStart(date = new Date()) {
-  const parts = new Intl.DateTimeFormat('en-CA', {
-    timeZone: TOKYO_TZ,
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-  }).formatToParts(date);
-
-  const map = {};
-  for (const part of parts) map[part.type] = part.value;
-
-  // 00:00 JST is 15:00 UTC on the previous calendar date.
-  return new Date(Date.UTC(
-    Number(map.year),
-    Number(map.month) - 1,
-    Number(map.day) - 1,
-    15, 0, 0, 0
-  ));
 }
 
 function releasedSongs(data) {
@@ -115,6 +95,7 @@ async function buildRound(mode, kind, starterId = null) {
     startedAt: Date.now(),
     createdAt: Date.now(),
     guessers: new Set(),
+    attempts: new Map(),
     hintStage: 0,
     lastHintAt: 0,
     resolving: false,
@@ -284,7 +265,7 @@ async function chooseAutomaticChannel(client, requestedChannelId = null) {
 }
 
 async function announceAutomatic(client, channel, challengeMessage, mode) {
-  const id = String(config.HolodoriChannelID || '').trim();
+  const id = String(config.birthdayChannelId || '').trim();
   if (!id) return;
   const announcement = await resolveTextChannel(client, id);
   if (!announcement) return;
@@ -332,6 +313,7 @@ async function spawnAutomatic(client, { mode = null, channelId = null, forced = 
     nextAutoAt = null;
     if (announce) await announceAutomatic(client, channel, msg, selectedMode);
     console.log(`[guess] ${forced ? 'forced' : 'automatic'} ${selectedMode} challenge started in ${channel.id}`);
+    console.log(`[guess-debug] ANSWER: ${round.answerName} (${round.answerId}) | mode=${selectedMode} | channel=${channel.id}`);
     return { success: true, round, channel, message: msg };
   } catch (err) {
     console.error('[guess] automatic spawn failed:', err);
@@ -340,11 +322,9 @@ async function spawnAutomatic(client, { mode = null, channelId = null, forced = 
 }
 
 function randomDelayMs() {
-  const min = GUESS_AUTO_MIN_MINUTES * 60 * 1000;
-  const max = GUESS_AUTO_MAX_MINUTES * 60 * 1000;
-  // Log-uniform keeps shorter waits more common while enforcing a strict
-  // 30-minute minimum and 6-hour maximum between resolved challenges.
-  return Math.round(Math.exp(Math.log(min) + Math.random() * (Math.log(max) - Math.log(min))));
+  // Uniform random delay between 60 and 300 minutes.
+  const minutes = AUTO_MIN_MINUTES + Math.floor(Math.random() * (AUTO_MAX_MINUTES - AUTO_MIN_MINUTES + 1));
+  return minutes * 60 * 1000;
 }
 
 function scheduleNextAutomatic(client, { retryMs = null } = {}) {
@@ -495,7 +475,7 @@ async function correctAnswer(message, round) {
     let reward = null;
     let rewardError = null;
     try {
-      reward = pickHolodoriLoginReward(message.author.id);
+      reward = pickHolodoriLoginReward();
       await addHolodoriReward(message.author.id, reward);
       await GuessChallenge.updateOne(
         { challengeId: round.roundId },
@@ -533,8 +513,15 @@ async function correctAnswer(message, round) {
   }).catch(() => {});
 }
 
+function autoAttemptLine(round, userId) {
+  if (round.kind !== 'auto') return '';
+  const used = Number(round.attempts?.get(String(userId)) || 0);
+  const remaining = Math.max(0, MAX_AUTO_ATTEMPTS_PER_ROUND - used);
+  return `\n-# Attempts remaining: **${remaining}/${MAX_AUTO_ATTEMPTS_PER_ROUND}**`;
+}
+
 async function wrongGuess(message, round, label) {
-  const tip = round.kind === 'manual' ? manualTip(round.mode) : '';
+  const tip = round.kind === 'manual' ? manualTip(round.mode) : autoAttemptLine(round, message.author.id);
   await message.reply({
     embeds: [new EmbedBuilder()
       .setTitle('❌ Incorrect')
@@ -549,7 +536,7 @@ async function processGuess(message, round, content) {
   if (round.mode === 'holomem') {
     const hit = bestMatch(content, data.holomems || [], h => [h.name, h.shortName, h.id], 80);
     if (!hit) {
-      await message.reply({ content: `Couldn't find a holomem matching \`${String(content).slice(0, 100)}\`.${round.kind === 'manual' ? manualTip(round.mode) : ''}`, allowedMentions: { parse: [] } }).catch(() => {});
+      await message.reply({ content: `Couldn't find a holomem matching \`${String(content).slice(0, 100)}\`.${round.kind === 'manual' ? manualTip(round.mode) : autoAttemptLine(round, message.author.id)}`, allowedMentions: { parse: [] } }).catch(() => {});
       return;
     }
     if (String(hit.item.id) === String(round.answerId)) return correctAnswer(message, round);
@@ -558,7 +545,7 @@ async function processGuess(message, round, content) {
 
   const hit = bestMatch(content, data.songs || [], s => [s.title, s.id], 80);
   if (!hit) {
-    await message.reply({ content: `Couldn't find a song matching \`${String(content).slice(0, 100)}\`.${round.kind === 'manual' ? manualTip(round.mode) : ''}`, allowedMentions: { parse: [] } }).catch(() => {});
+    await message.reply({ content: `Couldn't find a song matching \`${String(content).slice(0, 100)}\`.${round.kind === 'manual' ? manualTip(round.mode) : autoAttemptLine(round, message.author.id)}`, allowedMentions: { parse: [] } }).catch(() => {});
     return;
   }
   if (String(hit.item.id) === String(round.answerId)) return correctAnswer(message, round);
@@ -671,29 +658,34 @@ async function handleControlMessage(message, round, command) {
   return null;
 }
 
+function jstDayBounds(now = new Date()) {
+  const shifted = new Date(now.getTime() + JST_OFFSET_MS);
+  const startShifted = Date.UTC(
+    shifted.getUTCFullYear(),
+    shifted.getUTCMonth(),
+    shifted.getUTCDate(),
+    0, 0, 0, 0
+  );
+  const start = new Date(startShifted - JST_OFFSET_MS);
+  const end = new Date(start.getTime() + 24 * 60 * 60 * 1000);
+  return { start, end };
+}
+
+async function getDailyRewardCount(userId, now = new Date()) {
+  const { start, end } = jstDayBounds(now);
+  return GuessChallenge.countDocuments({
+    winnerId: String(userId),
+    resolvedAt: { $gte: start, $lt: end },
+    'reward.name': { $exists: true, $ne: null },
+  }).exec();
+}
+
 async function getAutomaticGuessLock(round, userId) {
   if (!round || round.kind !== 'auto') return null;
-
-  const spawnedAt = Number(round.startedAt || 0);
-  if (!spawnedAt) return null;
-
-  const now = new Date();
-  const lockEndsAt = spawnedAt + RECENT_WIN_LOCK_MS;
-  if (now.getTime() >= lockEndsAt) return null;
-
-  // Use the same JST calendar-day reset as /login. At 00:00 JST the win
-  // counter resets immediately, even if this challenge spawned before midnight.
-  const dayStart = getJstDayStart(now);
-  const wins = await GuessChallenge.countDocuments({
-    winnerId: String(userId),
-    resolvedAt: {
-      $gte: dayStart,
-      $lte: now,
-    },
-  }).exec();
-
-  if (wins < RECENT_WIN_LOCK_THRESHOLD) return null;
-  return { wins, lockEndsAt };
+  const rewards = await getDailyRewardCount(userId);
+  if (rewards < DAILY_REWARD_LIMIT) return null;
+  const { end } = jstDayBounds();
+  return { rewards, resetsAt: end.getTime() };
 }
 
 async function handleMessage(message) {
@@ -713,21 +705,33 @@ async function handleMessage(message) {
     try {
       const lock = await getAutomaticGuessLock(round, message.author.id);
       if (lock) {
-        const unlockTimestamp = Math.ceil(lock.lockEndsAt / 1000);
+        const resetTimestamp = Math.ceil(lock.resetsAt / 1000);
         await message.reply({
-          content: `⏳ You've already won **${lock.wins}** Guess Challenges today (JST), so you can't guess during this challenge's first hour. You can join <t:${unlockTimestamp}:R>, or immediately after the daily reset if that comes first.`,
+          content: `⏳ You've already earned **${lock.rewards}/${DAILY_REWARD_LIMIT}** Guess Challenge rewards today. You can guess for rewards again <t:${resetTimestamp}:R> (midnight JST).`,
           allowedMentions: { parse: [] },
         }).catch(() => {});
         return true;
       }
     } catch (err) {
-      console.error('[guess] recent-win lock check failed:', err);
+      console.error('[guess] daily reward-cap check failed:', err);
       await message.reply({
         content: 'Could not verify Guess Challenge eligibility right now. Please try again in a moment.',
         allowedMentions: { parse: [] },
       }).catch(() => {});
       return true;
     }
+
+    if (!(round.attempts instanceof Map)) round.attempts = new Map();
+    const userId = String(message.author.id);
+    const usedAttempts = Number(round.attempts.get(userId) || 0);
+    if (usedAttempts >= MAX_AUTO_ATTEMPTS_PER_ROUND) {
+      await message.reply({
+        content: `❌ You've used all **${MAX_AUTO_ATTEMPTS_PER_ROUND}** attempts for this Guess Challenge.`,
+        allowedMentions: { parse: [] },
+      }).catch(() => {});
+      return true;
+    }
+    round.attempts.set(userId, usedAttempts + 1);
   }
 
   round.guessers.add(String(message.author.id));
@@ -795,6 +799,7 @@ async function restoreAutomaticRounds(client) {
       startedAt: new Date(doc.spawnedAt || doc.createdAt || Date.now()).getTime(),
       createdAt: Date.now(),
       guessers: new Set(),
+      attempts: new Map(),
       hintStage: 0,
       lastHintAt: 0,
       resolving: false,

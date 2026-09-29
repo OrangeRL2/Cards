@@ -696,6 +696,12 @@
     "image": "../cards/04012-5-uniq-0051-00.png"
   },
   {
+    "assetId": "04012-5-uniq-0087-00",
+    "member": "Baelz",
+    "rarity": 5,
+    "image": "../cards/04012-5-uniq-0087-00.png"
+  },
+  {
     "assetId": "04014-5-uniq-0053-00",
     "member": "Bijou",
     "rarity": 5,
@@ -834,6 +840,12 @@
     "image": "../cards/03009-5-uniq-0041-00.png"
   },
   {
+    "assetId": "03009-5-uniq-0088-00",
+    "member": "Kobo",
+    "rarity": 5,
+    "image": "../cards/03009-5-uniq-0088-00.png"
+  },
+  {
     "assetId": "00017-5-uniq-0015-00",
     "member": "Korone",
     "rarity": 5,
@@ -850,6 +862,12 @@
     "member": "Koyori",
     "rarity": 5,
     "image": "../cards/00037-5-uniq-0030-00.png"
+  },
+  {
+    "assetId": "00037-5-uniq-0086-00",
+    "member": "Koyori",
+    "rarity": 5,
+    "image": "../cards/00037-5-uniq-0086-00.png"
   },
   {
     "assetId": "04010-5-uniq-0049-00",
@@ -904,6 +922,12 @@
     "member": "Marine",
     "rarity": 5,
     "image": "../cards/00023-5-uniq-0019-00.png"
+  },
+  {
+    "assetId": "00023-5-uniq-0085-00",
+    "member": "Marine",
+    "rarity": 5,
+    "image": "../cards/00023-5-uniq-0085-00.png"
   },
   {
     "assetId": "00007-5-uniq-0008-00",

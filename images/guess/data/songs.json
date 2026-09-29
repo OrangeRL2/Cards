@@ -1979,6 +1979,46 @@
     "audio": "../audio/m0348.mp3"
   },
   {
+    "id": "m0349",
+    "title": "Grave of Halo",
+    "playingSeconds": 123,
+    "characterIds": [
+      "chr-00004"
+    ],
+    "jacket": "../jackets/m0349.png",
+    "audio": "../audio/m0349.mp3"
+  },
+  {
+    "id": "m0350",
+    "title": "Lethal Dose Paranoid",
+    "playingSeconds": 133,
+    "characterIds": [
+      "chr-00035"
+    ],
+    "jacket": "../jackets/m0350.png",
+    "audio": "../audio/m0350.mp3"
+  },
+  {
+    "id": "m0351",
+    "title": "Glitch Through",
+    "playingSeconds": 124,
+    "characterIds": [
+      "chr-04013"
+    ],
+    "jacket": "../jackets/m0351.png",
+    "audio": "../audio/m0351.mp3"
+  },
+  {
+    "id": "m0352",
+    "title": "64.",
+    "playingSeconds": 136,
+    "characterIds": [
+      "chr-03005"
+    ],
+    "jacket": "../jackets/m0352.png",
+    "audio": "../audio/m0352.mp3"
+  },
+  {
     "id": "m0353",
     "title": "Night Loop",
     "playingSeconds": 134,
@@ -2027,6 +2067,23 @@
     ],
     "jacket": "../jackets/m0524.png",
     "audio": "../audio/m0524.mp3"
+  },
+  {
+    "id": "m0525",
+    "title": "Watcha Gatcha!!!!!!!!",
+    "playingSeconds": 122,
+    "characterIds": [
+      "chr-00030",
+      "chr-00031",
+      "chr-00032",
+      "chr-00034",
+      "chr-00035",
+      "chr-00036",
+      "chr-00037",
+      "chr-00039"
+    ],
+    "jacket": "../jackets/m0525.png",
+    "audio": "../audio/m0525.mp3"
   },
   {
     "id": "m0527",
