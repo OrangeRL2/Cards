@@ -1,3 +1,4 @@
+const { installLocalImageTransport } = require('../../utils/localizeInteractionEmbeds');
 // commands/login.js
 // Slash command: /login
 // Grants daily random fans.
@@ -679,6 +680,7 @@ async function sendPaginatedLoginRewardReply({
   });
 
   collector.on('collect', async buttonInteraction => {
+      installLocalImageTransport(buttonInteraction);
     try {
       const parts = String(buttonInteraction.customId || '').split(':');
 
@@ -798,6 +800,7 @@ module.exports = {
    * @param {import('discord.js').CommandInteraction} interaction
    */
   async execute(interaction) {
+    installLocalImageTransport(interaction);
     await interaction.deferReply();
 
     try {
@@ -904,7 +907,7 @@ module.exports = {
       }
 
       // One HOLODORI card is awarded on every successful daily login.
-      holodoriCard = pickHolodoriLoginReward(userId);
+      holodoriCard = pickHolodoriLoginReward();
 
       // Store HOLODORI cards using their star tier as the actual rarity.
       if (holodoriCard) {
@@ -1009,3 +1012,4 @@ module.exports = {
     }
   },
 };
+

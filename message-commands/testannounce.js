@@ -1,3 +1,4 @@
+const { localizePayload } = require('../utils/localizeInteractionEmbeds');
 // message-commands/testannounce.js
 const { EmbedBuilder } = require('discord.js');
 const User = require('../models/User');
@@ -104,7 +105,7 @@ module.exports = {
       let posted;
       try {
         if (sendAsEmbed && embed) {
-          posted = await targetChannel.send({ embeds: [embed] });
+          posted = await targetChannel.send(localizePayload({ embeds: [embed] }, `testannounce-${message.id}`, false));
         } else {
           const text = `**${title}**\n\n${body}`;
           posted = await targetChannel.send({ content: text });
@@ -209,3 +210,5 @@ module.exports = {
     }
   }
 };
+
+

@@ -2029,6 +2029,34 @@
     "audio": "../audio/m0353.mp3"
   },
   {
+    "id": "m0354",
+    "title": "PARADISE！",
+    "playingSeconds": 116,
+    "characterIds": [],
+    "jacket": "../jackets/m0354.png",
+    "audio": "../audio/m0354.mp3"
+  },
+  {
+    "id": "m0357",
+    "title": "Play Dice!",
+    "playingSeconds": 155,
+    "characterIds": [
+      "chr-04012"
+    ],
+    "jacket": "../jackets/m0357.png",
+    "audio": "../audio/m0357.mp3"
+  },
+  {
+    "id": "m0358",
+    "title": "PROPOSE",
+    "playingSeconds": 133,
+    "characterIds": [
+      "chr-03009"
+    ],
+    "jacket": "../jackets/m0358.png",
+    "audio": "../audio/m0358.mp3"
+  },
+  {
     "id": "m0359",
     "title": "Backseat",
     "playingSeconds": 149,
@@ -2047,6 +2075,36 @@
     ],
     "jacket": "../jackets/m0363.png",
     "audio": "../audio/m0363.mp3"
+  },
+  {
+    "id": "m0375",
+    "title": "Wonky Monkey",
+    "playingSeconds": 124,
+    "characterIds": [
+      "chr-00017"
+    ],
+    "jacket": "../jackets/m0375.png",
+    "audio": "../audio/m0375.mp3"
+  },
+  {
+    "id": "m0376",
+    "title": "KONKON Beats",
+    "playingSeconds": 101,
+    "characterIds": [
+      "chr-00006"
+    ],
+    "jacket": "../jackets/m0376.png",
+    "audio": "../audio/m0376.mp3"
+  },
+  {
+    "id": "m0413",
+    "title": "BAKU LOVE CHEMISTRY",
+    "playingSeconds": 125,
+    "characterIds": [
+      "chr-00037"
+    ],
+    "jacket": "../jackets/m0413.png",
+    "audio": "../audio/m0413.mp3"
   },
   {
     "id": "m0459",
@@ -2095,5 +2153,15 @@
     ],
     "jacket": "../jackets/m0527.png",
     "audio": "../audio/m0527.mp3"
+  },
+  {
+    "id": "m0548",
+    "title": "Kyapi",
+    "playingSeconds": 123,
+    "characterIds": [
+      "chr-00023"
+    ],
+    "jacket": "../jackets/m0548.png",
+    "audio": "../audio/m0548.mp3"
   }
 ]

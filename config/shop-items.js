@@ -36,11 +36,17 @@ const SHOP_ITEMS = {
     holoDoriRisu:  { name: 'HoloDori Risu',  rarity: 'UP',               cost: t1,   image: 'Risu 001', stock: -1 },
     bloomCupRobocoEN:  { name: 'Bloom Cup Roboco',  rarity: 'UP',               cost: t1,   image: 'Roboco 001', stock: -1 },
     bloomCupFinalistIrohaEN:  { name: 'Bloom Cup Iroha',  rarity: 'UP',               cost: t1,   image: 'Iroha 501', stock: -1 },
-    
+
+    // COL cards - 1,000 Fans
+    colBIG3_001: { name: 'COL BIG3', rarity: 'COL', cost: t1, image: 'BIG3 001', stock: -1 },
+    colFUWAMOCO_001: { name: 'COL FUWAMOCO', rarity: 'COL', cost: t1, image: 'FUWAMOCO 001', stock: -1 },
+    colFUWAMOCO_501: { name: 'COL FUWAMOCO 501', rarity: 'COL', cost: t1, image: 'FUWAMOCO 501', stock: -1 },
+    colHoloAN_001: { name: 'COL holoAN', rarity: 'COL', cost: t1, image: 'holoAN 001', stock: -1 },
 
   //tier2
     witch1: { name: 'holoWitch holoWitches', rarity: 'UP', cost: t2,  image: 'holoWitches 001',  stock: -1 },
     worldTour1: { name: 'WorldTour25 -Synchronize!- Calli, IRyS, Nerissa, Ollie, Nene', rarity: 'UP', cost: t2, image: 'Calli, IRyS, Nerissa, Ollie, Nene 701', stock: -1 },
+
   //tier3
     bloomLam: { name: 'Bloom Cup Champion Lamy', rarity: 'UP',       cost: t3,  image: 'Lamy 001',  stock: -1 },
     bloomLamEN: { name: 'Bloom Cup Champion Lamy EN', rarity: 'UP',       cost: t3,  image: 'Lamy 501',  stock: -1 },
@@ -50,81 +56,31 @@ const SHOP_ITEMS = {
     bloom6: { name: 'Bloom Cup Reine Top8', rarity: 'UP',                 cost: t3,  image: 'Reine 701',  stock: -1 },
     bloomMiko: { name: 'Bloom Cup Miko EN', rarity: 'UP',                 cost: t3,  image: 'Miko 501',  stock: -1 },
     bloomCupSui:  { name: 'Bloom Cup Suisei',  rarity: 'UP',               cost: t3,   image: 'Suisei 006', stock: -1 },
-        bloomCupFinalistRaoraEN:  { name: 'Bloom Cup Raora',  rarity: 'UP',               cost: t3,   image: 'Raora 701', stock: -1 },
-                bloomCupFinalistRandomEN:  { name: 'Bloom Cup Final Challenger Bijou, Ina, Baelz, Cecilia',  rarity: 'UP',               cost: t3,   image: 'Bijou, Ina, Baelz, Cecilia 701', stock: -1 },
+    bloomCupFinalistRaoraEN:  { name: 'Bloom Cup Raora',  rarity: 'UP',               cost: t3,   image: 'Raora 701', stock: -1 },
+    bloomCupFinalistRandomEN:  { name: 'Bloom Cup Final Challenger Bijou, Ina, Baelz, Cecilia',  rarity: 'UP',               cost: t3,   image: 'Bijou, Ina, Baelz, Cecilia 701', stock: -1 },
+
+    // COL cards - 5,000 Fans
+    colRiona_001: { name: 'COL Riona', rarity: 'COL', cost: t3, image: 'Riona 001', stock: -1 },
+    colRiona_501: { name: 'COL Riona 501', rarity: 'COL', cost: t3, image: 'Riona 501', stock: -1 },
+    colBijouInaBaelzCecilia_701: { name: 'COL Bijou, Ina, Baelz, Cecilia', rarity: 'COL', cost: t3, image: 'Bijou, Ina, Baelz, Cecilia 701', stock: -1 },
+
   //tier4
     wgSubaLuna: { name: 'World Grand Prix Top 8 SubaLuna', rarity: 'UP',       cost: t4,  image: 'SubaLuna 001',  stock: -1 },
     wgpTop16Koy: { name: 'World Grand Prix Top 16 Koyori', rarity: 'UP',          cost: t4,  image: 'Koyori 001',  stock: -1 },
     wgpTop16Koy: { name: 'World Grand Prix Top 16 Ayame', rarity: 'UP',          cost: t4,  image: 'Ayame 002',  stock: -1 },
     wgpTop8Shion: { name: 'World Grand Prix Top 8 Shion', rarity: 'UP',            cost: t4,  image: 'Shion 001',  stock: -1 },
     bloomCupFinalistRandomEN:  { name: 'Bloom Cup Final Challenger Top 8 Calli',  rarity: 'UP',               cost: t3,   image: 'Calli 701', stock: -1 },
+
+    // COL cards - 10,000 Fans
+    colKoyori_001: { name: 'COL Koyori', rarity: 'COL', cost: t4, image: 'Koyori 001', stock: -1 },
+
   //tier5
     wgpTop4: { name: 'World Grand Prix Top4 OkaKoro', rarity: 'UP',       cost: t5,  image: 'OkaKoro 001',  stock: -1 },
     exstreamerTop4Sui: { name: 'Exstreamer Cup Top 4 Suisei', rarity: 'UP', cost: t5, image: 'Suisei 004', stock: -1 },
     wgpTop4Tokyo: { name: 'World Grand Prix Tokyo Top4 Pekora', rarity: 'UP',       cost: t5,  image: 'Pekora 001',  stock: -1 },
     wgpTop4Chiba: { name: 'World Grand Prix Chiba Top4 Raden', rarity: 'UP',       cost: t5,  image: 'Raden 001',  stock: -1 },
     wtTop4Fukuoka: { name: 'World Grand Prix Fukuoka Top4 Watame', rarity: 'UP',       cost: t5,  image: 'Watame 001',  stock: -1 },
-  //tier6
-    exstreamer: { name: 'Exstreamer Cup Entry PekoMari', rarity: 'UP', cost: t6, image: 'PekoMari 001', stock: -1 },
-    exstreamerFinal: { name: 'Exstreamer Cup Finalist Suisei', rarity: 'UP', cost: t6, image: 'Suisei 003', stock: -1 },
-    
-    exstreamerChamp: { name: 'Exstreamer Cup Champion Suisei', rarity: 'UP', cost: t7, image: 'Suisei 002', stock: -1 },
-};
 
-module.exports = SHOP_ITEMS;
-
-//notes
-/*
-base price
-Illust Change (P) 1000
-SR 5000
-UR 10000
-OUR 25000
-entry + 0
-certain entry qualification + 10000
-top48 + 1000
-top16 + 1000
-top8 + 2500
-top4 + 5000
-Finalist + 10000
-Champion + 25000
-*/
-
-
-/*
-// data/shop-items.js
-// Keys are stable ids used in button customIds and DB ops
-let t1 = 1000;
-let t2 = 2500;
-let t3 = 5000;
-let t4 = 10000;
-let t5 = 20000;
-let t6 = 30000;
-let t7 = 50000;
-const SHOP_ITEMS = {
-  //tier1
-    bloomSui:  { name: 'Bloom Cup Suisei Top 8',  rarity: 'UP',         cost: t1,   image: 'Suisei 001', stock: -1 },
-    bloomFub: { name: 'Bloom Cup Fubuki Top 8', rarity: 'UP',           cost: t1,  image: 'Fubuki 001',  stock: -1 },
-    bloomPol: { name: 'Bloom Cup Polka Top 48', rarity: 'UP',           cost: t1,  image: 'Polka 001',  stock: -1 },
-    sparkleGen0: { name: 'Shiny Sparkles Symphony Gen 0', rarity: 'UP',  cost: t1,  image: 'Gen 0 001',  stock: -1 },
-    anniSorAZ:  { name: 'Anniversary SorAZ',  rarity: 'UP',               cost: t1,   image: 'SorAZ 001', stock: -1 },
-  //tier2
-    witch1: { name: 'HoloWitch Holowitches', rarity: 'UP', cost: t2,  image: 'Holowitches 001',  stock: -1 },
-    worldTour1: { name: 'WorldTour25 -Synchronize!- Calli, IRyS, Nerissa, Ollie, Nene', rarity: 'UP', cost: t2, image: 'Calli, IRyS, Nerissa , Ollie, Nene 501', stock: -1 },
-  //tier3
-    bloomLam: { name: 'Bloom Cup Champion Lamy', rarity: 'UP',       cost: t3,  image: 'Lamy 001',  stock: -1 },
-    bloomMik: { name: 'Bloom Cup Champion Miko', rarity: 'UP',       cost: t3,  image: 'Miko 001',  stock: -1 },
-    exstreamerTop8Sui: { name: 'Exstreamer Cup Top 8 Suisei', rarity: 'UP', cost: t3, image: 'Suisei 005', stock: -1 },
-    bloom6: { name: 'Bloom Cup Reine Top8', rarity: 'UP',                 cost: t3,  image: 'Reine 501',  stock: -1 },a
-  //tier4
-    wgSubaLuna: { name: 'World Grand Prix Top 8 SubaLuna', rarity: 'UP',       cost: t4,  image: 'SubaLuna 001',  stock: -1 },
-    wgpTop16Koy: { name: 'World Grand Prix Top 16 Koyori', rarity: 'UP',          cost: t4,  image: 'Koyori 001',  stock: -1 },
-    wgpTop8Shion: { name: 'World Grand Prix Top 8 Shion', rarity: 'UP',            cost: t4,  image: 'Shion 001',  stock: -1 },
-  //tier5
-    wgpTop4: { name: 'World Grand Prix Top4 OkaKoro', rarity: 'UP',       cost: t5,  image: 'OkaKoro 001',  stock: -1 },
-    exstreamerTop4Sui: { name: 'Exstreamer Cup Top 4 Suisei', rarity: 'UP', cost: t5, image: 'Suisei 004', stock: -1 },
-    wgpTop4Tokyo: { name: 'World Grand Prix Tokyo Top4 Pekora', rarity: 'UP',       cost: t5,  image: 'Pekora 001',  stock: -1 },
-    wgpTop4Chiba: { name: 'World Grand Prix Chiba Top4 Raden', rarity: 'UP',       cost: t5,  image: 'Raden 001',  stock: -1 },
   //tier6
     exstreamer: { name: 'Exstreamer Cup Entry PekoMari', rarity: 'UP', cost: t6, image: 'PekoMari 001', stock: -1 },
     exstreamerFinal: { name: 'Exstreamer Cup Finalist Suisei', rarity: 'UP', cost: t6, image: 'Suisei 003', stock: -1 },
@@ -133,21 +89,3 @@ const SHOP_ITEMS = {
 };
 
 module.exports = SHOP_ITEMS;
-
-//notes
-/*
-base price
-Illust Change (P) 1000
-SR 5000
-UR 10000
-OUR 25000
-entry + 0
-certain entry qualification + 10000
-top48 + 1000
-top16 + 1000
-top8 + 2500
-top4 + 5000
-Finalist + 10000
-Champion + 25000
-*/
-

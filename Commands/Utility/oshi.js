@@ -1,3 +1,4 @@
+const { installLocalImageTransport } = require('../../utils/localizeInteractionEmbeds');
 // commands/oshi.js
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const mongoose = require('mongoose');
@@ -27,6 +28,7 @@ module.exports = {
     ),
 
   async execute(interaction) {
+    installLocalImageTransport(interaction);
     try {
       const targetUser = interaction.options.getUser('user') ?? interaction.user;
       const targetId = targetUser.id;
@@ -124,3 +126,4 @@ module.exports = {
     }
   }
 };
+

@@ -1,3 +1,4 @@
+const { installLocalImageTransport } = require('../../utils/localizeInteractionEmbeds');
 // Commands/Utility/recents.js
 
 const {
@@ -250,6 +251,7 @@ module.exports = {
   requireOshi: false,
 
   async execute(interaction) {
+    installLocalImageTransport(interaction);
     await interaction.deferReply();
 
     const days = interaction.options.getInteger('days') || 1;
@@ -352,22 +354,27 @@ module.exports = {
         .setFooter({ text: `Page ${pageIndex + 1}/${totalPages}` })
     );
 
-    const imageEmbeds = rows.map((row, imageIndex) => {
+    // Build card image embeds only when the image viewer needs one. This keeps
+    // the initial /recents response cheap even when the acquisition history is
+    // large.
+    function buildImageEmbed(imageIndex) {
+      const row = rows[imageIndex];
       const cc = resolveCardColor(row.name, row.rarity);
       const emoji = cc ? getAttributeEmoji(cc) : '';
       const attrTag = emoji ? ` ${emoji}` : '';
       const variantTag = row.variant ? ` (${row.variant})` : '';
       const countTag = row.count > 1 ? ` ×${row.count}` : '';
       const ts = Math.floor(row.acquiredAt.getTime() / 1000);
+      const imageUrl = buildCardImageUrl(row.name, row.rarity, row.variant);
 
       return new EmbedBuilder()
         .setTitle(`**[${row.rarity}]** ${escapeMarkdown(row.name)}${attrTag}${countTag}`)
         .setDescription(`Acquired <t:${ts}:R>${variantTag}`)
-        .setImage(buildCardImageUrl(row.name, row.rarity, row.variant))
-        .setURL(buildCardImageUrl(row.name, row.rarity, row.variant))
+        .setImage(imageUrl)
+        .setURL(imageUrl)
         .setColor(RARITY_COLORS[row.rarity] ?? Colors.Default)
         .setFooter({ text: `Card ${imageIndex + 1}/${rows.length}` });
-    });
+    }
 
     function buildListRow() {
       return new ActionRowBuilder().addComponents(
@@ -464,6 +471,7 @@ module.exports = {
 
       if (!modalInt) return;
 
+      installLocalImageTransport(modalInt);
       resetIdleTimer();
 
       let target = Number(modalInt.fields.getTextInputValue('jump_number').trim());
@@ -474,7 +482,7 @@ module.exports = {
         imageIdx = target - 1;
         mode = 'image';
         await modalInt.update({
-          embeds: [imageEmbeds[imageIdx]],
+          embeds: [buildImageEmbed(imageIdx)],
           components: [buildImageRow()],
         });
       } else {
@@ -490,6 +498,7 @@ module.exports = {
     resetIdleTimer();
 
     collector.on('collect', async btn => {
+      installLocalImageTransport(btn);
       resetIdleTimer();
 
       try {
@@ -513,7 +522,7 @@ module.exports = {
         if (action === 'list_view') {
           imageIdx = Math.min(listPage * MAX_LINES_PER_PAGE, rows.length - 1);
           mode = 'image';
-          await btn.update({ embeds: [imageEmbeds[imageIdx]], components: [buildImageRow()] });
+          await btn.update({ embeds: [buildImageEmbed(imageIdx)], components: [buildImageRow()] });
           return;
         }
 
@@ -524,13 +533,13 @@ module.exports = {
 
         if (action === 'img_prev') {
           imageIdx = (imageIdx - 1 + rows.length) % rows.length;
-          await btn.update({ embeds: [imageEmbeds[imageIdx]], components: [buildImageRow()] });
+          await btn.update({ embeds: [buildImageEmbed(imageIdx)], components: [buildImageRow()] });
           return;
         }
 
         if (action === 'img_next') {
           imageIdx = (imageIdx + 1) % rows.length;
-          await btn.update({ embeds: [imageEmbeds[imageIdx]], components: [buildImageRow()] });
+          await btn.update({ embeds: [buildImageEmbed(imageIdx)], components: [buildImageRow()] });
           return;
         }
 

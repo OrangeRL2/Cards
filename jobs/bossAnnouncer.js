@@ -1,3 +1,4 @@
+const { localizePayload } = require('../utils/localizeInteractionEmbeds');
 // jobs/bossAnnouncer.js
 const BossEvent = require('../models/BossEvent');
 const oshis = require('../config/oshis');
@@ -37,7 +38,7 @@ async function announceActivatedEvents(client) {
       }
       const ch = await client.channels.fetch(channelId);
       if (ch && ch.isTextBased && ch.send) {
-        await ch.send({ embeds: [embed] });
+        await ch.send(localizePayload({ embeds: [embed] }, `boss-announce-${ev.eventId}`, false));
       } else {
         console.warn('Configured boss channel is not text-based or could not be fetched:', channelId);
       }
@@ -48,3 +49,5 @@ async function announceActivatedEvents(client) {
 }
 
 module.exports = { announceActivatedEvents };
+
+

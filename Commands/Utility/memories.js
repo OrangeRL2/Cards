@@ -1,3 +1,4 @@
+const { installLocalImageTransport } = require('../../utils/localizeInteractionEmbeds');
 // commands/Utility/memories.js
 const {
   SlashCommandBuilder,
@@ -52,6 +53,7 @@ module.exports = {
   requireOshi: true,
 
   async execute(interaction) {
+    installLocalImageTransport(interaction);
     await interaction.deferReply();
 
     // Show loading GIF
@@ -229,6 +231,7 @@ module.exports = {
       let isRevealing = false;
 
       collector.on('collect', async comp => {
+      installLocalImageTransport(comp);
         resetIdle();
 
         if (isRevealing) {
@@ -344,6 +347,7 @@ module.exports = {
               time: 60_000,
             });
 
+            installLocalImageTransport(modalInt);
             resetIdle();
 
             // acknowledge modal so it disappears
@@ -631,3 +635,4 @@ module.exports = {
     }
   },
 };
+

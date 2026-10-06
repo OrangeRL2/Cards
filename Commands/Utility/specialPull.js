@@ -1,3 +1,4 @@
+const { installLocalImageTransport } = require('../../utils/localizeInteractionEmbeds');
 // Commands/Utility/pull.js
 const { SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 const path = require('path');
@@ -362,6 +363,7 @@ module.exports = {
   requireOshi: true,
 
   async execute(interaction) {
+    installLocalImageTransport(interaction);
     try { await interaction.deferReply(); } catch (e) { /* ignore */ }
 
     if (inFlightInteractions.has(interaction.id)) {
@@ -784,6 +786,7 @@ module.exports = {
     let pageIndex = 0;
 
     collector.on('collect', async (btnInt) => {
+      installLocalImageTransport(btnInt);
       try {
         if (btnInt.customId === 'prev') pageIndex = (pageIndex - 1 + pageItems.length) % pageItems.length;
         else if (btnInt.customId === 'next') pageIndex = (pageIndex + 1) % pageItems.length;
@@ -801,3 +804,5 @@ module.exports = {
     });
   },
 };
+
+

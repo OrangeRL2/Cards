@@ -1,4 +1,4 @@
-
+const { installLocalImageTransport } = require('../../utils/localizeInteractionEmbeds');
 const {
   SlashCommandBuilder,
   EmbedBuilder,
@@ -24,7 +24,6 @@ const { resolveCardColor, getAttributeEmoji } = require('../../config/holomemCol
 const IMAGE_BASE = 'http://152.69.195.48/images';
 const ITEMS_PER_PAGE = 10;
 const IDLE_LIMIT = 120_000; // 2 minutes
-
 
 // Cards to always hide from output (any rarity)
 const EXCEPTION_LIST = [
@@ -110,29 +109,30 @@ const RARITY_ORDER = {
   VAL: 2,
   EAS: 3,
   SUN: 4,
-  '★★★': 5,
-  '★★★★': 6,
-  '★★★★★': 7,
-  HOLODORI: 7,
-  C: 8,
-  U: 9,
-  R: 10,
-  S: 11,
-  RR: 12,
-  OC: 13,
-  SR: 14,
-  OSR: 15,
-  COL: 16,
-  P: 17,
-  SP: 18,
-  UP: 19,
-  SY: 20,
-  UR: 21,
-  OUR: 22,
-  HR: 23,
-  BDAY: 24,
-  SEC: 25,
-  ORI: 26,
+  EV: 5,
+  '★★★': 6,
+  '★★★★': 7,
+  '★★★★★': 8,
+  HOLODORI: 9,
+  C: 10,
+  U: 11,
+  R: 12,
+  S: 13,
+  RR: 14,
+  OC: 15,
+  SR: 16,
+  OSR: 17,
+  COL: 18,
+  P: 19,
+  SP: 20,
+  UP: 21,
+  SY: 22,
+  UR: 23,
+  OUR: 24,
+  HR: 25,
+  BDAY: 26,
+  SEC: 27,
+  ORI: 28,
 };
 
 const RARITY_COLORS = {
@@ -234,6 +234,7 @@ module.exports = {
   requireOshi: true,
 
   async execute(interaction) {
+    installLocalImageTransport(interaction);
     const explicitTarget = interaction.options.getUser('user');
     const targetUser = explicitTarget ? explicitTarget : interaction.user;
 
@@ -360,11 +361,10 @@ module.exports = {
       (_, i) => entries.slice(i * ITEMS_PER_PAGE, (i + 1) * ITEMS_PER_PAGE)
     );
 
-    // Prepare image data
-    const imageResults = entries.map(c => ({
-      c,
-      url: buildCardImageUrl(c.name, c.rarity, c.variant),
-    }));
+    // Image embeds are built lazily only when the user actually opens the
+    // image viewer. Large inventories no longer allocate one EmbedBuilder and
+    // one ActionRowBuilder per card during the initial /inventory response.
+    const imageCount = entries.length;
 
     // Unique customId helper
     const uid = interaction.id || `${Date.now()}_${Math.floor(Math.random() * 1000)}`;
@@ -429,7 +429,9 @@ module.exports = {
       return new ActionRowBuilder().addComponents(prev, view, next, skip);
     });
 
-    const imageEmbeds = imageResults.map(({ c, url }, i) => {
+    function buildImageEmbed(i) {
+      const c = entries[i];
+      const url = buildCardImageUrl(c.name, c.rarity, c.variant);
       const cc = resolveCardColor(c.name, c.rarity);
       const emoji = cc ? getAttributeEmoji(cc) : '';
       const attrTag = cc ? ` ${emoji}` : '';
@@ -438,10 +440,10 @@ module.exports = {
         .setTitle(`**[${c.rarity}${c.rarity === 'HOLODORI' && c.variant ? ` ${c.variant}` : ''}]** ${escapeMarkdown(c.name)}${attrTag} (x${c.count})${c.locked ? ' 🔒' : ''}`)
         .setImage(url)
         .setColor(RARITY_COLORS[c.rarity] ?? Colors.Default)
-        .setFooter({ text: `Card ${i + 1} of ${imageResults.length}` });
-    });
+        .setFooter({ text: `Card ${i + 1} of ${imageCount}` });
+    }
 
-    const imageRows = imageResults.map((_, i) => {
+    function buildImageRow(i) {
       const prev = new ButtonBuilder()
         .setCustomId(cid(`img_prev_${i}`))
         .setLabel('◀ Prev')
@@ -460,7 +462,7 @@ module.exports = {
         .setDisabled(false);
 
       return new ActionRowBuilder().addComponents(prev, back, next);
-    });
+    }
 
     // Send initial list page
     await interaction.editReply({ embeds: [listEmbeds[0]], components: [listRows[0]] });
@@ -484,6 +486,7 @@ module.exports = {
     resetIdleTimer();
 
     collector.on('collect', async btn => {
+      installLocalImageTransport(btn);
       resetIdleTimer();
 
       try {
@@ -492,20 +495,20 @@ module.exports = {
 
         if (parts.startsWith('list_prev_')) {
           listPage = (listPage - 1 + totalPages) % totalPages;
-          await btn.update({ embeds: [listEmbeds[listPage]] });
+          await btn.update({ embeds: [listEmbeds[listPage]], components: [listRows[listPage]] });
           return;
         }
 
         if (parts.startsWith('list_next_')) {
           listPage = (listPage + 1) % totalPages;
-          await btn.update({ embeds: [listEmbeds[listPage]] });
+          await btn.update({ embeds: [listEmbeds[listPage]], components: [listRows[listPage]] });
           return;
         }
 
         if (parts.startsWith('list_view_')) {
           imageIdx = listPage * ITEMS_PER_PAGE;
-          imageIdx = Math.max(0, Math.min(imageIdx, imageEmbeds.length - 1));
-          await btn.update({ embeds: [imageEmbeds[imageIdx]], components: [imageRows[imageIdx]] });
+          imageIdx = Math.max(0, Math.min(imageIdx, imageCount - 1));
+          await btn.update({ embeds: [buildImageEmbed(imageIdx)], components: [buildImageRow(imageIdx)] });
           return;
         }
 
@@ -527,6 +530,7 @@ module.exports = {
               time: 60000,
             });
 
+            installLocalImageTransport(modalInt);
             resetIdleTimer();
 
             let target = parseInt(modalInt.fields.getTextInputValue('page_input'), 10);
@@ -545,14 +549,14 @@ module.exports = {
         }
 
         if (parts.startsWith('img_prev_')) {
-          imageIdx = (imageIdx - 1 + imageEmbeds.length) % imageEmbeds.length;
-          await btn.update({ embeds: [imageEmbeds[imageIdx]] });
+          imageIdx = (imageIdx - 1 + imageCount) % imageCount;
+          await btn.update({ embeds: [buildImageEmbed(imageIdx)], components: [buildImageRow(imageIdx)] });
           return;
         }
 
         if (parts.startsWith('img_next_')) {
-          imageIdx = (imageIdx + 1) % imageEmbeds.length;
-          await btn.update({ embeds: [imageEmbeds[imageIdx]] });
+          imageIdx = (imageIdx + 1) % imageCount;
+          await btn.update({ embeds: [buildImageEmbed(imageIdx)], components: [buildImageRow(imageIdx)] });
           return;
         }
 
@@ -586,3 +590,5 @@ module.exports = {
     });
   },
 };
+
+

@@ -1,4 +1,4 @@
-
+const { installLocalImageTransport } = require('../../utils/localizeInteractionEmbeds');
 // commands/change-img.js
 const { SlashCommandBuilder, EmbedBuilder, PermissionFlagsBits } = require('discord.js');
 const mongoose = require('mongoose');
@@ -57,6 +57,7 @@ module.exports = {
     ),
 
   async execute(interaction) {
+    installLocalImageTransport(interaction);
     const raritySelection = resolveRarityOptions(interaction, { required: true });
     await interaction.deferReply({ ephemeral: true });
     if (raritySelection.error) {
@@ -183,3 +184,5 @@ if (!allowedByOshi && !allowedByException) {
     }
   }
 };
+
+

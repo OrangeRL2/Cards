@@ -1,3 +1,4 @@
+const { installLocalImageTransport } = require('../../utils/localizeInteractionEmbeds');
 // commands/Utility/fusion.js
 const {
   SlashCommandBuilder,
@@ -59,6 +60,7 @@ module.exports = {
     .setDescription('Make cards collab together to create new ones!'),
 
   async execute(interaction) {
+    installLocalImageTransport(interaction);
     await interaction.deferReply();
 
     // Show entrance GIF as an "entering" animation
@@ -157,6 +159,7 @@ module.exports = {
       resetIdle();
 
       collector.on('collect', async comp => {
+      installLocalImageTransport(comp);
         resetIdle();
         try {
           const cid = comp.customId;
@@ -207,6 +210,7 @@ module.exports = {
                 time: 60_000,
               });
 
+              installLocalImageTransport(modalInt);
               resetIdle();
 
               // acknowledge modal so it disappears
@@ -442,3 +446,5 @@ module.exports = {
     }
   },
 };
+
+

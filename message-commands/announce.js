@@ -1,3 +1,4 @@
+const { localizePayload } = require('../utils/localizeInteractionEmbeds');
 // message-commands/announce.js
 const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 const User = require('../models/User');
@@ -99,12 +100,12 @@ module.exports = {
       );
 
       // Send preview to the channel where the command was used
-      const previewMsg = await message.channel.send({
+      const previewMsg = await message.channel.send(localizePayload({
         content: `Preview (invoked by <@${message.author.id}>). Click **Publish** to post or **Cancel** to abort.`,
         embeds: previewEmbed ? [previewEmbed] : undefined,
         components: [row],
         allowedMentions: { parse: [] }
-      });
+      }, `announce-preview-${message.id}`, false));
 
       // Collector: only allow the command invoker to interact
       const filter = (interaction) => {
@@ -124,22 +125,22 @@ module.exports = {
         try {
           if (interaction.customId === cancelId) {
             actionTaken = 'cancel';
-            await interaction.update({
+            await interaction.update(localizePayload({
               content: `Announcement preview cancelled by <@${message.author.id}>.`,
               embeds: [],
               components: []
-            });
+            }, `announce-cancel-${message.id}`, true));
             collector.stop('cancelled');
             return;
           }
 
           if (interaction.customId === publishId) {
             actionTaken = 'publish';
-            await interaction.update({
+            await interaction.update(localizePayload({
               content: `Publishing announcement...`,
               embeds: [],
               components: []
-            });
+            }, `announce-publish-${message.id}`, true));
             collector.stop('publish');
             return;
           }
@@ -153,11 +154,11 @@ module.exports = {
       collector.on('end', async (collected, reason) => {
         try {
           if (reason === 'time' && actionTaken === null) {
-            await previewMsg.edit({
+            await previewMsg.edit(localizePayload({
               content: `Announcement preview timed out and was cancelled (invoked by <@${message.author.id}>).`,
               embeds: [],
               components: []
-            }).catch(() => {});
+            }, `announce-timeout-${message.id}`, true)).catch(() => {});
             return;
           }
 
@@ -246,11 +247,11 @@ module.exports = {
             let posted;
             try {
               if (sendAsEmbed && previewEmbed) {
-                posted = await targetChannel.send({
+                posted = await targetChannel.send(localizePayload({
                   content: topMention || undefined,
                   embeds: [previewEmbed],
                   allowedMentions
-                });
+                }, `announce-post-${message.id}`, false));
               } else {
                 const text = `${topMention ? topMention + '\n' : ''}**${title}**\n\n${body}`;
                 posted = await targetChannel.send({ content: text, allowedMentions });
@@ -379,3 +380,5 @@ module.exports = {
     }
   }
 };
+
+

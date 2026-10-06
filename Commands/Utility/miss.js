@@ -1,4 +1,4 @@
-
+const { installLocalImageTransport } = require('../../utils/localizeInteractionEmbeds');
 // commands/Utility/miss.js
 const {
   SlashCommandBuilder,
@@ -18,7 +18,6 @@ const User = require('../../models/User');
 const { resolveCardColor, getAttributeEmoji } = require('../../config/holomemColor');
 const pools = require('../../utils/loadImages');
 const { rarityChoices } = require('../../utils/rarities');
-const { getAllBirthdayFiles, getCurrentBirthdayFiles } = require('../../utils/birthdayPool');
 
 const IMAGE_BASE = process.env.IMAGE_BASE || 'http://152.69.195.48/images';
 const PAGE_SIZE = 10;
@@ -139,14 +138,11 @@ module.exports = {
         { name: 'Mixed', value: 'mixed' },
         { name: 'None', value: 'none' },
       )
-  )
-  .addBooleanOption(opt =>
-    opt.setName('showallbday')
-      .setDescription('Show every BDAY card, including cards outside the current month')
   ),
 requireOshi: true,
 
   async execute(interaction) {
+    installLocalImageTransport(interaction);
     await interaction.deferReply();
 
     try {
@@ -160,7 +156,6 @@ requireOshi: true,
       const filterQ = interaction.options.getString('search')?.toLowerCase();
   const filterColor = interaction.options.getString('color');
   const sortBy = interaction.options.getString('sort') || 'rarity';
-  const showAllBday = interaction.options.getBoolean('showallbday') || false;
 
       // load user doc and owned map
       const userDoc = await User.findOne({ id: interaction.user.id });
@@ -195,21 +190,6 @@ requireOshi: true,
             }
           }
 
-          continue;
-        }
-
-        if (rarity === 'BDAY') {
-          const birthdayFiles = showAllBday
-            ? getAllBirthdayFiles()
-            : getCurrentBirthdayFiles();
-
-          for (const file of birthdayFiles) {
-            universe.push({
-              rarity: 'BDAY',
-              name: path.basename(file, path.extname(file)),
-              file,
-            });
-          }
           continue;
         }
 
@@ -370,6 +350,7 @@ requireOshi: true,
       resetIdleTimer();
 
       collector.on('collect', async btn => {
+      installLocalImageTransport(btn);
         resetIdleTimer();
         try {
           // normalize customId (strip uid suffix)
@@ -409,6 +390,7 @@ requireOshi: true,
 
             try {
               const modalInt = await btn.awaitModalSubmit({ filter: m => m.customId === modalId && m.user.id === interaction.user.id, time: 60_000 });
+              installLocalImageTransport(modalInt);
               resetIdleTimer();
               let target = parseInt(modalInt.fields.getTextInputValue('page_input'), 10);
               if (isNaN(target)) target = 1;
@@ -475,3 +457,5 @@ requireOshi: true,
     }
   },
 };
+
+

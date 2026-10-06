@@ -1010,7 +1010,11 @@ if (!SY_ANNOUNCE_EXEMPT_IDS.has(discordUserId) && String(rarity).toUpperCase() =
           const emoji = cc ? getAttributeEmoji(cc) : '';
           const tag = emoji ? ` ${emoji}` : '';
 
-          pageItems.push({ rarity, rawName: raw, displayName, titleLine, imageUrl: encodedUrl });
+          const localImagePath = item.relativeImagePath
+            ? path.join(process.cwd(), 'assets', 'images', ...String(item.relativeImagePath).split('/'))
+            : path.join(process.cwd(), 'assets', 'images', String(rarity), `${raw}.png`);
+
+          pageItems.push({ rarity, rawName: raw, displayName, titleLine, imageUrl: encodedUrl, localImagePath });
 
           allNames.push(`${visiblePrefix}[${escapeLinkText(titleBody)}](${encodedUrl})${tag}${titleCount}`);
         }
@@ -1123,7 +1127,7 @@ if (!SY_ANNOUNCE_EXEMPT_IDS.has(discordUserId) && String(rarity).toUpperCase() =
             .setDescription(descriptionAll)
             .setColor(0x87CEFA)
             .addFields({ name: 'Special pulls remaining', value: `${consumeResult.remainingSpecial ?? 0}`, inline: true })
-            .setImage(it.imageUrl)
+            .setImage('attachment://pull-card.png')
             .setURL(it.imageUrl)
             .setFooter({ text: `Card: ${idx + 1} / ${pageItems.length}\nPull by: ${interaction.user.username}` });
         }
@@ -1136,9 +1140,18 @@ if (!SY_ANNOUNCE_EXEMPT_IDS.has(discordUserId) && String(rarity).toUpperCase() =
             { name: 'Timed pulls remaining', value: `${consumeResult.remainingTimed}`, inline: true },
             { name: 'Event pulls remaining', value: `${consumeResult.remainingEvent}`, inline: true },
           )
-          .setImage(it.imageUrl)
+          .setImage('attachment://pull-card.png')
           .setURL(it.imageUrl)
           .setFooter({ text: `Card: ${idx + 1} / ${pageItems.length}\nPull by: ${interaction.user.username}` });
+      }
+
+      function makePagePayload(idx, components) {
+        return {
+          embeds: [makeEmbed(idx)],
+          components,
+          attachments: [],
+          files: [{ attachment: pageItems[idx].localImagePath, name: 'pull-card.png' }],
+        };
       }
 
       const prevBtnEnabled = new ButtonBuilder().setCustomId('prev').setLabel('◀ Prev').setStyle(ButtonStyle.Primary).setDisabled(pageItems.length <= 1);
@@ -1149,7 +1162,10 @@ if (!SY_ANNOUNCE_EXEMPT_IDS.has(discordUserId) && String(rarity).toUpperCase() =
       const nextBtnDisabled = new ButtonBuilder().setCustomId('next').setLabel('Next ▶').setStyle(ButtonStyle.Primary).setDisabled(true);
       const disableRow = new ActionRowBuilder().addComponents(prevBtnDisabled, nextBtnDisabled);
 
-      const message = await interaction.editReply({ embeds: [makeEmbed(0)], components: [row] }).catch(() => null);
+      const message = await interaction.editReply(makePagePayload(0, [row])).catch(err => {
+        console.error('[pull] failed to upload card attachment:', err);
+        return null;
+      });
 
       if (!message) {
         inFlightInteractions.delete(interaction.id);
@@ -1180,7 +1196,8 @@ if (!SY_ANNOUNCE_EXEMPT_IDS.has(discordUserId) && String(rarity).toUpperCase() =
           else if (btnInt.customId === 'next') pageIndex = (pageIndex + 1) % pageItems.length;
           else return await btnInt.reply({ content: 'Unknown action', ephemeral: true });
 
-          await btnInt.update({ embeds: [makeEmbed(pageIndex)], components: [row] });
+          await btnInt.deferUpdate();
+          await btnInt.editReply(makePagePayload(pageIndex, [row]));
         } catch (err) {
           console.error('collector interaction error:', err);
         }

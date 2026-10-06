@@ -1001,12 +1001,17 @@ const frozen = isFrozen(discordUserId, member);
 
             const listLine = `${visiblePrefix}[${escapeLinkText(titleBody)}](${encodedUrl})${tag}${titleCount}`;
 
+            const localImagePath = item.relativeImagePath
+              ? path.join(process.cwd(), 'assets', 'images', ...String(item.relativeImagePath).split('/'))
+              : path.join(process.cwd(), 'assets', 'images', String(rarity), `${raw}.png`);
+
             pageItems.push({
               rarity,
               rawName: raw,
               displayName,
               titleLine,
               imageUrl: encodedUrl,
+              localImagePath,
               packIndex,
               cardIndex,
               listLine
@@ -1185,7 +1190,7 @@ const frozen = isFrozen(discordUserId, member);
             .setDescription(packDescriptions[it.packIndex])
             .setColor(0x87CEFA)
             .addFields({ name: 'Special pulls remaining', value: `${consumeResult.remainingSpecial ?? 0}`, inline: true })
-            .setImage(it.imageUrl)
+            .setImage('attachment://pull-card.png')
             .setURL(it.imageUrl)
             .setFooter({ text: `Pack ${it.packIndex + 1} / ${amount} • Card ${it.cardIndex + 1} / ${packs[it.packIndex].length}\nPull by: ${interaction.user.username}` });
         }
@@ -1198,9 +1203,18 @@ const frozen = isFrozen(discordUserId, member);
             { name: 'Timed pulls remaining', value: `${consumeResult.remainingTimed}`, inline: true },
             { name: 'Event pulls remaining', value: `${consumeResult.remainingEvent}`, inline: true },
           )
-          .setImage(it.imageUrl)
+          .setImage('attachment://pull-card.png')
           .setURL(it.imageUrl)
           .setFooter({ text: `Pack ${it.packIndex + 1} / ${amount} • Card ${it.cardIndex + 1} / ${packs[it.packIndex].length}\nPull by: ${interaction.user.username}` });
+      }
+
+      function makePagePayload(idx, components) {
+        return {
+          embeds: [makeEmbed(idx)],
+          components,
+          attachments: [],
+          files: [{ attachment: pageItems[idx].localImagePath, name: 'pull-card.png' }],
+        };
       }
 
       const prevBtnEnabled = new ButtonBuilder().setCustomId('prev').setLabel('◀ Prev').setStyle(ButtonStyle.Primary).setDisabled(pageItems.length <= 1);
@@ -1220,7 +1234,10 @@ const frozen = isFrozen(discordUserId, member);
       // First card index for every pack. For an 8-card pack, Pack 2 starts at page 9.
       const firstCardIndexByPack = packs.map((_, packIndex) => pageItems.findIndex(item => item.packIndex === packIndex));
 
-      const message = await interaction.editReply({ embeds: [makeEmbed(0)], components: [row] }).catch(() => null);
+      const message = await interaction.editReply(makePagePayload(0, [row])).catch(err => {
+        console.error('[pull] failed to upload card attachment:', err);
+        return null;
+      });
 
       if (!message) {
         inFlightInteractions.delete(interaction.id);
@@ -1249,26 +1266,30 @@ const frozen = isFrozen(discordUserId, member);
         try {
           if (btnInt.customId === 'prev') {
             pageIndex = (pageIndex - 1 + pageItems.length) % pageItems.length;
-            await btnInt.update({ embeds: [makeEmbed(pageIndex)], components: [row] });
+            await btnInt.deferUpdate();
+          await btnInt.editReply(makePagePayload(pageIndex, [row]));
             return;
           }
           if (btnInt.customId === 'next') {
             pageIndex = (pageIndex + 1) % pageItems.length;
-            await btnInt.update({ embeds: [makeEmbed(pageIndex)], components: [row] });
+            await btnInt.deferUpdate();
+          await btnInt.editReply(makePagePayload(pageIndex, [row]));
             return;
           }
           if (btnInt.customId === 'prev_pack') {
             const currentPackIndex = pageItems[pageIndex].packIndex;
             const previousPackIndex = (currentPackIndex - 1 + amount) % amount;
             pageIndex = firstCardIndexByPack[previousPackIndex];
-            await btnInt.update({ embeds: [makeEmbed(pageIndex)], components: [row] });
+            await btnInt.deferUpdate();
+          await btnInt.editReply(makePagePayload(pageIndex, [row]));
             return;
           }
           if (btnInt.customId === 'next_pack') {
             const currentPackIndex = pageItems[pageIndex].packIndex;
             const nextPackIndex = (currentPackIndex + 1) % amount;
             pageIndex = firstCardIndexByPack[nextPackIndex];
-            await btnInt.update({ embeds: [makeEmbed(pageIndex)], components: [row] });
+            await btnInt.deferUpdate();
+          await btnInt.editReply(makePagePayload(pageIndex, [row]));
             return;
           }
           if (btnInt.customId === 'jump_pack') {
@@ -1299,7 +1320,8 @@ const frozen = isFrozen(discordUserId, member);
               return;
             }
             pageIndex = firstCardIndexByPack[packNumber - 1];
-            await modalSubmit.update({ embeds: [makeEmbed(pageIndex)], components: [row] });
+            await modalSubmit.deferUpdate();
+            await modalSubmit.editReply(makePagePayload(pageIndex, [row]));
             return;
           }
           await btnInt.reply({ content: 'Unknown action', ephemeral: true });
