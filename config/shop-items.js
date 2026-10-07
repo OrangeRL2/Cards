@@ -37,11 +37,11 @@ const SHOP_ITEMS = {
     bloomCupRobocoEN:  { name: 'Bloom Cup Roboco',  rarity: 'UP',               cost: t1,   image: 'Roboco 001', stock: -1 },
     bloomCupFinalistIrohaEN:  { name: 'Bloom Cup Iroha',  rarity: 'UP',               cost: t1,   image: 'Iroha 501', stock: -1 },
 
-    // COL cards - 1,000 Fans
-    colBIG3_001: { name: 'COL BIG3', rarity: 'COL', cost: t1, image: 'BIG3 001', stock: -1 },
-    colFUWAMOCO_001: { name: 'COL FUWAMOCO', rarity: 'COL', cost: t1, image: 'FUWAMOCO 001', stock: -1 },
-    colFUWAMOCO_501: { name: 'COL FUWAMOCO 501', rarity: 'COL', cost: t1, image: 'FUWAMOCO 501', stock: -1 },
-    colHoloAN_001: { name: 'COL holoAN', rarity: 'COL', cost: t1, image: 'holoAN 001', stock: -1 },
+    // UP cards - 1,000 Fans
+    colBIG3_001: { name: 'BIG3', rarity: 'UP', cost: t1, image: 'BIG3 001', stock: -1 },
+    colFUWAMOCO_001: { name: 'FUWAMOCO', rarity: 'UP', cost: t1, image: 'FUWAMOCO 001', stock: -1 },
+    colFUWAMOCO_501: { name: 'FUWAMOCO', rarity: 'UP', cost: t1, image: 'FUWAMOCO 501', stock: -1 },
+    colHoloAN_001: { name: 'holoAN', rarity: 'UP', cost: t1, image: 'holoAN 001', stock: -1 },
 
   //tier2
     witch1: { name: 'holoWitch holoWitches', rarity: 'UP', cost: t2,  image: 'holoWitches 001',  stock: -1 },
@@ -59,10 +59,10 @@ const SHOP_ITEMS = {
     bloomCupFinalistRaoraEN:  { name: 'Bloom Cup Raora',  rarity: 'UP',               cost: t3,   image: 'Raora 701', stock: -1 },
     bloomCupFinalistRandomEN:  { name: 'Bloom Cup Final Challenger Bijou, Ina, Baelz, Cecilia',  rarity: 'UP',               cost: t3,   image: 'Bijou, Ina, Baelz, Cecilia 701', stock: -1 },
 
-    // COL cards - 5,000 Fans
-    colRiona_001: { name: 'COL Riona', rarity: 'COL', cost: t3, image: 'Riona 001', stock: -1 },
-    colRiona_501: { name: 'COL Riona 501', rarity: 'COL', cost: t3, image: 'Riona 501', stock: -1 },
-    colBijouInaBaelzCecilia_701: { name: 'COL Bijou, Ina, Baelz, Cecilia', rarity: 'COL', cost: t3, image: 'Bijou, Ina, Baelz, Cecilia 701', stock: -1 },
+    // UP cards - 5,000 Fans
+    colRiona_001: { name: 'Riona', rarity: 'UP', cost: t3, image: 'Riona 001', stock: -1 },
+    colRiona_501: { name: 'Riona', rarity: 'UP', cost: t3, image: 'Riona 501', stock: -1 },
+    colBijouInaBaelzCecilia_701: { name: 'Bijou, Ina, Baelz, Cecilia', rarity: 'UP', cost: t3, image: 'Bijou, Ina, Baelz, Cecilia 701', stock: -1 },
 
   //tier4
     wgSubaLuna: { name: 'World Grand Prix Top 8 SubaLuna', rarity: 'UP',       cost: t4,  image: 'SubaLuna 001',  stock: -1 },
@@ -71,8 +71,8 @@ const SHOP_ITEMS = {
     wgpTop8Shion: { name: 'World Grand Prix Top 8 Shion', rarity: 'UP',            cost: t4,  image: 'Shion 001',  stock: -1 },
     bloomCupFinalistRandomEN:  { name: 'Bloom Cup Final Challenger Top 8 Calli',  rarity: 'UP',               cost: t3,   image: 'Calli 701', stock: -1 },
 
-    // COL cards - 10,000 Fans
-    colKoyori_001: { name: 'COL Koyori', rarity: 'COL', cost: t4, image: 'Koyori 001', stock: -1 },
+    // UP cards - 10,000 Fans
+    colKoyori_001: { name: 'Koyori', rarity: 'UP', cost: t4, image: 'Koyori 001', stock: -1 },
 
   //tier5
     wgpTop4: { name: 'World Grand Prix Top4 OkaKoro', rarity: 'UP',       cost: t5,  image: 'OkaKoro 001',  stock: -1 },
