@@ -4668,3 +4668,724 @@ cards.json: /usr/share/nginx/html/images/guess/data/cards.json
 [guess-controller] Local Guess manifests:
 -rw-r--r-- 1 nana0411 nana0411 26K Oct  6 18:37 /home/nana0411/4newCards/Cards/images/guess/data/cards.json
 -rw-r--r-- 1 nana0411 nana0411 44K Oct  6 18:37 /home/nana0411/4newCards/Cards/images/guess/data/songs.json
+
+============================================================
+[guess-controller] 2026-10-07T10:35:42+09:00
+============================================================
+[guess-controller] Refreshing own Holodori master...
+============================================================
+1. CHECKING LIVE MASTER
+============================================================
+Fetching Master/Get...
+Master version: 65badf8533aacbc04382f97f0f5f56740e761e6f5be6172d8440ae9061deebe7
+Master packs: 379
+Downloading Card (192512 bytes)
+Downloading LangCard_Eng (40960 bytes)
+
+========================================================================
+UPDATE COMPLETE
+========================================================================
+Cards: 192
+Lang rows: 192
+Missing names: 0
+Snapshot: snapshots/65badf8533aacbc04382f97f0f5f56740e761e6f5be6172d8440ae9061deebe7.json
+Latest: latest.json
+
+=== DIFF ===
+Added: 3
+Removed: 0
+Changed: 0
+ + card-00030-5-uniq-0089-00 | A Cool, Healing Sip
+ + card-00034-5-uniq-0090-00 | Shared BBQ Bliss
+ + card-06003-5-uniq-0091-00 | Night Summer Smile
+
+============================================================
+2. SYNCING NEW CARDS TO ASSET WATCHER
+============================================================
+QUEUED: card-00030-5-uniq-0089-00 | A Cool, Healing Sip
+QUEUED: card-00034-5-uniq-0090-00 | Shared BBQ Bliss
+QUEUED: card-06003-5-uniq-0091-00 | Night Summer Smile
+
+New pending cards: 3
+Total tracked cards: 11
+Updated: /home/nana0411/holodori-own/pending_cards.json
+
+============================================================
+3. CHECKING PENDING ASSETS
+============================================================
+Pending cards: 3
+ - 00030-5-uniq-0089-00 | A Cool, Healing Sip
+ - 00034-5-uniq-0090-00 | Shared BBQ Bliss
+ - 06003-5-uniq-0091-00 | Night Summer Smile
+
+Filter: 00030.*0089|00034.*0090|06003.*0091
+
+[httpx] HTTP Request: GET https://raw.githubusercontent.com/HolodoriDB/holodori-app-protos/refs/heads/main/global/appver.json "HTTP/1.1 200 OK"
+[httpx] HTTP Request: GET https://raw.githubusercontent.com/HolodoriDB/holodori-app-protos/refs/heads/main/jp/appver.json "HTTP/1.1 200 OK"
+[catalog] appver: using 1.2.1
+[catalog] app version 1.2.1
+[httpx] HTTP Request: GET https://us.game-hololive-dreams.com/asset/v2/pub/a/5/v/200001/list/0 "HTTP/2 200 OK"
+[download] revision 97: 24681 bundles, 19531 resources
+[download] downloading 138 files to /home/nana0411/holodori-own/pending-card-assets
+
+  0%|          | 0/138 [00:00<?, ?file/s][httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/TWSLS6 "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/Ep1mjg "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/YKMhnc "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/tAEhnV "HTTP/2 200 OK"
+
+  1%|          | 1/138 [00:01<03:07,  1.37s/file][httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/v7MRQO "HTTP/2 200 OK"
+
+  1%|▏         | 2/138 [00:03<04:05,  1.81s/file][httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/mhMMjD "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/zqlE0J "HTTP/2 200 OK"
+
+  4%|▎         | 5/138 [00:05<02:03,  1.07file/s][httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/1krDFo "HTTP/2 200 OK"
+
+  4%|▍         | 6/138 [00:06<02:23,  1.08s/file][httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/xkPXzS "HTTP/2 200 OK"
+
+  6%|▌         | 8/138 [00:07<01:30,  1.44file/s][httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/meMp9N "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/fyuPU2 "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/GEH7YG "HTTP/2 200 OK"
+
+  7%|▋         | 9/138 [00:08<01:40,  1.28file/s][httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/LUx0fe "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/qTMuNC "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/AOCIfC "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/uMbtWp "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/cXnqTS "HTTP/2 200 OK"
+
+ 12%|█▏        | 16/138 [00:10<01:01,  1.97file/s][httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/9behVF "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/iKmbVc "HTTP/2 200 OK"
+
+ 12%|█▏        | 17/138 [00:14<01:44,  1.15file/s]
+ 13%|█▎        | 18/138 [00:15<01:46,  1.13file/s]
+ 14%|█▍        | 19/138 [00:16<01:57,  1.01file/s][httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/hzrrtB "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/vZX5Sm "HTTP/2 200 OK"
+
+ 14%|█▍        | 20/138 [00:21<03:30,  1.78s/file][httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/yLx1Rq "HTTP/2 200 OK"
+
+ 15%|█▌        | 21/138 [00:23<03:39,  1.88s/file][httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/TAaALl "HTTP/2 200 OK"
+
+ 16%|█▌        | 22/138 [00:24<03:00,  1.56s/file]
+ 17%|█▋        | 23/138 [00:25<02:39,  1.38s/file][httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/WN7zTH "HTTP/2 200 OK"
+
+ 17%|█▋        | 24/138 [00:25<02:11,  1.15s/file][httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/WNViLP "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/nvOp7v "HTTP/2 200 OK"
+
+ 18%|█▊        | 25/138 [00:26<02:02,  1.08s/file]
+ 19%|█▉        | 26/138 [00:27<01:50,  1.01file/s][httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/lZvAu4 "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/o5kIXC "HTTP/2 200 OK"
+
+ 20%|█▉        | 27/138 [00:28<01:39,  1.11file/s][httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/QYQn5V "HTTP/2 200 OK"
+
+ 20%|██        | 28/138 [00:28<01:25,  1.28file/s][httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/DMindj "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/pHfym2 "HTTP/2 200 OK"
+
+ 21%|██        | 29/138 [00:29<01:24,  1.30file/s][httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/lIsZVQ "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/fdfo5I "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/v5nzN6 "HTTP/2 200 OK"
+
+ 22%|██▏       | 31/138 [00:39<04:52,  2.73s/file]
+ 23%|██▎       | 32/138 [01:00<12:35,  7.13s/file][httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/BaBAZf "HTTP/2 200 OK"
+
+ 24%|██▍       | 33/138 [01:03<10:38,  6.08s/file][httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/EgI3tO "HTTP/2 200 OK"
+
+ 25%|██▍       | 34/138 [01:06<09:19,  5.38s/file][httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/msOTp8 "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/byv9it "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/Gp1C05 "HTTP/2 200 OK"
+
+ 26%|██▌       | 36/138 [01:10<06:26,  3.79s/file][httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/Sb9gDw "HTTP/2 200 OK"
+
+ 28%|██▊       | 39/138 [01:10<03:15,  1.97s/file][httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/4InGwI "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/dgpJdo "HTTP/2 200 OK"
+
+ 30%|██▉       | 41/138 [01:10<02:13,  1.38s/file][httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/Vi1tdc "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/Wy5hvU "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/TXZt9d "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/UJAU09 "HTTP/2 200 OK"
+
+ 31%|███       | 43/138 [01:11<01:41,  1.07s/file][httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/ArW7lO "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/PIDuNU "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/vJTquB "HTTP/2 200 OK"
+
+ 34%|███▍      | 47/138 [01:11<00:53,  1.69file/s][httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/S4sret "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/MxXx3y "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/Q2zTbY "HTTP/2 200 OK"
+
+ 36%|███▌      | 49/138 [01:12<00:46,  1.90file/s][httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/k5WeVO "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/gHuhIw "HTTP/2 200 OK"
+
+ 38%|███▊      | 52/138 [01:12<00:30,  2.83file/s][httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/ruM7Jw "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/uApBmK "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/aRBnXU "HTTP/2 200 OK"
+
+ 39%|███▉      | 54/138 [01:12<00:29,  2.89file/s][httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/8HbLSH "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/QzTlMJ "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/abgSjB "HTTP/2 200 OK"
+
+ 43%|████▎     | 59/138 [01:12<00:15,  5.13file/s][httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/aHke9f "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/jyGiA2 "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/OWQ63X "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/GfqV70 "HTTP/2 200 OK"
+
+ 44%|████▍     | 61/138 [01:13<00:13,  5.80file/s][httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/99M0pn "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/94M7gT "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/xjh9c9 "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/rQa65Y "HTTP/2 200 OK"
+
+ 48%|████▊     | 66/138 [01:13<00:08,  8.78file/s][httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/Awp38e "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/9A12GP "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/eRkbwn "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/5BjHkc "HTTP/2 200 OK"
+
+ 50%|█████     | 69/138 [01:13<00:06,  9.93file/s][httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/xrrS8q "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/lw3dvb "HTTP/2 200 OK"
+
+ 53%|█████▎    | 73/138 [01:13<00:05, 12.92file/s][httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/fGnOyP "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/fGAvR6 "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/blRH0w "HTTP/2 200 OK"
+
+ 55%|█████▌    | 76/138 [01:13<00:04, 14.16file/s][httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/cnqLxn "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/N7s6cV "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/ZJ3zqQ "HTTP/2 200 OK"
+
+ 57%|█████▋    | 79/138 [01:13<00:04, 14.38file/s][httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/kgCIhU "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/dQtJDV "HTTP/2 200 OK"
+
+ 59%|█████▊    | 81/138 [01:14<00:03, 14.68file/s][httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/ZFILgt "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/Oa4x1C "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/ZdpWrG "HTTP/2 200 OK"
+
+ 60%|██████    | 83/138 [01:14<00:03, 13.94file/s][httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/KNtdkl "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/UIs7tD "HTTP/2 200 OK"
+
+ 62%|██████▏   | 86/138 [01:14<00:03, 16.52file/s][httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/V7Nu6D "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/Lr3Fig "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/rGhE22 "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/gu8so0 "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/4cMRIS "HTTP/2 200 OK"
+
+ 64%|██████▍   | 89/138 [01:14<00:04, 11.19file/s]
+ 67%|██████▋   | 92/138 [01:15<00:06,  6.64file/s][httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/Kvfqet "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/ioys36 "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/0rCm6N "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/oorzLP "HTTP/2 200 OK"
+
+ 68%|██████▊   | 94/138 [01:16<00:06,  6.38file/s][httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/hltAYl "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/MimllO "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/9oiIi1 "HTTP/2 200 OK"
+
+ 70%|██████▉   | 96/138 [01:17<00:10,  4.03file/s]
+ 72%|███████▏  | 99/138 [01:17<00:06,  5.61file/s][httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/xS6inr "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/4bluHy "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/sCzItI "HTTP/2 200 OK"
+
+ 73%|███████▎  | 101/138 [01:17<00:06,  5.50file/s]
+ 74%|███████▍  | 102/138 [01:17<00:06,  5.64file/s][httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/6avelk "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/O1IAza "HTTP/2 200 OK"
+
+ 75%|███████▍  | 103/138 [01:18<00:07,  4.79file/s][httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/MdXPA7 "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/Q6haTx "HTTP/2 200 OK"
+
+ 76%|███████▌  | 105/138 [01:18<00:08,  3.84file/s][httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/WsqnUM "HTTP/2 200 OK"
+
+ 77%|███████▋  | 106/138 [01:19<00:07,  4.05file/s][httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/LVNzc4 "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/4235pX "HTTP/2 200 OK"
+
+ 78%|███████▊  | 108/138 [01:19<00:06,  4.67file/s][httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/F1l05Q "HTTP/2 200 OK"
+
+ 79%|███████▉  | 109/138 [01:19<00:05,  5.20file/s][httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/FLVCxL "HTTP/2 200 OK"
+
+ 80%|███████▉  | 110/138 [01:19<00:06,  4.65file/s]
+ 80%|████████  | 111/138 [01:19<00:05,  4.94file/s][httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/jTZohw "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/5GknLY "HTTP/2 200 OK"
+
+ 81%|████████  | 112/138 [01:20<00:05,  5.01file/s][httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/aAJAay "HTTP/2 200 OK"
+
+ 82%|████████▏ | 113/138 [01:20<00:07,  3.57file/s][httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/Ur4Dlr "HTTP/2 200 OK"
+
+ 83%|████████▎ | 114/138 [01:21<00:08,  2.68file/s][httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/u3wSXZ "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/ManjDK "HTTP/2 200 OK"
+
+ 83%|████████▎ | 115/138 [01:21<00:09,  2.38file/s][httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/zTRyrJ "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/GjsRqg "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/O0hskD "HTTP/2 200 OK"
+
+ 85%|████████▍ | 117/138 [01:22<00:10,  2.07file/s][httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/fmSBrx "HTTP/2 200 OK"
+
+ 86%|████████▌ | 119/138 [01:23<00:09,  1.99file/s][httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/4SD2Cz "HTTP/2 200 OK"
+
+ 88%|████████▊ | 121/138 [01:24<00:06,  2.77file/s][httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/tiQ5aZ "HTTP/2 200 OK"
+
+ 89%|████████▉ | 123/138 [01:24<00:04,  3.44file/s][httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/pUSOr6 "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/ubiZuQ "HTTP/2 200 OK"
+
+ 90%|████████▉ | 124/138 [01:24<00:03,  3.51file/s][httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/fCfI5O "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/265uvK "HTTP/2 200 OK"
+
+ 91%|█████████▏| 126/138 [01:24<00:02,  4.58file/s][httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/cO1K2X "HTTP/2 200 OK"
+
+ 92%|█████████▏| 127/138 [01:25<00:02,  4.65file/s][httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/bIMDTR "HTTP/2 200 OK"
+
+ 93%|█████████▎| 128/138 [01:25<00:02,  4.89file/s][httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/4rAaHM "HTTP/2 200 OK"
+
+ 93%|█████████▎| 129/138 [01:25<00:01,  5.11file/s][httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/ozaYKF "HTTP/2 200 OK"
+
+ 94%|█████████▍| 130/138 [01:25<00:01,  5.44file/s][httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/Q2eCwP "HTTP/2 200 OK"
+
+ 95%|█████████▍| 131/138 [01:25<00:01,  5.27file/s][httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/eFvSa0 "HTTP/2 200 OK"
+
+ 96%|█████████▌| 132/138 [01:26<00:01,  4.28file/s][httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/IeFdet "HTTP/2 200 OK"
+
+ 96%|█████████▋| 133/138 [01:26<00:01,  4.85file/s]
+ 97%|█████████▋| 134/138 [01:26<00:00,  4.55file/s][httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/hnn5kd "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/BNEigK "HTTP/2 200 OK"
+
+ 98%|█████████▊| 135/138 [01:41<00:13,  4.46s/file][httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/0oHL0V "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/fU28mL "HTTP/2 200 OK"
+
+ 99%|█████████▊| 136/138 [01:45<00:08,  4.33s/file]
+ 99%|█████████▉| 137/138 [01:47<00:03,  3.59s/file]
+100%|██████████| 138/138 [01:48<00:00,  2.86s/file]
+100%|██████████| 138/138 [01:48<00:00,  1.27file/s]
+
+=== STATUS ===
+
+FOUND: 00030-5-uniq-0089-00 | A Cool, Healing Sip
+revision: 97
+files: 46
+  pending-card-assets/assetbundles/img_card_full_00030-5-uniq-0089-00
+  pending-card-assets/assetbundles/img_card_live_thumb_00030-5-uniq-0089-00
+  pending-card-assets/assetbundles/img_card_thin_00030-5-uniq-0089-00
+  pending-card-assets/assetbundles/img_card_thumb_00030-5-uniq-0089-00
+  pending-card-assets/assetbundles/img_card_vert_00030-5-uniq-0089-00
+  pending-card-assets/assetbundles/img_cos_2d_thumb_00030-uniq-0089-00
+  pending-card-assets/assetbundles/img_cos_sd_thumb_00030-uniq-0089-00
+  pending-card-assets/assetbundles/live2d_mdl_00030-uniq-0089-00
+  pending-card-assets/assetbundles/mdl_chr_drs_00030-uniq-0089-00_body
+  pending-card-assets/assetbundles/mdl_chr_drs_00030-uniq-0089-00_hair
+  pending-card-assets/resources/mov_card_full_0_00030-5-uniq-0089-00.usm
+  pending-card-assets/resources/mov_card_full_1_00030-5-uniq-0089-00.usm
+  pending-card-assets/resources/mov_card_sign_00030-5-uniq-0089-00.usm
+  pending-card-assets/resources/vo_card_cmn_00030_00030-5-uniq-0089-00_potential-001.acb
+  pending-card-assets/resources/vo_card_cmn_00030_00030-5-uniq-0089-00_potential-002.acb
+  pending-card-assets/resources/vo_card_cmn_00030_00030-5-uniq-0089-00_potential-003.acb
+  pending-card-assets/resources/vo_card_cmn_00030_00030-5-uniq-0089-00_potential-004.acb
+  pending-card-assets/resources/vo_card_cmn_00030_00030-5-uniq-0089-00_potential-005.acb
+  pending-card-assets/resources/vo_card_cmn_00030_00030-5-uniq-0089-00_situation.acb
+  pending-card-assets/resources/vo_live_cmn_card_00030_00030-5-uniq-0089-00_skill-card.acb
+
+FOUND: 00034-5-uniq-0090-00 | Shared BBQ Bliss
+revision: 97
+files: 46
+  pending-card-assets/assetbundles/img_card_full_00034-5-uniq-0090-00
+  pending-card-assets/assetbundles/img_card_live_thumb_00034-5-uniq-0090-00
+  pending-card-assets/assetbundles/img_card_thin_00034-5-uniq-0090-00
+  pending-card-assets/assetbundles/img_card_thumb_00034-5-uniq-0090-00
+  pending-card-assets/assetbundles/img_card_vert_00034-5-uniq-0090-00
+  pending-card-assets/assetbundles/img_cos_2d_thumb_00034-uniq-0090-00
+  pending-card-assets/assetbundles/img_cos_sd_thumb_00034-uniq-0090-00
+  pending-card-assets/assetbundles/live2d_mdl_00034-uniq-0090-00
+  pending-card-assets/assetbundles/mdl_chr_drs_00034-uniq-0090-00_body
+  pending-card-assets/assetbundles/mdl_chr_drs_00034-uniq-0090-00_hair
+  pending-card-assets/resources/mov_card_full_0_00034-5-uniq-0090-00.usm
+  pending-card-assets/resources/mov_card_full_1_00034-5-uniq-0090-00.usm
+  pending-card-assets/resources/mov_card_sign_00034-5-uniq-0090-00.usm
+  pending-card-assets/resources/vo_card_cmn_00034_00034-5-uniq-0090-00_potential-001.acb
+  pending-card-assets/resources/vo_card_cmn_00034_00034-5-uniq-0090-00_potential-002.acb
+  pending-card-assets/resources/vo_card_cmn_00034_00034-5-uniq-0090-00_potential-003.acb
+  pending-card-assets/resources/vo_card_cmn_00034_00034-5-uniq-0090-00_potential-004.acb
+  pending-card-assets/resources/vo_card_cmn_00034_00034-5-uniq-0090-00_potential-005.acb
+  pending-card-assets/resources/vo_card_cmn_00034_00034-5-uniq-0090-00_situation.acb
+  pending-card-assets/resources/vo_live_cmn_card_00034_00034-5-uniq-0090-00_skill-card.acb
+
+FOUND: 06003-5-uniq-0091-00 | Night Summer Smile
+revision: 97
+files: 46
+  pending-card-assets/assetbundles/img_card_full_06003-5-uniq-0091-00
+  pending-card-assets/assetbundles/img_card_live_thumb_06003-5-uniq-0091-00
+  pending-card-assets/assetbundles/img_card_thin_06003-5-uniq-0091-00
+  pending-card-assets/assetbundles/img_card_thumb_06003-5-uniq-0091-00
+  pending-card-assets/assetbundles/img_card_vert_06003-5-uniq-0091-00
+  pending-card-assets/assetbundles/img_cos_2d_thumb_06003-uniq-0091-00
+  pending-card-assets/assetbundles/img_cos_sd_thumb_06003-uniq-0091-00
+  pending-card-assets/assetbundles/live2d_mdl_06003-uniq-0091-00
+  pending-card-assets/assetbundles/mdl_chr_drs_06003-uniq-0091-00_body
+  pending-card-assets/assetbundles/mdl_chr_drs_06003-uniq-0091-00_hair
+  pending-card-assets/resources/mov_card_full_0_06003-5-uniq-0091-00.usm
+  pending-card-assets/resources/mov_card_full_1_06003-5-uniq-0091-00.usm
+  pending-card-assets/resources/mov_card_sign_06003-5-uniq-0091-00.usm
+  pending-card-assets/resources/vo_card_cmn_06003_06003-5-uniq-0091-00_potential-001.acb
+  pending-card-assets/resources/vo_card_cmn_06003_06003-5-uniq-0091-00_potential-002.acb
+  pending-card-assets/resources/vo_card_cmn_06003_06003-5-uniq-0091-00_potential-003.acb
+  pending-card-assets/resources/vo_card_cmn_06003_06003-5-uniq-0091-00_potential-004.acb
+  pending-card-assets/resources/vo_card_cmn_06003_06003-5-uniq-0091-00_potential-005.acb
+  pending-card-assets/resources/vo_card_cmn_06003_06003-5-uniq-0091-00_situation.acb
+  pending-card-assets/resources/vo_live_cmn_card_06003_06003-5-uniq-0091-00_skill-card.acb
+
+============================================================
+Catalog revision: 97
+Newly available: 3
+Still waiting: 0
+Updated: /home/nana0411/holodori-own/pending_cards.json
+[guess-controller] Master before: 5267906a638d20ddfc5c68dcb7775b0bda3484dfbb65006cd8e7dc59232112bc
+[guess-controller] Master after : 65badf8533aacbc04382f97f0f5f56740e761e6f5be6172d8440ae9061deebe7
+[guess-controller] Refreshing Holodori asset catalog...
+[httpx] HTTP Request: GET https://raw.githubusercontent.com/HolodoriDB/holodori-app-protos/refs/heads/main/global/appver.json "HTTP/1.1 200 OK"
+[httpx] HTTP Request: GET https://raw.githubusercontent.com/HolodoriDB/holodori-app-protos/refs/heads/main/jp/appver.json "HTTP/1.1 200 OK"
+[catalog] appver: using 1.2.1
+[catalog] app version 1.2.1
+[httpx] HTTP Request: GET https://us.game-hololive-dreams.com/asset/v2/pub/a/5/v/200001/list/0 "HTTP/2 200 OK"
+[download] revision 97: 24681 bundles, 19531 resources
+[download] downloading 0 files to /tmp/holodori-catalog-refresh
+0file [00:00, ?file/s]0file [00:00, ?file/s]
+[guess-controller] Changes: MASTER=1 CATALOG=1 FORCE=0
+[guess-controller] Updating/organizing local Holodori cards from own master...
+Holodori card update check started
+Live master source: /home/nana0411/holodori-own/master-client/latest.json
+$ git pull --ff-only
+Already up to date.
+Master version: 65badf8533aacbc04382f97f0f5f56740e761e6f5be6172d8440ae9061deebe7
+Asset tools changed: False
+New or missing card records detected: 3
+  00030-5-uniq-0089-00
+  00034-5-uniq-0090-00
+  06003-5-uniq-0091-00
+$ holodori download /home/nana0411/testholo/all-cards-raw --filter ^img_card_full_ --no-overwrite --catalog /home/nana0411/4newCards/Cards/.guess-updater/octo_list.json
+[download] revision 97: 24681 bundles, 19531 resources
+[download] downloading 3 files to /home/nana0411/testholo/all-cards-raw
+  0%|          | 0/3 [00:00<?, ?file/s][httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/9behVF "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/uMbtWp "HTTP/2 200 OK"
+ 33%|███▎      | 1/3 [00:00<00:01,  1.69file/s][httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/cXnqTS "HTTP/2 200 OK"
+ 67%|██████▋   | 2/3 [00:00<00:00,  2.29file/s]100%|██████████| 3/3 [00:01<00:00,  2.46file/s]100%|██████████| 3/3 [00:01<00:00,  2.33file/s]
+$ holodori download /home/nana0411/testholo/card-signatures-raw --filter ^mov_card_sign_ --workers 1 --no-overwrite --catalog /home/nana0411/4newCards/Cards/.guess-updater/octo_list.json
+[download] revision 97: 24681 bundles, 19531 resources
+[download] downloading 3 files to /home/nana0411/testholo/card-signatures-raw
+  0%|          | 0/3 [00:00<?, ?file/s][httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/BaBAZf "HTTP/2 200 OK"
+ 33%|███▎      | 1/3 [00:02<00:04,  2.08s/file][httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/EgI3tO "HTTP/2 200 OK"
+ 67%|██████▋   | 2/3 [00:03<00:01,  1.86s/file][httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/0oHL0V "HTTP/2 200 OK"
+100%|██████████| 3/3 [00:05<00:00,  1.91s/file]100%|██████████| 3/3 [00:05<00:00,  1.92s/file]
+$ holodori extract /home/nana0411/testholo/card-signatures-raw/resources /home/nana0411/testholo/card-signatures-extracted
+[extract] mov_card_sign_00001-5-uniq-0000-00.usm -> 2 files
+[extract] mov_card_sign_00002-5-uniq-0001-00.usm -> 2 files
+[extract] mov_card_sign_00004-5-uniq-0005-00.usm -> 2 files
+[extract] mov_card_sign_00004-5-uniq-0081-00.usm -> 2 files
+[extract] mov_card_sign_00005-5-uniq-0006-00.usm -> 2 files
+[extract] mov_card_sign_00006-5-uniq-0007-00.usm -> 2 files
+[extract] mov_card_sign_00006-5-uniq-0074-00.usm -> 2 files
+[extract] mov_card_sign_00007-5-uniq-0008-00.usm -> 2 files
+[extract] mov_card_sign_00010-5-uniq-0010-00.usm -> 2 files
+[extract] mov_card_sign_00010-5-uniq-0069-00.usm -> 2 files
+[extract] mov_card_sign_00011-5-uniq-0011-00.usm -> 2 files
+[extract] mov_card_sign_00012-5-uniq-0012-00.usm -> 2 files
+[extract] mov_card_sign_00012-5-uniq-0062-00.usm -> 2 files
+[extract] mov_card_sign_00013-5-uniq-0002-00.usm -> 2 files
+[extract] mov_card_sign_00014-5-uniq-0013-00.usm -> 2 files
+[extract] mov_card_sign_00014-5-uniq-0075-00.usm -> 2 files
+[extract] mov_card_sign_00015-5-uniq-0003-00.usm -> 2 files
+[extract] mov_card_sign_00015-5-uniq-0067-00.usm -> 2 files
+[extract] mov_card_sign_00016-5-uniq-0014-00.usm -> 2 files
+[extract] mov_card_sign_00016-5-uniq-0076-00.usm -> 2 files
+[extract] mov_card_sign_00017-5-uniq-0015-00.usm -> 2 files
+[extract] mov_card_sign_00017-5-uniq-0077-00.usm -> 2 files
+[extract] mov_card_sign_00018-5-uniq-0004-00.usm -> 2 files
+[extract] mov_card_sign_00018-5-uniq-0068-00.usm -> 2 files
+[extract] mov_card_sign_00019-5-uniq-0016-00.usm -> 2 files
+[extract] mov_card_sign_00021-5-uniq-0017-00.usm -> 2 files
+[extract] mov_card_sign_00021-5-uniq-0064-00.usm -> 2 files
+[extract] mov_card_sign_00022-5-uniq-0018-00.usm -> 2 files
+[extract] mov_card_sign_00022-5-uniq-0063-00.usm -> 2 files
+[extract] mov_card_sign_00023-5-uniq-0019-00.usm -> 2 files
+[extract] mov_card_sign_00023-5-uniq-0085-00.usm -> 2 files
+[extract] mov_card_sign_00026-5-uniq-0021-00.usm -> 2 files
+[extract] mov_card_sign_00026-5-uniq-0065-00.usm -> 2 files
+[extract] mov_card_sign_00027-5-uniq-0022-00.usm -> 2 files
+[extract] mov_card_sign_00028-5-uniq-0023-00.usm -> 2 files
+[extract] mov_card_sign_00028-5-uniq-0070-00.usm -> 2 files
+[extract] mov_card_sign_00030-5-uniq-0024-00.usm -> 2 files
+[extract] mov_card_sign_00030-5-uniq-0089-00.usm -> 2 files
+[extract] mov_card_sign_00031-5-uniq-0025-00.usm -> 2 files
+[extract] mov_card_sign_00032-5-uniq-0026-00.usm -> 2 files
+[extract] mov_card_sign_00034-5-uniq-0027-00.usm -> 2 files
+[extract] mov_card_sign_00034-5-uniq-0090-00.usm -> 2 files
+[extract] mov_card_sign_00035-5-uniq-0028-00.usm -> 2 files
+[extract] mov_card_sign_00035-5-uniq-0082-00.usm -> 2 files
+[extract] mov_card_sign_00036-5-uniq-0029-00.usm -> 2 files
+[extract] mov_card_sign_00036-5-uniq-0078-00.usm -> 2 files
+[extract] mov_card_sign_00037-5-uniq-0030-00.usm -> 2 files
+[extract] mov_card_sign_00037-5-uniq-0086-00.usm -> 2 files
+[extract] mov_card_sign_00039-5-uniq-0032-00.usm -> 2 files
+[extract] mov_card_sign_03001-5-uniq-0033-00.usm -> 2 files
+[extract] mov_card_sign_03002-5-uniq-0034-00.usm -> 2 files
+[extract] mov_card_sign_03003-5-uniq-0035-00.usm -> 2 files
+[extract] mov_card_sign_03004-5-uniq-0036-00.usm -> 2 files
+[extract] mov_card_sign_03004-5-uniq-0073-00.usm -> 2 files
+[extract] mov_card_sign_03005-5-uniq-0037-00.usm -> 2 files
+[extract] mov_card_sign_03005-5-uniq-0084-00.usm -> 2 files
+[extract] mov_card_sign_03006-5-uniq-0038-00.usm -> 2 files
+[extract] mov_card_sign_03007-5-uniq-0039-00.usm -> 2 files
+[extract] mov_card_sign_03008-5-uniq-0040-00.usm -> 2 files
+[extract] mov_card_sign_03009-5-uniq-0041-00.usm -> 2 files
+[extract] mov_card_sign_03009-5-uniq-0088-00.usm -> 2 files
+[extract] mov_card_sign_04001-5-uniq-0042-00.usm -> 2 files
+[extract] mov_card_sign_04001-5-uniq-0071-00.usm -> 2 files
+[extract] mov_card_sign_04002-5-uniq-0043-00.usm -> 2 files
+[extract] mov_card_sign_04003-5-uniq-0044-00.usm -> 2 files
+[extract] mov_card_sign_04003-5-uniq-0072-00.usm -> 2 files
+[extract] mov_card_sign_04007-5-uniq-0047-00.usm -> 2 files
+[extract] mov_card_sign_04010-5-uniq-0049-00.usm -> 2 files
+[extract] mov_card_sign_04012-5-uniq-0051-00.usm -> 2 files
+[extract] mov_card_sign_04012-5-uniq-0087-00.usm -> 2 files
+[extract] mov_card_sign_04013-5-uniq-0052-00.usm -> 2 files
+[extract] mov_card_sign_04013-5-uniq-0083-00.usm -> 2 files
+[extract] mov_card_sign_04014-5-uniq-0053-00.usm -> 2 files
+[extract] mov_card_sign_04015-5-uniq-0054-00.usm -> 2 files
+[extract] mov_card_sign_04016-5-uniq-0055-00.usm -> 2 files
+[extract] mov_card_sign_04016-5-uniq-0079-00.usm -> 2 files
+[extract] mov_card_sign_04017-5-uniq-0056-00.usm -> 2 files
+[extract] mov_card_sign_04017-5-uniq-0080-00.usm -> 2 files
+[extract] mov_card_sign_06002-5-uniq-0058-00.usm -> 2 files
+[extract] mov_card_sign_06002-5-uniq-0066-00.usm -> 2 files
+[extract] mov_card_sign_06003-5-uniq-0059-00.usm -> 2 files
+[extract] mov_card_sign_06003-5-uniq-0091-00.usm -> 2 files
+[extract] mov_card_sign_06004-5-uniq-0060-00.usm -> 2 files
+[extract] mov_card_sign_06005-5-uniq-0061-00.usm -> 2 files
+Card bundles found: 192
+/home/nana0411/holodori-own/holodori-asset-tools/.venv/lib/python3.12/site-packages/UnityPy/files/BundleFile.py:533: UnityVersionFallbackWarning: No valid Unity version found, defaulting to UnityPy.config.FALLBACK_UNITY_VERSION (6000.3.15f1)
+  version_str = config.get_fallback_version()
+/home/nana0411/holodori-own/holodori-asset-tools/.venv/lib/python3.12/site-packages/UnityPy/files/SerializedFile.py:360: UnityVersionFallbackWarning: No valid Unity version found, defaulting to UnityPy.config.FALLBACK_UNITY_VERSION (6000.3.15f1)
+  string_version = config.get_fallback_version()
+Card [84/192]: img_card_full_00030-5-uniq-0089-00_8218993855850732589.png
+/home/nana0411/holodori-own/holodori-asset-tools/.venv/lib/python3.12/site-packages/UnityPy/files/BundleFile.py:533: UnityVersionFallbackWarning: No valid Unity version found, defaulting to UnityPy.config.FALLBACK_UNITY_VERSION (6000.3.15f1)
+  version_str = config.get_fallback_version()
+/home/nana0411/holodori-own/holodori-asset-tools/.venv/lib/python3.12/site-packages/UnityPy/files/SerializedFile.py:360: UnityVersionFallbackWarning: No valid Unity version found, defaulting to UnityPy.config.FALLBACK_UNITY_VERSION (6000.3.15f1)
+  string_version = config.get_fallback_version()
+Card [94/192]: img_card_full_00034-5-uniq-0090-00_6397311361977415551.png
+Card [186/192]: img_card_full_06003-5-uniq-0091-00_-8332220173373269114.png
+New corrected cards: 3; card failures: 0
+$ ffmpeg -loglevel error -f h264 -i /home/nana0411/testholo/card-signatures-extracted/mov_card_sign_00030-5-uniq-0089-00/sfv_ch0 /tmp/tmprzxzt7nn/color/%06d.png
+$ ffmpeg -loglevel error -f mpegvideo -i /home/nana0411/testholo/card-signatures-extracted/mov_card_sign_00030-5-uniq-0089-00/alp_ch0 /tmp/tmprzxzt7nn/alpha/%06d.png
+Signature layer: mov_card_sign_00030-5-uniq-0089-00.png
+$ ffmpeg -loglevel error -f h264 -i /home/nana0411/testholo/card-signatures-extracted/mov_card_sign_00034-5-uniq-0090-00/sfv_ch0 /tmp/tmpsfzn0j7j/color/%06d.png
+$ ffmpeg -loglevel error -f mpegvideo -i /home/nana0411/testholo/card-signatures-extracted/mov_card_sign_00034-5-uniq-0090-00/alp_ch0 /tmp/tmpsfzn0j7j/alpha/%06d.png
+Signature layer: mov_card_sign_00034-5-uniq-0090-00.png
+$ ffmpeg -loglevel error -f h264 -i /home/nana0411/testholo/card-signatures-extracted/mov_card_sign_06003-5-uniq-0091-00/sfv_ch0 /tmp/tmpiodjmgl_/color/%06d.png
+$ ffmpeg -loglevel error -f mpegvideo -i /home/nana0411/testholo/card-signatures-extracted/mov_card_sign_06003-5-uniq-0091-00/alp_ch0 /tmp/tmpiodjmgl_/alpha/%06d.png
+Signature layer: mov_card_sign_06003-5-uniq-0091-00.png
+New signature layers: 3
+Signed card: img_card_full_00030-5-uniq-0089-00_signed.png
+Signed card: img_card_full_00034-5-uniq-0090-00_signed.png
+Signed card: img_card_full_06003-5-uniq-0091-00_signed.png
+New or refreshed signed cards: 3
+Organized images copied: 276; missing unsigned: 0
+Card update complete
+Open: /home/nana0411/testholo/organized-card-images
+[guess-controller] Syncing ★★★ / ★★★★ / ★★★★★ into local bot...
+[guess-controller] Ensuring remote HOLODORI directories exist...
+[guess-controller] Syncing HOLODORI card folders to OPC...
+[guess-controller] Sending fresh catalog to OPC...
+[guess-controller] Sending fresh master data to OPC...
+[guess-controller] Running OPC Guess updater...
+From https://github.com/HolodoriDB/holodori-db-eng-diff
+   ffc3155..c98eddf  main       -> origin/main
+[guess-update] DB changed: ffc3155067cda6679eaea246eed862e09c9af673 -> c98eddf11f81ecc65bfd1ca50427b59224627730
+Updating ffc3155..c98eddf
+Fast-forward
+ AssetStreamingMute.json                      |     6 +
+ Card.json                                    |   135 +
+ CharacterLiveDialogueVoice.json              |   648 ++
+ CharacterVoice.json                          |  1629 +++
+ Cheat.json                                   |    36 +-
+ Condition.json                               |   406 +-
+ Costume.json                                 |    70 +-
+ Emblem.json                                  |   380 +
+ ExchangeBooth.json                           |    18 +
+ ExchangeBoothFixedItem.json                  |   412 +
+ ExchangeBoothGroup.json                      |    18 +
+ Gacha.json                                   |    12 +
+ GachaButton.json                             |    36 +
+ GachaPoint.json                              |    10 +
+ Item.json                                    |    40 +
+ LangCard_Eng.json                            |    21 +
+ LangCharacterVoice_Eng.json                  |  1425 +++
+ LangClientCommon_Eng.json                    |     2 +-
+ LangEmblem_Eng.json                          |   266 +
+ LangFacility_Eng.json                        |     2 +-
+ LangGachaPoint_Eng.json                      |     7 +
+ LangGeneratedLiveActiveSkillLevel_Eng.json   |    42 +
+ LangGeneratedLiveLeaderSkill_Eng.json        |    28 +-
+ LangGeneratedLivePassiveSkillEffect_Eng.json |    21 +
+ LangGeneratedLivePassiveSkillLevel_Eng.json  |    42 +
+ LangGeneratedLiveSpecialSkillLevel_Eng.json  |    42 +
+ LangItem_Eng.json                            |    28 +
+ LangLiveDialogueVoice_Eng.json               |   273 +
+ LangMission_Eng.json                         |     9 +-
+ LangMusicMv_Eng.json                         |    24 +
+ LangMusic_Eng.json                           |   348 +
+ LangParkQuestStep_Eng.json                   |     2 +-
+ LangParkTalk_Eng.json                        |     4 +-
+ LangPoster_Eng.json                          |    14 +
+ LangResourceObtainmentRoute_Eng.json         |    14 +
+ LangTipsDetail_Eng.json                      |     9 +-
+ LiveActiveSkill.json                         |    18 +
+ LiveActiveSkillLevel.json                    |    82 +
+ LiveDialogueVoice.json                       |   465 +
+ LiveDialogueVoiceCharacter.json              | 13301 +++++++++++++------------
+ LiveLeaderSkill.json                         |    38 +-
+ LivePassiveSkill.json                        |    18 +
+ LivePassiveSkillEffect.json                  |    36 +
+ LivePassiveSkillLevel.json                   |    64 +
+ LiveSpecialCardDialogue.json                 |   189 +
+ LiveSpecialCostumeDialogue.json              |   189 +
+ LiveSpecialSkill.json                        |    18 +
+ LiveSpecialSkillLevel.json                   |    66 +
+ Mission.json                                 |   174 +-
+ MissionGroup.json                            |    14 +
+ MissionProgress.json                         |  1292 +++
+ Music.json                                   |   244 +-
+ MusicDifficulty.json                         |   200 +
+ MusicDifficultyChart.json                    |   200 +
+ MusicMv.json                                 |   116 +
+ MusicStartupNotification.json                |    55 +
+ ParkQuestStep.json                           |   552 +-
+ Poster.json                                  |    18 +
+ ResourceObtainmentRoute.json                 |    18 +
+ SdCostume.json                               |    56 +-
+ Setting.json                                 |     1 -
+ Tips.json                                    |    10 +
+ TipsDetail.json                              |    66 +
+ version.txt                                  |     2 +-
+ 64 files changed, 17222 insertions(+), 6759 deletions(-)
+=== GUESS FULL UPDATE ===
+$ /home/opc/guess-updater/.venv/bin/holodori download /home/opc/guess-updater/work/_raw/jackets --filter ^img_music_jacket_ --no-overwrite --catalog /home/opc/guess-updater/octo_list.json
+[download] revision 97: 24681 bundles, 19531 resources
+[download] downloading 5 files to /home/opc/guess-updater/work/_raw/jackets
+  0%|          | 0/5 [00:00<?, ?file/s][httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/OeTmhP "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/u7ygyT "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/IC7xvf "HTTP/2 200 OK"
+ 20%|██        | 1/5 [00:00<00:00,  5.17file/s][httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/1mfwhj "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/fS27HQ "HTTP/2 200 OK"
+ 40%|████      | 2/5 [00:00<00:01,  2.50file/s] 60%|██████    | 3/5 [00:00<00:00,  3.01file/s]100%|██████████| 5/5 [00:01<00:00,  4.67file/s]
+/home/opc/guess-updater/.venv/lib64/python3.12/site-packages/UnityPy/files/BundleFile.py:533: UnityVersionFallbackWarning: No valid Unity version found, defaulting to UnityPy.config.FALLBACK_UNITY_VERSION (6000.3.15f1)
+  version_str = config.get_fallback_version()
+/home/opc/guess-updater/.venv/lib64/python3.12/site-packages/UnityPy/files/SerializedFile.py:360: UnityVersionFallbackWarning: No valid Unity version found, defaulting to UnityPy.config.FALLBACK_UNITY_VERSION (6000.3.15f1)
+  string_version = config.get_fallback_version()
+/home/opc/guess-updater/.venv/lib64/python3.12/site-packages/UnityPy/files/BundleFile.py:533: UnityVersionFallbackWarning: No valid Unity version found, defaulting to UnityPy.config.FALLBACK_UNITY_VERSION (6000.3.15f1)
+  version_str = config.get_fallback_version()
+/home/opc/guess-updater/.venv/lib64/python3.12/site-packages/UnityPy/files/SerializedFile.py:360: UnityVersionFallbackWarning: No valid Unity version found, defaulting to UnityPy.config.FALLBACK_UNITY_VERSION (6000.3.15f1)
+  string_version = config.get_fallback_version()
+jacket NEW m0360.png
+jacket NEW m0361.png
+jacket NEW m0362.png
+jacket NEW m0377.png
+jacket NEW m0378.png
+$ /home/opc/guess-updater/.venv/bin/holodori download /home/opc/guess-updater/work/_raw/audio --filter ^music_short_ --no-overwrite --catalog /home/opc/guess-updater/octo_list.json
+[download] revision 97: 24681 bundles, 19531 resources
+[download] downloading 5 files to /home/opc/guess-updater/work/_raw/audio
+  0%|          | 0/5 [00:00<?, ?file/s][httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/yLCosO "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/VrdVTs "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/U0yme3 "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/vcGuAV "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/FK1v5t "HTTP/2 200 OK"
+ 20%|██        | 1/5 [00:01<00:06,  1.62s/file] 40%|████      | 2/5 [00:01<00:02,  1.29file/s] 60%|██████    | 3/5 [00:02<00:01,  1.23file/s] 80%|████████  | 4/5 [00:03<00:00,  1.42file/s]100%|██████████| 5/5 [00:03<00:00,  1.94file/s]100%|██████████| 5/5 [00:03<00:00,  1.48file/s]
+decoding /home/opc/guess-updater/work/_raw/audio/resources/music_short_m0360.acb
+sample rate: 48000 Hz
+channels: 2
+channel mask: 0x3 / FL FR
+stream total samples: 7555875 (2:37.414 seconds)
+encoding: CRI HCA
+layout: flat
+metadata from: CRI HCA header
+bitrate: 255 kbps
+stream name: music_short_m0360
+sample type: float
+play duration: 7555875 samples (2:37.414 seconds)
+$ /usr/bin/ffmpeg -y -loglevel error -i /home/opc/guess-updater/work/wav/m0360.wav -vn -c:a libmp3lame -b:a 96k /usr/share/nginx/html/images/guess/audio/m0360.mp3
+decoding /home/opc/guess-updater/work/_raw/audio/resources/music_short_m0361.acb
+sample rate: 48000 Hz
+channels: 2
+channel mask: 0x3 / FL FR
+stream total samples: 7905104 (2:44.690 seconds)
+encoding: CRI HCA
+layout: flat
+metadata from: CRI HCA header
+bitrate: 255 kbps
+stream name: music_short_m0361
+sample type: float
+play duration: 7905104 samples (2:44.690 seconds)
+audio NEW m0360.mp3
+$ /usr/bin/ffmpeg -y -loglevel error -i /home/opc/guess-updater/work/wav/m0361.wav -vn -c:a libmp3lame -b:a 96k /usr/share/nginx/html/images/guess/audio/m0361.mp3
+decoding /home/opc/guess-updater/work/_raw/audio/resources/music_short_m0362.acb
+sample rate: 48000 Hz
+channels: 2
+channel mask: 0x3 / FL FR
+stream total samples: 5549781 (1:55.620 seconds)
+encoding: CRI HCA
+layout: flat
+metadata from: CRI HCA header
+bitrate: 255 kbps
+stream name: music_short_m0362
+sample type: float
+play duration: 5549781 samples (1:55.620 seconds)
+audio NEW m0361.mp3
+$ /usr/bin/ffmpeg -y -loglevel error -i /home/opc/guess-updater/work/wav/m0362.wav -vn -c:a libmp3lame -b:a 96k /usr/share/nginx/html/images/guess/audio/m0362.mp3
+decoding /home/opc/guess-updater/work/_raw/audio/resources/music_short_m0377.acb
+sample rate: 48000 Hz
+channels: 2
+channel mask: 0x3 / FL FR
+stream total samples: 4746068 (1:38.876 seconds)
+encoding: CRI HCA
+layout: flat
+metadata from: CRI HCA header
+bitrate: 255 kbps
+stream name: music_short_m0377
+sample type: float
+play duration: 4746068 samples (1:38.876 seconds)
+audio NEW m0362.mp3
+$ /usr/bin/ffmpeg -y -loglevel error -i /home/opc/guess-updater/work/wav/m0377.wav -vn -c:a libmp3lame -b:a 96k /usr/share/nginx/html/images/guess/audio/m0377.mp3
+decoding /home/opc/guess-updater/work/_raw/audio/resources/music_short_m0378.acb
+sample rate: 48000 Hz
+channels: 2
+channel mask: 0x3 / FL FR
+stream total samples: 5884540 (2:02.595 seconds)
+encoding: CRI HCA
+layout: flat
+metadata from: CRI HCA header
+bitrate: 255 kbps
+stream name: music_short_m0378
+sample type: float
+play duration: 5884540 samples (2:02.595 seconds)
+audio NEW m0377.mp3
+$ /usr/bin/ffmpeg -y -loglevel error -i /home/opc/guess-updater/work/wav/m0378.wav -vn -c:a libmp3lame -b:a 96k /usr/share/nginx/html/images/guess/audio/m0378.mp3
+audio NEW m0378.mp3
+Cards in DB: 192
+Cards hosted: 189
+Missing hosted cards: 3
+$ /home/opc/guess-updater/.venv/bin/holodori download /home/opc/guess-updater/work/_raw/cards --filter ^img_card_full_ --no-overwrite --catalog /home/opc/guess-updater/octo_list.json
+[download] revision 97: 24681 bundles, 19531 resources
+[download] downloading 3 files to /home/opc/guess-updater/work/_raw/cards
+  0%|          | 0/3 [00:00<?, ?file/s][httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/9behVF "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/uMbtWp "HTTP/2 200 OK"
+ 33%|███▎      | 1/3 [00:00<00:00,  5.11file/s][httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/cXnqTS "HTTP/2 200 OK"
+100%|██████████| 3/3 [00:00<00:00,  8.13file/s]100%|██████████| 3/3 [00:00<00:00,  7.67file/s]
+card NEW 00030-5-uniq-0089-00.png
+card NEW 00034-5-uniq-0090-00.png
+card NEW 06003-5-uniq-0091-00.png
+cards.json rows: 192
+
+=== COMPLETE ===
+Songs manifest: 210
+New jackets: 5; failures: 0
+New audio:   5; failures: 0
+New cards:   3; failures: 0
+Hosted cards: 192
+songs.json: /usr/share/nginx/html/images/guess/data/songs.json
+cards.json: /usr/share/nginx/html/images/guess/data/cards.json
+[guess-controller] Fixing Guess web permissions...
+[guess-controller] Copying fresh Guess JSON manifests back to bot...
+[guess-controller] Finished successfully.
+[guess-controller] Local HOLODORI counts:
+  ★★★: 54
+  ★★★★: 54
+  ★★★★★: 168
+[guess-controller] Local Guess manifests:
+-rw-r--r-- 1 nana0411 nana0411 26K Oct  7 10:40 /home/nana0411/4newCards/Cards/images/guess/data/cards.json
+-rw-r--r-- 1 nana0411 nana0411 44K Oct  7 10:40 /home/nana0411/4newCards/Cards/images/guess/data/songs.json

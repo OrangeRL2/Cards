@@ -894,6 +894,12 @@
     "image": "../cards/00030-5-uniq-0024-00.png"
   },
   {
+    "assetId": "00030-5-uniq-0089-00",
+    "member": "Lamy",
+    "rarity": 5,
+    "image": "../cards/00030-5-uniq-0089-00.png"
+  },
+  {
     "assetId": "00036-5-uniq-0029-00",
     "member": "Lui",
     "rarity": 5,
@@ -1038,6 +1044,12 @@
     "image": "../cards/00034-5-uniq-0027-00.png"
   },
   {
+    "assetId": "00034-5-uniq-0090-00",
+    "member": "Polka",
+    "rarity": 5,
+    "image": "../cards/00034-5-uniq-0090-00.png"
+  },
+  {
     "assetId": "06004-5-uniq-0060-00",
     "member": "Raden",
     "rarity": 5,
@@ -1054,6 +1066,12 @@
     "member": "Ririka",
     "rarity": 5,
     "image": "../cards/06003-5-uniq-0059-00.png"
+  },
+  {
+    "assetId": "06003-5-uniq-0091-00",
+    "member": "Ririka",
+    "rarity": 5,
+    "image": "../cards/06003-5-uniq-0091-00.png"
   },
   {
     "assetId": "03001-5-uniq-0033-00",
