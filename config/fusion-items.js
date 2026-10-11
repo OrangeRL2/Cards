@@ -576,6 +576,38 @@ holoWitchesEV1: {
       { rarity: 'SR', image: 'Kanata 001', count: 1 },
     ],
   },
+
+  extremerCup001: {
+    name: 'Extremer Cup',
+    rarity: 'COL',
+    image: 'Extremer Cup 001',
+    stock: -1,
+    requires: [
+      { rarity: 'SR', image: 'Bijou 003', count: 1 },
+      { rarity: 'SR', image: 'Calli 009', count: 1 },
+      { rarity: 'SR', image: 'Fubuki 008', count: 1 },
+      { rarity: 'SR', image: 'Ina 004', count: 1 },
+      { rarity: 'SR', image: 'Koyori 014', count: 1 },
+      { rarity: 'SR', image: 'La+ 007', count: 1 },
+      { rarity: 'SR', image: 'Matsuri 008', count: 1 },
+      { rarity: 'SR', image: 'Nerissa 009', count: 1 },
+      { rarity: 'SR', image: 'Polka 005', count: 1 },
+      { rarity: 'SR', image: 'Riona 005', count: 1 },
+      { rarity: 'SR', image: 'Ririka 006', count: 1 },
+      { rarity: 'SR', image: 'Subaru 010', count: 1 },
+    ],
+  },
+  OkaKoro001: {
+    name: 'OkaKoro',
+    rarity: 'COL',
+    image: 'OkaKoro 002',
+    stock: -1,
+    requires: [
+      { rarity: 'ORI', image: 'Okayu 002', count: 1 },
+      { rarity: 'ORI', image: 'Korone 002', count: 1 },
+
+    ],
+  },
 };
 
 module.exports = FUSION_ITEMS;
