@@ -475,7 +475,7 @@ async function correctAnswer(message, round) {
     let reward = null;
     let rewardError = null;
     try {
-      reward = pickHolodoriLoginReward();
+      reward = pickHolodoriLoginReward(message.author.id);
       await addHolodoriReward(message.author.id, reward);
       await GuessChallenge.updateOne(
         { challengeId: round.roundId },
