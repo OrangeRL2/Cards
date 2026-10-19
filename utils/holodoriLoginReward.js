@@ -14,20 +14,27 @@ const TIERS = Object.freeze([
 const USER_TIER_WEIGHTS = Object.freeze({
   // Rule-violation rate profile: 0.5% total five-star chance.
   // The removed 4.5 percentage points are moved entirely to three-star.
-  '1171127294413246567': Object.freeze({
+  '1171127294413246567': Object.freeze({ //blacky
     three_star: 89.5,
     four_star: 10,
     five_star: 0.4,
     signed: 0.1,
   }),
 
-  '408400038767624195': Object.freeze({
+  '408400038767624195': Object.freeze({//grimm
     three_star: 95,
     four_star: 5,
     five_star: 0,
     signed: 0,
   }),
-});
+    '1450162068484264091': Object.freeze({//grimm2
+    three_star: 95,
+    four_star: 5,
+    five_star: 0,
+    signed: 0,
+  }),
+})
+
 
 const NO_HOLODORI_FIVE_STAR_USER_IDS = new Set([
   '408400038767624195',

@@ -60,7 +60,8 @@ const SPECIAL_USER_RANGES = {
 
   // blacky
   '1416081468794339479': { min: 1, max: 50 },
-
+  //grimm
+  '1450162068484264091': { min: 1, max: 50 },
   // MAINS
   '1334914199968677941': { min: 1, max: 53 },
 };
