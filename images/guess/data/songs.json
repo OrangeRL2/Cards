@@ -2067,6 +2067,36 @@
     "audio": "../audio/m0359.mp3"
   },
   {
+    "id": "m0360",
+    "title": "HOLOGRAM CIRCUS",
+    "playingSeconds": 157,
+    "characterIds": [
+      "chr-00034"
+    ],
+    "jacket": "../jackets/m0360.png",
+    "audio": "../audio/m0360.mp3"
+  },
+  {
+    "id": "m0361",
+    "title": "Lamy's Baribari Workout",
+    "playingSeconds": 164,
+    "characterIds": [
+      "chr-00030"
+    ],
+    "jacket": "../jackets/m0361.png",
+    "audio": "../audio/m0361.mp3"
+  },
+  {
+    "id": "m0362",
+    "title": "Tokyo Shandy Rendez-vous",
+    "playingSeconds": 115,
+    "characterIds": [
+      "chr-06003"
+    ],
+    "jacket": "../jackets/m0362.png",
+    "audio": "../audio/m0362.mp3"
+  },
+  {
     "id": "m0363",
     "title": "Simulacre",
     "playingSeconds": 143,
@@ -2095,6 +2125,26 @@
     ],
     "jacket": "../jackets/m0376.png",
     "audio": "../audio/m0376.mp3"
+  },
+  {
+    "id": "m0377",
+    "title": "Round and Round and CircLuna",
+    "playingSeconds": 98,
+    "characterIds": [
+      "chr-00028"
+    ],
+    "jacket": "../jackets/m0377.png",
+    "audio": "../audio/m0377.mp3"
+  },
+  {
+    "id": "m0378",
+    "title": "NEW[zom]BIE!!",
+    "playingSeconds": 122,
+    "characterIds": [
+      "chr-03004"
+    ],
+    "jacket": "../jackets/m0378.png",
+    "audio": "../audio/m0378.mp3"
   },
   {
     "id": "m0413",
