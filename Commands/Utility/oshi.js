@@ -16,6 +16,24 @@ const OshiImageOverrideSchema = new Schema({
 });
 const OshiImageOverride = mongoose.models.OshiImageOverride || mongoose.model('OshiImageOverride', OshiImageOverrideSchema);
 
+
+function buildProfileImageUrl(rarityInput, cardNameInput) {
+  const rarity = String(rarityInput || '').trim();
+  const cardName = String(cardNameInput || '').trim();
+  const encodedCardName = encodeURIComponent(cardName);
+  const base = 'http://152.69.195.48/images';
+
+  if (/^★{3,5}$/.test(rarity)) {
+    return `${base}/HOLODORI/${encodeURIComponent(rarity)}/${encodedCardName}.png`;
+  }
+
+  if (rarity.toUpperCase() === 'HOLODORI') {
+    return `${base}/HOLODORI/${encodeURIComponent('★★★')}/${encodedCardName}.png`;
+  }
+
+  return `${base}/${encodeURIComponent(rarity)}/${encodedCardName}.png`;
+}
+
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('oshi')
@@ -75,15 +93,12 @@ module.exports = {
 
       let imageUrl;
       if (override && override.rarity && override.cardName) {
-        const encodedCardName = encodeURIComponent(String(override.cardName).trim());
-        const rarityPart = encodeURIComponent(String(override.rarity).trim());
-        imageUrl = `http://152.69.195.48/images/${rarityPart}/${encodedCardName}.png`;
+        imageUrl = buildProfileImageUrl(override.rarity, override.cardName);
       } else {
         const baseName = typeof oshiLabel === 'string' ? oshiLabel.trim() : String(oshiLabel);
         const cardName = `${baseName} 001`;
         const rarity = 'OSR';
-        const encodedCardName = encodeURIComponent(cardName);
-        imageUrl = `http://152.69.195.48/images/${rarity}/${encodedCardName}.png`;
+        imageUrl = buildProfileImageUrl(rarity, cardName);
       }
 
       const embed = new EmbedBuilder()

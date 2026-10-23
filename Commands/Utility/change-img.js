@@ -35,6 +35,24 @@ function normalizeForCompare(s) {
   return String(s || '').toUpperCase().replace(/[^A-Z0-9]/g, '');
 }
 
+
+function buildProfileImageUrl(rarityInput, cardNameInput) {
+  const rarity = String(rarityInput || '').trim();
+  const cardName = String(cardNameInput || '').trim();
+  const encodedCardName = encodeURIComponent(cardName);
+  const base = 'http://152.69.195.48/images';
+
+  if (/^★{3,5}$/.test(rarity)) {
+    return `${base}/HOLODORI/${encodeURIComponent(rarity)}/${encodedCardName}.png`;
+  }
+
+  if (rarity.toUpperCase() === 'HOLODORI') {
+    return `${base}/HOLODORI/${encodeURIComponent('★★★')}/${encodedCardName}.png`;
+  }
+
+  return `${base}/${encodeURIComponent(rarity)}/${encodedCardName}.png`;
+}
+
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('img')
@@ -145,9 +163,7 @@ if (!allowedByOshi && !allowedByException) {
       }
 
       // Build image URL (trim + encode)
-      const encoded = encodeURIComponent(String(updated.cardName).trim());
-      const rarityPart = encodeURIComponent(String(updated.rarity).trim());
-      const imageUrl = `http://152.69.195.48/images/${rarityPart}/${encoded}.png`;
+      const imageUrl = buildProfileImageUrl(updated.rarity, updated.cardName);
 
       // Resolve display name
       let displayName = targetUser.tag;
