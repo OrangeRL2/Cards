@@ -1,4 +1,6 @@
 const { installLocalImageTransport } = require('../../utils/localizeInteractionEmbeds');
+const fs = require('node:fs');
+const path = require('node:path');
 const {
   SlashCommandBuilder,
   EmbedBuilder,
@@ -24,6 +26,17 @@ const { resolveCardColor, getAttributeEmoji } = require('../../config/holomemCol
 const IMAGE_BASE = 'http://152.69.195.48/images';
 const ITEMS_PER_PAGE = 10;
 const IDLE_LIMIT = 120_000; // 2 minutes
+const BOO_IMAGE_DIR = path.join(__dirname, '..', '..', 'assets', 'images', 'BOO');
+
+function booImageExtension(name) {
+  // Tarot/ Halloween X art is JPG; BanG Dream! trick cards are PNG.
+  // Look up the actual file, matching how /miss handles mixed extensions.
+  const stem = String(name || '').trim();
+  for (const ext of ['.jpg', '.png', '.jpeg', '.webp']) {
+    if (fs.existsSync(path.join(BOO_IMAGE_DIR, `${stem}${ext}`))) return ext;
+  }
+  return '.jpg';
+}
 
 // Cards to always hide from output (any rarity)
 const EXCEPTION_LIST = [
@@ -55,7 +68,7 @@ function buildCardImageUrl(name, rarity, variant = null) {
   }
 
   if (normalizedRarity === 'BOO') {
-    return `${baseUrl}/BOO/${encodedName}.jpg`;
+    return `${baseUrl}/BOO/${encodedName}${booImageExtension(name)}`;
   }
 
   if (/^★{3,5}$/.test(normalizedRarity)) {

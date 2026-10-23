@@ -1,10 +1,14 @@
 const { installLocalImageTransport } = require('../../utils/localizeInteractionEmbeds');
+const { showSecReveal } = require('../../utils/secReveal');
+const { showSavedPull } = require('../../utils/pullDisplayRecovery');
 // Commands/Utility/pull.js
 const { SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 const path = require('path');
 
 const User = require('../../models/User');
 const halEvent = require('../../utils/halEvent');
+const { candyForPack } = require('../../utils/halCandy');
+const { isTrickBoo } = require('../../config/halTarot');
 const halPull = require('../../utils/halPullEffects');
 const PullQuota = require('../../utils/pullQuota'); // helper with getUpdatedQuota, constants
 const PullQuotaModel = require('../../models/PullQuota'); // direct model for atomic updates
@@ -731,27 +735,14 @@ module.exports = {
 
     // If any SEC was pulled, show a special reveal GIF before the result embed
     const hasSEC = pageItems.some(it => String(it.rarity ?? '').toUpperCase() === 'SEC');
-    if (hasSEC) {
-      const specialGifUrl = 'https://media.discordapp.net/attachments/1046811248647475302/1437428522577821828/Ran_chan_drop_kick.gif';
-      try {
-        const secEmbed = new EmbedBuilder()
-          .setTitle('**!?!?!?!?!?!?!?!?!?!?!?!?**')
-          .setColor(0xFFD700)
-          .setImage(specialGifUrl);
-
-        await interaction.editReply({ embeds: [secEmbed], components: [] }).catch(() => null);
-        await sleep(DEFAULT_GIF_DURATION_MS);
-      } catch (err) {
-        console.warn('failed to show SEC reveal gif:', err);
-      }
-    }
-
-    const halBonus = await halEvent.rollPullRewards(discordUserId, 1, { skipBoo: true })
+    const candyEarned = candyForPack(pack);
+    const halBonus = await halEvent.rollPullRewards(discordUserId, candyEarned, { skipBoo: true })
       .catch(err => { console.error('[HAL] special pull rewards failed:', err); return null; });
     if (halMagician) await halEvent.useMagician(discordUserId);
-    const booNames = pack.filter(item => item.rarity === 'BOO').map(item => path.basename(item.file, '.jpg'));
+    const booNames = pack.filter(item => item.rarity === 'BOO').map(item => path.parse(item.file).name);
+    const trickDrops = booNames.filter(isTrickBoo);
     const notice = halBonus
-      ? `\n+1 Candy (Balance: ${halBonus.balance})${booNames.length ? ` | BOO extra slot: ${booNames.join(', ')}` : ''}`
+      ? `\n+${candyEarned} Candy (Balance: ${halBonus.balance})${booNames.length ? ` | BOO extra slot: ${booNames.join(', ')}` : ''}${trickDrops.length ? `\n🎃 YOU'VE BEEN TRICKED! BanG Dream! guests: ${trickDrops.join(', ')}` : ''}`
       : '';
     descriptionAll += notice;
 
@@ -765,12 +756,15 @@ module.exports = {
     // Build embed maker
     function makeEmbed(idx) {
       const it = pageItems[idx];
+      const trickReveal = it.rarity === 'BOO' && isTrickBoo(it.displayName)
+        ? '🎃 **YOU\'VE BEEN TRICKED!** A BanG Dream! visitor slipped into your BOO pull!\n\n'
+        : '';
 
       // If this pull used a special draw token, show light-blue embed and only special remaining
       if (drawToken) {
         return new EmbedBuilder()
           .setTitle(`Card: ${idx + 1} **[${it.rarity}]** - ${it.displayName}`)
-          .setDescription(descriptionAll)
+          .setDescription((trickReveal + descriptionAll).slice(0, 4096))
           .setColor(0x87CEFA) // light blue for special pulls
           .addFields(
             { name: 'Special pulls remaining', value: `${consumeResult.remainingSpecial ?? 0}`, inline: true }
@@ -783,7 +777,7 @@ module.exports = {
       // Default (non-special) embed
       return new EmbedBuilder()
         .setTitle(`Card: ${idx + 1} **[${it.rarity}]** - ${it.displayName}`)
-        .setDescription(descriptionAll)
+        .setDescription((trickReveal + descriptionAll).slice(0, 4096))
         .setColor(0x00BB88)
         .addFields(
           { name: 'Timed pulls remaining', value: `${consumeResult.remainingTimed}`, inline: true },
@@ -803,7 +797,29 @@ module.exports = {
     const nextBtnDisabled = new ButtonBuilder().setCustomId('next').setLabel('Next ▶').setStyle(ButtonStyle.Primary).setDisabled(true);
     const disableRow = new ActionRowBuilder().addComponents(prevBtnDisabled, nextBtnDisabled);
 
-    const message = await interaction.editReply({ embeds: [makeEmbed(0)], components: [row] }).catch(() => null);
+    await showSecReveal(interaction, hasSEC, {
+      content: null,
+      embeds: [new EmbedBuilder()
+        .setTitle('SEC pull results')
+        .setDescription(descriptionAll.slice(0, 4000))
+        .setColor(0xFFD700)],
+      attachments: [], components: [],
+    }, DEFAULT_GIF_DURATION_MS, 'special-pull');
+
+    const textResult = {
+      content: 'Your cards were saved, but the artwork preview could not be displayed.',
+      embeds: [new EmbedBuilder().setTitle('Pull results')
+        .setDescription(descriptionAll.slice(0, 4000)).setColor(0x00BB88)],
+      components: [], attachments: [],
+    };
+    const display = await showSavedPull(
+      interaction, { embeds: [makeEmbed(0)], components: [row] }, textResult, 'special-pull'
+    );
+    const message = display.message;
+    if (!display.image) {
+      inFlightInteractions.delete(interaction.id);
+      return;
+    }
 
     if (!message) {
       inFlightInteractions.delete(interaction.id);

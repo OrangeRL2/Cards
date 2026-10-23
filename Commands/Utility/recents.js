@@ -1,3 +1,4 @@
+const { booFileName } = require('../../config/halTarot');
 const { installLocalImageTransport } = require('../../utils/localizeInteractionEmbeds');
 // Commands/Utility/recents.js
 
@@ -185,6 +186,10 @@ function buildCardImageUrl(name, rarity, variant = null) {
     String(variant || '').trim().toLowerCase() === 'full art'
   ) {
     return `${baseUrl}/SUN/Full%20Art/${encodedName}.png`;
+  }
+
+  if (normalizedRarity === 'BOO') {
+    return `${baseUrl}/BOO/${encodeURIComponent(booFileName(name))}`;
   }
 
   if (/^★{3,5}$/.test(normalizedRarity)) {

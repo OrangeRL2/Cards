@@ -9,8 +9,7 @@ const { getUserProfile } = require('./rates');
 // Manual safety exclusions for XXI - The World.
 // Add Discord user IDs as strings. These are IN ADDITION TO automatic rate-based exclusions.
 const WORLD_EXCLUDED_USER_IDS = new Set([
-  '1171127294413246567',//blacky
-  '408400038767624195',//grimm
+  // '123456789012345678',
 ]);
 
 const NEGATIVE_TAROTS = new Set([5, 9, 12, 13, 16]);
@@ -26,7 +25,7 @@ function jstDay(date = new Date()) {
 function active(date = new Date()) {
   const dateJst = jstDay(date);
   return config.halEventForceActive === true ||
-    (dateJst >= '2026-10-24' && dateJst <= '2026-11-08');
+    (dateJst >= '2026-10-26' && dateJst <= '2026-11-08');
 }
 async function getState(id) {
   return HalUser.findOne({ userId: String(id) }).lean().exec();
@@ -138,8 +137,9 @@ function rollBooExtraSlot(rng = Math.random) {
   const card = tarot.collectible(rng);
   return {
     rarity: 'BOO',
-    file: path.join(process.cwd(), 'assets', 'images', 'BOO', `${card.name}.jpg`),
-    relativeImagePath: `BOO/${card.name}.jpg`,
+    file: path.join(process.cwd(), 'assets', 'images', 'BOO', card.fileName),
+    relativeImagePath: `BOO/${card.fileName}`,
+    trick: card.trick,
   };
 }
 async function rollPullRewards(id, count = 1, { skipBoo = false } = {}) {
@@ -149,7 +149,7 @@ async function rollPullRewards(id, count = 1, { skipBoo = false } = {}) {
   if (!skipBoo) for (let i = 0; i < count; i += 1) {
     const drop = rollBooExtraSlot();
     if (drop) {
-      const cardName = path.basename(drop.file, '.jpg');
+      const cardName = path.parse(drop.file).name;
       await grantCard(id, cardName);
       boo.push(cardName);
     }

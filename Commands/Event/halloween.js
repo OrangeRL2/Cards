@@ -6,7 +6,7 @@ const {
 const config = require('../../config.json');
 const hal = require('../../utils/halEvent');
 const shop = require('../../utils/halShop');
-const { CARDS } = require('../../config/halTarot');
+const { CARDS, isTrickBoo, booFileName } = require('../../config/halTarot');
 const { buildHolodoriImageUrl } = require('../../utils/holodoriLoginReward');
 const { installLocalImageTransport, resolveOwnImagePath } = require('../../utils/localizeInteractionEmbeds');
 const sharp = require('sharp');
@@ -66,7 +66,8 @@ function hub(userId, state, card) {
       { name: 'Candies', value: String(state.candies || 0), inline: true },
       { name: 'Active Tarot', value: card ? `${card.number} - ${card.name} (${card.member})` : 'None', inline: true },
       { name: 'Effect', value: tarotDetails(card), inline: false },
-      { name: 'Shop', value: `BOO card: ${shop.BOO_PRICE} Candies\nHOLODORI 10-pull: ${shop.HOLO_PRICE} Candies (first-purchase 5-star bonus)`, inline: false }
+      { name: 'Shop', value: `BOO card: ${shop.BOO_PRICE} Candies\n10 BOO cards: ${shop.BOO_TEN_PRICE} Candies` +
+        (state.firstHolodoriBought ? '' : `\nOne-time HOLODORI 10-pull: ${shop.HOLO_PRICE} Candies (guaranteed 5★)`), inline: false }
     );
   const rows = [row(button(id('shop', userId), 'Candy Shop', ButtonStyle.Primary),
     button(id('tarots', userId), 'Tarot Guide'), button(id('refresh', userId), 'Refresh'))];
@@ -74,15 +75,35 @@ function hub(userId, state, card) {
 }
 function shopMenu(userId, state) {
   const balance = Number(state.candies || 0);
-  return { content: null, embeds: [withEventLogo(new EmbedBuilder().setTitle(`${eventName()} — Candy Shop`).setColor(LOGO_COLOR)
-      .setDescription(`You have **${balance} Candies**.\n\n**BOO Pull (${shop.BOO_PRICE})**: One collectible BOO card. Halloween X has a 0.03% chance.\n\n**HOLODORI 10-Pull (${shop.HOLO_PRICE})**: Your first purchase includes a 5-star bonus.\n\nFirst 5-star purchase: **${state.firstHolodoriBought ? 'Already claimed' : 'Available'}**`))],
-    components: [row(button(id('buyboo', userId), `BOO - ${shop.BOO_PRICE}`, ButtonStyle.Success, !hal.active() || balance < shop.BOO_PRICE),
-       button(id('buyholodori', userId), `HOLODORI 10 - ${shop.HOLO_PRICE}`, ButtonStyle.Primary, !hal.active() || balance < shop.HOLO_PRICE)),
-      row(button(id('home', userId), 'Back to Event Hub'))], attachments: [] };
+  const holodoriAvailable = state.firstHolodoriBought !== true;
+  const description = `You have **${balance} Candies**.\n\n` +
+    `**BOO Pull (${shop.BOO_PRICE})**: One collectible BOO card. Halloween X has a 0.03% chance.` +
+    `\n**10 BOO Pulls (${shop.BOO_TEN_PRICE})**: Ten independent collectible BOO cards, with the same odds per card.` +
+    (holodoriAvailable
+      ? `\n\n**One-time HOLODORI 10-Pull (${shop.HOLO_PRICE})**: Ten HOLODORI cards with a guaranteed 5★.`
+      : '');
+  const purchaseButtons = [
+    button(id('buyboo', userId), `BOO - ${shop.BOO_PRICE}`, ButtonStyle.Success,
+      !hal.active() || balance < shop.BOO_PRICE),
+    button(id('buyboo10', userId), `10 BOO - ${shop.BOO_TEN_PRICE}`, ButtonStyle.Success,
+      !hal.active() || balance < shop.BOO_TEN_PRICE),
+  ];
+  if (holodoriAvailable) {
+    purchaseButtons.push(button(id('buyholodori', userId), `HOLODORI 10 - ${shop.HOLO_PRICE}`,
+      ButtonStyle.Primary, !hal.active() || balance < shop.HOLO_PRICE));
+  }
+  return {
+    content: null,
+    embeds: [withEventLogo(new EmbedBuilder().setTitle(`${eventName()} — Candy Shop`)
+      .setColor(LOGO_COLOR).setDescription(description))],
+    components: [row(...purchaseButtons), row(button(id('home', userId), 'Back to Event Hub'))],
+    attachments: [],
+  };
 }
 function purchaseConfirm(userId, item, token, balance) {
   const price = shop.priceOf(item);
-  const title = item === 'boo' ? 'one BOO collectible' : 'ten HOLODORI cards';
+  const title = item === 'boo' ? 'one BOO collectible'
+    : item === 'boo10' ? 'ten BOO collectibles' : 'ten HOLODORI cards';
   const embed = withEventLogo(new EmbedBuilder().setTitle(`${eventName()} — Confirm Purchase`).setColor(LOGO_COLOR)
     .setDescription(`Spend **${price} Candies** to receive ${title}?\nCurrent balance: **${balance}**.`));
   return { content: null, embeds: [embed], components: [row(
@@ -96,25 +117,37 @@ function tarotGuide(userId) {
     components: [row(button(id('home', userId), 'Back to Hub'))], attachments: [] };
 }
 function booImage(card) {
-  return `${IMAGE_BASE.replace(/\/$/, '')}/BOO/${encodeURIComponent(card.name)}.jpg`;
+  return `${IMAGE_BASE.replace(/\/$/, '')}/BOO/${encodeURIComponent(booFileName(card.name))}`;
 }
 function purchaseResult(userId, result, page, { imageRef = null, logoRef = null, imageUnavailable = false } = {}) {
   const cards = result.cards;
   const card = cards[page];
-  const isBoo = result.item === 'boo';
+  const isBoo = result.item === 'boo' || result.item === 'boo10';
   const heading = isBoo ? `[BOO] ${card.name}` : `${card.signed ? 'SIGNED ' : ''}${card.rarity} ${card.name}`;
+  const trickReveal = isBoo && isTrickBoo(card.name)
+    ? '\n\n🎃 **YOU\'VE BEEN TRICKED!** A BanG Dream! guest crashed your Halloween candy haul!'
+    : '';
   const embed = new EmbedBuilder().setTitle(`${eventName()} — Purchase Complete`).setColor(LOGO_COLOR)
     .setDescription(`Received **${cards.length} card${cards.length === 1 ? '' : 's'}**.\nCandies remaining: **${result.balance}**` +
-      (result.first ? '\nFirst HOLODORI purchase bonus applied!' : '') +
-      `\n\n**Card ${page + 1}/${cards.length}:** ${heading}` +
+      (result.first ? '\nGuaranteed 5★ included!' : '') +
+      `\n\n**Card ${page + 1}/${cards.length}:** ${heading}` + trickReveal +
       (imageUnavailable ? '\n-# Card artwork is temporarily unavailable.' : ''));
   if (imageRef) embed.setImage(imageRef);
   if (logoRef) embed.setThumbnail(logoRef);
   const nav = cards.length > 1 ? [row(button(id('prev', userId), 'Previous'),
     button(id('next', userId), 'Next'))] : [];
-  return { content: null, embeds: [embed], components: [...nav, row(
-    button(id('shop', userId), 'Continue Shopping', ButtonStyle.Primary),
-    button(id('home', userId), 'Event Hub'))] };
+  const actions = [];
+  // Reuse this purchase's next token until it succeeds. Old or repeated button
+  // interactions cannot charge twice for the same BOO purchase.
+  if (isBoo && result.booAgainToken) {
+    const repeatPrice = shop.priceOf(result.item);
+    actions.push(button(id(`buyagain-${result.booAgainToken}`, userId),
+      result.item === 'boo10' ? `10 BOO Again - ${repeatPrice} Candies` : `Pull Again - ${repeatPrice} Candies`,
+      ButtonStyle.Success, !hal.active() || Number(result.balance) < repeatPrice));
+  }
+  actions.push(button(id('shop', userId), 'Continue Shopping', ButtonStyle.Primary));
+  actions.push(button(id('home', userId), 'Event Hub'));
+  return { content: null, embeds: [embed], components: [...nav, row(...actions)] };
 }
 module.exports = {
   data: new SlashCommandBuilder().setName('halloween').setDescription('Open the Halloween tarot and Candy shop'),
@@ -144,7 +177,8 @@ module.exports = {
       if (cardImageCache.has(index)) return cardImageCache.get(index);
       const job = (async () => {
         const card = result.cards[index];
-        const source = result.item === 'boo' ? booImage(card) : buildHolodoriImageUrl(card, IMAGE_BASE);
+        const source = (result.item === 'boo' || result.item === 'boo10')
+          ? booImage(card) : buildHolodoriImageUrl(card, IMAGE_BASE);
         const localPath = resolveOwnImagePath(source);
         if (!localPath) throw new Error(`Card artwork not found locally: ${source}`);
         const image = await sharp(localPath, { failOn: 'none' })
@@ -226,6 +260,17 @@ module.exports = {
       prefetchNeighbors(index);
     }
 
+    async function showPurchasedCards(purchased) {
+      result = purchased;
+      if (result.item === 'boo' || result.item === 'boo10') result.booAgainToken = shop.purchaseToken();
+      page = 0;
+      renderedPage = 0;
+      logoAttachmentId = null;
+      cardImageCache.clear();
+      await editCardPage(0, true);
+      screen = 'result';
+    }
+
     // Rapid button clicks change the requested page immediately. Only one
     // attachment edit runs at a time, skipping intermediate queued pages.
     function queueNavigation() {
@@ -280,8 +325,8 @@ module.exports = {
         if (action === 'home' || action === 'refresh') screen = 'hub';
         else if (action === 'shop') screen = 'shop';
         else if (action === 'tarots') screen = 'tarots';
-        else if (action === 'buyboo' || action === 'buyholodori') screen = 'confirm';
-        else if (action.startsWith('confirm-')) screen = 'processing';
+        else if (action === 'buyboo' || action === 'buyboo10' || action === 'buyholodori') screen = 'confirm';
+        else if (action.startsWith('confirm-') || action.startsWith('buyagain-')) screen = 'processing';
         // A previous fast page edit must finish before showing another screen.
         if (navigationJob) await navigationJob;
 
@@ -294,11 +339,36 @@ module.exports = {
           return await interaction.editReply(shopMenu(userId, state));
         }
         if (action === 'tarots') return await interaction.editReply(tarotGuide(userId));
-        if (action === 'buyboo' || action === 'buyholodori') {
+        if (action === 'buyboo' || action === 'buyboo10' || action === 'buyholodori') {
           if (!hal.active()) return await interaction.editReply({ content: 'Halloween is not active.', embeds: [], components: [row(button(id('home', userId), 'Hub'))] });
           ({ state } = await view(userId));
-          const item = action === 'buyboo' ? 'boo' : 'holodori';
+          const item = action === 'buyboo' ? 'boo' : action === 'buyboo10' ? 'boo10' : 'holodori';
+          if (item === 'holodori' && state.firstHolodoriBought) {
+            screen = 'shop';
+            return await interaction.editReply(shopMenu(userId, state));
+          }
           return await interaction.editReply(purchaseConfirm(userId, item, shop.purchaseToken(), state.candies || 0));
+        }
+        if (action.startsWith('buyagain-')) {
+          const token = action.slice('buyagain-'.length);
+          if (!result || !['boo', 'boo10'].includes(result.item) || token !== result.booAgainToken) {
+            screen = 'shop';
+            ({ state } = await view(userId));
+            return await interaction.editReply(shopMenu(userId, state));
+          }
+          // The token is fixed in the displayed button, and purchase() checks
+          // it atomically in MongoDB. One click means one additional purchase.
+          const purchased = await shop.purchase(userId, result.item, token);
+          if (!purchased.success) {
+            screen = 'shop';
+            ({ state } = await view(userId));
+            return await interaction.editReply({ ...shopMenu(userId, state),
+              content: purchased.reason === 'NOT_ENOUGH_CANDY'
+                ? 'Not enough Candies for another BOO exchange.'
+                : 'That BOO pull could not be completed.' });
+          }
+          await showPurchasedCards(purchased);
+          return;
         }
         if (action.startsWith('confirm-')) {
           const parts = action.split('-');
@@ -308,15 +378,12 @@ module.exports = {
           if (!purchased.success) {
             screen = 'shop';
             ({ state } = await view(userId));
-            return await interaction.editReply({ ...shopMenu(userId, state), content: `Purchase failed: ${purchased.reason}` });
+            const reason = purchased.reason === 'ALREADY_PURCHASED'
+              ? 'That one-time exchange has already been used.'
+              : `Purchase failed: ${purchased.reason}`;
+            return await interaction.editReply({ ...shopMenu(userId, state), content: reason });
           }
-          result = purchased;
-          page = 0;
-          renderedPage = 0;
-          logoAttachmentId = null;
-          cardImageCache.clear();
-          await editCardPage(0, true);
-          screen = 'result';
+          await showPurchasedCards(purchased);
           return;
         }
       } catch (err) {

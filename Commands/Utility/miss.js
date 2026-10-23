@@ -84,7 +84,13 @@ function buildMissingCardImageUrl(card) {
   const baseUrl = IMAGE_BASE.replace(/\/$/, '');
   const rarity = String(card?.rarity || '').trim().toUpperCase();
   const encodedName = encodeURIComponent(String(card?.name || '').trim());
-  if (rarity === 'BOO') return `${baseUrl}/BOO/${encodedName}.jpg`;
+  // BOO contains both JPG tarot cards and PNG guest cards. Use the
+  // extension from the actual inventory source file rather than assuming JPG.
+  if (rarity === 'BOO') {
+    const ext = path.extname(String(card?.file || '')).toLowerCase();
+    const imageExt = ['.png', '.jpg', '.jpeg', '.webp', '.gif'].includes(ext) ? ext : '.jpg';
+    return `${baseUrl}/BOO/${encodedName}${imageExt}`;
+  }
   if (rarity === 'SUN' && card.folder) {
     return `${baseUrl}/SUN/${encodeURIComponent(card.folder)}/${encodedName}.png`;
   }

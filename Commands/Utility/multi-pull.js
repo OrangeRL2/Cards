@@ -2,10 +2,13 @@
 // Commands/Utility/pull.js
 const { SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, ModalBuilder, TextInputBuilder, TextInputStyle } = require('discord.js');
 const { installLocalImageTransport } = require('../../utils/localizeInteractionEmbeds');
+const { showSecReveal } = require('../../utils/secReveal');
 const { showSavedPull } = require('../../utils/pullDisplayRecovery');
 const path = require('path');
 const User = require('../../models/User');
 const halEvent = require('../../utils/halEvent');
+const { candyForPacks } = require('../../utils/halCandy');
+const { isTrickBoo } = require('../../config/halTarot');
 const halPull = require('../../utils/halPullEffects');
 
 // === Quota + models (special-aware) ===
@@ -98,7 +101,7 @@ const IMAGE_BASE = process.env.IMAGE_BASE || 'http://152.69.195.48/images';
 
 const PAGE_TIMEOUT_MS = 2 * 60 * 1000; // 2 minutes
 const DEFAULT_GIF_DURATION_MS = 1200; // base animation delay for first/solo pulls
-
+/*
 const gifs = [
   'https://media.discordapp.net/attachments/1046811248647475302/1437428233086963774/ppp.gif',
   'https://media.discordapp.net/attachments/1046811248647475302/1437428255249535096/ag.gif',
@@ -110,7 +113,10 @@ const gifs = [
   'https://cdn.discordapp.com/attachments/986110973574283265/1441054422401683626/Pasupare.gif',
   'https://cdn.discordapp.com/attachments/802431770023952406/1443593296189456486/ras.gif'
 ];
-
+*/
+const gifs = [
+'https://media.discordapp.net/attachments/986110973574283265/1486867794892030052/fly_to_the_sky_sayo_san.gif'
+];
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
@@ -1179,12 +1185,14 @@ const frozen = isFrozen(discordUserId, member);
         return;
       }
       
-      const halBonus = await halEvent.rollPullRewards(discordUserId, amount, { skipBoo: true })
+      const candyEarned = candyForPacks(packs);
+      const halBonus = await halEvent.rollPullRewards(discordUserId, candyEarned, { skipBoo: true })
         .catch(err => { console.error('[HAL] multi pull rewards failed:', err); return null; });
       const booNames = packs.flatMap(pack => pack.filter(item => item.rarity === 'BOO')
-        .map(item => path.basename(item.file, '.jpg')));
+        .map(item => path.parse(item.file).name));
+      const trickDrops = booNames.filter(isTrickBoo);
       const halRewardNotice = halBonus
-        ? `\n\uD83C\uDF83 +${amount} Candy (Balance: ${halBonus.balance})${booNames.length ? ` | BOO extra slot: ${booNames.join(', ')}` : ''}`
+        ? `\n\uD83C\uDF83 +${candyEarned} Candy (Balance: ${halBonus.balance})${booNames.length ? ` | BOO extra slot: ${booNames.join(', ')}` : ''}${trickDrops.length ? `\n🎃 YOU'VE BEEN TRICKED! BanG Dream! guests: ${trickDrops.join(', ')}` : ''}`
         : '';
       if (halMagicianReady) await halEvent.useMagician(discordUserId);
 
@@ -1199,18 +1207,6 @@ const frozen = isFrozen(discordUserId, member);
 
       // SEC reveal (also respects queued fast mode)
       const hasSEC = pageItems.some(it => String(it.rarity ?? '').toUpperCase() === 'SEC');
-
-      if (hasSEC) {
-        const specialGifUrl = 'https://media.discordapp.net/attachments/1046811248647475302/1437428522577821828/Ran_chan_drop_kick.gif';
-        try {
-          const secEmbed = new EmbedBuilder().setTitle('**!?!?!?!?!?!?!?!?!?!?!?!?**').setColor(0xFFD700).setImage(specialGifUrl);
-          await interaction.editReply({ embeds: [secEmbed], components: [] }).catch(() => null);
-          if (ANIM_MS > 0) await sleep(ANIM_MS);
-        } catch (err) {
-          console.warn('failed to show SEC reveal gif:', err);
-        }
-      }
-
       // --- Update pull stats + pity counter ---
       let nextSinceSEC = 0;
 
@@ -1237,6 +1233,9 @@ const frozen = isFrozen(discordUserId, member);
 
       function makeEmbed(idx) {
         const it = pageItems[idx];
+        const trickReveal = it.rarity === 'BOO' && isTrickBoo(it.displayName)
+          ? '🎃 **YOU\'VE BEEN TRICKED!** A BanG Dream! visitor slipped into your BOO pull!\n\n'
+          : '';
         
         const cc = resolveCardColor(it.displayName, it.rarity);
         const emoji = cc ? getAttributeEmoji(cc) : '';
@@ -1245,7 +1244,7 @@ const frozen = isFrozen(discordUserId, member);
         if (useSpecial) {
           return new EmbedBuilder()
             .setTitle(`Pack ${it.packIndex + 1}/${amount} • Card ${it.cardIndex + 1} **[${it.rarity}]** - ${it.displayName}${tag}`)
-            .setDescription(packDescriptions[it.packIndex])
+            .setDescription((trickReveal + packDescriptions[it.packIndex]).slice(0, 4096))
             .setColor(0x87CEFA)
             .addFields({ name: 'Special pulls remaining', value: `${consumeResult.remainingSpecial ?? 0}`, inline: true })
             .setImage('attachment://pull-card.png')
@@ -1255,7 +1254,7 @@ const frozen = isFrozen(discordUserId, member);
 
         return new EmbedBuilder()
           .setTitle(`Pack ${it.packIndex + 1}/${amount} • Card ${it.cardIndex + 1} **[${it.rarity}]** - ${it.displayName}${tag}`)
-          .setDescription(packDescriptions[it.packIndex])
+          .setDescription((trickReveal + packDescriptions[it.packIndex]).slice(0, 4096))
           .setColor(0x00BB88)
           .addFields(
             { name: 'Timed pulls remaining', value: `${consumeResult.remainingTimed}`, inline: true },
@@ -1298,6 +1297,14 @@ const frozen = isFrozen(discordUserId, member);
         embeds: [new EmbedBuilder().setTitle('🎴 Pull results').setDescription(packDescriptions[0].slice(0, 4000)).setColor(0x00BB88)],
         components: [], attachments: [],
       };
+      await showSecReveal(interaction, hasSEC, {
+        content: null,
+        embeds: [new EmbedBuilder()
+          .setTitle('SEC multi-pull results')
+          .setDescription(packDescriptions[0].slice(0, 4000))
+          .setColor(0xFFD700)],
+        attachments: [], components: [],
+      }, ANIM_MS, 'multi-pull');
       const display = await showSavedPull(interaction, makePagePayload(0, [row]), textResult, 'multi-pull');
       const message = display.message;
       const plainResult = !display.image;
