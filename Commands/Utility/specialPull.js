@@ -4,6 +4,8 @@ const { SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, ButtonBuilder, Butt
 const path = require('path');
 
 const User = require('../../models/User');
+const halEvent = require('../../utils/halEvent');
+const halPull = require('../../utils/halPullEffects');
 const PullQuota = require('../../utils/pullQuota'); // helper with getUpdatedQuota, constants
 const PullQuotaModel = require('../../models/PullQuota'); // direct model for atomic updates
 const SpecialPullGrant = require('../../models/SpecialPullGrant'); // active 24h grants
@@ -168,7 +170,7 @@ async function consumePulls(discordUserId, amount, allowEvent, specialLabel = nu
       remainingSpecial = 0;
     }
 
-    if (remainingSpecial <= 0) {
+    if (remainingSpecial < amount) {
       return {
         success: false,
         consumedFromEvent: 0,
@@ -184,7 +186,7 @@ async function consumePulls(discordUserId, amount, allowEvent, specialLabel = nu
     }
 
     // Consume requested amount from special pulls (we only support amount=1 in current UI, but keep generic)
-    const toConsume = Math.min(amount, remainingSpecial);
+    const toConsume = amount;
     try {
       // Atomic decrement via model
       const incObj = {};
@@ -251,6 +253,13 @@ async function consumePulls(discordUserId, amount, allowEvent, specialLabel = nu
     }
 
     const needed = amount;
+    // Reject insufficient balances without spending a partial number of pulls.
+    if ((Number(doc.eventPulls || 0) + Number(doc.pulls || 0)) < needed) {
+      return { success: false, consumedFromEvent: 0, consumedFromTimed: 0,
+        consumedFromSpecial: 0, doc, remainingEvent: Number(doc.eventPulls || 0),
+        remainingTimed: Number(doc.pulls || 0), remainingSpecial: null,
+        nextRefillInMs: computeNextRefill(doc), reason: 'not_enough_pulls' };
+    }
     let consumedFromEvent = 0;
     let consumedFromTimed = 0;
 
@@ -301,8 +310,8 @@ async function consumePulls(discordUserId, amount, allowEvent, specialLabel = nu
       };
     }
 
-    if (doc.pulls > 0) {
-      const consumedFromTimed = 1;
+    if (doc.pulls >= amount) {
+      const consumedFromTimed = amount;
       const wasFullBefore = doc.pulls >= PullQuota.MAX_STOCK;
       doc.pulls = Math.max(0, doc.pulls - consumedFromTimed);
       if (wasFullBefore) doc.lastRefill = new Date();
@@ -423,12 +432,19 @@ module.exports = {
       }
     }
 
+    const halTarot = await halEvent.getEffect(discordUserId);
+    const halContext = await halPull.createContext(discordUserId, halTarot);
+    halContext.drawMode = drawToken ? 'special' : 'normal';
+    const halFactor = halTarot?.number === 7 ? 2 : (halTarot?.number === 16 ? 0.5 : 1);
+    const halMagician = halTarot?.number === 1 && !(await halEvent.getState(discordUserId))?.magicianUsed;
+    const halCost = halTarot?.number === 5 ? 2 : 1;
+
     // AUTHORITATIVE: consume pulls BEFORE drawing pack
     let consumeResult;
     try {
       // For consumption we pass the grant key (map key) if available so quotas decrement correctly
       const consumeLabel = consumeLabelKey || null;
-      consumeResult = await consumePulls(discordUserId, amount, allowEvent, consumeLabel);
+      consumeResult = await consumePulls(discordUserId, amount * halCost, allowEvent, consumeLabel);
     } catch (err) {
       console.error('consumePulls error (pre-draw):', err);
       inFlightInteractions.delete(interaction.id);
@@ -492,10 +508,19 @@ module.exports = {
     let pack;
     try {
       if (drawToken && drawPackSpecial) {
-        pack = await drawPackSpecial(discordUserId, drawToken);
+        pack = await drawPackSpecial(discordUserId, drawToken, { forceSEC: halMagician, rateMultiplier: halFactor });
       } else {
-        pack = await drawPack(discordUserId, null);
+        pack = await drawPack(discordUserId, null, { forceSEC: halMagician, rateMultiplier: halFactor });
       }
+      pack = halPull.modifyPack(pack, halContext, { forceMagician: halMagician });
+      if (halTarot?.number === 20) {
+        const extra = drawToken && drawPackSpecial
+          ? await drawPackSpecial(discordUserId, drawToken, { forceSEC: false, rateMultiplier: halFactor })
+          : await drawPack(discordUserId, null, { forceSEC: false, rateMultiplier: halFactor });
+        pack.push(...halPull.modifyPack(extra, halContext).slice(0, 8));
+      }
+      const halBooDrop = halTarot?.number === 13 ? null : halEvent.rollBooExtraSlot();
+      if (halBooDrop) pack.push(halBooDrop);
       console.debug('[pull] drawPack returned', { drawToken, packLength: Array.isArray(pack) ? pack.length : null });
     } catch (err) {
       console.error('drawPack error after consume:', err);
@@ -642,7 +667,9 @@ module.exports = {
           }
         }
 
-        const encodedUrl = `${IMAGE_BASE.replace(/\/$/, '')}/${rarity}/${encodeURIComponent(raw)}.png`;
+        const encodedUrl = item.relativeImagePath
+          ? `${IMAGE_BASE.replace(/\/$/, '')}/${String(item.relativeImagePath).split('/').map(encodeURIComponent).join('/')}`
+          : `${IMAGE_BASE.replace(/\/$/, '')}/${encodeURIComponent(rarity)}/${encodeURIComponent(raw)}.png`;
         const visiblePrefix = `[${rarity}] - `;
         const titleBody = `${displayName}`;
         const titleCount = ` - #${currentCount}`;
@@ -718,6 +745,15 @@ module.exports = {
         console.warn('failed to show SEC reveal gif:', err);
       }
     }
+
+    const halBonus = await halEvent.rollPullRewards(discordUserId, 1, { skipBoo: true })
+      .catch(err => { console.error('[HAL] special pull rewards failed:', err); return null; });
+    if (halMagician) await halEvent.useMagician(discordUserId);
+    const booNames = pack.filter(item => item.rarity === 'BOO').map(item => path.basename(item.file, '.jpg'));
+    const notice = halBonus
+      ? `\n+1 Candy (Balance: ${halBonus.balance})${booNames.length ? ` | BOO extra slot: ${booNames.join(', ')}` : ''}`
+      : '';
+    descriptionAll += notice;
 
     // increment user's pulls once (informational user doc counter)
     try {

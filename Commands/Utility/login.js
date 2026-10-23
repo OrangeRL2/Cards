@@ -25,6 +25,7 @@ const mongoose = require('mongoose');
 const { Schema } = require('mongoose');
 
 const User = require('../../models/User');
+const halEvent = require('../../utils/halEvent');
 const { addPulls } = require('../../utils/pullQuota');
 const { isFrozen } = require('../../utils/freeze');
 const { pickHolodoriLoginReward, buildHolodoriImageUrl } = require('../../utils/holodoriLoginReward');
@@ -788,6 +789,48 @@ function buildLoginReplyContent({ fans, frozen, pullsGranted, eventCardsAwarded,
   return content;
 }
 
+// Public Halloween tarot reveal text. Polarity is descriptive, not a rarity modifier.
+const HAL_TAROT_FLAVOR = Object.freeze({
+  0: ['MYSTERY', 'A mischievous spirit leads you down an unknown path. You gain Halloween X, then fate draws another tarot!'],
+  1: ['GOOD', 'A spell of fortune crackles in the moonlight! Your next pull guarantees SEC in its usual slot!'],
+  2: ['NEUTRAL', 'A blue moon has risen! Every card you pull will be BLUE until the JST reset!'],
+  3: ['NEUTRAL', 'The witch of emerald tides has spoken! Every card you pull will be GREEN until the JST reset!'],
+  4: ['NEUTRAL', 'The crimson king claims your fate! Every card you pull will be RED until the JST reset!'],
+  5: ['BAD', 'A tolling bell echoes through the haunted halls! Each pull now costs TWO pulls until the JST reset!'],
+  6: ['GOOD', 'Your beloved oshi is drawn to you by a bewitched heart! Each slot has a 60% chance to favor your oshi when a matching card exists!'],
+  7: ['GOOD', 'Victory rides beneath the blood moon! Your higher-rarity pull odds are DOUBLED until the JST reset!'],
+  8: ['GOOD', 'An iron guardian watches over your collection! No cards will be lost when you do lives until the JST reset!'],
+  9: ['BAD', 'Your oshi disappears into the haunted mist! Your oshi will NOT appear in pulls until the JST reset!'],
+  10: ['GOOD', 'The wheel spins toward fortune! Fans earned from lives are DOUBLED until the JST reset!'],
+  11: ['GOOD', 'The scales of fate are in your favor! At your NEXT DAY\'S login, fate guarantees you a GOOD tarot effect! But beware: miss that next JST day, and the blessing is FORFEITED!'],
+  12: ['BAD', 'Your luck hangs upside down! Your SEC pity counter moves BACKWARDS instead of forwards until the JST reset!'],
+  13: ['BAD', 'DEATH HAS CLAIMED YOU! High-rarity cards are CURSED OUT of your pulls, lives always fail, correct Guesses give NO cards, and SEC pity is frozen until the JST reset!'],
+  14: ['NEUTRAL', 'Ghostly white candles guide your hands! Every card you pull will be WHITE until the JST reset!'],
+  15: ['NEUTRAL', 'Purple flames dance around the summoning circle! Every card you pull will be PURPLE until the JST reset!'],
+  16: ['BAD', 'Lightning shatters your castle of luck! Your higher-rarity pull odds are HALVED until the JST reset!'],
+  17: ['GOOD', 'A wishing star burns in the Halloween sky! Every card you pull will belong to your chosen oshi until the JST reset!'],
+  18: ['NEUTRAL', 'The moon casts a strange repeating shadow! The SAME member appears in your first FOUR pull slots until the JST reset!'],
+  19: ['NEUTRAL', 'A golden jack-o-lantern lights your way! Every card you pull will be YELLOW until the JST reset!'],
+  20: ['GOOD', 'The spirits pass their verdict: MORE TREASURE! One pull gives you TWO pulls worth of cards until the JST reset!'],
+  21: ['GOOD', 'Your luck is OUT OF THIS WORLD! Lower rarities vanish: C/S from slots 1-4, U/RR from 5-7, and R from slot 8!'],
+});
+
+function buildHalTarotReveal(result) {
+  const card = result.initial;
+  const effect = result.effect;
+  const [mood, description] = HAL_TAROT_FLAVOR[effect.number] || ['MYSTERY', 'The spirits have altered your fate!'];
+  const color = mood === 'GOOD' ? 0x57f287 : mood === 'BAD' ? 0xed4245 : mood === 'NEUTRAL' ? 0x9b59b6 : 0xf1c40f;
+  const details = card.number === 0
+    ? `**The Fool's trick:** ${result.awards.length} Halloween X awarded!\n**Final tarot:** ${effect.member} - ${effect.name} (${effect.number})\n\n${description}`
+    : description;
+  const imageUrl = `${IMAGE_BASE.replace(/\/$/, '')}/BOO/${encodeURIComponent(card.cardName)}.jpg`;
+  return new EmbedBuilder()
+    .setTitle(`🎃 Halloween Tarot #${card.number} — ${card.member}: ${card.name}`)
+    .setDescription(`**${mood} EFFECT**\n\n${details}\n\n⏳ Ends at midnight JST.`)
+    .setColor(color)
+    .setImage(imageUrl);
+}
+
 // =====================
 // Command
 // =====================
@@ -969,9 +1012,15 @@ module.exports = {
         await addPulls(userId, pullsGranted);
       }
 
+      // HAL tarot is assigned only after a successful daily login.
+      let halTarotResult = null;
+      try { halTarotResult = await halEvent.loginTarot(userId); }
+      catch (err) { console.error('[HAL] login tarot failed:', err); }
+
       // -----------------------------
       // Reply
       // -----------------------------
+      const halTarotLine = halTarotResult ? `\n\n🎃 Tarot: **${halTarotResult.initial.name}** — active: **${halTarotResult.effect.name}** until midnight JST.${halTarotResult.awards.length ? ` Awarded ${halTarotResult.awards.length} Halloween X.` : ''}` : '';
       const content = buildLoginReplyContent({
         fans,
         frozen,
@@ -979,7 +1028,7 @@ module.exports = {
         eventCardsAwarded,
         eventStreak,
         holodoriCard,
-      });
+      }) + halTarotLine;
 
       const displayedLoginCards = [
         ...(holodoriCard ? [holodoriCard] : []),
@@ -999,6 +1048,13 @@ module.exports = {
           embeds: [],
           components: [],
         });
+      }
+      // The tarot effect is temporary; its card art and effect are revealed publicly.
+      if (halTarotResult) {
+        await interaction.followUp({
+          embeds: [buildHalTarotReveal(halTarotResult)],
+          allowedMentions: { parse: [] },
+        }).catch(err => console.warn('[HAL] could not display tarot art:', err.message));
       }
     } catch (err) {
       console.error('[cmd:login] error', err);

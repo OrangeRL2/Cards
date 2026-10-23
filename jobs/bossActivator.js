@@ -1,4 +1,4 @@
-const { localizePayload } = require('../utils/localizeInteractionEmbeds');
+const { optimizedInteractionPayload } = require('../utils/localizeInteractionEmbeds');
 // jobs/bossActivator.js (excerpt)
 const { buildOshiOsrImageUrl } = require('../utils/bossUtils');
 const BossEvent = require('../models/BossEvent');
@@ -39,7 +39,7 @@ async function announceActivatedEvents(client) {
     try {
       const ch = await client.channels.fetch(DISCORD_ANNOUNCE_CHANNEL_ID);
       if (ch && ch.isTextBased && ch.send) {
-        await ch.send(localizePayload({ embeds: [embed] }, `boss-activate-${ev.eventId}`, false));
+        await ch.send(await optimizedInteractionPayload({ embeds: [embed] }));
       }
     } catch (err) {
       console.error('Failed to announce boss spawn:', err);

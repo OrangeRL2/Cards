@@ -38,6 +38,7 @@ const USER_TIER_WEIGHTS = Object.freeze({
 
 const NO_HOLODORI_FIVE_STAR_USER_IDS = new Set([
   '408400038767624195',
+  '1450162068484264091',
 ]);
 
 const MEMBER_ALIASES = Object.freeze({
@@ -142,14 +143,27 @@ function cardFromFile(file, tier, extra = {}) {
   };
 }
 
-function pickHolodoriLoginReward(userIdOrRng = null, rng = Math.random) {
+function pickHolodoriLoginReward(userIdOrRng = null, rng = Math.random, options = {}) {
   // Backward compatibility: older debug/tests may call pickHolodoriLoginReward(rng).
   const userId = typeof userIdOrRng === 'function' ? null : userIdOrRng;
   const pickerRng = typeof userIdOrRng === 'function'
     ? userIdOrRng
     : (typeof rng === 'function' ? rng : Math.random);
 
-  const tier = weightedTierPick(pickerRng, tiersForUser(userId));
+  const userTiers = tiersForUser(userId);
+  const permittedFiveStarTiers = userTiers.filter(tier =>
+    (tier.key === 'five_star' || tier.key === 'signed') && tier.weight > 0
+  );
+  // Explicitly zero-rate users are never boosted, even when marked buffed.
+  const canBuff = !NO_HOLODORI_FIVE_STAR_USER_IDS.has(String(userId || ''))
+    && permittedFiveStarTiers.length > 0;
+  // Signed-only boost is allowed only if the user has a nonzero signed tier.
+  const signedTier = userTiers.find(tier => tier.key === 'signed' && tier.weight > 0);
+  const tier = options?.forceSignedFiveStar && canBuff && signedTier
+    ? signedTier
+    : options?.forceFiveStar && canBuff
+      ? weightedTierPick(pickerRng, permittedFiveStarTiers)
+      : weightedTierPick(pickerRng, userTiers);
   const files = listTierFiles(tier);
 
   if (!files.length) {
@@ -158,6 +172,59 @@ function pickHolodoriLoginReward(userIdOrRng = null, rng = Math.random) {
 
   const file = files[Math.floor(pickerRng() * files.length)];
   return cardFromFile(file, tier);
+}
+
+/**
+ * HAL/BOO Candy shop FIRST HOLODORI 10-pull only.
+ * The normal reward picker still enforces all zero-five-star restrictions.
+ *
+ * cardName optionally names the exact guaranteed card for any configured user
+ * (e.g. "Suisei 001" or signed "Suisei 002"). With no configured card,
+ * the player's ordinary guaranteed-selection rule applies.
+ */
+function pickHalloweenFirstPurchaseFiveStar(userId, { cardName = null, rng = Math.random } = {}) {
+  const id = String(userId || '');
+  const permitted = tiersForUser(id).filter(tier =>
+    (tier.key === 'five_star' || tier.key === 'signed') && tier.weight > 0
+  );
+  const restricted = NO_HOLODORI_FIVE_STAR_USER_IDS.has(id) || permitted.length === 0;
+
+  // A configured first-purchase card always takes priority, regardless of the
+  // user's regular rate profile. This does not affect other pull systems.
+  if (cardName !== null && cardName !== undefined && cardName !== '') {
+    if (typeof cardName !== 'string') {
+      throw new Error(`HAL first-purchase card override for ${id} must be a card name string.`);
+    }
+    const name = cardName.trim();
+    // Avoid path traversal; card files are named "Member 001.png", etc.
+    const match = name.match(/^([^/\\\x00-\x1f]+) (\d{3})$/u);
+    if (!match || name.includes('..')) {
+      throw new Error(`Invalid HAL first-purchase card override for ${id}: ${name}`);
+    }
+    const signed = Number(match[2]) % 2 === 0;
+    const tier = TIERS.find(item => item.key === (signed ? 'signed' : 'five_star'));
+    const filename = `${name}.png`;
+    if (!listTierFiles(tier).includes(filename)) {
+      throw new Error(`HAL first-purchase 5-star card does not exist: ${filename}`);
+    }
+    return cardFromFile(filename, tier, { guaranteed: true });
+  }
+
+  // Unconfigured users retain the normal guaranteed five-star selection.
+  if (!restricted) {
+    const reward = pickHolodoriLoginReward(id, rng, { forceFiveStar: true });
+    return { ...reward, guaranteed: true };
+  }
+
+  // This opt-in bypass is *only* used by HAL's first purchase. Normal HOLODORI
+  // packs and all subsequent HAL 10-pulls still respect the user's zero rate.
+  const fiveStarTiers = TIERS.filter(item => item.key === 'five_star' || item.key === 'signed');
+  const tier = weightedTierPick(rng, fiveStarTiers);
+  const files = listTierFiles(tier);
+  if (!files.length) {
+    throw new Error(`No eligible HOLODORI cards found in ${tier.folder} for ${tier.key}.`);
+  }
+  return cardFromFile(files[Math.floor(rng() * files.length)], tier, { guaranteed: true });
 }
 
 function pickIslandGuaranteedFiveStar(islandMembers, rng = Math.random) {
@@ -237,6 +304,7 @@ module.exports = {
   normalizeMemberName,
   memberMatches,
   pickHolodoriLoginReward,
+  pickHalloweenFirstPurchaseFiveStar,
   pickIslandGuaranteedFiveStar,
   pickIslandGuaranteedSignedFiveStar,
   buildHolodoriTenPull,

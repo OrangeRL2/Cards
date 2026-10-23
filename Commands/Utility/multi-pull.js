@@ -1,8 +1,12 @@
 
 // Commands/Utility/pull.js
 const { SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, ModalBuilder, TextInputBuilder, TextInputStyle } = require('discord.js');
+const { installLocalImageTransport } = require('../../utils/localizeInteractionEmbeds');
+const { showSavedPull } = require('../../utils/pullDisplayRecovery');
 const path = require('path');
 const User = require('../../models/User');
+const halEvent = require('../../utils/halEvent');
+const halPull = require('../../utils/halPullEffects');
 
 // === Quota + models (special-aware) ===
 const PullQuota = require('../../utils/pullQuota'); // helper with getUpdatedQuota, constants
@@ -536,22 +540,27 @@ module.exports = {
   requireOshi: true,
 
   async execute(interaction) {
-    // Defer immediately so Discord doesn’t time us out while we queue.
-    try { await interaction.deferReply(); } catch {}
+    installLocalImageTransport(interaction);
+    // Claim this interaction before any async work, so duplicate deliveries do
+    // not create a second placeholder or replace a completed result with a GIF.
+    if (inFlightInteractions.has(interaction.id)) return;
+    inFlightInteractions.set(interaction.id, Date.now());
+
+    // Never charge or award a pull when its Discord response couldn't start.
+    try { await interaction.deferReply(); }
+    catch (err) {
+      console.error('[pull] failed to acknowledge interaction:', err);
+      inFlightInteractions.delete(interaction.id);
+      return;
+    }
 
     // Show loading GIF right away (users see something even if they spam).
     const gifUrl = gifs[Math.floor(Math.random() * gifs.length)];
     const loadingEmbed = new EmbedBuilder().setTitle('*PULLING...*').setColor(0x00BBFF).setImage(gifUrl);
 
     let gifShownAt = Date.now();
-    try { await interaction.editReply({ embeds: [loadingEmbed] }); gifShownAt = Date.now(); } catch {}
+    try { await interaction.editReply({ content: null, embeds: [loadingEmbed], components: [] }); gifShownAt = Date.now(); } catch {}
 
-    // Guard against duplicate processing of the same interaction id.
-    if (inFlightInteractions.has(interaction.id)) {
-      try { await interaction.editReply({ content: 'This interaction is already being processed. Please wait.' }); } catch {}
-      return;
-    }
-    inFlightInteractions.set(interaction.id, Date.now());
 
     const discordUserId = interaction.user.id;
     const lockOwner = interaction.id;
@@ -583,6 +592,7 @@ const frozen = isFrozen(discordUserId, member);
 
         try {
           await interaction.editReply({
+            embeds: [], attachments: [],
             content: 'Server is busy handling your previous pulls. Please try again in a moment.',
             components: []
           });
@@ -593,14 +603,31 @@ const frozen = isFrozen(discordUserId, member);
       }
     }
 
+    // Maintain the Mongo lock until the DB transaction has finished. A fixed
+    // expiry alone is unsafe for large inventories / Judgement double-card packs.
+    const lockHeartbeat = setInterval(() => {
+      void PullLock.updateOne(
+        { userId: discordUserId, owner: lockOwner },
+        { $set: { until: new Date(Date.now() + 120_000) } }
+      ).exec().then(result => {
+        if (!result.matchedCount) console.warn(`[pull-lock] Lease lost for ${discordUserId}`);
+      }).catch(err => console.error('[pull-lock] Lease refresh failed:', err));
+    }, 30_000);
+    lockHeartbeat.unref?.();
+
     // From here, we own the lock. Always release it at the end.
     let lockReleased = false;
     const release = async () => {
-      if (!lockReleased) { lockReleased = true; await releasePullLock(discordUserId, lockOwner); }
+      if (!lockReleased) {
+        lockReleased = true;
+        clearInterval(lockHeartbeat);
+        await releasePullLock(discordUserId, lockOwner);
+      }
     };
 
     // If this was queued, skip the GIF delays to speed up results.
     const ANIM_MS = queued ? 0 : DEFAULT_GIF_DURATION_MS;
+    let resultDisplayed = false;
 
     try {
       const amount = interaction.options.getInteger('amount', true);
@@ -678,7 +705,7 @@ const frozen = isFrozen(discordUserId, member);
           const elapsed = Date.now() - gifShownAt;
           if (elapsed < ANIM_MS) await sleep(ANIM_MS - elapsed);
 
-          await interaction.editReply({ content: 'Failed to check special pulls. Please try again later.', components: [] }).catch(() => null);
+          await interaction.editReply({ embeds: [], attachments: [], content: 'Failed to check special pulls. Please try again later.', components: [] }).catch(() => null);
           await release();
           return;
         }
@@ -717,11 +744,19 @@ const frozen = isFrozen(discordUserId, member);
         bossChannelBias = { drawToken: null, biased: false };
       }
 
+      // HAL effects are read BEFORE charging quota so Hierophant can spend 2 pulls.
+      const halTarot = await halEvent.getEffect(discordUserId);
+      const halContext = await halPull.createContext(discordUserId, halTarot);
+      halContext.drawMode = useSpecial ? 'special' : 'normal';
+      const halRateFactor = halTarot?.number === 7 ? 2 : (halTarot?.number === 16 ? 0.5 : 1);
+      const halPullCostMultiplier = halTarot?.number === 5 ? 2 : 1;
+      const halMagicianReady = halTarot?.number === 1 && !(await halEvent.getState(discordUserId))?.magicianUsed;
+
       // --- Authoritative: consume pulls BEFORE drawing ---
       let consumeResult;
       try {
         const consumeLabel = consumeLabelKey ?? null;
-        consumeResult = await consumePulls(discordUserId, amount, allowEvent, consumeLabel, { frozen });
+        consumeResult = await consumePulls(discordUserId, amount * halPullCostMultiplier, allowEvent, consumeLabel, { frozen });
       } catch (err) {
         console.error('consumePulls error (pre-draw):', err);
         inFlightInteractions.delete(interaction.id);
@@ -729,7 +764,7 @@ const frozen = isFrozen(discordUserId, member);
         const elapsed = Date.now() - gifShownAt;
         if (elapsed < ANIM_MS) await sleep(ANIM_MS - elapsed);
 
-        await interaction.editReply({ content: 'Failed to consume pulls. Please try again later.', components: [] }).catch(() => null);
+        await interaction.editReply({ embeds: [], attachments: [], content: 'Failed to consume pulls. Please try again later.', components: [] }).catch(() => null);
         await release();
         return;
       }
@@ -803,7 +838,7 @@ const frozen = isFrozen(discordUserId, member);
           pullsSinceLastSEC = Number(u?.pullsSinceLastSEC ?? 0);
 
           // ✅ Force only if user is NOT in no-force mode
-          forceSEC = (!pityNoForce) && (pullsSinceLastSEC >= 1999); // next pull is the 2000th
+          forceSEC = (!pityNoForce) && halTarot?.number !== 13 && (pullsSinceLastSEC >= 1999); // next pull is the 2000th
         } catch (e) {
           console.error('[pity] failed to read pullsSinceLastSEC:', e);
           pullsSinceLastSEC = 0;
@@ -820,31 +855,32 @@ const frozen = isFrozen(discordUserId, member);
       let runningSinceSEC = pullsSinceLastSEC;
       try {
         for (let packIndex = 0; packIndex < amount; packIndex += 1) {
-          forceSEC = (!pityNoForce) && (runningSinceSEC >= 1999);
+          forceSEC = (halMagicianReady && packIndex === 0) || ((!pityNoForce) && halTarot?.number !== 13 && (runningSinceSEC >= 1999));
           let drawnPack;
           if (!useSpecial && bossChannelBias && bossChannelBias.biased && bossChannelBias.drawToken) {
             drawnPack = await drawPackBoss(discordUserId, bossChannelBias.drawToken, {
             forceSEC,
-            rateMultiplier: pullChannelContext.rateMultiplier,
+            rateMultiplier: pullChannelContext.rateMultiplier * halRateFactor,
             summerIsland: summerContext?.summerActive ? summerContext.island : null,
           });
           } else if (useSpecial && drawPackSpecial && specialDrawToken) {
             drawnPack = await drawPackSpecial(discordUserId, specialDrawToken, {
             forceSEC,
-            rateMultiplier: pullChannelContext.rateMultiplier,
+            rateMultiplier: pullChannelContext.rateMultiplier * halRateFactor,
           });
           } else {
             drawnPack = await drawPack(discordUserId, null, {
             forceSEC,
-            rateMultiplier: pullChannelContext.rateMultiplier,
+            rateMultiplier: pullChannelContext.rateMultiplier * halRateFactor,
             summerIsland: summerContext?.summerActive
               ? summerContext.island
               : null,
           });
           }
 
+          drawnPack = halPull.modifyPack(drawnPack, halContext, { forceMagician: halMagicianReady && packIndex === 0 });
           // Each pack independently rolls for an optional ninth SUN card.
-          const summerBonus = rollSummerBonus({
+          const summerBonus = halTarot?.number === 13 ? null : rollSummerBonus({
           summerContext,
           chance: getSummerBonusChance(),
         });
@@ -853,10 +889,19 @@ const frozen = isFrozen(discordUserId, member);
             drawnPack.push(summerBonus);
           }
 
+          if (halTarot?.number === 20) {
+            const second = await halPull.halIndependentSecondPack({ userId: discordUserId, useSpecial, drawPackSpecial,
+        specialToken: specialDrawToken, bossBias: bossChannelBias, bossDraw: drawPackBoss,
+        normalDraw: drawPack, rateMultiplier: pullChannelContext.rateMultiplier * halRateFactor,
+        summerIsland: summerContext?.summerActive ? summerContext.island : null, context: halContext });
+            drawnPack.push(...second);
+          }
+          const halBooDrop = halTarot?.number === 13 ? null : halEvent.rollBooExtraSlot();
+          if (halBooDrop) drawnPack.push(halBooDrop);
           packs.push(drawnPack);
           if (!pityNoTrack) {
             const packHasSEC = drawnPack.some(item => String(item?.rarity ?? '').toUpperCase() === 'SEC');
-            runningSinceSEC = packHasSEC ? 0 : runningSinceSEC + 1;
+            runningSinceSEC = halPull.pityAfter(runningSinceSEC, packHasSEC, halTarot?.number);
           }
         }
       } catch (err) {
@@ -895,7 +940,7 @@ const frozen = isFrozen(discordUserId, member);
         const elapsed = Date.now() - gifShownAt;
         if (elapsed < ANIM_MS) await sleep(ANIM_MS - elapsed);
 
-        await interaction.editReply({ content: 'An error occurred while drawing the pack. Your pull has been refunded. Please try again.', components: [] }).catch(() => null);
+        await interaction.editReply({ embeds: [], attachments: [], content: 'An error occurred while drawing the pack. Your pull has been refunded. Please try again.', components: [] }).catch(() => null);
         await release();
         return;
       }
@@ -988,7 +1033,7 @@ const frozen = isFrozen(discordUserId, member);
                   .split('/')
                   .map(encodeURIComponent)
                   .join('/')}`
-              : `${IMAGE_BASE.replace(/\/$/, '')}/${encodeURIComponent(rarity)}/${encodeURIComponent(raw)}.png`;
+              : `${IMAGE_BASE.replace(/\/$/, '')}/${encodeURIComponent(rarity)}/${encodeURIComponent(raw)}${path.extname(path.basename(file)) || '.png'}`;
 
             const visiblePrefix = `[${rarity}] - `;
             const titleBody = `${displayName}`;
@@ -1001,9 +1046,13 @@ const frozen = isFrozen(discordUserId, member);
 
             const listLine = `${visiblePrefix}[${escapeLinkText(titleBody)}](${encodedUrl})${tag}${titleCount}`;
 
-            const localImagePath = item.relativeImagePath
+          // Keep the actual selected source file (including .jpg, such as BOO)
+          // instead of assuming every rarity has a .png at a synthesized path.
+          const localImagePath = path.isAbsolute(String(file))
+            ? String(file)
+            : (item.relativeImagePath
               ? path.join(process.cwd(), 'assets', 'images', ...String(item.relativeImagePath).split('/'))
-              : path.join(process.cwd(), 'assets', 'images', String(rarity), `${raw}.png`);
+              : path.join(process.cwd(), 'assets', 'images', String(rarity), path.basename(String(file))));
 
             pageItems.push({
               rarity,
@@ -1125,15 +1174,24 @@ const frozen = isFrozen(discordUserId, member);
         const elapsed = Date.now() - gifShownAt;
         if (elapsed < ANIM_MS) await sleep(ANIM_MS - elapsed);
 
-        await interaction.editReply({ content: 'An error occurred while saving your pull. Your pull has been refunded. Please try again.', components: [] }).catch(() => null);
+        await interaction.editReply({ embeds: [], attachments: [], content: 'An error occurred while saving your pull. Your pull has been refunded. Please try again.', components: [] }).catch(() => null);
         await release();
         return;
       }
       
+      const halBonus = await halEvent.rollPullRewards(discordUserId, amount, { skipBoo: true })
+        .catch(err => { console.error('[HAL] multi pull rewards failed:', err); return null; });
+      const booNames = packs.flatMap(pack => pack.filter(item => item.rarity === 'BOO')
+        .map(item => path.basename(item.file, '.jpg')));
+      const halRewardNotice = halBonus
+        ? `\n\uD83C\uDF83 +${amount} Candy (Balance: ${halBonus.balance})${booNames.length ? ` | BOO extra slot: ${booNames.join(', ')}` : ''}`
+        : '';
+      if (halMagicianReady) await halEvent.useMagician(discordUserId);
+
       // --- Build pack-local descriptions and show results ---
       const packDescriptions = packs.map((_, packIndex) => {
         const lines = pageItems.filter(it => it.packIndex === packIndex).map(it => it.listLine);
-        return `**Pulled ${amount} pack${amount === 1 ? '' : 's'}**\n**Pack ${packIndex + 1}**\n${lines.join('\n')}`;
+        return `**Pulled ${amount} pack${amount === 1 ? '' : 's'}**${packIndex === 0 ? halRewardNotice : ''}\n**Pack ${packIndex + 1}**\n${lines.join('\n')}`;
       });
 
       const elapsedSinceGif = Date.now() - gifShownAt;
@@ -1210,6 +1268,7 @@ const frozen = isFrozen(discordUserId, member);
 
       function makePagePayload(idx, components) {
         return {
+          content: null,
           embeds: [makeEmbed(idx)],
           components,
           attachments: [],
@@ -1234,12 +1293,17 @@ const frozen = isFrozen(discordUserId, member);
       // First card index for every pack. For an 8-card pack, Pack 2 starts at page 9.
       const firstCardIndexByPack = packs.map((_, packIndex) => pageItems.findIndex(item => item.packIndex === packIndex));
 
-      const message = await interaction.editReply(makePagePayload(0, [row])).catch(err => {
-        console.error('[pull] failed to upload card attachment:', err);
-        return null;
-      });
-
-      if (!message) {
+      const textResult = {
+        content: `⚠️ All ${pageItems.length} cards across ${amount} pack(s) were saved, but the image preview failed. Only the first pack is listed here; check your inventory for the rest.`,
+        embeds: [new EmbedBuilder().setTitle('🎴 Pull results').setDescription(packDescriptions[0].slice(0, 4000)).setColor(0x00BB88)],
+        components: [], attachments: [],
+      };
+      const display = await showSavedPull(interaction, makePagePayload(0, [row]), textResult, 'multi-pull');
+      const message = display.message;
+      const plainResult = !display.image;
+      resultDisplayed = Boolean(message);
+      if (plainResult) {
+        // Never attach a paginator whose card-image payloads are failing.
         inFlightInteractions.delete(interaction.id);
         return;
       }
@@ -1263,6 +1327,7 @@ const frozen = isFrozen(discordUserId, member);
       let pageIndex = 0;
 
       collector.on('collect', async (btnInt) => {
+        installLocalImageTransport(btnInt);
         try {
           if (btnInt.customId === 'prev') {
             pageIndex = (pageIndex - 1 + pageItems.length) % pageItems.length;
@@ -1320,6 +1385,7 @@ const frozen = isFrozen(discordUserId, member);
               return;
             }
             pageIndex = firstCardIndexByPack[packNumber - 1];
+            installLocalImageTransport(modalSubmit);
             await modalSubmit.deferUpdate();
             await modalSubmit.editReply(makePagePayload(pageIndex, [row]));
             return;
@@ -1338,8 +1404,17 @@ const frozen = isFrozen(discordUserId, member);
 
     } catch (outerErr) {
       console.error('unhandled error in /multi-pull:', outerErr);
-      try { await releasePullLock(interaction.user.id, interaction.id); } catch {}
-      throw outerErr;
+      if (!resultDisplayed) {
+        try {
+          await interaction.editReply({
+            content: '⚠️ Multi-pull encountered a server error. Check your inventory and pull balance before retrying.',
+            embeds: [], attachments: [], components: [],
+          });
+        } catch (displayErr) {
+          console.error('[multi-pull] failed to clear loading GIF after error:', displayErr);
+        }
+      }
+      inFlightInteractions.delete(interaction.id);
     } finally {
       await release();
     }

@@ -17,6 +17,8 @@
 
 const { EmbedBuilder, Colors } = require('discord.js');
 const { getUserProfile, buildSlotOptions, getOverrides } = require('../utils/rates');
+const halEvent = require('../utils/halEvent');
+const { worldFilter } = require('../utils/halWorldOdds');
 
 // ---------- Hard-coded authorization (no env vars) ----------
 const OWNER_IDS = new Set([
@@ -79,7 +81,6 @@ function isAuthorized(message) {
 // ---------- ID Exceptions (ALWAYS show default odds in this command) ----------
 const DEFAULT_VIEW_USER_IDS = new Set([
   '91098889796481024', // MJ (example: always show as default in !odds)
-  '409717160995192832', // Yoi
   '875080998314975374' //toxic guy
 ]);
 
@@ -161,8 +162,16 @@ function parseUserIdFromMentionOrToken(tok) {
   return null;
 }
 
-function buildSlotReport({ baseOptions, rate, overrides, raw }) {
-  const finalOptions = buildSlotOptions(baseOptions, rate, overrides);
+function buildSlotReport({ baseOptions, rate, overrides, raw, tarotNumber = null, slotIndex = 0 }) {
+  let finalOptions = buildSlotOptions(baseOptions, rate, overrides);
+  if (tarotNumber === 7 || tarotNumber === 16) {
+    const factor = tarotNumber === 7 ? 2 : 0.5;
+    const adjusted = finalOptions.map((o, i) => i === 0 ? { ...o } : { ...o, weight: Number(o.weight) * factor });
+    const rest = adjusted.slice(1).reduce((s, o) => s + Number(o.weight || 0), 0);
+    adjusted[0].weight = Math.max(0, 100 - rest);
+    finalOptions = adjusted;
+  }
+  if (tarotNumber === 21) finalOptions = worldFilter(finalOptions, slotIndex);
   const total = finalOptions.reduce((s, o) => s + (o.weight || 0), 0) || 1;
 
   const lines = finalOptions.map(o => {
@@ -366,6 +375,8 @@ module.exports = {
       const isDefaultView = (keywordDefaultView || idDefaultView) && !forceProfile;
 
       const profile = isDefaultView ? makeDefaultProfile() : getUserProfile(targetUserId);
+      const activeTarot = isDefaultView ? null : await halEvent.getEffect(targetUserId);
+      const tarotNumber = activeTarot?.number ?? null;
       const modesToShow = mode === 'all' ? ['normal', 'special', 'boss'] : [mode];
 
       // ONE embed per mode to avoid hitting embed field limit (<= 25).
@@ -376,7 +387,7 @@ module.exports = {
           .setTitle(`Odds for ${targetUserId} — ${m.toUpperCase()}`)
           // Same color always so default view is not visually obvious
           .setColor(Colors.Blurple)
-          .setDescription(makeEmbedHeader(profile, raw, isDefaultView, debugView));
+          .setDescription(makeEmbedHeader(profile, raw, isDefaultView, debugView) + (activeTarot ? `\n**Active tarot:** ${activeTarot.name || `#${tarotNumber}`} (${tarotNumber})` : ''));
 
         const slotsToShow = slot
           ? [slot]
@@ -392,10 +403,8 @@ module.exports = {
           const overrides = isDefaultView ? null : getOverrides(profile, cfg.overrideMode, slotName);
 
           const { lines, total } = buildSlotReport({
-            baseOptions: base,
-            rate: cfg.rate,
-            overrides,
-            raw
+            baseOptions: base, rate: cfg.rate, overrides, raw, tarotNumber,
+            slotIndex: ['common1','common2','common3','common4','uncommon1','uncommon2','uncommon3','rare'].indexOf(slotName),
           });
 
           const headerBits = [`${slotName}`];

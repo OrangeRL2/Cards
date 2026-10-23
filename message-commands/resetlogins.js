@@ -32,6 +32,8 @@
 
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
+const { endTarot } = require('../utils/halEvent');
+const HalUser = require('../models/HalUser');
 
 const PREFIX = '!';
 const COMMAND_NAME = 'resetlogins';
@@ -169,6 +171,18 @@ try {
   LoginCardEventRecord = mongoose.model('LoginCardEventRecord');
 } catch (e) {
   LoginCardEventRecord = mongoose.model('LoginCardEventRecord', loginCardEventRecordSchema);
+}
+
+// Clear only temporary tarot state; preserve Candies, BOO cards and purchase history.
+async function clearTarotForIds(userIds) {
+  for (const userId of userIds) await endTarot(userId);
+}
+
+async function clearTarotForAll() {
+  await HalUser.updateMany({}, { $set: {
+    tarotNumber: null, tarotDateJST: null, magicianUsed: false,
+    justiceUsed: false, justiceShield: false,
+  } }).exec();
 }
 
 // =====================
@@ -451,6 +465,7 @@ module.exports = {
         }
 
         const result = await setNextStreakForIds(targetUserIds, eventKey, nextStreak);
+        await clearTarotForIds(targetUserIds);
 
         return message.reply({
           content:
@@ -475,6 +490,7 @@ module.exports = {
         }
 
         const result = await advanceOneTestDayForIds(targetUserIds, eventKey);
+        await clearTarotForIds(targetUserIds);
 
         return message.reply({
           content:
@@ -535,6 +551,12 @@ module.exports = {
         if (scope === 'event' || scope === 'both') {
           eventAffected = await resetEventForIds(targetUserIds, eventKey, mode);
         }
+      }
+
+      // Daily cooldown reset must also remove the currently active HAL tarot.
+      if (scope === 'daily' || scope === 'both') {
+        if (operateOnAll) await clearTarotForAll();
+        else await clearTarotForIds(targetUserIds);
       }
 
       const lines = [

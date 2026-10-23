@@ -7,6 +7,7 @@ const crypto = require('crypto');
 const mongoose = require('mongoose');
 const fs = require('fs').promises;
 const path = require('path');
+const { optimizedInteractionPayload } = require('../utils/localizeInteractionEmbeds');
 
 const StreamEvent = require('../models/StreamEvent');
 const StreamActionLog = require('../models/StreamActionLog');
@@ -36,6 +37,7 @@ const DEBUG_DURATION_MS = process.env.STREAM_DEBUG_DURATION_MS
 const SESSION_TTL_MS = 5 * 60 * 1000;
 const FINAL_ORDER_WINDOW_MS = 15 * 60 * 1000;
 const REFRESH_DEBOUNCE_MS = 2000;
+const FES_REWARD_HAPPINESS = 750;
 
 const SUB_VALUES = Object.freeze({
   SR: 5,
@@ -284,7 +286,13 @@ function buildStreamEmbedAndButtons(ev) {
     .setTitle(`${label} has started a 24 hour stream!`)
     .setDescription(
       `Support **${label}** with Likes, Subs, and Superchats.\n` +
-      `💸 **¥1 = 10 fans = 1 Happiness**`
+      `💸 **¥1 = 10 fans = 1 Happiness**` +
+      (ev.rewardOverrides?.firstPlaceRewardRarity && ev.rewardOverrides?.firstPlaceRewardCardName
+        ? String(ev.rewardOverrides.firstPlaceRewardRarity).toUpperCase() === 'FES'
+          ? `\n🎁 **1st place:** [FES] ${ev.rewardOverrides.firstPlaceRewardCardName} (guaranteed)` +
+            `\n🎁 **FES milestone:** Other fans contributing **${FES_REWARD_HAPPINESS} Happiness** or more also receive this card`
+          : `\n🎁 **1st place:** [${ev.rewardOverrides.firstPlaceRewardRarity}] ${ev.rewardOverrides.firstPlaceRewardCardName}`
+        : '')
     )
     .setColor(0x5AB3F4)
     .setImage(ev.imageUrl || buildImageUrl(label, 'ORI'))
@@ -382,7 +390,7 @@ async function refreshEventMessage(client, eventId, evOverride = null) {
   const msg = await ch.messages.fetch(ev.announceMessageId).catch(() => null);
   if (!msg) return false;
   const { embed, components } = buildStreamEmbedAndButtons(ev);
-  await msg.edit({ embeds: [embed], components });
+  await msg.edit(await optimizedInteractionPayload({ embeds: [embed], components }, { message: msg }, true));
   return true;
 }
 
@@ -1398,6 +1406,9 @@ async function settleEndedEvents(client = null) {
       });
       const winners = sorted.slice(0, 3);
       const label = streamLabel(ev);
+      const featuredRarity = String(ev.rewardOverrides?.firstPlaceRewardRarity || 'ORI').trim().toUpperCase();
+      const featuredCard = String(ev.rewardOverrides?.firstPlaceRewardCardName || `${label} 001`).trim();
+      const isFesMilestone = featuredRarity === 'FES';
 
       for (const p of sorted) {
   try {
@@ -1461,12 +1472,50 @@ async function settleEndedEvents(client = null) {
         } catch (err) { console.error('[stream settle] second', err); }
       }
 
+      // FES grants the featured card to first place regardless of Happiness.
+      // Other participants receive it once if they reach the milestone.
+      if (isFesMilestone) {
+        for (const participant of sorted) {
+          if (winners[0] && String(participant.userId) === String(winners[0].userId)) continue;
+          if (Number(participant.happiness || 0) < FES_REWARD_HAPPINESS) continue;
+          try {
+            const alreadyAwarded = await StreamActionLog.exists({
+              eventId: ev.eventId,
+              userId: participant.userId,
+              action: 'reward',
+              'meta.tier': 'FES (750+ Happiness)',
+            });
+            if (alreadyAwarded) continue;
+            await addCardToUser(participant.userId, featuredCard, 'FES', 1);
+            await StreamActionLog.create({
+              eventId: ev.eventId,
+              userId: participant.userId,
+              oshiId: ev.oshiId,
+              action: 'reward',
+              happiness: 0,
+              meta: {
+                tier: 'FES (750+ Happiness)',
+                reward: 'FES',
+                card: featuredCard,
+                threshold: FES_REWARD_HAPPINESS,
+                contribution: Number(participant.happiness),
+              },
+            });
+          } catch (err) {
+            console.error('[stream settle] FES milestone', participant.userId, err);
+          }
+        }
+      }
+
       if (winners[0]) {
         try {
-          const specified = ev.firstPlaceOriCardName || ev.firstPlaceRewardCardName || ev.rewardOverrides?.firstPlaceOriCardName || ev.rewardOverrides?.firstPlaceOri || ev.rewards?.firstPlaceOriCardName || ev.rewards?.firstPlaceOri;
+          const rewardRarity = String(ev.rewardOverrides?.firstPlaceRewardRarity || 'ORI').trim().toUpperCase();
+          const specified = ev.rewardOverrides?.firstPlaceRewardCardName || ev.firstPlaceOriCardName || ev.firstPlaceRewardCardName || ev.rewardOverrides?.firstPlaceOriCardName || ev.rewardOverrides?.firstPlaceOri || ev.rewards?.firstPlaceOriCardName || ev.rewards?.firstPlaceOri;
           const cardName = String(specified || `${label} 001`).trim();
-          await addCardToUser(winners[0].userId, cardName, 'ORI', 1);
-          await StreamActionLog.create({ eventId: ev.eventId, userId: winners[0].userId, oshiId: ev.oshiId, action: 'reward', happiness: 0, meta: { tier: 1, reward: 'ORI', card: cardName } });
+          // Always award and log the first-place featured card, including FES.
+          // FES first place is omitted from the milestone loop above, so it is not duplicated.
+          await addCardToUser(winners[0].userId, cardName, rewardRarity, 1);
+          await StreamActionLog.create({ eventId: ev.eventId, userId: winners[0].userId, oshiId: ev.oshiId, action: 'reward', happiness: 0, meta: { tier: 1, reward: rewardRarity, card: cardName } });
 
           const picked2 = await pickCardByWeightedRarity(SECONDPLACE_WEIGHTS, label, { avoidImmediateRepeat: true, minRarity: 'SY' });
           if (picked2?.name) {
@@ -1522,13 +1571,13 @@ async function announceActivatedEvents(client) {
     ev.imageUrl = ev.imageUrl || buildImageUrl(streamLabel(ev), 'ORI');
     await ev.save();
     const { embed, components } = buildStreamEmbedAndButtons(ev);
-    const msg = await ch.send({ embeds: [embed], components });
+    const msg = await ch.send(await optimizedInteractionPayload({ embeds: [embed], components }));
     ev.announceMessageId = msg.id;
     await ev.save();
   }
 }
 
-async function createAndAnnounceEvent(client, targetInput = null, durationMs = null) {
+async function createAndAnnounceEvent(client, targetInput = null, durationMs = null, options = {}) {
   const target = resolveStreamTarget(targetInput);
   if (!target) throw new Error(`Unknown Oshi/subunit/stream: ${targetInput}`);
   if (!STREAM_CHANNEL_ID) throw new Error('Neither streamChannelId nor bossChannelId is configured.');
@@ -1536,12 +1585,14 @@ async function createAndAnnounceEvent(client, targetInput = null, durationMs = n
   const endsAt = new Date(now.getTime() + (typeof durationMs === 'number' ? durationMs : eventDurationMs()));
   const ev = await StreamEvent.create({
     eventId: nanoid(), oshiId: target.eventOshiId, spawnAt: now, endsAt,
-    status: 'active', happiness: 0, users: [], imageUrl: buildImageUrl(target.label, 'ORI'), createdAt: now,
+    status: 'active', happiness: 0, users: [],
+    imageUrl: options.imageUrl || buildImageUrl(target.label, 'ORI'),
+    rewardOverrides: options.rewardOverrides || {}, createdAt: now,
   });
   const ch = await client.channels.fetch(STREAM_CHANNEL_ID);
   if (!ch?.isTextBased?.()) throw new Error('Configured stream channel is not text-based or unavailable.');
   const { embed, components } = buildStreamEmbedAndButtons(ev);
-  const msg = await ch.send({ embeds: [embed], components });
+  const msg = await ch.send(await optimizedInteractionPayload({ embeds: [embed], components }));
   ev.announceMessageId = msg.id;
   await ev.save();
   return { event: ev, message: msg };

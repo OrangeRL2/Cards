@@ -4,6 +4,7 @@ const fs = require('fs').promises;
 const path = require('path');
 const mongoose = require('mongoose');
 const User = require('../models/User');
+const halEvent = require('./halEvent');
 
 const STAGE_FOR_RARITY = { C:1, OC:1, U:1, S:2, R:2, RR:2, SR:3, OSR:3, UR:4, OUR:4, SY:4, SEC:5 };
 const STAGE_NAMES = {1:'Galaxy',2:'SPACE',3:'CiRCLE',4:'RiNG',5:'Budokan'};
@@ -373,6 +374,8 @@ async function startAttemptAtomic(userId, name, rarity) {
 
 // Resolve attempt: transaction path + fallback no-session path
 async function resolveAttemptAtomic(userId, attemptId) {
+  const tarotNumber = (await halEvent.getEffect(userId))?.number;
+  const fanMultiplier = tarotNumber === 10 ? 2 : 1;
   const session = await mongoose.startSession().catch(() => null);
   const trace = { restoredCard: null, awardedPoints: 0, awardedPCard: null, awardedPCards: null, notes: [] };
 
@@ -414,7 +417,7 @@ async function resolveAttemptAtomic(userId, attemptId) {
         const stageNum = Number(attempt.stage);
         const normalizedAttemptName = normalizeCardName(attempt.name);
         const successChance = getSuccessChance(attempt.rarity);
-        const successResult = Math.random() <= successChance;
+        const successResult = tarotNumber !== 13 && Math.random() <= successChance;
 
         // mark resolved first (idempotency)
         const mark = await User.updateOne(
@@ -459,10 +462,10 @@ async function resolveAttemptAtomic(userId, attemptId) {
               const picked = await pickRandomStage5Card();
               if (!picked) {
                 trace.notes.push('stage5-pick-null');
-                awardedPoints += STAGE5_PICK_FALLBACK_POINTS;
+                awardedPoints += STAGE5_PICK_FALLBACK_POINTS * fanMultiplier;
                 await User.updateOne(
                   { id: userId },
-                  { $inc: { points: STAGE5_PICK_FALLBACK_POINTS } },
+                  { $inc: { points: STAGE5_PICK_FALLBACK_POINTS * fanMultiplier } },
                   { session }
                 ).exec();
               } else {
@@ -478,19 +481,19 @@ async function resolveAttemptAtomic(userId, attemptId) {
                   awardedP = norm;
                 } else {
                   trace.notes.push('stage5-insert-miss');
-                  awardedPoints += STAGE5_PICK_FALLBACK_POINTS;
+                  awardedPoints += STAGE5_PICK_FALLBACK_POINTS * fanMultiplier;
                   await User.updateOne(
                     { id: userId },
-                    { $inc: { points: STAGE5_PICK_FALLBACK_POINTS } },
+                    { $inc: { points: STAGE5_PICK_FALLBACK_POINTS * fanMultiplier } },
                     { session }
                   ).exec();
                 }
               }
             } else {
-              awardedPoints += STAGE5_SUCCESS_POINTS;
+              awardedPoints += STAGE5_SUCCESS_POINTS * fanMultiplier;
               await User.updateOne(
                 { id: userId },
-                { $inc: { points: STAGE5_SUCCESS_POINTS } },
+                { $inc: { points: STAGE5_SUCCESS_POINTS * fanMultiplier } },
                 { session }
               ).exec();
             }
@@ -502,10 +505,10 @@ async function resolveAttemptAtomic(userId, attemptId) {
               const picked = await pickRandomPCard();
               if (!picked) {
                 trace.notes.push(`P-pick-null-${i}`);
-                awardedPoints += 5;
+                awardedPoints += 5 * fanMultiplier;
                 await User.updateOne(
                   { id: userId },
-                  { $inc: { points: 5 } },
+                  { $inc: { points: 5 * fanMultiplier } },
                   { session }
                 ).exec();
                 continue;
@@ -519,10 +522,10 @@ async function resolveAttemptAtomic(userId, attemptId) {
                 awardedPs.push({ name: norm.name, displayName: norm.displayName, rarity: norm.rarity });
               } else {
                 trace.notes.push(`P-insert-miss-${i}`);
-                awardedPoints += 5;
+                awardedPoints += 5 * fanMultiplier;
                 await User.updateOne(
                   { id: userId },
-                  { $inc: { points: 5 } },
+                  { $inc: { points: 5 * fanMultiplier } },
                   { session }
                 ).exec();
               }
@@ -531,6 +534,11 @@ async function resolveAttemptAtomic(userId, attemptId) {
             if (awardedPs.length) awardedP = awardedPs[0];
           }
         } else {
+          if (tarotNumber === 8) {
+            const restored = await incOrUpsertCard(userId, normalizedAttemptName, attempt.rarity, { session });
+            if (!restored) throw new Error('Strength failed to restore the staked card');
+            trace.restoredCard = { name: normalizedAttemptName, rarity: attempt.rarity };
+          }
           // UPDATED failure points for stages 3/4 rules
           const cf = getSuccessChance(attempt.rarity);
           const s = stageNum;
@@ -542,6 +550,7 @@ async function resolveAttemptAtomic(userId, attemptId) {
           else if (s === 4) awardedPoints = Math.round(baseFailPoints(cf) * 1.25); // +25%
           else awardedPoints = Math.round(baseFailPoints(cf) * 0.5);
 
+          awardedPoints *= fanMultiplier;
           if (awardedPoints > 0) {
             await User.updateOne(
               { id: userId },
@@ -610,7 +619,7 @@ async function resolveAttemptAtomic(userId, attemptId) {
       const stageNum = Number(attempt.stage);
       const normalizedAttemptName = normalizeCardName(attempt.name);
       const successChance = getSuccessChance(attempt.rarity);
-      const successResult = Math.random() <= successChance;
+      const successResult = tarotNumber !== 13 && Math.random() <= successChance;
 
       const mark = await User.updateOne(
         { id: userId, 'pendingAttempts.id': attemptId, 'pendingAttempts.resolved': false },
@@ -645,10 +654,10 @@ async function resolveAttemptAtomic(userId, attemptId) {
             const picked = await pickRandomStage5Card();
             if (!picked) {
               trace.notes.push('stage5-pick-null');
-              awardedPoints += STAGE5_PICK_FALLBACK_POINTS;
+              awardedPoints += STAGE5_PICK_FALLBACK_POINTS * fanMultiplier;
               await User.updateOne(
                 { id: userId },
-                { $inc: { points: STAGE5_PICK_FALLBACK_POINTS } }
+                { $inc: { points: STAGE5_PICK_FALLBACK_POINTS * fanMultiplier } }
               ).exec();
             } else {
               const pickedName = normalizeCardName(picked.displayName);
@@ -657,16 +666,16 @@ async function resolveAttemptAtomic(userId, attemptId) {
               if (norm) awardedP = norm;
               else {
                 trace.notes.push('stage5-insert-miss');
-                awardedPoints += STAGE5_PICK_FALLBACK_POINTS;
+                awardedPoints += STAGE5_PICK_FALLBACK_POINTS * fanMultiplier;
                 await User.updateOne(
                   { id: userId },
-                  { $inc: { points: STAGE5_PICK_FALLBACK_POINTS } }
+                  { $inc: { points: STAGE5_PICK_FALLBACK_POINTS * fanMultiplier } }
                 ).exec();
               }
             }
           } else {
-            awardedPoints += STAGE5_SUCCESS_POINTS;
-            await User.updateOne({ id: userId }, { $inc: { points: STAGE5_SUCCESS_POINTS } }).exec();
+            awardedPoints += STAGE5_SUCCESS_POINTS * fanMultiplier;
+            await User.updateOne({ id: userId }, { $inc: { points: STAGE5_SUCCESS_POINTS * fanMultiplier } }).exec();
           }
         } else {
           const pAwardCount = promoCountForStage(stageNum);
@@ -675,8 +684,8 @@ async function resolveAttemptAtomic(userId, attemptId) {
             const picked = await pickRandomPCard();
             if (!picked) {
               trace.notes.push(`P-pick-null-${i}`);
-              awardedPoints += 5;
-              await User.updateOne({ id: userId }, { $inc: { points: 5 } }).exec();
+              awardedPoints += 5 * fanMultiplier;
+              await User.updateOne({ id: userId }, { $inc: { points: 5 * fanMultiplier } }).exec();
               continue;
             }
 
@@ -688,14 +697,19 @@ async function resolveAttemptAtomic(userId, attemptId) {
               awardedPs.push({ name: norm.name, displayName: norm.displayName, rarity: norm.rarity });
             } else {
               trace.notes.push(`P-insert-miss-${i}`);
-              awardedPoints += 5;
-              await User.updateOne({ id: userId }, { $inc: { points: 5 } }).exec();
+              awardedPoints += 5 * fanMultiplier;
+              await User.updateOne({ id: userId }, { $inc: { points: 5 * fanMultiplier } }).exec();
             }
           }
 
           if (awardedPs.length) awardedP = awardedPs[0];
         }
       } else {
+        if (tarotNumber === 8) {
+          const restored = await incOrUpsertCard(userId, normalizedAttemptName, attempt.rarity);
+          if (!restored) throw new Error('Strength failed to restore the staked card');
+          trace.restoredCard = { name: normalizedAttemptName, rarity: attempt.rarity };
+        }
         const cf = getSuccessChance(attempt.rarity);
         const s = stageNum;
 
@@ -706,6 +720,7 @@ async function resolveAttemptAtomic(userId, attemptId) {
         else if (s === 4) awardedPoints = Math.round(baseFailPoints(cf) * 1.25);
         else awardedPoints = Math.round(baseFailPoints(cf) * 0.5);
 
+        awardedPoints *= fanMultiplier;
         if (awardedPoints > 0) await User.updateOne({ id: userId }, { $inc: { points: awardedPoints } }).exec();
       }
 

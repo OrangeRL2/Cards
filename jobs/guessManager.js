@@ -13,9 +13,13 @@ const GuessChallenge = require('../models/GuessChallenge');
 const holo = require('../utils/guessHolodoriClient');
 const { cropSquare, unsquishCard, clipMp3, hasFfmpeg } = require('../utils/guessAssets');
 const { bestMatch, maskedName } = require('../utils/guessMatcher');
+const halEvent = require('../utils/halEvent');
+const { optimizedInteractionPayload } = require('../utils/localizeInteractionEmbeds');
 const { pickHolodoriLoginReward, buildHolodoriImageUrl } = require('../utils/holodoriLoginReward');
 
 const GUESS_PREFIX = '-';
+const BUFF_ADMIN_ID = '153551890976735232';
+const pendingBuffByChannel = new Map();
 const MODE_TIME_SECONDS = Object.freeze({ jacket: 60, song: 300, holomem: 30 });
 const STAGE_SECONDS = Object.freeze({ 1: 1, 2: 3, 3: 5, 4: 8 });
 const MAX_MUSIC_STAGE = 4;
@@ -99,6 +103,8 @@ async function buildRound(mode, kind, starterId = null) {
     hintStage: 0,
     lastHintAt: 0,
     resolving: false,
+    buffGuess: false,
+    buffGuessSigned: false,
     channelId: null,
     guildId: null,
     messageId: null,
@@ -222,7 +228,9 @@ async function sendManual(interaction, mode) {
     round.guildId = interaction.guildId;
     const msg = await interaction.editReply(challengePayload(round));
     round.messageId = msg?.id || null;
+    const wasPendingBuff = transferPendingBuff(round);
     activeRounds.set(channelId, round);
+    if (wasPendingBuff) await notifyBuffedRound(interaction.client, round);
     return { success: true, round };
   } catch (err) {
     console.error('[guess] manual start failed:', err);
@@ -304,10 +312,14 @@ async function spawnAutomatic(client, { mode = null, channelId = null, forced = 
       answerName: round.answerName,
       revealUrl: round.revealUrl,
       active: true,
+      buffGuess: pendingBuffByChannel.has(round.channelId),
+      buffGuessSigned: pendingBuffByChannel.get(round.channelId) === true,
       spawnedAt: new Date(round.startedAt),
     });
 
+    const wasPendingBuff = transferPendingBuff(round);
     activeRounds.set(round.channelId, round);
+    if (wasPendingBuff) await notifyBuffedRound(client, round);
     if (autoTimer) clearTimeout(autoTimer);
     autoTimer = null;
     nextAutoAt = null;
@@ -430,7 +442,9 @@ async function startManualFromButton(interaction, mode) {
     round.guildId = interaction.guildId;
     const msg = await interaction.channel.send(challengePayload(round));
     round.messageId = msg?.id || null;
+    const wasPendingBuff = transferPendingBuff(round);
     activeRounds.set(channelId, round);
+    if (wasPendingBuff) await notifyBuffedRound(interaction.client, round);
   } catch (err) {
     console.error('[guess] play-again start failed:', err);
     await interaction.followUp({ content: `Couldn't start that round: ${err.message}`, ephemeral: true }).catch(() => {});
@@ -474,19 +488,22 @@ async function correctAnswer(message, round) {
 
     let reward = null;
     let rewardError = null;
+    const halDeath = (await halEvent.getEffect(message.author.id))?.number === 13;
     try {
-      reward = pickHolodoriLoginReward(message.author.id);
+      if (!halDeath) {
+      reward = pickHolodoriLoginReward(message.author.id, Math.random, { forceFiveStar: Boolean(round.buffGuess), forceSignedFiveStar: Boolean(round.buffGuessSigned) });
       await addHolodoriReward(message.author.id, reward);
       await GuessChallenge.updateOne(
         { challengeId: round.roundId },
         { $set: { reward: { rarity: reward.rarity, name: reward.name, signed: Boolean(reward.signed) } } }
       ).exec();
+      }
     } catch (err) {
       rewardError = err;
       console.error('[guess] reward grant failed:', err);
     }
 
-    const rewardLine = reward
+    const rewardLine = halDeath ? '\n\nYOU GUESSED CORRECTLY, BUT BECAUSE YOU ARE DEAD YOU GET NO CARD.' : reward
       ? `\n\n🎴 Reward: **${reward.signed ? '✍️ SIGNED ' : ''}${reward.rarity} ${reward.name}**`
       : `\n\n⚠️ The answer was accepted, but the reward could not be granted automatically.${rewardError ? ' An admin should check the logs.' : ''}`;
     const embed = revealEmbed(round, {
@@ -494,23 +511,36 @@ async function correctAnswer(message, round) {
       description: `${message.author} guessed **${round.answerName}** first!${rewardLine}`,
       reward,
     });
-    await message.reply({ embeds: [embed], allowedMentions: { parse: [] } }).catch(() => {});
+    await message.reply(await optimizedInteractionPayload({ embeds: [embed], allowedMentions: { parse: [] } })).catch(() => {});
     scheduleNextAutomatic(message.client);
     return;
   }
 
   activeRounds.delete(round.channelId);
+  let manualReward = null;
+  let manualRewardError = null;
+  const manualHalDeath = (await halEvent.getEffect(message.author.id))?.number === 13;
+  if (round.buffGuess && !manualHalDeath) {
+    try {
+      manualReward = pickHolodoriLoginReward(message.author.id, Math.random, { forceFiveStar: true, forceSignedFiveStar: Boolean(round.buffGuessSigned) });
+      await addHolodoriReward(message.author.id, manualReward);
+    } catch (err) {
+      manualRewardError = err;
+      console.error('[guess] buffed manual reward failed:', err);
+    }
+  }
   const seconds = ((Date.now() - round.startedAt) / 1000).toFixed(2);
   const extra = round.mode === 'holomem' && round.meta.cardName ? `\n**Card:** ${round.meta.cardName}` : '';
   const embed = revealEmbed(round, {
     title: '✅ Correct!',
-    description: `${message.author} successfully guessed **${round.answerName}** in \`${seconds}\` seconds!${extra}`,
+    description: `${message.author} successfully guessed **${round.answerName}** in \`${seconds}\` seconds!${extra}${manualHalDeath && round.buffGuess ? '\n\nYOU GUESSED CORRECTLY, BUT BECAUSE YOU ARE DEAD YOU GET NO CARD.' : manualReward ? `\n\n🎴 Reward: **${manualReward.signed ? '✍️ SIGNED ' : ''}${manualReward.rarity} ${manualReward.name}**` : (manualRewardError ? '\n\n⚠️ Reward grant failed; an admin should check logs.' : '')}`,
+    reward: manualReward,
   });
-  await message.reply({
+  await message.reply(await optimizedInteractionPayload({
     embeds: [embed],
     components: manualResultComponents(round),
     allowedMentions: { parse: [] },
-  }).catch(() => {});
+  })).catch(() => {});
 }
 
 function autoAttemptLine(round, userId) {
@@ -564,11 +594,11 @@ async function endManualRound(round, channel, enderId, reason = 'ended') {
     ? `Time ran out. The correct answer was **${round.answerName}**.`
     : `The answer was **${round.answerName}**.`;
   const embed = revealEmbed(round, { title, description, color: 0xed4245 });
-  await channel.send({
+  await channel.send(await optimizedInteractionPayload({
     embeds: [embed],
     components: manualResultComponents(round),
     allowedMentions: { parse: [] },
-  }).catch(() => {});
+  })).catch(() => {});
 }
 
 async function hintForRound(round) {
@@ -688,6 +718,69 @@ async function getAutomaticGuessLock(round, userId) {
   return { rewards, resetsAt: end.getTime() };
 }
 
+function transferPendingBuff(round) {
+  const channelId = String(round.channelId || '');
+  if (!pendingBuffByChannel.has(channelId)) return false;
+  const signed = pendingBuffByChannel.get(channelId);
+  pendingBuffByChannel.delete(channelId);
+  round.buffGuess = true;
+  round.buffGuessSigned = signed === true;
+  return true;
+}
+
+function buffGuessDescription(round) {
+  const kind = round.kind === 'auto' ? 'Automatic' : 'Manual';
+  return `**${kind} ${modeTitle(round.mode)}** in <#${round.channelId}>` +
+    (round.messageId ? ` (message: https://discord.com/channels/${round.guildId}/${round.channelId}/${round.messageId})` : '') +
+    `\n**Answer:** ${round.answerName}`;
+}
+
+async function notifyBuffedRound(client, round) {
+  try {
+    const admin = await client.users.fetch(BUFF_ADMIN_ID);
+    await admin.send(`Queued ${round.buffGuessSigned ? "SIGNED 5★" : "5★"} buff activated for ${buffGuessDescription(round)}.`);
+  } catch (err) {
+    console.warn('[guess] Could not privately notify admin about queued buff:', err.message);
+  }
+}
+
+async function buffGuess(message, { signed = false } = {}) {
+  if (message.author?.bot || String(message.author?.id) !== BUFF_ADMIN_ID) return;
+  if (!message.guildId || !message.channelId) return;
+
+  // A prefix message cannot be ephemeral: require deletion to avoid leaking the operation.
+  try {
+    await message.delete();
+  } catch (err) {
+    console.warn('[guess] Cannot delete !buffguess; no buff applied:', err.message);
+    await message.author.send('Could not delete !buffguess. Grant the bot Manage Messages permission and try again. No buff was applied.').catch(() => {});
+    return;
+  }
+
+  const channelId = String(message.channelId);
+  const round = activeRounds.get(channelId);
+  if (round && !round.resolving) {
+    if (round.kind === 'auto') {
+      try {
+        const result = await GuessChallenge.updateOne(
+          { challengeId: round.roundId, active: true }, { $set: { buffGuess: true, buffGuessSigned: Boolean(signed) } }
+        ).exec();
+        if (!result.matchedCount) throw new Error('The round was already resolved.');
+      } catch (err) {
+        console.error('[guess] Failed to persist buff:', err);
+        await message.author.send('Could not buff this round; database update failed or round ended.').catch(() => {});
+        return;
+      }
+    }
+    round.buffGuess = true;
+    round.buffGuessSigned = Boolean(signed);
+    await message.author.send(`Current guess has been buffed (${signed ? "guaranteed SIGNED 5★" : "5★, 80% regular / 20% signed"}): ${buffGuessDescription(round)}.`).catch(() => {});
+  } else {
+    pendingBuffByChannel.set(channelId, Boolean(signed));
+    await message.author.send(`The next Guess round in <#${channelId}> is queued for a one-time ${signed ? "SIGNED 5★" : "5★"} buff. I will DM you its mode and answer when it starts.`).catch(() => {});
+  }
+}
+
 async function handleMessage(message) {
   if (!message || message.author?.bot || !message.content?.startsWith(GUESS_PREFIX)) return false;
   if (message.content.startsWith('-#')) return false;
@@ -803,6 +896,8 @@ async function restoreAutomaticRounds(client) {
       hintStage: 0,
       lastHintAt: 0,
       resolving: false,
+      buffGuess: Boolean(doc.buffGuess),
+      buffGuessSigned: Boolean(doc.buffGuessSigned),
       channelId: String(doc.channelId),
       guildId: String(doc.guildId),
       messageId: String(doc.messageId || ''),
@@ -845,6 +940,53 @@ async function startGuessManager(client) {
   if (!hasActiveAutomatic()) scheduleNextAutomatic(client);
 }
 
+async function clearAllGuesses(client) {
+  // Close MongoDB challenges first so they cannot be restored after a restart.
+  const now = new Date();
+  const closed = await GuessChallenge.updateMany(
+    { active: true },
+    { $set: { active: false, resolvedAt: now } }
+  ).exec();
+
+  if (autoTimer) clearTimeout(autoTimer);
+  autoTimer = null;
+  nextAutoAt = null;
+
+  const rounds = [...activeRounds.values()];
+  // Mark the round as ending before removing it from active state.
+  for (const round of rounds) round.resolving = true;
+  activeRounds.clear();
+  const pendingBuffs = pendingBuffByChannel.size;
+  pendingBuffByChannel.clear();
+
+  let removedMessages = 0;
+  let failedMessages = 0;
+  for (const round of rounds) {
+    if (!round.messageId) continue;
+    try {
+      const channel = await resolveTextChannel(client, round.channelId);
+      if (!channel?.messages?.fetch) {
+        failedMessages += 1;
+        continue;
+      }
+      const challengeMessage = await channel.messages.fetch(String(round.messageId));
+      await challengeMessage.delete();
+      removedMessages += 1;
+    } catch (err) {
+      // The challenge can still be safely closed even if its post was removed already.
+      if (err?.code !== 10008) {
+        failedMessages += 1;
+        console.warn(`[guess] Could not delete challenge post in ${round.channelId}:`, err.message);
+      }
+    }
+  }
+
+  // Do not force a new challenge immediately; resume normal random scheduling.
+  if (started && (client || managerClient)) scheduleNextAutomatic(client || managerClient);
+  console.log(`[guess] admin cleared ${rounds.length} rounds; database closed ${closed.modifiedCount || 0}; cleared ${pendingBuffs} queued buffs.`);
+  return { rounds: rounds.length, dbClosed: closed.modifiedCount || 0, removedMessages, failedMessages, pendingBuffs };
+}
+
 function stopGuessManager() {
   if (timeoutInterval) clearInterval(timeoutInterval);
   if (autoTimer) clearTimeout(autoTimer);
@@ -852,6 +994,7 @@ function stopGuessManager() {
   autoTimer = null;
   nextAutoAt = null;
   started = false;
+  pendingBuffByChannel.clear();
 }
 
 function getStatus() {
@@ -870,6 +1013,8 @@ module.exports = {
   spawnAutomatic,
   scheduleNextAutomatic,
   handleMessage,
+  buffGuess,
+  clearAllGuesses,
   slashHint,
   slashTime,
   slashEnd,

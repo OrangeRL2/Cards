@@ -27,11 +27,13 @@ const RARITY_ORDER = [
   'C', 'U', 'R', 'S', 'RR', 'OC', 'SR', 'COL', 'OSR',
   'P', 'SP', 'SY', 'UR', 'OUR', 'HR', 'BDAY', 'UP', 'SEC', 'ORI', 'EV',
 ];
-const RARITY2_ORDER = ['XMAS', 'VAL', 'EAS', 'SUN', '★★★', '★★★★', '★★★★★'];
+const RARITY2_ORDER = ['XMAS', 'VAL', 'EAS', 'SUN', 'BOO', 'FES', '★★★', '★★★★', '★★★★★'];
 const ALL_RARITY_ORDER = [...RARITY2_ORDER, ...RARITY_ORDER];
 
 const COLOR_MAP = {
   SUN: 0xF4C542,
+  BOO: 0x9B59B6,
+  FES: 0xE8A32A,
   '★★★': 0xF5C2E7,
   '★★★★': 0xE8B4F8,
   '★★★★★': 0xFFD166,
@@ -82,6 +84,7 @@ function buildMissingCardImageUrl(card) {
   const baseUrl = IMAGE_BASE.replace(/\/$/, '');
   const rarity = String(card?.rarity || '').trim().toUpperCase();
   const encodedName = encodeURIComponent(String(card?.name || '').trim());
+  if (rarity === 'BOO') return `${baseUrl}/BOO/${encodedName}.jpg`;
   if (rarity === 'SUN' && card.folder) {
     return `${baseUrl}/SUN/${encodeURIComponent(card.folder)}/${encodedName}.png`;
   }

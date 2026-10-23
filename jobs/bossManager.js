@@ -1,4 +1,4 @@
-const { localizePayload } = require('../utils/localizeInteractionEmbeds');
+const { optimizedInteractionPayload } = require('../utils/localizeInteractionEmbeds');
 // jobs/bossManager.js
 // Centralized boss manager implementing scheduled spawns, announcements, actions, and settlement.
 
@@ -443,7 +443,7 @@ async function announceActivatedEvents(client) {
       const ch = await client.channels.fetch(channelId).catch(() => null);
       if (!ch || !ch.isTextBased?.()) continue;
 
-      const msg = await ch.send(localizePayload({ embeds: [embed], components: components || [] }, `boss-send-${ev.eventId}`, false));
+      const msg = await ch.send(await optimizedInteractionPayload({ embeds: [embed], components: components || [] }));
       ev.announceMessageId = msg.id;
       await ev.save();
       console.log(`[announce] event ${ev.eventId} announced as message ${msg.id}`);
@@ -468,7 +468,7 @@ async function refreshEventMessage(client, eventId, evOverride = null) {
   const msg = await ch.messages.fetch(ev.announceMessageId).catch(() => null);
   if (!msg) return false;
 
-  await msg.edit(localizePayload({ embeds: [embed], components: components || [] }, `boss-edit-${ev.eventId}`, true));
+  await msg.edit(await optimizedInteractionPayload({ embeds: [embed], components: components || [] }, { message: msg }, true));
   return true;
 }
 
@@ -1349,7 +1349,7 @@ async function createAndAnnounceEvent(client, oshiId = null, durationMs = null) 
   const ch = await client.channels.fetch(channelId);
   if (!ch || !ch.isTextBased?.()) throw new Error('Configured boss channel is not text-based or unavailable');
 
-  const msg = await ch.send(localizePayload({ embeds: [embed], components: components || [] }, `boss-send-${ev.eventId}`, false));
+  const msg = await ch.send(await optimizedInteractionPayload({ embeds: [embed], components: components || [] }));
 
   eventDoc.announceMessageId = msg.id;
   await eventDoc.save();
@@ -1426,7 +1426,7 @@ async function startBossManager(client) {
           continue;
         }
 
-        await msg.edit(localizePayload({ embeds: [embed], components: components || [] }, `boss-edit-${ev.eventId || 'event'}`, true)).catch(() => null);
+        await msg.edit(await optimizedInteractionPayload({ embeds: [embed], components: components || [] }, { message: msg }, true)).catch(() => null);
         if (newHash) lastEmbedHashByEvent.set(ev.eventId, newHash);
       }
     } catch (err) {

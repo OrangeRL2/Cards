@@ -11,6 +11,7 @@ module.exports = {
   name: 'pull',
   description: 'Run the /pull command via prefix',
   async execute(message, args = []) {
+    let replyMessage = null;
     try {
       if (!message.content?.startsWith(PREFIX)) return;
       if (message.author.bot) return;
@@ -52,37 +53,41 @@ module.exports = {
                          remainingArgs.includes('--special') ||
                          remainingArgs.includes('true');
 
-      let replyMessage = null;
 
       // fake interaction that matches the methods your slash handler expects
       // inside message-commands/pull.js, where fakeInteraction is defined
 const fakeInteraction = {
   id: `msg-${message.id}`, // ensure a unique id per message invocation
+  client: message.client,
+  guild: message.guild,
+  guildId: message.guildId,
+  channel: message.channel,
+  channelId: message.channelId,
+  member: message.member,
   user: targetUser || message.author,
   _initiator: message.author,
   options: {
     getBoolean: (name) => (name === 'special' ? allowspecial : null)
   },
+  // Keep the same Discord message for the entire loading -> result lifecycle.
+  // A blank content send is invalid and can make the fallback spawn duplicates.
   async deferReply() {
-    try {
-      replyMessage = await message.channel.send({ content: '' });
-    } catch (e) {
-      replyMessage = null;
-    }
+    replyMessage = await message.channel.send({ content: '🎴 Preparing pull...' });
   },
   async editReply(payload) {
-    try {
-      if (!replyMessage) {
-        replyMessage = await message.channel.send(payload);
-        return replyMessage;
-      }
-      return await replyMessage.edit(typeof payload === 'string' ? { content: payload } : payload);
-    } catch (err) {
-      try { replyMessage = await message.channel.send(payload); return replyMessage; } catch { return null; }
-    }
+    if (!replyMessage) throw new Error('Prefix pull reply was not created');
+    return replyMessage.edit(typeof payload === 'string' ? { content: payload } : payload);
   },
   async reply(payload) {
-    try { replyMessage = await message.channel.send(payload); return replyMessage; } catch { return null; }
+    if (replyMessage) return replyMessage.edit(payload);
+    replyMessage = await message.channel.send(payload);
+    return replyMessage;
+  },
+  async deleteReply() {
+    if (replyMessage) {
+      await replyMessage.delete();
+      replyMessage = null;
+    }
   }
 };
 
@@ -91,7 +96,17 @@ const fakeInteraction = {
       await slashCmd.execute(fakeInteraction);
     } catch (err) {
       console.error('[MSG-CMD] pull wrapper error', err);
-      try { await message.reply({ content: 'An error occurred running the pull command.' }); } catch {}
+      // The original reply is a loading GIF: don't abandon it on an edit failure.
+      try {
+        if (replyMessage) {
+          await replyMessage.edit({ content: '⚠️ Pull display failed. Check your inventory before retrying.', embeds: [], attachments: [], components: [] });
+          return;
+        }
+      } catch (cleanupError) {
+        console.error('[MSG-CMD] could not clean up loading message:', cleanupError);
+        try { await replyMessage?.delete(); } catch {}
+      }
+      try { await message.reply({ content: 'Pull display failed. Check your inventory before retrying.' }); } catch {}
     }
   }
 };

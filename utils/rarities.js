@@ -8,7 +8,7 @@ const STANDARD_RARITIES = Object.freeze([
 ]);
 
 const SPECIAL_RARITIES = Object.freeze([
-  'XMAS', 'VAL', 'EAS', 'SUN', '★★★', '★★★★', '★★★★★',
+  'XMAS', 'VAL', 'EAS', 'SUN', 'BOO', 'FES', '★★★', '★★★★', '★★★★★',
 ]);
 
 const RARITIES = Object.freeze([...SPECIAL_RARITIES, ...STANDARD_RARITIES]);

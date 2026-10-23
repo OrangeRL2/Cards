@@ -10,6 +10,8 @@ const guessChallengeSchema = new Schema({
   answerName: { type: String, required: true },
   revealUrl: { type: String, default: null },
   active: { type: Boolean, default: true, index: true },
+  buffGuess: { type: Boolean, default: false },
+  buffGuessSigned: { type: Boolean, default: false },
   spawnedAt: { type: Date, default: Date.now },
   resolvedAt: { type: Date, default: null },
   winnerId: { type: String, default: null },

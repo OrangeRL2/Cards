@@ -54,6 +54,10 @@ function buildCardImageUrl(name, rarity, variant = null) {
     return `${baseUrl}/SUN/Full%20Art/${encodedName}.png`;
   }
 
+  if (normalizedRarity === 'BOO') {
+    return `${baseUrl}/BOO/${encodedName}.jpg`;
+  }
+
   if (/^★{3,5}$/.test(normalizedRarity)) {
     return `${baseUrl}/HOLODORI/${encodeURIComponent(normalizedRarity)}/${encodedName}.png`;
   }
@@ -109,6 +113,8 @@ const RARITY_ORDER = {
   VAL: 2,
   EAS: 3,
   SUN: 4,
+  BOO: 4.5,
+  FES: 4.75,
   EV: 5,
   '★★★': 6,
   '★★★★': 7,
@@ -138,6 +144,8 @@ const RARITY_ORDER = {
 const RARITY_COLORS = {
   XMAS: 0x05472A,
   SUN: 0xF4C542,
+  BOO: 0x9B59B6,
+  FES: 0xE8A32A,
   '★★★': 0xF5C2E7,
   '★★★★': 0xE8B4F8,
   '★★★★★': 0xFFD166,
