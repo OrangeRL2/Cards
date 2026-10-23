@@ -6,6 +6,13 @@ const config = require('../config.json');
 const { addCardsToUser } = require('./halInventory');
 const { getUserProfile } = require('./rates');
 
+// Manual safety exclusions for XXI - The World.
+// Add Discord user IDs as strings. These are IN ADDITION TO automatic rate-based exclusions.
+const WORLD_EXCLUDED_USER_IDS = new Set([
+  '1171127294413246567',//blacky
+  '408400038767624195',//grimm
+]);
+
 const NEGATIVE_TAROTS = new Set([5, 9, 12, 13, 16]);
 // Same nine GOOD effects shown in the daily login reveal.
 const GOOD_TAROTS = new Set([1, 6, 7, 8, 10, 11, 17, 20, 21]);
@@ -19,7 +26,7 @@ function jstDay(date = new Date()) {
 function active(date = new Date()) {
   const dateJst = jstDay(date);
   return config.halEventForceActive === true ||
-    (dateJst >= '2026-10-26' && dateJst <= '2026-11-08');
+    (dateJst >= '2026-10-24' && dateJst <= '2026-11-08');
 }
 async function getState(id) {
   return HalUser.findOne({ userId: String(id) }).lean().exec();
@@ -33,6 +40,7 @@ async function grantCard(id, name) {
   await addCardsToUser(id, [{ rarity: 'BOO', name: String(name), signed: false }]);
 }
 function worldRestricted(id) {
+  if (WORLD_EXCLUDED_USER_IDS.has(String(id))) return true;
   const profile = getUserProfile(id);
   return Number(profile.pullRate) < 1 || Number(profile.specialPullRate) < 1 || Number(profile.extraSlotRate) < 1;
 }
