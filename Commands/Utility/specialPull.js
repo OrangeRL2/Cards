@@ -509,6 +509,9 @@ module.exports = {
 
     // At this point, pulls have been consumed authoritatively.
     // Draw pack — use drawPackSpecial when drawToken is present, otherwise original drawPack
+    // Count the two Judgement draws separately for Candy, even though the
+    // awarded cards are displayed as one pack.
+    let candyEarned = 0;
     let pack;
     try {
       if (drawToken && drawPackSpecial) {
@@ -517,11 +520,14 @@ module.exports = {
         pack = await drawPack(discordUserId, null, { forceSEC: halMagician, rateMultiplier: halFactor });
       }
       pack = halPull.modifyPack(pack, halContext, { forceMagician: halMagician });
+      candyEarned = candyForPack(pack);
       if (halTarot?.number === 20) {
         const extra = drawToken && drawPackSpecial
           ? await drawPackSpecial(discordUserId, drawToken, { forceSEC: false, rateMultiplier: halFactor })
           : await drawPack(discordUserId, null, { forceSEC: false, rateMultiplier: halFactor });
-        pack.push(...halPull.modifyPack(extra, halContext).slice(0, 8));
+        const second = halPull.modifyPack(extra, halContext).slice(0, 8);
+        candyEarned += candyForPack(second);
+        pack.push(...second);
       }
       const halBooDrop = halTarot?.number === 13 ? null : halEvent.rollBooExtraSlot();
       if (halBooDrop) pack.push(halBooDrop);
@@ -735,7 +741,6 @@ module.exports = {
 
     // If any SEC was pulled, show a special reveal GIF before the result embed
     const hasSEC = pageItems.some(it => String(it.rarity ?? '').toUpperCase() === 'SEC');
-    const candyEarned = candyForPack(pack);
     const halBonus = await halEvent.rollPullRewards(discordUserId, candyEarned, { skipBoo: true })
       .catch(err => { console.error('[HAL] special pull rewards failed:', err); return null; });
     if (halMagician) await halEvent.useMagician(discordUserId);

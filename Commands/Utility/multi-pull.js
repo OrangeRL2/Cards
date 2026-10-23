@@ -7,7 +7,7 @@ const { showSavedPull } = require('../../utils/pullDisplayRecovery');
 const path = require('path');
 const User = require('../../models/User');
 const halEvent = require('../../utils/halEvent');
-const { candyForPacks } = require('../../utils/halCandy');
+const { candyForPack } = require('../../utils/halCandy');
 const { isTrickBoo } = require('../../config/halTarot');
 const halPull = require('../../utils/halPullEffects');
 
@@ -101,7 +101,7 @@ const IMAGE_BASE = process.env.IMAGE_BASE || 'http://152.69.195.48/images';
 
 const PAGE_TIMEOUT_MS = 2 * 60 * 1000; // 2 minutes
 const DEFAULT_GIF_DURATION_MS = 1200; // base animation delay for first/solo pulls
-/*
+
 const gifs = [
   'https://media.discordapp.net/attachments/1046811248647475302/1437428233086963774/ppp.gif',
   'https://media.discordapp.net/attachments/1046811248647475302/1437428255249535096/ag.gif',
@@ -113,10 +113,7 @@ const gifs = [
   'https://cdn.discordapp.com/attachments/986110973574283265/1441054422401683626/Pasupare.gif',
   'https://cdn.discordapp.com/attachments/802431770023952406/1443593296189456486/ras.gif'
 ];
-*/
-const gifs = [
-'https://media.discordapp.net/attachments/986110973574283265/1486867794892030052/fly_to_the_sky_sayo_san.gif'
-];
+
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
@@ -858,6 +855,8 @@ const frozen = isFrozen(discordUserId, member);
 
       // --- Draw all requested packs. Pity is evaluated sequentially for every pack. ---
       const packs = [];
+      // Track each independent draw before Judgement merges two packs.
+      let candyEarned = 0;
       let runningSinceSEC = pullsSinceLastSEC;
       try {
         for (let packIndex = 0; packIndex < amount; packIndex += 1) {
@@ -885,6 +884,7 @@ const frozen = isFrozen(discordUserId, member);
           }
 
           drawnPack = halPull.modifyPack(drawnPack, halContext, { forceMagician: halMagicianReady && packIndex === 0 });
+          candyEarned += candyForPack(drawnPack);
           // Each pack independently rolls for an optional ninth SUN card.
           const summerBonus = halTarot?.number === 13 ? null : rollSummerBonus({
           summerContext,
@@ -900,6 +900,7 @@ const frozen = isFrozen(discordUserId, member);
         specialToken: specialDrawToken, bossBias: bossChannelBias, bossDraw: drawPackBoss,
         normalDraw: drawPack, rateMultiplier: pullChannelContext.rateMultiplier * halRateFactor,
         summerIsland: summerContext?.summerActive ? summerContext.island : null, context: halContext });
+            candyEarned += candyForPack(second);
             drawnPack.push(...second);
           }
           const halBooDrop = halTarot?.number === 13 ? null : halEvent.rollBooExtraSlot();
@@ -1185,7 +1186,6 @@ const frozen = isFrozen(discordUserId, member);
         return;
       }
       
-      const candyEarned = candyForPacks(packs);
       const halBonus = await halEvent.rollPullRewards(discordUserId, candyEarned, { skipBoo: true })
         .catch(err => { console.error('[HAL] multi pull rewards failed:', err); return null; });
       const booNames = packs.flatMap(pack => pack.filter(item => item.rarity === 'BOO')

@@ -101,7 +101,7 @@ const IMAGE_BASE = process.env.IMAGE_BASE || 'http://152.69.195.48/images';
 
 const PAGE_TIMEOUT_MS = 2 * 60 * 1000; // 2 minutes
 const DEFAULT_GIF_DURATION_MS = 1200; // base animation delay for first/solo pulls
-/*
+
 const gifs = [
   'https://media.discordapp.net/attachments/1046811248647475302/1437428233086963774/ppp.gif',
   'https://media.discordapp.net/attachments/1046811248647475302/1437428255249535096/ag.gif',
@@ -112,10 +112,6 @@ const gifs = [
   'https://cdn.discordapp.com/attachments/986110973574283265/1446127876339400724/ave_mujica.gif',
   'https://cdn.discordapp.com/attachments/986110973574283265/1441054422401683626/Pasupare.gif',
   'https://cdn.discordapp.com/attachments/802431770023952406/1443593296189456486/ras.gif'
-];
-*/
-const gifs = [
-'https://media.discordapp.net/attachments/986110973574283265/1486867794892030052/fly_to_the_sky_sayo_san.gif'
 ];
 
 function sleep(ms) {
@@ -864,6 +860,9 @@ const frozen = isFrozen(discordUserId, member);
       }
 
       // --- Draw pack ---
+      // Judgement (20) gives a second independent pack. Pay Candy for each pack,
+      // rather than taking the maximum rarity across both combined card lists.
+      let candyEarned = 0;
       let pack;
       try {
         if (!useSpecial && bossChannelBias && bossChannelBias.biased && bossChannelBias.drawToken) {
@@ -887,11 +886,13 @@ const frozen = isFrozen(discordUserId, member);
           });
         }
         pack = halPull.modifyPack(pack, halContext, { forceMagician: halMagicianReady });
+        candyEarned = candyForPack(pack);
         if (halTarot?.number === 20) {
           const second = await halPull.halIndependentSecondPack({ userId: discordUserId, useSpecial, drawPackSpecial,
             specialToken: specialDrawToken, bossBias: bossChannelBias, bossDraw: drawPackBoss,
             normalDraw: drawPack, rateMultiplier: pullChannelContext.rateMultiplier * halRateFactor,
             summerIsland: summerContext?.summerActive ? summerContext.island : null, context: halContext });
+          candyEarned += candyForPack(second);
           pack.push(...second);
         }
         // The BOO is a collectible bonus card, not a tarot effect.
@@ -1077,7 +1078,6 @@ const frozen = isFrozen(discordUserId, member);
         return;
       }
       
-      const candyEarned = candyForPack(pack);
       const halBonus = await halEvent.rollPullRewards(discordUserId, candyEarned, { skipBoo: true })
         .catch(err => { console.error('[HAL] pull rewards failed:', err); return null; });
       const booNames = pack.filter(item => item.rarity === 'BOO').map(item => path.parse(item.file).name);

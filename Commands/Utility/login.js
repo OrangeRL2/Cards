@@ -821,7 +821,7 @@ function buildHalTarotReveal(result) {
   const [mood, description] = HAL_TAROT_FLAVOR[effect.number] || ['MYSTERY', 'The spirits have altered your fate!'];
   const color = mood === 'GOOD' ? 0x57f287 : mood === 'BAD' ? 0xed4245 : mood === 'NEUTRAL' ? 0x9b59b6 : 0xf1c40f;
   const details = card.number === 0
-    ? `**The Fool's trick:** ${result.awards.length} Halloween X awarded!\n**Final tarot:** ${effect.member} - ${effect.name} (${effect.number})\n\n${description}`
+    ? `**The Fool's trick:** ${result.awards.filter(name => name === 'Halloween X').length} Halloween X awarded!\n**Final tarot:** ${effect.member} - ${effect.name} (${effect.number})\n\n${description}`
     : description;
   const imageUrl = `${IMAGE_BASE.replace(/\/$/, '')}/BOO/${encodeURIComponent(card.cardName)}.jpg`;
   return new EmbedBuilder()
@@ -1020,7 +1020,7 @@ module.exports = {
       // -----------------------------
       // Reply
       // -----------------------------
-      const halTarotLine = halTarotResult ? `\n\n🎃 Tarot: **${halTarotResult.initial.name}** — active: **${halTarotResult.effect.name}** until midnight JST.${halTarotResult.awards.length ? ` Awarded ${halTarotResult.awards.length} Halloween X.` : ''}` : '';
+      const halTarotLine = halTarotResult ? `\n\n🎃 Tarot: **${halTarotResult.initial.name}** — active: **${halTarotResult.effect.name}** until midnight JST.${halTarotResult.awards.some(name => name === 'Halloween X') ? ` Awarded ${halTarotResult.awards.filter(name => name === 'Halloween X').length} Halloween X.` : ''}` : '';
       const content = buildLoginReplyContent({
         fans,
         frozen,
