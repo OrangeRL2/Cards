@@ -4,6 +4,7 @@ const { SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, ButtonBuilder, Butt
 const { installLocalImageTransport } = require('../../utils/localizeInteractionEmbeds');
 const { showSecReveal } = require('../../utils/secReveal');
 const { showSavedPull } = require('../../utils/pullDisplayRecovery');
+const { startPullDisplayGuard } = require('../../utils/pullDisplayGuard');
 const path = require('path');
 const User = require('../../models/User');
 const halEvent = require('../../utils/halEvent');
@@ -102,6 +103,7 @@ const IMAGE_BASE = process.env.IMAGE_BASE || 'http://152.69.195.48/images';
 const PAGE_TIMEOUT_MS = 2 * 60 * 1000; // 2 minutes
 const DEFAULT_GIF_DURATION_MS = 1200; // base animation delay for first/solo pulls
 
+/*
 const gifs = [
   'https://media.discordapp.net/attachments/1046811248647475302/1437428233086963774/ppp.gif',
   'https://media.discordapp.net/attachments/1046811248647475302/1437428255249535096/ag.gif',
@@ -112,6 +114,10 @@ const gifs = [
   'https://cdn.discordapp.com/attachments/986110973574283265/1446127876339400724/ave_mujica.gif',
   'https://cdn.discordapp.com/attachments/986110973574283265/1441054422401683626/Pasupare.gif',
   'https://cdn.discordapp.com/attachments/802431770023952406/1443593296189456486/ras.gif'
+];
+*/
+const gifs = [
+'https://media.discordapp.net/attachments/986110973574283265/1486867794892030052/fly_to_the_sky_sayo_san.gif'
 ];
 
 function sleep(ms) {
@@ -535,6 +541,7 @@ module.exports = {
 
   async execute(interaction) {
     installLocalImageTransport(interaction);
+    const displayGuard = startPullDisplayGuard(interaction, 'pull');
     // Claim this interaction before any async work, so duplicate deliveries do
     // not create a second placeholder or replace a completed result with a GIF.
     if (inFlightInteractions.has(interaction.id)) return;
@@ -556,6 +563,7 @@ module.exports = {
     try { await interaction.editReply({ content: null, embeds: [loadingEmbed], components: [] }); gifShownAt = Date.now(); } catch {}
 
 
+    displayGuard.stage('loading shown / checking account');
     const discordUserId = interaction.user.id;
     const lockOwner = interaction.id;
     // --- Freeze check (users/roles) ---
@@ -572,6 +580,7 @@ const frozen = isFrozen(discordUserId, member);
     const pityNoForce = pityNoTrack || PITY_EXEMPT_IDS2.has(discordUserId);
 
     // Try to get the lock immediately; if not, wait (queue) without showing any "please wait" error.
+    displayGuard.stage('waiting for MongoDB pull lock');
     let acquiredFast = await acquirePullLock(discordUserId, lockOwner, 120000);
     let queued = false;
     if (!acquiredFast) {
@@ -599,6 +608,7 @@ const frozen = isFrozen(discordUserId, member);
 
     // Maintain the Mongo lock until the DB transaction has finished. A fixed
     // expiry alone is unsafe for large inventories / Judgement double-card packs.
+    displayGuard.stage('lock acquired / checking quota and event rules');
     const lockHeartbeat = setInterval(() => {
       void PullLock.updateOne(
         { userId: discordUserId, owner: lockOwner },
@@ -761,6 +771,7 @@ const frozen = isFrozen(discordUserId, member);
       const halPullCostMultiplier = halTarot?.number === 5 ? 2 : 1;
       const halMagicianReady = halTarot?.number === 1 && !(await halEvent.getState(discordUserId))?.magicianUsed;
 
+      displayGuard.stage('consuming pull quota');
       // --- Authoritative: consume pulls BEFORE drawing ---
       let consumeResult;
       try {
@@ -859,6 +870,7 @@ const frozen = isFrozen(discordUserId, member);
         forceSEC = false;
       }
 
+      displayGuard.stage('drawing pack');
       // --- Draw pack ---
       // Judgement (20) gives a second independent pack. Pay Candy for each pack,
       // rather than taking the maximum rarity across both combined card lists.
@@ -956,6 +968,7 @@ const frozen = isFrozen(discordUserId, member);
         console.error('[pull] Summer bonus roll failed:', err);
       }
 
+      displayGuard.stage('writing drawn cards to inventory');
       // --- Persist cards + build page items ---
       const pageItems = [];
       const allNames = [];
@@ -1078,6 +1091,8 @@ const frozen = isFrozen(discordUserId, member);
         return;
       }
       
+      displayGuard.saved(pageItems);
+      displayGuard.stage('inventory saved / HAL rewards');
       const halBonus = await halEvent.rollPullRewards(discordUserId, candyEarned, { skipBoo: true })
         .catch(err => { console.error('[HAL] pull rewards failed:', err); return null; });
       const booNames = pack.filter(item => item.rarity === 'BOO').map(item => path.parse(item.file).name);
@@ -1195,6 +1210,7 @@ const frozen = isFrozen(discordUserId, member);
           .setColor(0xFFD700)],
         attachments: [], components: [],
       }, ANIM_MS, 'pull');
+      displayGuard.stage('final Discord result upload');
       const display = await showSavedPull(interaction, makePagePayload(0, [row]), textResult, 'pull');
       const message = display.message;
       const plainResult = !display.image;

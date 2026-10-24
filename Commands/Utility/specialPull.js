@@ -1,6 +1,7 @@
 const { installLocalImageTransport } = require('../../utils/localizeInteractionEmbeds');
 const { showSecReveal } = require('../../utils/secReveal');
 const { showSavedPull } = require('../../utils/pullDisplayRecovery');
+const { startPullDisplayGuard } = require('../../utils/pullDisplayGuard');
 // Commands/Utility/pull.js
 const { SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 const path = require('path');
@@ -377,6 +378,7 @@ module.exports = {
 
   async execute(interaction) {
     installLocalImageTransport(interaction);
+    const displayGuard = startPullDisplayGuard(interaction, 'special-pull');
     try { await interaction.deferReply(); } catch (e) { /* ignore */ }
 
     if (inFlightInteractions.has(interaction.id)) {
@@ -390,6 +392,7 @@ module.exports = {
     let gifShownAt = Date.now();
     try { await interaction.editReply({ embeds: [loadingEmbed] }); gifShownAt = Date.now(); } catch (err) { /* ignore */ }
 
+    displayGuard.stage('loading shown / checking account');
     const discordUserId = interaction.user.id;
     const amount = 1;
     const allowEvent = Boolean(interaction.options.getBoolean('event'));
@@ -448,6 +451,7 @@ module.exports = {
     try {
       // For consumption we pass the grant key (map key) if available so quotas decrement correctly
       const consumeLabel = consumeLabelKey || null;
+      displayGuard.stage('consuming special pull quota');
       consumeResult = await consumePulls(discordUserId, amount * halCost, allowEvent, consumeLabel);
     } catch (err) {
       console.error('consumePulls error (pre-draw):', err);
@@ -508,6 +512,7 @@ module.exports = {
     }
 
     // At this point, pulls have been consumed authoritatively.
+    displayGuard.stage('drawing special pack');
     // Draw pack — use drawPackSpecial when drawToken is present, otherwise original drawPack
     // Count the two Judgement draws separately for Candy, even though the
     // awarded cards are displayed as one pack.
@@ -566,6 +571,7 @@ module.exports = {
       return;
     }
 
+    displayGuard.stage('saving special pull inventory');
     // Persist cards and increment user's pulls once (user-facing counter)
     const pageItems = [];
     const allNames = [];
@@ -723,6 +729,8 @@ module.exports = {
       return;
     }
 
+    displayGuard.saved(pageItems);
+    displayGuard.stage('inventory saved / preparing results');
     // Build description and truncate safely
     let descriptionAll = allNames.join('\n');
     const MAX_DESC = 4096;
@@ -741,6 +749,7 @@ module.exports = {
 
     // If any SEC was pulled, show a special reveal GIF before the result embed
     const hasSEC = pageItems.some(it => String(it.rarity ?? '').toUpperCase() === 'SEC');
+    displayGuard.stage('HAL rewards');
     const halBonus = await halEvent.rollPullRewards(discordUserId, candyEarned, { skipBoo: true })
       .catch(err => { console.error('[HAL] special pull rewards failed:', err); return null; });
     if (halMagician) await halEvent.useMagician(discordUserId);
@@ -817,6 +826,7 @@ module.exports = {
         .setDescription(descriptionAll.slice(0, 4000)).setColor(0x00BB88)],
       components: [], attachments: [],
     };
+    displayGuard.stage('final Discord result upload');
     const display = await showSavedPull(
       interaction, { embeds: [makeEmbed(0)], components: [row] }, textResult, 'special-pull'
     );
