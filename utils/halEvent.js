@@ -25,7 +25,7 @@ function jstDay(date = new Date()) {
 function active(date = new Date()) {
   const dateJst = jstDay(date);
   return config.halEventForceActive === true ||
-    (dateJst >= '2026-10-26' && dateJst <= '2026-11-08');
+    (dateJst >= '2026-10-24' && dateJst <= '2026-11-08');
 }
 async function getState(id) {
   return HalUser.findOne({ userId: String(id) }).lean().exec();
@@ -36,7 +36,7 @@ async function getEffect(id, now = new Date()) {
   return current?.number === 21 && worldRestricted(id) ? null : current;
 }
 async function grantCard(id, name) {
-  await addCardsToUser(id, [{ rarity: 'BOO', name: String(name), signed: false }]);
+  await addCardsToUser(id, [{ rarity: tarot.isXCard(name) ? tarot.X_RARITY : 'BOO', name: String(name), signed: false }]);
 }
 function worldRestricted(id) {
   if (WORLD_EXCLUDED_USER_IDS.has(String(id))) return true;
@@ -81,7 +81,7 @@ async function applyTarot(id, choice, { source = 'debug', now = new Date(), prot
     cardsToGrant.push({ rarity: 'BOO', name: selected.cardName, signed: false });
     awards.push(selected.cardName);
     if (selected.number !== 0) break;
-    cardsToGrant.push({ rarity: 'BOO', name: 'Halloween X', signed: false });
+    cardsToGrant.push({ rarity: tarot.X_RARITY, name: 'Halloween X', signed: false });
     awards.push('Halloween X');
     rerolls += 1;
     if (rerolls >= 100) throw new Error('Fool reroll safety limit reached');
@@ -135,11 +135,11 @@ function rollBooExtraSlot(rng = Math.random) {
   const chance = Math.min(1, Math.max(0, Number(config.halBooBonusChance ?? 0.01)));
   if (rng() >= chance) return null;
   const card = tarot.collectible(rng);
+  // Art remains in BOO/ for backwards compatibility, but X awards are ??? rarity.
   return {
-    rarity: 'BOO',
+    rarity: card.rarity,
     file: path.join(process.cwd(), 'assets', 'images', 'BOO', card.fileName),
     relativeImagePath: `BOO/${card.fileName}`,
-    trick: card.trick,
   };
 }
 async function rollPullRewards(id, count = 1, { skipBoo = false } = {}) {

@@ -2,7 +2,7 @@
 // Shared rarity/window helpers for the universal acquisition watcher and /recents.
 
 const RARITY_ORDER = Object.freeze([
-  'C', 'U', 'R', 'S', 'RR', 'OC', 'SR', 'XMAS', 'VAL', 'EAS', 'SUN', 'BOO', 'FES', 'EV',
+  'C', 'U', 'R', 'S', 'RR', 'OC', 'SR', 'XMAS', 'VAL', 'EAS', 'SUN', 'BOO', '???', 'FES', 'EV',
   '★★★', 'COL', 'OSR', 'P', 'SP', '★★★★', 'UP', 'SY', 'UR', 'OUR', 'HR',
   'BDAY', '★★★★★', 'SEC', 'ORI',
 ]);

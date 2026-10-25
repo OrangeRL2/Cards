@@ -31,7 +31,7 @@ function button(id, label, style = ButtonStyle.Secondary, disabled = false) {
 function id(action, userId) { return `hal:${action}:${userId}`; }
 function tarotDetails(card) {
   const effect = {
-    0: 'Receive Halloween X, then roll another tarot.',
+    0: 'Receive a [???] Halloween X card, then roll another tarot.',
     1: 'Your next paid pack has a guaranteed SEC in slot 8.',
     2: 'Every pulled card is BLUE.', 3: 'Every pulled card is GREEN.',
     4: 'Every pulled card is RED.', 5: 'Each pack costs two pull credits.',
@@ -60,7 +60,7 @@ async function view(userId) {
 function hub(userId, state, card) {
   const active = hal.active();
   const embed = withEventLogo(new EmbedBuilder().setTitle(`🎃 ${eventName()}`).setColor(LOGO_COLOR))
-    .setDescription(`${active ? 'Event active' : 'Event not active'} | Oct 26 - Nov 8 (JST)\n` +
+    .setDescription(`${active ? 'Event active' : 'Event not active'} | Oct 24 - Nov 8 (JST)\n` +
       `Daily tarot expires at midnight JST. Collectible BOO cards never activate tarot effects.`)
     .addFields(
       { name: 'Candies', value: String(state.candies || 0), inline: true },
@@ -77,8 +77,8 @@ function shopMenu(userId, state) {
   const balance = Number(state.candies || 0);
   const holodoriAvailable = state.firstHolodoriBought !== true;
   const description = `You have **${balance} Candies**.\n\n` +
-    `**BOO Pull (${shop.BOO_PRICE})**: One collectible BOO card. Halloween X has a 0.03% chance.` +
-    `\n**10 BOO Pulls (${shop.BOO_TEN_PRICE})**: Ten independent collectible BOO cards, with the same odds per card.` +
+    `**BOO Pull (${shop.BOO_PRICE})**: One collectible draw. Most results are BOO, but the 0.03% Halloween X is a separate [???] rarity.` +
+    `\n**10 BOO Pulls (${shop.BOO_TEN_PRICE})**: Ten independent draws, with the same odds per card.` +
     (holodoriAvailable
       ? `\n\n**One-time HOLODORI 10-Pull (${shop.HOLO_PRICE})**: Ten HOLODORI cards with a guaranteed 5★.`
       : '');
@@ -123,7 +123,7 @@ function purchaseResult(userId, result, page, { imageRef = null, logoRef = null,
   const cards = result.cards;
   const card = cards[page];
   const isBoo = result.item === 'boo' || result.item === 'boo10';
-  const heading = isBoo ? `[BOO] ${card.name}` : `${card.signed ? 'SIGNED ' : ''}${card.rarity} ${card.name}`;
+  const heading = isBoo ? `[${card.rarity}] ${card.name}` : `${card.signed ? 'SIGNED ' : ''}${card.rarity} ${card.name}`;
   const trickReveal = isBoo && isTrickBoo(card.name)
     ? '\n\n🎃 **YOU\'VE BEEN TRICKED!** A BanG Dream! guest crashed your Halloween candy haul!'
     : '';

@@ -103,7 +103,6 @@ const IMAGE_BASE = process.env.IMAGE_BASE || 'http://152.69.195.48/images';
 const PAGE_TIMEOUT_MS = 2 * 60 * 1000; // 2 minutes
 const DEFAULT_GIF_DURATION_MS = 1200; // base animation delay for first/solo pulls
 
-/*
 const gifs = [
   'https://media.discordapp.net/attachments/1046811248647475302/1437428233086963774/ppp.gif',
   'https://media.discordapp.net/attachments/1046811248647475302/1437428255249535096/ag.gif',
@@ -115,10 +114,7 @@ const gifs = [
   'https://cdn.discordapp.com/attachments/986110973574283265/1441054422401683626/Pasupare.gif',
   'https://cdn.discordapp.com/attachments/802431770023952406/1443593296189456486/ras.gif'
 ];
-*/
-const gifs = [
-'https://media.discordapp.net/attachments/986110973574283265/1486867794892030052/fly_to_the_sky_sayo_san.gif'
-];
+
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
@@ -1204,9 +1200,11 @@ const frozen = isFrozen(discordUserId, member);
         .catch(err => { console.error('[HAL] multi pull rewards failed:', err); return null; });
       const booNames = packs.flatMap(pack => pack.filter(item => item.rarity === 'BOO')
         .map(item => path.parse(item.file).name));
+      const xNames = packs.flatMap(pack => pack.filter(item => item.rarity === '???')
+        .map(item => path.parse(item.file).name));
       const trickDrops = booNames.filter(isTrickBoo);
       const halRewardNotice = halBonus
-        ? `\n\uD83C\uDF83 +${candyEarned} Candy (Balance: ${halBonus.balance})${booNames.length ? ` | BOO extra slot: ${booNames.join(', ')}` : ''}${trickDrops.length ? `\n🎃 YOU'VE BEEN TRICKED! BanG Dream! guests: ${trickDrops.join(', ')}` : ''}`
+        ? `\n\uD83C\uDF83 +${candyEarned} Candy (Balance: ${halBonus.balance})${booNames.length ? ` | BOO extra slot: ${booNames.join(', ')}` : ''}${xNames.length ? ` | ??? special card: ${xNames.join(', ')}` : ''}${trickDrops.length ? `\n🎃 YOU'VE BEEN TRICKED! BanG Dream! guests: ${trickDrops.join(', ')}` : ''}`
         : '';
       if (halMagicianReady) await halEvent.useMagician(discordUserId);
 

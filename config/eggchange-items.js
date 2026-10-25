@@ -1,4 +1,5 @@
 // config/eggchange-items.js
+const { storedRarity } = require('./unknownCards');
 // Each color pool totals 100000.
 // Easter X/Y/O = 10 each => 0.01% each (10 / 100000).
 // Named cards share remaining 99970 across 7 names:
@@ -115,7 +116,7 @@ function toWeightedCardPool(colorName) {
   if (!def) return [];
 
   return Object.entries(def.cards).map(([image, weight]) => ({
-    rarity: def.rarity,
+    rarity: storedRarity(image, def.rarity),
     image,
     weight, // integer out of 100000-scale
   }));

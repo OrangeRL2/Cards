@@ -1,4 +1,5 @@
 const { booFileName } = require('../../config/halTarot');
+const { artRarity } = require('../../config/unknownCards');
 const { installLocalImageTransport } = require('../../utils/localizeInteractionEmbeds');
 // Commands/Utility/recents.js
 
@@ -150,6 +151,8 @@ function rowText(row) {
 const RARITY_COLORS = {
   XMAS: 0x05472A,
   SUN: 0xF4C542,
+  BOO: 0x9B59B6,
+  '???': 0xFFD166,
   '★★★': 0xF5C2E7,
   '★★★★': 0xE8B4F8,
   '★★★★★': 0xFFD166,
@@ -188,7 +191,7 @@ function buildCardImageUrl(name, rarity, variant = null) {
     return `${baseUrl}/SUN/Full%20Art/${encodedName}.png`;
   }
 
-  if (normalizedRarity === 'BOO') {
+  if (normalizedRarity === 'BOO' || (normalizedRarity === '???' && name === 'Halloween X')) {
     return `${baseUrl}/BOO/${encodeURIComponent(booFileName(name))}`;
   }
 
@@ -207,7 +210,7 @@ function buildCardImageUrl(name, rarity, variant = null) {
     if (folder) return `${baseUrl}/SUN/${folder}/${encodedName}.png`;
   }
 
-  return `${baseUrl}/${normalizedRarity}/${encodedName}.png`;
+  return `${baseUrl}/${artRarity(name, normalizedRarity)}/${encodedName}.png`;
 }
 
 function escapeMarkdown(str = '') {

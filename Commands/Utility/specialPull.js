@@ -754,9 +754,10 @@ module.exports = {
       .catch(err => { console.error('[HAL] special pull rewards failed:', err); return null; });
     if (halMagician) await halEvent.useMagician(discordUserId);
     const booNames = pack.filter(item => item.rarity === 'BOO').map(item => path.parse(item.file).name);
+    const xNames = pack.filter(item => item.rarity === '???').map(item => path.parse(item.file).name);
     const trickDrops = booNames.filter(isTrickBoo);
     const notice = halBonus
-      ? `\n+${candyEarned} Candy (Balance: ${halBonus.balance})${booNames.length ? ` | BOO extra slot: ${booNames.join(', ')}` : ''}${trickDrops.length ? `\n🎃 YOU'VE BEEN TRICKED! BanG Dream! guests: ${trickDrops.join(', ')}` : ''}`
+      ? `\n+${candyEarned} Candy (Balance: ${halBonus.balance})${booNames.length ? ` | BOO extra slot: ${booNames.join(', ')}` : ''}${xNames.length ? ` | ??? special card: ${xNames.join(', ')}` : ''}${trickDrops.length ? `\n🎃 YOU'VE BEEN TRICKED! BanG Dream! guests: ${trickDrops.join(', ')}` : ''}`
       : '';
     descriptionAll += notice;
 

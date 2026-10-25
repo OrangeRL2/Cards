@@ -47,7 +47,7 @@ async function purchase(userId, item, token) {
   try {
     let cards;
     if (item === 'boo' || item === 'boo10') {
-      // Both options use the same per-card odds, including the rare Halloween X.
+      // Both options use the same per-card odds: ordinary BOO or rare ??? Halloween X.
       // Duplicates count as separate copies in the user's collection.
       const count = item === 'boo10' ? 10 : 1;
       cards = Array.from({ length: count }, () => collectible());

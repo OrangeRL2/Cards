@@ -18,6 +18,8 @@ const User = require('../../models/User');
 const { resolveCardColor, getAttributeEmoji } = require('../../config/holomemColor');
 const pools = require('../../utils/loadImages');
 const { rarityChoices } = require('../../utils/rarities');
+const { isXCard } = require('../../config/halTarot');
+const { isUnknownCard, sourceRarity, artRarity } = require('../../config/unknownCards');
 
 const IMAGE_BASE = process.env.IMAGE_BASE || 'http://152.69.195.48/images';
 const PAGE_SIZE = 10;
@@ -27,12 +29,13 @@ const RARITY_ORDER = [
   'C', 'U', 'R', 'S', 'RR', 'OC', 'SR', 'COL', 'OSR',
   'P', 'SP', 'SY', 'UR', 'OUR', 'HR', 'BDAY', 'UP', 'SEC', 'ORI', 'EV',
 ];
-const RARITY2_ORDER = ['XMAS', 'VAL', 'EAS', 'SUN', 'BOO', 'FES', '★★★', '★★★★', '★★★★★'];
+const RARITY2_ORDER = ['XMAS', 'VAL', 'EAS', 'SUN', 'BOO', '???', 'FES', '★★★', '★★★★', '★★★★★'];
 const ALL_RARITY_ORDER = [...RARITY2_ORDER, ...RARITY_ORDER];
 
 const COLOR_MAP = {
   SUN: 0xF4C542,
   BOO: 0x9B59B6,
+  '???': 0xFFD166,
   FES: 0xE8A32A,
   '★★★': 0xF5C2E7,
   '★★★★': 0xE8B4F8,
@@ -86,7 +89,7 @@ function buildMissingCardImageUrl(card) {
   const encodedName = encodeURIComponent(String(card?.name || '').trim());
   // BOO contains both JPG tarot cards and PNG guest cards. Use the
   // extension from the actual inventory source file rather than assuming JPG.
-  if (rarity === 'BOO') {
+  if (rarity === 'BOO' || (rarity === '???' && isXCard(card?.name))) {
     const ext = path.extname(String(card?.file || '')).toLowerCase();
     const imageExt = ['.png', '.jpg', '.jpeg', '.webp', '.gif'].includes(ext) ? ext : '.jpg';
     return `${baseUrl}/BOO/${encodedName}${imageExt}`;
@@ -100,7 +103,7 @@ function buildMissingCardImageUrl(card) {
   if (rarity === 'COL' || rarity === 'ORI') {
     return `${baseUrl}/${encodeURIComponent(rarity)}/secret.png`;
   }
-  return `${baseUrl}/${encodeURIComponent(rarity)}/${encodedName}.png`;
+  return `${baseUrl}/${encodeURIComponent(artRarity(card?.name, rarity))}/${encodedName}.png`;
 }
 
 module.exports = {
@@ -214,9 +217,17 @@ requireOshi: true,
           continue;
         }
 
-        const rarityFiles = Array.isArray(pools[rarity]) ? pools[rarity] : [];
-        for (const file of rarityFiles) {
-          universe.push({ rarity, name: path.basename(file, path.extname(file)), file });
+        // ??? is a virtual collection whose five cards retain artwork in
+        // their original folders (BOO / EAS / XMAS). Filter source rarities
+        // so those cards never appear as missing EAS, XMAS or BOO cards.
+        const folders = rarity === '???' ? ['BOO', 'EAS', 'XMAS'] : [rarity];
+        for (const folder of folders) {
+          const rarityFiles = Array.isArray(pools[folder]) ? pools[folder] : [];
+          for (const file of rarityFiles) {
+            const name = path.basename(file, path.extname(file));
+            if (rarity === '???' ? sourceRarity(name) !== folder : isUnknownCard(name) && sourceRarity(name) === folder) continue;
+            universe.push({ rarity, name, file });
+          }
         }
       }
 

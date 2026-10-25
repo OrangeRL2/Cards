@@ -16,6 +16,7 @@ const {
 const mongoose = require('mongoose');
 const User = require('../../models/User');
 const SHOP_ITEMS = require('../../config/event-items');
+const { artRarity } = require('../../config/unknownCards');
 
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
@@ -34,7 +35,7 @@ function escapeMarkdown(str = '') {
 }
 
 function buildImageUrl(rarity, imageFilename) {
-  return `${IMAGE_BASE.replace(/\/$/, '')}/${encodeURIComponent(rarity)}/${encodeURIComponent(imageFilename)}`;
+  return `${IMAGE_BASE.replace(/\/$/, '')}/${encodeURIComponent(artRarity(String(imageFilename).replace(/\.png$/i, ''), rarity))}/${encodeURIComponent(imageFilename)}`;
 }
 
 // Build event categories dynamically from items (plus All Events)
@@ -567,7 +568,7 @@ module.exports = {
               }
 
               updatedUser.cards = updatedUser.cards || [];
-              const displayName = item.name.replace(/[_-]+/g, ' ').trim();
+              const displayName = item.image.replace(/[_-]+/g, ' ').trim();
               const now = new Date();
 
               let card = updatedUser.cards.find(c => c.name === displayName && c.rarity === item.rarity);

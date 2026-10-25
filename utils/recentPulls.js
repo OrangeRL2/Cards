@@ -6,7 +6,7 @@ const RECENT_PULL_RETENTION_DAYS = 30;
 const RECENT_PULL_MAX_BATCHES = 500;
 
 const RARITY_ORDER = Object.freeze([
-  'C', 'U', 'R', 'S', 'RR', 'OC', 'SR', 'XMAS', 'VAL', 'EAS', 'SUN', 'BOO', 'FES', 'EV',
+  'C', 'U', 'R', 'S', 'RR', 'OC', 'SR', 'XMAS', 'VAL', 'EAS', 'SUN', 'BOO', '???', 'FES', 'EV',
   '★★★', 'COL', 'OSR', 'P', 'SP', '★★★★', 'UP', 'SY', 'UR', 'OUR', 'HR',
   'BDAY', '★★★★★', 'SEC', 'ORI',
 ]);

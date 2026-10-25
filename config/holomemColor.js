@@ -14,7 +14,8 @@
 // Returned values are normalized to lowercase and validated against ALLOWED_COLORS.
 
 // ✅ Excel-derived mapping (auto-generated from your Excel)
-const { EXCEL_CARD_COLOR } = require('../utils/holomemColor.excel'); // utils/holomemColor.excel.js [2](https://ace00101-my.sharepoint.com/personal/nauldee_nawill_ace00101_onmicrosoft_com/Documents/Microsoft%20Copilot%20Chat%20%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB/card-name-map.txt)[1](https://ace00101-my.sharepoint.com/personal/nauldee_nawill_ace00101_onmicrosoft_com/Documents/Microsoft%20Copilot%20Chat%20%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB/holomemColor.js)
+const { EXCEL_CARD_COLOR } = require('../utils/holomemColor.excel');
+const { artRarity } = require('./unknownCards'); // utils/holomemColor.excel.js [2](https://ace00101-my.sharepoint.com/personal/nauldee_nawill_ace00101_onmicrosoft_com/Documents/Microsoft%20Copilot%20Chat%20%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB/card-name-map.txt)[1](https://ace00101-my.sharepoint.com/personal/nauldee_nawill_ace00101_onmicrosoft_com/Documents/Microsoft%20Copilot%20Chat%20%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB/holomemColor.js)
 
 // Returned values are normalized to lowercase and validated against ALLOWED_COLORS.
 const ALLOWED_COLORS = new Set([
@@ -433,7 +434,7 @@ function getExceptionAttr(cardName, rarity) {
 }
 
 function resolveCardColor(cardName, rarity) {
-  const exc = getExceptionAttr(cardName, rarity);
+  const exc = getExceptionAttr(cardName, artRarity(cardName, rarity));
   if (exc) return exc;
 
   const member = extractMember(cardName);

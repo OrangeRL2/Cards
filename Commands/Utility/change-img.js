@@ -1,4 +1,3 @@
-const { booFileName } = require('../../config/halTarot');
 const { installLocalImageTransport } = require('../../utils/localizeInteractionEmbeds');
 // commands/change-img.js
 const { SlashCommandBuilder, EmbedBuilder, PermissionFlagsBits } = require('discord.js');
@@ -37,14 +36,16 @@ function normalizeForCompare(s) {
 }
 
 
+const { artRarity } = require('../../config/unknownCards');
+
 function buildProfileImageUrl(rarityInput, cardNameInput) {
   const rarity = String(rarityInput || '').trim();
   const cardName = String(cardNameInput || '').trim();
   const encodedCardName = encodeURIComponent(cardName);
   const base = 'http://152.69.195.48/images';
 
-  if (rarity.toUpperCase() === 'BOO') {
-    return `${base}/BOO/${encodeURIComponent(booFileName(cardName))}`;
+  if (rarity === '???' && cardName === 'Halloween X') {
+    return `${base}/BOO/${encodedCardName}.jpg`;
   }
 
   if (/^★{3,5}$/.test(rarity)) {
@@ -55,7 +56,7 @@ function buildProfileImageUrl(rarityInput, cardNameInput) {
     return `${base}/HOLODORI/${encodeURIComponent('★★★')}/${encodedCardName}.png`;
   }
 
-  return `${base}/${encodeURIComponent(rarity)}/${encodedCardName}.png`;
+  return `${base}/${encodeURIComponent(artRarity(cardName, rarity))}/${encodedCardName}.png`;
 }
 
 module.exports = {
