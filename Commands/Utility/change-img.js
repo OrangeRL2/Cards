@@ -9,7 +9,13 @@ const { rarityChoices, resolveRarityOptions } = require('../../utils/rarities');
 const excelExceptions = require('../../config/imgExceptions.excel');
 // Optional manual overrides (merged with excelExceptions)
 const MANUAL_EXCEPTIONS = {
-  // Example: 'chloe': ['Ruka', 'HoloX'],
+  // Halloween X (??? rarity) may be used as an oshi image by these six members.
+  lamy: ['Halloween X'],
+  marine: ['Halloween X'],
+  miko: ['Halloween X'],
+  fubuki: ['Halloween X'],
+  kanata: ['Halloween X'],
+  luna: ['Halloween X'],
 };
 function mergeExceptionMaps(a = {}, b = {}) {
   const out = { ...a };
