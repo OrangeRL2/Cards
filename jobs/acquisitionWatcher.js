@@ -20,6 +20,11 @@ const {
 
 const snapshots = new Map();
 const pendingRefreshes = new Map();
+// A debounce timer alone does not prevent an already-running refresh from
+// overlapping another read of the same multi-thousand-card inventory.
+const refreshQueue = new Map();
+const activeRefreshes = new Set();
+const followUpRefreshes = new Map();
 
 let changeStream = null;
 let started = false;
@@ -29,7 +34,13 @@ let restartAttempt = 0;
 let generation = 0;
 
 const REFRESH_DEBOUNCE_MS = 750;
+// Bound simultaneous full-inventory downloads across the bot. Keep both caps
+// conservative on shared MongoDB Atlas tiers.
+const MAX_CONCURRENT_REFRESHES = 2;
+const SLOW_REFRESH_WARNING_MS = 2_000;
+const SLOW_WARNING_INTERVAL_MS = 60_000;
 const MAX_RESTART_DELAY_MS = 60_000;
+let lastSlowWarningAt = 0;
 
 function cardKey(card) {
   const rarity = normalizeRarity(card?.rarity);
@@ -177,18 +188,67 @@ async function refreshDocument(documentId) {
   }
 }
 
+function drainRefreshQueue() {
+  while (!stopping && activeRefreshes.size < MAX_CONCURRENT_REFRESHES && refreshQueue.size) {
+    const [key, documentId] = refreshQueue.entries().next().value;
+    refreshQueue.delete(key);
+
+    if (activeRefreshes.has(key)) {
+      followUpRefreshes.set(key, documentId);
+      continue;
+    }
+
+    activeRefreshes.add(key);
+    const beganAt = Date.now();
+    void refreshDocument(documentId)
+      .catch(err => {
+        console.error('[acquisitionWatcher] failed to refresh changed inventory:', err);
+      })
+      .finally(() => {
+        const elapsedMs = Date.now() - beganAt;
+        if (elapsedMs >= SLOW_REFRESH_WARNING_MS &&
+            Date.now() - lastSlowWarningAt >= SLOW_WARNING_INTERVAL_MS) {
+          lastSlowWarningAt = Date.now();
+          console.warn(`[acquisitionWatcher] slow inventory refresh: ${elapsedMs}ms; ` +
+            'limiting concurrent inventory reads to prevent overload.');
+        }
+
+        activeRefreshes.delete(key);
+        const followUpId = followUpRefreshes.get(key);
+        followUpRefreshes.delete(key);
+        // A write received while the read was in-flight may not have been
+        // visible in its snapshot. Recheck once after the debounce window.
+        if (!stopping && followUpId) scheduleDocumentRefresh(followUpId);
+        drainRefreshQueue();
+      });
+  }
+}
+
 function scheduleDocumentRefresh(documentId) {
   const key = String(documentId ?? '');
   if (!key || stopping) return;
+
+  // A queued read will see the newest state; scheduling another one would
+  // only repeat the same full inventory download.
+  if (refreshQueue.has(key)) return;
+  // Do not start another read while one for this user is still in progress.
+  if (activeRefreshes.has(key)) {
+    followUpRefreshes.set(key, documentId);
+    return;
+  }
 
   const existing = pendingRefreshes.get(key);
   if (existing) clearTimeout(existing);
 
   const timer = setTimeout(() => {
     pendingRefreshes.delete(key);
-    refreshDocument(documentId).catch(err => {
-      console.error('[acquisitionWatcher] failed to refresh changed inventory:', err);
-    });
+    if (stopping) return;
+    if (activeRefreshes.has(key)) {
+      followUpRefreshes.set(key, documentId);
+    } else {
+      refreshQueue.set(key, documentId);
+      drainRefreshQueue();
+    }
   }, REFRESH_DEBOUNCE_MS);
 
   timer.unref?.();
@@ -310,6 +370,8 @@ async function stopAcquisitionWatcher() {
 
   for (const timer of pendingRefreshes.values()) clearTimeout(timer);
   pendingRefreshes.clear();
+  refreshQueue.clear();
+  followUpRefreshes.clear();
 
   const stream = changeStream;
   changeStream = null;

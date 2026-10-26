@@ -1,0 +1,54 @@
+Commands/Utility/buy.js:22:  return new Promise(resolve => setTimeout(resolve, ms));
+Commands/Utility/buy.js:212:        idleTimer = setTimeout(() => collector.stop('idle'), IDLE_LIMIT);
+Commands/Utility/diff.js:425:        idleTimeout = setTimeout(() => collector.stop('idle'), IDLE_LIMIT);
+Commands/Utility/fusion.js:42:  return new Promise(resolve => setTimeout(resolve, ms));
+Commands/Utility/fusion.js:157:        idleTimer = setTimeout(() => collector.stop('idle'), IDLE_LIMIT);
+Commands/Utility/inventory.js:507:      idleTimeout = setTimeout(() => collector.stop('idle'), IDLE_LIMIT);
+Commands/Utility/memories.js:22:  return new Promise(resolve => setTimeout(resolve, ms));
+Commands/Utility/memories.js:227:        idleTimer = setTimeout(() => collector.stop('idle'), IDLE_LIMIT);
+Commands/Utility/miss.js:368:        idleTimeout = setTimeout(() => collector.stop('idle'), IDLE_LIMIT);
+Commands/Utility/multi-pull.js:123:  return new Promise(resolve => setTimeout(resolve, ms));
+Commands/Utility/multi-pull.js:620:    const lockHeartbeat = setInterval(() => {
+Commands/Utility/multi-pull.js:1342:        setTimeout(async () => {
+Commands/Utility/pull.js:122:  return new Promise(resolve => setTimeout(resolve, ms));
+Commands/Utility/pull.js:610:    const lockHeartbeat = setInterval(() => {
+Commands/Utility/pull.js:1229:        setTimeout(async () => {
+Commands/Utility/recents.js:450:      idleTimeout = setTimeout(() => collector.stop('idle'), IDLE_LIMIT);
+Commands/Utility/specialPull.js:51:  return new Promise(resolve => setTimeout(resolve, ms));
+Commands/Utility/specialPull.js:846:      setTimeout(async () => {
+events/interactionCreate.js:156:        setTimeout(() => timestamps.delete(interaction.user.id), cooldownMs);
+index.js:10:const { startAcquisitionWatcher, stopAcquisitionWatcher } = require('./jobs/acquisitionWatcher');
+index.js:416:setInterval(cleanupExpiredListings, 60 * 60 * 1000);
+jobs/acquisitionWatcher.js:1:// jobs/acquisitionWatcher.js
+jobs/acquisitionWatcher.js:102:  console.log(`[acquisitionWatcher] primed ${count} user inventory snapshot(s).`);
+jobs/acquisitionWatcher.js:131:  console.log(`[acquisitionWatcher] ${userId}: ${summary}`);
+jobs/acquisitionWatcher.js:187:  const timer = setTimeout(() => {
+jobs/acquisitionWatcher.js:190:      console.error('[acquisitionWatcher] failed to refresh changed inventory:', err);
+jobs/acquisitionWatcher.js:218:  console.warn(`[acquisitionWatcher] restarting change stream in ${Math.round(delay / 1000)}s.`);
+jobs/acquisitionWatcher.js:220:  restartTimer = setTimeout(async () => {
+jobs/acquisitionWatcher.js:225:      console.error('[acquisitionWatcher] restart failed:', err);
+jobs/acquisitionWatcher.js:276:    console.error('[acquisitionWatcher] change stream error:', err);
+jobs/acquisitionWatcher.js:284:    console.warn('[acquisitionWatcher] change stream closed unexpectedly.');
+jobs/acquisitionWatcher.js:288:  console.log('[acquisitionWatcher] watching User.cards for notable acquisitions.');
+jobs/birthdayHandout.js:204:  cron.schedule(
+jobs/bossManager.js:793:  setTimeout(async () => {
+jobs/bossManager.js:1373:  activatorInterval = setInterval(async () => {
+jobs/bossManager.js:1382:  settleInterval = setInterval(async () => {
+jobs/bossManager.js:1404:  refresherInterval = setInterval(async () => {
+jobs/guessManager.js:351:  autoTimer = setTimeout(async () => {
+jobs/guessManager.js:938:  timeoutInterval = setInterval(() => sweepTimeouts().catch(err => console.error('[guess] timeout sweep error:', err)), 2000);
+jobs/index.js:11:  setInterval(async () => {
+jobs/index.js:19:  setInterval(async () => {
+jobs/streamManager.js:339:  setTimeout(() => {
+jobs/streamManager.js:377:  const timer = setTimeout(async () => {
+jobs/streamManager.js:1607:  activatorInterval = setInterval(async () => {
+jobs/streamManager.js:1610:  settleInterval = setInterval(async () => {
+jobs/streamManager.js:1613:  refresherInterval = setInterval(async () => {
+message-commands/restart.js:57:      setTimeout(async () => {
+message-commands/restart.js:80:          setTimeout(() => process.exit(exitCode), 100);
+utils/localizeInteractionEmbeds.js:275:  while (state.running) await new Promise(resolve => setTimeout(resolve, 10));
+utils/pullDisplayGuard.js:69:  const warningTimer = setTimeout(() => { void warning(); }, warningAfterMs);
+utils/pullDisplayGuard.js:71:  const lateNoticeTimer = setTimeout(() => { if (!completed && !noticeShown) void warning(); }, lateRetryMs);
+utils/pullDisplayGuard.js:73:  const diagnosticTimer = setTimeout(() => {
+utils/pullDisplayGuard.js:89:      secTimer = setTimeout(() => { if (!completed) void warning(); }, secWarningAfterMs);
+utils/secReveal.js:25:  if (delayMs > 0) await new Promise(resolve => setTimeout(resolve, delayMs));

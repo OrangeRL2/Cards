@@ -1,0 +1,590 @@
+Commands/Admin/summer-admin.js:106:      const doc = await SummerUser.findOne({ userId: user.id }).lean().exec();
+Commands/Admin/summer-admin.js:136:      const updated = await SummerUser.findOneAndUpdate(
+Commands/Admin/summer-admin.js:187:    const doc = await SummerUser.findOneAndUpdate(
+Commands/Event/halloween.js:251:          logoAttachmentId = attachments.find(a => a.name === LOGO_NAME)?.id || null;
+Commands/Event/summer.js:12:async function showHub(interaction,uid){const gift=await grantSummerWelcomeGift(uid);const d=gift.summerUser||await SummerUser.findOne({userId:uid}).lean().exec();const content=gift.granted?`🎁 Welcome to ${LABEL[normalizeIsland(d.island)]}! You received **100 Summer Shells**.`:null;await interaction.editReply({content,embeds:[hubEmbed(d)],components:hubRows(uid,d)});}
+Commands/Event/summer.js:23:function coreView(uid,d,w){const day=A.getDayNumber(d),win=A.getDayData(day)?.windows?.[w],state=A.getWindowState(d,day,w);if(!win)return {content:'No activity data exists for this time window.',embeds:[],components:[row(btn(`summer:activities:${uid}`,'Back'))]};if(state.coreId){const core=win.coreActivities.find(x=>x.id===state.coreId),step=core?.steps?.find(x=>x.id===state.stepId),options=A.getAvailableOptions(d,day,w,state.coreId,state.stepId);if(!core||!step)return {content:'This activity path is no longer valid. Please contact an administrator.',embeds:[],components:[row(btn(`summer:activities:${uid}`,'Back'))]};if(!options.length)return {content:'No choices are currently available for this path. Check the activity flag conditions.',embeds:[new EmbedBuilder().setTitle(core.buttonText).setDescription(`${state.lastResultDialogue||core.selectedDialogue}\n\n**${step.prompt}**`).setColor(0xe67e22)],components:[row(btn(`summer:activities:${uid}`,'Back'))]};return {content:null,embeds:[new EmbedBuilder().setTitle(core.buttonText).setDescription(`${state.lastResultDialogue||core.selectedDialogue}\n\n**${step.prompt}**`).setColor(0x35c98b)],components:[row(new StringSelectMenuBuilder().setCustomId(`summer:option:${w}:${core.id}:${step.id}:${uid}`).setPlaceholder('Choose an option').addOptions(options.map(o=>({label:o.text,value:o.id}))))]};}const cores=A.getAvailableCoreActivities(d,day,w);if(!cores.length)return {content:'No activities are available for your current story path in this window.',embeds:[new EmbedBuilder().setTitle(win.title||`${w} activities`).setDescription(win.openingDialogue).setColor(0xe67e22)],components:[row(btn(`summer:activities:${uid}`,'Back'))]};return {content:null,embeds:[new EmbedBuilder().setTitle(win.title||`${w} activities`).setDescription(win.openingDialogue).setColor(0x35c98b).addFields(...cores.map(c=>({name:c.buttonText||c.fullArtRoute,value:c.previewDialogue||c.fullArtRoute,inline:false})))],components:[row(...cores.map((c,i)=>btn(`summer:core:${w}:${c.id}:${uid}`,c.buttonText||c.fullArtRoute,[ButtonStyle.Primary,ButtonStyle.Success,ButtonStyle.Secondary][i%3]))),row(btn(`summer:activities:${uid}`,'Back'))]};}
+Commands/Event/summer.js:34:module.exports={data:new SlashCommandBuilder().setName('summer').setDescription('Open Hello! A Brand New Summer!'),requireOshi:true,async execute(interaction){installLocalImageTransport(interaction);await interaction.deferReply({ephemeral:true});const uid=interaction.user.id;let d=await SummerUser.findOne({userId:uid}).lean().exec();let activeHolodoriResult=null;let activeHolodoriPage=0;if(d?.island)await showHub(interaction,uid);else await interaction.editReply({embeds:[overview()],components:[islandSelect(uid)]});const msg=await interaction.fetchReply();const col=msg.createMessageComponentCollector({time:10*60*1000,filter:c=>c.user.id===uid&&c.customId.endsWith(`:${uid}`)});col.on('collect',async c=>{
+Commands/Event/summer.js:38: if(c.customId.startsWith('summer:confirm:')){await c.deferUpdate();const i=normalizeIsland(c.customId.split(':')[2]);await SummerUser.updateOne({userId:uid},{$setOnInsert:{userId:uid,island:i}},{upsert:true,setDefaultsOnInsert:true});await SummerUser.updateOne({userId:uid,island:null},{$set:{island:i}});return showHub(c,uid);}
+Commands/Event/summer.js:40: if(c.customId===`summer:shop:${uid}`){await c.deferUpdate();d=await SummerUser.findOne({userId:uid}).lean();return c.editReply({content:null,embeds:[shopEmbed(d)],components:shopRows(uid,d)});}
+Commands/Event/summer.js:41: if(c.customId.startsWith('summer:shopselect:')){await c.deferUpdate();const itemId=c.customId.split(':')[2],item=S.getShopItem(itemId);if(!item)return c.editReply({content:'That shop item does not exist.',embeds:[],components:[row(btn(`summer:shop:${uid}`,'Back'))]});d=await SummerUser.findOne({userId:uid}).lean();if((d.summerShells||0)<item.price)return c.editReply({content:`You need ${item.price} Summer Shells, but only have ${d.summerShells||0}.`,embeds:[],components:[row(btn(`summer:shop:${uid}`,'Back to Shop'))]});const token=S.createPurchaseToken();return c.editReply({content:null,embeds:[shopConfirmEmbed(item,d)],components:shopConfirmRows(uid,itemId,token)});}
+Commands/Event/summer.js:46: if(c.customId===`summer:activities:${uid}`){await c.deferUpdate();d=await SummerUser.findOne({userId:uid}).lean();const day=A.getDayNumber(d);if(!day)return c.editReply({content:'No August activity day is active.',embeds:[],components:[row(btn(`summer:hub:${uid}`,'Back'))]});return c.editReply({content:null,embeds:[activityHomeEmbed(d)],components:activityHomeRows(uid,d)});}
+Commands/Event/summer.js:47: if(c.customId.startsWith('summer:window:')){await c.deferUpdate();const w=c.customId.split(':')[2];d=await SummerUser.findOne({userId:uid}).lean();return c.editReply(coreView(uid,d,w));}
+Commands/Event/summer.js:48: if(c.customId.startsWith('summer:core:')){await c.deferUpdate();const [, ,w,coreId]=c.customId.split(':');d=await SummerUser.findOne({userId:uid}).lean();const day=A.getDayNumber(d);const r=await A.selectCore(uid,day,w,coreId);if(!r.success){const message=r.reason==='CONDITION_FAILED'?'That activity is not available on your current story path.':r.reason==='NO_AVAILABLE_STEPS'?'That activity has no valid starting step for your current story flags.':'That activity is already locked or completed.';return c.editReply({content:message,embeds:[],components:[row(btn(`summer:activities:${uid}`,'Back'))]});}d=await SummerUser.findOne({userId:uid}).lean();return c.editReply(coreView(uid,d,w));}
+Commands/Event/summer.js:49: if(c.componentType===ComponentType.StringSelect&&c.customId.startsWith('summer:option:')){await c.deferUpdate();const parts=c.customId.split(':'),w=parts[2],coreId=parts[3],stepId=parts[4];d=await SummerUser.findOne({userId:uid}).lean();const day=A.getDayNumber(d);const r=await A.chooseOption(uid,day,w,coreId,stepId,c.values[0]);if(!r.success){let message='This choice is no longer available.';if(r.reason==='CONDITION_FAILED')message='Your story flags no longer allow that choice.';if(r.reason==='NEXT_STEP_CONDITION_FAILED')message=`The selected choice points to ${r.nextStepId}, but that step's flag conditions are not satisfied.`;return c.editReply({content:message,embeds:[],components:[row(btn(`summer:activities:${uid}`,'Back'))]});}if(r.completed)return c.editReply({content:null,embeds:[rewardEmbed(r)],components:[row(btn(`summer:activities:${uid}`,'Activities'),btn(`summer:hub:${uid}`,'Hub'))]});d=await SummerUser.findOne({userId:uid}).lean();return c.editReply(coreView(uid,d,w));}
+Commands/Utility/burn.js:107:    const userDoc = await User.findOne({ id: userId }).lean().exec();
+Commands/Utility/burn.js:184:        const userDocTx = await User.findOne({ id: userId }).session(sessionDb).exec();
+Commands/Utility/burn.js:211:        const oshi = await Oshi.findOne({ userId }).session(sessionDb).exec();
+Commands/Utility/burn.js:269:            const existing = userDocTx.cards.find(x => String(x.name) === displayName && String(x.rarity || '').toUpperCase() === awardRarity);
+Commands/Utility/burn.js:290:          await PullQuota.findOneAndUpdate(
+Commands/Utility/burn.js:297:        await userDocTx.save({ session: sessionDb });
+Commands/Utility/burn.js:298:        await oshi.save({ session: sessionDb });
+Commands/Utility/buy.js:104:        const tier = COST_TIERS.find(t => t.id === tierId);
+Commands/Utility/buy.js:139:            .setFooter({ text: `Page ${pageIdx + 1}/${totalPages} - Filter: ${COST_TIERS.find(t => t.id === activeTier)?.label || 'All Cards'}` });
+Commands/Utility/buy.js:481:                let userDoc = await User.findOne({ id: buyerId }).session(session);
+Commands/Utility/buy.js:484:                  await userDoc.save({ session });
+Commands/Utility/buy.js:496:                let card = userDoc.cards.find(c => c.name === displayName && c.rarity === item.rarity);
+Commands/Utility/buy.js:506:                await userDoc.save({ session });
+Commands/Utility/buy.js:550:              const updatedUser = await User.findOneAndUpdate(
+Commands/Utility/buy.js:565:              let card = updatedUser.cards.find(c => c.name === displayName && c.rarity === item.rarity);
+Commands/Utility/buy.js:583:              await updatedUser.save();
+Commands/Utility/change-img.js:113:      const oshiDoc = await OshiUser.findOne({ userId: targetId }).lean().exec();
+Commands/Utility/change-img.js:143:      const userDoc = await User.findOne({ id: targetId }).lean().exec();
+Commands/Utility/change-img.js:161:      const updated = await OshiImageOverride.findOneAndUpdate(
+Commands/Utility/change-img.js:185:      const oshiMeta = OSHI_LIST.find(o => o.id === oshiDoc.oshiId);
+Commands/Utility/diff.js:187:        User.findOne({ id: interaction.user.id }),
+Commands/Utility/diff.js:188:        User.findOne({ id: targetUser.id }),
+Commands/Utility/fusion.js:324:          let userDoc = await User.findOne({ id: buyerId });
+Commands/Utility/fusion.js:327:            await userDoc.save();
+Commands/Utility/fusion.js:343:            const card = (userDoc.cards || []).find(c => String(c.rarity) === String(req.rarity) && String(c.name) === String(req.image));
+Commands/Utility/fusion.js:380:            const card = (userDoc.cards || []).find(c => String(c.rarity) === String(req.rarity) && String(c.name) === String(req.image));
+Commands/Utility/fusion.js:393:          let fusedCard = userDoc.cards.find(c => c.name === displayName && c.rarity === recipe.rarity);
+Commands/Utility/fusion.js:410:          await userDoc.save();
+Commands/Utility/gift.js:103:      const fromDoc = await User.findOne({ id: fromId }).exec();
+Commands/Utility/gift.js:193:      await fromDoc.save();
+Commands/Utility/gift.js:196:      let toDoc = await User.findOne({ id: toUser.id }).exec();
+Commands/Utility/gift.js:220:      await toDoc.save();
+Commands/Utility/inventory.js:290:    const userDoc = await User.findOne({ id: targetUser.id });
+Commands/Utility/leaderboard.js:48:    const topUsers = await User.find()
+Commands/Utility/lives-claim.js:104:    const user = await User.findOne({ id: userId }).lean();
+Commands/Utility/lives-claim.js:244:    const userAfter = await User.findOne({ id: userId }).lean();
+Commands/Utility/lives-claim.js:331:      const slot = (userAfter?.pendingAttempts || []).find(a => !a.resolved && Number(a.stage) === Number(s));
+Commands/Utility/lives-claim.js:363:  const freshUser = await User.findOne({ id: userId }).lean();
+Commands/Utility/lives-claim.js:365:    const slot = (freshUser?.pendingAttempts || []).find(a => !a.resolved && Number(a.stage) === Number(s));
+Commands/Utility/lives-claim.js:390:      const fresh = await User.findOne({ id: userId }).lean();
+Commands/Utility/lives-claim.js:400:          await User.updateOne({ id: userId }, { $set: { [`lastLiveOptions.stage_${s}`]: opts } }).exec();
+Commands/Utility/lives-claim.js:463:const fresh2 = await User.findOne({ id: userId }).lean();
+Commands/Utility/lives-claim.js:488:    await User.updateOne({ id: userId }, { $set: { [`lastLiveOptions.stage_${s}`]: opts } }).exec();
+Commands/Utility/lives-start.js:156:      const user = await User.findOne({ id: userId }).lean();
+Commands/Utility/lives-start.js:252:            await User.updateOne(
+Commands/Utility/lives-start.js:328:    const user = await User.findOne({ id: userId }).lean();
+Commands/Utility/lives-start.js:429:          await User.updateOne(
+Commands/Utility/lock.js:61:    const userDoc = await User.findOne({ id: userId }).exec();
+Commands/Utility/lock.js:114:    await userDoc.save();
+Commands/Utility/login.js:453:  let user = await User.findOneAndUpdate(
+Commands/Utility/login.js:460:    user = await User.findOne({ id: userId }).exec();
+Commands/Utility/login.js:474:      await User.updateOne(
+Commands/Utility/login.js:479:      await User.updateOne(
+Commands/Utility/login.js:870:      const rec = await LoginRecord.findOne({ userId }).exec();
+Commands/Utility/login.js:916:        const eventRec = await LoginCardEventRecord.findOne({
+Commands/Utility/login.js:935:        await LoginCardEventRecord.findOneAndUpdate(
+Commands/Utility/login.js:968:      await LoginRecord.findOneAndUpdate(
+Commands/Utility/login.js:984:      await User.findOneAndUpdate(
+Commands/Utility/memories.js:135:            : (EVENT_CATEGORIES.find(e => e.id === activeEvent)?.label || activeEvent);
+Commands/Utility/memories.js:481:                let userDoc = await User.findOne({ id: buyerId }).session(session);
+Commands/Utility/memories.js:484:                  await userDoc.save({ session });
+Commands/Utility/memories.js:497:                let card = userDoc.cards.find(c => c.name === displayName && c.rarity === item.rarity);
+Commands/Utility/memories.js:507:                await userDoc.save({ session });
+Commands/Utility/memories.js:555:              const updatedUser = await User.findOneAndUpdate(
+Commands/Utility/memories.js:574:              let card = updatedUser.cards.find(c => c.name === displayName && c.rarity === item.rarity);
+Commands/Utility/memories.js:591:              await updatedUser.save();
+Commands/Utility/miss.js:173:      const userDoc = await User.findOne({ id: interaction.user.id });
+Commands/Utility/miss.js:248:        const info = owned.find(c => c.name === card.name && c.rarity === card.rarity);
+Commands/Utility/multi-pull.js:131:    const res = await PullLock.updateOne(
+Commands/Utility/multi-pull.js:243:      .findOne({ active: true, expiresAt: { $gt: new Date() } })
+Commands/Utility/multi-pull.js:254:    await PullQuotaModel.updateOne(
+Commands/Utility/multi-pull.js:293:      .findOne({ label: labelKey, active: true, expiresAt: { $gt: new Date() } })
+Commands/Utility/multi-pull.js:310:        await PullQuotaModel.updateOne(
+Commands/Utility/multi-pull.js:353:      await PullQuotaModel.updateOne({ userId: discordUserId }, { $inc: incObj }).exec();
+Commands/Utility/multi-pull.js:428:    await doc.save();
+Commands/Utility/multi-pull.js:446:  const dec = await PullQuotaModel.updateOne(
+Commands/Utility/multi-pull.js:621:      void PullLock.updateOne(
+Commands/Utility/multi-pull.js:838:      await User.updateOne(
+Commands/Utility/multi-pull.js:850:          const u = await User.findOne({ id: discordUserId }, { pullsSinceLastSEC: 1 }).lean();
+Commands/Utility/multi-pull.js:939:              await PullQuotaModel.updateOne({ userId: discordUserId }, { $inc: inc }).catch(() => null);
+Commands/Utility/multi-pull.js:948:                await doc.save().catch(() => null);
+Commands/Utility/multi-pull.js:976:        const inventoryDoc = await User.findOne(
+Commands/Utility/multi-pull.js:1148:          const bulkResult = await User.bulkWrite(bulkOps, { ordered: true });
+Commands/Utility/multi-pull.js:1174:              await PullQuotaModel.updateOne({ userId: discordUserId }, { $inc: inc }).catch(() => null);
+Commands/Utility/multi-pull.js:1183:                await doc.save().catch(() => null);
+Commands/Utility/multi-pull.js:1245:        await User.updateOne({ id: discordUserId }, update, { upsert: true });
+Commands/Utility/oshi.js:74:      const doc = await OshiUser.findOne({ userId: targetId }).lean().exec();
+Commands/Utility/oshi.js:84:      const oshiMeta = OSHI_LIST.find(o => o.id === doc.oshiId);
+Commands/Utility/oshi.js:98:      const override = await OshiImageOverride.findOne({ userId: targetId }).lean().exec();
+Commands/Utility/points.js:25:      const u = await User.findOne({ id: targetUser.id }).lean();
+Commands/Utility/pull.js:130:    const res = await PullLock.updateOne(
+Commands/Utility/pull.js:242:      .findOne({ active: true, expiresAt: { $gt: new Date() } })
+Commands/Utility/pull.js:253:    await PullQuotaModel.updateOne(
+Commands/Utility/pull.js:292:      .findOne({ label: labelKey, active: true, expiresAt: { $gt: new Date() } })
+Commands/Utility/pull.js:309:        await PullQuotaModel.updateOne(
+Commands/Utility/pull.js:352:      await PullQuotaModel.updateOne({ userId: discordUserId }, { $inc: incObj }).exec();
+Commands/Utility/pull.js:425:    await doc.save();
+Commands/Utility/pull.js:443:  const dec = await PullQuotaModel.updateOne(
+Commands/Utility/pull.js:611:      void PullLock.updateOne(
+Commands/Utility/pull.js:843:      await User.updateOne(
+Commands/Utility/pull.js:855:          const u = await User.findOne({ id: discordUserId }, { pullsSinceLastSEC: 1 }).lean();
+Commands/Utility/pull.js:925:              await PullQuotaModel.updateOne({ userId: discordUserId }, { $inc: inc }).catch(() => null);
+Commands/Utility/pull.js:934:                await doc.save().catch(() => null);
+Commands/Utility/pull.js:977:        await User.updateOne({ id: discordUserId }, { $setOnInsert: { id: discordUserId, pulls: 0, cards: [] } }, { upsert: true });
+Commands/Utility/pull.js:978:        const inventoryDoc = await User.findOne({ id: discordUserId }, { cards: 1 }).lean();
+Commands/Utility/pull.js:1045:          const saved = await User.bulkWrite(updates, { ordered: true });
+Commands/Utility/pull.js:1065:              await PullQuotaModel.updateOne({ userId: discordUserId }, { $inc: inc }).catch(() => null);
+Commands/Utility/pull.js:1074:                await doc.save().catch(() => null);
+Commands/Utility/pull.js:1142:        await User.updateOne({ id: discordUserId }, update, { upsert: true });
+Commands/Utility/recents.js:303:    const userDoc = await User.findOne(
+Commands/Utility/specialPull.js:59:    return await SpecialPullGrant.findOne({ active: true, expiresAt: { $gt: new Date() } }).sort({ createdAt: -1 }).lean();
+Commands/Utility/specialPull.js:72:    await PullQuotaModel.updateOne(
+Commands/Utility/specialPull.js:118:    const grant = await SpecialPullGrant.findOne({ label: labelKey, active: true, expiresAt: { $gt: new Date() } }).lean();
+Commands/Utility/specialPull.js:140:        await PullQuotaModel.updateOne({ userId: discordUserId }, { $setOnInsert: init }, { upsert: true }).catch(() => null);
+Commands/Utility/specialPull.js:199:      await PullQuotaModel.updateOne({ userId: discordUserId }, { $inc: incObj }).exec();
+Commands/Utility/specialPull.js:287:    await doc.save();
+Commands/Utility/specialPull.js:323:      await doc.save();
+Commands/Utility/specialPull.js:551:            await PullQuotaModel.updateOne({ userId: discordUserId }, { $inc: inc }).catch(() => null);
+Commands/Utility/specialPull.js:559:              await doc.save().catch(() => null);
+Commands/Utility/specialPull.js:582:      await User.updateOne({ id: discordUserId }, { $setOnInsert: { id: discordUserId, pulls: 0, cards: [] } }, { upsert: true });
+Commands/Utility/specialPull.js:596:        const incResult = await User.updateOne(
+Commands/Utility/specialPull.js:614:          const readDoc = await User.findOne(
+Commands/Utility/specialPull.js:630:            const agg = await User.aggregate([
+Commands/Utility/specialPull.js:640:          await User.updateOne(
+Commands/Utility/specialPull.js:660:          const readDoc = await User.findOne(
+Commands/Utility/specialPull.js:676:            const agg = await User.aggregate([
+Commands/Utility/specialPull.js:709:            await PullQuotaModel.updateOne({ userId: discordUserId }, { $inc: inc }).catch(() => null);
+Commands/Utility/specialPull.js:717:              await doc.save().catch(() => null);
+Commands/Utility/specialPull.js:766:      await User.updateOne({ id: discordUserId }, { $inc: { pulls: 1 } });
+Commands/Utility/trade.js:113:    const fromDoc = await User.findOne({ id: fromId }).exec();
+Commands/Utility/trade.js:270:          const doc = await User.findOne({ id: userId }).exec();
+Commands/Utility/trade.js:362:          let fromDocFinal = await User.findOne({ id: session.fromId }).exec();
+Commands/Utility/trade.js:363:          let toDocFinal = await User.findOne({ id: session.toId }).exec();
+Commands/Utility/trade.js:371:              const s = (sourceDoc.cards || []).find(x =>
+Commands/Utility/trade.js:434:            await Promise.all([fromDocFinal.save(), toDocFinal.save()]);
+config/halTarot.js:5:function lookup(value){const q=String(value??'').trim().toLowerCase();return CARDS.find(x=>String(x.number)===q||x.name.toLowerCase()===q||x.name.replace(/^the /i,'').toLowerCase()===q)||null;}
+events/interactionCreate.js:87:          const oshi = OSHI_LIST.find(o => o.id === selectedId);
+events/interactionCreate.js:91:            const existing = await OshiUser.findOne({ userId: allowedUserId }).lean();
+events/interactionCreate.js:101:            await OshiUser.findOneAndUpdate(
+index.js:399:    const result = await TradeListing.updateMany(
+jobs/acquisitionWatcher.js:93:  const cursor = User.find({}, { id: 1, cards: 1 }).lean().cursor();
+jobs/acquisitionWatcher.js:111:  await User.updateOne(
+jobs/acquisitionWatcher.js:116:  await User.updateOne(
+jobs/acquisitionWatcher.js:163:  const doc = await User.findById(documentId, { id: 1, cards: 1 }).lean();
+jobs/birthdayHandout.js:24:    const o = oshis.find(x => x.id === oshiId);
+jobs/birthdayHandout.js:67:    let userDoc = await User.findOne({ id: userId }).exec();
+jobs/birthdayHandout.js:70:    let card = (userDoc.cards || []).find(c => c.name === displayName && c.rarity === 'BDAY');
+jobs/birthdayHandout.js:82:    await userDoc.save();
+jobs/birthdayHandout.js:125:      const oshiDoc = oshis.find(o => o.id === oshiId);
+jobs/birthdayHandout.js:128:        await DailyEvent.updateOne(
+jobs/birthdayHandout.js:135:      const users = (await Oshi.find({ oshiId }).lean()) || [];
+jobs/birthdayHandout.js:145:          let pq = await PullQuota.findOne({ userId });
+jobs/birthdayHandout.js:165:            await pq.save();
+jobs/birthdayHandout.js:183:        await DailyEvent.updateOne(
+jobs/bossActivator.js:11:  const toActivate = await BossEvent.find({ status: 'scheduled', spawnAt: { $lte: now }, endsAt: { $gt: now } });
+jobs/bossActivator.js:17:    await ev.save();
+jobs/bossActivator.js:21:    const oshiCfg = oshis.find(o => o.id === ev.oshiId);
+jobs/bossAnnouncer.js:11:  const toActivate = await BossEvent.find({ status: 'scheduled', spawnAt: { $lte: now }, endsAt: { $gt: now } });
+jobs/bossAnnouncer.js:15:    const oshiCfg = oshis.find(o => o.id === ev.oshiId);
+jobs/bossAnnouncer.js:21:    await ev.save();
+jobs/bossManager.js:120:  const cfg = oshis.find(o => String(o.id).toLowerCase() === id);
+jobs/bossManager.js:226:  const oshiCfg = oshis.find(o =>
+jobs/bossManager.js:250:  return oshis.find(o =>
+jobs/bossManager.js:290:    .map(id => oshis.find(o => String(o.id).toLowerCase() === String(id).toLowerCase())?.label || id)
+jobs/bossManager.js:318:    let user = await User.findOne({ id: userId }).session(session).exec();
+jobs/bossManager.js:321:      await User.updateOne({ id: userId }, { $push: { cards: newCard } }, { upsert: true, session });
+jobs/bossManager.js:331:      await User.updateOne({ id: userId }, { $set: update }, { session });
+jobs/bossManager.js:334:      await User.updateOne({ id: userId }, { $push: { cards: newCard } }, { upsert: true, session });
+jobs/bossManager.js:412:  await BossEvent.updateMany(
+jobs/bossManager.js:417:  await BossEvent.updateMany(
+jobs/bossManager.js:425:  const toActivate = await BossEvent.find({ status: 'scheduled', spawnAt: { $lte: now }, endsAt: { $gt: now } });
+jobs/bossManager.js:429:    const oshiCfg = oshis.find(o => o.id === ev.oshiId);
+jobs/bossManager.js:435:    await ev.save();
+jobs/bossManager.js:448:      await ev.save();
+jobs/bossManager.js:457:  const ev = evOverride || await BossEvent.findOne({ eventId }).lean();
+jobs/bossManager.js:460:  const oshiCfg = oshis.find(o => o.id === ev.oshiId);
+jobs/bossManager.js:484:  const updatedIfExists = await BossEvent.findOneAndUpdate(
+jobs/bossManager.js:500:  return BossEvent.findOneAndUpdate({ eventId }, pushUpdate, { session, new: true }).lean();
+jobs/bossManager.js:506:  const user = await User.findOne({ id: userId }).session(session);
+jobs/bossManager.js:516:    await User.updateOne({ id: userId }, { $set: update }).session(session);
+jobs/bossManager.js:518:    await User.updateOne({ id: userId }, { $pull: { cards: { name: card.name, rarity: card.rarity } } }).session(session);
+jobs/bossManager.js:525:  const user = await User.findOne({ id: userId }).session(session);
+jobs/bossManager.js:539:    await User.updateOne({ id: userId }, { $set: update }).session(session);
+jobs/bossManager.js:541:    await User.updateOne({ id: userId }, { $pull: { cards: { name: card.name, rarity: card.rarity } } }).session(session);
+jobs/bossManager.js:552:  const ev = await BossEvent.findOne({ eventId: String(eventId) }).exec();
+jobs/bossManager.js:568:  return BossEvent.findOne({ oshiId, spawnAt: { $lte: now }, endsAt: { $gt: now }, status: 'active' });
+jobs/bossManager.js:595:  const oshiDoc = await Oshi.findOne({ userId }).lean();
+jobs/bossManager.js:596:  const userDoc = await User.findOne({ id: userId }).lean();
+jobs/bossManager.js:618:    const existing = await BossPointLog.findOne({ eventId: ev.eventId, userId, action: 'like' })
+jobs/bossManager.js:738:  const userDoc = await User.findOne({ id: userId }).lean();
+jobs/bossManager.js:762:  const ev = await BossEvent.findOne({ eventId }).lean();
+jobs/bossManager.js:769:  const userState = (ev.pointsByUser || []).find(p => p.userId === userId);
+jobs/bossManager.js:774:  const oshiCfg = oshis.find(o => o.id === ev.oshiId);
+jobs/bossManager.js:829:    const ev = await BossEvent.findOne({ eventId }).lean();
+jobs/bossManager.js:835:    const userState = (ev.pointsByUser || []).find(p => p.userId === userId);
+jobs/bossManager.js:862:  const userDoc = await User.findOne({ id: userId }).lean();
+jobs/bossManager.js:865:  const userState = (ev.pointsByUser || []).find(p => p.userId === userId);
+jobs/bossManager.js:884:    const userUpdate = await User.updateOne(
+jobs/bossManager.js:913:    const freshEv = await BossEvent.findOne({ eventId: ev.eventId }).lean();
+jobs/bossManager.js:1114:  const toSettle = await BossEvent.find({ status: 'ended' });
+jobs/bossManager.js:1131:        const oshiCfg = oshis.find(o => o.id === ev.oshiId);
+jobs/bossManager.js:1166:          const oshiCfg = oshis.find(o => o.id === ev.oshiId);
+jobs/bossManager.js:1188:          const oshiCfg = oshis.find(o => o.id === ev.oshiId);
+jobs/bossManager.js:1222:          const oshiCfg = oshis.find(o => o.id === ev.oshiId);
+jobs/bossManager.js:1287:      await ev.save();
+jobs/bossManager.js:1295:            const oshiCfg = oshis.find(o => o.id === ev.oshiId);
+jobs/bossManager.js:1355:  await eventDoc.save();
+jobs/bossManager.js:1406:      const active = await BossEvent.find({ status: 'active' });
+jobs/bossManager.js:1415:        const oshiCfg = oshis.find(o => o.id === ev.oshiId);
+jobs/guessManager.js:64:  const d = (song?.difficulties || []).find(x => String(x.type || '').toLowerCase() === 'expert');
+jobs/guessManager.js:169:      const member = (data.holomems || []).find(h => String(h.id) === String(card.characterId));
+jobs/guessManager.js:367:  let user = await User.findOneAndUpdate(
+jobs/guessManager.js:382:    await User.updateOne({ id: String(userId) }, { $set: set }).exec();
+jobs/guessManager.js:384:    await User.updateOne(
+jobs/guessManager.js:481:    const claimed = await GuessChallenge.findOneAndUpdate(
+jobs/guessManager.js:496:      await GuessChallenge.updateOne(
+jobs/guessManager.js:637:        const song = (data.songs || []).find(s => String(s.id) === String(round.answerId));
+jobs/guessManager.js:765:        const result = await GuessChallenge.updateOne(
+jobs/guessManager.js:874:  const docs = await GuessChallenge.find({ active: true }).sort({ spawnedAt: 1 }).lean().exec();
+jobs/guessManager.js:880:      await GuessChallenge.updateOne({ challengeId: doc.challengeId }, { $set: { active: false, resolvedAt: new Date() } }).exec();
+jobs/guessManager.js:946:  const closed = await GuessChallenge.updateMany(
+jobs/streamManager.js:130:  const cfg = oshis.find(o => String(o.id).toLowerCase() === id);
+jobs/streamManager.js:140:  return oshis.find(o =>
+jobs/streamManager.js:224:  let state = (ev.users || []).find(s => s.userId === userId);
+jobs/streamManager.js:270:  return getStreamMemberIds(ev.oshiId).find(id => cardMatchesOshi(cardName, id)) || null;
+jobs/streamManager.js:316:  const ev = await StreamEvent.findOne({ eventId: String(eventId) }).exec();
+jobs/streamManager.js:386:  const ev = evOverride || await StreamEvent.findOne({ eventId }).lean();
+jobs/streamManager.js:406:      const ev = await StreamEvent.findOne({ eventId }).session(session);
+jobs/streamManager.js:408:      const oshiDoc = await Oshi.findOne({ userId }).session(session).lean();
+jobs/streamManager.js:432:      await ev.save({ session });
+jobs/streamManager.js:469:  const user = await User.findOne({ id: userId }).lean();
+jobs/streamManager.js:484:  const user = await User.findOne({ id: userId }).lean();
+jobs/streamManager.js:508:  const oshiDoc = await Oshi.findOne({ userId }).lean();
+jobs/streamManager.js:559:  const oshiDoc = await Oshi.findOne({ userId }).lean();
+jobs/streamManager.js:574:  const user = await User.findOne({ id: userId }).lean();
+jobs/streamManager.js:575:  const card = (user?.cards || []).find(c => c.name === selected.name && c.rarity === selected.rarity && c.count > 0 && !c.locked);
+jobs/streamManager.js:621:      const ev = await StreamEvent.findOne({ eventId }).session(dbSession);
+jobs/streamManager.js:623:      const user = await User.findOne({ id: userId }).session(dbSession);
+jobs/streamManager.js:625:      const oshiDoc = await Oshi.findOne({ userId }).session(dbSession).lean();
+jobs/streamManager.js:631:        const card = user.cards.find(c => c.name === req.name && c.rarity === req.rarity);
+jobs/streamManager.js:643:      await user.save({ session: dbSession });
+jobs/streamManager.js:650:      await ev.save({ session: dbSession });
+jobs/streamManager.js:699:  const user = await User.findOne({ id: userId }).lean();
+jobs/streamManager.js:730:  const user = await User.findOne({ id: userId }).lean();
+jobs/streamManager.js:792:  const user = await User.findOne({ id: userId }).lean();
+jobs/streamManager.js:798:  const oshiDoc = await Oshi.findOne({ userId }).lean();
+jobs/streamManager.js:831:      const ev = await StreamEvent.findOne({ eventId }).session(dbSession);
+jobs/streamManager.js:833:      const user = await User.findOne({ id: userId }).session(dbSession);
+jobs/streamManager.js:835:      const oshiDoc = await Oshi.findOne({ userId }).session(dbSession).lean();
+jobs/streamManager.js:840:        const card = user.cards.find(c => c.name === req.name && c.rarity === req.rarity);
+jobs/streamManager.js:848:      await user.save({ session: dbSession });
+jobs/streamManager.js:858:      await ev.save({ session: dbSession });
+jobs/streamManager.js:883:  const oshiDoc = await Oshi.findOne({ userId }).lean();
+jobs/streamManager.js:897:  const user = await User.findOne({ id: userId }).lean();
+jobs/streamManager.js:949:      const ev = await StreamEvent.findOne({ eventId }).session(dbSession);
+jobs/streamManager.js:951:      const oshiDoc = await Oshi.findOne({ userId }).session(dbSession).lean();
+jobs/streamManager.js:958:      const user = await User.findOne({ id: userId }).session(dbSession);
+jobs/streamManager.js:959:      const card = user?.cards?.find(c => c.name === selected.name && c.rarity === 'SEC');
+jobs/streamManager.js:963:      await user.save({ session: dbSession });
+jobs/streamManager.js:967:      await ev.save({ session: dbSession });
+jobs/streamManager.js:989:  const oshiDoc = await Oshi.findOne({ userId }).lean();
+jobs/streamManager.js:1014:  const oshiDoc = await Oshi.findOne({ userId }).lean();
+jobs/streamManager.js:1041:      const ev = await StreamEvent.findOne({ eventId }).session(dbSession);
+jobs/streamManager.js:1043:      const oshiDoc = await Oshi.findOne({ userId }).session(dbSession).lean();
+jobs/streamManager.js:1049:      const userUpdate = await User.updateOne(
+jobs/streamManager.js:1070:      await ev.save({ session: dbSession });
+jobs/streamManager.js:1169:        const oshiDoc = await Oshi.findOne({ userId }).lean();
+jobs/streamManager.js:1373:      let user = await User.findOne({ id: userId }).session(session);
+jobs/streamManager.js:1375:      const card = (user.cards || []).find(c => c.name === cardName && c.rarity === rarity);
+jobs/streamManager.js:1382:      await user.save({ session });
+jobs/streamManager.js:1392:    const ev = await StreamEvent.findOneAndUpdate(
+jobs/streamManager.js:1533:      await ev.save();
+jobs/streamManager.js:1560:  await StreamEvent.updateMany({ status: 'scheduled', spawnAt: { $lte: now }, endsAt: { $gt: now } }, { $set: { status: 'active' } });
+jobs/streamManager.js:1561:  await StreamEvent.updateMany({ status: 'active', endsAt: { $lte: now } }, { $set: { status: 'ended' } });
+jobs/streamManager.js:1566:  const events = await StreamEvent.find({ status: 'active', announceMessageId: null, spawnAt: { $lte: now }, endsAt: { $gt: now } });
+jobs/streamManager.js:1572:    await ev.save();
+jobs/streamManager.js:1576:    await ev.save();
+jobs/streamManager.js:1597:  await ev.save();
+jobs/streamManager.js:1615:      const active = await StreamEvent.find({ status: 'active' }).lean();
+message-commands/addeventpulls.js:89:            const roleByName = guild.roles.cache.find(r => r.name.toLowerCase() === maybeTarget.toLowerCase());
+message-commands/addeventpulls.js:98:              const memberByTag = guild.members.cache.find(m => `${m.user.username}#${m.user.discriminator}`.toLowerCase() === maybeTarget.toLowerCase());
+message-commands/addeventpulls.js:126:          await PullQuota.bulkWrite(pullOps);
+message-commands/addfans.js:86:          const pqDocs = await PullQuota.find({}, 'userId').lean();
+message-commands/addfans.js:135:              const roleByName = guild.roles.cache.find(
+message-commands/addfans.js:142:                const memberByTag = guild.members.cache.find(
+message-commands/addfans.js:178:          await User.updateOne(
+message-commands/admingive.js:73:            const roleByName = guild.roles.cache.find(r => r.name.toLowerCase() === rawTarget.toLowerCase());
+message-commands/admingive.js:76:              const memberByTag = guild.members.cache.find(m => `${m.user.username}#${m.user.discriminator}`.toLowerCase() === rawTarget.toLowerCase());
+message-commands/admingive.js:100:          await User.updateOne({ id: user.id }, { $setOnInsert: { pulls: 0, points: 0, cards: [], pendingAttempts: [] } }, { upsert: true }).exec();
+message-commands/admingive.js:103:          await User.updateOne(
+message-commands/admingive.js:112:          const incRes = await User.updateOne(
+message-commands/admingive.js:119:            await User.updateOne(
+message-commands/adminremove.js:102:            const roleByName = guild.roles.cache.find(
+message-commands/adminremove.js:109:              const memberByTag = guild.members.cache.find(
+message-commands/adminremove.js:139:          const userDoc = await User.findOne({ id: user.id }).exec();
+message-commands/adminremove.js:150:          const card = userDoc.cards.find(
+message-commands/adminremove.js:173:          await userDoc.save();
+message-commands/announce.js:196:                  const role = guild.roles.cache.find(r => r.name.toLowerCase() === roleName.toLowerCase());
+message-commands/announce.js:205:                  const memberByTag = guild.members.cache.find(m => `${m.user.username}#${m.user.discriminator}`.toLowerCase() === `${name}#${discrim}`.toLowerCase());
+message-commands/announce.js:210:                const memberByName = guild.members.cache.find(m =>
+message-commands/announce.js:276:                const pqDocs = await PullQuota.find({}, 'userId').lean().catch((e) => {
+message-commands/announce.js:312:                    const roleByName = guild.roles.cache.find(r => r.name.toLowerCase() === targetRaw.toLowerCase());
+message-commands/announce.js:320:                      const memberByTag = guild.members.cache.find(m => `${m.user.username}#${m.user.discriminator}`.toLowerCase() === targetRaw.toLowerCase());
+message-commands/announce.js:362:                await PullQuota.bulkWrite(pullOps);
+message-commands/announce.js:363:                await User.bulkWrite(userOps);
+message-commands/bulkassign.js:122:          User.updateOne({ id: info.id }, { $setOnInsert: { id: info.id, pulls: 0, points: 0, cards: [], pendingAttempts: [] } }, { upsert: true }).exec()
+message-commands/changeoshi.js:33:  const byId = OSHI_LIST.find(o => String(o.id).toLowerCase() === q);
+message-commands/changeoshi.js:36:  const byLabel = OSHI_LIST.find(o => String(o.label).toLowerCase() === q);
+message-commands/changeoshi.js:74:      await OshiUser.updateOne(
+message-commands/clearInv.js:140:      const beforeDoc = await User.findOne({ id: targetUser.id }).lean().exec();
+message-commands/clearInv.js:167:      await User.updateOne(
+message-commands/gift-all.js:126:      const fromDoc = await User.findOne({ id: fromId }).exec();
+message-commands/gift-all.js:138:        toDoc = await User.findOne({ id: toUser.id }).exec();
+message-commands/gift-all.js:229:      await fromDoc.save();
+message-commands/gift-all.js:234:        toDoc = await User.findOne({ id: toUser.id }).exec();
+message-commands/gift-all.js:260:      await toDoc.save();
+message-commands/gift-hoard.js:243:      const fromDoc = await User.findOne({ id: fromId }).exec();
+message-commands/gift-hoard.js:329:      await fromDoc.save();
+message-commands/gift-hoard.js:332:      let toDoc = await User.findOne({ id: toUser.id }).exec();
+message-commands/gift-hoard.js:359:      await toDoc.save();
+message-commands/givemiss.js:83:      await User.updateOne(
+message-commands/givemiss.js:89:      const userDoc = await User.findOne({ id: targetUser.id }).lean();
+message-commands/givemiss.js:175:          await User.bulkWrite(ops, { ordered: false });
+message-commands/oshistats.js:18:      const grouped = await Oshi.aggregate([
+message-commands/pity1999.js:64:      await User.updateOne(
+message-commands/pullresults.js:279:          const foundKey = Object.keys(TEAM_MAP).find(k => k.toLowerCase() === String(requested).toLowerCase());
+message-commands/pullresults.js:290:          const found = Object.entries(TEAM_MAP).find(([, ids]) => Array.isArray(ids) && ids.includes(myId));
+message-commands/pullresults.js:306:        const userDocPromises = uniqueIds.map(id => User.findOne({ id }).lean().exec());
+message-commands/pullresults.js:382:      const userDoc = await User.findOne({ id: userId }).lean().exec();
+message-commands/purge-shiro.js:27:      const existingOshi = await Oshi.findOne({ userId: TARGET_ID }).lean().exec();
+message-commands/purge-shiro.js:30:        await Oshi.updateOne(
+message-commands/purge-shiro.js:50:      await PullQuota.updateOne(
+message-commands/recents-miss.js:245:          const foundKey = Object.keys(TEAM_MAP).find(k => k.toLowerCase() === requested.toLowerCase());
+message-commands/recents-miss.js:256:          const found = Object.entries(TEAM_MAP).find(([, ids]) => Array.isArray(ids) && ids.includes(myId));
+message-commands/recents-miss.js:271:        const userDocs = await Promise.all(uniqueIds.map(id => User.findOne({ id }).lean().exec()));
+message-commands/recents-miss.js:307:      const userDoc = await User.findOne({ id: userId }).lean().exec();
+message-commands/repaircurrentstream.js:23:  return (ev.users || []).find(state => String(state.userId) === String(userId)) || null;
+message-commands/repaircurrentstream.js:80:  return StreamEvent.find({
+message-commands/repaircurrentstream.js:125:    return activeEvents.find(ev => String(ev.eventId) === String(target.eventId)) || null;
+message-commands/repaircurrentstream.js:130:    return activeEvents.find(ev => String(ev.oshiId || '').trim().toLowerCase() === wanted) || null;
+message-commands/repaircurrentstream.js:196:          const ev = await StreamEvent.findOne({ eventId: current.eventId }).session(session);
+message-commands/repaircurrentstream.js:201:          const logs = await StreamActionLog.find({
+message-commands/repaircurrentstream.js:210:            ? await Oshi.find({ userId: { $in: actionUserIds } }, { userId: 1, oshiId: 1 }).session(session).lean()
+message-commands/repaircurrentstream.js:266:                if (!dryRun) await log.save({ session });
+message-commands/repaircurrentstream.js:291:                if (!dryRun) await log.save({ session });
+message-commands/repaircurrentstream.js:336:                  if (!dryRun) await log.save({ session });
+message-commands/repaircurrentstream.js:368:            await ev.save({ session });
+message-commands/resetlogins.js:182:  await HalUser.updateMany({}, { $set: {
+message-commands/resetlogins.js:213:  const roleByName = message.guild.roles.cache.find(
+message-commands/resetlogins.js:221:  const memberByName = message.guild.members.cache.find(m => {
+message-commands/resetlogins.js:248:  const res = await LoginRecord.updateMany(
+message-commands/resetlogins.js:268:  const res = await LoginCardEventRecord.updateMany(
+message-commands/resetlogins.js:298:    const existing = await LoginCardEventRecord.findOne({
+message-commands/resetlogins.js:304:      await LoginCardEventRecord.updateOne(
+message-commands/resetlogins.js:350:    await LoginCardEventRecord.findOneAndUpdate(
+message-commands/resetlogins.js:523:            const res = await LoginRecord.updateMany({}, { $unset: { lastLoginJST: '' } }).exec();
+message-commands/resetlogins.js:533:            const res = await LoginCardEventRecord.updateMany(
+message-commands/results-lives.js:277:      const user = await User.findOne({ id: userId }).lean();
+message-commands/results-lives.js:425:      const userAfter = await User.findOne({ id: userId }).lean();
+message-commands/results-lives.js:522:          const slot = pending.find(a => !a.resolved && Number(a.stage) === Number(s));
+message-commands/results-lives.js:545:            const fresh = await User.findOne({ id: userId }).lean();
+message-commands/results-lives.js:562:                await User.updateOne(
+message-commands/results-lives.js:584:          const fresh2 = await User.findOne({ id: userId }).lean();
+message-commands/results-lives.js:602:              await User.updateOne(
+message-commands/schedulespecialstream.js:30:      const latest = await StreamEvent.findOne({
+message-commands/schedulestream.js:50:      const latestScheduled = await StreamEvent.findOne({
+message-commands/scores.js:53:  const cfg = (oshis || []).find(o => norm(o?.id) === key || norm(o?.label) === key);
+message-commands/scores.js:93:    const users = await User.find(
+message-commands/scores.js:170:  return StreamEvent.find({
+message-commands/scores.js:178:  return StreamEvent.findOne({}).sort({ spawnAt: -1, createdAt: -1 }).lean().exec();
+message-commands/scores.js:185:  const exact = await StreamEvent.findOne({ eventId: raw }).lean().exec();
+message-commands/scores.js:194:  const direct = await StreamEvent.find({ oshiId: { $in: [...ids] } })
+message-commands/scores.js:197:    return direct.find(ev => ev.status === 'active' && new Date(ev.endsAt).getTime() > Date.now()) || direct[0];
+message-commands/scores.js:200:  const recent = await StreamEvent.find({}).sort({ spawnAt: -1 }).limit(100).lean().exec();
+message-commands/scores.js:201:  return recent.find(ev => norm(ev.oshiId) === wanted || norm(streamLabel(ev)) === wanted) || null;
+message-commands/scores.js:205:  const events = await StreamEvent.find({}).sort({ spawnAt: -1, createdAt: -1 }).limit(10).lean().exec();
+message-commands/scores.js:273:    const ev = await StreamEvent.findOne({ eventId: String(eventId) }).lean().exec();
+message-commands/scores.js:278:    const u = await User.findOne(
+message-commands/specialpulls.js:73:          let member = message.guild.members.cache.find(m =>
+message-commands/specialpulls.js:84:                member = fetched.find(m =>
+message-commands/specialpulls.js:117:      const wipe = await PullQuota.updateMany({}, { $set: { specialPulls: {} } }).exec();
+message-commands/specialpulls.js:175:              await PullQuota.bulkWrite(ops, { ordered: false }).catch(e =>
+message-commands/specialpulls.js:184:            await PullQuota.bulkWrite(ops, { ordered: false }).catch(e =>
+message-commands/specialpulls.js:193:          const cursor = PullQuota.find().cursor();
+message-commands/specialpulls.js:204:              await PullQuota.bulkWrite(ops, { ordered: false }).catch(e =>
+message-commands/specialpulls.js:213:            await PullQuota.bulkWrite(ops, { ordered: false }).catch(e =>
+message-commands/testannounce.js:151:            const roleByName = guild.roles.cache.find(r => r.name.toLowerCase() === targetRaw.toLowerCase());
+message-commands/testannounce.js:159:              const memberByTag = guild.members.cache.find(m => `${m.user.username}#${m.user.discriminator}`.toLowerCase() === targetRaw.toLowerCase());
+message-commands/testannounce.js:198:          await PullQuota.bulkWrite(pullOps);
+message-commands/testannounce.js:199:          await User.bulkWrite(userOps);
+message-commands/timeline.js:96:  return SummerUser.findOne({ userId: String(userId) }).lean().exec();
+message-commands/timeline.js:172:      ?.find(entry => entry.id === state.coreId);
+requireOshi.js:9:  const doc = await OshiUser.findOne({ userId }).lean().exec();
+requireOshiUI.js:117:    const userDoc = await UserModel.findOne({ id: discordId }).lean().exec();
+scripts/bdayfix.js:15:    const users = await User.find({
+scripts/bdayfix.js:41:        await user.save();
+scripts/check-duplicate-risk.js:184:  return User.aggregate(pipeline).allowDiskUse(true);
+scripts/check-duplicate-risk.js:298:  return User.aggregate(pipeline).allowDiskUse(true);
+scripts/clone-inventory.js:52:    const source = await User.findOne({ id: SOURCE_ID }).lean();
+scripts/clone-inventory.js:57:    const target = await User.findOne({ id: TARGET_ID }).lean();
+scripts/clone-inventory.js:106:    const res = await User.updateOne(
+scripts/clone-inventory.js:119:    const after = await User.findOne({ id: TARGET_ID }, { id: 1, cards: 1 }).lean();
+scripts/delete-listed-cards.js:136:    const rows = await User.aggregate(pipeline).allowDiskUse(true).exec();
+scripts/delete-listed-cards.js:287:    const res = await User.bulkWrite(ops, { ordered: false });
+scripts/deleterarity.js:32:  const res = await User.updateMany(
+scripts/fix-card-names-by-rarity.js:203:    const res = await User.bulkWrite(batch, { ordered: false });
+scripts/fix-card-names-by-rarity.js:218:  const doc = await User.findOne({ id: userId }).lean();
+scripts/fix-card-names-by-rarity.js:261:  await User.updateOne({ id: userId }, { $set: { cards: merged } }).exec();
+scripts/fix-card-names-by-rarity.js:285:  const agg = User.aggregate(pipeline).allowDiskUse(true);
+scripts/fix-padoru.js:42:    const users = await User.find({
+scripts/fix-padoru.js:72:        await user.save();
+scripts/fixBossLikes.js:20:  const dups = await BossPointLog.aggregate([
+scripts/fixBossLikes.js:55:  const target = idx.find(i => {
+scripts/fixburn.js:26:  const logs = await BurnLog.find({ userId: targetUserId, restoredAt: { $exists: false } }).sort({ timestamp: 1 }).lean().exec();
+scripts/fixburn.js:41:      const logDoc = await BurnLog.findById(log._id).session(session).exec();
+scripts/fixburn.js:58:      const userDoc = await User.findOne({ id: targetUserId }).session(session).exec();
+scripts/fixburn.js:77:        const existing = userDoc.cards.find(c => String(c.name) === name && String((c.rarity || '')).toUpperCase() === rarity);
+scripts/fixburn.js:108:        await PullQuota.findOneAndUpdate(
+scripts/fixburn.js:116:      await userDoc.save({ session });
+scripts/fixburn.js:119:      await BurnLog.updateOne(
+scripts/list-duplicate-entries-after-rename.js:173:    const users = await User.find(
+scripts/migrate-halloween-x-to-unknown.js:42:        const updated = await users.updateMany(filter,
+scripts/migrate-holodori-rarities.js:20:  const users = await User.find({ 'cards.rarity': 'HOLODORI' });
+scripts/migrate-holodori-rarities.js:41:      const existing = rebuilt.find(entry =>
+scripts/migrate-holodori-rarities.js:60:      await user.save();
+scripts/migrate-summer-full-art-names.js:48:  const users = await User.find({
+scripts/migrate-summer-full-art-names.js:71:      const modern = user.cards.find(card =>
+scripts/migrate-summer-full-art-names.js:95:      await user.save();
+scripts/migratecards.js:12:  const result = await users.updateMany(
+scripts/pointredo.js:120:  const rows = await BossPointLog.aggregate(pipeline).allowDiskUse(true).exec();
+scripts/pointredo.js:135:  const ev = await BossEvent.findOne({ eventId }).lean().exec();
+scripts/pointredo.js:182:  const res = await BossEvent.updateOne({ eventId }, update).exec();
+scripts/seed-milestones.js:9:  await LevelMilestone.findOneAndUpdate(query, doc, { upsert: true, new: true });
+scripts/topscores.js:116:    results = await BossPointLog.aggregate(pipeline).allowDiskUse(true).exec();
+scripts/topscores.js:133:    users = await User.find({ id: { $in: userIds } }).lean().exec();
+scripts/undoburnrestore.js:35:    const existing = (userDoc.cards || []).find(c => String(c.name) === name && String((c.rarity || '')).toUpperCase() === rarity);
+scripts/undoburnrestore.js:45:    const logDoc = await BurnLog.findById(logId).session(session).exec();
+scripts/undoburnrestore.js:51:    const userDoc = await User.findOne({ id: targetUserId }).session(session).exec();
+scripts/undoburnrestore.js:92:    await userDoc.save({ session });
+scripts/undoburnrestore.js:101:    await BurnLog.updateOne(
+scripts/undoburnrestore.js:135:  let logs = await BurnLog.find({ userId: args.targetUserId, timestamp: { $lt: cutoffDate } }).sort({ timestamp: 1 }).lean().exec();
+utils/birthdayGrant.js:41:    let userDoc = await User.findOne({ id: userId }).exec();
+utils/birthdayGrant.js:44:    let card = (userDoc.cards || []).find(
+utils/birthdayGrant.js:66:    await userDoc.save();
+utils/birthdayGrant.js:79:  const oshi = OSHI_LIST.find(o => o.id === chosenOshiId);
+utils/birthdayGrant.js:89:  let pq = await PullQuota.findOne({ userId });
+utils/birthdayGrant.js:106:    await pq.save();
+utils/bossPullBias.js:17:    const ev = await StreamEvent.findOne({
+utils/bossPullBias.js:24:    const cfg = oshis.find(o => o.id === ev.oshiId);
+utils/halEvent.js:31:  return HalUser.findOne({ userId: String(id) }).lean().exec();
+utils/halEvent.js:91:  const state = await HalUser.findOneAndUpdate(
+utils/halEvent.js:111:  await HalUser.updateOne({ userId: String(id) }, { $set: {
+utils/halEvent.js:117:  const state = await HalUser.findOneAndUpdate(
+utils/halEvent.js:124:  await HalUser.updateOne({ userId: String(id), tarotDateJST: jstDay(now), tarotNumber: 1 },
+utils/halEvent.js:129:  return HalUser.findOneAndUpdate({ userId: String(id) },
+utils/halInventory.js:4: await User.updateOne({id:userId},{$setOnInsert:{id:userId}},{upsert:true}).exec();
+utils/halInventory.js:7: const doc=await User.findOne({id:userId},{cards:1}).lean().exec();
+utils/halInventory.js:9: if(idx>=0)await User.updateOne({id:userId},{$inc:{[`cards.${idx}.count`]:1},$set:{[`cards.${idx}.lastAcquiredAt`]:now}}).exec();
+utils/halInventory.js:10: else await User.updateOne({id:userId},{$push:{cards:{name,rarity,variant,count:1,firstAcquiredAt:now,lastAcquiredAt:now}}}).exec();
+utils/halPullEffects.js:45:  const doc = await Oshi.findOne({ userId: String(userId) }, { oshiId: 1 }).lean().exec();
+utils/halPullEffects.js:46:  const found = oshis.find(o => o.id === doc?.oshiId);
+utils/halShop.js:31:  const before = await HalUser.findOneAndUpdate(
+utils/halShop.js:69:    await HalUser.updateOne({ userId: id, processedPurchaseIds: token },
+utils/holodoriLoginReward.js:161:  const signedTier = userTiers.find(tier => tier.key === 'signed' && tier.weight > 0);
+utils/holodoriLoginReward.js:205:    const tier = TIERS.find(item => item.key === (signed ? 'signed' : 'five_star'));
+utils/holodoriLoginReward.js:231:  const tier = TIERS.find(item => item.key === 'five_star');
+utils/holodoriLoginReward.js:247:  const tier = TIERS.find(item => item.key === 'signed');
+utils/liveAsync.js:95:    return cards.find(
+utils/liveAsync.js:120:      .findOneAndUpdate(pushFilter, pushUpdate, pushOpts)
+utils/liveAsync.js:135:      .findOne({ id: userId }, { cards: 1 }, session ? { session } : {})
+utils/liveAsync.js:149:          .findOneAndUpdate({ id: userId }, incUpdate, optsFNU)
+utils/liveAsync.js:154:          const updatedElem = updated.cards.find(c => String(c._id) === String(found._id));
+utils/liveAsync.js:171:    const incRes = await User.updateOne(
+utils/liveAsync.js:179:        .findOne({ id: userId }, { cards: 1 }, session ? { session } : {})
+utils/liveAsync.js:192:      .findOne({ id: userId }, { cards: 1 }, session ? { session } : {})
+utils/liveAsync.js:209:    await User.updateOne({ id: userId }, { $inc: { points: delta } }, session ? { session } : {}).exec();
+utils/liveAsync.js:221:    await User.updateOne({ id: userId }, { $inc: { points: delta } }, session ? { session } : {}).exec();
+utils/liveAsync.js:344:  const res = await User.findOneAndUpdate(
+utils/liveAsync.js:354:    const u = await User.findOne({ id: userId }, { pendingAttempts: 1, cards: 1 }).lean();
+utils/liveAsync.js:356:      const existing = (u.pendingAttempts || []).find(
+utils/liveAsync.js:366:  const added = (res.pendingAttempts || []).find(a => a.id === attemptId);
+utils/liveAsync.js:407:        const userDoc = await User.findOne({ id: userId }).session(session).exec();
+utils/liveAsync.js:410:        const attempt = (userDoc.pendingAttempts || []).find(a => a.id === attemptId);
+utils/liveAsync.js:423:        const mark = await User.updateOne(
+utils/liveAsync.js:466:                await User.updateOne(
+utils/liveAsync.js:485:                  await User.updateOne(
+utils/liveAsync.js:494:              await User.updateOne(
+utils/liveAsync.js:509:                await User.updateOne(
+utils/liveAsync.js:526:                await User.updateOne(
+utils/liveAsync.js:555:            await User.updateOne(
+utils/liveAsync.js:574:        await User.updateOne(
+utils/liveAsync.js:609:      const snapshot = await User.findOne({ id: userId }).lean();
+utils/liveAsync.js:612:      const attempt = (snapshot.pendingAttempts || []).find(a => a.id === attemptId);
+utils/liveAsync.js:624:      const mark = await User.updateOne(
+utils/liveAsync.js:658:              await User.updateOne(
+utils/liveAsync.js:670:                await User.updateOne(
+utils/liveAsync.js:678:            await User.updateOne({ id: userId }, { $inc: { points: STAGE5_SUCCESS_POINTS * fanMultiplier } }).exec();
+utils/liveAsync.js:688:              await User.updateOne({ id: userId }, { $inc: { points: 5 * fanMultiplier } }).exec();
+utils/liveAsync.js:701:              await User.updateOne({ id: userId }, { $inc: { points: 5 * fanMultiplier } }).exec();
+utils/liveAsync.js:724:        if (awardedPoints > 0) await User.updateOne({ id: userId }, { $inc: { points: awardedPoints } }).exec();
+utils/liveAsync.js:731:      await User.updateOne(
+utils/milestones.js:8:  return LevelMilestone.find({ enabled: true }).lean().exec();
+utils/newWeightedDraw.js:175:        .findOne({ userId: idStr })
+utils/oshiRewards.js:22:    const updated = await User.findOneAndUpdate(
+utils/oshiRewards.js:36:    const inserted = await User.findOneAndUpdate(
+utils/postStreamResults.js:30:    const ev = await StreamEvent.findOne({ eventId }).lean();
+utils/postStreamResults.js:33:    const rewardLogs = await StreamActionLog.find({ eventId, action: 'reward' }).lean();
+utils/postStreamResults.js:49:    const oshiCfg = oshis.find(o => o.id === ev.oshiId);
+utils/pullQuota.js:10:  let doc = await PullQuota.findOne({ userId }).exec();
+utils/pullQuota.js:44:      await doc.save();
+utils/pullQuota.js:54:    await doc.save();
+utils/pullQuota.js:70:  await doc.save();
+utils/pullQuota.js:109:      await doc.save();
+utils/pullQuota.js:127:  await doc.save();
+utils/pullQuota.js:156:  await doc.save();
+utils/pullQuota.js:164:  await doc.save();
+utils/pullQuota.js:172:  await doc.save();
+utils/pullQuota.js:184:  await doc.save();
+utils/recentPulls.js:49:  await User.updateOne(
+utils/recentPulls.js:56:  await User.updateOne(
+utils/specialStreamReward.js:62:  const file = files.find(f => IMAGE_EXTENSIONS.includes(path.extname(f).toLowerCase()) &&
+utils/summerActivity.js:47:  return activities.days.find(entry => Number(entry.day) === Number(day)) || null;
+utils/summerActivity.js:121:  return getDayData(day)?.windows?.[windowName]?.coreActivities?.find(core => core.id === coreId) || null;
+utils/summerActivity.js:136:  const step = core.steps?.find(entry => entry.id === stepId);
+utils/summerActivity.js:192:        await SummerUser.updateOne({ userId }, { $inc: { summerShells: amount } }).exec();
+utils/summerActivity.js:201:        await SummerUser.updateOne({ userId }, { $inc: { sunPulls: amount } }).exec();
+utils/summerActivity.js:209:        await SummerUser.updateOne({ userId }, { $inc: { summerShells: 20 } }).exec();
+utils/summerActivity.js:217:      await SummerUser.updateOne(
+utils/summerActivity.js:232:  await SummerUser.updateOne(
+utils/summerActivity.js:243:  await User.updateOne(
+utils/summerActivity.js:249:  const hit = await User.updateOne(
+utils/summerActivity.js:258:    await User.updateOne(
+utils/summerActivity.js:280:  await SummerUser.updateOne({ userId }, { $set: update }).exec();
+utils/summerActivity.js:301:  const step = core?.steps?.find(entry => entry.id === requestedStepId);
+utils/summerActivity.js:311:    const step = core.steps?.find(entry => entry.id === choice.stepId);
+utils/summerActivity.js:312:    const option = step?.options?.find(entry => entry.id === choice.optionId);
+utils/summerActivity.js:335:    const core = win.coreActivities?.find(entry => entry.id === state?.coreId);
+utils/summerActivity.js:348:      const option = step.options?.find(entry => entry.id === choice.optionId);
+utils/summerActivity.js:400:  const doc = await SummerUser.findOne({ userId }).lean().exec();
+utils/summerActivity.js:446:    const doc = await SummerUser.findOne({ userId: key }).lean().exec();
+utils/summerActivity.js:448:    const step = core?.steps?.find(entry => entry.id === stepId);
+utils/summerActivity.js:449:    const option = step?.options?.find(entry => entry.id === optionId);
+utils/summerActivity.js:556:    const guard = await SummerUser.updateOne(
+utils/summerCardFiles.js:12:  return SUN_ISLAND_FOLDERS.find(value => value.toLowerCase() === wanted) || null;
+utils/summerCardFiles.js:44:    .find(card => card.cardName.toLowerCase() === wanted) || null;
+utils/summerEvent.js:13:  return values.find(value => typeof value === 'string' && value.trim().length > 0) || null;
+utils/summerEvent.js:54:    .find(([, id]) => id && String(id) === target);
+utils/summerFusion.js:39:  const user = await User.findOne({ id: userId }).lean().exec();
+utils/summerFusion.js:77:  const user = await User.findOne({ id: userId });
+utils/summerFusion.js:81:    const card = user.cards.find(entry =>
+utils/summerFusion.js:102:  const fullArt = user.cards.find(card => isFullArtCard(card, route));
+utils/summerFusion.js:122:  await user.save();
+utils/summerFusion.js:124:  await SummerUser.updateOne(
+utils/summerPullBonus.js:97:  const summerUser = await SummerUser.findOne({ userId: discordId }).lean().exec();
+utils/summerShop.js:40:  await User.updateOne(
+utils/summerShop.js:47:    const existing = await User.findOne(
+utils/summerShop.js:57:      await User.updateOne(
+utils/summerShop.js:65:      await User.updateOne(
+utils/summerShop.js:85:  const update = await SummerUser.findOneAndUpdate(
+utils/summerShop.js:103:    const current = await SummerUser.findOne({ userId }).lean().exec();
+utils/summerShop.js:110:      const quota = await PullQuota.findOneAndUpdate(
+utils/summerShop.js:126:      await SummerUser.updateOne(
+utils/summerShop.js:146:  const current = await SummerUser.findOne({ userId }).lean().exec();
+utils/summerShop.js:157:  let charged = await SummerUser.findOneAndUpdate(
+utils/summerShop.js:175:    charged = await SummerUser.findOneAndUpdate(
+utils/summerShop.js:190:    const latest = await SummerUser.findOne({ userId }).lean().exec();
+utils/summerShop.js:215:    await SummerUser.updateOne(
+utils/summerWelcomeGift.js:6:  const result = await SummerUser.findOneAndUpdate(
+utils/sunPull.js:32:  await User.updateOne(
+utils/sunPull.js:38:  const increment = await User.updateOne(
+utils/sunPull.js:55:    await User.updateOne(
+utils/sunPull.js:82:  const user = await User.findOne(
+utils/sunPull.js:109:    const summerUser = await SummerUser.findOneAndUpdate(
+utils/sunPull.js:128:      const existing = await SummerUser.findOne({ userId: key }).lean().exec();
+utils/sunPull.js:141:    await SummerUser.updateOne(
+utils/sunPull.js:158:      await SummerUser.updateOne(
