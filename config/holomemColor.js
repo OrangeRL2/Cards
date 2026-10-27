@@ -205,8 +205,6 @@ const DEFAULT_MEMBER_COLOR = {
   'Mela': 'purple',
   'Sopia': 'blue',
   'Tsuzuri': 'yellow',
-
-
   // Eggs
   'Easter X': 'green',
   'Easter Y': 'blue',
@@ -252,12 +250,13 @@ const DEFAULT_MEMBER_COLOR = {
   'Dorobo Construction': 'support',
   'Justice': 'support',
   'Raora & Bijou': 'support',
-
+  'HOLOTORI': 'support',
+  
   // Notable strings seen in your data
   'Calli, IRyS, Nerissa , Ollie, Nene': 'white',
   'Holowitches': 'white',
   'SubaLuna': 'white',
-
+  'LambDuck': 'yellow',
   // Duos
   'FUWAMOCO': 'blue',
   'OkaKoro': 'yellow',
@@ -265,7 +264,7 @@ const DEFAULT_MEMBER_COLOR = {
   'Lamy & Nene': 'blue',
   'Matsuri & Marine': 'red',
   'Ina & Ririka': 'red',
-
+  'BIG3': 'support',
   // “Mixed” labels (normalizeAttr will lowercase)
   'miComet': 'mixed',
   'MariFure': 'mixed',
@@ -300,6 +299,14 @@ const DEFAULT_MEMBER_COLOR = {
   'Padoru Zeta': 'yellow',
   'Padoru Mumei': 'white',
   'BAKATARE CIRCUS': 'support',
+  'AzuIro':'support',
+  'HOLOTORI':'support',
+  'Marine, Sora, Koyori':'support',
+  'Myth':'support',
+  'NoeFure':'support',
+  'Oozora Police':'support',
+  'Hajime & Baelz':'support',
+  'NoeSuba':'support',
 };
 
 // Card-specific overrides.
@@ -324,7 +331,7 @@ const EXCEPTION_CARD_COLOR = {
   'Marine & Ran 101': 'red',
   'Sora & Kasumi 101': 'white',
   'Suisei & LAYER 101': 'blue',
-
+  'LambDuck 001::SR': 'yellow',
   'Watame & Subaru 001': 'yellow',
   'Watame & Subaru 002': 'yellow',
   'Pekora, Subaru, Calli, Kobo 001': 'blue',
@@ -333,7 +340,7 @@ const EXCEPTION_CARD_COLOR = {
   'Nerissa & Elizabeth 001': 'support',
   'Dorobo Construction 501': 'support',
   'Choco, Luna, Subaru 002': 'support',
-
+  'BIG3 001': 'support',
   // Rarity-specific examples
   'holoForce 001::S': 'support',
   'holoForce 501::S': 'support',
@@ -362,7 +369,7 @@ const EXCEPTION_CARD_COLOR = {
   'Force 001': 'typo',
   'Dorobo Contsruction 501': 'typo',
   'Lamy 501::BDAY': 'typo',
-
+  'BIG3 001::U': 'support',
   // mixed
   'PekoMari 001::P': 'mixed',
   'SorAZ 001::P': 'mixed',
@@ -384,10 +391,44 @@ const EXCEPTION_CARD_COLOR = {
   'FUWAMOCO 501::C': 'support',
   'FUWAMOCO 002::C': 'support',
   'FUWAMOCO 502::C': 'support',
+  'Lambduck 001::P': 'support',
+  'Lambduck 001::R': 'support',
+  'Michiru 001::P': 'support',
+  'Ooozora Police 001::P': 'support',
+  'Sayaka 001::P': 'support',
+  'holoWitches 001::COL': 'mixed',
+  'holoWitches 002::COL': 'mixed',
+  'holoWitches 003::COL': 'mixed',
+  'holoWitches 004::COL': 'mixed',
+  'holoWitches 005::COL': 'mixed',
+  'holoWitches 006::COL': 'mixed',
+  'holoWitches 007::COL': 'mixed',
+  'holoWitches 008::COL': 'mixed',
+  'holoWitches 009::COL': 'mixed',
+  'holoWitches 010::COL': 'mixed',
+  'AzuIro 001::S': 'support',
+  'HOLOTORI 001::S': 'support',
+  'Myth 001::S': 'support',
+  'Myth 002::S': 'support',
+  'NoeFure 001::S': 'support',
+  'Raora & Kiara 001::S': 'support',
+  'Rich Chocolat 001::S': 'support',
+  'Rich Chocolat 001::S': 'support',
+  'Michiru 001::C': 'support',
+  
+  
 
   // specific exceptions
   'Watame 002::OSR': 'white',
   'Watame 002::P': 'support',
+
+  //ORI
+  'FubuMiComet 002::ORI': 'support',
+  'HOLOTORI 002::ORI': 'red',
+  'Hoshimatic Project 001::ORI': 'blue',
+  'StartEnd 002::ORI': 'blue',
+
+  
 };
 
 function normKey(s) {
