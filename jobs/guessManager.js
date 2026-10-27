@@ -19,7 +19,9 @@ const { pickHolodoriLoginReward, buildHolodoriImageUrl } = require('../utils/hol
 
 const GUESS_PREFIX = '-';
 const BUFF_ADMIN_ID = '153551890976735232';
-const pendingBuffByChannel = new Map();
+// Owner-only buff is independent of the channel where the admin command is sent.
+// An outstanding buff targets the next automatic reward challenge in any Guess channel.
+let pendingAutomaticBuff = null;
 const MODE_TIME_SECONDS = Object.freeze({ jacket: 60, song: 300, holomem: 30 });
 const STAGE_SECONDS = Object.freeze({ 1: 1, 2: 3, 3: 5, 4: 8 });
 const MAX_MUSIC_STAGE = 4;
@@ -228,9 +230,8 @@ async function sendManual(interaction, mode) {
     round.guildId = interaction.guildId;
     const msg = await interaction.editReply(challengePayload(round));
     round.messageId = msg?.id || null;
-    const wasPendingBuff = transferPendingBuff(round);
+    // Practice/manual rounds cannot consume a reward-challenge buff.
     activeRounds.set(channelId, round);
-    if (wasPendingBuff) await notifyBuffedRound(interaction.client, round);
     return { success: true, round };
   } catch (err) {
     console.error('[guess] manual start failed:', err);
@@ -302,6 +303,9 @@ async function spawnAutomatic(client, { mode = null, channelId = null, forced = 
     const msg = await channel.send(challengePayload(round));
     round.messageId = String(msg.id);
 
+    // Capture the one-time global buff before persisting this challenge.  Keep it
+    // queued if the database write fails, and preserve any newer admin request.
+    const queuedBuff = pendingAutomaticBuff;
     await GuessChallenge.create({
       challengeId: round.roundId,
       channelId: round.channelId,
@@ -312,12 +316,12 @@ async function spawnAutomatic(client, { mode = null, channelId = null, forced = 
       answerName: round.answerName,
       revealUrl: round.revealUrl,
       active: true,
-      buffGuess: pendingBuffByChannel.has(round.channelId),
-      buffGuessSigned: pendingBuffByChannel.get(round.channelId) === true,
+      buffGuess: queuedBuff !== null,
+      buffGuessSigned: queuedBuff?.signed === true,
       spawnedAt: new Date(round.startedAt),
     });
 
-    const wasPendingBuff = transferPendingBuff(round);
+    const wasPendingBuff = transferPendingBuff(round, queuedBuff);
     activeRounds.set(round.channelId, round);
     if (wasPendingBuff) await notifyBuffedRound(client, round);
     if (autoTimer) clearTimeout(autoTimer);
@@ -442,9 +446,8 @@ async function startManualFromButton(interaction, mode) {
     round.guildId = interaction.guildId;
     const msg = await interaction.channel.send(challengePayload(round));
     round.messageId = msg?.id || null;
-    const wasPendingBuff = transferPendingBuff(round);
+    // Practice/manual rounds cannot consume a reward-challenge buff.
     activeRounds.set(channelId, round);
-    if (wasPendingBuff) await notifyBuffedRound(interaction.client, round);
   } catch (err) {
     console.error('[guess] play-again start failed:', err);
     await interaction.followUp({ content: `Couldn't start that round: ${err.message}`, ephemeral: true }).catch(() => {});
@@ -718,13 +721,12 @@ async function getAutomaticGuessLock(round, userId) {
   return { rewards, resetsAt: end.getTime() };
 }
 
-function transferPendingBuff(round) {
-  const channelId = String(round.channelId || '');
-  if (!pendingBuffByChannel.has(channelId)) return false;
-  const signed = pendingBuffByChannel.get(channelId);
-  pendingBuffByChannel.delete(channelId);
+function transferPendingBuff(round, queuedBuff = pendingAutomaticBuff) {
+  if (round.kind !== 'auto' || !queuedBuff) return false;
   round.buffGuess = true;
-  round.buffGuessSigned = signed === true;
+  round.buffGuessSigned = queuedBuff.signed === true;
+  // Don't discard a new buff queued while this round was being created.
+  if (pendingAutomaticBuff === queuedBuff) pendingAutomaticBuff = null;
   return true;
 }
 
@@ -757,27 +759,26 @@ async function buffGuess(message, { signed = false } = {}) {
     return;
   }
 
-  const channelId = String(message.channelId);
-  const round = activeRounds.get(channelId);
-  if (round && !round.resolving) {
-    if (round.kind === 'auto') {
-      try {
-        const result = await GuessChallenge.updateOne(
-          { challengeId: round.roundId, active: true }, { $set: { buffGuess: true, buffGuessSigned: Boolean(signed) } }
-        ).exec();
-        if (!result.matchedCount) throw new Error('The round was already resolved.');
-      } catch (err) {
-        console.error('[guess] Failed to persist buff:', err);
-        await message.author.send('Could not buff this round; database update failed or round ended.').catch(() => {});
-        return;
-      }
+  // The admin command may be sent in a private channel that never hosts Guess.
+  // There is at most one active automatic reward challenge at a time.
+  const round = [...activeRounds.values()].find(r => r.kind === 'auto' && !r.resolving);
+  if (round) {
+    try {
+      const result = await GuessChallenge.updateOne(
+        { challengeId: round.roundId, active: true }, { $set: { buffGuess: true, buffGuessSigned: Boolean(signed) } }
+      ).exec();
+      if (!result.matchedCount) throw new Error('The round was already resolved.');
+    } catch (err) {
+      console.error('[guess] Failed to persist buff:', err);
+      await message.author.send('Could not buff this round; database update failed or round ended.').catch(() => {});
+      return;
     }
     round.buffGuess = true;
     round.buffGuessSigned = Boolean(signed);
     await message.author.send(`Current guess has been buffed (${signed ? "guaranteed SIGNED 5★" : "5★, 80% regular / 20% signed"}): ${buffGuessDescription(round)}.`).catch(() => {});
   } else {
-    pendingBuffByChannel.set(channelId, Boolean(signed));
-    await message.author.send(`The next Guess round in <#${channelId}> is queued for a one-time ${signed ? "SIGNED 5★" : "5★"} buff. I will DM you its mode and answer when it starts.`).catch(() => {});
+    pendingAutomaticBuff = { signed: Boolean(signed) };
+    await message.author.send(`The next Guess reward challenge (in any playable Guess channel) is queued for a one-time ${signed ? "SIGNED 5★" : "5★"} buff. I will DM you its mode, channel and answer when it starts.`).catch(() => {});
   }
 }
 
@@ -956,8 +957,8 @@ async function clearAllGuesses(client) {
   // Mark the round as ending before removing it from active state.
   for (const round of rounds) round.resolving = true;
   activeRounds.clear();
-  const pendingBuffs = pendingBuffByChannel.size;
-  pendingBuffByChannel.clear();
+  const pendingBuffs = pendingAutomaticBuff ? 1 : 0;
+  pendingAutomaticBuff = null;
 
   let removedMessages = 0;
   let failedMessages = 0;
@@ -994,7 +995,7 @@ function stopGuessManager() {
   autoTimer = null;
   nextAutoAt = null;
   started = false;
-  pendingBuffByChannel.clear();
+  pendingAutomaticBuff = null;
 }
 
 function getStatus() {
