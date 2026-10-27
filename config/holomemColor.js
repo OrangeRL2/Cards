@@ -15,7 +15,7 @@
 
 // ✅ Excel-derived mapping (auto-generated from your Excel)
 const { EXCEL_CARD_COLOR } = require('../utils/holomemColor.excel');
-const { artRarity } = require('./unknownCards'); // utils/holomemColor.excel.js [2](https://ace00101-my.sharepoint.com/personal/nauldee_nawill_ace00101_onmicrosoft_com/Documents/Microsoft%20Copilot%20Chat%20%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB/card-name-map.txt)[1](https://ace00101-my.sharepoint.com/personal/nauldee_nawill_ace00101_onmicrosoft_com/Documents/Microsoft%20Copilot%20Chat%20%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB/holomemColor.js)
+const { artRarity } = require('./unknownCards'); // utils/holomemColor.excel.js 
 
 // Returned values are normalized to lowercase and validated against ALLOWED_COLORS.
 const ALLOWED_COLORS = new Set([
@@ -198,6 +198,14 @@ const DEFAULT_MEMBER_COLOR = {
   'Achan': 'blue',
   'Nodoka': 'white',
 
+  'Yuki': 'white',
+
+  //Asobimawari-tai
+  'Kyoko': 'red',
+  'Mela': 'purple',
+  'Sopia': 'blue',
+
+
   // Eggs
   'Easter X': 'green',
   'Easter Y': 'blue',
@@ -337,7 +345,8 @@ const EXCEPTION_CARD_COLOR = {
   'holoForce 502::U': 'support',
   'holoForce 701::S': 'support',
   'Hajime & Baelz 701::S': 'support',
-
+    'ASOBI MAWARI TAI 001': 'support',
+  'ASOBI MAWARI TAI 002': 'support',
   'FubuMio 001 701::S': 'support',
   // typo tags
   'MiKorone 001': 'typo',
