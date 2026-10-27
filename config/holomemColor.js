@@ -204,6 +204,7 @@ const DEFAULT_MEMBER_COLOR = {
   'Kyoko': 'red',
   'Mela': 'purple',
   'Sopia': 'blue',
+  'Tsuzuri': 'yellow',
 
 
   // Eggs
