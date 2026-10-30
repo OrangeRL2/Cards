@@ -2107,6 +2107,90 @@
     "audio": "../audio/m0363.mp3"
   },
   {
+    "id": "m0365",
+    "title": "Shallow Shadow",
+    "playingSeconds": 123,
+    "characterIds": [
+      "chr-00027"
+    ],
+    "jacket": "../jackets/m0365.png",
+    "audio": "../audio/m0365.mp3"
+  },
+  {
+    "id": "m0366",
+    "title": "Amaryllis",
+    "playingSeconds": 109,
+    "characterIds": [
+      "chr-00032"
+    ],
+    "jacket": "../jackets/m0366.png",
+    "audio": "../audio/m0366.mp3"
+  },
+  {
+    "id": "m0367",
+    "title": "CORE//UNBREAKABLE",
+    "playingSeconds": 119,
+    "characterIds": [
+      "chr-04014"
+    ],
+    "jacket": "../jackets/m0367.png",
+    "audio": "../audio/m0367.mp3"
+  },
+  {
+    "id": "m0368",
+    "title": "Forge My Soul",
+    "playingSeconds": 105,
+    "characterIds": [
+      "chr-03008"
+    ],
+    "jacket": "../jackets/m0368.png",
+    "audio": "../audio/m0368.mp3"
+  },
+  {
+    "id": "m0369",
+    "title": "KaienSpectacle",
+    "playingSeconds": 116,
+    "characterIds": [
+      "chr-00007",
+      "chr-03007",
+      "chr-04015",
+      "chr-06004",
+      "chr-06005"
+    ],
+    "jacket": "../jackets/m0369.png",
+    "audio": "../audio/m0369.mp3"
+  },
+  {
+    "id": "m0371",
+    "title": "BANZAI",
+    "playingSeconds": 134,
+    "characterIds": [
+      "chr-06005"
+    ],
+    "jacket": "../jackets/m0371.png",
+    "audio": "../audio/m0371.mp3"
+  },
+  {
+    "id": "m0372",
+    "title": "Miracle Palette",
+    "playingSeconds": 141,
+    "characterIds": [
+      "chr-06004"
+    ],
+    "jacket": "../jackets/m0372.png",
+    "audio": "../audio/m0372.mp3"
+  },
+  {
+    "id": "m0373",
+    "title": "Sweetest Scarlet",
+    "playingSeconds": 138,
+    "characterIds": [
+      "chr-04015"
+    ],
+    "jacket": "../jackets/m0373.png",
+    "audio": "../audio/m0373.mp3"
+  },
+  {
     "id": "m0375",
     "title": "Wonky Monkey",
     "playingSeconds": 124,
@@ -2145,6 +2229,16 @@
     ],
     "jacket": "../jackets/m0378.png",
     "audio": "../audio/m0378.mp3"
+  },
+  {
+    "id": "m0388",
+    "title": "Break It Down",
+    "playingSeconds": 141,
+    "characterIds": [
+      "chr-03007"
+    ],
+    "jacket": "../jackets/m0388.png",
+    "audio": "../audio/m0388.mp3"
   },
   {
     "id": "m0413",
@@ -2213,5 +2307,25 @@
     ],
     "jacket": "../jackets/m0548.png",
     "audio": "../audio/m0548.mp3"
+  },
+  {
+    "id": "m0549",
+    "title": "Sakuraful March",
+    "playingSeconds": 134,
+    "characterIds": [
+      "chr-00015"
+    ],
+    "jacket": "../jackets/m0549.png",
+    "audio": "../audio/m0549.mp3"
+  },
+  {
+    "id": "m0551",
+    "title": "ENDLESS FES",
+    "playingSeconds": 112,
+    "characterIds": [
+      "chr-00007"
+    ],
+    "jacket": "../jackets/m0551.png",
+    "audio": "../audio/m0551.mp3"
   }
 ]
