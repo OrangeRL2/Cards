@@ -28,7 +28,8 @@ const User = require('../../models/User');
 const halEvent = require('../../utils/halEvent');
 const { addPulls } = require('../../utils/pullQuota');
 const { isFrozen } = require('../../utils/freeze');
-const { pickHolodoriLoginReward, buildHolodoriImageUrl } = require('../../utils/holodoriLoginReward');
+const { pickHolodoriLoginReward, pickMemberHolodoriLoginReward, buildHolodoriImageUrl } = require('../../utils/holodoriLoginReward');
+const ForcedLoginReward = require('../../models/ForcedLoginReward');
 
 let resolveCardColor = null;
 let getAttributeEmoji = null;
@@ -951,7 +952,12 @@ module.exports = {
       }
 
       // One HOLODORI card is awarded on every successful daily login.
-      holodoriCard = pickHolodoriLoginReward(userId);
+      // A queued admin override changes ONLY its member; normal tier weights apply.
+      // Keep the override until card insertion is confirmed (not merely when viewed).
+      const forcedLogin = await ForcedLoginReward.findOne({ userId }).lean().exec();
+      holodoriCard = forcedLogin
+        ? pickMemberHolodoriLoginReward(forcedLogin.member, userId)
+        : pickHolodoriLoginReward(userId);
 
       // Store HOLODORI cards using their star tier as the actual rarity.
       if (holodoriCard) {
@@ -1000,6 +1006,15 @@ module.exports = {
 
       if (allLoginCards.length > 0) {
         await addCardsToUser(userId, allLoginCards);
+      }
+
+      // Consume only the exact request used for this successful login. If an
+      // admin queues a newer override mid-login, preserve that newer request.
+      if (forcedLogin) {
+        await ForcedLoginReward.deleteOne({
+          userId,
+          requestId: forcedLogin.requestId,
+        }).exec();
       }
 
       // -----------------------------

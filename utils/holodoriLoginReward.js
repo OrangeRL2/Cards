@@ -227,6 +227,37 @@ function pickHalloweenFirstPurchaseFiveStar(userId, { cardName = null, rng = Mat
   return cardFromFile(files[Math.floor(rng() * files.length)], tier, { guaranteed: true });
 }
 
+// Admin one-time login override: keep the user's normal HOLODORI tier weights,
+// but restrict the card artwork to the requested member. Signed cards remain a
+// separate five-star tier under the normal login rules.
+function eligibleMemberLoginTiers(memberName, userId = null) {
+  return tiersForUser(userId)
+    .filter(tier => Number(tier.weight) > 0)
+    .map(tier => ({
+      ...tier,
+      memberFiles: listTierFiles(tier).filter(file =>
+        memberMatches(fileMemberName(file), memberName)
+      ),
+    }))
+    .filter(tier => tier.memberFiles.length > 0);
+}
+
+function hasMemberHolodoriLoginCards(memberName, userId = null) {
+  return eligibleMemberLoginTiers(memberName, userId).length > 0;
+}
+
+function pickMemberHolodoriLoginReward(memberName, userId = null, rng = Math.random) {
+  const choices = eligibleMemberLoginTiers(memberName, userId);
+  if (!choices.length) {
+    throw new Error(`No eligible 3-5 star HOLODORI login cards found for ${memberName}.`);
+  }
+
+  const pickerRng = typeof rng === 'function' ? rng : Math.random;
+  const tier = weightedTierPick(pickerRng, choices);
+  const file = tier.memberFiles[Math.floor(pickerRng() * tier.memberFiles.length)];
+  return cardFromFile(file, tier);
+}
+
 function pickIslandGuaranteedFiveStar(islandMembers, rng = Math.random) {
   const tier = TIERS.find(item => item.key === 'five_star');
   const members = Array.isArray(islandMembers) ? islandMembers : [];
@@ -304,6 +335,8 @@ module.exports = {
   normalizeMemberName,
   memberMatches,
   pickHolodoriLoginReward,
+  hasMemberHolodoriLoginCards,
+  pickMemberHolodoriLoginReward,
   pickHalloweenFirstPurchaseFiveStar,
   pickIslandGuaranteedFiveStar,
   pickIslandGuaranteedSignedFiveStar,
