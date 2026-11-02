@@ -9,6 +9,11 @@ const oshis = require('../config/oshis');
 
 const PREFIX = '!';
 const TOP_N = 10;
+// Discord allows at most 10 embeds and 6,000 combined embed characters per message.
+// Leave room below the hard limit for formatting and future fields.
+const MAX_EMBEDS_PER_MESSAGE = 10;
+const MAX_EMBED_CHARS_PER_MESSAGE = 5_500;
+const MAX_DESCRIPTION_CHARS = 3_900;
 const ADMIN_CHANNEL_ID = String(config.adminChannelId || '');
 
 const OWNER_IDS = new Set([
@@ -116,7 +121,8 @@ function makeEmbed(ev, labels) {
   const endTs = unix(ev.endsAt);
 
   const lines = top.length ? top.map((u, i) => {
-    const name = labels.get(String(u.userId)) || String(u.userId);
+    const fullName = String(labels.get(String(u.userId)) || u.userId);
+    const name = Array.from(fullName).slice(0, 80).join('');
     const total = Number(u.happiness || 0);
     const like = Number(u.likeHappiness || 0);
     const sub = Number(u.subHappiness || 0);
@@ -129,7 +135,7 @@ function makeEmbed(ev, labels) {
 
   const embed = new EmbedBuilder()
     .setTitle(`${label} Stream — Top ${Math.min(TOP_N, users.length || TOP_N)}`)
-    .setDescription(lines.join('\n'))
+    .setDescription(lines.join('\n').slice(0, MAX_DESCRIPTION_CHARS))
     .setColor(0x5AB3F4)
     .addFields(
       { name: 'Stream Happiness', value: `**${Number(ev.happiness || 0).toLocaleString()} ❤️**`, inline: true },
@@ -201,8 +207,87 @@ async function findEvent(selector) {
   return recent.find(ev => norm(ev.oshiId) === wanted || norm(streamLabel(ev)) === wanted) || null;
 }
 
+// Count only the text Discord includes in the combined 6,000-character embed limit.
+function embedCharCount(embed) {
+  const data = typeof embed.toJSON === 'function' ? embed.toJSON() : embed;
+  const fields = Array.isArray(data.fields) ? data.fields : [];
+  return String(data.title || '').length +
+    String(data.description || '').length +
+    String(data.author?.name || '').length +
+    String(data.footer?.text || '').length +
+    fields.reduce((sum, field) => sum + String(field.name || '').length + String(field.value || '').length, 0);
+}
+
+function groupEmbeds(embeds) {
+  const groups = [];
+  let group = [];
+  let chars = 0;
+  for (const embed of embeds) {
+    const length = embedCharCount(embed);
+    if (length > MAX_EMBED_CHARS_PER_MESSAGE) {
+      throw new Error(`Score embed exceeds safe message limit (${length} characters)`);
+    }
+    if (group.length && (group.length >= MAX_EMBEDS_PER_MESSAGE || chars + length > MAX_EMBED_CHARS_PER_MESSAGE)) {
+      groups.push(group);
+      group = [];
+      chars = 0;
+    }
+    group.push(embed);
+    chars += length;
+  }
+  if (group.length) groups.push(group);
+  return groups;
+}
+
+async function sendEmbedGroups(message, embeds) {
+  const groups = groupEmbeds(embeds);
+  let first = true;
+  let delivered = 0;
+  const send = async payload => {
+    // Only the first successful send should be a reply; subsequent batches are
+    // ordinary channel messages. Do not swallow a Discord error silently.
+    if (first) {
+      first = false;
+      return message.reply(payload);
+    }
+    return message.channel.send(payload);
+  };
+
+  for (const group of groups) {
+    try {
+      await send({ embeds: group });
+      delivered += group.length;
+    } catch (err) {
+      console.error(`[scores] Failed to send group of ${group.length} embeds:`, err);
+      // A single oversized or rejected embed should not hide the remaining streams.
+      for (const embed of group) {
+        try {
+          await send({ embeds: [embed] });
+          delivered++;
+        } catch (individualError) {
+          console.error('[scores] Failed to send individual stream score:', individualError);
+          const json = embed.toJSON();
+          const fallback = `${json.title || 'Stream scores'}\n${json.description || ''}`.slice(0, 1_950);
+          try {
+            await send({ content: fallback });
+            delivered++;
+          } catch (fallbackError) {
+            console.error('[scores] Failed to send even text fallback:', fallbackError);
+          }
+        }
+      }
+    }
+  }
+  if (delivered !== embeds.length) {
+    console.warn(`[scores] Delivered ${delivered}/${embeds.length} scoreboards.`);
+  }
+}
+
 async function showList(message) {
-  const events = await StreamEvent.find({}).sort({ spawnAt: -1, createdAt: -1 }).limit(10).lean().exec();
+  // List *all* currently active streams, not just the newest ten events.
+  const active = await activeEvents();
+  const events = active.length ? active : await StreamEvent.find({})
+    .sort({ spawnAt: -1, createdAt: -1 }).limit(10).lean().exec();
   if (!events.length) return message.reply('No stream events found.').catch(() => {});
 
   const lines = events.map(ev => {
@@ -211,12 +296,23 @@ async function showList(message) {
       `↳ ${ev.status}${ts ? ` • <t:${ts}:R>` : ''} • ${Number(ev.happiness || 0).toLocaleString()} ❤️`;
   });
 
-  return message.reply({ embeds: [new EmbedBuilder()
-    .setTitle('Recent Streams')
-    .setDescription(lines.join('\n'))
+  const descriptions = [];
+  let current = '';
+  for (const line of lines) {
+    if (current && current.length + line.length + 1 > MAX_DESCRIPTION_CHARS) {
+      descriptions.push(current);
+      current = '';
+    }
+    current += (current ? '\n' : '') + line;
+  }
+  if (current) descriptions.push(current);
+
+  const embeds = descriptions.map((description, index) => new EmbedBuilder()
+    .setTitle(`${active.length ? 'Active' : 'Recent'} Streams (${events.length})${descriptions.length > 1 ? ` — ${index + 1}/${descriptions.length}` : ''}`)
+    .setDescription(description)
     .setColor(0x5AB3F4)
-    .setFooter({ text: 'Use !scores <eventId> for one specific stream.' })
-  ]}).catch(() => {});
+    .setFooter({ text: 'Use !scores <eventId> for one specific stream.' }));
+  return sendEmbedGroups(message, embeds);
 }
 
 async function sendScores(message, events) {
@@ -232,11 +328,9 @@ async function sendScores(message, events) {
     embeds.push(makeEmbed(ev, labels));
   }
 
-  for (let i = 0; i < embeds.length; i += 10) {
-    const chunk = embeds.slice(i, i + 10);
-    if (i === 0) await message.reply({ embeds: chunk }).catch(() => {});
-    else await message.channel.send({ embeds: chunk }).catch(() => {});
-  }
+  // Chunk by BOTH embed count and total text length. Discord rejects a message
+  // exceeding 6,000 characters across all embeds, even with <=10 embeds.
+  return sendEmbedGroups(message, embeds);
 }
 
 module.exports = {
