@@ -1,6 +1,8 @@
 'use strict';
 const path = require('path');
+const { randomUUID } = require('node:crypto');
 const HalUser = require('../models/HalUser');
+const NextTarotOverride = require('../models/NextTarotOverride');
 const tarot = require('../config/halTarot');
 const config = require('../config.json');
 const { addCardsToUser } = require('./halInventory');
@@ -98,10 +100,55 @@ async function applyTarot(id, choice, { source = 'debug', now = new Date(), prot
   ).lean().exec();
   return { initial, effect: selected, awards, rerolls, state };
 }
+// An owner can queue an exact tarot for a player's NEXT successful Halloween
+// login. Validate at queue time so ineligible World effects never get persisted.
+async function queueNextTarot(id, choice) {
+  const card = tarot.lookup(choice) || tarot.CARDS.find(c => c.member.toLowerCase() === String(choice).trim().toLowerCase());
+  if (!card) {
+    const err = new Error(`Unknown tarot: ${choice}. Use a tarot number (0-21), name, or member.`);
+    err.code = 'INVALID_TAROT';
+    throw err;
+  }
+  if (card.number === 21 && worldRestricted(id)) {
+    const err = new Error('The World is unavailable for this user. No override was queued.');
+    err.code = 'TAROT_NOT_ALLOWED';
+    throw err;
+  }
+  await NextTarotOverride.findOneAndUpdate(
+    { userId: String(id) },
+    { $set: { tarotNumber: card.number, requestId: randomUUID() } },
+    { upsert: true, new: true, runValidators: true }
+  ).exec();
+  return card;
+}
+async function cancelNextTarot(id) {
+  const result = await NextTarotOverride.deleteOne({ userId: String(id) }).exec();
+  return Number(result.deletedCount || 0) > 0;
+}
 async function loginTarot(id, now = new Date()) {
   if (!active(now)) return null;
   const existing = await getState(id);
   if (existing?.tarotDateJST === jstDay(now)) return null;
+
+  const queued = await NextTarotOverride.findOne({ userId: String(id) }).lean().exec();
+  if (queued) {
+    const choice = tarot.lookup(queued.tarotNumber);
+    if (choice && !(choice.number === 21 && worldRestricted(id))) {
+      // Report source='login' so the user receives the EXACT same reveal and
+      // effect/card-award flow as a naturally drawn tarot. A forced Fool can
+      // reroll into any eligible effect, including another Fool.
+      const result = await applyTarot(id, choice, { source: 'login', now });
+      await NextTarotOverride.deleteOne({
+        userId: String(id), requestId: queued.requestId,
+      }).exec().catch(err => console.error('[nexttarot] awarded but cleanup failed:', err));
+      return result;
+    }
+    // Restrictions may have changed after queuing; discard an invalid override
+    // and fall back to an ordinary roll rather than skipping the daily tarot.
+    console.warn('[nexttarot] discarding an ineligible or invalid queued tarot for', String(id));
+    await NextTarotOverride.deleteOne({ userId: String(id), requestId: queued.requestId }).exec();
+  }
+
   const protectedNext = existing?.justiceShield === true &&
     existing?.tarotDateJST === previousJstDay(now);
   const first = rollEffect({ protectedNext, userId: id });
@@ -158,6 +205,6 @@ async function rollPullRewards(id, count = 1, { skipBoo = false } = {}) {
 }
 module.exports = {
   jstDay, active, getState, getEffect, grantCard, rollEffect, applyTarot,
-  loginTarot, endTarot, useMagician, restoreMagician, addCandy, rollBooExtraSlot, rollPullRewards,
+  loginTarot, queueNextTarot, cancelNextTarot, endTarot, useMagician, restoreMagician, addCandy, rollBooExtraSlot, rollPullRewards,
   NEGATIVE_TAROTS, GOOD_TAROTS,
 };
