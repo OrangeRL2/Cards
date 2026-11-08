@@ -1,5 +1,5 @@
 const { installLocalImageTransport } = require('../../utils/localizeInteractionEmbeds');
-const { resolveOshiImage, embedImage } = require('../../utils/oshiImageResolver');
+const { resolveOshiImage, remoteOshiImageUrl, embedImage } = require('../../utils/oshiImageResolver');
 // commands/change-img.js
 const { SlashCommandBuilder, EmbedBuilder, PermissionFlagsBits } = require('discord.js');
 const mongoose = require('mongoose');
@@ -17,6 +17,8 @@ const MANUAL_EXCEPTIONS = {
   fubuki: ['Halloween X'],
   kanata: ['Halloween X'],
   luna: ['Halloween X'],
+  // Original-group artwork usable by Suisei; keep all spreadsheet exceptions.
+  suisei: ['Hoshimatic Project'],
 };
 function mergeExceptionMaps(a = {}, b = {}) {
   const out = { ...a };
@@ -108,7 +110,7 @@ module.exports = {
 const normCard = normalizeForCompare(cardName);
 
 // Build normalized exceptions list for this oshi (if any)
-const rawExceptions = EXCEPTIONS[oshiId] || [];
+const rawExceptions = EXCEPTIONS[oshiId.toLowerCase()] || EXCEPTIONS[oshiId] || [];
 const normExceptions = rawExceptions.map(e => normalizeForCompare(e));
 
 // Allowed if card starts with oshi id OR starts with any exception prefix
@@ -145,12 +147,15 @@ if (!allowedByOshi && !allowedByException) {
       }
       const canonicalCardName = String(ownedCard.name).trim();
 
-      // A saved override must have real artwork. Resolve using the canonical
-      // inventory name, not the possibly miscapitalized slash-command input.
+      // Card ownership is authoritative. The artwork is not always stored on
+      // the bot machine: older images can live only on the /images/ web server.
+      // Prefer the actual local file (correct case and extension) when present,
+      // otherwise preserve the pre-November-8 remote URL behavior.
       const art = resolveOshiImage(rarity, canonicalCardName);
-      if (!art.path) {
-        console.warn(`[img] Refusing missing artwork: user=${targetId} rarity=${rarity} card=${canonicalCardName}; searched=${art.expected}`);
-        return interaction.editReply({ content: `You own **[${rarity}] ${canonicalCardName}**, but its image file was not found on the bot server. The existing oshi image was not changed. Please ask an admin to check the artwork folder and extension.` });
+      const fallbackUrl = art.path ? null : remoteOshiImageUrl(rarity, canonicalCardName);
+      if (!art.path && !fallbackUrl) {
+        console.warn(`[img] Unsupported image path: rarity=${rarity} name=${canonicalCardName}`);
+        return interaction.editReply({ content: 'The selected card has an unsupported artwork path. The existing oshi image was not changed.' });
       }
 
       // Persist the inventory's exact spelling rather than the user's input.
@@ -164,8 +169,7 @@ if (!allowedByOshi && !allowedByException) {
         return interaction.editReply({ content: 'Failed to save image override.' });
       }
 
-      // Use the actual file and extension instead of an assumed remote .png URL.
-      const image = embedImage(art.path);
+      const image = art.path ? embedImage(art.path) : { url: fallbackUrl, file: null };
 
       // Resolve display name
       let displayName = targetUser.tag;
@@ -191,7 +195,7 @@ if (!allowedByOshi && !allowedByException) {
           { name: 'Image override', value: `**[${updated.rarity}]** ${updated.cardName}`, inline: true }
         );
 
-      return interaction.editReply({ embeds: [embed], files: [image.file] });
+      return interaction.editReply({ embeds: [embed], ...(image.file ? { files: [image.file] } : {}) });
     } catch (err) {
       console.error('[CMD] /change-img error', err);
       if (!interaction.replied && !interaction.deferred) {

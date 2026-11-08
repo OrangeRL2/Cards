@@ -3,15 +3,24 @@
 // Oshi images are sent to Discord as attachments to avoid hotlink failures.
 const fs = require('node:fs');
 const path = require('node:path');
-const { artRarity } = require('../config/unknownCards');
+const { artRarity, SOURCE_RARITIES } = require('../config/unknownCards');
 
 const DEFAULT_ROOT = path.resolve(__dirname, '..', 'assets', 'images');
 const IMAGE_EXTENSIONS = ['.png', '.jpg', '.jpeg', '.webp', '.gif'];
+const IMAGE_BASE = (process.env.OSHI_IMAGE_BASE_URL || 'http://152.69.195.48/images').replace(/\/$/, '');
+
+function canonicalUnknownName(cardName) {
+  const wanted = String(cardName ?? '').trim().normalize('NFC').toLowerCase();
+  return Object.keys(SOURCE_RARITIES).find(name => name.normalize('NFC').toLowerCase() === wanted) || null;
+}
 
 function imageParts(rarityInput, cardNameInput) {
   const rarity = String(rarityInput ?? '').trim();
-  const cardName = String(cardNameInput ?? '').trim();
+  let cardName = String(cardNameInput ?? '').trim();
   if (!rarity || !cardName || /[\\/\0]/.test(cardName)) return null;
+  // Older overrides sometimes use different capitalization (e.g. easter o).
+  // The unknown-card registry gives us the correct canonical art filename.
+  if (rarity.toUpperCase() === '???') cardName = canonicalUnknownName(cardName) || cardName;
 
   if (/^★{3,5}$/.test(rarity)) return { segments: ['HOLODORI', rarity], cardName };
   if (rarity.toUpperCase() === 'HOLODORI') return { segments: ['HOLODORI', '★★★'], cardName };
@@ -50,7 +59,10 @@ function resolveOshiImage(rarity, cardName, options = {}) {
   const pieces = imageParts(rarity, cardName);
   if (!pieces) return { path: null, expected: null };
   const root = path.resolve(options.imageRoot || DEFAULT_ROOT);
-  const folders = [root, path.join(root, 'other'), path.join(root, 'special')];
+  const folders = [
+    root, path.join(root, 'other'), path.join(root, 'special'),
+    path.resolve(root, '..', 'image'), // legacy singular asset directory
+  ];
   for (const folder of folders) {
     const dir = path.join(folder, ...pieces.segments);
     const found = findActualFile(dir, pieces.cardName);
@@ -65,4 +77,13 @@ function embedImage(filePath, filenameStem = 'oshi-artwork') {
   return { url: `attachment://${name}`, file: { attachment: filePath, name } };
 }
 
-module.exports = { resolveOshiImage, embedImage };
+// Preserve the old /images/ HTTP route when artwork is served separately from
+// the Discord bot. A local lookup failure must never reject an owned card.
+function remoteOshiImageUrl(rarity, cardName) {
+  const pieces = imageParts(rarity, cardName);
+  if (!pieces) return null;
+  const ext = pieces.cardName === 'Halloween X' && String(rarity).toUpperCase() === '???' ? '.jpg' : '.png';
+  return `${IMAGE_BASE}/${pieces.segments.map(encodeURIComponent).join('/')}/${encodeURIComponent(pieces.cardName)}${ext}`;
+}
+
+module.exports = { resolveOshiImage, remoteOshiImageUrl, embedImage };

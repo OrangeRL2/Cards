@@ -1,4 +1,5 @@
 const { installLocalImageTransport } = require('../../utils/localizeInteractionEmbeds');
+const { resolveOshiImage, remoteOshiImageUrl, embedImage } = require('../../utils/oshiImageResolver');
 // commands/oshi.js
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const mongoose = require('mongoose');
@@ -16,29 +17,6 @@ const OshiImageOverrideSchema = new Schema({
 });
 const OshiImageOverride = mongoose.models.OshiImageOverride || mongoose.model('OshiImageOverride', OshiImageOverrideSchema);
 
-
-const { artRarity } = require('../../config/unknownCards');
-
-function buildProfileImageUrl(rarityInput, cardNameInput) {
-  const rarity = String(rarityInput || '').trim();
-  const cardName = String(cardNameInput || '').trim();
-  const encodedCardName = encodeURIComponent(cardName);
-  const base = 'http://152.69.195.48/images';
-
-  if (rarity === '???' && cardName === 'Halloween X') {
-    return `${base}/BOO/${encodedCardName}.jpg`;
-  }
-
-  if (/^★{3,5}$/.test(rarity)) {
-    return `${base}/HOLODORI/${encodeURIComponent(rarity)}/${encodedCardName}.png`;
-  }
-
-  if (rarity.toUpperCase() === 'HOLODORI') {
-    return `${base}/HOLODORI/${encodeURIComponent('★★★')}/${encodedCardName}.png`;
-  }
-
-  return `${base}/${encodeURIComponent(artRarity(cardName, rarity))}/${encodedCardName}.png`;
-}
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -97,21 +75,24 @@ module.exports = {
       // Prefer override from OshiImageOverride collection if present
       const override = await OshiImageOverride.findOne({ userId: targetId }).lean().exec();
 
-      let imageUrl;
-      if (override && override.rarity && override.cardName) {
-        imageUrl = buildProfileImageUrl(override.rarity, override.cardName);
-      } else {
-        const baseName = typeof oshiLabel === 'string' ? oshiLabel.trim() : String(oshiLabel);
-        const cardName = `${baseName} 001`;
-        const rarity = 'OSR';
-        imageUrl = buildProfileImageUrl(rarity, cardName);
+      const selectedCard = override?.rarity && override?.cardName
+        ? { rarity: override.rarity, cardName: override.cardName }
+        : { rarity: 'OSR', cardName: `${String(oshiLabel).trim()} 001` };
+      const resolved = resolveOshiImage(selectedCard.rarity, selectedCard.cardName);
+      // A missing local file does NOT mean its artwork is missing on the image
+      // server. This remote fallback was supported before the Nov 8 patch.
+      const remoteUrl = resolved.path ? null : remoteOshiImageUrl(selectedCard.rarity, selectedCard.cardName);
+      const image = resolved.path ? embedImage(resolved.path)
+        : remoteUrl ? { url: remoteUrl, file: null }
+        : null;
+      if (!image) {
+        console.warn(`[oshi] Invalid artwork path for user ${targetId}: [${selectedCard.rarity}] ${selectedCard.cardName}`);
       }
 
       const embed = new EmbedBuilder()
         .setTitle(`${displayName}'s Oshi: ${oshiLabel}`)
         .setColor(0xFF69B4)
         .setThumbnail(targetUser.displayAvatarURL({ dynamic: true, size: 64 }))
-        .setImage(imageUrl)
         .addFields(
           {
             name: 'Anniversary Progress',
@@ -119,6 +100,9 @@ module.exports = {
             inline: true
           }
         );
+
+      if (image) embed.setImage(image.url);
+      if (!image) embed.addFields({ name: 'Oshi image', value: 'Artwork file unavailable on the bot server.', inline: false });
 
       if (doc.chosenAt) {
         embed.addFields({
@@ -136,7 +120,7 @@ module.exports = {
         });
       }
 
-      await interaction.reply({ embeds: [embed], ephemeral: false });
+      await interaction.reply({ embeds: [embed], ...(image?.file ? { files: [image.file] } : {}), ephemeral: false });
     } catch (err) {
       console.error('[CMD] /oshi error', err);
       if (!interaction.replied && !interaction.deferred) {
