@@ -1,4 +1,5 @@
 const { installLocalImageTransport } = require('../../utils/localizeInteractionEmbeds');
+const { resolveOshiImage, embedImage } = require('../../utils/oshiImageResolver');
 // commands/change-img.js
 const { SlashCommandBuilder, EmbedBuilder, PermissionFlagsBits } = require('discord.js');
 const mongoose = require('mongoose');
@@ -41,29 +42,6 @@ function normalizeForCompare(s) {
   return String(s || '').toUpperCase().replace(/[^A-Z0-9]/g, '');
 }
 
-
-const { artRarity } = require('../../config/unknownCards');
-
-function buildProfileImageUrl(rarityInput, cardNameInput) {
-  const rarity = String(rarityInput || '').trim();
-  const cardName = String(cardNameInput || '').trim();
-  const encodedCardName = encodeURIComponent(cardName);
-  const base = 'http://152.69.195.48/images';
-
-  if (rarity === '???' && cardName === 'Halloween X') {
-    return `${base}/BOO/${encodedCardName}.jpg`;
-  }
-
-  if (/^★{3,5}$/.test(rarity)) {
-    return `${base}/HOLODORI/${encodeURIComponent(rarity)}/${encodedCardName}.png`;
-  }
-
-  if (rarity.toUpperCase() === 'HOLODORI') {
-    return `${base}/HOLODORI/${encodeURIComponent('★★★')}/${encodedCardName}.png`;
-  }
-
-  return `${base}/${encodeURIComponent(artRarity(cardName, rarity))}/${encodedCardName}.png`;
-}
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -151,22 +129,34 @@ if (!allowedByOshi && !allowedByException) {
         return interaction.editReply({ content: `Target user inventory not found.` });
       }
 
-      const ownsCard = (userDoc.cards || []).some(c => {
+      // Match the requested card case-insensitively, but always store the
+      // inventory's canonical spelling. Otherwise a request such as "Kronmei
+      // 001" could save that spelling even when the owned card is "KronMei 001".
+      const ownedCard = (userDoc.cards || []).find(c => {
         const cName = String(c.name || '').trim();
         const cRarity = String(c.rarity || '').toUpperCase();
         return normalizeForCompare(cName) === normalizeForCompare(cardName) && cRarity === rarity && Number(c.count || 0) > 0;
       });
 
-      if (!ownsCard) {
+      if (!ownedCard) {
         return interaction.editReply({
           content: `Target user does not have that card in their inventory. They must own **${cardName}** (${rarity}) to set it as their image.`
         });
       }
+      const canonicalCardName = String(ownedCard.name).trim();
 
-      // Persist override
+      // A saved override must have real artwork. Resolve using the canonical
+      // inventory name, not the possibly miscapitalized slash-command input.
+      const art = resolveOshiImage(rarity, canonicalCardName);
+      if (!art.path) {
+        console.warn(`[img] Refusing missing artwork: user=${targetId} rarity=${rarity} card=${canonicalCardName}; searched=${art.expected}`);
+        return interaction.editReply({ content: `You own **[${rarity}] ${canonicalCardName}**, but its image file was not found on the bot server. The existing oshi image was not changed. Please ask an admin to check the artwork folder and extension.` });
+      }
+
+      // Persist the inventory's exact spelling rather than the user's input.
       const updated = await OshiImageOverride.findOneAndUpdate(
         { userId: targetId },
-        { $set: { rarity, cardName, updatedAt: new Date() } },
+        { $set: { rarity, cardName: canonicalCardName, updatedAt: new Date() } },
         { upsert: true, new: true }
       ).exec();
 
@@ -174,8 +164,8 @@ if (!allowedByOshi && !allowedByException) {
         return interaction.editReply({ content: 'Failed to save image override.' });
       }
 
-      // Build image URL (trim + encode)
-      const imageUrl = buildProfileImageUrl(updated.rarity, updated.cardName);
+      // Use the actual file and extension instead of an assumed remote .png URL.
+      const image = embedImage(art.path);
 
       // Resolve display name
       let displayName = targetUser.tag;
@@ -195,13 +185,13 @@ if (!allowedByOshi && !allowedByException) {
         .setTitle(`${displayName}'s Oshi Image Updated`)
         .setColor(0xFF69B4)
         .setThumbnail(targetUser.displayAvatarURL({ dynamic: true, size: 64 }))
-        .setImage(imageUrl)
+        .setImage(image.url)
         .addFields(
           { name: 'Oshi', value: `${oshiLabel}`, inline: true },
           { name: 'Image override', value: `**[${updated.rarity}]** ${updated.cardName}`, inline: true }
         );
 
-      return interaction.editReply({ embeds: [embed] });
+      return interaction.editReply({ embeds: [embed], files: [image.file] });
     } catch (err) {
       console.error('[CMD] /change-img error', err);
       if (!interaction.replied && !interaction.deferred) {
