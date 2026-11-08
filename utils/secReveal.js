@@ -6,8 +6,8 @@ const { EmbedBuilder } = require('discord.js');
 // before the potentially slow card-artwork upload. This never writes rewards.
 async function showSecReveal(interaction, hasSEC, textPayload, delayMs = 1200, tag = 'pull') {
   if (!hasSEC) return;
-  //const gifUrl = 'https://media.discordapp.net/attachments/1046811248647475302/1437428522577821828/Ran_chan_drop_kick.gif';
-  const gifUrl = 'https://media.discordapp.net/attachments/1532321010093785178/1563165827425894421/sorascary.gif';
+  const gifUrl = 'https://media.discordapp.net/attachments/1046811248647475302/1437428522577821828/Ran_chan_drop_kick.gif';
+  
   try {
     await interaction.editReply({
       content: null,
