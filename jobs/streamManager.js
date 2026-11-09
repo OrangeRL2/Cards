@@ -76,10 +76,28 @@ const SECONDPLACE_WEIGHTS = {
   SR: 0, OSR: 0, SY: 15, UR: 15, OUR: 11, HR: 11, BDAY: 8, SEC: 5,
 };
 
+// Stream-only members are intentionally kept out of config/oshis.js so this
+// addition does not silently expand the global oshi selector or Summer VN cast.
+// Their short labels match the usual card-name prefixes; full names are aliases.
+const STREAM_ONLY_MEMBERS = Object.freeze([
+  Object.freeze({ id: 'kyoko', label: 'Kyoko', aliases: Object.freeze(['Hyakuto Kyoko']) }),
+  Object.freeze({ id: 'mela', label: 'Mela', aliases: Object.freeze(['Achichi Mela']) }),
+  Object.freeze({ id: 'tsuzuri', label: 'Tsuzuri', aliases: Object.freeze(['Suzuna Tsuzuri']) }),
+  Object.freeze({ id: 'sopia', label: 'Sopia', aliases: Object.freeze(['Sorashina Sopia']) }),
+]);
+
 const MANUAL_STREAM_GROUPS = Object.freeze({
   'Hoshimatic Project': Object.freeze([
     'suisei', 'sora', 'matsuri', 'aki', 'subaru', 'towa', 'nene', 'koyori', 'iroha', 'chloe',
   ]),
+  'ASOBI★MAWARI-TAI!': Object.freeze(['kyoko', 'mela', 'tsuzuri', 'sopia']),
+});
+
+// The group stream uses a real artwork filename whose spelling differs from
+// the stylized canonical stream ID. Keep the DB target canonical, but resolve
+// its default card/image using the exact asset basename.
+const MANUAL_STREAM_GROUP_CARD_NAMES = Object.freeze({
+  'ASOBI★MAWARI-TAI!': 'ASOBI MAWARI TAI 001',
 });
 
 const BASE_EXCEPTIONS = {
@@ -126,8 +144,7 @@ function normalizeCardText(value) {
 }
 
 function displayNameFromOshiId(oshiId) {
-  const id = String(oshiId || '').toLowerCase();
-  const cfg = oshis.find(o => String(o.id).toLowerCase() === id);
+  const cfg = resolveOshiConfigByIdOrName(oshiId);
   if (cfg?.label) return cfg.label;
   return String(oshiId || '').replace(/[_-]+/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
 }
@@ -137,11 +154,15 @@ function resolveOshiConfigByIdOrName(value) {
   if (!raw) return null;
   const rawLower = raw.toLowerCase();
   const rawNorm = normalizeExceptionKey(raw);
-  return oshis.find(o =>
-    String(o.id).toLowerCase() === rawLower ||
-    String(o.label).toLowerCase() === rawLower ||
-    normalizeExceptionKey(o.label) === rawNorm
-  ) || null;
+  const candidates = [...(oshis || []), ...STREAM_ONLY_MEMBERS];
+  return candidates.find(o => {
+    const names = [o.id, o.label, ...(Array.isArray(o.aliases) ? o.aliases : [])]
+      .filter(Boolean)
+      .map(String);
+    return names.some(name =>
+      name.toLowerCase() === rawLower || normalizeExceptionKey(name) === rawNorm
+    );
+  }) || null;
 }
 
 function addException(out, key, values) {
@@ -181,12 +202,32 @@ function buildExceptions() {
 
 const EXCEPTIONS = buildExceptions();
 
+// Canonicalize manual group names so punctuation, capitalization, and spacing
+// do not create separate stream IDs. For example, all of these resolve to the
+// same group: ASOBI★MAWARI-TAI!, asobi mawari tai, asobimawaritai.
+function resolveManualStreamGroup(input) {
+  const normalized = normalizeExceptionKey(input);
+  const compact = normalized.replace(/\s+/g, '');
+  if (!normalized) return null;
+  return Object.keys(MANUAL_STREAM_GROUPS).find(groupName => {
+    const groupNormalized = normalizeExceptionKey(groupName);
+    return groupNormalized === normalized || groupNormalized.replace(/\s+/g, '') === compact;
+  }) || null;
+}
+
 function resolveStreamTarget(input = null) {
   if (!input) {
     const random = oshis[Math.floor(Math.random() * oshis.length)];
     return { eventOshiId: random.id, label: random.label, isOshi: true };
   }
   const raw = String(input).trim();
+  const manualGroup = resolveManualStreamGroup(raw);
+  if (manualGroup) {
+    const groupCardName = MANUAL_STREAM_GROUP_CARD_NAMES[manualGroup];
+    const groupLabel = groupCardName ? groupCardName.replace(/\s+\d{3}$/, '') : manualGroup;
+    return { eventOshiId: manualGroup, label: groupLabel, isOshi: false };
+  }
+
   const rawLower = raw.toLowerCase();
   const rawNorm = normalizeExceptionKey(raw);
   const oshiCfg = resolveOshiConfigByIdOrName(raw);
@@ -198,7 +239,9 @@ function resolveStreamTarget(input = null) {
 
 function getExceptionListForStreamTarget(target) {
   const raw = String(target || '').trim();
-  const list = EXCEPTIONS[raw] || EXCEPTIONS[raw.toLowerCase()] || EXCEPTIONS[normalizeExceptionKey(raw)] || [];
+  const manualGroup = resolveManualStreamGroup(raw);
+  const key = manualGroup || raw;
+  const list = EXCEPTIONS[key] || EXCEPTIONS[key.toLowerCase()] || EXCEPTIONS[normalizeExceptionKey(key)] || [];
   return Array.isArray(list) ? list : [];
 }
 
@@ -258,24 +301,31 @@ function cardMatchesOshi(cardName, oshiId) {
   const cfg = resolveOshiConfigByIdOrName(oshiId);
   if (!cfg) return false;
   const card = normalizeCardText(cardName);
-  const label = normalizeCardText(cfg.label);
-  const id = normalizeCardText(cfg.id);
-  return Boolean(
-    (label && (card === label || card.startsWith(`${label} `))) ||
-    (id && (card === id || card.startsWith(`${id} `)))
-  );
+  const identifiers = [cfg.label, cfg.id, ...(Array.isArray(cfg.aliases) ? cfg.aliases : [])];
+  return identifiers.some(value => {
+    const key = normalizeCardText(value);
+    return Boolean(key && (card === key || card.startsWith(`${key} `)));
+  });
 }
 
 function streamMemberForCard(cardName, ev) {
   return getStreamMemberIds(ev.oshiId).find(id => cardMatchesOshi(cardName, id)) || null;
 }
 
+function defaultStreamCardName(oshiLabel) {
+  const manualGroup = resolveManualStreamGroup(oshiLabel);
+  return MANUAL_STREAM_GROUP_CARD_NAMES[manualGroup] || `${String(oshiLabel || '').trim()} 001`;
+}
+
 function buildImageUrl(oshiLabel, rarity = 'ORI') {
-  const cardName = `${String(oshiLabel || '').trim()} 001`;
+  const cardName = defaultStreamCardName(oshiLabel);
   return `${IMAGE_BASE.replace(/\/$/, '')}/${encodeURIComponent(String(rarity).trim())}/${encodeURIComponent(cardName)}.png`;
 }
 
 function streamLabel(ev) {
+  const manualGroup = resolveManualStreamGroup(ev?.oshiId);
+  const groupCardName = MANUAL_STREAM_GROUP_CARD_NAMES[manualGroup];
+  if (groupCardName) return groupCardName.replace(/\s+\d{3}$/, '');
   return resolveOshiConfigByIdOrName(ev.oshiId)?.label || ev.oshiId;
 }
 
@@ -1407,7 +1457,7 @@ async function settleEndedEvents(client = null) {
       const winners = sorted.slice(0, 3);
       const label = streamLabel(ev);
       const featuredRarity = String(ev.rewardOverrides?.firstPlaceRewardRarity || 'ORI').trim().toUpperCase();
-      const featuredCard = String(ev.rewardOverrides?.firstPlaceRewardCardName || `${label} 001`).trim();
+      const featuredCard = String(ev.rewardOverrides?.firstPlaceRewardCardName || defaultStreamCardName(label)).trim();
       const isFesMilestone = featuredRarity === 'FES';
 
       for (const p of sorted) {
@@ -1437,7 +1487,7 @@ async function settleEndedEvents(client = null) {
             await addCardToUser(p.userId, picked.name, picked.rarity, 1);
             await StreamActionLog.create({ eventId: ev.eventId, userId: p.userId, oshiId: ev.oshiId, action: 'reward', happiness: 0, meta: { tier: 'participation', reward: picked.rarity, card: picked.name } });
           } else {
-            const fallback = `${label} 001`;
+            const fallback = defaultStreamCardName(label);
             await addCardToUser(p.userId, fallback, 'C', 1);
             await StreamActionLog.create({ eventId: ev.eventId, userId: p.userId, oshiId: ev.oshiId, action: 'reward', happiness: 0, meta: { tier: 'participation', reward: 'C', card: fallback, note: 'fallback' } });
           }
@@ -1451,7 +1501,7 @@ async function settleEndedEvents(client = null) {
             await addCardToUser(winners[2].userId, picked.name, picked.rarity, 1);
             await StreamActionLog.create({ eventId: ev.eventId, userId: winners[2].userId, oshiId: ev.oshiId, action: 'reward', happiness: 0, meta: { tier: 3, reward: picked.rarity, card: picked.name } });
           } else {
-            const fallback = `${label} 001`;
+            const fallback = defaultStreamCardName(label);
             await addCardToUser(winners[2].userId, fallback, 'SY', 1);
             await StreamActionLog.create({ eventId: ev.eventId, userId: winners[2].userId, oshiId: ev.oshiId, action: 'reward', happiness: 0, meta: { tier: 3, reward: 'SY', card: fallback, note: 'SY floor fallback' } });
           }
@@ -1465,7 +1515,7 @@ async function settleEndedEvents(client = null) {
             await addCardToUser(winners[1].userId, picked.name, picked.rarity, 1);
             await StreamActionLog.create({ eventId: ev.eventId, userId: winners[1].userId, oshiId: ev.oshiId, action: 'reward', happiness: 0, meta: { tier: 2, reward: picked.rarity, card: picked.name } });
           } else {
-            const fallback = `${label} 001`;
+            const fallback = defaultStreamCardName(label);
             await addCardToUser(winners[1].userId, fallback, 'SY', 1);
             await StreamActionLog.create({ eventId: ev.eventId, userId: winners[1].userId, oshiId: ev.oshiId, action: 'reward', happiness: 0, meta: { tier: 2, reward: 'SY', card: fallback, note: 'SY floor fallback' } });
           }
@@ -1511,7 +1561,7 @@ async function settleEndedEvents(client = null) {
         try {
           const rewardRarity = String(ev.rewardOverrides?.firstPlaceRewardRarity || 'ORI').trim().toUpperCase();
           const specified = ev.rewardOverrides?.firstPlaceRewardCardName || ev.firstPlaceOriCardName || ev.firstPlaceRewardCardName || ev.rewardOverrides?.firstPlaceOriCardName || ev.rewardOverrides?.firstPlaceOri || ev.rewards?.firstPlaceOriCardName || ev.rewards?.firstPlaceOri;
-          const cardName = String(specified || `${label} 001`).trim();
+          const cardName = String(specified || defaultStreamCardName(label)).trim();
           // Always award and log the first-place featured card, including FES.
           // FES first place is omitted from the milestone loop above, so it is not duplicated.
           await addCardToUser(winners[0].userId, cardName, rewardRarity, 1);
@@ -1522,7 +1572,7 @@ async function settleEndedEvents(client = null) {
             await addCardToUser(winners[0].userId, picked2.name, picked2.rarity, 1);
             await StreamActionLog.create({ eventId: ev.eventId, userId: winners[0].userId, oshiId: ev.oshiId, action: 'reward', happiness: 0, meta: { tier: 2, reward: picked2.rarity, card: picked2.name, note: '1st place also receives 2nd-place reward' } });
           } else {
-            const fallback = `${label} 001`;
+            const fallback = defaultStreamCardName(label);
             await addCardToUser(winners[0].userId, fallback, 'SY', 1);
             await StreamActionLog.create({ eventId: ev.eventId, userId: winners[0].userId, oshiId: ev.oshiId, action: 'reward', happiness: 0, meta: { tier: 2, reward: 'SY', card: fallback, note: '1st place SY floor fallback' } });
           }
