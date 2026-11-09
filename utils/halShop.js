@@ -21,7 +21,6 @@ function purchaseToken() { return crypto.randomUUID(); }
 async function purchase(userId, item, token) {
   const id = String(userId);
   const price = priceOf(item);
-  if (!hal.active()) return { success: false, reason: 'EVENT_INACTIVE' };
   if (!price || price <= 0 || !Number.isInteger(price)) return { success: false, reason: 'BAD_ITEM' };
   if (!/^[0-9a-f-]{36}$/i.test(String(token))) return { success: false, reason: 'BAD_TOKEN' };
   // The HOLODORI exchange is one-time only. Enforce this atomically at the

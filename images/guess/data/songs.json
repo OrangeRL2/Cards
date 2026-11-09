@@ -2241,6 +2241,28 @@
     "audio": "../audio/m0388.mp3"
   },
   {
+    "id": "m0394",
+    "title": "Dramatic XViltration",
+    "playingSeconds": 121,
+    "characterIds": [
+      "chr-03001",
+      "chr-03002",
+      "chr-03003"
+    ],
+    "jacket": "../jackets/m0394.png",
+    "audio": "../audio/m0394.mp3"
+  },
+  {
+    "id": "m0396",
+    "title": "Metropolis",
+    "playingSeconds": 133,
+    "characterIds": [
+      "chr-03001"
+    ],
+    "jacket": "../jackets/m0396.png",
+    "audio": "../audio/m0396.mp3"
+  },
+  {
     "id": "m0413",
     "title": "BAKU LOVE CHEMISTRY",
     "playingSeconds": 125,
@@ -2299,6 +2321,16 @@
     "audio": "../audio/m0527.mp3"
   },
   {
+    "id": "m0528",
+    "title": "Multiverse",
+    "playingSeconds": 136,
+    "characterIds": [
+      "chr-03002"
+    ],
+    "jacket": "../jackets/m0528.png",
+    "audio": "../audio/m0528.mp3"
+  },
+  {
     "id": "m0548",
     "title": "Kyapi",
     "playingSeconds": 123,
@@ -2319,6 +2351,16 @@
     "audio": "../audio/m0549.mp3"
   },
   {
+    "id": "m0550",
+    "title": "Lucu Juga",
+    "playingSeconds": 117,
+    "characterIds": [
+      "chr-03003"
+    ],
+    "jacket": "../jackets/m0550.png",
+    "audio": "../audio/m0550.mp3"
+  },
+  {
     "id": "m0551",
     "title": "ENDLESS FES",
     "playingSeconds": 112,
@@ -2327,5 +2369,15 @@
     ],
     "jacket": "../jackets/m0551.png",
     "audio": "../audio/m0551.mp3"
+  },
+  {
+    "id": "m0552",
+    "title": "LOVE MISSION♡",
+    "playingSeconds": 123,
+    "characterIds": [
+      "chr-03007"
+    ],
+    "jacket": "../jackets/m0552.png",
+    "audio": "../audio/m0552.mp3"
   }
 ]

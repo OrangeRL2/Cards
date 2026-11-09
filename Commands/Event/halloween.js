@@ -60,8 +60,8 @@ async function view(userId) {
 function hub(userId, state, card) {
   const active = hal.active();
   const embed = withEventLogo(new EmbedBuilder().setTitle(`🎃 ${eventName()}`).setColor(LOGO_COLOR))
-    .setDescription(`${active ? 'Event active' : 'Event not active'} | Oct 24 - Nov 8 (JST)\n` +
-      `Daily tarot expires at midnight JST. Collectible BOO cards never activate tarot effects.`)
+    .setDescription(`${active ? 'Event active' : 'Event ended'} | Oct 24 - Nov 8 (JST)\n` +
+      `The Candy Shop remains open after the event. Daily tarot expires at midnight JST. Collectible BOO cards never activate tarot effects.`)
     .addFields(
       { name: 'Candies', value: String(state.candies || 0), inline: true },
       { name: 'Active Tarot', value: card ? `${card.number} - ${card.name} (${card.member})` : 'None', inline: true },
@@ -76,7 +76,7 @@ function hub(userId, state, card) {
 function shopMenu(userId, state) {
   const balance = Number(state.candies || 0);
   const holodoriAvailable = state.firstHolodoriBought !== true;
-  const description = `You have **${balance} Candies**.\n\n` +
+  const description = `You have **${balance} Candies**. The Candy Shop remains open after Halloween.\n\n` +
     `**BOO Pull (${shop.BOO_PRICE})**: One collectible draw. Most results are BOO, but the 0.03% Halloween X is a separate [???] rarity.` +
     `\n**10 BOO Pulls (${shop.BOO_TEN_PRICE})**: Ten independent draws, with the same odds per card.` +
     (holodoriAvailable
@@ -84,13 +84,13 @@ function shopMenu(userId, state) {
       : '');
   const purchaseButtons = [
     button(id('buyboo', userId), `BOO - ${shop.BOO_PRICE}`, ButtonStyle.Success,
-      !hal.active() || balance < shop.BOO_PRICE),
+      balance < shop.BOO_PRICE),
     button(id('buyboo10', userId), `10 BOO - ${shop.BOO_TEN_PRICE}`, ButtonStyle.Success,
-      !hal.active() || balance < shop.BOO_TEN_PRICE),
+      balance < shop.BOO_TEN_PRICE),
   ];
   if (holodoriAvailable) {
     purchaseButtons.push(button(id('buyholodori', userId), `HOLODORI 10 - ${shop.HOLO_PRICE}`,
-      ButtonStyle.Primary, !hal.active() || balance < shop.HOLO_PRICE));
+      ButtonStyle.Primary, balance < shop.HOLO_PRICE));
   }
   return {
     content: null,
@@ -143,7 +143,7 @@ function purchaseResult(userId, result, page, { imageRef = null, logoRef = null,
     const repeatPrice = shop.priceOf(result.item);
     actions.push(button(id(`buyagain-${result.booAgainToken}`, userId),
       result.item === 'boo10' ? `10 BOO Again - ${repeatPrice} Candies` : `Pull Again - ${repeatPrice} Candies`,
-      ButtonStyle.Success, !hal.active() || Number(result.balance) < repeatPrice));
+      ButtonStyle.Success, Number(result.balance) < repeatPrice));
   }
   actions.push(button(id('shop', userId), 'Continue Shopping', ButtonStyle.Primary));
   actions.push(button(id('home', userId), 'Event Hub'));
@@ -340,7 +340,6 @@ module.exports = {
         }
         if (action === 'tarots') return await interaction.editReply(tarotGuide(userId));
         if (action === 'buyboo' || action === 'buyboo10' || action === 'buyholodori') {
-          if (!hal.active()) return await interaction.editReply({ content: 'Halloween is not active.', embeds: [], components: [row(button(id('home', userId), 'Hub'))] });
           ({ state } = await view(userId));
           const item = action === 'buyboo' ? 'boo' : action === 'buyboo10' ? 'boo10' : 'holodori';
           if (item === 'holodori' && state.firstHolodoriBought) {
