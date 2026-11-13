@@ -1583,8 +1583,11 @@ async function settleEndedEvents(client = null) {
       await ev.save();
       if (client) await postStreamResults(client, ev.eventId);
 
-      if (client && STREAM_CHANNEL_ID) {
-        const ch = await client.channels.fetch(STREAM_CHANNEL_ID).catch(() => null);
+      // Send the end-of-stream leaderboard alongside the reward results.
+      // With no resultsChannel configured, retain the original stream-channel behavior.
+      const summaryChannelId = String(config.resultsChannel || '').trim() || STREAM_CHANNEL_ID;
+      if (client && summaryChannelId) {
+        const ch = await client.channels.fetch(summaryChannelId).catch(() => null);
         if (ch?.isTextBased?.()) {
           const summary = new EmbedBuilder()
             .setTitle(`Stream ended: ${label}`)

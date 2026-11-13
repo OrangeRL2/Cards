@@ -31,7 +31,8 @@ async function postStreamResults(client, eventId) {
     if (!ev) return;
 
     const rewardLogs = await StreamActionLog.find({ eventId, action: 'reward' }).lean();
-    const channelId = config.streamChannelId || config.bossChannelId;
+    // Use a dedicated channel for reward results when configured; preserve the old destination otherwise.
+    const channelId = String(config.resultsChannel || '').trim() || config.streamChannelId || config.bossChannelId;
     const ch = channelId ? await client.channels.fetch(channelId).catch(() => null) : null;
     if (!ch?.isTextBased?.()) return;
 
