@@ -15,7 +15,7 @@ const halPull = require('../../utils/halPullEffects');
 // === Quota + models (special-aware) ===
 const PullQuota = require('../../utils/pullQuota'); // helper with getUpdatedQuota, constants
 const PullQuotaModel = require('../../models/PullQuota'); // direct model for atomic updates
-const SpecialPullGrant = require('../../models/SpecialPullGrant'); // active 24h grants
+const { consumeSpecialPulls, refundSpecialPulls } = require('../../utils/specialPullQueue');
 const PullLock = require('../../models/PullLock'); // per-user advisory lock (Mongo-backed)
 const { resolveCardColor, getAttributeEmoji } = require('../../config/holomemColor'); // for attribute emojis in pull results
 // === Draw functions ===
@@ -234,36 +234,6 @@ async function waitForPullLock(userId, owner, timeoutMs = 20000, retryMs = 50) {
 }
 
 // === Special + quota helpers ===
-async function findMostRecentActiveSpecial() {
-  try {
-    return await SpecialPullGrant
-      .findOne({ active: true, expiresAt: { $gt: new Date() } })
-      .sort({ createdAt: -1 })
-      .lean();
-  } catch (err) {
-    console.error('[findMostRecentActiveSpecial] error', err);
-    return null;
-  }
-}
-
-async function ensureUserSpecialKey(userId, labelKey, defaultVal) {
-  try {
-    await PullQuotaModel.updateOne(
-      { userId, [`specialPulls.${labelKey}`]: { $exists: false } },
-      { $set: { [`specialPulls.${labelKey}`]: defaultVal } }
-    ).exec();
-    return true;
-  } catch (err) {
-    console.error('[ensureUserSpecialKey] updateOne failed', { userId, labelKey, err });
-    return false;
-  }
-}
-
-/**
- * Authoritative pulls consumption.
- * (Special path already uses atomic $inc. We'll harden timed-only to use $inc too.)
- */
-
 async function consumePulls(discordUserId, amount, allowEvent, specialLabel = null, options = {}) {
 
   const frozen = Boolean(options?.frozen || options?.isFrozen);
@@ -283,102 +253,12 @@ async function consumePulls(discordUserId, amount, allowEvent, specialLabel = nu
   }
 
 
-  // --- Special path (kept as-is; already atomic) ---
+  // Special pulls use one shared FIFO queue, with a separate quota per grant.
   if (specialLabel) {
-    const labelKey = String(specialLabel);
-    const grant = await SpecialPullGrant
-      .findOne({ label: labelKey, active: true, expiresAt: { $gt: new Date() } })
-      .lean();
-
-    if (!grant) {
-      return {
-        success: false,
-        consumedFromEvent: 0, consumedFromTimed: 0, consumedFromSpecial: 0,
-        doc: null, remainingEvent: 0, remainingTimed: 0, remainingSpecial: 0,
-        nextRefillInMs: null, reason: 'no_active_special'
-      };
-    }
-
-    const { doc: initialDoc } = await PullQuota.getUpdatedQuota(discordUserId, options);
-    if (!initialDoc) {
-      try {
-        const init = { userId: discordUserId, pulls: 0, eventPulls: 0, specialPulls: {} };
-        init.specialPulls[labelKey] = grant.pullsPerUser;
-        await PullQuotaModel.updateOne(
-          { userId: discordUserId },
-          { $setOnInsert: init },
-          { upsert: true }
-        ).catch(() => null);
-      } catch {}
-    }
-
-    await ensureUserSpecialKey(discordUserId, labelKey, grant.pullsPerUser);
-
-    const { doc } = await PullQuota.getUpdatedQuota(discordUserId, { frozen });
-    if (!doc) {
-      return {
-        success: false,
-        consumedFromEvent: 0, consumedFromTimed: 0, consumedFromSpecial: 0,
-        doc: null, remainingEvent: 0, remainingTimed: 0, remainingSpecial: 0,
-        nextRefillInMs: null, reason: 'no_quota_doc'
-      };
-    }
-
-    let remainingSpecial = 0;
-    try {
-      if (doc.specialPulls && typeof doc.specialPulls.get === 'function') {
-        remainingSpecial = Number(doc.specialPulls.get(labelKey) ?? 0);
-      } else if (doc.specialPulls && Object.prototype.hasOwnProperty.call(doc.specialPulls, labelKey)) {
-        remainingSpecial = Number(doc.specialPulls[labelKey] ?? 0);
-      }
-    } catch { remainingSpecial = 0; }
-
-    if (remainingSpecial < amount) {
-      return {
-        success: false,
-        consumedFromEvent: 0, consumedFromTimed: 0, consumedFromSpecial: 0,
-        doc, remainingEvent: doc.eventPulls ?? 0, remainingTimed: doc.pulls ?? 0, remainingSpecial,
-        nextRefillInMs: computeNextRefill(doc), reason: 'no_special_remaining'
-      };
-    }
-
-    const toConsume = amount;
-
-    try {
-      const incObj = {};
-      incObj[`specialPulls.${labelKey}`] = -toConsume;
-      await PullQuotaModel.updateOne({ userId: discordUserId }, { $inc: incObj }).exec();
-    } catch (e) {
-      console.error('[consumePulls] special decrement failed', e);
-      return {
-        success: false,
-        consumedFromEvent: 0, consumedFromTimed: 0, consumedFromSpecial: 0,
-        doc, remainingEvent: doc.eventPulls ?? 0, remainingTimed: doc.pulls ?? 0, remainingSpecial,
-        nextRefillInMs: computeNextRefill(doc), reason: 'special_consume_failed'
-      };
-    }
-
-    const { doc: afterDoc } = await PullQuota.getUpdatedQuota(discordUserId, options);
-
-    let afterRemainingSpecial = 0;
-    if (afterDoc) {
-      if (afterDoc.specialPulls && typeof afterDoc.specialPulls.get === 'function') {
-        afterRemainingSpecial = Number(afterDoc.specialPulls.get(labelKey) ?? 0);
-      } else if (afterDoc.specialPulls && Object.prototype.hasOwnProperty.call(afterDoc.specialPulls, labelKey)) {
-        afterRemainingSpecial = Number(afterDoc.specialPulls[labelKey] ?? 0);
-      }
-    }
-
-    return {
-      success: true,
-      consumedFromEvent: 0, consumedFromTimed: 0, consumedFromSpecial: toConsume,
-      doc: afterDoc ?? null,
-      remainingEvent: afterDoc ? (afterDoc.eventPulls ?? 0) : 0,
-      remainingTimed: afterDoc ? (afterDoc.pulls ?? 0) : 0,
-      remainingSpecial: afterRemainingSpecial,
-      nextRefillInMs: computeNextRefill(afterDoc),
-      reason: null
-    };
+    return consumeSpecialPulls(discordUserId,
+      options.packCount ?? amount,
+      options.specialCostMultiplier ?? 1,
+      { frozen });
   }
 
   // --- Non-special path (original logic + atomic $inc for timed-only) ---
@@ -682,49 +562,10 @@ const frozen = isFrozen(discordUserId, member);
         return;
       }
 
-      // --- Resolve active special grant (if requested) ---
-      let consumeLabelKey = null; // quota key (grant.label)
-      let specialDrawToken = null; // draw token (grant.displayLabel ?? label)
-      let resolvedGrant = null;
-
-      if (useSpecial) {
-        try {
-          const grant = await findMostRecentActiveSpecial();
-          if (!grant || !grant.label) {
-            inFlightInteractions.delete(interaction.id);
-            const elapsed = Date.now() - gifShownAt;
-            if (elapsed < ANIM_MS) await sleep(ANIM_MS - elapsed);
-
-            const embed = new EmbedBuilder()
-              .setTitle('No active special pulls')
-              .setColor(0xFF5555)
-              .setDescription('There is no active special pull event right now.');
-            await interaction.editReply({ embeds: [embed], components: [] }).catch(() => null);
-            await release();
-            return;
-          }
-
-          consumeLabelKey = String(grant.label);
-          specialDrawToken = String(grant.displayLabel ?? grant.label);
-          resolvedGrant = grant;
-
-          try {
-            loadingEmbed.setFooter({ text: `Active special: ${grant.displayLabel ?? grant.label}` });
-            loadingEmbed.setColor(0x87CEFA);
-            await interaction.editReply({ embeds: [loadingEmbed] }).catch(() => null);
-          } catch {}
-        } catch (err) {
-          console.error('failed to resolve active special grant:', err);
-          inFlightInteractions.delete(interaction.id);
-
-          const elapsed = Date.now() - gifShownAt;
-          if (elapsed < ANIM_MS) await sleep(ANIM_MS - elapsed);
-
-          await interaction.editReply({ embeds: [], attachments: [], content: 'Failed to check special pulls. Please try again later.', components: [] }).catch(() => null);
-          await release();
-          return;
-        }
-      }
+      // The quota helper selects the head of this user's FIFO grant queue.
+      // A multi-pull may consume more than one grant; selection happens per pack.
+      const consumeLabelKey = useSpecial ? 'queue' : null;
+      let specialDrawToken = null;
 
       // --- Boss-channel detection (non-fatal) ---
       let bossChannelBias = null;
@@ -772,7 +613,7 @@ const frozen = isFrozen(discordUserId, member);
       let consumeResult;
       try {
         const consumeLabel = consumeLabelKey ?? null;
-        consumeResult = await consumePulls(discordUserId, amount * halPullCostMultiplier, allowEvent, consumeLabel, { frozen });
+        consumeResult = await consumePulls(discordUserId, amount * halPullCostMultiplier, allowEvent, consumeLabel, { frozen, packCount: amount, specialCostMultiplier: halPullCostMultiplier });
       } catch (err) {
         console.error('consumePulls error (pre-draw):', err);
         inFlightInteractions.delete(interaction.id);
@@ -783,6 +624,15 @@ const frozen = isFrozen(discordUserId, member);
         await interaction.editReply({ embeds: [], attachments: [], content: 'Failed to consume pulls. Please try again later.', components: [] }).catch(() => null);
         await release();
         return;
+      }
+
+      if (consumeResult.success && useSpecial) {
+        specialDrawToken = String(consumeResult.packGrants[0]?.displayLabel || consumeResult.packGrants[0]?.label || '');
+        try {
+          loadingEmbed.setFooter({ text: `Active special: ${specialDrawToken}` });
+          loadingEmbed.setColor(0x87CEFA);
+          await interaction.editReply({ embeds: [loadingEmbed] }).catch(() => null);
+        } catch {}
       }
 
       if (!consumeResult.success) {
@@ -879,7 +729,8 @@ const frozen = isFrozen(discordUserId, member);
             rateMultiplier: pullChannelContext.rateMultiplier * halRateFactor,
             summerIsland: summerContext?.summerActive ? summerContext.island : null,
           });
-        } else if (useSpecial && drawPackSpecial && specialDrawToken) {
+        } else if (useSpecial) {
+          if (!drawPackSpecial || !specialDrawToken) throw new Error('Special draw unavailable');
           pack = await drawPackSpecial(discordUserId, specialDrawToken, {
             forceSEC,
             rateMultiplier: pullChannelContext.rateMultiplier * halRateFactor,
@@ -916,22 +767,17 @@ const frozen = isFrozen(discordUserId, member);
             const inc = {};
             if (consumeResult.consumedFromEvent) inc.eventPulls = consumeResult.consumedFromEvent;
             if (consumeResult.consumedFromTimed) inc.pulls = consumeResult.consumedFromTimed;
-            if (consumeResult.consumedFromSpecial && resolvedGrant) {
-              inc[`specialPulls.${resolvedGrant.label ?? resolvedGrant.displayLabel}`] = consumeResult.consumedFromSpecial;
-            }
             if (Object.keys(inc).length > 0) {
               await PullQuotaModel.updateOne({ userId: discordUserId }, { $inc: inc }).catch(() => null);
               if (!PullQuotaModel) {
                 if (consumeResult.consumedFromEvent) doc.eventPulls = (doc.eventPulls ?? 0) + consumeResult.consumedFromEvent;
                 if (consumeResult.consumedFromTimed) doc.pulls = (doc.pulls ?? 0) + consumeResult.consumedFromTimed;
-                if (consumeResult.consumedFromSpecial && resolvedGrant) {
-                  doc.specialPulls = doc.specialPulls ?? {};
-                  doc.specialPulls[resolvedGrant.label ?? resolvedGrant.displayLabel] =
-                    (doc.specialPulls[resolvedGrant.label ?? resolvedGrant.displayLabel] ?? 0) + consumeResult.consumedFromSpecial;
-                }
                 await doc.save().catch(() => null);
               }
             }
+          }
+          if (consumeResult.consumedFromSpecial) {
+            await refundSpecialPulls(discordUserId, consumeResult);
           }
         } catch (refundErr) {
           console.error('refund error after draw failure:', refundErr);
@@ -1056,22 +902,17 @@ const frozen = isFrozen(discordUserId, member);
             const inc = {};
             if (consumeResult.consumedFromEvent) inc.eventPulls = consumeResult.consumedFromEvent;
             if (consumeResult.consumedFromTimed) inc.pulls = consumeResult.consumedFromTimed;
-            if (consumeResult.consumedFromSpecial && resolvedGrant) {
-              inc[`specialPulls.${resolvedGrant.label ?? resolvedGrant.displayLabel}`] = consumeResult.consumedFromSpecial;
-            }
             if (Object.keys(inc).length > 0) {
               await PullQuotaModel.updateOne({ userId: discordUserId }, { $inc: inc }).catch(() => null);
               if (!PullQuotaModel) {
                 if (consumeResult.consumedFromEvent) doc.eventPulls = (doc.eventPulls ?? 0) + consumeResult.consumedFromEvent;
                 if (consumeResult.consumedFromTimed) doc.pulls = (doc.pulls ?? 0) + consumeResult.consumedFromTimed;
-                if (consumeResult.consumedFromSpecial && resolvedGrant) {
-                  doc.specialPulls = doc.specialPulls ?? {};
-                  doc.specialPulls[resolvedGrant.label ?? resolvedGrant.displayLabel] =
-                    (doc.specialPulls[resolvedGrant.label ?? resolvedGrant.displayLabel] ?? 0) + consumeResult.consumedFromSpecial;
-                }
                 await doc.save().catch(() => null);
               }
             }
+          }
+          if (consumeResult.consumedFromSpecial) {
+            await refundSpecialPulls(discordUserId, consumeResult);
           }
         } catch (refundErr) {
           console.error('refund error after atomic update failure:', refundErr);

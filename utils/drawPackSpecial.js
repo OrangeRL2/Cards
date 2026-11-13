@@ -3,6 +3,7 @@ const path = require('path');
 const pools = require('./loadImages');
 const { pickCardFromRarityFolder } = require('./cardPicker');
 const { pickWeighted, buildSlotOptions, getUserProfile, getOverrides } = require('./rates');
+const { SPECIAL_BASES } = require('./pullSlotBases');
 const { rollExtraSlot } = require('./extraSlot');
 
 /**
@@ -22,8 +23,12 @@ function pickOne(arr) {
   return arr[Math.floor(Math.random() * arr.length)];
 }
 
-const MONTHLY_BDAYS_BASE = process.env.MONTHLY_BDAYS_BASE || 'assets/montlybdays';
-const OSR_BASE = process.env.OSR_BASE || 'assets/special/OSR';
+// Special pulls use the full BDAY artwork folder, independent of the month.
+const IMAGE_ASSETS_BASE = path.join(__dirname, '..', 'assets', 'images');
+const configuredOsrBase = process.env.OSR_BASE;
+const OSR_BASE = configuredOsrBase
+  ? (path.basename(configuredOsrBase).toUpperCase() === 'OSR' ? path.dirname(configuredOsrBase) : configuredOsrBase)
+  : IMAGE_ASSETS_BASE;
 
 /**
  * Resolve the incoming specialLabel into the actual folder label used for pulls.
@@ -36,7 +41,7 @@ function resolveSpecialVariantLabel(specialLabel) {
   const base = String(specialLabel).trim();
   const key = base.toLowerCase();
 
-  const variants = gachaMap[key];
+  const variants = key === 'god' ? gachaMap.hololive : gachaMap[key];
   if (Array.isArray(variants) && variants.length > 0) {
     return { baseLabel: base, variantLabel: pickOne(variants) };
   }
@@ -64,7 +69,7 @@ async function pickForSlot(rarity, specialLabel) {
       const pickedMonthly = await pickCardFromRarityFolder(
         'BDAY',
         specialLabel || null,
-        { avoidImmediateRepeat: true, baseDir: MONTHLY_BDAYS_BASE }
+        { avoidImmediateRepeat: true, baseDir: IMAGE_ASSETS_BASE, birthdayFilter: false, includeExtension: true }
       );
       if (pickedMonthly) return pickedMonthly;
     } catch {}
@@ -73,7 +78,7 @@ async function pickForSlot(rarity, specialLabel) {
       const pickedMonthlyNeutral = await pickCardFromRarityFolder(
         'BDAY',
         null,
-        { avoidImmediateRepeat: true, baseDir: MONTHLY_BDAYS_BASE }
+        { avoidImmediateRepeat: true, baseDir: IMAGE_ASSETS_BASE, birthdayFilter: false, includeExtension: true }
       );
       if (pickedMonthlyNeutral) return pickedMonthlyNeutral;
     } catch {}
@@ -82,7 +87,7 @@ async function pickForSlot(rarity, specialLabel) {
       const pickedOSR = await pickCardFromRarityFolder(
         'OSR',
         specialLabel || null,
-        { avoidImmediateRepeat: true, baseDir: OSR_BASE }
+        { avoidImmediateRepeat: true, baseDir: OSR_BASE, includeExtension: true }
       );
       if (pickedOSR) return pickedOSR;
     } catch {}
@@ -91,7 +96,7 @@ async function pickForSlot(rarity, specialLabel) {
       const pickedOSRNeutral = await pickCardFromRarityFolder(
         'OSR',
         null,
-        { avoidImmediateRepeat: true, baseDir: OSR_BASE }
+        { avoidImmediateRepeat: true, baseDir: OSR_BASE, includeExtension: true }
       );
       if (pickedOSRNeutral) return pickedOSRNeutral;
     } catch {}
@@ -102,7 +107,7 @@ async function pickForSlot(rarity, specialLabel) {
       const picked = await pickCardFromRarityFolder(
         rarity,
         specialLabel,
-        { avoidImmediateRepeat: true }
+        { avoidImmediateRepeat: true, baseDir: IMAGE_ASSETS_BASE, includeExtension: true }
       );
       if (picked) return picked;
     } catch {}
@@ -112,13 +117,18 @@ async function pickForSlot(rarity, specialLabel) {
     const fallback = await pickCardFromRarityFolder(
       rarity,
       null,
-      { avoidImmediateRepeat: true }
+      { avoidImmediateRepeat: true, baseDir: IMAGE_ASSETS_BASE, includeExtension: true }
     );
     if (fallback) return fallback;
   } catch {}
 
   const raw = fallbackPickFromPools(rarity);
-  return path.basename(raw, path.extname(raw));
+  // Never grant a phantom card without a file: draw failures are refunded by
+  // the slash commands. Include the true extension for JPEG/WebP artwork.
+  if (!require('fs').existsSync(raw)) {
+    throw new Error(`No artwork available for special rarity ${rarity} (${specialLabel})`);
+  }
+  return path.basename(raw);
 }
 
 async function drawPackSpecial(userId, specialLabel, opts = {}) {
@@ -128,8 +138,8 @@ async function drawPackSpecial(userId, specialLabel, opts = {}) {
 
   // Hololive's special pack is intentionally a fixed guaranteed-rarity pack,
   // so it continues to bypass normal/special rate multipliers.
-  if (String(baseLabel || '').trim().toLowerCase() === 'hololive') {
-    const guaranteedRarities = ['BDAY', 'OC', 'S', 'HR', 'SY', 'SY', 'UR', 'OUR'];
+  if (['hololive', 'god'].includes(String(baseLabel || '').trim().toLowerCase())) {
+    const guaranteedRarities = ['BDAY', 'OC', 'S', 'HR', 'SY', 'SY', 'UR', 'SEC'];
 
     for (const rarity of guaranteedRarities) {
       const file = await pickForSlot(rarity, variantLabel);
@@ -156,12 +166,7 @@ async function drawPackSpecial(userId, specialLabel, opts = {}) {
     Number(profile?.specialPullRate ?? 1.0) * contextRateMultiplier;
 
   // --- Common slots (4) ---
-  const commonSlot1Base = [
-    { key: 'C', weight: 93.8 },
-    { key: 'S', weight: 4.0 },
-    { key: 'HR', weight: 1.1 },
-    { key: 'BDAY', weight: 1.1 },
-  ];
+  const commonSlot1Base = SPECIAL_BASES.common1;
   {
     const options = buildSlotOptions(commonSlot1Base, rate, getOverrides(profile, 'special', 'common1'));
     const rarity = pickWeighted(options);
@@ -169,11 +174,7 @@ async function drawPackSpecial(userId, specialLabel, opts = {}) {
     results.push({ rarity, file });
   }
 
-  const commonSlot2Base = [
-    { key: 'C', weight: 94.0 },
-    { key: 'S', weight: 4.0 },
-    { key: 'OC', weight: 2.0 },
-  ];
+  const commonSlot2Base = SPECIAL_BASES.common2;
   {
     const options = buildSlotOptions(commonSlot2Base, rate, getOverrides(profile, 'special', 'common2'));
     const rarity = pickWeighted(options);
@@ -181,11 +182,7 @@ async function drawPackSpecial(userId, specialLabel, opts = {}) {
     results.push({ rarity, file });
   }
 
-  const commonSlot3Base = [
-    { key: 'C', weight: 94.9 },
-    { key: 'S', weight: 4.0 },
-    { key: 'BDAY', weight: 1.1 },
-  ];
+  const commonSlot3Base = SPECIAL_BASES.common3;
   {
     const options = buildSlotOptions(commonSlot3Base, rate, getOverrides(profile, 'special', 'common3'));
     const rarity = pickWeighted(options);
@@ -193,11 +190,7 @@ async function drawPackSpecial(userId, specialLabel, opts = {}) {
     results.push({ rarity, file });
   }
 
-  const commonSlot4Base = [
-    { key: 'C', weight: 94.9 },
-    { key: 'S', weight: 4.0 },
-    { key: 'HR', weight: 1.1 },
-  ];
+  const commonSlot4Base = SPECIAL_BASES.common4;
   {
     const options = buildSlotOptions(commonSlot4Base, rate, getOverrides(profile, 'special', 'common4'));
     const rarity = pickWeighted(options);
@@ -207,21 +200,9 @@ async function drawPackSpecial(userId, specialLabel, opts = {}) {
 
   // --- Uncommon slots (3) ---
   const uncommonSlotBases = [
-    [
-      { key: 'U', weight: 88.75 },
-      { key: 'RR', weight: 10.0 },
-      { key: 'SY', weight: 1.25 },
-    ],
-    [
-      { key: 'U', weight: 94.75 },
-      { key: 'SR', weight: 5.0 },
-      { key: 'SY', weight: 1.25 },
-    ],
-    [
-      { key: 'U', weight: 94.5 },
-      { key: 'OSR', weight: 4.0 },
-      { key: 'UR', weight: 1.5 },
-    ],
+    SPECIAL_BASES.uncommon1,
+    SPECIAL_BASES.uncommon2,
+    SPECIAL_BASES.uncommon3,
   ];
 
   for (let i = 0; i < uncommonSlotBases.length; i++) {
@@ -237,11 +218,7 @@ async function drawPackSpecial(userId, specialLabel, opts = {}) {
   }
 
   // --- Rare slot (1) ---
-  const rareBase = [
-    { key: 'R', weight: 99.1 },
-    { key: 'OUR', weight: 0.9 },
-    { key: 'SEC', weight: 0.1 },
-  ];
+  const rareBase = SPECIAL_BASES.rare;
   {
     const baseOverrides = getOverrides(profile, 'special', 'rare');
     const pityOverrides = (opts && opts.forceSEC)

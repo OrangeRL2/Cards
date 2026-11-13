@@ -8,7 +8,9 @@ const specialPullGrantSchema = new Schema({
   createdBy: { type: String, required: true },
   createdAt: { type: Date, default: () => new Date() },
   expiresAt: { type: Date, required: true },
-  active: { type: Boolean, default: true }
+  active: { type: Boolean, default: true },
+  targetUserIds: { type: [String], default: [] }, // [] applies to everyone
+  queueVersion: { type: Number, default: 0 } // 0 = legacy label quotas; 1 = ID-based quotas
 }, { timestamps: false });
 
 specialPullGrantSchema.index({ label: 1, expiresAt: 1 });

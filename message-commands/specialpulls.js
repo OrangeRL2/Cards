@@ -31,9 +31,9 @@ function parseFlags(content) {
 module.exports = {
   name: 'specialpulls',
   description: 'Owner-only: create 24h special pulls for a target oshi. Can target specific users by ID or username.',
-  async execute(message) {
+  async execute(message, { stack = false } = {}) {
     try {
-      console.log('[specialpulls] invoked by', message.author?.id, 'content:', message.content);
+      console.log(stack ? '[stackspecialpulls]' : '[specialpulls]', 'invoked by', message.author?.id, 'content:', message.content);
 
       if (!OWNER_IDS.has(message.author.id)) {
         console.log('[specialpulls] denied owner check', message.author.id);
@@ -42,7 +42,7 @@ module.exports = {
 
       const parsed = parseFlags(message.content);
       if (!parsed) {
-        return message.reply({ content: 'Usage: !specialpulls --pulls=12 --target="suisei" [--users="id1,id2"] [--usernames="name1,name2"] [--init]' }).catch(() => {});
+        return message.reply({ content: `Usage: !${stack ? 'stackspecialpulls' : 'specialpulls'} --pulls=12 --target="suisei" [--users="id1,id2"] [--usernames="name1,name2"] [--init]` }).catch(() => {});
       }
 
       const { pulls, rawTarget, rawUsers, rawUsernames, init } = parsed;
@@ -104,21 +104,15 @@ module.exports = {
 
       console.log('[specialpulls] targetUserIds resolved', targetUserIds);
 
-      // ============================================================
-      // HARD CLEAR: delete ALL previous special grants + wipe quotas
-      // ============================================================
-
-      // 1) Delete all existing grants (hard delete)
-      const deleted = await SpecialPullGrant.deleteMany({});
-      console.log('[specialpulls] hard-cleared SpecialPullGrant docs:', { deleted: deleted.deletedCount ?? 0 });
-
-      // 2) Wipe specialPulls in PullQuota for all users (removes old label keys)
-      //    This prevents old specialPulls.<label> values from lingering forever.
-      const wipe = await PullQuota.updateMany({}, { $set: { specialPulls: {} } }).exec();
-      console.log('[specialpulls] wiped PullQuota.specialPulls for all users:', {
-        matched: wipe.matchedCount ?? wipe.n ?? 0,
-        modified: wipe.modifiedCount ?? wipe.nModified ?? 0,
-      });
+      // The original command deliberately replaces every prior grant.
+      // The new stacking command must leave all grants and quotas untouched.
+      if (!stack) {
+        const deleted = await SpecialPullGrant.deleteMany({});
+        console.log('[specialpulls] hard-cleared grants:', deleted.deletedCount ?? 0);
+        await PullQuota.updateMany({}, {
+          $set: { specialPulls: {}, specialGrantRemaining: {} }
+        }).exec();
+      }
 
       // ============================================================
       // Create the new grant (the only one now)
@@ -131,6 +125,7 @@ module.exports = {
         createdAt: new Date(),
         expiresAt,
         active: true,
+        queueVersion: 1,
         targetUserIds // empty array means applies to everyone
       });
 
@@ -149,7 +144,7 @@ module.exports = {
       } else {
         replyMsg += ' Applies to all users.';
       }
-      replyMsg += ' (Previous specials deleted)';
+      replyMsg += stack ? ' (Added to FIFO queue; previous specials preserved)' : ' (Previous specials deleted)';
 
       await message.reply({ content: replyMsg }).catch(() => {});
 
@@ -166,7 +161,7 @@ module.exports = {
             ops.push({
               updateOne: {
                 filter: { userId: uid },
-                update: { $set: { [`specialPulls.${label}`]: pulls } },
+                update: { $set: { [`specialGrantRemaining.${grant._id}`]: pulls, ...(stack ? {} : { [`specialPulls.${label}`]: pulls }) } },
                 upsert: true
               }
             });
@@ -196,7 +191,7 @@ module.exports = {
             ops.push({
               updateOne: {
                 filter: { userId: doc.userId },
-                update: { $set: { [`specialPulls.${label}`]: pulls } }
+                update: { $set: { [`specialGrantRemaining.${grant._id}`]: pulls, ...(stack ? {} : { [`specialPulls.${label}`]: pulls }) } }
               }
             });
 

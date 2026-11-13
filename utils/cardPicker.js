@@ -78,16 +78,17 @@ function buildCandidates(label) {
 async function pickCardFromRarityFolder(
   rarity,
   oshiLabel,
-  { avoidImmediateRepeat = true, baseDir = null } = {}
+  { avoidImmediateRepeat = true, baseDir = null, includeExtension = false, birthdayFilter = true } = {}
 ) {
   try {
     const rarityKey = String(rarity).toUpperCase();
     const folder = rarityKey === 'BDAY'
-      ? BIRTHDAY_FOLDER
+      ? (baseDir ? path.join(baseDir, rarityKey) : BIRTHDAY_FOLDER)
       : path.join(baseDir || ASSETS_BASE, rarityKey);
 
     let files = await fs.readdir(folder).catch(() => []);
-    if (rarityKey === 'BDAY') {
+    files = files.filter(name => /\.(png|jpe?g|webp|gif)$/i.test(name));
+    if (rarityKey === 'BDAY' && birthdayFilter) {
       files = filterBirthdayFilesForCurrentMonth(files);
     }
 
@@ -101,14 +102,14 @@ async function pickCardFromRarityFolder(
 
     // If no label provided, behave neutrally (random pick with anti-repeat)
     if (!oshiLabel) {
-      return neutralPick(candidatesList, rarity, oshiLabel, avoidImmediateRepeat);
+      return neutralPick(candidatesList, rarity, oshiLabel, avoidImmediateRepeat, includeExtension);
     }
 
     // Build candidate tokens: primary + exceptions
     const candidates = buildCandidates(oshiLabel);
     if (!candidates || candidates.length === 0) {
       // nothing to prefer, fallback to neutral
-      return neutralPick(candidatesList, rarity, oshiLabel, avoidImmediateRepeat);
+      return neutralPick(candidatesList, rarity, oshiLabel, avoidImmediateRepeat, includeExtension);
     }
 
     // Choose one candidate uniformly at random (primary and each exception have equal chance)
@@ -142,7 +143,7 @@ async function pickCardFromRarityFolder(
 
     // If still no pool, fall back to neutral pick
     if (!pool || pool.length === 0) {
-      return neutralPick(candidatesList, rarity, oshiLabel, avoidImmediateRepeat);
+      return neutralPick(candidatesList, rarity, oshiLabel, avoidImmediateRepeat, includeExtension);
     }
 
     // Group by normalized basename to avoid duplicates caused by different filenames mapping to same normalized name
@@ -153,7 +154,7 @@ async function pickCardFromRarityFolder(
       grouped.get(key).push(item.raw);
     }
     const groups = Array.from(grouped.values());
-    if (groups.length === 0) return neutralPick(candidatesList, rarity, oshiLabel, avoidImmediateRepeat);
+    if (groups.length === 0) return neutralPick(candidatesList, rarity, oshiLabel, avoidImmediateRepeat, includeExtension);
 
     // Avoid immediate repeat for this rarity+oshi (use the original oshiLabel as key so exceptions still share the same lastPicked)
     const lastKey = `${String(rarity)}::${oshiLabel || ''}::${folder}`; // include actual folder in key to avoid cross-folder interference
@@ -184,7 +185,7 @@ async function pickCardFromRarityFolder(
 
     console.debug(`[pickCard] rarity=${rarity} oshi=${oshiLabel} candidate=${cand.raw} poolSize=${pool.length} groups=${groups.length} chosen=${rawPick}`);
 
-    return path.basename(rawPick, path.extname(rawPick));
+    return includeExtension ? rawPick : path.basename(rawPick, path.extname(rawPick));
   } catch (err) {
     console.error('[pickCardFromRarityFolder] error', err);
     return null;
@@ -194,7 +195,7 @@ async function pickCardFromRarityFolder(
 /**
  * Neutral random pick helper (used when no label matches or no label provided)
  */
-function neutralPick(candidatesList, rarity, oshiLabel, avoidImmediateRepeat) {
+function neutralPick(candidatesList, rarity, oshiLabel, avoidImmediateRepeat, includeExtension) {
   if (!Array.isArray(candidatesList) || candidatesList.length === 0) return null;
 
   // Group by normalized basename to avoid duplicates caused by different filenames mapping to same normalized name
@@ -232,7 +233,7 @@ function neutralPick(candidatesList, rarity, oshiLabel, avoidImmediateRepeat) {
 
   console.debug(`[pickCard-neutral] rarity=${rarity} oshi=${oshiLabel} poolSize=${candidatesList.length} groups=${groups.length} chosen=${rawPick}`);
 
-  return path.basename(rawPick, path.extname(rawPick));
+  return includeExtension ? rawPick : path.basename(rawPick, path.extname(rawPick));
 }
 
 /**
