@@ -7,6 +7,7 @@ const { showSavedPull } = require('../../utils/pullDisplayRecovery');
 const { startPullDisplayGuard } = require('../../utils/pullDisplayGuard');
 const path = require('path');
 const User = require('../../models/User');
+const { loadMatchingInventoryCards } = require('../../utils/loadMatchingInventoryCards');
 const halEvent = require('../../utils/halEvent');
 const { candyForPack } = require('../../utils/halCandy');
 const { isTrickBoo } = require('../../config/halTarot');
@@ -819,7 +820,7 @@ const frozen = isFrozen(discordUserId, member);
 
       try {
         await User.updateOne({ id: discordUserId }, { $setOnInsert: { id: discordUserId, pulls: 0, cards: [] } }, { upsert: true });
-        const inventoryDoc = await User.findOne({ id: discordUserId }, { cards: 1 }).lean();
+        const inventoryDoc = await loadMatchingInventoryCards(User, discordUserId, [pack]);
         if (!inventoryDoc) throw new Error(`Missing user inventory for ${discordUserId}`);
         const normalizeName = value => String(value ?? '').replace(/[_\s\-]+/g, ' ').replace(/\s+/g, ' ').trim().toLowerCase();
         const identity = (rarity, name) => `${rarity}\0${normalizeName(name)}`;

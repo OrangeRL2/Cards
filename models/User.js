@@ -60,9 +60,7 @@ const userSchema = new Schema({
   pendingAttempts: { type: [pendingAttemptSchema], default: [] },
 }, { timestamps: true });
 
-// Optional: create an index to help find unresolved attempts quickly
-// Note: MongoDB doesn't support unique constraints on array subdocuments across documents easily.
-// This index helps queries for unresolved attempts per user.
-userSchema.index({ id: 1 });
+// userSchema.id already declares unique: true; a separate index({ id: 1 })
+// would duplicate it and trigger a Mongoose warning.
 
 module.exports = model('User', userSchema);

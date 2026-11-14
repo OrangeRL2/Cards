@@ -7,6 +7,7 @@ const { showSavedPull } = require('../../utils/pullDisplayRecovery');
 const { startPullDisplayGuard } = require('../../utils/pullDisplayGuard');
 const path = require('path');
 const User = require('../../models/User');
+const { loadMatchingInventoryCards } = require('../../utils/loadMatchingInventoryCards');
 const halEvent = require('../../utils/halEvent');
 const { candyForPack } = require('../../utils/halCandy');
 const { isTrickBoo } = require('../../config/halTarot');
@@ -819,10 +820,7 @@ const frozen = isFrozen(discordUserId, member);
       try {
         // Load the inventory once. The per-user pull lock means another /pull or
         // /multi-pull for this user cannot race this block.
-        const inventoryDoc = await User.findOne(
-          { id: discordUserId },
-          { cards: 1 }
-        ).lean();
+        const inventoryDoc = await loadMatchingInventoryCards(User, discordUserId, packs);
 
         if (!inventoryDoc) {
           throw new Error(`User inventory document missing for ${discordUserId}`);

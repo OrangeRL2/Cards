@@ -19,6 +19,13 @@ const {
 } = require('../utils/recentAcquisitions');
 
 const snapshots = new Map();
+// Array positions are needed for processing small change-stream updates without
+// downloading the entire inventory again. The original snapshots remain the
+// authoritative aggregate counts used by fallback full refreshes.
+const cardPositionsByDocument = new Map();
+const userIdByDocument = new Map();
+const pendingGains = new Map();
+const saveChains = new Map();
 const pendingRefreshes = new Map();
 // A debounce timer alone does not prevent an already-running refresh from
 // overlapping another read of the same multi-thousand-card inventory.
@@ -34,6 +41,7 @@ let restartAttempt = 0;
 let generation = 0;
 
 const REFRESH_DEBOUNCE_MS = 750;
+const GAINS_DEBOUNCE_MS = 750;
 // Bound simultaneous full-inventory downloads across the bot. Keep both caps
 // conservative on shared MongoDB Atlas tiers.
 const MAX_CONCURRENT_REFRESHES = 2;
@@ -97,8 +105,19 @@ function positiveDifferences(before, after) {
   return gained;
 }
 
+function snapshotPositions(cards) {
+  return (Array.isArray(cards) ? cards : []).map(card => ({
+    name: String(card?.name ?? '').trim(),
+    rarity: normalizeRarity(card?.rarity),
+    variant: card?.variant ?? null,
+    count: Math.max(0, Number(card?.count || 0)),
+  }));
+}
+
 async function hydrateSnapshots() {
   snapshots.clear();
+  cardPositionsByDocument.clear();
+  userIdByDocument.clear();
 
   // Only read the two fields the watcher actually needs.
   const cursor = User.find({}, { id: 1, cards: 1 }).lean().cursor();
@@ -107,6 +126,9 @@ async function hydrateSnapshots() {
   for await (const doc of cursor) {
     if (!doc?.id) continue;
     snapshots.set(String(doc.id), snapshotCards(doc.cards));
+    const documentId = String(doc._id);
+    cardPositionsByDocument.set(documentId, snapshotPositions(doc.cards));
+    userIdByDocument.set(documentId, String(doc.id));
     count += 1;
   }
 
@@ -182,6 +204,9 @@ async function refreshDocument(documentId) {
   // Update before writing recentAcquisitions. Those writes do not touch cards and
   // are ignored by changeTouchesCards(), so they cannot recursively re-read inventory.
   snapshots.set(userId, after);
+  const documentKey = String(doc._id);
+  cardPositionsByDocument.set(documentKey, snapshotPositions(doc.cards));
+  userIdByDocument.set(documentKey, userId);
 
   if (gained.length) {
     await saveAcquisition(userId, gained, new Date());
@@ -255,12 +280,124 @@ function scheduleDocumentRefresh(documentId) {
   pendingRefreshes.set(key, timer);
 }
 
+function enqueueAcquisitionSave(userId, cards) {
+  const previous = saveChains.get(userId) || Promise.resolve();
+  const next = previous.then(() => saveAcquisition(userId, cards))
+    .catch(err => console.error('[acquisitionWatcher] incremental save failed:', err))
+    .finally(() => { if (saveChains.get(userId) === next) saveChains.delete(userId); });
+  saveChains.set(userId, next);
+}
+
+function queueGains(userId, gained) {
+  if (!gained.length) return;
+  const existing = pendingGains.get(userId) || { cards: new Map(), timer: null };
+  for (const card of gained) {
+    const key = cardKey(card);
+    const old = existing.cards.get(key);
+    if (old) old.count += card.count;
+    else existing.cards.set(key, { ...card });
+  }
+  if (existing.timer) clearTimeout(existing.timer);
+  existing.timer = setTimeout(() => {
+    pendingGains.delete(userId);
+    enqueueAcquisitionSave(userId, [...existing.cards.values()]);
+  }, GAINS_DEBOUNCE_MS);
+  existing.timer.unref?.();
+  pendingGains.set(userId, existing);
+}
+
+// Most ordinary pulls modify just cards.<index>.count or append cards.<index>.
+// Reconstructing those changes from the already-primed snapshot avoids a full
+// cards-array read after every pull. Unknown array operations fall back to the
+// existing conservative refresh (e.g. reorder, rename, deletion, replacement).
+function applyIncrementalChange(change) {
+  if (change?.operationType !== 'update') return false;
+  const documentId = String(change?.documentKey?._id ?? '');
+  const userId = userIdByDocument.get(documentId);
+  const positions = cardPositionsByDocument.get(documentId);
+  const counts = userId && snapshots.get(userId);
+  if (!userId || !positions || !counts) return false;
+
+  // If another event requires a full refresh, let it reconcile the latest state
+  // rather than racing an incremental update against a database snapshot.
+  if (activeRefreshes.has(documentId) || refreshQueue.has(documentId) ||
+      pendingRefreshes.has(documentId) || followUpRefreshes.has(documentId)) return false;
+
+  const description = change.updateDescription || {};
+  if ((description.removedFields || []).some(pathTouchesCards) ||
+      (description.truncatedArrays || []).some(entry => pathTouchesCards(entry?.field))) return false;
+
+  const appends = [];
+  const changes = [];
+  for (const [path, value] of Object.entries(description.updatedFields || {})) {
+    if (!pathTouchesCards(path)) continue;
+    let match = /^cards\.(\d+)\.count$/.exec(path);
+    if (match) {
+      changes.push({ index: Number(match[1]), value });
+      continue;
+    }
+    match = /^cards\.(\d+)$/.exec(path);
+    if (match && value && typeof value === 'object' && !Array.isArray(value)) {
+      appends.push({ index: Number(match[1]), value });
+      continue;
+    }
+    if (/^cards\.\d+\.(?:lastAcquiredAt|firstAcquiredAt|locked|_id)$/.test(path)) continue;
+    return false;
+  }
+  if (!appends.length && !changes.length) return true;
+
+  appends.sort((a, b) => a.index - b.index);
+  for (let i = 0; i < appends.length; i++) {
+    const { index, value } = appends[i];
+    if (index !== positions.length + i || !value.name || !value.rarity ||
+        !Number.isFinite(Number(value.count ?? 0))) return false;
+  }
+  for (const { index, value } of changes) {
+    if (index < 0 || index >= positions.length + appends.length ||
+        !Number.isFinite(Number(value ?? 0))) return false;
+  }
+
+  const previousTotals = new Map();
+  function changeTotal(card, difference) {
+    const key = cardKey(card);
+    const old = counts.get(key);
+    if (!previousTotals.has(key)) previousTotals.set(key, old?.count || 0);
+    if (old) old.count += difference;
+    else counts.set(key, { ...card, count: difference });
+  }
+  for (const { value } of appends) {
+    const card = snapshotPositions([value])[0];
+    positions.push(card);
+    changeTotal(card, card.count);
+  }
+  for (const { index, value } of changes) {
+    const card = positions[index];
+    const newCount = Math.max(0, Number(value || 0));
+    const difference = newCount - card.count;
+    card.count = newCount;
+    changeTotal(card, difference);
+  }
+
+  const gained = [];
+  for (const [key, previousCount] of previousTotals) {
+    const current = counts.get(key);
+    const difference = current.count - previousCount;
+    if (difference > 0 && isTrackedRarity(current.rarity)) {
+      gained.push({ name: current.name, rarity: current.rarity,
+        variant: current.variant ?? null, count: difference });
+    }
+  }
+  queueGains(userId, gained);
+  return true;
+}
+
 function handleChange(change) {
   if (!changeTouchesCards(change)) return;
 
   const documentId = change?.documentKey?._id;
   if (!documentId) return;
 
+  if (applyIncrementalChange(change)) return;
   scheduleDocumentRefresh(documentId);
 }
 
@@ -372,12 +509,22 @@ async function stopAcquisitionWatcher() {
   pendingRefreshes.clear();
   refreshQueue.clear();
   followUpRefreshes.clear();
+  for (const [userId, entry] of pendingGains) {
+    if (entry.timer) clearTimeout(entry.timer);
+    // A graceful stop should not discard acquisitions awaiting their debounce.
+    enqueueAcquisitionSave(userId, [...entry.cards.values()]);
+  }
+  pendingGains.clear();
+  await Promise.allSettled([...saveChains.values()]);
+  saveChains.clear();
 
   const stream = changeStream;
   changeStream = null;
   await closeStreamSilently(stream);
 
   snapshots.clear();
+  cardPositionsByDocument.clear();
+  userIdByDocument.clear();
 }
 
 module.exports = {

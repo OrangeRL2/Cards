@@ -8,6 +8,7 @@
 const mongoose = require('mongoose');
 const config = require('../config.json');
 const User = require('../models/User');
+const { loadMatchingInventoryCards } = require('../utils/loadMatchingInventoryCards');
 const { performance } = require('node:perf_hooks');
 
 const SAMPLES = 4;
@@ -67,15 +68,37 @@ async function main() {
     console.log(`Sample ${i}/${SAMPLES}`);
     await measure('ping', () => mongoose.connection.db.admin().command({ ping: 1 }));
     await measure('indexed-user-id-only', () => User.findOne({ id: largest.id }, { id: 1 }).lean().maxTimeMS(MAX_TIME_MS).exec());
+    const countOnly = await measure('server-only-cards-array-length', () => User.aggregate([
+      { $match: { id: largest.id } },
+      { $project: { count: { $size: { $ifNull: ['$cards', []] } } } },
+    ]).option({ maxTimeMS: MAX_TIME_MS }).exec());
+    if (countOnly?.length) console.log(`  server-side card count: ${countOnly[0].count}`);
+
     const cardsDoc = await measure('same-user-entire-cards-array', () => User.findOne({ id: largest.id }, { cards: 1 }).lean().maxTimeMS(MAX_TIME_MS).exec());
     if (cardsDoc) console.log(`  cards array entries: ${cardsDoc.cards?.length ?? 0}`);
+
+    if (cardsDoc?.cards?.length) {
+      const first = cardsDoc.cards.find(card => card?.name && card?.rarity);
+      if (first) {
+        const filtered = await measure('server-filtered-one-card', () => loadMatchingInventoryCards(
+          User, largest.id, [[{ rarity: first.rarity, file: `${first.name}.png` }]],
+        ));
+        if (filtered) console.log(`  filtered card entries returned: ${filtered.cards?.length ?? 0}`);
+      }
+    }
+    if (i === 1) {
+      const native = await measure('native-driver-entire-cards-array', () => mongoose.connection.db
+        .collection(User.collection.name)
+        .findOne({ id: largest.id }, { projection: { cards: 1 }, maxTimeMS: MAX_TIME_MS }));
+      if (native) console.log(`  native driver card entries: ${native.cards?.length ?? 0}`);
+    }
   }
 
   console.log('\nSummary:');
   for (const [label, durations] of Object.entries(DURATIONS)) {
     console.log(`  ${label}: ${stats(durations)}`);
   }
-  console.log('A slow ping suggests connection/cluster/network trouble. Fast ping and ID-only lookup but slow cards-array reads suggests inventory transfer or document handling overhead.');
+  console.log('Compare: server-only length (server work), full lean + native driver (transfer/driver), and filtered one-card (reduced payload).');
 }
 
 main().catch(err => {
