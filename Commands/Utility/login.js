@@ -28,7 +28,8 @@ const User = require('../../models/User');
 const halEvent = require('../../utils/halEvent');
 const { addPulls } = require('../../utils/pullQuota');
 const { isFrozen } = require('../../utils/freeze');
-const { pickHolodoriLoginReward, pickMemberHolodoriLoginReward, buildHolodoriImageUrl } = require('../../utils/holodoriLoginReward');
+const { pickHolodoriLoginReward, pickMemberHolodoriLoginReward, pickGuaranteedSignedFiveStarLoginReward, buildHolodoriImageUrl } = require('../../utils/holodoriLoginReward');
+const { scheduledForJstDate } = require('../../utils/signedLoginDay');
 const ForcedLoginReward = require('../../models/ForcedLoginReward');
 
 let resolveCardColor = null;
@@ -745,13 +746,17 @@ async function sendPaginatedLoginRewardReply({
 // Reply content
 // =====================
 
-function buildLoginReplyContent({ fans, frozen, pullsGranted, eventCardsAwarded, eventStreak, holodoriCard }) {
+function buildLoginReplyContent({ fans, frozen, pullsGranted, eventCardsAwarded, eventStreak, holodoriCard, signedLoginBonus = false }) {
   const lines = [
     `You logged in for the day and earned **${fans}** fans 🎉`,
   ];
 
   if (frozen) {
     lines.push(`Frozen bonus: **+${pullsGranted} pulls** 🎟️`);
+  }
+
+  if (signedLoginBonus) {
+    lines.push('🎉 Anniversary login bonus: guaranteed SIGNED HOLODORI 5★!');
   }
 
   if (holodoriCard) {
@@ -951,13 +956,19 @@ module.exports = {
         eventCardsAwarded = buildLoginEventRewardCardsForStreak(eventStreak);
       }
 
-      // One HOLODORI card is awarded on every successful daily login.
-      // A queued admin override changes ONLY its member; normal tier weights apply.
-      // Keep the override until card insertion is confirmed (not merely when viewed).
-      const forcedLogin = await ForcedLoginReward.findOne({ userId }).lean().exec();
-      holodoriCard = forcedLogin
-        ? pickMemberHolodoriLoginReward(forcedLogin.member, userId)
-        : pickHolodoriLoginReward(userId);
+      // Date-specific global anniversary reward. It applies ONLY on the
+      // scheduled JST day (never a later login), and replaces that day's
+      // normal HOLODORI card with a signed five-star.
+      // A pending per-user !forcelogin remains queued for another day.
+      const signedLoginBonus = await scheduledForJstDate(todayJST);
+      const forcedLogin = signedLoginBonus
+        ? null
+        : await ForcedLoginReward.findOne({ userId }).lean().exec();
+      holodoriCard = signedLoginBonus
+        ? pickGuaranteedSignedFiveStarLoginReward()
+        : forcedLogin
+          ? pickMemberHolodoriLoginReward(forcedLogin.member, userId)
+          : pickHolodoriLoginReward(userId);
 
       // Store HOLODORI cards using their star tier as the actual rarity.
       if (holodoriCard) {
@@ -1043,6 +1054,7 @@ module.exports = {
         eventCardsAwarded,
         eventStreak,
         holodoriCard,
+        signedLoginBonus,
       }) + halTarotLine;
 
       const displayedLoginCards = [

@@ -258,6 +258,24 @@ function pickMemberHolodoriLoginReward(memberName, userId = null, rng = Math.ran
   return cardFromFile(file, tier);
 }
 
+// Global anniversary bonus: choose from the existing signed 5-star artwork.
+// The admin-scheduled guarantee deliberately ignores ordinary user rate weights.
+function hasSignedFiveStarHolodoriArtwork() {
+  const tier = TIERS.find(item => item.key === 'signed');
+  return listTierFiles(tier).length > 0;
+}
+
+function pickGuaranteedSignedFiveStarLoginReward(rng = Math.random) {
+  const tier = TIERS.find(item => item.key === 'signed');
+  const files = listTierFiles(tier);
+  if (!files.length) {
+    throw new Error('No signed five-star HOLODORI artwork found in assets/images/HOLODORI/★★★★★/.');
+  }
+  const pickerRng = typeof rng === 'function' ? rng : Math.random;
+  const file = files[Math.min(files.length - 1, Math.floor(pickerRng() * files.length))];
+  return cardFromFile(file, tier, { guaranteed: true });
+}
+
 function pickIslandGuaranteedFiveStar(islandMembers, rng = Math.random) {
   const tier = TIERS.find(item => item.key === 'five_star');
   const members = Array.isArray(islandMembers) ? islandMembers : [];
@@ -337,6 +355,8 @@ module.exports = {
   pickHolodoriLoginReward,
   hasMemberHolodoriLoginCards,
   pickMemberHolodoriLoginReward,
+  hasSignedFiveStarHolodoriArtwork,
+  pickGuaranteedSignedFiveStarLoginReward,
   pickHalloweenFirstPurchaseFiveStar,
   pickIslandGuaranteedFiveStar,
   pickIslandGuaranteedSignedFiveStar,
