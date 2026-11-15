@@ -40,6 +40,10 @@ const SHOP_ITEMS = {
   upFUWAMOCO_001: { name: 'FUWAMOCO', rarity: 'UP', cost: t1, image: 'FUWAMOCO 001', stock: -1 },
   upFUWAMOCO_501: { name: 'FUWAMOCO', rarity: 'UP', cost: t1, image: 'FUWAMOCO 501', stock: -1 },
   upHoloAN_001: { name: 'holoAN', rarity: 'UP', cost: t1, image: 'holoAN 001', stock: -1 },
+  upMatsuri_002: { name: 'Matsuri', rarity: 'UP', cost: t1, image: 'Matsuri 002', stock: -1 },
+  upRoboco_501: { name: 'Roboco', rarity: 'UP', cost: t1, image: 'Roboco 501', stock: -1 },
+  upSora_002: { name: 'Sora', rarity: 'UP', cost: t1, image: 'Sora 002', stock: -1 },
+  upSora_003: { name: 'Sora', rarity: 'UP', cost: t1, image: 'Sora 003', stock: -1 },
 
   // tier2 - 2,500 Fans
   witch1: { name: 'holoWitch holoWitches', rarity: 'UP', cost: t2, image: 'holoWitches 001', stock: -1 },
@@ -58,6 +62,8 @@ const SHOP_ITEMS = {
   upRiona_001: { name: 'Riona', rarity: 'UP', cost: t3, image: 'Riona 001', stock: -1 },
   upRiona_501: { name: 'Riona', rarity: 'UP', cost: t3, image: 'Riona 501', stock: -1 },
   upSubaru_005: { name: 'Subaru', rarity: 'UP', cost: t3, image: 'Subaru 005', stock: -1 },
+  upSuisei_506: { name: 'Suisei', rarity: 'UP', cost: t3, image: 'Suisei 506', stock: -1 },
+  upNoel_001: { name: 'Noel', rarity: 'UP', cost: t3, image: 'Noel 001', stock: -1 },
 
   // tier4 - 10,000 Fans
   wgpTop16Ayame: { name: 'World Grand Prix Top 16 Ayame', rarity: 'UP', cost: t4, image: 'Ayame 002', stock: -1 },
