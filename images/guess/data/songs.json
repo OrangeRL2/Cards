@@ -2231,6 +2231,36 @@
     "audio": "../audio/m0378.mp3"
   },
   {
+    "id": "m0383",
+    "title": "slight fever",
+    "playingSeconds": 129,
+    "characterIds": [
+      "chr-00002"
+    ],
+    "jacket": "../jackets/m0383.png",
+    "audio": "../audio/m0383.mp3"
+  },
+  {
+    "id": "m0385",
+    "title": "Burning hope",
+    "playingSeconds": 130,
+    "characterIds": [
+      "chr-04007"
+    ],
+    "jacket": "../jackets/m0385.png",
+    "audio": "../audio/m0385.mp3"
+  },
+  {
+    "id": "m0387",
+    "title": "PEKORISER",
+    "playingSeconds": 135,
+    "characterIds": [
+      "chr-00019"
+    ],
+    "jacket": "../jackets/m0387.png",
+    "audio": "../audio/m0387.mp3"
+  },
+  {
     "id": "m0388",
     "title": "Break It Down",
     "playingSeconds": 141,
@@ -2261,6 +2291,16 @@
     ],
     "jacket": "../jackets/m0396.png",
     "audio": "../audio/m0396.mp3"
+  },
+  {
+    "id": "m0398",
+    "title": "Fleur",
+    "playingSeconds": 121,
+    "characterIds": [
+      "chr-00030"
+    ],
+    "jacket": "../jackets/m0398.png",
+    "audio": "../audio/m0398.mp3"
   },
   {
     "id": "m0413",

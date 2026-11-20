@@ -7752,3 +7752,681 @@ cards.json: /usr/share/nginx/html/images/guess/data/cards.json
 [guess-controller] Local Guess manifests:
 -rw-r--r-- 1 nana0411 nana0411 28K Nov  9 11:20 /home/nana0411/4newCards/Cards/images/guess/data/cards.json
 -rw-r--r-- 1 nana0411 nana0411 48K Nov  9 11:20 /home/nana0411/4newCards/Cards/images/guess/data/songs.json
+
+============================================================
+[guess-controller] 2026-11-20T18:21:02+09:00
+============================================================
+[guess-controller] Refreshing own Holodori master...
+============================================================
+1. CHECKING LIVE MASTER
+============================================================
+Fetching Master/Get...
+[master] app version 1.2.101 (HolodoriDB Global metadata)
+Master version: 1e7e0e9790e0d2e27712c5eb3f71470230fa977f9b75d7c8fa7b2a7dad3c292d
+Master packs: 379
+Downloading Card (217088 bytes)
+Downloading LangCard_Eng (49152 bytes)
+
+========================================================================
+UPDATE COMPLETE
+========================================================================
+Cards: 209
+Lang rows: 209
+Missing names: 0
+Snapshot: snapshots/1e7e0e9790e0d2e27712c5eb3f71470230fa977f9b75d7c8fa7b2a7dad3c292d.json
+Latest: latest.json
+
+=== DIFF ===
+Added: 5
+Removed: 0
+Changed: 0
+ + card-00002-5-uniq-0104-00 | Autumn Date with High-Spec Me
+ + card-00019-5-uniq-0108-00 | Whimsical Steps, Dressed to Shine
+ + card-00031-5-uniq-0105-00 | Vibrant Shower of Fallen Gold
+ + card-03006-5-uniq-0107-00 | The Breeze of Ginkgo Trees
+ + card-04007-5-uniq-0106-00 | Sowing Hope
+
+============================================================
+2. SYNCING NEW CARDS TO ASSET WATCHER
+============================================================
+QUEUED: card-00002-5-uniq-0104-00 | Autumn Date with High-Spec Me
+QUEUED: card-00019-5-uniq-0108-00 | Whimsical Steps, Dressed to Shine
+QUEUED: card-00031-5-uniq-0105-00 | Vibrant Shower of Fallen Gold
+QUEUED: card-03006-5-uniq-0107-00 | The Breeze of Ginkgo Trees
+QUEUED: card-04007-5-uniq-0106-00 | Sowing Hope
+
+New pending cards: 5
+Total tracked cards: 28
+Updated: /home/nana0411/holodori-own/pending_cards.json
+
+============================================================
+3. CHECKING PENDING ASSETS
+============================================================
+Pending cards: 5
+ - 00002-5-uniq-0104-00 | Autumn Date with High-Spec Me
+ - 00019-5-uniq-0108-00 | Whimsical Steps, Dressed to Shine
+ - 00031-5-uniq-0105-00 | Vibrant Shower of Fallen Gold
+ - 03006-5-uniq-0107-00 | The Breeze of Ginkgo Trees
+ - 04007-5-uniq-0106-00 | Sowing Hope
+
+Filter: 00002.*0104|00019.*0108|00031.*0105|03006.*0107|04007.*0106
+
+[catalog] appver: using 1.2.101
+[catalog] app version 1.2.101
+[download] revision 115: 26754 bundles, 20344 resources
+[download] downloading 190 files to /home/nana0411/holodori-own/pending-card-assets
+
+  0%|          | 0/190 [00:00<?, ?file/s]
+  1%|          | 1/190 [00:00<00:54,  3.44file/s]
+  1%|          | 2/190 [00:00<00:36,  5.11file/s]
+  3%|▎         | 5/190 [00:00<00:14, 12.38file/s]
+  4%|▍         | 8/190 [00:00<00:13, 13.08file/s]
+  6%|▌         | 11/190 [00:00<00:11, 15.34file/s]
+  8%|▊         | 15/190 [00:00<00:08, 20.94file/s]
+ 11%|█         | 21/190 [00:01<00:06, 25.74file/s]
+ 13%|█▎        | 25/190 [00:01<00:05, 27.89file/s]
+ 21%|██        | 40/190 [00:01<00:02, 56.62file/s]
+ 27%|██▋       | 51/190 [00:01<00:02, 49.65file/s]
+ 30%|███       | 57/190 [00:01<00:03, 38.49file/s]
+ 33%|███▎      | 63/190 [00:02<00:03, 41.29file/s]
+ 37%|███▋      | 71/190 [00:02<00:03, 33.77file/s]
+ 44%|████▍     | 84/190 [00:02<00:02, 48.23file/s]
+ 54%|█████▍    | 103/190 [00:02<00:01, 74.20file/s]
+ 63%|██████▎   | 120/190 [00:02<00:00, 93.39file/s]
+ 74%|███████▎  | 140/190 [00:02<00:00, 116.14file/s]
+ 83%|████████▎ | 158/190 [00:02<00:00, 130.39file/s]
+ 91%|█████████ | 173/190 [00:03<00:00, 132.18file/s]
+ 99%|█████████▉| 188/190 [00:04<00:00, 36.47file/s] 
+100%|██████████| 190/190 [00:04<00:00, 43.80file/s]
+
+=== STATUS ===
+
+FOUND: 00002-5-uniq-0104-00 | Autumn Date with High-Spec Me
+revision: 115
+files: 38
+  pending-card-assets/assetbundles/img_card_full_00002-5-uniq-0104-00
+  pending-card-assets/assetbundles/img_card_live_thumb_00002-5-uniq-0104-00
+  pending-card-assets/assetbundles/img_card_thin_00002-5-uniq-0104-00
+  pending-card-assets/assetbundles/img_card_thumb_00002-5-uniq-0104-00
+  pending-card-assets/assetbundles/img_card_vert_00002-5-uniq-0104-00
+  pending-card-assets/assetbundles/img_cos_2d_thumb_00002-uniq-0104-00
+  pending-card-assets/assetbundles/img_cos_sd_thumb_00002-uniq-0104-00
+  pending-card-assets/assetbundles/live2d_mdl_00002-uniq-0104-00
+  pending-card-assets/assetbundles/mdl_chr_drs_00002-uniq-0104-00_body
+  pending-card-assets/assetbundles/mdl_chr_drs_00002-uniq-0104-00_hair
+  pending-card-assets/resources/mov_card_full_0_00002-5-uniq-0104-00.usm
+  pending-card-assets/resources/mov_card_full_1_00002-5-uniq-0104-00.usm
+  pending-card-assets/resources/mov_card_sign_00002-5-uniq-0104-00.usm
+  pending-card-assets/resources/vo_card_cmn_00002_00002-5-uniq-0104-00_potential-001.acb
+  pending-card-assets/resources/vo_card_cmn_00002_00002-5-uniq-0104-00_potential-002.acb
+  pending-card-assets/resources/vo_card_cmn_00002_00002-5-uniq-0104-00_potential-003.acb
+  pending-card-assets/resources/vo_card_cmn_00002_00002-5-uniq-0104-00_potential-004.acb
+  pending-card-assets/resources/vo_card_cmn_00002_00002-5-uniq-0104-00_potential-005.acb
+  pending-card-assets/resources/vo_card_cmn_00002_00002-5-uniq-0104-00_situation.acb
+  pending-card-assets/resources/vo_live_cmn_card_00002_00002-5-uniq-0104-00_skill-card.acb
+
+FOUND: 00019-5-uniq-0108-00 | Whimsical Steps, Dressed to Shine
+revision: 115
+files: 38
+  pending-card-assets/assetbundles/img_card_full_00019-5-uniq-0108-00
+  pending-card-assets/assetbundles/img_card_live_thumb_00019-5-uniq-0108-00
+  pending-card-assets/assetbundles/img_card_thin_00019-5-uniq-0108-00
+  pending-card-assets/assetbundles/img_card_thumb_00019-5-uniq-0108-00
+  pending-card-assets/assetbundles/img_card_vert_00019-5-uniq-0108-00
+  pending-card-assets/assetbundles/img_cos_2d_thumb_00019-uniq-0108-00
+  pending-card-assets/assetbundles/img_cos_sd_thumb_00019-uniq-0108-00
+  pending-card-assets/assetbundles/live2d_mdl_00019-uniq-0108-00
+  pending-card-assets/assetbundles/mdl_chr_drs_00019-uniq-0108-00_body
+  pending-card-assets/assetbundles/mdl_chr_drs_00019-uniq-0108-00_hair
+  pending-card-assets/resources/mov_card_full_0_00019-5-uniq-0108-00.usm
+  pending-card-assets/resources/mov_card_full_1_00019-5-uniq-0108-00.usm
+  pending-card-assets/resources/mov_card_sign_00019-5-uniq-0108-00.usm
+  pending-card-assets/resources/vo_card_cmn_00019_00019-5-uniq-0108-00_potential-001.acb
+  pending-card-assets/resources/vo_card_cmn_00019_00019-5-uniq-0108-00_potential-002.acb
+  pending-card-assets/resources/vo_card_cmn_00019_00019-5-uniq-0108-00_potential-003.acb
+  pending-card-assets/resources/vo_card_cmn_00019_00019-5-uniq-0108-00_potential-004.acb
+  pending-card-assets/resources/vo_card_cmn_00019_00019-5-uniq-0108-00_potential-005.acb
+  pending-card-assets/resources/vo_card_cmn_00019_00019-5-uniq-0108-00_situation.acb
+  pending-card-assets/resources/vo_live_cmn_card_00019_00019-5-uniq-0108-00_skill-card.acb
+
+FOUND: 00031-5-uniq-0105-00 | Vibrant Shower of Fallen Gold
+revision: 115
+files: 38
+  pending-card-assets/assetbundles/img_card_full_00031-5-uniq-0105-00
+  pending-card-assets/assetbundles/img_card_live_thumb_00031-5-uniq-0105-00
+  pending-card-assets/assetbundles/img_card_thin_00031-5-uniq-0105-00
+  pending-card-assets/assetbundles/img_card_thumb_00031-5-uniq-0105-00
+  pending-card-assets/assetbundles/img_card_vert_00031-5-uniq-0105-00
+  pending-card-assets/assetbundles/img_cos_2d_thumb_00031-uniq-0105-00
+  pending-card-assets/assetbundles/img_cos_sd_thumb_00031-uniq-0105-00
+  pending-card-assets/assetbundles/live2d_mdl_00031-uniq-0105-00
+  pending-card-assets/assetbundles/mdl_chr_drs_00031-uniq-0105-00_body
+  pending-card-assets/assetbundles/mdl_chr_drs_00031-uniq-0105-00_hair
+  pending-card-assets/resources/mov_card_full_0_00031-5-uniq-0105-00.usm
+  pending-card-assets/resources/mov_card_full_1_00031-5-uniq-0105-00.usm
+  pending-card-assets/resources/mov_card_sign_00031-5-uniq-0105-00.usm
+  pending-card-assets/resources/vo_card_cmn_00031_00031-5-uniq-0105-00_potential-001.acb
+  pending-card-assets/resources/vo_card_cmn_00031_00031-5-uniq-0105-00_potential-002.acb
+  pending-card-assets/resources/vo_card_cmn_00031_00031-5-uniq-0105-00_potential-003.acb
+  pending-card-assets/resources/vo_card_cmn_00031_00031-5-uniq-0105-00_potential-004.acb
+  pending-card-assets/resources/vo_card_cmn_00031_00031-5-uniq-0105-00_potential-005.acb
+  pending-card-assets/resources/vo_card_cmn_00031_00031-5-uniq-0105-00_situation.acb
+  pending-card-assets/resources/vo_live_cmn_card_00031_00031-5-uniq-0105-00_skill-card.acb
+
+FOUND: 03006-5-uniq-0107-00 | The Breeze of Ginkgo Trees
+revision: 115
+files: 38
+  pending-card-assets/assetbundles/img_card_full_03006-5-uniq-0107-00
+  pending-card-assets/assetbundles/img_card_live_thumb_03006-5-uniq-0107-00
+  pending-card-assets/assetbundles/img_card_thin_03006-5-uniq-0107-00
+  pending-card-assets/assetbundles/img_card_thumb_03006-5-uniq-0107-00
+  pending-card-assets/assetbundles/img_card_vert_03006-5-uniq-0107-00
+  pending-card-assets/assetbundles/img_cos_2d_thumb_03006-uniq-0107-00
+  pending-card-assets/assetbundles/img_cos_sd_thumb_03006-uniq-0107-00
+  pending-card-assets/assetbundles/live2d_mdl_03006-uniq-0107-00
+  pending-card-assets/assetbundles/mdl_chr_drs_03006-uniq-0107-00_body
+  pending-card-assets/assetbundles/mdl_chr_drs_03006-uniq-0107-00_hair
+  pending-card-assets/resources/mov_card_full_0_03006-5-uniq-0107-00.usm
+  pending-card-assets/resources/mov_card_full_1_03006-5-uniq-0107-00.usm
+  pending-card-assets/resources/mov_card_sign_03006-5-uniq-0107-00.usm
+  pending-card-assets/resources/vo_card_cmn_03006_03006-5-uniq-0107-00_potential-001.acb
+  pending-card-assets/resources/vo_card_cmn_03006_03006-5-uniq-0107-00_potential-002.acb
+  pending-card-assets/resources/vo_card_cmn_03006_03006-5-uniq-0107-00_potential-003.acb
+  pending-card-assets/resources/vo_card_cmn_03006_03006-5-uniq-0107-00_potential-004.acb
+  pending-card-assets/resources/vo_card_cmn_03006_03006-5-uniq-0107-00_potential-005.acb
+  pending-card-assets/resources/vo_card_cmn_03006_03006-5-uniq-0107-00_situation.acb
+  pending-card-assets/resources/vo_live_cmn_card_03006_03006-5-uniq-0107-00_skill-card.acb
+
+FOUND: 04007-5-uniq-0106-00 | Sowing Hope
+revision: 115
+files: 38
+  pending-card-assets/assetbundles/img_card_full_04007-5-uniq-0106-00
+  pending-card-assets/assetbundles/img_card_live_thumb_04007-5-uniq-0106-00
+  pending-card-assets/assetbundles/img_card_thin_04007-5-uniq-0106-00
+  pending-card-assets/assetbundles/img_card_thumb_04007-5-uniq-0106-00
+  pending-card-assets/assetbundles/img_card_vert_04007-5-uniq-0106-00
+  pending-card-assets/assetbundles/img_cos_2d_thumb_04007-uniq-0106-00
+  pending-card-assets/assetbundles/img_cos_sd_thumb_04007-uniq-0106-00
+  pending-card-assets/assetbundles/live2d_mdl_04007-uniq-0106-00
+  pending-card-assets/assetbundles/mdl_chr_drs_04007-uniq-0106-00_body
+  pending-card-assets/assetbundles/mdl_chr_drs_04007-uniq-0106-00_hair
+  pending-card-assets/resources/mov_card_full_0_04007-5-uniq-0106-00.usm
+  pending-card-assets/resources/mov_card_full_1_04007-5-uniq-0106-00.usm
+  pending-card-assets/resources/mov_card_sign_04007-5-uniq-0106-00.usm
+  pending-card-assets/resources/vo_card_cmn_04007_04007-5-uniq-0106-00_potential-001.acb
+  pending-card-assets/resources/vo_card_cmn_04007_04007-5-uniq-0106-00_potential-002.acb
+  pending-card-assets/resources/vo_card_cmn_04007_04007-5-uniq-0106-00_potential-003.acb
+  pending-card-assets/resources/vo_card_cmn_04007_04007-5-uniq-0106-00_potential-004.acb
+  pending-card-assets/resources/vo_card_cmn_04007_04007-5-uniq-0106-00_potential-005.acb
+  pending-card-assets/resources/vo_card_cmn_04007_04007-5-uniq-0106-00_situation.acb
+  pending-card-assets/resources/vo_live_cmn_card_04007_04007-5-uniq-0106-00_skill-card.acb
+
+============================================================
+Catalog revision: 115
+Newly available: 5
+Still waiting: 0
+Updated: /home/nana0411/holodori-own/pending_cards.json
+[guess-controller] Master before: a968ca86762ff8aeb79996a4c0151e60962b5c70be8757b14410b14499f1a2ef
+[guess-controller] Master after : 1e7e0e9790e0d2e27712c5eb3f71470230fa977f9b75d7c8fa7b2a7dad3c292d
+[guess-controller] Refreshing Holodori asset catalog...
+[catalog] appver: using 1.2.101
+[catalog] app version 1.2.101
+[download] revision 115: 26754 bundles, 20344 resources
+[download] downloading 0 files to /tmp/holodori-catalog-refresh
+0file [00:00, ?file/s]0file [00:00, ?file/s]
+[guess-controller] Changes: MASTER=1 CATALOG=1 FORCE=0
+[guess-controller] Updating/organizing local Holodori cards from own master...
+Holodori card update check started
+Live master source: /home/nana0411/holodori-own/master-client/latest.json
+$ git pull --ff-only
+Already up to date.
+Master version: 1e7e0e9790e0d2e27712c5eb3f71470230fa977f9b75d7c8fa7b2a7dad3c292d
+Asset tools changed: False
+New or missing card records detected: 5
+  00002-5-uniq-0104-00
+  00019-5-uniq-0108-00
+  00031-5-uniq-0105-00
+  03006-5-uniq-0107-00
+  04007-5-uniq-0106-00
+$ holodori download /home/nana0411/testholo/all-cards-raw --filter ^img_card_full_ --no-overwrite --catalog /home/nana0411/4newCards/Cards/.guess-updater/octo_list.json
+[download] revision 115: 26754 bundles, 20344 resources
+[download] downloading 5 files to /home/nana0411/testholo/all-cards-raw
+  0%|          | 0/5 [00:00<?, ?file/s] 20%|██        | 1/5 [00:00<00:01,  3.77file/s]100%|██████████| 5/5 [00:00<00:00, 15.17file/s]
+$ holodori download /home/nana0411/testholo/card-signatures-raw --filter ^mov_card_sign_ --workers 1 --no-overwrite --catalog /home/nana0411/4newCards/Cards/.guess-updater/octo_list.json
+[download] revision 115: 26754 bundles, 20344 resources
+[download] downloading 5 files to /home/nana0411/testholo/card-signatures-raw
+  0%|          | 0/5 [00:00<?, ?file/s] 20%|██        | 1/5 [00:00<00:02,  1.86file/s] 40%|████      | 2/5 [00:00<00:01,  2.86file/s] 60%|██████    | 3/5 [00:01<00:00,  3.02file/s] 80%|████████  | 4/5 [00:01<00:00,  3.68file/s]100%|██████████| 5/5 [00:01<00:00,  4.26file/s]100%|██████████| 5/5 [00:01<00:00,  3.54file/s]
+$ holodori extract /home/nana0411/testholo/card-signatures-raw/resources /home/nana0411/testholo/card-signatures-extracted
+[extract] mov_card_sign_00001-5-uniq-0000-00.usm -> 2 files
+[extract] mov_card_sign_00002-5-uniq-0001-00.usm -> 2 files
+[extract] mov_card_sign_00002-5-uniq-0104-00.usm -> 2 files
+[extract] mov_card_sign_00004-5-uniq-0005-00.usm -> 2 files
+[extract] mov_card_sign_00004-5-uniq-0081-00.usm -> 2 files
+[extract] mov_card_sign_00005-5-uniq-0006-00.usm -> 2 files
+[extract] mov_card_sign_00006-5-uniq-0007-00.usm -> 2 files
+[extract] mov_card_sign_00006-5-uniq-0074-00.usm -> 2 files
+[extract] mov_card_sign_00007-5-uniq-0008-00.usm -> 2 files
+[extract] mov_card_sign_00007-5-uniq-0096-00.usm -> 2 files
+[extract] mov_card_sign_00010-5-uniq-0010-00.usm -> 2 files
+[extract] mov_card_sign_00010-5-uniq-0069-00.usm -> 2 files
+[extract] mov_card_sign_00011-5-uniq-0011-00.usm -> 2 files
+[extract] mov_card_sign_00012-5-uniq-0012-00.usm -> 2 files
+[extract] mov_card_sign_00012-5-uniq-0062-00.usm -> 2 files
+[extract] mov_card_sign_00013-5-uniq-0002-00.usm -> 2 files
+[extract] mov_card_sign_00014-5-uniq-0013-00.usm -> 2 files
+[extract] mov_card_sign_00014-5-uniq-0075-00.usm -> 2 files
+[extract] mov_card_sign_00015-5-uniq-0003-00.usm -> 2 files
+[extract] mov_card_sign_00015-5-uniq-0067-00.usm -> 2 files
+[extract] mov_card_sign_00016-5-uniq-0014-00.usm -> 2 files
+[extract] mov_card_sign_00016-5-uniq-0076-00.usm -> 2 files
+[extract] mov_card_sign_00017-5-uniq-0015-00.usm -> 2 files
+[extract] mov_card_sign_00017-5-uniq-0077-00.usm -> 2 files
+[extract] mov_card_sign_00018-5-uniq-0004-00.usm -> 2 files
+[extract] mov_card_sign_00018-5-uniq-0068-00.usm -> 2 files
+[extract] mov_card_sign_00019-5-uniq-0016-00.usm -> 2 files
+[extract] mov_card_sign_00019-5-uniq-0108-00.usm -> 2 files
+[extract] mov_card_sign_00021-5-uniq-0017-00.usm -> 2 files
+[extract] mov_card_sign_00021-5-uniq-0064-00.usm -> 2 files
+[extract] mov_card_sign_00022-5-uniq-0018-00.usm -> 2 files
+[extract] mov_card_sign_00022-5-uniq-0063-00.usm -> 2 files
+[extract] mov_card_sign_00023-5-uniq-0019-00.usm -> 2 files
+[extract] mov_card_sign_00023-5-uniq-0085-00.usm -> 2 files
+[extract] mov_card_sign_00026-5-uniq-0021-00.usm -> 2 files
+[extract] mov_card_sign_00026-5-uniq-0065-00.usm -> 2 files
+[extract] mov_card_sign_00027-5-uniq-0022-00.usm -> 2 files
+[extract] mov_card_sign_00027-5-uniq-0092-00.usm -> 2 files
+[extract] mov_card_sign_00028-5-uniq-0023-00.usm -> 2 files
+[extract] mov_card_sign_00028-5-uniq-0070-00.usm -> 2 files
+[extract] mov_card_sign_00030-5-uniq-0024-00.usm -> 2 files
+[extract] mov_card_sign_00030-5-uniq-0089-00.usm -> 2 files
+[extract] mov_card_sign_00031-5-uniq-0025-00.usm -> 2 files
+[extract] mov_card_sign_00031-5-uniq-0105-00.usm -> 2 files
+[extract] mov_card_sign_00032-5-uniq-0026-00.usm -> 2 files
+[extract] mov_card_sign_00032-5-uniq-0093-00.usm -> 2 files
+[extract] mov_card_sign_00034-5-uniq-0027-00.usm -> 2 files
+[extract] mov_card_sign_00034-5-uniq-0090-00.usm -> 2 files
+[extract] mov_card_sign_00035-5-uniq-0028-00.usm -> 2 files
+[extract] mov_card_sign_00035-5-uniq-0082-00.usm -> 2 files
+[extract] mov_card_sign_00036-5-uniq-0029-00.usm -> 2 files
+[extract] mov_card_sign_00036-5-uniq-0078-00.usm -> 2 files
+[extract] mov_card_sign_00037-5-uniq-0030-00.usm -> 2 files
+[extract] mov_card_sign_00037-5-uniq-0086-00.usm -> 2 files
+[extract] mov_card_sign_00039-5-uniq-0032-00.usm -> 2 files
+[extract] mov_card_sign_03001-5-uniq-0033-00.usm -> 2 files
+[extract] mov_card_sign_03001-5-uniq-0114-00.usm -> 2 files
+[extract] mov_card_sign_03002-5-uniq-0034-00.usm -> 2 files
+[extract] mov_card_sign_03002-5-uniq-0113-00.usm -> 2 files
+[extract] mov_card_sign_03003-5-uniq-0035-00.usm -> 2 files
+[extract] mov_card_sign_03003-5-uniq-0115-00.usm -> 2 files
+[extract] mov_card_sign_03004-5-uniq-0036-00.usm -> 2 files
+[extract] mov_card_sign_03004-5-uniq-0073-00.usm -> 2 files
+[extract] mov_card_sign_03005-5-uniq-0037-00.usm -> 2 files
+[extract] mov_card_sign_03005-5-uniq-0084-00.usm -> 2 files
+[extract] mov_card_sign_03006-5-uniq-0038-00.usm -> 2 files
+[extract] mov_card_sign_03006-5-uniq-0107-00.usm -> 2 files
+[extract] mov_card_sign_03007-5-uniq-0039-00.usm -> 2 files
+[extract] mov_card_sign_03007-5-uniq-0100-00.usm -> 2 files
+[extract] mov_card_sign_03008-5-uniq-0040-00.usm -> 2 files
+[extract] mov_card_sign_03008-5-uniq-0095-00.usm -> 2 files
+[extract] mov_card_sign_03009-5-uniq-0041-00.usm -> 2 files
+[extract] mov_card_sign_03009-5-uniq-0088-00.usm -> 2 files
+[extract] mov_card_sign_04001-5-uniq-0042-00.usm -> 2 files
+[extract] mov_card_sign_04001-5-uniq-0071-00.usm -> 2 files
+[extract] mov_card_sign_04002-5-uniq-0043-00.usm -> 2 files
+[extract] mov_card_sign_04003-5-uniq-0044-00.usm -> 2 files
+[extract] mov_card_sign_04003-5-uniq-0072-00.usm -> 2 files
+[extract] mov_card_sign_04007-5-uniq-0047-00.usm -> 2 files
+[extract] mov_card_sign_04007-5-uniq-0106-00.usm -> 2 files
+[extract] mov_card_sign_04010-5-uniq-0049-00.usm -> 2 files
+[extract] mov_card_sign_04012-5-uniq-0051-00.usm -> 2 files
+[extract] mov_card_sign_04012-5-uniq-0087-00.usm -> 2 files
+[extract] mov_card_sign_04013-5-uniq-0052-00.usm -> 2 files
+[extract] mov_card_sign_04013-5-uniq-0083-00.usm -> 2 files
+[extract] mov_card_sign_04014-5-uniq-0053-00.usm -> 2 files
+[extract] mov_card_sign_04014-5-uniq-0094-00.usm -> 2 files
+[extract] mov_card_sign_04015-5-uniq-0054-00.usm -> 2 files
+[extract] mov_card_sign_04015-5-uniq-0099-00.usm -> 2 files
+[extract] mov_card_sign_04016-5-uniq-0055-00.usm -> 2 files
+[extract] mov_card_sign_04016-5-uniq-0079-00.usm -> 2 files
+[extract] mov_card_sign_04017-5-uniq-0056-00.usm -> 2 files
+[extract] mov_card_sign_04017-5-uniq-0080-00.usm -> 2 files
+[extract] mov_card_sign_06002-5-uniq-0058-00.usm -> 2 files
+[extract] mov_card_sign_06002-5-uniq-0066-00.usm -> 2 files
+[extract] mov_card_sign_06003-5-uniq-0059-00.usm -> 2 files
+[extract] mov_card_sign_06003-5-uniq-0091-00.usm -> 2 files
+[extract] mov_card_sign_06004-5-uniq-0060-00.usm -> 2 files
+[extract] mov_card_sign_06004-5-uniq-0098-00.usm -> 2 files
+[extract] mov_card_sign_06005-5-uniq-0061-00.usm -> 2 files
+[extract] mov_card_sign_06005-5-uniq-0097-00.usm -> 2 files
+Card bundles found: 209
+/home/nana0411/holodori-own/holodori-asset-tools/.venv/lib/python3.12/site-packages/UnityPy/files/BundleFile.py:533: UnityVersionFallbackWarning: No valid Unity version found, defaulting to UnityPy.config.FALLBACK_UNITY_VERSION (6000.3.15f1)
+  version_str = config.get_fallback_version()
+/home/nana0411/holodori-own/holodori-asset-tools/.venv/lib/python3.12/site-packages/UnityPy/files/SerializedFile.py:360: UnityVersionFallbackWarning: No valid Unity version found, defaulting to UnityPy.config.FALLBACK_UNITY_VERSION (6000.3.15f1)
+  string_version = config.get_fallback_version()
+Card [7/209]: img_card_full_00002-5-uniq-0104-00_-6594681306748801571.png
+/home/nana0411/holodori-own/holodori-asset-tools/.venv/lib/python3.12/site-packages/UnityPy/files/BundleFile.py:533: UnityVersionFallbackWarning: No valid Unity version found, defaulting to UnityPy.config.FALLBACK_UNITY_VERSION (6000.3.15f1)
+  version_str = config.get_fallback_version()
+/home/nana0411/holodori-own/holodori-asset-tools/.venv/lib/python3.12/site-packages/UnityPy/files/SerializedFile.py:360: UnityVersionFallbackWarning: No valid Unity version found, defaulting to UnityPy.config.FALLBACK_UNITY_VERSION (6000.3.15f1)
+  string_version = config.get_fallback_version()
+Card [60/209]: img_card_full_00019-5-uniq-0108-00_-1237060248547042078.png
+Card [92/209]: img_card_full_00031-5-uniq-0105-00_-7724734151319689543.png
+Card [139/209]: img_card_full_03006-5-uniq-0107-00_4207041640759551695.png
+Card [166/209]: img_card_full_04007-5-uniq-0106-00_3595188488578375504.png
+New corrected cards: 5; card failures: 0
+$ ffmpeg -loglevel error -f h264 -i /home/nana0411/testholo/card-signatures-extracted/mov_card_sign_00002-5-uniq-0104-00/sfv_ch0 /tmp/tmptmxps9qn/color/%06d.png
+$ ffmpeg -loglevel error -f mpegvideo -i /home/nana0411/testholo/card-signatures-extracted/mov_card_sign_00002-5-uniq-0104-00/alp_ch0 /tmp/tmptmxps9qn/alpha/%06d.png
+Signature layer: mov_card_sign_00002-5-uniq-0104-00.png
+$ ffmpeg -loglevel error -f h264 -i /home/nana0411/testholo/card-signatures-extracted/mov_card_sign_00019-5-uniq-0108-00/sfv_ch0 /tmp/tmpjanhwn9k/color/%06d.png
+$ ffmpeg -loglevel error -f mpegvideo -i /home/nana0411/testholo/card-signatures-extracted/mov_card_sign_00019-5-uniq-0108-00/alp_ch0 /tmp/tmpjanhwn9k/alpha/%06d.png
+Signature layer: mov_card_sign_00019-5-uniq-0108-00.png
+$ ffmpeg -loglevel error -f h264 -i /home/nana0411/testholo/card-signatures-extracted/mov_card_sign_00031-5-uniq-0105-00/sfv_ch0 /tmp/tmpg2jrxd2u/color/%06d.png
+$ ffmpeg -loglevel error -f mpegvideo -i /home/nana0411/testholo/card-signatures-extracted/mov_card_sign_00031-5-uniq-0105-00/alp_ch0 /tmp/tmpg2jrxd2u/alpha/%06d.png
+Signature layer: mov_card_sign_00031-5-uniq-0105-00.png
+$ ffmpeg -loglevel error -f h264 -i /home/nana0411/testholo/card-signatures-extracted/mov_card_sign_03006-5-uniq-0107-00/sfv_ch0 /tmp/tmp8rxb_nuy/color/%06d.png
+$ ffmpeg -loglevel error -f mpegvideo -i /home/nana0411/testholo/card-signatures-extracted/mov_card_sign_03006-5-uniq-0107-00/alp_ch0 /tmp/tmp8rxb_nuy/alpha/%06d.png
+Signature layer: mov_card_sign_03006-5-uniq-0107-00.png
+$ ffmpeg -loglevel error -f h264 -i /home/nana0411/testholo/card-signatures-extracted/mov_card_sign_04007-5-uniq-0106-00/sfv_ch0 /tmp/tmpffzr04is/color/%06d.png
+$ ffmpeg -loglevel error -f mpegvideo -i /home/nana0411/testholo/card-signatures-extracted/mov_card_sign_04007-5-uniq-0106-00/alp_ch0 /tmp/tmpffzr04is/alpha/%06d.png
+Signature layer: mov_card_sign_04007-5-uniq-0106-00.png
+New signature layers: 5
+Signed card: img_card_full_00002-5-uniq-0104-00_signed.png
+Signed card: img_card_full_00019-5-uniq-0108-00_signed.png
+Signed card: img_card_full_00031-5-uniq-0105-00_signed.png
+Signed card: img_card_full_03006-5-uniq-0107-00_signed.png
+Signed card: img_card_full_04007-5-uniq-0106-00_signed.png
+New or refreshed signed cards: 5
+Organized images copied: 310; missing unsigned: 0
+Card update complete
+Open: /home/nana0411/testholo/organized-card-images
+[guess-controller] Syncing ★★★ / ★★★★ / ★★★★★ into local bot...
+[guess-controller] Ensuring remote HOLODORI directories exist...
+[guess-controller] Syncing HOLODORI card folders to OPC...
+[guess-controller] Sending fresh catalog to OPC...
+[guess-controller] Sending fresh master data to OPC...
+[guess-controller] Running OPC Guess updater...
+From https://github.com/HolodoriDB/holodori-db-eng-diff
+   4c6c9c3..2b5f371  main       -> origin/main
+[guess-update] DB changed: 4c6c9c37095d6bf2eb1a3b0f709d2270c5e9d323 -> 2b5f371d233baa8cf5475e75211ed2002ad12355
+Updating 4c6c9c3..2b5f371
+Fast-forward
+ Card.json                                    |   225 +
+ CharacterLiveDialogueVoice.json              |   720 ++
+ CharacterStory.json                          |    60 +
+ CharacterVoice.json                          |  2075 ++++
+ CircuitSetting.json                          |     3 +-
+ Condition.json                               |   588 +-
+ Costume.json                                 |    70 +
+ Emblem.json                                  |   630 ++
+ EventStory.json                              |   120 +
+ EventStoryChapter.json                       |    50 +
+ ExchangeBooth.json                           |    42 +
+ ExchangeBoothFixedItem.json                  |   473 +
+ ExchangeBoothGroup.json                      |    12 +
+ Gacha.json                                   |    12 +
+ GachaButton.json                             |    36 +
+ GachaPoint.json                              |    10 +
+ Item.json                                    |   125 +
+ LangCard_Eng.json                            |    35 +
+ LangCharacterStory_Eng.json                  |    35 +
+ LangCharacterVoice_Eng.json                  |  1815 ++++
+ LangCostume_Eng.json                         |    35 +
+ LangEmblem_Eng.json                          |   441 +
+ LangEventStoryChapter_Eng.json               |    35 +
+ LangEventStory_Eng.json                      |    70 +
+ LangGachaPoint_Eng.json                      |     7 +
+ LangGeneratedLiveActiveSkillLevel_Eng.json   |    70 +
+ LangGeneratedLiveLeaderSkill_Eng.json        |    35 +
+ LangGeneratedLivePassiveSkillEffect_Eng.json |    28 +
+ LangGeneratedLivePassiveSkillLevel_Eng.json  |    70 +
+ LangGeneratedLiveSpecialSkillLevel_Eng.json  |    70 +
+ LangItem_Eng.json                            |    84 +
+ LangLiveDialogueVoice_Eng.json               |   315 +
+ LangMissionGroup_Eng.json                    |    42 +
+ LangMusicMv_Eng.json                         |    48 +
+ LangMusic_Eng.json                           |   560 +
+ LangParkTalk_Eng.json                        |     2 +-
+ LangPoster_Eng.json                          |    35 +
+ LangResourceObtainmentRoute_Eng.json         |    42 +
+ LangSdCostume_Eng.json                       |    35 +
+ LiveActiveSkill.json                         |    30 +
+ LiveActiveSkillLevel.json                    |   138 +
+ LiveDialogueVoice.json                       |   535 +
+ LiveDialogueVoiceCharacter.json              | 13863 +++++++++++++------------
+ LiveLeaderSkill.json                         |    46 +
+ LivePassiveSkill.json                        |    30 +
+ LivePassiveSkillEffect.json                  |    48 +
+ LivePassiveSkillLevel.json                   |   102 +
+ LiveSpecialCardDialogue.json                 |   225 +
+ LiveSpecialCostumeDialogue.json              |   225 +
+ LiveSpecialSkill.json                        |    30 +
+ LiveSpecialSkillLevel.json                   |   120 +
+ Mission.json                                 |   212 +
+ MissionGroup.json                            |    42 +
+ MissionProgress.json                         |   931 ++
+ Music.json                                   |   652 +-
+ MusicDifficulty.json                         |   320 +
+ MusicDifficultyChart.json                    |   320 +
+ MusicMv.json                                 |   232 +
+ MusicStartupNotification.json                |    83 +
+ ParkQuest.json                               |   106 +-
+ ParkQuestStep.json                           |   662 +-
+ Poster.json                                  |    45 +
+ ResourceObtainmentRoute.json                 |    54 +
+ SdCostume.json                               |    70 +
+ Story.json                                   |   140 +
+ version.txt                                  |     2 +-
+ 66 files changed, 21301 insertions(+), 7122 deletions(-)
+=== GUESS FULL UPDATE ===
+$ /home/opc/guess-updater/.venv/bin/holodori download /home/opc/guess-updater/work/_raw/jackets --filter ^img_music_jacket_ --no-overwrite --catalog /home/opc/guess-updater/octo_list.json
+[download] revision 115: 26754 bundles, 20344 resources
+[download] downloading 8 files to /home/opc/guess-updater/work/_raw/jackets
+  0%|          | 0/8 [00:00<?, ?file/s][httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/WzGCkz "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/CyAihz "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/iWcD7Q "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/rGK5kb "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/3J4ZVw "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/OC3TAA "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/ucvJN8 "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/54BAGq "HTTP/2 200 OK"
+ 12%|█▎        | 1/8 [00:01<00:08,  1.23s/file] 25%|██▌       | 2/8 [00:02<00:05,  1.03file/s] 88%|████████▊ | 7/8 [00:02<00:00,  4.74file/s]100%|██████████| 8/8 [00:02<00:00,  3.27file/s]
+/home/opc/guess-updater/.venv/lib64/python3.12/site-packages/UnityPy/files/BundleFile.py:533: UnityVersionFallbackWarning: No valid Unity version found, defaulting to UnityPy.config.FALLBACK_UNITY_VERSION (6000.3.15f1)
+  version_str = config.get_fallback_version()
+/home/opc/guess-updater/.venv/lib64/python3.12/site-packages/UnityPy/files/SerializedFile.py:360: UnityVersionFallbackWarning: No valid Unity version found, defaulting to UnityPy.config.FALLBACK_UNITY_VERSION (6000.3.15f1)
+  string_version = config.get_fallback_version()
+/home/opc/guess-updater/.venv/lib64/python3.12/site-packages/UnityPy/files/BundleFile.py:533: UnityVersionFallbackWarning: No valid Unity version found, defaulting to UnityPy.config.FALLBACK_UNITY_VERSION (6000.3.15f1)
+  version_str = config.get_fallback_version()
+/home/opc/guess-updater/.venv/lib64/python3.12/site-packages/UnityPy/files/SerializedFile.py:360: UnityVersionFallbackWarning: No valid Unity version found, defaulting to UnityPy.config.FALLBACK_UNITY_VERSION (6000.3.15f1)
+  string_version = config.get_fallback_version()
+jacket NEW m0383.png
+jacket NEW m0384.png
+jacket NEW m0385.png
+jacket NEW m0386.png
+jacket NEW m0387.png
+jacket NEW m0398.png
+jacket NEW m0403.png
+jacket NEW m0404.png
+$ /home/opc/guess-updater/.venv/bin/holodori download /home/opc/guess-updater/work/_raw/audio --filter ^music_short_ --no-overwrite --catalog /home/opc/guess-updater/octo_list.json
+[download] revision 115: 26754 bundles, 20344 resources
+[download] downloading 16 files to /home/opc/guess-updater/work/_raw/audio
+  0%|          | 0/16 [00:00<?, ?file/s][httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/gu9fql "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/exTHoA "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/QW7iXj "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/XlXs5T "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/15f41M "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/8Ji9Fk "HTTP/2 200 OK"
+ 19%|█▉        | 3/16 [00:00<00:00, 21.85file/s][httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/rdRwxP "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/YPapN2 "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/utYxal "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/YSdYRf "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/LQHWiR "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/k5oT8G "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/LyPORT "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/NIu4hy "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/Q8fz3b "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/cV9eE4 "HTTP/2 200 OK"
+ 56%|█████▋    | 9/16 [00:04<00:03,  1.88file/s] 62%|██████▎   | 10/16 [00:04<00:03,  1.98file/s] 69%|██████▉   | 11/16 [00:04<00:02,  2.15file/s] 94%|█████████▍| 15/16 [00:05<00:00,  3.71file/s]100%|██████████| 16/16 [00:05<00:00,  2.98file/s]
+ACB: bank has no subsongs (ignore)
+failed opening /home/opc/guess-updater/work/_raw/audio/resources/music_short_m0383.acb
+decoding /home/opc/guess-updater/work/_raw/audio/resources/music_short_m0383.awb
+sample rate: 48000 Hz
+channels: 2
+channel mask: 0x3 / FL FR
+stream total samples: 6220801 (2:09.600 seconds)
+encoding: CRI HCA
+layout: flat
+metadata from: CRI HCA header
+bitrate: 255 kbps
+stream name: music_short_m0383
+sample type: float
+play duration: 6220801 samples (2:09.600 seconds)
+$ /usr/bin/ffmpeg -y -loglevel error -i /home/opc/guess-updater/work/wav/m0383.wav -vn -c:a libmp3lame -b:a 96k /usr/share/nginx/html/images/guess/audio/m0383.mp3
+ACB: bank has no subsongs (ignore)
+failed opening /home/opc/guess-updater/work/_raw/audio/resources/music_short_m0384.acb
+decoding /home/opc/guess-updater/work/_raw/audio/resources/music_short_m0384.awb
+sample rate: 48000 Hz
+channels: 2
+channel mask: 0x3 / FL FR
+stream total samples: 4997647 (1:44.118 seconds)
+encoding: CRI HCA
+layout: flat
+metadata from: CRI HCA header
+bitrate: 255 kbps
+stream name: music_short_m0384
+sample type: float
+play duration: 4997647 samples (1:44.118 seconds)
+audio NEW m0383.mp3
+$ /usr/bin/ffmpeg -y -loglevel error -i /home/opc/guess-updater/work/wav/m0384.wav -vn -c:a libmp3lame -b:a 96k /usr/share/nginx/html/images/guess/audio/m0384.mp3
+ACB: bank has no subsongs (ignore)
+failed opening /home/opc/guess-updater/work/_raw/audio/resources/music_short_m0385.acb
+decoding /home/opc/guess-updater/work/_raw/audio/resources/music_short_m0385.awb
+sample rate: 48000 Hz
+channels: 2
+channel mask: 0x3 / FL FR
+stream total samples: 6277682 (2:10.785 seconds)
+encoding: CRI HCA
+layout: flat
+metadata from: CRI HCA header
+bitrate: 255 kbps
+stream name: music_short_m0385
+sample type: float
+play duration: 6277682 samples (2:10.785 seconds)
+audio NEW m0384.mp3
+$ /usr/bin/ffmpeg -y -loglevel error -i /home/opc/guess-updater/work/wav/m0385.wav -vn -c:a libmp3lame -b:a 96k /usr/share/nginx/html/images/guess/audio/m0385.mp3
+ACB: bank has no subsongs (ignore)
+failed opening /home/opc/guess-updater/work/_raw/audio/resources/music_short_m0386.acb
+decoding /home/opc/guess-updater/work/_raw/audio/resources/music_short_m0386.awb
+sample rate: 48000 Hz
+channels: 2
+channel mask: 0x3 / FL FR
+stream total samples: 5870770 (2:02.308 seconds)
+encoding: CRI HCA
+layout: flat
+metadata from: CRI HCA header
+bitrate: 255 kbps
+stream name: music_short_m0386
+sample type: float
+play duration: 5870770 samples (2:02.308 seconds)
+audio NEW m0385.mp3
+$ /usr/bin/ffmpeg -y -loglevel error -i /home/opc/guess-updater/work/wav/m0386.wav -vn -c:a libmp3lame -b:a 96k /usr/share/nginx/html/images/guess/audio/m0386.mp3
+ACB: bank has no subsongs (ignore)
+failed opening /home/opc/guess-updater/work/_raw/audio/resources/music_short_m0387.acb
+decoding /home/opc/guess-updater/work/_raw/audio/resources/music_short_m0387.awb
+sample rate: 48000 Hz
+channels: 2
+channel mask: 0x3 / FL FR
+stream total samples: 6480000 (2:15.000 seconds)
+encoding: CRI HCA
+layout: flat
+metadata from: CRI HCA header
+bitrate: 255 kbps
+stream name: music_short_m0387
+sample type: float
+play duration: 6480000 samples (2:15.000 seconds)
+audio NEW m0386.mp3
+$ /usr/bin/ffmpeg -y -loglevel error -i /home/opc/guess-updater/work/wav/m0387.wav -vn -c:a libmp3lame -b:a 96k /usr/share/nginx/html/images/guess/audio/m0387.mp3
+ACB: bank has no subsongs (ignore)
+failed opening /home/opc/guess-updater/work/_raw/audio/resources/music_short_m0398.acb
+decoding /home/opc/guess-updater/work/_raw/audio/resources/music_short_m0398.awb
+sample rate: 48000 Hz
+channels: 2
+channel mask: 0x3 / FL FR
+stream total samples: 5812207 (2:01.088 seconds)
+encoding: CRI HCA
+layout: flat
+metadata from: CRI HCA header
+bitrate: 255 kbps
+stream name: music_short_m0398
+sample type: float
+play duration: 5812207 samples (2:01.088 seconds)
+audio NEW m0387.mp3
+$ /usr/bin/ffmpeg -y -loglevel error -i /home/opc/guess-updater/work/wav/m0398.wav -vn -c:a libmp3lame -b:a 96k /usr/share/nginx/html/images/guess/audio/m0398.mp3
+ACB: bank has no subsongs (ignore)
+failed opening /home/opc/guess-updater/work/_raw/audio/resources/music_short_m0403.acb
+decoding /home/opc/guess-updater/work/_raw/audio/resources/music_short_m0403.awb
+sample rate: 48000 Hz
+channels: 2
+channel mask: 0x3 / FL FR
+stream total samples: 6974458 (2:25.301 seconds)
+encoding: CRI HCA
+layout: flat
+metadata from: CRI HCA header
+bitrate: 255 kbps
+stream name: music_short_m0403
+sample type: float
+play duration: 6974458 samples (2:25.301 seconds)
+audio NEW m0398.mp3
+$ /usr/bin/ffmpeg -y -loglevel error -i /home/opc/guess-updater/work/wav/m0403.wav -vn -c:a libmp3lame -b:a 96k /usr/share/nginx/html/images/guess/audio/m0403.mp3
+ACB: bank has no subsongs (ignore)
+failed opening /home/opc/guess-updater/work/_raw/audio/resources/music_short_m0404.acb
+decoding /home/opc/guess-updater/work/_raw/audio/resources/music_short_m0404.awb
+sample rate: 48000 Hz
+channels: 2
+channel mask: 0x3 / FL FR
+stream total samples: 6783158 (2:21.316 seconds)
+encoding: CRI HCA
+layout: flat
+metadata from: CRI HCA header
+bitrate: 255 kbps
+stream name: music_short_m0404
+sample type: float
+play duration: 6783158 samples (2:21.316 seconds)
+audio NEW m0403.mp3
+$ /usr/bin/ffmpeg -y -loglevel error -i /home/opc/guess-updater/work/wav/m0404.wav -vn -c:a libmp3lame -b:a 96k /usr/share/nginx/html/images/guess/audio/m0404.mp3
+audio NEW m0404.mp3
+Cards in DB: 209
+Cards hosted: 204
+Missing hosted cards: 5
+$ /home/opc/guess-updater/.venv/bin/holodori download /home/opc/guess-updater/work/_raw/cards --filter ^img_card_full_ --no-overwrite --catalog /home/opc/guess-updater/octo_list.json
+[download] revision 115: 26754 bundles, 20344 resources
+[download] downloading 5 files to /home/opc/guess-updater/work/_raw/cards
+  0%|          | 0/5 [00:00<?, ?file/s][httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/vVop3s "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/nTGFgD "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/U9gq9l "HTTP/2 200 OK"
+[httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/xkyBkc "HTTP/2 200 OK"
+ 20%|██        | 1/5 [00:00<00:01,  2.03file/s][httpx] HTTP Request: GET https://asset.game-hololive-dreams.com/T0QtL2 "HTTP/2 200 OK"
+ 80%|████████  | 4/5 [00:00<00:00,  6.68file/s]100%|██████████| 5/5 [00:00<00:00,  6.48file/s]
+card NEW 00002-5-uniq-0104-00.png
+card NEW 00019-5-uniq-0108-00.png
+card NEW 00031-5-uniq-0105-00.png
+card NEW 03006-5-uniq-0107-00.png
+card NEW 04007-5-uniq-0106-00.png
+cards.json rows: 209
+
+=== COMPLETE ===
+Songs manifest: 235
+New jackets: 8; failures: 0
+New audio:   8; failures: 0
+New cards:   5; failures: 0
+Hosted cards: 209
+songs.json: /usr/share/nginx/html/images/guess/data/songs.json
+cards.json: /usr/share/nginx/html/images/guess/data/cards.json
+[guess-controller] Fixing Guess web permissions...
+[guess-controller] Copying fresh Guess JSON manifests back to bot...
+[guess-controller] Finished successfully.
+[guess-controller] Local HOLODORI counts:
+  ★★★: 54
+  ★★★★: 54
+  ★★★★★: 202
+[guess-controller] Local Guess manifests:
+-rw-r--r-- 1 nana0411 nana0411 28K Nov 20 18:25 /home/nana0411/4newCards/Cards/images/guess/data/cards.json
+-rw-r--r-- 1 nana0411 nana0411 49K Nov 20 18:25 /home/nana0411/4newCards/Cards/images/guess/data/songs.json

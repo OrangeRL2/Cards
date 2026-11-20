@@ -1,7 +1,7 @@
 {
-  "revisionId": 108,
+  "revisionId": 110,
   "urlFormat": "https://asset.game-hololive-dreams.com/{o}",
-  "serverTime": 1793349697775,
+  "serverTime": 1794190673368,
   "assetBundles": [
     {
       "name": "adv_area_01_01_01-01",
@@ -128123,112 +128123,6 @@
       "id": 35051
     },
     {
-      "name": "ref_adv_chr_00017_01_01-01",
-      "objectName": "KRdasR",
-      "url": "https://asset.game-hololive-dreams.com/KRdasR",
-      "md5": "340aa3bf40836833afaac85fa87f7fa1",
-      "size": 43826,
-      "dependencies": [
-        19888,
-        19889,
-        19896,
-        19900,
-        19902,
-        19905,
-        19907,
-        20139,
-        20141,
-        20213,
-        20219,
-        20222,
-        20224,
-        20228,
-        20422,
-        20456,
-        20925,
-        32192,
-        32306,
-        32307,
-        32367,
-        32368,
-        32429,
-        32430,
-        32491,
-        32492,
-        32554,
-        32616,
-        32676,
-        32783,
-        32844,
-        32845,
-        32968,
-        32969,
-        33018,
-        33060,
-        33063,
-        33192,
-        33193,
-        33194,
-        33196,
-        33200,
-        33203,
-        33207,
-        33210,
-        33211,
-        33212,
-        33213,
-        33214,
-        33215,
-        33223,
-        33224,
-        33225,
-        33227,
-        33230,
-        33249,
-        33256,
-        33260,
-        33261,
-        33262,
-        33263,
-        33264,
-        33265,
-        33266,
-        33267,
-        33269,
-        33271,
-        33272,
-        33273,
-        33277,
-        33279,
-        33288,
-        33289,
-        33290,
-        33292,
-        33294,
-        33297,
-        33308,
-        33312,
-        33315,
-        33319,
-        33320,
-        33323,
-        33334,
-        33336,
-        33345,
-        33346,
-        33348,
-        33351,
-        35425,
-        35684,
-        35686,
-        35690,
-        35691,
-        35692,
-        35693
-      ],
-      "id": 35053
-    },
-    {
       "name": "ref_adv_chr_00019_01_01-03",
       "objectName": "FYFVSF",
       "url": "https://asset.game-hololive-dreams.com/FYFVSF",
@@ -196715,15 +196609,6 @@
       "size": 5002,
       "dependencies": [],
       "id": 17885
-    },
-    {
-      "name": "adv_chr_00017_01_01-01_lang-eng",
-      "objectName": "cPVG4r",
-      "url": "https://asset.game-hololive-dreams.com/cPVG4r",
-      "md5": "7398bf64b6b18716ebac6cf06f283f8f",
-      "size": 5025,
-      "dependencies": [],
-      "id": 17886
     },
     {
       "name": "adv_chr_00017_01_01-01_lang-ind",
@@ -327113,6 +326998,2770 @@
       "size": 765317,
       "dependencies": [],
       "id": 45802
+    },
+    {
+      "name": "adv_chr_00017_01_01-01_lang-eng",
+      "objectName": "68qPvB",
+      "url": "https://asset.game-hololive-dreams.com/68qPvB",
+      "md5": "143addfff3f41719f5adacf469782084",
+      "size": 5025,
+      "dependencies": [],
+      "id": 17886
+    },
+    {
+      "name": "img_mv_slide_m0068-mv-01_001",
+      "objectName": "6EW8DB",
+      "url": "https://asset.game-hololive-dreams.com/6EW8DB",
+      "md5": "e35b90784ced84947db54cbc5d7018dc",
+      "size": 822240,
+      "dependencies": [],
+      "id": 46075
+    },
+    {
+      "name": "img_mv_slide_m0068-mv-01_002",
+      "objectName": "0IJH42",
+      "url": "https://asset.game-hololive-dreams.com/0IJH42",
+      "md5": "0f09be6656c959c916ac58a93c43fb06",
+      "size": 779308,
+      "dependencies": [],
+      "id": 46076
+    },
+    {
+      "name": "img_mv_slide_m0068-mv-01_003",
+      "objectName": "GMPzTX",
+      "url": "https://asset.game-hololive-dreams.com/GMPzTX",
+      "md5": "fd2c0fccfa202baeb4b908802cd2efa4",
+      "size": 778597,
+      "dependencies": [],
+      "id": 46077
+    },
+    {
+      "name": "img_mv_slide_m0068-mv-01_004",
+      "objectName": "UCkfTG",
+      "url": "https://asset.game-hololive-dreams.com/UCkfTG",
+      "md5": "e676059970af667eceb496fa871e8104",
+      "size": 605670,
+      "dependencies": [],
+      "id": 46078
+    },
+    {
+      "name": "img_mv_slide_m0068-mv-01_005",
+      "objectName": "d9aLki",
+      "url": "https://asset.game-hololive-dreams.com/d9aLki",
+      "md5": "4a17a78c3c1982f42462a4580a912cb1",
+      "size": 816870,
+      "dependencies": [],
+      "id": 46079
+    },
+    {
+      "name": "img_mv_slide_m0068-mv-01_006",
+      "objectName": "sDNm1q",
+      "url": "https://asset.game-hololive-dreams.com/sDNm1q",
+      "md5": "e1fb6fc1f487f1b801380b558b41a5eb",
+      "size": 665387,
+      "dependencies": [],
+      "id": 46080
+    },
+    {
+      "name": "img_mv_slide_m0068-mv-01_007",
+      "objectName": "1PBP2b",
+      "url": "https://asset.game-hololive-dreams.com/1PBP2b",
+      "md5": "9929144431f58959d6eed678ba870d61",
+      "size": 808795,
+      "dependencies": [],
+      "id": 46081
+    },
+    {
+      "name": "img_mv_slide_m0068-mv-01_008",
+      "objectName": "SwP6VS",
+      "url": "https://asset.game-hololive-dreams.com/SwP6VS",
+      "md5": "c50de7361f75094322e3d884d9337f59",
+      "size": 829026,
+      "dependencies": [],
+      "id": 46082
+    },
+    {
+      "name": "img_mv_slide_m0068-mv-01_009",
+      "objectName": "P3OsiV",
+      "url": "https://asset.game-hololive-dreams.com/P3OsiV",
+      "md5": "d4f3a194527370590d04f025f725fbfc",
+      "size": 701461,
+      "dependencies": [],
+      "id": 46083
+    },
+    {
+      "name": "img_mv_slide_m0068-mv-01_010",
+      "objectName": "KaAYFN",
+      "url": "https://asset.game-hololive-dreams.com/KaAYFN",
+      "md5": "0c95cfe3c6b57584b2eb8d60916cd07f",
+      "size": 849408,
+      "dependencies": [],
+      "id": 46084
+    },
+    {
+      "name": "img_mv_slide_m0068-mv-01_011",
+      "objectName": "WvclMh",
+      "url": "https://asset.game-hololive-dreams.com/WvclMh",
+      "md5": "c30378a1c2aec5093ef4114a8741ef10",
+      "size": 668620,
+      "dependencies": [],
+      "id": 46085
+    },
+    {
+      "name": "img_mv_slide_m0068-mv-01_012",
+      "objectName": "aVWkHG",
+      "url": "https://asset.game-hololive-dreams.com/aVWkHG",
+      "md5": "b9a23dc47bf998c214b14f8efe4f58c6",
+      "size": 682477,
+      "dependencies": [],
+      "id": 46086
+    },
+    {
+      "name": "img_mv_slide_m0068-mv-01_013",
+      "objectName": "7y58iZ",
+      "url": "https://asset.game-hololive-dreams.com/7y58iZ",
+      "md5": "a77c866850a29b87dd4599aea587c333",
+      "size": 886847,
+      "dependencies": [],
+      "id": 46087
+    },
+    {
+      "name": "img_mv_slide_m0068-mv-01_014",
+      "objectName": "7BOy5z",
+      "url": "https://asset.game-hololive-dreams.com/7BOy5z",
+      "md5": "cce0cefc9a34d17c9956e765a7caed8d",
+      "size": 824988,
+      "dependencies": [],
+      "id": 46088
+    },
+    {
+      "name": "img_mv_slide_m0068-mv-01_015",
+      "objectName": "pEynIe",
+      "url": "https://asset.game-hololive-dreams.com/pEynIe",
+      "md5": "a3a9a02912696d5818328d8731febddf",
+      "size": 889707,
+      "dependencies": [],
+      "id": 46089
+    },
+    {
+      "name": "img_mv_slide_m0068-mv-01_016",
+      "objectName": "8HiFdP",
+      "url": "https://asset.game-hololive-dreams.com/8HiFdP",
+      "md5": "64bce3f65b354504fe459bf0f16e1f1c",
+      "size": 800771,
+      "dependencies": [],
+      "id": 46090
+    },
+    {
+      "name": "img_mv_slide_m0068-mv-01_017",
+      "objectName": "zIgqJ1",
+      "url": "https://asset.game-hololive-dreams.com/zIgqJ1",
+      "md5": "1bda176841067fa61defa8085f638fc9",
+      "size": 764476,
+      "dependencies": [],
+      "id": 46091
+    },
+    {
+      "name": "img_mv_slide_m0068-mv-01_018",
+      "objectName": "iH0yUT",
+      "url": "https://asset.game-hololive-dreams.com/iH0yUT",
+      "md5": "29d44737ec8fa46cf324e68bd7ecf1b3",
+      "size": 819132,
+      "dependencies": [],
+      "id": 46092
+    },
+    {
+      "name": "img_mv_slide_m0068-mv-01_019",
+      "objectName": "BMjzXD",
+      "url": "https://asset.game-hololive-dreams.com/BMjzXD",
+      "md5": "169fa96189749170bac63734e7ca82ee",
+      "size": 726027,
+      "dependencies": [],
+      "id": 46093
+    },
+    {
+      "name": "img_mv_slide_m0068-mv-01_020",
+      "objectName": "0FaZMW",
+      "url": "https://asset.game-hololive-dreams.com/0FaZMW",
+      "md5": "b1640dfaab45ac0c717fc814e91440d8",
+      "size": 690890,
+      "dependencies": [],
+      "id": 46094
+    },
+    {
+      "name": "img_music_jacket_m0394",
+      "objectName": "5GJNyB",
+      "url": "https://asset.game-hololive-dreams.com/5GJNyB",
+      "md5": "3a13116e44e4092e8dd01fe684164b48",
+      "size": 1951524,
+      "dependencies": [],
+      "id": 46070
+    },
+    {
+      "name": "img_music_jacket_m0396",
+      "objectName": "HrGfMi",
+      "url": "https://asset.game-hololive-dreams.com/HrGfMi",
+      "md5": "7fcc1e44fb4da8d2f3e2c1f61712c060",
+      "size": 2144492,
+      "dependencies": [],
+      "id": 46071
+    },
+    {
+      "name": "mdl_chr_drs_03002-uniq-0113-00_body",
+      "objectName": "t7YQMU",
+      "url": "https://asset.game-hololive-dreams.com/t7YQMU",
+      "md5": "4ed72dc81776a58c1ffef5c35efb5196",
+      "size": 3776588,
+      "dependencies": [
+        33354,
+        35425,
+        35456,
+        35460,
+        35462,
+        35684
+      ],
+      "id": 46207
+    },
+    {
+      "name": "mdl_chr_drs_03002-uniq-0113-00_hair",
+      "objectName": "Pt9OC7",
+      "url": "https://asset.game-hololive-dreams.com/Pt9OC7",
+      "md5": "bb6f8a3e970170ccc4cb10f0afd1be09",
+      "size": 2177728,
+      "dependencies": [
+        35425,
+        35456,
+        35462,
+        35684
+      ],
+      "id": 46208
+    },
+    {
+      "name": "mdl_chr_drs_03003-uniq-0115-00_body",
+      "objectName": "KkT4Sg",
+      "url": "https://asset.game-hololive-dreams.com/KkT4Sg",
+      "md5": "be9704cc94bcb931bb9a7c4e02d01297",
+      "size": 3956471,
+      "dependencies": [
+        33354,
+        35425,
+        35456,
+        35460,
+        35462,
+        35684
+      ],
+      "id": 46209
+    },
+    {
+      "name": "mdl_chr_drs_03003-uniq-0115-00_hair",
+      "objectName": "1yyJ7C",
+      "url": "https://asset.game-hololive-dreams.com/1yyJ7C",
+      "md5": "c1624c2b30415f576632764a70460c9c",
+      "size": 2659498,
+      "dependencies": [
+        35425,
+        35456,
+        35462,
+        35684
+      ],
+      "id": 46210
+    },
+    {
+      "name": "mdl_chr_drs_03001-uniq-0114-00_body",
+      "objectName": "btlK1b",
+      "url": "https://asset.game-hololive-dreams.com/btlK1b",
+      "md5": "374e205eb60b3d5d4fa686b3f2ab8817",
+      "size": 4237934,
+      "dependencies": [
+        33354,
+        35425,
+        35456,
+        35460,
+        35462,
+        35684
+      ],
+      "id": 46205
+    },
+    {
+      "name": "mdl_chr_drs_03001-uniq-0114-00_hair",
+      "objectName": "w2YwCn",
+      "url": "https://asset.game-hololive-dreams.com/w2YwCn",
+      "md5": "f64f32f77fea18e9af3a26aa144e16b2",
+      "size": 2533235,
+      "dependencies": [
+        35425,
+        35456,
+        35462,
+        35684
+      ],
+      "id": 46206
+    },
+    {
+      "name": "img_banner_full_birthday-chr-03007-261107",
+      "objectName": "DTJhKj",
+      "url": "https://asset.game-hololive-dreams.com/DTJhKj",
+      "md5": "c0ceb89ace45d4d77639d771b5f3be86",
+      "size": 898436,
+      "dependencies": [],
+      "id": 45927
+    },
+    {
+      "name": "img_emb_m_birthday-chr-03007-261107",
+      "objectName": "b0av8G",
+      "url": "https://asset.game-hololive-dreams.com/b0av8G",
+      "md5": "9721d0801a5293364a33f2ae4c1a49c0",
+      "size": 246879,
+      "dependencies": [],
+      "id": 45966
+    },
+    {
+      "name": "img_emb_m_birthday-chr-03007-261107_lang-chs",
+      "objectName": "yEMuDq",
+      "url": "https://asset.game-hololive-dreams.com/yEMuDq",
+      "md5": "cbebc425ed3748b98ba36427ea9c722a",
+      "size": 246893,
+      "dependencies": [],
+      "id": 45967
+    },
+    {
+      "name": "img_emb_m_birthday-chr-03007-261107_lang-cht",
+      "objectName": "Q8ipQz",
+      "url": "https://asset.game-hololive-dreams.com/Q8ipQz",
+      "md5": "8203152946861d2eb46942d7683b7e5f",
+      "size": 246886,
+      "dependencies": [],
+      "id": 45968
+    },
+    {
+      "name": "img_emb_m_birthday-chr-03007-261107_lang-eng",
+      "objectName": "BouI4n",
+      "url": "https://asset.game-hololive-dreams.com/BouI4n",
+      "md5": "2447c031db07c4cc24047ed0b4dd5bfc",
+      "size": 246886,
+      "dependencies": [],
+      "id": 45969
+    },
+    {
+      "name": "img_emb_m_birthday-chr-03007-261107_lang-ind",
+      "objectName": "KpR3T5",
+      "url": "https://asset.game-hololive-dreams.com/KpR3T5",
+      "md5": "8b510a0bfabe2e8d7cc664ca08aa1c49",
+      "size": 246885,
+      "dependencies": [],
+      "id": 45970
+    },
+    {
+      "name": "img_emb_m_birthday-chr-03007-261107_lang-kor",
+      "objectName": "TfqIAy",
+      "url": "https://asset.game-hololive-dreams.com/TfqIAy",
+      "md5": "411e5f5762236f93584d2f267ba42633",
+      "size": 246886,
+      "dependencies": [],
+      "id": 45971
+    },
+    {
+      "name": "img_login_bg_birthday-chr-03007-261107",
+      "objectName": "jbsbFl",
+      "url": "https://asset.game-hololive-dreams.com/jbsbFl",
+      "md5": "d4227690bac7abf43228eac450455aae",
+      "size": 753579,
+      "dependencies": [],
+      "id": 46056
+    },
+    {
+      "name": "img_login_bg_birthday-chr-03007-261107_lang-chs",
+      "objectName": "hnVGZ1",
+      "url": "https://asset.game-hololive-dreams.com/hnVGZ1",
+      "md5": "317866f8d086f1dbb05ab637931b4b34",
+      "size": 753577,
+      "dependencies": [],
+      "id": 46057
+    },
+    {
+      "name": "img_login_bg_birthday-chr-03007-261107_lang-cht",
+      "objectName": "Dt93Yo",
+      "url": "https://asset.game-hololive-dreams.com/Dt93Yo",
+      "md5": "287c63ffc4888ce4ca060585bad2226a",
+      "size": 753562,
+      "dependencies": [],
+      "id": 46058
+    },
+    {
+      "name": "img_login_bg_birthday-chr-03007-261107_lang-eng",
+      "objectName": "QjbQjV",
+      "url": "https://asset.game-hololive-dreams.com/QjbQjV",
+      "md5": "8cba7d266a2da9b928a5b89386be27e5",
+      "size": 753562,
+      "dependencies": [],
+      "id": 46059
+    },
+    {
+      "name": "img_login_bg_birthday-chr-03007-261107_lang-ind",
+      "objectName": "cljnnZ",
+      "url": "https://asset.game-hololive-dreams.com/cljnnZ",
+      "md5": "8559c26c0e4498f6a13f4a6515543fd6",
+      "size": 753576,
+      "dependencies": [],
+      "id": 46060
+    },
+    {
+      "name": "img_login_bg_birthday-chr-03007-261107_lang-kor",
+      "objectName": "Kker40",
+      "url": "https://asset.game-hololive-dreams.com/Kker40",
+      "md5": "f68b533ec4e2960223657ab273f1f0cf",
+      "size": 753562,
+      "dependencies": [],
+      "id": 46061
+    },
+    {
+      "name": "live2d_mdl_03001-uniq-0114-00",
+      "objectName": "vOuu2j",
+      "url": "https://asset.game-hololive-dreams.com/vOuu2j",
+      "md5": "7e82dab4d266ba6660123704053b1ddc",
+      "size": 2734561,
+      "dependencies": [
+        20925,
+        32387,
+        35425,
+        35684,
+        35686,
+        35690,
+        35691,
+        35692,
+        35693,
+        35694
+      ],
+      "id": 46202
+    },
+    {
+      "name": "live2d_mdl_03002-uniq-0113-00",
+      "objectName": "2y7Jao",
+      "url": "https://asset.game-hololive-dreams.com/2y7Jao",
+      "md5": "581f68931ead302ab996ef3618947b10",
+      "size": 2862834,
+      "dependencies": [
+        20925,
+        32213,
+        32269,
+        32327,
+        32388,
+        32450,
+        32512,
+        32574,
+        32636,
+        32696,
+        32746,
+        32803,
+        32865,
+        32927,
+        32989,
+        35425,
+        35684,
+        35686,
+        35690,
+        35691,
+        35692,
+        35693
+      ],
+      "id": 46203
+    },
+    {
+      "name": "live2d_mdl_03003-uniq-0115-00",
+      "objectName": "h4YzQy",
+      "url": "https://asset.game-hololive-dreams.com/h4YzQy",
+      "md5": "d71cb431ea36828c983cc23c3a3d08a3",
+      "size": 2377264,
+      "dependencies": [
+        20925,
+        32214,
+        32270,
+        32328,
+        32389,
+        32451,
+        32513,
+        32575,
+        32637,
+        32697,
+        32747,
+        32804,
+        32866,
+        32928,
+        32990,
+        35425,
+        35684,
+        35686,
+        35690,
+        35691,
+        35692,
+        35693
+      ],
+      "id": 46204
+    },
+    {
+      "name": "img_cos_sd_thumb_03001-uniq-0114-00",
+      "objectName": "LeaRI7",
+      "url": "https://asset.game-hololive-dreams.com/LeaRI7",
+      "md5": "6496903c1d17ff5f1cc94cff4fa85f73",
+      "size": 35888,
+      "dependencies": [],
+      "id": 45963
+    },
+    {
+      "name": "img_cos_sd_thumb_03002-uniq-0113-00",
+      "objectName": "pLaGrQ",
+      "url": "https://asset.game-hololive-dreams.com/pLaGrQ",
+      "md5": "557952871d74ae3649e752cd752a0740",
+      "size": 38426,
+      "dependencies": [],
+      "id": 45964
+    },
+    {
+      "name": "img_cos_sd_thumb_03003-uniq-0115-00",
+      "objectName": "SI8Yw5",
+      "url": "https://asset.game-hololive-dreams.com/SI8Yw5",
+      "md5": "614530b906bc50154b9bee03caaa23f4",
+      "size": 37008,
+      "dependencies": [],
+      "id": 45965
+    },
+    {
+      "name": "img_banner_full_gacha-pickup-261106",
+      "objectName": "YsXW9f",
+      "url": "https://asset.game-hololive-dreams.com/YsXW9f",
+      "md5": "710ac9a93ea0804840a419ae3ce29000",
+      "size": 1125842,
+      "dependencies": [],
+      "id": 45933
+    },
+    {
+      "name": "img_gacha_group_icon_pickup-normal-261106",
+      "objectName": "UjCYxH",
+      "url": "https://asset.game-hololive-dreams.com/UjCYxH",
+      "md5": "62a83668f78f05970340373c5e4e050c",
+      "size": 19467,
+      "dependencies": [],
+      "id": 46032
+    },
+    {
+      "name": "img_gacha_group_icon_pickup-select-261106",
+      "objectName": "Udtc5X",
+      "url": "https://asset.game-hololive-dreams.com/Udtc5X",
+      "md5": "cfecb9e24ba7395193d3f8f483e57d2a",
+      "size": 19801,
+      "dependencies": [],
+      "id": 46038
+    },
+    {
+      "name": "img_banner_full_marathon_event-normal-009",
+      "objectName": "zQdjPq",
+      "url": "https://asset.game-hololive-dreams.com/zQdjPq",
+      "md5": "eacad29cdf31dcaab74fe29f83aa99c4",
+      "size": 1101351,
+      "dependencies": [],
+      "id": 45939
+    },
+    {
+      "name": "img_music_jacket_m0550",
+      "objectName": "Vvvozt",
+      "url": "https://asset.game-hololive-dreams.com/Vvvozt",
+      "md5": "5c03a7af422dd7d1b166b53cefb94f41",
+      "size": 915495,
+      "dependencies": [],
+      "id": 46073
+    },
+    {
+      "name": "img_cos_2d_thumb_03001-uniq-0114-00",
+      "objectName": "IK8lui",
+      "url": "https://asset.game-hololive-dreams.com/IK8lui",
+      "md5": "bcf37a497a540253cc8e4de8ca28fa32",
+      "size": 33422,
+      "dependencies": [],
+      "id": 45960
+    },
+    {
+      "name": "img_cos_2d_thumb_03002-uniq-0113-00",
+      "objectName": "cT0TuW",
+      "url": "https://asset.game-hololive-dreams.com/cT0TuW",
+      "md5": "50f2ab2486fb1391a0f07f318794cf25",
+      "size": 36456,
+      "dependencies": [],
+      "id": 45961
+    },
+    {
+      "name": "img_cos_2d_thumb_03003-uniq-0115-00",
+      "objectName": "J3ELRO",
+      "url": "https://asset.game-hololive-dreams.com/J3ELRO",
+      "md5": "85423c80f0279cd542eb7e2f5d199aac",
+      "size": 35008,
+      "dependencies": [],
+      "id": 45962
+    },
+    {
+      "name": "img_music_jacket_m0528",
+      "objectName": "Jnm1GR",
+      "url": "https://asset.game-hololive-dreams.com/Jnm1GR",
+      "md5": "87cb89b2788a590c8aa878d73d52ad6a",
+      "size": 2044448,
+      "dependencies": [],
+      "id": 46072
+    },
+    {
+      "name": "img_music_jacket_m0552",
+      "objectName": "qpzDyT",
+      "url": "https://asset.game-hololive-dreams.com/qpzDyT",
+      "md5": "d84c2baf8d1758ee3a7ca34353ecc2f1",
+      "size": 1601522,
+      "dependencies": [],
+      "id": 46074
+    },
+    {
+      "name": "img_card_full_03001-5-uniq-0114-00",
+      "objectName": "mvxABt",
+      "url": "https://asset.game-hololive-dreams.com/mvxABt",
+      "md5": "6755c388cb1928bbd34d6122e8098ca4",
+      "size": 1147291,
+      "dependencies": [],
+      "id": 45945
+    },
+    {
+      "name": "img_card_full_03002-5-uniq-0113-00",
+      "objectName": "SgB9oE",
+      "url": "https://asset.game-hololive-dreams.com/SgB9oE",
+      "md5": "05b4335730ccc62bbbfe2912c3406c05",
+      "size": 1205017,
+      "dependencies": [],
+      "id": 45946
+    },
+    {
+      "name": "img_card_full_03003-5-uniq-0115-00",
+      "objectName": "62wGwh",
+      "url": "https://asset.game-hololive-dreams.com/62wGwh",
+      "md5": "12261c300af53a18f58f385c388b3735",
+      "size": 1189117,
+      "dependencies": [],
+      "id": 45947
+    },
+    {
+      "name": "img_card_live_thumb_03001-5-uniq-0114-00",
+      "objectName": "F6L26u",
+      "url": "https://asset.game-hololive-dreams.com/F6L26u",
+      "md5": "83c8fc7b46cf090fa25ad019192a8fe8",
+      "size": 587392,
+      "dependencies": [],
+      "id": 45948
+    },
+    {
+      "name": "img_card_live_thumb_03002-5-uniq-0113-00",
+      "objectName": "bOH8OR",
+      "url": "https://asset.game-hololive-dreams.com/bOH8OR",
+      "md5": "f1a9a38f8b1c66bf292b280b73817ab7",
+      "size": 603671,
+      "dependencies": [],
+      "id": 45949
+    },
+    {
+      "name": "img_card_live_thumb_03003-5-uniq-0115-00",
+      "objectName": "3PTuzE",
+      "url": "https://asset.game-hololive-dreams.com/3PTuzE",
+      "md5": "a5545c87a706e30f13ec1cdeea425d2b",
+      "size": 611307,
+      "dependencies": [],
+      "id": 45950
+    },
+    {
+      "name": "img_card_thin_03001-5-uniq-0114-00",
+      "objectName": "3Hq2Ws",
+      "url": "https://asset.game-hololive-dreams.com/3Hq2Ws",
+      "md5": "706a4cbe0792878a2b282f9186225bac",
+      "size": 152176,
+      "dependencies": [],
+      "id": 45951
+    },
+    {
+      "name": "img_card_thin_03002-5-uniq-0113-00",
+      "objectName": "XzSVqX",
+      "url": "https://asset.game-hololive-dreams.com/XzSVqX",
+      "md5": "7032217b6bddbf7fb0199a0c10cd87eb",
+      "size": 156318,
+      "dependencies": [],
+      "id": 45952
+    },
+    {
+      "name": "img_card_thin_03003-5-uniq-0115-00",
+      "objectName": "g66zPa",
+      "url": "https://asset.game-hololive-dreams.com/g66zPa",
+      "md5": "749cf7c1adf3bd932b2c5a8e34c9bcf7",
+      "size": 156139,
+      "dependencies": [],
+      "id": 45953
+    },
+    {
+      "name": "img_card_thumb_03001-5-uniq-0114-00",
+      "objectName": "kqJNyx",
+      "url": "https://asset.game-hololive-dreams.com/kqJNyx",
+      "md5": "dd4ad63564e31a70622f714a7a08b691",
+      "size": 148011,
+      "dependencies": [],
+      "id": 45954
+    },
+    {
+      "name": "img_card_thumb_03002-5-uniq-0113-00",
+      "objectName": "0Qo1d8",
+      "url": "https://asset.game-hololive-dreams.com/0Qo1d8",
+      "md5": "6b7ad4014c31d2ae422cc09c81baf658",
+      "size": 158292,
+      "dependencies": [],
+      "id": 45955
+    },
+    {
+      "name": "img_card_thumb_03003-5-uniq-0115-00",
+      "objectName": "1c9hpI",
+      "url": "https://asset.game-hololive-dreams.com/1c9hpI",
+      "md5": "12eb7ef7bea61dedb42fde562ced6f8d",
+      "size": 158907,
+      "dependencies": [],
+      "id": 45956
+    },
+    {
+      "name": "img_card_vert_03001-5-uniq-0114-00",
+      "objectName": "1RrEhr",
+      "url": "https://asset.game-hololive-dreams.com/1RrEhr",
+      "md5": "15327bd1c4c13be837319e3c416f47c9",
+      "size": 78129,
+      "dependencies": [],
+      "id": 45957
+    },
+    {
+      "name": "img_card_vert_03002-5-uniq-0113-00",
+      "objectName": "A3TSpZ",
+      "url": "https://asset.game-hololive-dreams.com/A3TSpZ",
+      "md5": "a7f0b03dfd24349ceb4787c357565758",
+      "size": 80924,
+      "dependencies": [],
+      "id": 45958
+    },
+    {
+      "name": "img_card_vert_03003-5-uniq-0115-00",
+      "objectName": "mtnERw",
+      "url": "https://asset.game-hololive-dreams.com/mtnERw",
+      "md5": "2c22111e33f6e1011b469d1c61607b3d",
+      "size": 81406,
+      "dependencies": [],
+      "id": 45959
+    },
+    {
+      "name": "img_emb_m_event-normal-009-chapter-01-m0394-bronze",
+      "objectName": "JDQjPz",
+      "url": "https://asset.game-hololive-dreams.com/JDQjPz",
+      "md5": "d107ce5f4caeb164abe86d90056e3e00",
+      "size": 238119,
+      "dependencies": [],
+      "id": 46008
+    },
+    {
+      "name": "img_emb_m_event-normal-009-chapter-01-m0394-diamond",
+      "objectName": "KOw1uD",
+      "url": "https://asset.game-hololive-dreams.com/KOw1uD",
+      "md5": "ca948c7cc6386b7e52321f2488f0f1d8",
+      "size": 257361,
+      "dependencies": [],
+      "id": 46009
+    },
+    {
+      "name": "img_emb_m_event-normal-009-chapter-01-m0394-dream",
+      "objectName": "IZa2QT",
+      "url": "https://asset.game-hololive-dreams.com/IZa2QT",
+      "md5": "54c37aa7c00fd3d57210109c14a6fa22",
+      "size": 269615,
+      "dependencies": [],
+      "id": 46010
+    },
+    {
+      "name": "img_emb_m_event-normal-009-chapter-01-m0394-gold",
+      "objectName": "mJYuRv",
+      "url": "https://asset.game-hololive-dreams.com/mJYuRv",
+      "md5": "3ca4d5e5e48b6bf618fada35059f26c9",
+      "size": 253194,
+      "dependencies": [],
+      "id": 46011
+    },
+    {
+      "name": "img_emb_m_event-normal-009-chapter-01-m0394-platinum",
+      "objectName": "rIFCea",
+      "url": "https://asset.game-hololive-dreams.com/rIFCea",
+      "md5": "10ed1cd0959f5454e2f387351ad9f7fd",
+      "size": 250625,
+      "dependencies": [],
+      "id": 46012
+    },
+    {
+      "name": "img_emb_m_event-normal-009-chapter-01-m0394-silver",
+      "objectName": "NK1CT9",
+      "url": "https://asset.game-hololive-dreams.com/NK1CT9",
+      "md5": "9dc003402a72c45acb7c80e63c221633",
+      "size": 252797,
+      "dependencies": [],
+      "id": 46013
+    },
+    {
+      "name": "img_emb_m_event-normal-009-chapter-01-m0396-bronze",
+      "objectName": "f31ae6",
+      "url": "https://asset.game-hololive-dreams.com/f31ae6",
+      "md5": "10a8aa36c87d9fa4d3bf91d65007d173",
+      "size": 241019,
+      "dependencies": [],
+      "id": 46014
+    },
+    {
+      "name": "img_emb_m_event-normal-009-chapter-01-m0396-diamond",
+      "objectName": "5CUTmZ",
+      "url": "https://asset.game-hololive-dreams.com/5CUTmZ",
+      "md5": "bd11577997db78150cafa90d5d741ffd",
+      "size": 260180,
+      "dependencies": [],
+      "id": 46015
+    },
+    {
+      "name": "img_emb_m_event-normal-009-chapter-01-m0396-dream",
+      "objectName": "jkHFYb",
+      "url": "https://asset.game-hololive-dreams.com/jkHFYb",
+      "md5": "1807fc911b4ca8acdc216bea61eebb6f",
+      "size": 272441,
+      "dependencies": [],
+      "id": 46016
+    },
+    {
+      "name": "img_emb_m_event-normal-009-chapter-01-m0396-gold",
+      "objectName": "8AlwgM",
+      "url": "https://asset.game-hololive-dreams.com/8AlwgM",
+      "md5": "4b63f02db3ae1df92afdca22cc04d737",
+      "size": 256145,
+      "dependencies": [],
+      "id": 46017
+    },
+    {
+      "name": "img_emb_m_event-normal-009-chapter-01-m0396-platinum",
+      "objectName": "bzbnv0",
+      "url": "https://asset.game-hololive-dreams.com/bzbnv0",
+      "md5": "1bdf22b2f5572da1cd7b7ded9a97580d",
+      "size": 253465,
+      "dependencies": [],
+      "id": 46018
+    },
+    {
+      "name": "img_emb_m_event-normal-009-chapter-01-m0396-silver",
+      "objectName": "M72RKa",
+      "url": "https://asset.game-hololive-dreams.com/M72RKa",
+      "md5": "ae77e94fde517c4f988f3f6d6a1fd7dc",
+      "size": 255655,
+      "dependencies": [],
+      "id": 46019
+    },
+    {
+      "name": "img_emb_m_event-normal-009-chapter-01-m0528-bronze",
+      "objectName": "KXtlAK",
+      "url": "https://asset.game-hololive-dreams.com/KXtlAK",
+      "md5": "6c338c5d379bcc390710adc05dd6d04f",
+      "size": 236312,
+      "dependencies": [],
+      "id": 46020
+    },
+    {
+      "name": "img_emb_m_event-normal-009-chapter-01-m0528-diamond",
+      "objectName": "bkFwnV",
+      "url": "https://asset.game-hololive-dreams.com/bkFwnV",
+      "md5": "628e422cc978e0b3d539ee39e895e6e8",
+      "size": 255500,
+      "dependencies": [],
+      "id": 46021
+    },
+    {
+      "name": "img_emb_m_event-normal-009-chapter-01-m0528-dream",
+      "objectName": "C0BYnf",
+      "url": "https://asset.game-hololive-dreams.com/C0BYnf",
+      "md5": "e08c98f9a0110accb6df5c02ece695f3",
+      "size": 267777,
+      "dependencies": [],
+      "id": 46022
+    },
+    {
+      "name": "img_emb_m_event-normal-009-chapter-01-m0528-gold",
+      "objectName": "7iEgsL",
+      "url": "https://asset.game-hololive-dreams.com/7iEgsL",
+      "md5": "e8f58ad74efbc36d09058d564239dd37",
+      "size": 251364,
+      "dependencies": [],
+      "id": 46023
+    },
+    {
+      "name": "img_emb_m_event-normal-009-chapter-01-m0528-platinum",
+      "objectName": "YxCdH4",
+      "url": "https://asset.game-hololive-dreams.com/YxCdH4",
+      "md5": "95dfcb86408df21f6731252033939325",
+      "size": 248717,
+      "dependencies": [],
+      "id": 46024
+    },
+    {
+      "name": "img_emb_m_event-normal-009-chapter-01-m0528-silver",
+      "objectName": "iChDOc",
+      "url": "https://asset.game-hololive-dreams.com/iChDOc",
+      "md5": "9de589112714f720e8f9a354c2057580",
+      "size": 250943,
+      "dependencies": [],
+      "id": 46025
+    },
+    {
+      "name": "img_emb_m_event-normal-009-chapter-01-m0550-bronze",
+      "objectName": "Wr48ca",
+      "url": "https://asset.game-hololive-dreams.com/Wr48ca",
+      "md5": "6cf0bc16e1f3faae611f0c9e51251b09",
+      "size": 227424,
+      "dependencies": [],
+      "id": 46026
+    },
+    {
+      "name": "img_emb_m_event-normal-009-chapter-01-m0550-diamond",
+      "objectName": "TcZvEP",
+      "url": "https://asset.game-hololive-dreams.com/TcZvEP",
+      "md5": "022d274db34569adc3763f4c4c05fbf0",
+      "size": 246709,
+      "dependencies": [],
+      "id": 46027
+    },
+    {
+      "name": "img_emb_m_event-normal-009-chapter-01-m0550-dream",
+      "objectName": "IKErYl",
+      "url": "https://asset.game-hololive-dreams.com/IKErYl",
+      "md5": "72948ff65819bbcdbb414a5490b19fb6",
+      "size": 258864,
+      "dependencies": [],
+      "id": 46028
+    },
+    {
+      "name": "img_emb_m_event-normal-009-chapter-01-m0550-gold",
+      "objectName": "SCNpdP",
+      "url": "https://asset.game-hololive-dreams.com/SCNpdP",
+      "md5": "9a82c74141094b15e3ee959adc447986",
+      "size": 242513,
+      "dependencies": [],
+      "id": 46029
+    },
+    {
+      "name": "img_emb_m_event-normal-009-chapter-01-m0550-platinum",
+      "objectName": "qXGpED",
+      "url": "https://asset.game-hololive-dreams.com/qXGpED",
+      "md5": "b6cf7ec432d0e77f690ca401f717a4f7",
+      "size": 239981,
+      "dependencies": [],
+      "id": 46030
+    },
+    {
+      "name": "img_emb_m_event-normal-009-chapter-01-m0550-silver",
+      "objectName": "SXqamN",
+      "url": "https://asset.game-hololive-dreams.com/SXqamN",
+      "md5": "3d9935d4fc213024c3cc909a87bb82f8",
+      "size": 242169,
+      "dependencies": [],
+      "id": 46031
+    },
+    {
+      "name": "img_marathon_event_normal_top-009-01",
+      "objectName": "ALz0yi",
+      "url": "https://asset.game-hololive-dreams.com/ALz0yi",
+      "md5": "53879308c497c21ae78924be25c97ece",
+      "size": 1126419,
+      "dependencies": [],
+      "id": 46069
+    },
+    {
+      "name": "img_poster_full_event-2611-02-01",
+      "objectName": "hpByCb",
+      "url": "https://asset.game-hololive-dreams.com/hpByCb",
+      "md5": "d17c8db4177ffafbe59f1105b6862f33",
+      "size": 1092138,
+      "dependencies": [],
+      "id": 46201
+    },
+    {
+      "name": "img_marathon_event_normal_logo-009-01",
+      "objectName": "fue25g",
+      "url": "https://asset.game-hololive-dreams.com/fue25g",
+      "md5": "ca7659ae5416605b683b1cf1ab82acff",
+      "size": 146583,
+      "dependencies": [],
+      "id": 46063
+    },
+    {
+      "name": "img_emb_m_event-emblem-total_music_highest_score_reward-marathon_event-normal-009-chapter-01-bronze",
+      "objectName": "aQb9Nt",
+      "url": "https://asset.game-hololive-dreams.com/aQb9Nt",
+      "md5": "d5c91d7d055c3bedb2954822e1ba1957",
+      "size": 209159,
+      "dependencies": [],
+      "id": 45972
+    },
+    {
+      "name": "img_emb_m_event-emblem-total_music_highest_score_reward-marathon_event-normal-009-chapter-01-diamond",
+      "objectName": "nlOSON",
+      "url": "https://asset.game-hololive-dreams.com/nlOSON",
+      "md5": "1026d415a648167e3e54021be591befd",
+      "size": 243742,
+      "dependencies": [],
+      "id": 45978
+    },
+    {
+      "name": "img_emb_m_event-emblem-total_music_highest_score_reward-marathon_event-normal-009-chapter-01-dream",
+      "objectName": "PYFrwU",
+      "url": "https://asset.game-hololive-dreams.com/PYFrwU",
+      "md5": "b348b14b5db07c2aaea894e4b4a3e013",
+      "size": 265667,
+      "dependencies": [],
+      "id": 45984
+    },
+    {
+      "name": "img_emb_m_event-emblem-total_music_highest_score_reward-marathon_event-normal-009-chapter-01-gold",
+      "objectName": "zMf3Iz",
+      "url": "https://asset.game-hololive-dreams.com/zMf3Iz",
+      "md5": "70189cd46f96f2b2f47b39cacdd925df",
+      "size": 217958,
+      "dependencies": [],
+      "id": 45990
+    },
+    {
+      "name": "img_emb_m_event-emblem-total_music_highest_score_reward-marathon_event-normal-009-chapter-01-platinum",
+      "objectName": "7t6t3q",
+      "url": "https://asset.game-hololive-dreams.com/7t6t3q",
+      "md5": "50cc210f7c4c5368abf67e556e29af77",
+      "size": 218511,
+      "dependencies": [],
+      "id": 45996
+    },
+    {
+      "name": "img_emb_m_event-emblem-total_music_highest_score_reward-marathon_event-normal-009-chapter-01-silver",
+      "objectName": "0YIfjq",
+      "url": "https://asset.game-hololive-dreams.com/0YIfjq",
+      "md5": "9796f9e6cd30e640dc7d4f1da05c4e8c",
+      "size": 214139,
+      "dependencies": [],
+      "id": 46002
+    },
+    {
+      "name": "img_marathon_event_normal_bg-009-01",
+      "objectName": "pe1VLh",
+      "url": "https://asset.game-hololive-dreams.com/pe1VLh",
+      "md5": "fa88d5a6bd03b9f88b1a6b2376e972fb",
+      "size": 1092156,
+      "dependencies": [],
+      "id": 46062
+    },
+    {
+      "name": "img_gacha_logo_pickup-normal-261106",
+      "objectName": "umfE1w",
+      "url": "https://asset.game-hololive-dreams.com/umfE1w",
+      "md5": "377dd27eb51900d548c014735a34d46c",
+      "size": 19472,
+      "dependencies": [],
+      "id": 46044
+    },
+    {
+      "name": "img_gacha_logo_pickup-select-261106",
+      "objectName": "NaXKDr",
+      "url": "https://asset.game-hololive-dreams.com/NaXKDr",
+      "md5": "327a35c3f0315d451d5dedde8cd87516",
+      "size": 19802,
+      "dependencies": [],
+      "id": 46050
+    },
+    {
+      "name": "img_mv_slide_m0396-mv-01_001",
+      "objectName": "B54ogA",
+      "url": "https://asset.game-hololive-dreams.com/B54ogA",
+      "md5": "d4194dfc291efca838f9819e0a200873",
+      "size": 1145133,
+      "dependencies": [],
+      "id": 46115
+    },
+    {
+      "name": "img_mv_slide_m0396-mv-01_002",
+      "objectName": "kX6sik",
+      "url": "https://asset.game-hololive-dreams.com/kX6sik",
+      "md5": "c8350f4debff69f5d116380b799056ec",
+      "size": 1169186,
+      "dependencies": [],
+      "id": 46116
+    },
+    {
+      "name": "img_mv_slide_m0396-mv-01_003",
+      "objectName": "Jt6kZw",
+      "url": "https://asset.game-hololive-dreams.com/Jt6kZw",
+      "md5": "22e54e8eb0c9837a2cad8e50ed0fe28a",
+      "size": 1081514,
+      "dependencies": [],
+      "id": 46117
+    },
+    {
+      "name": "img_mv_slide_m0396-mv-01_004",
+      "objectName": "fQRnc7",
+      "url": "https://asset.game-hololive-dreams.com/fQRnc7",
+      "md5": "f6a03c12179183e42b6f4a0bf81beaf8",
+      "size": 1152631,
+      "dependencies": [],
+      "id": 46118
+    },
+    {
+      "name": "img_mv_slide_m0396-mv-01_005",
+      "objectName": "zC1KVo",
+      "url": "https://asset.game-hololive-dreams.com/zC1KVo",
+      "md5": "b30bcbff9923d1ea593b90bb730c0e7e",
+      "size": 1135919,
+      "dependencies": [],
+      "id": 46119
+    },
+    {
+      "name": "img_mv_slide_m0396-mv-01_006",
+      "objectName": "hjrsSk",
+      "url": "https://asset.game-hololive-dreams.com/hjrsSk",
+      "md5": "806549c5d751682d931b96dae79926ac",
+      "size": 1149007,
+      "dependencies": [],
+      "id": 46120
+    },
+    {
+      "name": "img_mv_slide_m0396-mv-01_007",
+      "objectName": "gCwWzx",
+      "url": "https://asset.game-hololive-dreams.com/gCwWzx",
+      "md5": "018a1e83857a98ee19090e45d9bab208",
+      "size": 1099166,
+      "dependencies": [],
+      "id": 46121
+    },
+    {
+      "name": "img_mv_slide_m0396-mv-01_008",
+      "objectName": "oWMlWS",
+      "url": "https://asset.game-hololive-dreams.com/oWMlWS",
+      "md5": "c2cfc243efa083947a1cd82da269e2cb",
+      "size": 1153541,
+      "dependencies": [],
+      "id": 46122
+    },
+    {
+      "name": "img_mv_slide_m0396-mv-01_009",
+      "objectName": "e0OBjW",
+      "url": "https://asset.game-hololive-dreams.com/e0OBjW",
+      "md5": "a8a083895c0a465684bd081aeb60f30c",
+      "size": 1167110,
+      "dependencies": [],
+      "id": 46123
+    },
+    {
+      "name": "img_mv_slide_m0396-mv-01_010",
+      "objectName": "6y2S4f",
+      "url": "https://asset.game-hololive-dreams.com/6y2S4f",
+      "md5": "9c1e56507143271cb7e737cf7e07feeb",
+      "size": 1136104,
+      "dependencies": [],
+      "id": 46124
+    },
+    {
+      "name": "img_mv_slide_m0396-mv-01_011",
+      "objectName": "ocPUEn",
+      "url": "https://asset.game-hololive-dreams.com/ocPUEn",
+      "md5": "f36471fd780b6352e45ecaf8b156625b",
+      "size": 1156358,
+      "dependencies": [],
+      "id": 46125
+    },
+    {
+      "name": "img_mv_slide_m0396-mv-01_012",
+      "objectName": "zrUWNK",
+      "url": "https://asset.game-hololive-dreams.com/zrUWNK",
+      "md5": "425e0e3a8e6f3e275ef317a6e73c2dca",
+      "size": 1170707,
+      "dependencies": [],
+      "id": 46126
+    },
+    {
+      "name": "img_mv_slide_m0396-mv-01_013",
+      "objectName": "plSHqD",
+      "url": "https://asset.game-hololive-dreams.com/plSHqD",
+      "md5": "091292c26b263deeb58d4cd14a781b83",
+      "size": 1051232,
+      "dependencies": [],
+      "id": 46127
+    },
+    {
+      "name": "img_mv_slide_m0396-mv-01_014",
+      "objectName": "50zR9Q",
+      "url": "https://asset.game-hololive-dreams.com/50zR9Q",
+      "md5": "0ff49f2e70fc8fd8ce751e1291bf9f45",
+      "size": 1063396,
+      "dependencies": [],
+      "id": 46128
+    },
+    {
+      "name": "img_mv_slide_m0396-mv-01_015",
+      "objectName": "OvauNM",
+      "url": "https://asset.game-hololive-dreams.com/OvauNM",
+      "md5": "6a9b328e9aa9aa411a6d9780138993b9",
+      "size": 1029822,
+      "dependencies": [],
+      "id": 46129
+    },
+    {
+      "name": "img_mv_slide_m0396-mv-01_016",
+      "objectName": "DFgtNr",
+      "url": "https://asset.game-hololive-dreams.com/DFgtNr",
+      "md5": "f583929dcb2e17ea36b7a048ffebaaf1",
+      "size": 1029559,
+      "dependencies": [],
+      "id": 46130
+    },
+    {
+      "name": "img_mv_slide_m0396-mv-01_017",
+      "objectName": "Q7lXKu",
+      "url": "https://asset.game-hololive-dreams.com/Q7lXKu",
+      "md5": "30c77936d43a1968c0b65973ed175c7a",
+      "size": 1130565,
+      "dependencies": [],
+      "id": 46131
+    },
+    {
+      "name": "img_mv_slide_m0396-mv-01_018",
+      "objectName": "o2wbhY",
+      "url": "https://asset.game-hololive-dreams.com/o2wbhY",
+      "md5": "31950e51d5d57db9cb97490a3aab02f6",
+      "size": 1164448,
+      "dependencies": [],
+      "id": 46132
+    },
+    {
+      "name": "img_mv_slide_m0396-mv-01_019",
+      "objectName": "kKsQkm",
+      "url": "https://asset.game-hololive-dreams.com/kKsQkm",
+      "md5": "02ab32860d2ff363f92b73928159f549",
+      "size": 1170242,
+      "dependencies": [],
+      "id": 46133
+    },
+    {
+      "name": "img_mv_slide_m0396-mv-01_020",
+      "objectName": "b3ZYBl",
+      "url": "https://asset.game-hololive-dreams.com/b3ZYBl",
+      "md5": "7fcf57530dcb8d150d243a48a28ec5ff",
+      "size": 1154473,
+      "dependencies": [],
+      "id": 46134
+    },
+    {
+      "name": "img_mv_slide_m0552-mv-01_001",
+      "objectName": "FYnfgC",
+      "url": "https://asset.game-hololive-dreams.com/FYnfgC",
+      "md5": "1ca4d1a4625ee567465d2c696719145f",
+      "size": 1041353,
+      "dependencies": [],
+      "id": 46175
+    },
+    {
+      "name": "img_mv_slide_m0552-mv-01_002",
+      "objectName": "JsFvVs",
+      "url": "https://asset.game-hololive-dreams.com/JsFvVs",
+      "md5": "0364424a2bdaf3335240084ed4d82e5a",
+      "size": 984635,
+      "dependencies": [],
+      "id": 46176
+    },
+    {
+      "name": "img_mv_slide_m0552-mv-01_003",
+      "objectName": "3d4NUI",
+      "url": "https://asset.game-hololive-dreams.com/3d4NUI",
+      "md5": "380a6607f1c296b82620f3f74ff5f496",
+      "size": 1096592,
+      "dependencies": [],
+      "id": 46177
+    },
+    {
+      "name": "img_mv_slide_m0552-mv-01_004",
+      "objectName": "qNknfu",
+      "url": "https://asset.game-hololive-dreams.com/qNknfu",
+      "md5": "c7bbd5de95cc67bcd92b205e632b6f96",
+      "size": 1107437,
+      "dependencies": [],
+      "id": 46178
+    },
+    {
+      "name": "img_mv_slide_m0552-mv-01_005",
+      "objectName": "6AKx4U",
+      "url": "https://asset.game-hololive-dreams.com/6AKx4U",
+      "md5": "ce4f3168c0c9c217bed358c2c2ce22c2",
+      "size": 1060789,
+      "dependencies": [],
+      "id": 46179
+    },
+    {
+      "name": "img_mv_slide_m0552-mv-01_006",
+      "objectName": "LEjQzx",
+      "url": "https://asset.game-hololive-dreams.com/LEjQzx",
+      "md5": "97f70a65c7ca991b5b00d2796c38da34",
+      "size": 1042706,
+      "dependencies": [],
+      "id": 46180
+    },
+    {
+      "name": "img_mv_slide_m0552-mv-01_007",
+      "objectName": "cnR872",
+      "url": "https://asset.game-hololive-dreams.com/cnR872",
+      "md5": "0331ce38abf2be0a5621e478dc2e9fed",
+      "size": 903565,
+      "dependencies": [],
+      "id": 46181
+    },
+    {
+      "name": "img_mv_slide_m0552-mv-01_008",
+      "objectName": "EbZNHS",
+      "url": "https://asset.game-hololive-dreams.com/EbZNHS",
+      "md5": "35027073ee734c356b8d4bcecd71fbce",
+      "size": 1068701,
+      "dependencies": [],
+      "id": 46182
+    },
+    {
+      "name": "img_mv_slide_m0552-mv-01_009",
+      "objectName": "QZxrHJ",
+      "url": "https://asset.game-hololive-dreams.com/QZxrHJ",
+      "md5": "b97a73effc787dba6d85602f71395951",
+      "size": 943565,
+      "dependencies": [],
+      "id": 46183
+    },
+    {
+      "name": "img_mv_slide_m0552-mv-01_010",
+      "objectName": "NDzzpM",
+      "url": "https://asset.game-hololive-dreams.com/NDzzpM",
+      "md5": "47167026e85d96ca507aac2a7d34b871",
+      "size": 1099688,
+      "dependencies": [],
+      "id": 46184
+    },
+    {
+      "name": "img_mv_slide_m0552-mv-01_011",
+      "objectName": "S21Mxq",
+      "url": "https://asset.game-hololive-dreams.com/S21Mxq",
+      "md5": "83394fa365cb7dfa491af2364159902b",
+      "size": 924599,
+      "dependencies": [],
+      "id": 46185
+    },
+    {
+      "name": "img_mv_slide_m0552-mv-01_012",
+      "objectName": "wlc87U",
+      "url": "https://asset.game-hololive-dreams.com/wlc87U",
+      "md5": "1736c0fdee1feb456c7f7b542fccb247",
+      "size": 1068483,
+      "dependencies": [],
+      "id": 46186
+    },
+    {
+      "name": "img_mv_slide_m0552-mv-01_013",
+      "objectName": "hIhdjx",
+      "url": "https://asset.game-hololive-dreams.com/hIhdjx",
+      "md5": "54f785458bd01b4ab277cd8798bd57cf",
+      "size": 861742,
+      "dependencies": [],
+      "id": 46187
+    },
+    {
+      "name": "img_mv_slide_m0552-mv-01_014",
+      "objectName": "CiNrVB",
+      "url": "https://asset.game-hololive-dreams.com/CiNrVB",
+      "md5": "4e229e2c85b6b023cc9499cb2568ded2",
+      "size": 968615,
+      "dependencies": [],
+      "id": 46188
+    },
+    {
+      "name": "img_mv_slide_m0552-mv-01_015",
+      "objectName": "tB8w7M",
+      "url": "https://asset.game-hololive-dreams.com/tB8w7M",
+      "md5": "bbfe59982b2843ae8c8f56cb9b1f0967",
+      "size": 961126,
+      "dependencies": [],
+      "id": 46189
+    },
+    {
+      "name": "img_mv_slide_m0552-mv-01_016",
+      "objectName": "0fV1Vf",
+      "url": "https://asset.game-hololive-dreams.com/0fV1Vf",
+      "md5": "489f8933cf687dd70ecfc3c5d9e411f7",
+      "size": 912159,
+      "dependencies": [],
+      "id": 46190
+    },
+    {
+      "name": "img_mv_slide_m0552-mv-01_017",
+      "objectName": "wesPvu",
+      "url": "https://asset.game-hololive-dreams.com/wesPvu",
+      "md5": "35951b025afb161c4f31a2c544d6f6cb",
+      "size": 1093988,
+      "dependencies": [],
+      "id": 46191
+    },
+    {
+      "name": "img_mv_slide_m0552-mv-01_018",
+      "objectName": "AOwxMM",
+      "url": "https://asset.game-hololive-dreams.com/AOwxMM",
+      "md5": "60a2b449c788b817b50e1e72a48b0168",
+      "size": 923960,
+      "dependencies": [],
+      "id": 46192
+    },
+    {
+      "name": "img_mv_slide_m0552-mv-01_019",
+      "objectName": "gmgzcv",
+      "url": "https://asset.game-hololive-dreams.com/gmgzcv",
+      "md5": "b101081472e7969c38779ca3bac11709",
+      "size": 1081441,
+      "dependencies": [],
+      "id": 46193
+    },
+    {
+      "name": "img_mv_slide_m0552-mv-01_020",
+      "objectName": "4J5wvx",
+      "url": "https://asset.game-hololive-dreams.com/4J5wvx",
+      "md5": "e7c846f59bb8b9815414abd08c5e1ae5",
+      "size": 459679,
+      "dependencies": [],
+      "id": 46194
+    },
+    {
+      "name": "img_mv_thumb_m0396-mv-01",
+      "objectName": "gl3F5g",
+      "url": "https://asset.game-hololive-dreams.com/gl3F5g",
+      "md5": "e2e8d4d8f064a88a4e817eb8623c44dc",
+      "size": 308177,
+      "dependencies": [],
+      "id": 46197
+    },
+    {
+      "name": "img_mv_thumb_m0552-mv-01",
+      "objectName": "vgaoA4",
+      "url": "https://asset.game-hololive-dreams.com/vgaoA4",
+      "md5": "0af68970b84c7dfeb06549f4f9832eda",
+      "size": 291628,
+      "dependencies": [],
+      "id": 46200
+    },
+    {
+      "name": "img_mv_slide_m0394-mv-01_001",
+      "objectName": "Mreco1",
+      "url": "https://asset.game-hololive-dreams.com/Mreco1",
+      "md5": "224bd25e2775cc20b0daaaf055adb98d",
+      "size": 748998,
+      "dependencies": [],
+      "id": 46095
+    },
+    {
+      "name": "img_mv_slide_m0394-mv-01_002",
+      "objectName": "D4Vel5",
+      "url": "https://asset.game-hololive-dreams.com/D4Vel5",
+      "md5": "9d92c4526a0b19a63f6bc666227877a8",
+      "size": 690307,
+      "dependencies": [],
+      "id": 46096
+    },
+    {
+      "name": "img_mv_slide_m0394-mv-01_003",
+      "objectName": "g925ZM",
+      "url": "https://asset.game-hololive-dreams.com/g925ZM",
+      "md5": "de9622f7f20200030f016919e5b6a3b3",
+      "size": 780270,
+      "dependencies": [],
+      "id": 46097
+    },
+    {
+      "name": "img_mv_slide_m0394-mv-01_004",
+      "objectName": "702v9D",
+      "url": "https://asset.game-hololive-dreams.com/702v9D",
+      "md5": "e3f32c6b131a0226dc252df72dafe5c1",
+      "size": 1028800,
+      "dependencies": [],
+      "id": 46098
+    },
+    {
+      "name": "img_mv_slide_m0394-mv-01_005",
+      "objectName": "TyDV9B",
+      "url": "https://asset.game-hololive-dreams.com/TyDV9B",
+      "md5": "10c01c69247f3bab2e8cab7a41686791",
+      "size": 1133637,
+      "dependencies": [],
+      "id": 46099
+    },
+    {
+      "name": "img_mv_slide_m0394-mv-01_006",
+      "objectName": "IE0RwB",
+      "url": "https://asset.game-hololive-dreams.com/IE0RwB",
+      "md5": "2d18de30d4d7d78f58a1776e099d76de",
+      "size": 1036679,
+      "dependencies": [],
+      "id": 46100
+    },
+    {
+      "name": "img_mv_slide_m0394-mv-01_007",
+      "objectName": "XB2h6I",
+      "url": "https://asset.game-hololive-dreams.com/XB2h6I",
+      "md5": "e64b07e9173f4dd4eac961fad553bc37",
+      "size": 844212,
+      "dependencies": [],
+      "id": 46101
+    },
+    {
+      "name": "img_mv_slide_m0394-mv-01_008",
+      "objectName": "rpitpK",
+      "url": "https://asset.game-hololive-dreams.com/rpitpK",
+      "md5": "18fb1138c502552bc34e73e74e7a6763",
+      "size": 1013209,
+      "dependencies": [],
+      "id": 46102
+    },
+    {
+      "name": "img_mv_slide_m0394-mv-01_009",
+      "objectName": "ld4SBc",
+      "url": "https://asset.game-hololive-dreams.com/ld4SBc",
+      "md5": "9656f67ab5e8cd2dd3d8767deac80df5",
+      "size": 919183,
+      "dependencies": [],
+      "id": 46103
+    },
+    {
+      "name": "img_mv_slide_m0394-mv-01_010",
+      "objectName": "z0VTUZ",
+      "url": "https://asset.game-hololive-dreams.com/z0VTUZ",
+      "md5": "a926f40c8e6240ff202f889108f2aced",
+      "size": 903650,
+      "dependencies": [],
+      "id": 46104
+    },
+    {
+      "name": "img_mv_slide_m0394-mv-01_011",
+      "objectName": "km4CGD",
+      "url": "https://asset.game-hololive-dreams.com/km4CGD",
+      "md5": "b96e66e216bf3c13fbaa56c3c09b65cd",
+      "size": 1082757,
+      "dependencies": [],
+      "id": 46105
+    },
+    {
+      "name": "img_mv_slide_m0394-mv-01_012",
+      "objectName": "QXPjHv",
+      "url": "https://asset.game-hololive-dreams.com/QXPjHv",
+      "md5": "56d9dbb8daae26296f89417c7b6ef5ad",
+      "size": 1051100,
+      "dependencies": [],
+      "id": 46106
+    },
+    {
+      "name": "img_mv_slide_m0394-mv-01_013",
+      "objectName": "Ffkc4i",
+      "url": "https://asset.game-hololive-dreams.com/Ffkc4i",
+      "md5": "41e280c07b080a5460189d445548d4c2",
+      "size": 1101246,
+      "dependencies": [],
+      "id": 46107
+    },
+    {
+      "name": "img_mv_slide_m0394-mv-01_014",
+      "objectName": "4BGolB",
+      "url": "https://asset.game-hololive-dreams.com/4BGolB",
+      "md5": "7eb5bd1f329a3f9d0f546c541a34f98f",
+      "size": 1125377,
+      "dependencies": [],
+      "id": 46108
+    },
+    {
+      "name": "img_mv_slide_m0394-mv-01_015",
+      "objectName": "1TI1Wh",
+      "url": "https://asset.game-hololive-dreams.com/1TI1Wh",
+      "md5": "c6e4285444ba5bf953010b35e236ae12",
+      "size": 1048590,
+      "dependencies": [],
+      "id": 46109
+    },
+    {
+      "name": "img_mv_slide_m0394-mv-01_016",
+      "objectName": "zXGFdZ",
+      "url": "https://asset.game-hololive-dreams.com/zXGFdZ",
+      "md5": "74a760d9be16bc836e3455329d7c2a0d",
+      "size": 1039662,
+      "dependencies": [],
+      "id": 46110
+    },
+    {
+      "name": "img_mv_slide_m0394-mv-01_017",
+      "objectName": "f07FnC",
+      "url": "https://asset.game-hololive-dreams.com/f07FnC",
+      "md5": "77766914b81086c1a954898b5d913da8",
+      "size": 1108057,
+      "dependencies": [],
+      "id": 46111
+    },
+    {
+      "name": "img_mv_slide_m0394-mv-01_018",
+      "objectName": "SzFAt7",
+      "url": "https://asset.game-hololive-dreams.com/SzFAt7",
+      "md5": "7149a3137c417cc734cd4b632f57e1f6",
+      "size": 538314,
+      "dependencies": [],
+      "id": 46112
+    },
+    {
+      "name": "img_mv_slide_m0394-mv-01_019",
+      "objectName": "hKyDNK",
+      "url": "https://asset.game-hololive-dreams.com/hKyDNK",
+      "md5": "e7ea408f79e5f0e0fb4547a4f14b8171",
+      "size": 1089773,
+      "dependencies": [],
+      "id": 46113
+    },
+    {
+      "name": "img_mv_slide_m0394-mv-01_020",
+      "objectName": "n096l2",
+      "url": "https://asset.game-hololive-dreams.com/n096l2",
+      "md5": "36e05f5da370c1729cad99c805921dca",
+      "size": 918702,
+      "dependencies": [],
+      "id": 46114
+    },
+    {
+      "name": "img_mv_slide_m0528-mv-01_001",
+      "objectName": "ihjIuA",
+      "url": "https://asset.game-hololive-dreams.com/ihjIuA",
+      "md5": "a585f617a1d7f19eda446583902c56ce",
+      "size": 570107,
+      "dependencies": [],
+      "id": 46135
+    },
+    {
+      "name": "img_mv_slide_m0528-mv-01_002",
+      "objectName": "RYWRoM",
+      "url": "https://asset.game-hololive-dreams.com/RYWRoM",
+      "md5": "5276969b235c796346f4aefa9da11b02",
+      "size": 399315,
+      "dependencies": [],
+      "id": 46136
+    },
+    {
+      "name": "img_mv_slide_m0528-mv-01_003",
+      "objectName": "ioPy4y",
+      "url": "https://asset.game-hololive-dreams.com/ioPy4y",
+      "md5": "15e9da8c9cc7dee255b543ff86075bc9",
+      "size": 665083,
+      "dependencies": [],
+      "id": 46137
+    },
+    {
+      "name": "img_mv_slide_m0528-mv-01_004",
+      "objectName": "xuk8a1",
+      "url": "https://asset.game-hololive-dreams.com/xuk8a1",
+      "md5": "34b8126d1db3477aea5d862ff2567cff",
+      "size": 574726,
+      "dependencies": [],
+      "id": 46138
+    },
+    {
+      "name": "img_mv_slide_m0528-mv-01_005",
+      "objectName": "NE9UM0",
+      "url": "https://asset.game-hololive-dreams.com/NE9UM0",
+      "md5": "dbc2cddab7cff4ef1fd8c5f9f492884e",
+      "size": 442693,
+      "dependencies": [],
+      "id": 46139
+    },
+    {
+      "name": "img_mv_slide_m0528-mv-01_006",
+      "objectName": "SU25Lp",
+      "url": "https://asset.game-hololive-dreams.com/SU25Lp",
+      "md5": "630532956e8ede3a81a5663db40eb1ae",
+      "size": 856768,
+      "dependencies": [],
+      "id": 46140
+    },
+    {
+      "name": "img_mv_slide_m0528-mv-01_007",
+      "objectName": "rvUNBw",
+      "url": "https://asset.game-hololive-dreams.com/rvUNBw",
+      "md5": "4e7ed827630e11659221820bc9c04def",
+      "size": 890175,
+      "dependencies": [],
+      "id": 46141
+    },
+    {
+      "name": "img_mv_slide_m0528-mv-01_008",
+      "objectName": "vteBjF",
+      "url": "https://asset.game-hololive-dreams.com/vteBjF",
+      "md5": "8ffd10e30313cacd01ba7865bb5ee090",
+      "size": 890017,
+      "dependencies": [],
+      "id": 46142
+    },
+    {
+      "name": "img_mv_slide_m0528-mv-01_009",
+      "objectName": "MgdhyW",
+      "url": "https://asset.game-hololive-dreams.com/MgdhyW",
+      "md5": "d4cf87db52c58f20b5e386d8a1471ede",
+      "size": 909511,
+      "dependencies": [],
+      "id": 46143
+    },
+    {
+      "name": "img_mv_slide_m0528-mv-01_010",
+      "objectName": "StuzyQ",
+      "url": "https://asset.game-hololive-dreams.com/StuzyQ",
+      "md5": "8579a01b05823e8c49b6443760513992",
+      "size": 847188,
+      "dependencies": [],
+      "id": 46144
+    },
+    {
+      "name": "img_mv_slide_m0528-mv-01_011",
+      "objectName": "SkaxOX",
+      "url": "https://asset.game-hololive-dreams.com/SkaxOX",
+      "md5": "674164d2539dee3e76ff8b4bf4ba6afb",
+      "size": 592596,
+      "dependencies": [],
+      "id": 46145
+    },
+    {
+      "name": "img_mv_slide_m0528-mv-01_012",
+      "objectName": "VeXzpZ",
+      "url": "https://asset.game-hololive-dreams.com/VeXzpZ",
+      "md5": "6c70cf2906a714afe826c76657559eb3",
+      "size": 746034,
+      "dependencies": [],
+      "id": 46146
+    },
+    {
+      "name": "img_mv_slide_m0528-mv-01_013",
+      "objectName": "Ty0cTB",
+      "url": "https://asset.game-hololive-dreams.com/Ty0cTB",
+      "md5": "4bfc5645d8aba1c9a1c702181f92b675",
+      "size": 712637,
+      "dependencies": [],
+      "id": 46147
+    },
+    {
+      "name": "img_mv_slide_m0528-mv-01_014",
+      "objectName": "ITXq9a",
+      "url": "https://asset.game-hololive-dreams.com/ITXq9a",
+      "md5": "f9aad8f9fab37e46b6e9d5220c1a915f",
+      "size": 767721,
+      "dependencies": [],
+      "id": 46148
+    },
+    {
+      "name": "img_mv_slide_m0528-mv-01_015",
+      "objectName": "TfJwV4",
+      "url": "https://asset.game-hololive-dreams.com/TfJwV4",
+      "md5": "5f0414a66db8885b093d7177304429d2",
+      "size": 777760,
+      "dependencies": [],
+      "id": 46149
+    },
+    {
+      "name": "img_mv_slide_m0528-mv-01_016",
+      "objectName": "wtbOAW",
+      "url": "https://asset.game-hololive-dreams.com/wtbOAW",
+      "md5": "b0b5bca487015ebc82a2f67fef6d1228",
+      "size": 832400,
+      "dependencies": [],
+      "id": 46150
+    },
+    {
+      "name": "img_mv_slide_m0528-mv-01_017",
+      "objectName": "aMp82W",
+      "url": "https://asset.game-hololive-dreams.com/aMp82W",
+      "md5": "541b103e03d0eb6d49c26fbf331da271",
+      "size": 898096,
+      "dependencies": [],
+      "id": 46151
+    },
+    {
+      "name": "img_mv_slide_m0528-mv-01_018",
+      "objectName": "3WFszB",
+      "url": "https://asset.game-hololive-dreams.com/3WFszB",
+      "md5": "6e9e3abe3f3bd3e357d4c8bc7cf83788",
+      "size": 971644,
+      "dependencies": [],
+      "id": 46152
+    },
+    {
+      "name": "img_mv_slide_m0528-mv-01_019",
+      "objectName": "Ad6Zp2",
+      "url": "https://asset.game-hololive-dreams.com/Ad6Zp2",
+      "md5": "224f4959cad555a106b78d841a7b9ff0",
+      "size": 642336,
+      "dependencies": [],
+      "id": 46153
+    },
+    {
+      "name": "img_mv_slide_m0528-mv-01_020",
+      "objectName": "XrDt22",
+      "url": "https://asset.game-hololive-dreams.com/XrDt22",
+      "md5": "26028c0f35042ebc6c0fe821be010e9d",
+      "size": 67926,
+      "dependencies": [],
+      "id": 46154
+    },
+    {
+      "name": "img_mv_slide_m0550-mv-01_001",
+      "objectName": "S0gp5M",
+      "url": "https://asset.game-hololive-dreams.com/S0gp5M",
+      "md5": "5ebad737822dd4baffe6ab64b7be1e55",
+      "size": 796546,
+      "dependencies": [],
+      "id": 46155
+    },
+    {
+      "name": "img_mv_slide_m0550-mv-01_002",
+      "objectName": "vyFelM",
+      "url": "https://asset.game-hololive-dreams.com/vyFelM",
+      "md5": "b454108fc52f685e6a2f688e4b082e63",
+      "size": 637590,
+      "dependencies": [],
+      "id": 46156
+    },
+    {
+      "name": "img_mv_slide_m0550-mv-01_003",
+      "objectName": "WGLWBB",
+      "url": "https://asset.game-hololive-dreams.com/WGLWBB",
+      "md5": "94a6a0457fab2b6ee66ed1b4a98fd83e",
+      "size": 980677,
+      "dependencies": [],
+      "id": 46157
+    },
+    {
+      "name": "img_mv_slide_m0550-mv-01_004",
+      "objectName": "dS2v90",
+      "url": "https://asset.game-hololive-dreams.com/dS2v90",
+      "md5": "b82b8c9e4dc4aa1d374f2f9bd17af01c",
+      "size": 1009664,
+      "dependencies": [],
+      "id": 46158
+    },
+    {
+      "name": "img_mv_slide_m0550-mv-01_005",
+      "objectName": "RrSQzl",
+      "url": "https://asset.game-hololive-dreams.com/RrSQzl",
+      "md5": "2179316538a83d05cb13dccdaa97c05c",
+      "size": 1062689,
+      "dependencies": [],
+      "id": 46159
+    },
+    {
+      "name": "img_mv_slide_m0550-mv-01_006",
+      "objectName": "tbtL1Y",
+      "url": "https://asset.game-hololive-dreams.com/tbtL1Y",
+      "md5": "c829a886b3c55a4e718d834dc6aeec10",
+      "size": 1045270,
+      "dependencies": [],
+      "id": 46160
+    },
+    {
+      "name": "img_mv_slide_m0550-mv-01_007",
+      "objectName": "2zhZ8I",
+      "url": "https://asset.game-hololive-dreams.com/2zhZ8I",
+      "md5": "a8ddfbe135e9d3bf540b4ab988ca33c9",
+      "size": 808382,
+      "dependencies": [],
+      "id": 46161
+    },
+    {
+      "name": "img_mv_slide_m0550-mv-01_008",
+      "objectName": "FsanzD",
+      "url": "https://asset.game-hololive-dreams.com/FsanzD",
+      "md5": "ef1283bd2bb34b0a23e7834c27ac4174",
+      "size": 689630,
+      "dependencies": [],
+      "id": 46162
+    },
+    {
+      "name": "img_mv_slide_m0550-mv-01_009",
+      "objectName": "ryTKbR",
+      "url": "https://asset.game-hololive-dreams.com/ryTKbR",
+      "md5": "542436874193f2f4d4b7327a5625c8b7",
+      "size": 860925,
+      "dependencies": [],
+      "id": 46163
+    },
+    {
+      "name": "img_mv_slide_m0550-mv-01_010",
+      "objectName": "iaZacY",
+      "url": "https://asset.game-hololive-dreams.com/iaZacY",
+      "md5": "9a5a7310dec99fbfbda2b1dff65c5254",
+      "size": 1102167,
+      "dependencies": [],
+      "id": 46164
+    },
+    {
+      "name": "img_mv_slide_m0550-mv-01_011",
+      "objectName": "0ENcRT",
+      "url": "https://asset.game-hololive-dreams.com/0ENcRT",
+      "md5": "b438a5475cc1341a9bed0cd6b8de5684",
+      "size": 1098802,
+      "dependencies": [],
+      "id": 46165
+    },
+    {
+      "name": "img_mv_slide_m0550-mv-01_012",
+      "objectName": "5A7kEu",
+      "url": "https://asset.game-hololive-dreams.com/5A7kEu",
+      "md5": "f24e7c1349fa3ad3b7b8d7d43c7aa8f1",
+      "size": 1018735,
+      "dependencies": [],
+      "id": 46166
+    },
+    {
+      "name": "img_mv_slide_m0550-mv-01_013",
+      "objectName": "YBZKBP",
+      "url": "https://asset.game-hololive-dreams.com/YBZKBP",
+      "md5": "36712455db8be698c61da33bb4d98d4b",
+      "size": 683726,
+      "dependencies": [],
+      "id": 46167
+    },
+    {
+      "name": "img_mv_slide_m0550-mv-01_014",
+      "objectName": "ZLsWm8",
+      "url": "https://asset.game-hololive-dreams.com/ZLsWm8",
+      "md5": "3e5f6d964610060aa22a9c238bed49e1",
+      "size": 1014429,
+      "dependencies": [],
+      "id": 46168
+    },
+    {
+      "name": "img_mv_slide_m0550-mv-01_015",
+      "objectName": "BJUrDN",
+      "url": "https://asset.game-hololive-dreams.com/BJUrDN",
+      "md5": "df8d3a127a0b36acbfec97f77f5e4075",
+      "size": 901589,
+      "dependencies": [],
+      "id": 46169
+    },
+    {
+      "name": "img_mv_slide_m0550-mv-01_016",
+      "objectName": "0p0mbc",
+      "url": "https://asset.game-hololive-dreams.com/0p0mbc",
+      "md5": "355d3028c8b9a4a2cb46ff990b18fa50",
+      "size": 605699,
+      "dependencies": [],
+      "id": 46170
+    },
+    {
+      "name": "img_mv_slide_m0550-mv-01_017",
+      "objectName": "NkmDtc",
+      "url": "https://asset.game-hololive-dreams.com/NkmDtc",
+      "md5": "f113f460b2f3bda1e170d8fd3a031ad9",
+      "size": 1038711,
+      "dependencies": [],
+      "id": 46171
+    },
+    {
+      "name": "img_mv_slide_m0550-mv-01_018",
+      "objectName": "PDH0na",
+      "url": "https://asset.game-hololive-dreams.com/PDH0na",
+      "md5": "adc4f25ef41b093d6c4d96d100524e63",
+      "size": 858527,
+      "dependencies": [],
+      "id": 46172
+    },
+    {
+      "name": "img_mv_slide_m0550-mv-01_019",
+      "objectName": "DbkV2C",
+      "url": "https://asset.game-hololive-dreams.com/DbkV2C",
+      "md5": "f1e138ca284eb51781d0116de9bf4cfd",
+      "size": 947869,
+      "dependencies": [],
+      "id": 46173
+    },
+    {
+      "name": "img_mv_slide_m0550-mv-01_020",
+      "objectName": "Z2oCEm",
+      "url": "https://asset.game-hololive-dreams.com/Z2oCEm",
+      "md5": "566aa523649956846f8dad5d142dce23",
+      "size": 612829,
+      "dependencies": [],
+      "id": 46174
+    },
+    {
+      "name": "img_mv_thumb_m0394-mv-01",
+      "objectName": "UvKAiP",
+      "url": "https://asset.game-hololive-dreams.com/UvKAiP",
+      "md5": "2ba2ecd88c1c2ff5c5ef66afcb0ca5c2",
+      "size": 289374,
+      "dependencies": [],
+      "id": 46196
+    },
+    {
+      "name": "img_mv_thumb_m0528-mv-01",
+      "objectName": "PGeKtC",
+      "url": "https://asset.game-hololive-dreams.com/PGeKtC",
+      "md5": "d3c573367638cadabbe4f9bd7b76b3fe",
+      "size": 188900,
+      "dependencies": [],
+      "id": 46198
+    },
+    {
+      "name": "img_mv_thumb_m0550-mv-01",
+      "objectName": "yfQTVK",
+      "url": "https://asset.game-hololive-dreams.com/yfQTVK",
+      "md5": "5bad301433bdeda0331334a0ea33e6cf",
+      "size": 286500,
+      "dependencies": [],
+      "id": 46199
+    },
+    {
+      "name": "img_banner_full_gacha-pickup-261106_lang-chs",
+      "objectName": "WjBcZ3",
+      "url": "https://asset.game-hololive-dreams.com/WjBcZ3",
+      "md5": "371a46d2f941aef082f5836387617c74",
+      "size": 1125682,
+      "dependencies": [],
+      "id": 45934
+    },
+    {
+      "name": "img_banner_full_gacha-pickup-261106_lang-cht",
+      "objectName": "Bcgo86",
+      "url": "https://asset.game-hololive-dreams.com/Bcgo86",
+      "md5": "028346b5f7a40f2fe26edc4392a5450a",
+      "size": 1127381,
+      "dependencies": [],
+      "id": 45935
+    },
+    {
+      "name": "img_banner_full_gacha-pickup-261106_lang-eng",
+      "objectName": "maAQdr",
+      "url": "https://asset.game-hololive-dreams.com/maAQdr",
+      "md5": "d104b1b18f6e4e9377a80ea85bebe24d",
+      "size": 1119269,
+      "dependencies": [],
+      "id": 45936
+    },
+    {
+      "name": "img_banner_full_gacha-pickup-261106_lang-ind",
+      "objectName": "HRoeLw",
+      "url": "https://asset.game-hololive-dreams.com/HRoeLw",
+      "md5": "2c2af57781294afb05b5346c3badd7ec",
+      "size": 1101302,
+      "dependencies": [],
+      "id": 45937
+    },
+    {
+      "name": "img_banner_full_gacha-pickup-261106_lang-kor",
+      "objectName": "086rOG",
+      "url": "https://asset.game-hololive-dreams.com/086rOG",
+      "md5": "feb7fd07fe55c7525af446e1312e2a27",
+      "size": 1121637,
+      "dependencies": [],
+      "id": 45938
+    },
+    {
+      "name": "img_banner_full_marathon_event-normal-009_lang-chs",
+      "objectName": "ywOKIL",
+      "url": "https://asset.game-hololive-dreams.com/ywOKIL",
+      "md5": "388427ae81f8ee10ac561eefdf531d8c",
+      "size": 1103558,
+      "dependencies": [],
+      "id": 45940
+    },
+    {
+      "name": "img_banner_full_marathon_event-normal-009_lang-cht",
+      "objectName": "XF1gPA",
+      "url": "https://asset.game-hololive-dreams.com/XF1gPA",
+      "md5": "dd672a3b996ea9168c2fd05b112ab994",
+      "size": 1102171,
+      "dependencies": [],
+      "id": 45941
+    },
+    {
+      "name": "img_banner_full_marathon_event-normal-009_lang-eng",
+      "objectName": "9goYDq",
+      "url": "https://asset.game-hololive-dreams.com/9goYDq",
+      "md5": "3b380fa02200c120d1b1612521d67d26",
+      "size": 1102119,
+      "dependencies": [],
+      "id": 45942
+    },
+    {
+      "name": "img_banner_full_marathon_event-normal-009_lang-ind",
+      "objectName": "eWxf7B",
+      "url": "https://asset.game-hololive-dreams.com/eWxf7B",
+      "md5": "34f0c4cde65e20bd05e524815cfc8c5e",
+      "size": 1105731,
+      "dependencies": [],
+      "id": 45943
+    },
+    {
+      "name": "img_banner_full_marathon_event-normal-009_lang-kor",
+      "objectName": "2jUx1l",
+      "url": "https://asset.game-hololive-dreams.com/2jUx1l",
+      "md5": "0c6a298eae163153c89b700d87c9be29",
+      "size": 1099186,
+      "dependencies": [],
+      "id": 45944
+    },
+    {
+      "name": "img_emb_m_event-emblem-total_music_highest_score_reward-marathon_event-normal-009-chapter-01-bronze_lang-chs",
+      "objectName": "iXsjHX",
+      "url": "https://asset.game-hololive-dreams.com/iXsjHX",
+      "md5": "96276249e7795ba7f29452ee05b7e930",
+      "size": 212015,
+      "dependencies": [],
+      "id": 45973
+    },
+    {
+      "name": "img_emb_m_event-emblem-total_music_highest_score_reward-marathon_event-normal-009-chapter-01-bronze_lang-cht",
+      "objectName": "7KOFcW",
+      "url": "https://asset.game-hololive-dreams.com/7KOFcW",
+      "md5": "20967fc71fd097595de45dfd3debc3e9",
+      "size": 210324,
+      "dependencies": [],
+      "id": 45974
+    },
+    {
+      "name": "img_emb_m_event-emblem-total_music_highest_score_reward-marathon_event-normal-009-chapter-01-bronze_lang-eng",
+      "objectName": "Hr7l5J",
+      "url": "https://asset.game-hololive-dreams.com/Hr7l5J",
+      "md5": "f9a154cca2cff78fbb78231100ebaec0",
+      "size": 207433,
+      "dependencies": [],
+      "id": 45975
+    },
+    {
+      "name": "img_emb_m_event-emblem-total_music_highest_score_reward-marathon_event-normal-009-chapter-01-bronze_lang-ind",
+      "objectName": "wQ0C2t",
+      "url": "https://asset.game-hololive-dreams.com/wQ0C2t",
+      "md5": "942a2874cd712f6e049954f1f40d1559",
+      "size": 212382,
+      "dependencies": [],
+      "id": 45976
+    },
+    {
+      "name": "img_emb_m_event-emblem-total_music_highest_score_reward-marathon_event-normal-009-chapter-01-bronze_lang-kor",
+      "objectName": "TaIFfo",
+      "url": "https://asset.game-hololive-dreams.com/TaIFfo",
+      "md5": "a161ec3a171e0fc864938ad45b84eb37",
+      "size": 206975,
+      "dependencies": [],
+      "id": 45977
+    },
+    {
+      "name": "img_emb_m_event-emblem-total_music_highest_score_reward-marathon_event-normal-009-chapter-01-diamond_lang-chs",
+      "objectName": "BWYhdO",
+      "url": "https://asset.game-hololive-dreams.com/BWYhdO",
+      "md5": "69c26deacdc314f65b5ad2174098e199",
+      "size": 246583,
+      "dependencies": [],
+      "id": 45979
+    },
+    {
+      "name": "img_emb_m_event-emblem-total_music_highest_score_reward-marathon_event-normal-009-chapter-01-diamond_lang-cht",
+      "objectName": "omXjop",
+      "url": "https://asset.game-hololive-dreams.com/omXjop",
+      "md5": "d1a162af1b23b6e026ef28aeb9a3327b",
+      "size": 246092,
+      "dependencies": [],
+      "id": 45980
+    },
+    {
+      "name": "img_emb_m_event-emblem-total_music_highest_score_reward-marathon_event-normal-009-chapter-01-diamond_lang-eng",
+      "objectName": "rimjfp",
+      "url": "https://asset.game-hololive-dreams.com/rimjfp",
+      "md5": "6b8fd796e3c2423110bcb30e4cab6ad2",
+      "size": 243027,
+      "dependencies": [],
+      "id": 45981
+    },
+    {
+      "name": "img_emb_m_event-emblem-total_music_highest_score_reward-marathon_event-normal-009-chapter-01-diamond_lang-ind",
+      "objectName": "QxXyoa",
+      "url": "https://asset.game-hololive-dreams.com/QxXyoa",
+      "md5": "cfbc3c23b4322a86d519c4ceeba2d80a",
+      "size": 246953,
+      "dependencies": [],
+      "id": 45982
+    },
+    {
+      "name": "img_emb_m_event-emblem-total_music_highest_score_reward-marathon_event-normal-009-chapter-01-diamond_lang-kor",
+      "objectName": "mu7ULq",
+      "url": "https://asset.game-hololive-dreams.com/mu7ULq",
+      "md5": "b67b3c4123dcb039b2d025ef76906838",
+      "size": 242080,
+      "dependencies": [],
+      "id": 45983
+    },
+    {
+      "name": "img_emb_m_event-emblem-total_music_highest_score_reward-marathon_event-normal-009-chapter-01-dream_lang-chs",
+      "objectName": "g3edll",
+      "url": "https://asset.game-hololive-dreams.com/g3edll",
+      "md5": "e3822a2e9122206383809903152fdc7d",
+      "size": 268047,
+      "dependencies": [],
+      "id": 45985
+    },
+    {
+      "name": "img_emb_m_event-emblem-total_music_highest_score_reward-marathon_event-normal-009-chapter-01-dream_lang-cht",
+      "objectName": "irhKQM",
+      "url": "https://asset.game-hololive-dreams.com/irhKQM",
+      "md5": "3c511c113fa264537aeb9cbf65c7492f",
+      "size": 267361,
+      "dependencies": [],
+      "id": 45986
+    },
+    {
+      "name": "img_emb_m_event-emblem-total_music_highest_score_reward-marathon_event-normal-009-chapter-01-dream_lang-eng",
+      "objectName": "nCzOUw",
+      "url": "https://asset.game-hololive-dreams.com/nCzOUw",
+      "md5": "1e18bd37d70cd9345acabd60922f3c0e",
+      "size": 264267,
+      "dependencies": [],
+      "id": 45987
+    },
+    {
+      "name": "img_emb_m_event-emblem-total_music_highest_score_reward-marathon_event-normal-009-chapter-01-dream_lang-ind",
+      "objectName": "pNzMEJ",
+      "url": "https://asset.game-hololive-dreams.com/pNzMEJ",
+      "md5": "0928751cb44e3cd0685af8c7c0757995",
+      "size": 268254,
+      "dependencies": [],
+      "id": 45988
+    },
+    {
+      "name": "img_emb_m_event-emblem-total_music_highest_score_reward-marathon_event-normal-009-chapter-01-dream_lang-kor",
+      "objectName": "xbx3iX",
+      "url": "https://asset.game-hololive-dreams.com/xbx3iX",
+      "md5": "7bade9856372a0ce02ba3bb1d1e1a0fd",
+      "size": 263479,
+      "dependencies": [],
+      "id": 45989
+    },
+    {
+      "name": "img_emb_m_event-emblem-total_music_highest_score_reward-marathon_event-normal-009-chapter-01-gold_lang-chs",
+      "objectName": "ambLa8",
+      "url": "https://asset.game-hololive-dreams.com/ambLa8",
+      "md5": "0bb93e6b822bfd5932256294131fc92b",
+      "size": 222264,
+      "dependencies": [],
+      "id": 45991
+    },
+    {
+      "name": "img_emb_m_event-emblem-total_music_highest_score_reward-marathon_event-normal-009-chapter-01-gold_lang-cht",
+      "objectName": "nj1inb",
+      "url": "https://asset.game-hololive-dreams.com/nj1inb",
+      "md5": "f955a933ccaaf842f51676a89f933519",
+      "size": 220963,
+      "dependencies": [],
+      "id": 45992
+    },
+    {
+      "name": "img_emb_m_event-emblem-total_music_highest_score_reward-marathon_event-normal-009-chapter-01-gold_lang-eng",
+      "objectName": "LWegnh",
+      "url": "https://asset.game-hololive-dreams.com/LWegnh",
+      "md5": "394771080f8a81788648b6512a9b3ce4",
+      "size": 217991,
+      "dependencies": [],
+      "id": 45993
+    },
+    {
+      "name": "img_emb_m_event-emblem-total_music_highest_score_reward-marathon_event-normal-009-chapter-01-gold_lang-ind",
+      "objectName": "JvKpGP",
+      "url": "https://asset.game-hololive-dreams.com/JvKpGP",
+      "md5": "d6025ce9ba6de68fd4fd0a2a6b58ffa6",
+      "size": 223150,
+      "dependencies": [],
+      "id": 45994
+    },
+    {
+      "name": "img_emb_m_event-emblem-total_music_highest_score_reward-marathon_event-normal-009-chapter-01-gold_lang-kor",
+      "objectName": "c70Q2N",
+      "url": "https://asset.game-hololive-dreams.com/c70Q2N",
+      "md5": "a90cc9eb9bf1119ce5441cdb4105d2b5",
+      "size": 217601,
+      "dependencies": [],
+      "id": 45995
+    },
+    {
+      "name": "img_emb_m_event-emblem-total_music_highest_score_reward-marathon_event-normal-009-chapter-01-platinum_lang-chs",
+      "objectName": "SU0bWx",
+      "url": "https://asset.game-hololive-dreams.com/SU0bWx",
+      "md5": "aa9bc91f808720f302aa45d77662488a",
+      "size": 223213,
+      "dependencies": [],
+      "id": 45997
+    },
+    {
+      "name": "img_emb_m_event-emblem-total_music_highest_score_reward-marathon_event-normal-009-chapter-01-platinum_lang-cht",
+      "objectName": "P0pqWJ",
+      "url": "https://asset.game-hololive-dreams.com/P0pqWJ",
+      "md5": "b76f766f92ad4eab79c8de952763bfbd",
+      "size": 221686,
+      "dependencies": [],
+      "id": 45998
+    },
+    {
+      "name": "img_emb_m_event-emblem-total_music_highest_score_reward-marathon_event-normal-009-chapter-01-platinum_lang-eng",
+      "objectName": "xBEZ1E",
+      "url": "https://asset.game-hololive-dreams.com/xBEZ1E",
+      "md5": "3ed5d80ff9dcde60b0360426dcef65f8",
+      "size": 218568,
+      "dependencies": [],
+      "id": 45999
+    },
+    {
+      "name": "img_emb_m_event-emblem-total_music_highest_score_reward-marathon_event-normal-009-chapter-01-platinum_lang-ind",
+      "objectName": "5UqKlE",
+      "url": "https://asset.game-hololive-dreams.com/5UqKlE",
+      "md5": "29ddf1efda89a1796bd669f371db22ce",
+      "size": 223339,
+      "dependencies": [],
+      "id": 46000
+    },
+    {
+      "name": "img_emb_m_event-emblem-total_music_highest_score_reward-marathon_event-normal-009-chapter-01-platinum_lang-kor",
+      "objectName": "eWTEZS",
+      "url": "https://asset.game-hololive-dreams.com/eWTEZS",
+      "md5": "2a7de4dc0e671118b2e0208774d84f88",
+      "size": 217687,
+      "dependencies": [],
+      "id": 46001
+    },
+    {
+      "name": "img_emb_m_event-emblem-total_music_highest_score_reward-marathon_event-normal-009-chapter-01-silver_lang-chs",
+      "objectName": "xV3hjr",
+      "url": "https://asset.game-hololive-dreams.com/xV3hjr",
+      "md5": "d037a4f874a71e7b2241864a39e71755",
+      "size": 217445,
+      "dependencies": [],
+      "id": 46003
+    },
+    {
+      "name": "img_emb_m_event-emblem-total_music_highest_score_reward-marathon_event-normal-009-chapter-01-silver_lang-cht",
+      "objectName": "6bZVzg",
+      "url": "https://asset.game-hololive-dreams.com/6bZVzg",
+      "md5": "108f7c772fdaa7f33426084ab6cc5b04",
+      "size": 216073,
+      "dependencies": [],
+      "id": 46004
+    },
+    {
+      "name": "img_emb_m_event-emblem-total_music_highest_score_reward-marathon_event-normal-009-chapter-01-silver_lang-eng",
+      "objectName": "llY93O",
+      "url": "https://asset.game-hololive-dreams.com/llY93O",
+      "md5": "0010fa6af3ee85379314251352e1d3ea",
+      "size": 213316,
+      "dependencies": [],
+      "id": 46005
+    },
+    {
+      "name": "img_emb_m_event-emblem-total_music_highest_score_reward-marathon_event-normal-009-chapter-01-silver_lang-ind",
+      "objectName": "fAVACV",
+      "url": "https://asset.game-hololive-dreams.com/fAVACV",
+      "md5": "abddeaf2191baa72d15c3cb0ecca299e",
+      "size": 217731,
+      "dependencies": [],
+      "id": 46006
+    },
+    {
+      "name": "img_emb_m_event-emblem-total_music_highest_score_reward-marathon_event-normal-009-chapter-01-silver_lang-kor",
+      "objectName": "h0mb0d",
+      "url": "https://asset.game-hololive-dreams.com/h0mb0d",
+      "md5": "64807397d91fd6ccd1ca491cff84255d",
+      "size": 212374,
+      "dependencies": [],
+      "id": 46007
+    },
+    {
+      "name": "img_gacha_group_icon_pickup-normal-261106_lang-chs",
+      "objectName": "4Af85J",
+      "url": "https://asset.game-hololive-dreams.com/4Af85J",
+      "md5": "7ef3d9c4bfd659f8f0ce19f216fc4b93",
+      "size": 19875,
+      "dependencies": [],
+      "id": 46033
+    },
+    {
+      "name": "img_gacha_group_icon_pickup-normal-261106_lang-cht",
+      "objectName": "5OkJZj",
+      "url": "https://asset.game-hololive-dreams.com/5OkJZj",
+      "md5": "9f2e45b43da90c741fae2656c7aea91e",
+      "size": 19769,
+      "dependencies": [],
+      "id": 46034
+    },
+    {
+      "name": "img_gacha_group_icon_pickup-normal-261106_lang-eng",
+      "objectName": "UWbL2F",
+      "url": "https://asset.game-hololive-dreams.com/UWbL2F",
+      "md5": "034c0fec138af63360d987c2e17a521b",
+      "size": 20097,
+      "dependencies": [],
+      "id": 46035
+    },
+    {
+      "name": "img_gacha_group_icon_pickup-normal-261106_lang-ind",
+      "objectName": "1H0zjx",
+      "url": "https://asset.game-hololive-dreams.com/1H0zjx",
+      "md5": "d9bab885831286781c03954187557204",
+      "size": 19858,
+      "dependencies": [],
+      "id": 46036
+    },
+    {
+      "name": "img_gacha_group_icon_pickup-normal-261106_lang-kor",
+      "objectName": "baS36g",
+      "url": "https://asset.game-hololive-dreams.com/baS36g",
+      "md5": "ce7b4bcfd25282469af72d794caf773d",
+      "size": 20015,
+      "dependencies": [],
+      "id": 46037
+    },
+    {
+      "name": "img_gacha_group_icon_pickup-select-261106_lang-chs",
+      "objectName": "QE43GI",
+      "url": "https://asset.game-hololive-dreams.com/QE43GI",
+      "md5": "2a80b26cf9c1f29c55a739d4a8f47d6c",
+      "size": 20819,
+      "dependencies": [],
+      "id": 46039
+    },
+    {
+      "name": "img_gacha_group_icon_pickup-select-261106_lang-cht",
+      "objectName": "pHFJdi",
+      "url": "https://asset.game-hololive-dreams.com/pHFJdi",
+      "md5": "20083839fe9e7eafb0500c12b3352542",
+      "size": 20716,
+      "dependencies": [],
+      "id": 46040
+    },
+    {
+      "name": "img_gacha_group_icon_pickup-select-261106_lang-eng",
+      "objectName": "YouPa8",
+      "url": "https://asset.game-hololive-dreams.com/YouPa8",
+      "md5": "997daf00b4bee14e9f35502fbc622cc3",
+      "size": 18182,
+      "dependencies": [],
+      "id": 46041
+    },
+    {
+      "name": "img_gacha_group_icon_pickup-select-261106_lang-ind",
+      "objectName": "zz1py7",
+      "url": "https://asset.game-hololive-dreams.com/zz1py7",
+      "md5": "ee5df94d79469ca26e227c71c610a8d3",
+      "size": 19521,
+      "dependencies": [],
+      "id": 46042
+    },
+    {
+      "name": "img_gacha_group_icon_pickup-select-261106_lang-kor",
+      "objectName": "cQxsxL",
+      "url": "https://asset.game-hololive-dreams.com/cQxsxL",
+      "md5": "3a5bc6e1bb733ef506bca855b882683c",
+      "size": 20024,
+      "dependencies": [],
+      "id": 46043
+    },
+    {
+      "name": "img_gacha_logo_pickup-normal-261106_lang-chs",
+      "objectName": "un09qT",
+      "url": "https://asset.game-hololive-dreams.com/un09qT",
+      "md5": "a2fe961f7378149b245d86ca85faf4ca",
+      "size": 19880,
+      "dependencies": [],
+      "id": 46045
+    },
+    {
+      "name": "img_gacha_logo_pickup-normal-261106_lang-cht",
+      "objectName": "Hz1Tw1",
+      "url": "https://asset.game-hololive-dreams.com/Hz1Tw1",
+      "md5": "3a99e3bf3f22d21fd390df89ed59003d",
+      "size": 19776,
+      "dependencies": [],
+      "id": 46046
+    },
+    {
+      "name": "img_gacha_logo_pickup-normal-261106_lang-eng",
+      "objectName": "TNrSLy",
+      "url": "https://asset.game-hololive-dreams.com/TNrSLy",
+      "md5": "836cc6e74ea44a0de75a40144e5378e1",
+      "size": 20102,
+      "dependencies": [],
+      "id": 46047
+    },
+    {
+      "name": "img_gacha_logo_pickup-normal-261106_lang-ind",
+      "objectName": "Ow6G6e",
+      "url": "https://asset.game-hololive-dreams.com/Ow6G6e",
+      "md5": "8fa7911e8739ad73990ee61807590719",
+      "size": 19857,
+      "dependencies": [],
+      "id": 46048
+    },
+    {
+      "name": "img_gacha_logo_pickup-normal-261106_lang-kor",
+      "objectName": "fWCReB",
+      "url": "https://asset.game-hololive-dreams.com/fWCReB",
+      "md5": "b2903d4ba675f14fd1c9515b8893ddb3",
+      "size": 20012,
+      "dependencies": [],
+      "id": 46049
+    },
+    {
+      "name": "img_gacha_logo_pickup-select-261106_lang-chs",
+      "objectName": "3fDa4L",
+      "url": "https://asset.game-hololive-dreams.com/3fDa4L",
+      "md5": "fce2cdb7b45edb3611f712262151559e",
+      "size": 20805,
+      "dependencies": [],
+      "id": 46051
+    },
+    {
+      "name": "img_gacha_logo_pickup-select-261106_lang-cht",
+      "objectName": "M3FRWK",
+      "url": "https://asset.game-hololive-dreams.com/M3FRWK",
+      "md5": "67ef534f7ad1bc8f46063373aa9ff46f",
+      "size": 20714,
+      "dependencies": [],
+      "id": 46052
+    },
+    {
+      "name": "img_gacha_logo_pickup-select-261106_lang-eng",
+      "objectName": "bZkR5N",
+      "url": "https://asset.game-hololive-dreams.com/bZkR5N",
+      "md5": "c0ff76872653a80583f05187454d7983",
+      "size": 18165,
+      "dependencies": [],
+      "id": 46053
+    },
+    {
+      "name": "img_gacha_logo_pickup-select-261106_lang-ind",
+      "objectName": "xlpEqr",
+      "url": "https://asset.game-hololive-dreams.com/xlpEqr",
+      "md5": "5eff370f8295b63746435abe3f7394ba",
+      "size": 19524,
+      "dependencies": [],
+      "id": 46054
+    },
+    {
+      "name": "img_gacha_logo_pickup-select-261106_lang-kor",
+      "objectName": "g3LorM",
+      "url": "https://asset.game-hololive-dreams.com/g3LorM",
+      "md5": "2543e188c219b14a98e47192045a51c2",
+      "size": 20020,
+      "dependencies": [],
+      "id": 46055
+    },
+    {
+      "name": "img_marathon_event_normal_logo-009-01_lang-chs",
+      "objectName": "9uNaht",
+      "url": "https://asset.game-hololive-dreams.com/9uNaht",
+      "md5": "da48245800613a27a11fcedaf59a0cf7",
+      "size": 159752,
+      "dependencies": [],
+      "id": 46064
+    },
+    {
+      "name": "img_marathon_event_normal_logo-009-01_lang-cht",
+      "objectName": "CkFymL",
+      "url": "https://asset.game-hololive-dreams.com/CkFymL",
+      "md5": "daa021d4713956e59188a1413d692682",
+      "size": 159173,
+      "dependencies": [],
+      "id": 46065
+    },
+    {
+      "name": "img_marathon_event_normal_logo-009-01_lang-eng",
+      "objectName": "UUsJus",
+      "url": "https://asset.game-hololive-dreams.com/UUsJus",
+      "md5": "a7f470b6f34c50ae2b1e91e9114042c6",
+      "size": 152564,
+      "dependencies": [],
+      "id": 46066
+    },
+    {
+      "name": "img_marathon_event_normal_logo-009-01_lang-ind",
+      "objectName": "dzVBQQ",
+      "url": "https://asset.game-hololive-dreams.com/dzVBQQ",
+      "md5": "16494463da676c80dac41318a8b03f5e",
+      "size": 165046,
+      "dependencies": [],
+      "id": 46067
+    },
+    {
+      "name": "img_marathon_event_normal_logo-009-01_lang-kor",
+      "objectName": "Pzqr41",
+      "url": "https://asset.game-hololive-dreams.com/Pzqr41",
+      "md5": "b181da01e5b667264680fb0269a84558",
+      "size": 149046,
+      "dependencies": [],
+      "id": 46068
+    },
+    {
+      "name": "img_banner_full_birthday-chr-03007-261107_lang-chs",
+      "objectName": "zKVqTD",
+      "url": "https://asset.game-hololive-dreams.com/zKVqTD",
+      "md5": "f13d22f9fb185622b06a008bde260177",
+      "size": 898476,
+      "dependencies": [],
+      "id": 45928
+    },
+    {
+      "name": "img_banner_full_birthday-chr-03007-261107_lang-cht",
+      "objectName": "RDwXMe",
+      "url": "https://asset.game-hololive-dreams.com/RDwXMe",
+      "md5": "91d25040b2c54c36fe8265ccfa0c6902",
+      "size": 898470,
+      "dependencies": [],
+      "id": 45929
+    },
+    {
+      "name": "img_banner_full_birthday-chr-03007-261107_lang-eng",
+      "objectName": "kW0gG5",
+      "url": "https://asset.game-hololive-dreams.com/kW0gG5",
+      "md5": "b9cf4434a1e5b8028bcca49552e05c17",
+      "size": 898476,
+      "dependencies": [],
+      "id": 45930
+    },
+    {
+      "name": "img_banner_full_birthday-chr-03007-261107_lang-ind",
+      "objectName": "WGgj2w",
+      "url": "https://asset.game-hololive-dreams.com/WGgj2w",
+      "md5": "f7ccadd67784dc5a21bc175abc9298f3",
+      "size": 898475,
+      "dependencies": [],
+      "id": 45931
+    },
+    {
+      "name": "img_banner_full_birthday-chr-03007-261107_lang-kor",
+      "objectName": "UcEgKw",
+      "url": "https://asset.game-hololive-dreams.com/UcEgKw",
+      "md5": "408d3da5751e4fffdef2677e8b207659",
+      "size": 898475,
+      "dependencies": [],
+      "id": 45932
+    },
+    {
+      "name": "img_mv_thumb_m0068-mv-01",
+      "objectName": "6SlAyG",
+      "url": "https://asset.game-hololive-dreams.com/6SlAyG",
+      "md5": "544b64afdb65139b4a3f418ba98d6bc9",
+      "size": 295731,
+      "dependencies": [],
+      "id": 46195
+    },
+    {
+      "name": "ref_adv_chr_00017_01_01-01",
+      "objectName": "G2oPOO",
+      "url": "https://asset.game-hololive-dreams.com/G2oPOO",
+      "md5": "6c6bea7c9c16235ddc30a53ec1370d3f",
+      "size": 43849,
+      "dependencies": [
+        19888,
+        19889,
+        19896,
+        19900,
+        19902,
+        19905,
+        19907,
+        20139,
+        20141,
+        20213,
+        20219,
+        20222,
+        20224,
+        20228,
+        20422,
+        20456,
+        20925,
+        32192,
+        32306,
+        32307,
+        32367,
+        32368,
+        32429,
+        32430,
+        32491,
+        32492,
+        32554,
+        32616,
+        32676,
+        32783,
+        32844,
+        32845,
+        32968,
+        32969,
+        33018,
+        33060,
+        33063,
+        33192,
+        33193,
+        33194,
+        33196,
+        33200,
+        33203,
+        33207,
+        33210,
+        33211,
+        33212,
+        33213,
+        33214,
+        33215,
+        33223,
+        33224,
+        33225,
+        33227,
+        33230,
+        33249,
+        33256,
+        33260,
+        33261,
+        33262,
+        33263,
+        33264,
+        33265,
+        33266,
+        33267,
+        33269,
+        33271,
+        33272,
+        33273,
+        33277,
+        33279,
+        33288,
+        33289,
+        33290,
+        33292,
+        33294,
+        33297,
+        33308,
+        33312,
+        33315,
+        33319,
+        33320,
+        33323,
+        33334,
+        33336,
+        33345,
+        33346,
+        33348,
+        33351,
+        35425,
+        35684,
+        35686,
+        35690,
+        35691,
+        35692,
+        35693
+      ],
+      "id": 35053
     }
   ],
   "resources": [
@@ -504534,15 +507183,6 @@
       "id": 44226
     },
     {
-      "name": "chart_m0367_expert.sus",
-      "objectName": "hO9Tth",
-      "url": "https://asset.game-hololive-dreams.com/hO9Tth",
-      "md5": "b08b0b7914b3482ce8272cc3dd3d1c03",
-      "size": 28742,
-      "dependencies": [],
-      "id": 44227
-    },
-    {
       "name": "chart_m0367_hard.sus",
       "objectName": "DPS4Kz",
       "url": "https://asset.game-hololive-dreams.com/DPS4Kz",
@@ -506791,6 +509431,933 @@
       "size": 4292041,
       "dependencies": [],
       "id": 45796
+    },
+    {
+      "name": "chart_m0394_easy.sus",
+      "objectName": "9fPYOJ",
+      "url": "https://asset.game-hololive-dreams.com/9fPYOJ",
+      "md5": "5f6830e8db4eccd963c9a7d09d674ff5",
+      "size": 7641,
+      "dependencies": [],
+      "id": 45825
+    },
+    {
+      "name": "chart_m0394_expert.sus",
+      "objectName": "rf2z3V",
+      "url": "https://asset.game-hololive-dreams.com/rf2z3V",
+      "md5": "a652cad77d4a9a307c70163cf3f1a49a",
+      "size": 20221,
+      "dependencies": [],
+      "id": 45826
+    },
+    {
+      "name": "chart_m0394_hard.sus",
+      "objectName": "18H2fG",
+      "url": "https://asset.game-hololive-dreams.com/18H2fG",
+      "md5": "37e5d7953873383bfccc8813cab5f7ec",
+      "size": 15969,
+      "dependencies": [],
+      "id": 45827
+    },
+    {
+      "name": "chart_m0394_normal.sus",
+      "objectName": "9mJ5Jn",
+      "url": "https://asset.game-hololive-dreams.com/9mJ5Jn",
+      "md5": "550b506ec17eac713c4fa2903b72e6de",
+      "size": 9982,
+      "dependencies": [],
+      "id": 45828
+    },
+    {
+      "name": "chart_m0396_easy.sus",
+      "objectName": "VOsnVc",
+      "url": "https://asset.game-hololive-dreams.com/VOsnVc",
+      "md5": "89ff5de3e7d292b379cb09680de4889a",
+      "size": 8313,
+      "dependencies": [],
+      "id": 45829
+    },
+    {
+      "name": "chart_m0396_expert.sus",
+      "objectName": "QBwwwY",
+      "url": "https://asset.game-hololive-dreams.com/QBwwwY",
+      "md5": "e456cc28228847e6798c5815c7617700",
+      "size": 28671,
+      "dependencies": [],
+      "id": 45830
+    },
+    {
+      "name": "chart_m0396_hard.sus",
+      "objectName": "xyiEyI",
+      "url": "https://asset.game-hololive-dreams.com/xyiEyI",
+      "md5": "445882a2859ad035af48b2310adef954",
+      "size": 17747,
+      "dependencies": [],
+      "id": 45831
+    },
+    {
+      "name": "chart_m0396_normal.sus",
+      "objectName": "z75fkN",
+      "url": "https://asset.game-hololive-dreams.com/z75fkN",
+      "md5": "f75be52668ae2355e23b3d68e8ac067e",
+      "size": 10607,
+      "dependencies": [],
+      "id": 45832
+    },
+    {
+      "name": "music_short_m0396.acb",
+      "objectName": "bw6CvW",
+      "url": "https://asset.game-hololive-dreams.com/bw6CvW",
+      "md5": "434a6c47e0fd65f4f8993503ffd3ec85",
+      "size": 7209,
+      "dependencies": [],
+      "id": 45868
+    },
+    {
+      "name": "music_short_m0394.acb",
+      "objectName": "EcnBAd",
+      "url": "https://asset.game-hololive-dreams.com/EcnBAd",
+      "md5": "422fbe3e7a0b7cb321801e8ae019cd5d",
+      "size": 7209,
+      "dependencies": [],
+      "id": 45866
+    },
+    {
+      "name": "mov_card_full_0_03002-5-uniq-0113-00.usm",
+      "objectName": "lFKlp0",
+      "url": "https://asset.game-hololive-dreams.com/lFKlp0",
+      "md5": "fcddb4afd09fe6099653dcc03b0f7c3b",
+      "size": 3706857,
+      "dependencies": [],
+      "id": 45846
+    },
+    {
+      "name": "mov_card_full_1_03002-5-uniq-0113-00.usm",
+      "objectName": "GHpVfW",
+      "url": "https://asset.game-hololive-dreams.com/GHpVfW",
+      "md5": "23d86a04c7eb2b65b2ef7e3577895dce",
+      "size": 5006889,
+      "dependencies": [],
+      "id": 45849
+    },
+    {
+      "name": "mov_card_sign_03002-5-uniq-0113-00.usm",
+      "objectName": "H5C4a9",
+      "url": "https://asset.game-hololive-dreams.com/H5C4a9",
+      "md5": "a46581100523996d40d6c50dfbe45458",
+      "size": 5159273,
+      "dependencies": [],
+      "id": 45852
+    },
+    {
+      "name": "chart_m0367_expert.sus",
+      "objectName": "BtPxbR",
+      "url": "https://asset.game-hololive-dreams.com/BtPxbR",
+      "md5": "68ccdb347bba8d9c504d25deeb0f7c1a",
+      "size": 28740,
+      "dependencies": [],
+      "id": 44227
+    },
+    {
+      "name": "music_short_m0550.acb",
+      "objectName": "7vtMzu",
+      "url": "https://asset.game-hololive-dreams.com/7vtMzu",
+      "md5": "c82c2a960ab3b2b8355b8570d7cad366",
+      "size": 7209,
+      "dependencies": [],
+      "id": 45872
+    },
+    {
+      "name": "vo_card_cmn_03001_03001-5-uniq-0114-00_potential-001.acb",
+      "objectName": "U8zSCY",
+      "url": "https://asset.game-hololive-dreams.com/U8zSCY",
+      "md5": "cd33d8c569f0f1e1ac4b891faa615c8f",
+      "size": 86953,
+      "dependencies": [],
+      "id": 45876
+    },
+    {
+      "name": "vo_card_cmn_03001_03001-5-uniq-0114-00_potential-002.acb",
+      "objectName": "Z2JDk4",
+      "url": "https://asset.game-hololive-dreams.com/Z2JDk4",
+      "md5": "fe075b6469cf28908347f3b5ad144bf7",
+      "size": 120361,
+      "dependencies": [],
+      "id": 45877
+    },
+    {
+      "name": "vo_card_cmn_03001_03001-5-uniq-0114-00_potential-003.acb",
+      "objectName": "k8vnzt",
+      "url": "https://asset.game-hololive-dreams.com/k8vnzt",
+      "md5": "e700bb52eed6313f82c9cfbaccd2a1a3",
+      "size": 82185,
+      "dependencies": [],
+      "id": 45878
+    },
+    {
+      "name": "vo_card_cmn_03001_03001-5-uniq-0114-00_potential-004.acb",
+      "objectName": "YoleKw",
+      "url": "https://asset.game-hololive-dreams.com/YoleKw",
+      "md5": "d01a71b550e5428365f890d393be7c75",
+      "size": 67849,
+      "dependencies": [],
+      "id": 45879
+    },
+    {
+      "name": "vo_card_cmn_03001_03001-5-uniq-0114-00_potential-005.acb",
+      "objectName": "3ZnDDk",
+      "url": "https://asset.game-hololive-dreams.com/3ZnDDk",
+      "md5": "71d8c291081ecda2489ac09408bde001",
+      "size": 110825,
+      "dependencies": [],
+      "id": 45880
+    },
+    {
+      "name": "vo_card_cmn_03001_03001-5-uniq-0114-00_situation.acb",
+      "objectName": "PNTtf3",
+      "url": "https://asset.game-hololive-dreams.com/PNTtf3",
+      "md5": "7bfc0c0a55cc259bfc558ac3795fa93a",
+      "size": 589225,
+      "dependencies": [],
+      "id": 45881
+    },
+    {
+      "name": "vo_card_cmn_03002_03002-5-uniq-0113-00_potential-001.acb",
+      "objectName": "NVo71T",
+      "url": "https://asset.game-hololive-dreams.com/NVo71T",
+      "md5": "6bd2fbef6081cd58e0117821a546d5ff",
+      "size": 100937,
+      "dependencies": [],
+      "id": 45882
+    },
+    {
+      "name": "vo_card_cmn_03002_03002-5-uniq-0113-00_potential-002.acb",
+      "objectName": "h3a3J1",
+      "url": "https://asset.game-hololive-dreams.com/h3a3J1",
+      "md5": "98769f77c5e884d2fe286dc76d45722b",
+      "size": 128553,
+      "dependencies": [],
+      "id": 45883
+    },
+    {
+      "name": "vo_card_cmn_03002_03002-5-uniq-0113-00_potential-003.acb",
+      "objectName": "24AGya",
+      "url": "https://asset.game-hololive-dreams.com/24AGya",
+      "md5": "b005cd9a62c6cfb69a395d01d3821134",
+      "size": 76393,
+      "dependencies": [],
+      "id": 45884
+    },
+    {
+      "name": "vo_card_cmn_03002_03002-5-uniq-0113-00_potential-004.acb",
+      "objectName": "VJW8fJ",
+      "url": "https://asset.game-hololive-dreams.com/VJW8fJ",
+      "md5": "e56f0fcbdc5070fcadcebb5a06b1c0dd",
+      "size": 125833,
+      "dependencies": [],
+      "id": 45885
+    },
+    {
+      "name": "vo_card_cmn_03002_03002-5-uniq-0113-00_potential-005.acb",
+      "objectName": "ZL7354",
+      "url": "https://asset.game-hololive-dreams.com/ZL7354",
+      "md5": "f30961ddd1891589e8b9cb0bd7ca049c",
+      "size": 137769,
+      "dependencies": [],
+      "id": 45886
+    },
+    {
+      "name": "vo_card_cmn_03002_03002-5-uniq-0113-00_situation.acb",
+      "objectName": "9DxwfT",
+      "url": "https://asset.game-hololive-dreams.com/9DxwfT",
+      "md5": "0d4a93521e5235d4a0c971908f7f555c",
+      "size": 689801,
+      "dependencies": [],
+      "id": 45887
+    },
+    {
+      "name": "vo_card_cmn_03003_03003-5-uniq-0115-00_potential-001.acb",
+      "objectName": "s8huqD",
+      "url": "https://asset.game-hololive-dreams.com/s8huqD",
+      "md5": "0024c770b36cd29666f8bd7065802976",
+      "size": 94121,
+      "dependencies": [],
+      "id": 45888
+    },
+    {
+      "name": "vo_card_cmn_03003_03003-5-uniq-0115-00_potential-002.acb",
+      "objectName": "n9bFd4",
+      "url": "https://asset.game-hololive-dreams.com/n9bFd4",
+      "md5": "05d1f4509074a491ad4e493df48f033d",
+      "size": 102313,
+      "dependencies": [],
+      "id": 45889
+    },
+    {
+      "name": "vo_card_cmn_03003_03003-5-uniq-0115-00_potential-003.acb",
+      "objectName": "nM5LOY",
+      "url": "https://asset.game-hololive-dreams.com/nM5LOY",
+      "md5": "c65347e9dd09751228b138676fa4dab7",
+      "size": 97865,
+      "dependencies": [],
+      "id": 45890
+    },
+    {
+      "name": "vo_card_cmn_03003_03003-5-uniq-0115-00_potential-004.acb",
+      "objectName": "nJtWn7",
+      "url": "https://asset.game-hololive-dreams.com/nJtWn7",
+      "md5": "c46db281011f670207bda04a1fc3702d",
+      "size": 66505,
+      "dependencies": [],
+      "id": 45891
+    },
+    {
+      "name": "vo_card_cmn_03003_03003-5-uniq-0115-00_potential-005.acb",
+      "objectName": "QhuFKJ",
+      "url": "https://asset.game-hololive-dreams.com/QhuFKJ",
+      "md5": "f2e7530102596d9150ccccd1e144ef90",
+      "size": 109129,
+      "dependencies": [],
+      "id": 45892
+    },
+    {
+      "name": "vo_card_cmn_03003_03003-5-uniq-0115-00_situation.acb",
+      "objectName": "hhiwlH",
+      "url": "https://asset.game-hololive-dreams.com/hhiwlH",
+      "md5": "a4d8533daf1bbd7e0ab8ccc6e54b199c",
+      "size": 634217,
+      "dependencies": [],
+      "id": 45893
+    },
+    {
+      "name": "vo_live_cmn_card_03001_03001-5-uniq-0114-00_skill-card.acb",
+      "objectName": "e1tZ5L",
+      "url": "https://asset.game-hololive-dreams.com/e1tZ5L",
+      "md5": "955119ef95d7cb204f43eae5a2491ba1",
+      "size": 29993,
+      "dependencies": [],
+      "id": 45894
+    },
+    {
+      "name": "vo_live_cmn_card_03001_03001-5-uniq-0114-00_start-card.acb",
+      "objectName": "cO4FOg",
+      "url": "https://asset.game-hololive-dreams.com/cO4FOg",
+      "md5": "9300cd7b1e2ff020f0896a60023b223d",
+      "size": 61385,
+      "dependencies": [],
+      "id": 45895
+    },
+    {
+      "name": "vo_live_cmn_card_03002_03002-5-uniq-0113-00_skill-card.acb",
+      "objectName": "SsW6de",
+      "url": "https://asset.game-hololive-dreams.com/SsW6de",
+      "md5": "6170968dce7fe0c9cd14ef0c4ee8efe9",
+      "size": 38537,
+      "dependencies": [],
+      "id": 45896
+    },
+    {
+      "name": "vo_live_cmn_card_03002_03002-5-uniq-0113-00_start-card.acb",
+      "objectName": "xrO2an",
+      "url": "https://asset.game-hololive-dreams.com/xrO2an",
+      "md5": "d7b7dc1e3c77769688ace7b1235953ac",
+      "size": 41257,
+      "dependencies": [],
+      "id": 45897
+    },
+    {
+      "name": "vo_live_cmn_card_03003_03003-5-uniq-0115-00_skill-card.acb",
+      "objectName": "iSlt1U",
+      "url": "https://asset.game-hololive-dreams.com/iSlt1U",
+      "md5": "dd5bd337c4e5aacc26d2abdea5cefc5f",
+      "size": 49449,
+      "dependencies": [],
+      "id": 45898
+    },
+    {
+      "name": "vo_live_cmn_card_03003_03003-5-uniq-0115-00_start-card.acb",
+      "objectName": "FVy49v",
+      "url": "https://asset.game-hololive-dreams.com/FVy49v",
+      "md5": "e1a9ef988b7fff0020f55ebefd738b43",
+      "size": 46025,
+      "dependencies": [],
+      "id": 45899
+    },
+    {
+      "name": "vo_live_dial_card_03001_03001-5-uniq-0114-00_03001-to-03002.acb",
+      "objectName": "HqX0aU",
+      "url": "https://asset.game-hololive-dreams.com/HqX0aU",
+      "md5": "45912e0f2bb7057e2e636b54e774ff0d",
+      "size": 79465,
+      "dependencies": [],
+      "id": 45900
+    },
+    {
+      "name": "vo_live_dial_card_03001_03001-5-uniq-0114-00_03001-to-03003.acb",
+      "objectName": "1STHQB",
+      "url": "https://asset.game-hololive-dreams.com/1STHQB",
+      "md5": "859ed54c11e07aa5520c28ce6ac26f0b",
+      "size": 73321,
+      "dependencies": [],
+      "id": 45901
+    },
+    {
+      "name": "vo_live_dial_card_03001_03001-5-uniq-0114-00_03002-to-03001.acb",
+      "objectName": "VO6HrD",
+      "url": "https://asset.game-hololive-dreams.com/VO6HrD",
+      "md5": "4e51d98ac5c0f012630e69f3b35374f2",
+      "size": 92425,
+      "dependencies": [],
+      "id": 45902
+    },
+    {
+      "name": "vo_live_dial_card_03001_03001-5-uniq-0114-00_03003-to-03001.acb",
+      "objectName": "6LAMHd",
+      "url": "https://asset.game-hololive-dreams.com/6LAMHd",
+      "md5": "789777403d97105f056a1d79dea1db87",
+      "size": 61033,
+      "dependencies": [],
+      "id": 45903
+    },
+    {
+      "name": "vo_live_dial_card_03001_03001-5-uniq-0114-00_myself.acb",
+      "objectName": "m0up2N",
+      "url": "https://asset.game-hololive-dreams.com/m0up2N",
+      "md5": "776f79dc34ca34c81816b7382b768ffb",
+      "size": 52841,
+      "dependencies": [],
+      "id": 45904
+    },
+    {
+      "name": "vo_live_dial_card_03001_03002-5-uniq-0113-00_03001-to-03002.acb",
+      "objectName": "nVQPMF",
+      "url": "https://asset.game-hololive-dreams.com/nVQPMF",
+      "md5": "f78f3ed763c5a197a96fc100b7d1259e",
+      "size": 54217,
+      "dependencies": [],
+      "id": 45905
+    },
+    {
+      "name": "vo_live_dial_card_03001_03002-5-uniq-0113-00_03002-to-03001.acb",
+      "objectName": "vAzFDu",
+      "url": "https://asset.game-hololive-dreams.com/vAzFDu",
+      "md5": "cb30e2e43111b2c570d56528430c3696",
+      "size": 47753,
+      "dependencies": [],
+      "id": 45906
+    },
+    {
+      "name": "vo_live_dial_card_03001_03003-5-uniq-0115-00_03001-to-03003.acb",
+      "objectName": "DqAU8N",
+      "url": "https://asset.game-hololive-dreams.com/DqAU8N",
+      "md5": "4660972b6831e5a2dcb52791858f6d48",
+      "size": 73321,
+      "dependencies": [],
+      "id": 45907
+    },
+    {
+      "name": "vo_live_dial_card_03001_03003-5-uniq-0115-00_03003-to-03001.acb",
+      "objectName": "DOJIoi",
+      "url": "https://asset.game-hololive-dreams.com/DOJIoi",
+      "md5": "6c4d69f3e136e1d1eb77b1daa8e4f2d2",
+      "size": 73993,
+      "dependencies": [],
+      "id": 45908
+    },
+    {
+      "name": "vo_live_dial_card_03002_03001-5-uniq-0114-00_03001-to-03002.acb",
+      "objectName": "boPZP6",
+      "url": "https://asset.game-hololive-dreams.com/boPZP6",
+      "md5": "e5d3cb463e54a4ad6241d735507b6d6d",
+      "size": 56617,
+      "dependencies": [],
+      "id": 45909
+    },
+    {
+      "name": "vo_live_dial_card_03002_03001-5-uniq-0114-00_03002-to-03001.acb",
+      "objectName": "FyNLoL",
+      "url": "https://asset.game-hololive-dreams.com/FyNLoL",
+      "md5": "7ff52af6ff8d6f06d023e1d21a3dce98",
+      "size": 49769,
+      "dependencies": [],
+      "id": 45910
+    },
+    {
+      "name": "vo_live_dial_card_03002_03002-5-uniq-0113-00_03001-to-03002.acb",
+      "objectName": "1CUTkN",
+      "url": "https://asset.game-hololive-dreams.com/1CUTkN",
+      "md5": "e91bf20175f748336532c2d1e61b870b",
+      "size": 61705,
+      "dependencies": [],
+      "id": 45911
+    },
+    {
+      "name": "vo_live_dial_card_03002_03002-5-uniq-0113-00_03002-to-03001.acb",
+      "objectName": "hyKY9C",
+      "url": "https://asset.game-hololive-dreams.com/hyKY9C",
+      "md5": "c269f746fb7addea3fbea35505fe93a4",
+      "size": 47049,
+      "dependencies": [],
+      "id": 45912
+    },
+    {
+      "name": "vo_live_dial_card_03002_03002-5-uniq-0113-00_03002-to-03003.acb",
+      "objectName": "7xLTkc",
+      "url": "https://asset.game-hololive-dreams.com/7xLTkc",
+      "md5": "bf7762fd8ca496b65955ff07459b9778",
+      "size": 47401,
+      "dependencies": [],
+      "id": 45913
+    },
+    {
+      "name": "vo_live_dial_card_03002_03002-5-uniq-0113-00_03003-to-03002.acb",
+      "objectName": "1Pq9PW",
+      "url": "https://asset.game-hololive-dreams.com/1Pq9PW",
+      "md5": "ec5b479cf8898b9ba4e97d07257dfe16",
+      "size": 51817,
+      "dependencies": [],
+      "id": 45914
+    },
+    {
+      "name": "vo_live_dial_card_03002_03002-5-uniq-0113-00_myself.acb",
+      "objectName": "9jHGWC",
+      "url": "https://asset.game-hololive-dreams.com/9jHGWC",
+      "md5": "d9eaa32c3202c78bad455b54f3814663",
+      "size": 61705,
+      "dependencies": [],
+      "id": 45915
+    },
+    {
+      "name": "vo_live_dial_card_03002_03003-5-uniq-0115-00_03002-to-03003.acb",
+      "objectName": "2KAckl",
+      "url": "https://asset.game-hololive-dreams.com/2KAckl",
+      "md5": "9d68d6e961bb86a33c308f3658b18bd4",
+      "size": 30697,
+      "dependencies": [],
+      "id": 45916
+    },
+    {
+      "name": "vo_live_dial_card_03002_03003-5-uniq-0115-00_03003-to-03002.acb",
+      "objectName": "fwhNz5",
+      "url": "https://asset.game-hololive-dreams.com/fwhNz5",
+      "md5": "5621ac2fd6b07eed59c02d37585fdab5",
+      "size": 38537,
+      "dependencies": [],
+      "id": 45917
+    },
+    {
+      "name": "vo_live_dial_card_03003_03001-5-uniq-0114-00_03001-to-03003.acb",
+      "objectName": "4KPkEG",
+      "url": "https://asset.game-hololive-dreams.com/4KPkEG",
+      "md5": "458b1412fa9135a822dca23d93b46aaa",
+      "size": 31017,
+      "dependencies": [],
+      "id": 45918
+    },
+    {
+      "name": "vo_live_dial_card_03003_03001-5-uniq-0114-00_03003-to-03001.acb",
+      "objectName": "IrjndK",
+      "url": "https://asset.game-hololive-dreams.com/IrjndK",
+      "md5": "c468c652759d44629d0ce29ecd012c31",
+      "size": 49769,
+      "dependencies": [],
+      "id": 45919
+    },
+    {
+      "name": "vo_live_dial_card_03003_03002-5-uniq-0113-00_03002-to-03003.acb",
+      "objectName": "493iCi",
+      "url": "https://asset.game-hololive-dreams.com/493iCi",
+      "md5": "ee3e183c555bd611d0eedf6b607b1a7d",
+      "size": 42633,
+      "dependencies": [],
+      "id": 45920
+    },
+    {
+      "name": "vo_live_dial_card_03003_03002-5-uniq-0113-00_03003-to-03002.acb",
+      "objectName": "IcYBYY",
+      "url": "https://asset.game-hololive-dreams.com/IcYBYY",
+      "md5": "7ad9aa83391b12dc60e5ccd166ee3186",
+      "size": 60361,
+      "dependencies": [],
+      "id": 45921
+    },
+    {
+      "name": "vo_live_dial_card_03003_03003-5-uniq-0115-00_03001-to-03003.acb",
+      "objectName": "RTM5zw",
+      "url": "https://asset.game-hololive-dreams.com/RTM5zw",
+      "md5": "6b6f8f4b6baf6793bf575741e117c35d",
+      "size": 52841,
+      "dependencies": [],
+      "id": 45922
+    },
+    {
+      "name": "vo_live_dial_card_03003_03003-5-uniq-0115-00_03002-to-03003.acb",
+      "objectName": "4s1s1y",
+      "url": "https://asset.game-hololive-dreams.com/4s1s1y",
+      "md5": "ee0e1f8851aaa361e737371061454be6",
+      "size": 61385,
+      "dependencies": [],
+      "id": 45923
+    },
+    {
+      "name": "vo_live_dial_card_03003_03003-5-uniq-0115-00_03003-to-03001.acb",
+      "objectName": "ck49AF",
+      "url": "https://asset.game-hololive-dreams.com/ck49AF",
+      "md5": "2c25b191d9765ac9e4960963ea4b7e0a",
+      "size": 61385,
+      "dependencies": [],
+      "id": 45924
+    },
+    {
+      "name": "vo_live_dial_card_03003_03003-5-uniq-0115-00_03003-to-03002.acb",
+      "objectName": "LAca2E",
+      "url": "https://asset.game-hololive-dreams.com/LAca2E",
+      "md5": "4b5375e10417d605caef3e3f4f0d5204",
+      "size": 78761,
+      "dependencies": [],
+      "id": 45925
+    },
+    {
+      "name": "vo_live_dial_card_03003_03003-5-uniq-0115-00_myself.acb",
+      "objectName": "otDFqE",
+      "url": "https://asset.game-hololive-dreams.com/otDFqE",
+      "md5": "79fb968b30ed38350f3633fea5488241",
+      "size": 78761,
+      "dependencies": [],
+      "id": 45926
+    },
+    {
+      "name": "music_short_m0528.acb",
+      "objectName": "jlzU2q",
+      "url": "https://asset.game-hololive-dreams.com/jlzU2q",
+      "md5": "64610688b673975f5c5534fb32ab7eeb",
+      "size": 7209,
+      "dependencies": [],
+      "id": 45870
+    },
+    {
+      "name": "chart_m0550_easy.sus",
+      "objectName": "BVGkjJ",
+      "url": "https://asset.game-hololive-dreams.com/BVGkjJ",
+      "md5": "84ddac3d9bb06d21f14b2e19890d0c74",
+      "size": 6319,
+      "dependencies": [],
+      "id": 45837
+    },
+    {
+      "name": "chart_m0550_expert.sus",
+      "objectName": "zGc6x9",
+      "url": "https://asset.game-hololive-dreams.com/zGc6x9",
+      "md5": "cbe9cb1580f0409f765300ca8d9d71e3",
+      "size": 17950,
+      "dependencies": [],
+      "id": 45838
+    },
+    {
+      "name": "chart_m0550_hard.sus",
+      "objectName": "6jSfvc",
+      "url": "https://asset.game-hololive-dreams.com/6jSfvc",
+      "md5": "440e3fd3a0ec5b4121f58981c53d1093",
+      "size": 11610,
+      "dependencies": [],
+      "id": 45839
+    },
+    {
+      "name": "chart_m0550_normal.sus",
+      "objectName": "oj4G2x",
+      "url": "https://asset.game-hololive-dreams.com/oj4G2x",
+      "md5": "8b2515760505aaa96e58be3c9c4ed846",
+      "size": 7963,
+      "dependencies": [],
+      "id": 45840
+    },
+    {
+      "name": "chart_m0528_easy.sus",
+      "objectName": "YXTZp1",
+      "url": "https://asset.game-hololive-dreams.com/YXTZp1",
+      "md5": "823733b6c88a02bf362685cf690e2315",
+      "size": 6690,
+      "dependencies": [],
+      "id": 45833
+    },
+    {
+      "name": "chart_m0528_expert.sus",
+      "objectName": "ksE8nK",
+      "url": "https://asset.game-hololive-dreams.com/ksE8nK",
+      "md5": "124328a47c6abf92edd3a5cc183fcaf0",
+      "size": 23027,
+      "dependencies": [],
+      "id": 45834
+    },
+    {
+      "name": "chart_m0528_hard.sus",
+      "objectName": "gEjeyz",
+      "url": "https://asset.game-hololive-dreams.com/gEjeyz",
+      "md5": "f54500b7d21d988203abc8e66408853e",
+      "size": 15627,
+      "dependencies": [],
+      "id": 45835
+    },
+    {
+      "name": "chart_m0528_normal.sus",
+      "objectName": "eDtAFk",
+      "url": "https://asset.game-hololive-dreams.com/eDtAFk",
+      "md5": "5f6c492c7cd9d1cd616f6e58862adf77",
+      "size": 9590,
+      "dependencies": [],
+      "id": 45836
+    },
+    {
+      "name": "chart_m0552_easy.sus",
+      "objectName": "zM7OTx",
+      "url": "https://asset.game-hololive-dreams.com/zM7OTx",
+      "md5": "3cde592d4e241d1d5fa8557c1d971056",
+      "size": 7893,
+      "dependencies": [],
+      "id": 45841
+    },
+    {
+      "name": "chart_m0552_expert.sus",
+      "objectName": "qmn764",
+      "url": "https://asset.game-hololive-dreams.com/qmn764",
+      "md5": "4a2e649a96d37635abdded1d9df7e584",
+      "size": 40271,
+      "dependencies": [],
+      "id": 45842
+    },
+    {
+      "name": "chart_m0552_hard.sus",
+      "objectName": "RSq2B7",
+      "url": "https://asset.game-hololive-dreams.com/RSq2B7",
+      "md5": "5ffcb4050e403d16e86d4b75cbd3d16a",
+      "size": 16045,
+      "dependencies": [],
+      "id": 45843
+    },
+    {
+      "name": "chart_m0552_normal.sus",
+      "objectName": "8yQhMZ",
+      "url": "https://asset.game-hololive-dreams.com/8yQhMZ",
+      "md5": "c273c84bbffd2ae5fd9648c2db045a38",
+      "size": 11627,
+      "dependencies": [],
+      "id": 45844
+    },
+    {
+      "name": "music_short_m0552.acb",
+      "objectName": "LR8JY6",
+      "url": "https://asset.game-hololive-dreams.com/LR8JY6",
+      "md5": "663184fce5968768ec6b4ba2abf3e3a2",
+      "size": 7209,
+      "dependencies": [],
+      "id": 45874
+    },
+    {
+      "name": "mov_card_full_0_03001-5-uniq-0114-00.usm",
+      "objectName": "TrhyGn",
+      "url": "https://asset.game-hololive-dreams.com/TrhyGn",
+      "md5": "47496adeefda23ba16bb490391c4f40b",
+      "size": 3722505,
+      "dependencies": [],
+      "id": 45845
+    },
+    {
+      "name": "mov_card_full_0_03003-5-uniq-0115-00.usm",
+      "objectName": "Oxcdmf",
+      "url": "https://asset.game-hololive-dreams.com/Oxcdmf",
+      "md5": "e938e7ebd549a8fc42e33b669d7eccad",
+      "size": 3188873,
+      "dependencies": [],
+      "id": 45847
+    },
+    {
+      "name": "mov_card_full_1_03001-5-uniq-0114-00.usm",
+      "objectName": "w1a4Rj",
+      "url": "https://asset.game-hololive-dreams.com/w1a4Rj",
+      "md5": "b8451189d8b195d9508112c0edaa5943",
+      "size": 5013481,
+      "dependencies": [],
+      "id": 45848
+    },
+    {
+      "name": "mov_card_full_1_03003-5-uniq-0115-00.usm",
+      "objectName": "xaD7T6",
+      "url": "https://asset.game-hololive-dreams.com/xaD7T6",
+      "md5": "de52811260d4a4f0978467a25f02d071",
+      "size": 4424521,
+      "dependencies": [],
+      "id": 45850
+    },
+    {
+      "name": "mov_card_sign_03001-5-uniq-0114-00.usm",
+      "objectName": "1qe948",
+      "url": "https://asset.game-hololive-dreams.com/1qe948",
+      "md5": "f45a40af4622f8b6e0cc9d7ac2d06509",
+      "size": 4797065,
+      "dependencies": [],
+      "id": 45851
+    },
+    {
+      "name": "mov_card_sign_03003-5-uniq-0115-00.usm",
+      "objectName": "IxoHrY",
+      "url": "https://asset.game-hololive-dreams.com/IxoHrY",
+      "md5": "03329897bf72acfd296a853deca4858e",
+      "size": 5386345,
+      "dependencies": [],
+      "id": 45853
+    },
+    {
+      "name": "mov_music_mv_m0396-mv-01.usm",
+      "objectName": "mjyyyd",
+      "url": "https://asset.game-hololive-dreams.com/mjyyyd",
+      "md5": "48576727d6e8eda6260a3522157759ef",
+      "size": 49305417,
+      "dependencies": [],
+      "id": 45856
+    },
+    {
+      "name": "mov_music_mv_m0552-mv-01.usm",
+      "objectName": "w8CUvr",
+      "url": "https://asset.game-hololive-dreams.com/w8CUvr",
+      "md5": "8128d014c68e3e7853205291c105e439",
+      "size": 45829993,
+      "dependencies": [],
+      "id": 45859
+    },
+    {
+      "name": "mov_music_thumb_m0396-mv-01.usm",
+      "objectName": "7ad2up",
+      "url": "https://asset.game-hololive-dreams.com/7ad2up",
+      "md5": "16733d12a9695820cf250bbeea1a1bbd",
+      "size": 495241,
+      "dependencies": [],
+      "id": 45862
+    },
+    {
+      "name": "mov_music_thumb_m0552-mv-01.usm",
+      "objectName": "5odNsk",
+      "url": "https://asset.game-hololive-dreams.com/5odNsk",
+      "md5": "7e0759207dca7972b020b2d0e89cfad8",
+      "size": 494505,
+      "dependencies": [],
+      "id": 45865
+    },
+    {
+      "name": "mov_music_mv_m0394-mv-01.usm",
+      "objectName": "BMs8bQ",
+      "url": "https://asset.game-hololive-dreams.com/BMs8bQ",
+      "md5": "e7d0050ac11cdf902dfaa54bdcc73820",
+      "size": 44985641,
+      "dependencies": [],
+      "id": 45855
+    },
+    {
+      "name": "mov_music_mv_m0528-mv-01.usm",
+      "objectName": "lVH51q",
+      "url": "https://asset.game-hololive-dreams.com/lVH51q",
+      "md5": "2e275eb6e278b63a93dd34ea1429bb44",
+      "size": 43306217,
+      "dependencies": [],
+      "id": 45857
+    },
+    {
+      "name": "mov_music_mv_m0550-mv-01.usm",
+      "objectName": "lvTNtd",
+      "url": "https://asset.game-hololive-dreams.com/lvTNtd",
+      "md5": "ec4e740f325959247531a4ff28b1f27b",
+      "size": 43189769,
+      "dependencies": [],
+      "id": 45858
+    },
+    {
+      "name": "mov_music_thumb_m0394-mv-01.usm",
+      "objectName": "upLmuK",
+      "url": "https://asset.game-hololive-dreams.com/upLmuK",
+      "md5": "8e12a9301e98ba794ab27bbc69c13672",
+      "size": 494089,
+      "dependencies": [],
+      "id": 45861
+    },
+    {
+      "name": "mov_music_thumb_m0528-mv-01.usm",
+      "objectName": "F9HTcS",
+      "url": "https://asset.game-hololive-dreams.com/F9HTcS",
+      "md5": "206e1cceeaff5b79c7af22c7d96e334e",
+      "size": 477129,
+      "dependencies": [],
+      "id": 45863
+    },
+    {
+      "name": "mov_music_thumb_m0550-mv-01.usm",
+      "objectName": "jpCcDV",
+      "url": "https://asset.game-hololive-dreams.com/jpCcDV",
+      "md5": "eda8298f27107482e21014cf5e7bc691",
+      "size": 451913,
+      "dependencies": [],
+      "id": 45864
+    },
+    {
+      "name": "mov_music_mv_m0068-mv-01.usm",
+      "objectName": "VNXRex",
+      "url": "https://asset.game-hololive-dreams.com/VNXRex",
+      "md5": "d28351cf78fb0a2a83b9f12b6bb5fe66",
+      "size": 39010569,
+      "dependencies": [],
+      "id": 45854
+    },
+    {
+      "name": "mov_music_thumb_m0068-mv-01.usm",
+      "objectName": "J3S4CT",
+      "url": "https://asset.game-hololive-dreams.com/J3S4CT",
+      "md5": "02dd789242ea45673bcc559e3357f09f",
+      "size": 405033,
+      "dependencies": [],
+      "id": 45860
+    },
+    {
+      "name": "music_short_m0394.awb",
+      "objectName": "nobPXr",
+      "url": "https://asset.game-hololive-dreams.com/nobPXr",
+      "md5": "ae9ebd6cc130d904f499a03853b36370",
+      "size": 3886173,
+      "dependencies": [],
+      "id": 45867
+    },
+    {
+      "name": "music_short_m0396.awb",
+      "objectName": "X0HyN5",
+      "url": "https://asset.game-hololive-dreams.com/X0HyN5",
+      "md5": "07bf3b47f5d6899deaad0dfa8965241b",
+      "size": 4256499,
+      "dependencies": [],
+      "id": 45869
+    },
+    {
+      "name": "music_short_m0528.awb",
+      "objectName": "25T1qo",
+      "url": "https://asset.game-hololive-dreams.com/25T1qo",
+      "md5": "f1b04d31adf476ecfdb77743b4ca942c",
+      "size": 4351979,
+      "dependencies": [],
+      "id": 45871
+    },
+    {
+      "name": "music_short_m0550.awb",
+      "objectName": "oVXFZc",
+      "url": "https://asset.game-hololive-dreams.com/oVXFZc",
+      "md5": "638ef0d7d86a5576b20700e1d8a9c637",
+      "size": 3744999,
+      "dependencies": [],
+      "id": 45873
+    },
+    {
+      "name": "music_short_m0552.awb",
+      "objectName": "pVBawA",
+      "url": "https://asset.game-hololive-dreams.com/pVBawA",
+      "md5": "970a0243a6fbc49dcf5cac3dd243a2bc",
+      "size": 3949599,
+      "dependencies": [],
+      "id": 45875
     }
   ]
 }
