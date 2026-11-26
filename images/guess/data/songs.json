@@ -2241,6 +2241,16 @@
     "audio": "../audio/m0383.mp3"
   },
   {
+    "id": "m0384",
+    "title": "Dear You, A Love Song Just for You!",
+    "playingSeconds": 104,
+    "characterIds": [
+      "chr-00031"
+    ],
+    "jacket": "../jackets/m0384.png",
+    "audio": "../audio/m0384.mp3"
+  },
+  {
     "id": "m0385",
     "title": "Burning hope",
     "playingSeconds": 130,
@@ -2249,6 +2259,16 @@
     ],
     "jacket": "../jackets/m0385.png",
     "audio": "../audio/m0385.mp3"
+  },
+  {
+    "id": "m0386",
+    "title": "Halulu",
+    "playingSeconds": 122,
+    "characterIds": [
+      "chr-03006"
+    ],
+    "jacket": "../jackets/m0386.png",
+    "audio": "../audio/m0386.mp3"
   },
   {
     "id": "m0387",
@@ -2303,6 +2323,69 @@
     "audio": "../audio/m0398.mp3"
   },
   {
+    "id": "m0403",
+    "title": "OYOME♡HOLIC",
+    "playingSeconds": 145,
+    "characterIds": [
+      "chr-04015"
+    ],
+    "jacket": "../jackets/m0403.png",
+    "audio": "../audio/m0403.mp3"
+  },
+  {
+    "id": "m0404",
+    "title": "Lyrical Monster",
+    "playingSeconds": 141,
+    "characterIds": [
+      "chr-00022"
+    ],
+    "jacket": "../jackets/m0404.png",
+    "audio": "../audio/m0404.mp3"
+  },
+  {
+    "id": "m0405",
+    "title": "Holiday Dream",
+    "playingSeconds": 135,
+    "characterIds": [
+      "chr-00015",
+      "chr-00028",
+      "chr-04003",
+      "chr-04013"
+    ],
+    "jacket": "../jackets/m0405.png",
+    "audio": "../audio/m0405.mp3"
+  },
+  {
+    "id": "m0407",
+    "title": "Zettai Chuusei Nanonanora",
+    "playingSeconds": 113,
+    "characterIds": [
+      "chr-00028"
+    ],
+    "jacket": "../jackets/m0407.png",
+    "audio": "../audio/m0407.mp3"
+  },
+  {
+    "id": "m0408",
+    "title": "TAKO∞TAKOVER",
+    "playingSeconds": 133,
+    "characterIds": [
+      "chr-04003"
+    ],
+    "jacket": "../jackets/m0408.png",
+    "audio": "../audio/m0408.mp3"
+  },
+  {
+    "id": "m0409",
+    "title": "Whisper Whisper Whisper",
+    "playingSeconds": 125,
+    "characterIds": [
+      "chr-04013"
+    ],
+    "jacket": "../jackets/m0409.png",
+    "audio": "../audio/m0409.mp3"
+  },
+  {
     "id": "m0413",
     "title": "BAKU LOVE CHEMISTRY",
     "playingSeconds": 125,
@@ -2321,6 +2404,16 @@
     ],
     "jacket": "../jackets/m0459.png",
     "audio": "../audio/m0459.mp3"
+  },
+  {
+    "id": "m0462",
+    "title": "SUNAO",
+    "playingSeconds": 108,
+    "characterIds": [
+      "chr-00015"
+    ],
+    "jacket": "../jackets/m0462.png",
+    "audio": "../audio/m0462.mp3"
   },
   {
     "id": "m0524",

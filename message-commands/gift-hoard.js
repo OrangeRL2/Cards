@@ -15,22 +15,24 @@ const ALLOWED_ROLE_IDS = new Set([
 
 /**
  * Hard-coded hoards.
- * Keys are typically Discord user IDs (string).
+ * Keys are typically Discord user IDs (string), or explicit hoard labels such as "koyori".
  * Values are "base names" that cards start with.
  *
  * Example: 'Lamy' matches 'Lamy 001', 'Lamy 501', 'Lamy_001', etc.
  */
 const hoardMap = {
-  '409717160995192832': ['Lamy', 'Nepolabo'],
-  '153551890976735232': ['Suisei', 'miComet', 'Shiranui Construction','Gen 0'],
-  '399012422805094410': ['Mumei', 'Promise'],
-  '272129129841688577': ['Zeta', 'holoh3ro'],
-  '1311652316973240380': ['Chloe', 'holoX'],
-  '443061305721618432': ['Ayame', 'Gen 2'],
-  '399631405228752897': ['Towa', 'holoForce'],
-  '409724952091295745': ['Kanata', 'holoForce'],
-  '409720567588061184': ['Mio', 'GAMERS', 'Dorobo','ayafubumi','Koyori','holoX'],
+  '409717160995192832': ['Lamy', 'NePoLaBo', 'BIG3', 'holoWitches', 'SnowZnow'],
+  '153551890976735232': ['Suisei', 'Gen 0', 'miComet', 'Shiranui Construction', 'AS_tar', 'FubuMiComet', 'Hoshimatic Project', 'StartEnd'],
+  '1311652316973240380': ['Chloe', 'holoX', 'holoWitches', 'Kanata Construction', 'Ruka'],
+  '399631405228752897': ['Towa', 'holoForce', 'StartEnd'],
+  '409724952091295745': ['Kanata', 'holoForce', 'holoWitches', 'Kanata Construction'],
+  '409720567588061184': ['Mio', 'GAMERS', 'Dorobo', 'AyaFubuMi', 'FubuMio'],
+  'koyori': ['Koyori', 'holoX', 'Hoshimatic Project'], // Use --hoard=koyori until a recipient ID is assigned.
+  '399012422805094410': ['Mumei', 'Promise', 'Council', 'CouncilRys', 'FauMei', 'KronMei'],
+  '272129129841688577': ['Zeta', 'holoh3ro', 'BoZet', 'HoloIndonesia'],
   '409728788117848074': ['Haato', 'Gen 1'],
+  // Existing Ayame hoard is unchanged.
+  '443061305721618432': ['Ayame', 'Gen 2'],
 };
 
 /**
@@ -194,7 +196,7 @@ module.exports = {
       if (!toUser) {
         return message.reply({
           content:
-            '!gift-hoard --user=<@id> --multi=true --allowlocked=true --count=999 --rarity=all [--hoard=all|<id>]',
+            '!gift-hoard --user=<@id> --multi=true --allowlocked=true --count=999 --rarity=all [--hoard=all|<id>|koyori]',
         }).catch(() => {});
       }
 
@@ -213,7 +215,7 @@ module.exports = {
       // Determine which hoard to use:
       // - default: recipient's id
       // - --hoard=all: union of all hoards
-      // - --hoard=<id>: use that id as hoard key
+      // - --hoard=<id|label>: use that configured hoard key (e.g. koyori)
       const hoardOpt = String(opts.hoard ?? '').trim();
       const hoardKey = hoardOpt || toUser.id;
 
