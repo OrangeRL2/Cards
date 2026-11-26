@@ -20,8 +20,13 @@ const IMAGE_POOL_ROOT = path.join(__dirname, '..', '..', 'assets', 'images', 'os
 
 function resolvePoolPath(poolFolder) {
   if (!poolFolder) return IMAGE_POOL_ROOT;
+  const projectRoot = path.join(__dirname, '..', '..');
+  // Previously seeded level-91 milestones may still contain this old path.
+  // Redirect it until the targeted milestone migration is applied.
+  if (String(poolFolder).replace(/\\/g, '/').replace(/^\.\//, '') === 'assets/montlybdays/BDAY') {
+    return path.join(projectRoot, 'assets', 'images', 'BDAY');
+  }
   if (poolFolder.startsWith('../') || poolFolder.startsWith('./')) {
-    const projectRoot = path.join(__dirname, '..', '..');
     return path.resolve(projectRoot, poolFolder);
   }
   return path.join(IMAGE_POOL_ROOT, poolFolder);
@@ -263,7 +268,8 @@ module.exports = {
             const displayName = raw.replace(/[_-]+/g, ' ').trim();
             const awardCount = Number((m.awardValue && m.awardValue.count) || 1);
             const awardRarity = String(chosenRarityFolder).toUpperCase();
-            const storedPath = path.join(poolFolder, chosenRarityFolder, pick);
+            // The selected file already includes its rarity folder; do not append it twice.
+            const storedPath = path.relative(path.join(__dirname, '..', '..'), pickResult.fullPath).split(path.sep).join('/');
 
             userDocTx.cards = userDocTx.cards || [];
             const existing = userDocTx.cards.find(x => String(x.name) === displayName && String(x.rarity || '').toUpperCase() === awardRarity);
