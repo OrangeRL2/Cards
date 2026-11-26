@@ -35,6 +35,12 @@ const hoardMap = {
   '443061305721618432': ['Ayame', 'Gen 2'],
 };
 
+// When gifting to these recipients without --hoard, include their additional
+// favorites in the same transfer. Named hoards remain selectable on their own.
+const extraHoardKeysByRecipient = {
+  '409720567588061184': ['koyori'], // Mio's recipient also collects Koyori.
+};
+
 /**
  * Optional alias expansion: group keywords -> list of base names
  * If your cards are NOT literally called "Nepolabo 001", you probably want this.
@@ -213,9 +219,9 @@ module.exports = {
       }
 
       // Determine which hoard to use:
-      // - default: recipient's id
+      // - default: recipient's id, plus any additional favorites assigned to them
       // - --hoard=all: union of all hoards
-      // - --hoard=<id|label>: use that configured hoard key (e.g. koyori)
+      // - --hoard=<id|label>: use only that configured hoard key (e.g. koyori)
       const hoardOpt = String(opts.hoard ?? '').trim();
       const hoardKey = hoardOpt || toUser.id;
 
@@ -233,9 +239,15 @@ module.exports = {
           }).catch(() => {});
         }
 
-        const expanded = expandAliases(list);
+        // Default recipient gifting can combine favorite hoards in one pass.
+        // Explicit --hoard keeps the user's selection isolated.
+        const extraKeys = !hoardOpt ? (extraHoardKeysByRecipient[toUser.id] ?? []) : [];
+        const extraNames = extraKeys.flatMap(key => hoardMap[key] ?? []);
+        const expanded = expandAliases([...list, ...extraNames]);
         hoardNamesNorm = expanded.map(normName);
-        hoardLabel = `Hoard(${hoardKey})`;
+        hoardLabel = extraKeys.length
+          ? `Hoard(${hoardKey} + ${extraKeys.join(' + ')})`
+          : `Hoard(${hoardKey})`;
       }
 
       const hoardSet = new Set(hoardNamesNorm);
